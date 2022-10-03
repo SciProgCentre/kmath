@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2021 KMath contributors.
+ * Copyright 2018-2022 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -27,7 +27,7 @@ fun main(): Unit = Double.tensorAlgebra.withBroadcast {  // work in context with
     println("y:\n$y")
 
     // stack them into single dataset
-    val dataset = stack(listOf(x, y)).transpose()
+    val dataset = stack(listOf(x, y)).transposed()
 
     // normalize both x and y
     val xMean = x.mean()
@@ -58,7 +58,7 @@ fun main(): Unit = Double.tensorAlgebra.withBroadcast {  // work in context with
 
     // and find out eigenvector of it
     val (_, evecs) = covMatrix.symEig()
-    val v = evecs[0]
+    val v = evecs.getTensor(0)
     println("Eigenvector:\n$v")
 
     // reduce dimension of dataset
@@ -68,7 +68,7 @@ fun main(): Unit = Double.tensorAlgebra.withBroadcast {  // work in context with
     // we can restore original data from reduced data;
     // for example, find 7th element of dataset.
     val n = 7
-    val restored = (datasetReduced[n] dot v.view(intArrayOf(1, 2))) * std + mean
-    println("Original value:\n${dataset[n]}")
+    val restored = (datasetReduced.getTensor(n) dot v.view(intArrayOf(1, 2))) * std + mean
+    println("Original value:\n${dataset.getTensor(n)}")
     println("Restored value:\n$restored")
 }

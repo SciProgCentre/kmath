@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2021 KMath contributors.
+ * Copyright 2018-2022 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -12,10 +12,10 @@ internal class ProjectionOntoLineTest {
     @Test
     fun projectionIntoOx() {
         with(Euclidean2DSpace) {
-            val ox = Line(zero, Vector2D(1.0, 0.0))
+            val ox = Line(zero, vector(1.0, 0.0))
 
             grid(-10.0..10.0, -10.0..10.0, 0.15).forEach { (x, y) ->
-                assertVectorEquals(Vector2D(x, 0.0), projectToLine(Vector2D(x, y), ox))
+                assertVectorEquals(vector(x, 0.0), projectToLine(vector(x, y), ox))
             }
         }
     }
@@ -23,10 +23,10 @@ internal class ProjectionOntoLineTest {
     @Test
     fun projectionIntoOy() {
         with(Euclidean2DSpace) {
-            val line = Line(zero, Vector2D(0.0, 1.0))
+            val line = Line(zero, vector(0.0, 1.0))
 
             grid(-10.0..10.0, -10.0..10.0, 0.15).forEach { (x, y) ->
-                assertVectorEquals(Vector2D(0.0, y), projectToLine(Vector2D(x, y), line))
+                assertVectorEquals(vector(0.0, y), projectToLine(vector(x, y), line))
             }
         }
     }
@@ -34,13 +34,13 @@ internal class ProjectionOntoLineTest {
     @Test
     fun projectionIntoYEqualsX() {
         with(Euclidean2DSpace) {
-            val line = Line(zero, Vector2D(1.0, 1.0))
+            val line = Line(zero, vector(1.0, 1.0))
 
             assertVectorEquals(zero, projectToLine(zero, line))
 
             grid(-10.0..10.0, -10.0..10.0, 0.15).forEach { (x, y) ->
                 val d = (y - x) / 2.0
-                assertVectorEquals(Vector2D(x + d, y - d), projectToLine(Vector2D(x, y), line))
+                assertVectorEquals(vector(x + d, y - d), projectToLine(vector(x, y), line))
             }
         }
     }
@@ -51,38 +51,38 @@ internal class ProjectionOntoLineTest {
             val a = 5.0
             val b = -3.0
             val c = -15.0
-            val line = Line(Vector2D(3.0, 0.0), Vector2D(3.0, 5.0))
+            val line = Line(vector(3.0, 0.0), vector(3.0, 5.0))
 
             grid(-10.0..10.0, -10.0..10.0, 0.15).forEach { (x, y) ->
                 val xProj = (b * (b * x - a * y) - a * c) / (a * a + b * b)
                 val yProj = (a * (-b * x + a * y) - b * c) / (a * a + b * b)
-                assertVectorEquals(Vector2D(xProj, yProj), projectToLine(Vector2D(x, y), line))
+                assertVectorEquals(vector(xProj, yProj), projectToLine(vector(x, y), line))
             }
         }
     }
 
     @Test
-    fun projectionOntoLine3d() {
+    fun projectionOntoLine3d() = with(Euclidean3DSpace) {
         val line = Line3D(
-            base = Vector3D(1.0, 3.5, 0.07),
-            direction = Vector3D(2.0, -0.0037, 11.1111)
+            base = vector(1.0, 3.5, 0.07),
+            direction = vector(2.0, -0.0037, 11.1111)
         )
 
-        with(Euclidean3DSpace) {
-            val testDomain = (-10.0..10.0).generateList(0.43)
-            for (x in testDomain) {
-                for (y in testDomain) {
-                    for (z in testDomain) {
-                        val v = Vector3D(x, y, z)
-                        val result = projectToLine(v, line)
 
-                        // assert that result is on line
-                        assertTrue(isCollinear(result - line.base, line.direction))
-                        // assert that PV vector is orthogonal to direction vector
-                        assertTrue(isOrthogonal(v - result, line.direction))
-                    }
+        val testDomain = (-10.0..10.0).generateList(0.43)
+        for (x in testDomain) {
+            for (y in testDomain) {
+                for (z in testDomain) {
+                    val v = vector(x, y, z)
+                    val result = projectToLine(v, line)
+
+                    // assert that result is on the line
+                    assertTrue(isCollinear(result - line.base, line.direction))
+                    // assert that PV vector is orthogonal to direction vector
+                    assertTrue(isOrthogonal(v - result, line.direction))
                 }
             }
         }
+
     }
 }

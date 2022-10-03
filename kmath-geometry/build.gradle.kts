@@ -1,15 +1,15 @@
 plugins {
-    kotlin("multiplatform")
-    id("ru.mipt.npm.gradle.common")
-    id("ru.mipt.npm.gradle.native")
+    id("space.kscience.gradle.mpp")
 }
 
-kotlin.sourceSets.commonMain {
-    dependencies {
-        api(project(":kmath-core"))
+kscience{
+    native()
+    withContextReceivers()
+    dependencies{
+        api(projects.kmath.kmathComplex)
     }
 }
 
 readme {
-    maturity = ru.mipt.npm.gradle.Maturity.PROTOTYPE
+    maturity = space.kscience.gradle.Maturity.PROTOTYPE
 }

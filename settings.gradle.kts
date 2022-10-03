@@ -1,12 +1,32 @@
 rootProject.name = "kmath"
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+
+dependencyResolutionManagement {
+    val toolsVersion: String by extra
+
+    repositories {
+        mavenLocal()
+        maven("https://repo.kotlin.link")
+        mavenCentral()
+        gradlePluginPortal()
+    }
+
+    versionCatalogs {
+        create("npmlibs") {
+            from("space.kscience:version-catalog:$toolsVersion")
+        }
+    }
+}
+
 include(
+    ":test-utils",
     ":kmath-memory",
     ":kmath-complex",
     ":kmath-core",
     ":kmath-coroutines",
     ":kmath-functions",
+    ":kmath-polynomial",
     ":kmath-histograms",
     ":kmath-commons",
     ":kmath-viktor",
@@ -25,6 +45,7 @@ include(
     ":kmath-jupyter",
     ":kmath-symja",
     ":kmath-jafama",
+    ":kmath-trajectory",
     ":examples",
     ":benchmarks",
 )

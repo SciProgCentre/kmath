@@ -1,17 +1,18 @@
 plugins {
-    kotlin("multiplatform")
-    id("ru.mipt.npm.gradle.common")
-    id("ru.mipt.npm.gradle.native")
+    id("space.kscience.gradle.mpp")
 }
 
-kscience {
-    useAtomic()
+kscience{
+    native()
 }
+
+//apply(plugin = "kotlinx-atomicfu")
 
 kotlin.sourceSets {
     commonMain {
         dependencies {
             api(project(":kmath-core"))
+            api(npmlibs.atomicfu)
         }
     }
     commonTest {
@@ -24,5 +25,5 @@ kotlin.sourceSets {
 }
 
 readme {
-    maturity = ru.mipt.npm.gradle.Maturity.PROTOTYPE
+    maturity = space.kscience.gradle.Maturity.PROTOTYPE
 }

@@ -1,5 +1,6 @@
 @file:Suppress("UNUSED_VARIABLE")
 
+import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
 import space.kscience.kmath.benchmarks.addBenchmarkProperties
 
 plugins {
@@ -14,6 +15,8 @@ sourceSets.register("benchmarks")
 repositories {
     mavenCentral()
 }
+
+val multikVersion: String by rootProject.extra
 
 kotlin {
     jvm()
@@ -39,7 +42,9 @@ kotlin {
                 implementation(project(":kmath-dimensions"))
                 implementation(project(":kmath-for-real"))
                 implementation(project(":kmath-tensors"))
-                implementation("org.jetbrains.kotlinx:kotlinx-benchmark-runtime:0.4.2")
+                implementation(project(":kmath-multik"))
+                implementation("org.jetbrains.kotlinx:multik-default:$multikVersion")
+                implementation(npmlibs.kotlinx.benchmark.runtime)
             }
         }
 
@@ -51,7 +56,6 @@ kotlin {
                 implementation(project(":kmath-kotlingrad"))
                 implementation(project(":kmath-viktor"))
                 implementation(project(":kmath-jafama"))
-                implementation(project(":kmath-multik"))
                 implementation(projects.kmath.kmathTensorflow)
                 implementation("org.tensorflow:tensorflow-core-platform:0.4.0")
                 implementation("org.nd4j:nd4j-native:1.0.0-M1")
@@ -155,7 +159,7 @@ kotlin.sourceSets.all {
     }
 }
 
-tasks.withType<org.jetbrains.kotlin.gradle.dsl.KotlinJvmCompile> {
+tasks.withType<KotlinJvmCompile> {
     kotlinOptions {
         jvmTarget = "11"
         freeCompilerArgs = freeCompilerArgs + "-Xjvm-default=all" + "-Xlambdas=indy"
@@ -163,7 +167,7 @@ tasks.withType<org.jetbrains.kotlin.gradle.dsl.KotlinJvmCompile> {
 }
 
 readme {
-    maturity = ru.mipt.npm.gradle.Maturity.EXPERIMENTAL
+    maturity = space.kscience.gradle.Maturity.EXPERIMENTAL
 }
 
 addBenchmarkProperties()

@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2021 KMath contributors.
+ * Copyright 2018-2022 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -11,13 +11,12 @@ import space.kscience.kmath.nd.as2D
 import space.kscience.kmath.nd.asND
 import space.kscience.kmath.operations.*
 import space.kscience.kmath.structures.Buffer
-import space.kscience.kmath.structures.BufferFactory
 import space.kscience.kmath.structures.VirtualBuffer
 import space.kscience.kmath.structures.indices
 
 
 public class BufferedLinearSpace<T, out A : Ring<T>>(
-    private val bufferAlgebra: BufferAlgebra<T, A>
+    private val bufferAlgebra: BufferAlgebra<T, A>,
 ) : LinearSpace<T, A> {
     override val elementAlgebra: A get() = bufferAlgebra.elementAlgebra
 
@@ -91,5 +90,5 @@ public class BufferedLinearSpace<T, out A : Ring<T>>(
 }
 
 
-public fun <T, A : Ring<T>> A.linearSpace(bufferFactory: BufferFactory<T>): BufferedLinearSpace<T, A> =
-    BufferedLinearSpace(BufferRingOps(this, bufferFactory))
+public val <T, A : Ring<T>> A.linearSpace: BufferedLinearSpace<T, A>
+    get() = BufferedLinearSpace(BufferRingOps(this))

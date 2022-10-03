@@ -1,6 +1,7 @@
 <component name="CopyrightManager">
-    <copyright>
-        <option name="notice" value="Copyright 2018-2021 KMath contributors.&#10;Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file." />
-        <option name="myName" value="kmath" />
-    </copyright>
+  <copyright>
+    <option name="allowReplaceRegexp" value="Copyright \d{4}-\d{4} KMath" />
+    <option name="notice" value="Copyright 2018-&amp;#36;today.year KMath contributors.&#10;Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file." />
+    <option name="myName" value="kmath" />
+  </copyright>
 </component>

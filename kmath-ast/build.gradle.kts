@@ -1,6 +1,9 @@
 plugins {
-    kotlin("multiplatform")
-    id("ru.mipt.npm.gradle.common")
+    id("space.kscience.gradle.mpp")
+}
+
+kscience{
+    native()
 }
 
 kotlin.js {
@@ -24,7 +27,7 @@ kotlin.sourceSets {
 
     commonMain {
         dependencies {
-            api("com.github.h0tk3y.betterParse:better-parse:0.4.2")
+            api("com.github.h0tk3y.betterParse:better-parse:0.4.4")
             api(project(":kmath-core"))
         }
     }
@@ -57,11 +60,11 @@ tasks.dokkaHtml {
 
 if (System.getProperty("space.kscience.kmath.ast.dump.generated.classes") == "1")
     tasks.jvmTest {
-        jvmArgs = (jvmArgs ?: emptyList()) + listOf("-Dspace.kscience.kmath.ast.dump.generated.classes=1")
+        jvmArgs("-Dspace.kscience.kmath.ast.dump.generated.classes=1")
     }
 
 readme {
-    maturity = ru.mipt.npm.gradle.Maturity.EXPERIMENTAL
+    maturity = space.kscience.gradle.Maturity.EXPERIMENTAL
     propertyByTemplate("artifact", rootProject.file("docs/templates/ARTIFACT-TEMPLATE.md"))
 
     feature(

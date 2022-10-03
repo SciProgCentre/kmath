@@ -1,14 +1,27 @@
 plugins {
-    id("ru.mipt.npm.gradle.jvm")
+    id("space.kscience.gradle.mpp")
 }
 
 description = "JetBrains Multik connector"
 
-dependencies {
-    api(project(":kmath-tensors"))
-    api("org.jetbrains.kotlinx:multik-default:0.1.0")
+val multikVersion: String by rootProject.extra
+
+kotlin{
+    sourceSets{
+        commonMain{
+            dependencies{
+                api(project(":kmath-tensors"))
+                api("org.jetbrains.kotlinx:multik-core:$multikVersion")
+            }
+        }
+        commonTest{
+            dependencies{
+                api("org.jetbrains.kotlinx:multik-default:$multikVersion")
+            }
+        }
+    }
 }
 
 readme {
-    maturity = ru.mipt.npm.gradle.Maturity.PROTOTYPE
+    maturity = space.kscience.gradle.Maturity.PROTOTYPE
 }

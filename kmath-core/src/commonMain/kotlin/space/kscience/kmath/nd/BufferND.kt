@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2021 KMath contributors.
+ * Copyright 2018-2022 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -56,7 +56,7 @@ public inline fun <T, reified R : Any> StructureND<T>.mapToBuffer(
  * @param strides The strides to access elements of [MutableBuffer] by linear indices.
  * @param buffer The underlying buffer.
  */
-public class MutableBufferND<T>(
+public open class MutableBufferND<T>(
     strides: ShapeIndexer,
     override val buffer: MutableBuffer<T>,
 ) : MutableStructureND<T>, BufferND<T>(strides, buffer) {
@@ -69,7 +69,7 @@ public class MutableBufferND<T>(
  * Transform structure to a new structure using provided [MutableBufferFactory] and optimizing if argument is [MutableBufferND]
  */
 public inline fun <T, reified R : Any> MutableStructureND<T>.mapToMutableBuffer(
-    factory: MutableBufferFactory<R> = MutableBuffer.Companion::auto,
+    factory: MutableBufferFactory<R> = MutableBufferFactory(MutableBuffer.Companion::auto),
     crossinline transform: (T) -> R,
 ): MutableBufferND<R> {
     return if (this is MutableBufferND<T>)

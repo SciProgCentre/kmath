@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2021 KMath contributors.
+ * Copyright 2018-2022 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -71,7 +71,7 @@ internal sealed class WasmBuilder<T : Number, out E : Expression<T>>(
     protected open fun visitBinary(mst: TypedMst.Binary<T>): ExpressionRef =
         error("Binary operation ${mst.operation} not defined in $this")
 
-    protected open fun createModule(): BinaryenModule = js("new \$module\$binaryen.Module()")
+    protected open fun createModule(): BinaryenModule = space.kscience.kmath.internal.binaryen.Module()
 
     protected fun visit(node: TypedMst<T>): ExpressionRef = when (node) {
         is TypedMst.Constant -> visitNumber(

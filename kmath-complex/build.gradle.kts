@@ -1,7 +1,9 @@
 plugins {
-    kotlin("multiplatform")
-    id("ru.mipt.npm.gradle.common")
-    id("ru.mipt.npm.gradle.native")
+    id("space.kscience.gradle.mpp")
+}
+
+kscience {
+    native()
 }
 
 kotlin.sourceSets {
@@ -14,18 +16,20 @@ kotlin.sourceSets {
 
 readme {
     description = "Complex numbers and quaternions."
-    maturity = ru.mipt.npm.gradle.Maturity.PROTOTYPE
+    maturity = space.kscience.gradle.Maturity.PROTOTYPE
     propertyByTemplate("artifact", rootProject.file("docs/templates/ARTIFACT-TEMPLATE.md"))
 
     feature(
         id = "complex",
-        description = "Complex Numbers",
         ref = "src/commonMain/kotlin/space/kscience/kmath/complex/Complex.kt"
-    )
+    ) {
+        "Complex numbers operations"
+    }
 
     feature(
         id = "quaternion",
-        description = "Quaternions",
         ref = "src/commonMain/kotlin/space/kscience/kmath/complex/Quaternion.kt"
-    )
+    ) {
+        "Quaternions and their composition"
+    }
 }

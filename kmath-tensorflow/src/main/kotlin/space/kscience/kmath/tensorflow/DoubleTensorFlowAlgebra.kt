@@ -1,3 +1,8 @@
+/*
+ * Copyright 2018-2022 KMath contributors.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ */
+
 package space.kscience.kmath.tensorflow
 
 import org.tensorflow.Graph
@@ -7,6 +12,7 @@ import org.tensorflow.op.core.Constant
 import org.tensorflow.types.TFloat64
 import space.kscience.kmath.expressions.Symbol
 import space.kscience.kmath.misc.PerformancePitfall
+import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.nd.DefaultStrides
 import space.kscience.kmath.nd.Shape
 import space.kscience.kmath.nd.StructureND
@@ -74,6 +80,7 @@ public class DoubleTensorFlowAlgebra internal constructor(
  *
  * The resulting tensor is available outside of scope
  */
+@UnstableKMathAPI
 public fun DoubleField.produceWithTF(
     block: DoubleTensorFlowAlgebra.() -> StructureND<Double>,
 ): StructureND<Double> = Graph().use { graph ->
@@ -86,6 +93,7 @@ public fun DoubleField.produceWithTF(
  *
  * The resulting tensors are available outside of scope
  */
+@OptIn(UnstableKMathAPI::class)
 public fun DoubleField.produceMapWithTF(
     block: DoubleTensorFlowAlgebra.() -> Map<Symbol, StructureND<Double>>,
 ): Map<Symbol, StructureND<Double>> = Graph().use { graph ->

@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2021 KMath contributors.
+ * Copyright 2018-2022 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -48,7 +48,8 @@ internal object InternalUtils {
                 cache.copyInto(
                     logFactorials,
                     BEGIN_LOG_FACTORIALS,
-                    BEGIN_LOG_FACTORIALS, endCopy
+                    BEGIN_LOG_FACTORIALS,
+                    endCopy,
                 )
             } else
             // All values to be computed

@@ -1,7 +1,9 @@
 plugins {
-    kotlin("multiplatform")
-    id("ru.mipt.npm.gradle.common")
-    id("ru.mipt.npm.gradle.native")
+    id("space.kscience.gradle.mpp")
+}
+
+kscience{
+    native()
 }
 
 kotlin.sourceSets {
@@ -17,11 +19,11 @@ kotlin.sourceSets {
         dependencies {
             api(project(":kmath-core"))
             api(project(":kmath-complex"))
-            api("org.jetbrains.kotlinx:kotlinx-coroutines-core:${ru.mipt.npm.gradle.KScienceVersions.coroutinesVersion}")
+            api("org.jetbrains.kotlinx:kotlinx-coroutines-core:${space.kscience.gradle.KScienceVersions.coroutinesVersion}")
         }
     }
 }
 
 readme {
-    maturity = ru.mipt.npm.gradle.Maturity.EXPERIMENTAL
+    maturity = space.kscience.gradle.Maturity.EXPERIMENTAL
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2021 KMath contributors.
+ * Copyright 2018-2022 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -82,7 +82,7 @@ public interface StructureND<out T> : Featured<StructureFeature>, WithShape {
         public fun contentEquals(
             st1: StructureND<Double>,
             st2: StructureND<Double>,
-            tolerance: Double = 1e-11
+            tolerance: Double = 1e-11,
         ): Boolean {
             if (st1 === st2) return true
 
@@ -101,11 +101,17 @@ public interface StructureND<out T> : Featured<StructureFeature>, WithShape {
             val bufferRepr: String = when (structure.shape.size) {
                 1 -> (0 until structure.shape[0]).map { structure[it] }
                     .joinToString(prefix = "[", postfix = "]", separator = ", ")
-                2 -> (0 until structure.shape[0]).joinToString(prefix = "[", postfix = "]", separator = ", ") { i ->
-                    (0 until structure.shape[1]).joinToString(prefix = "[", postfix = "]", separator = ", ") { j ->
+
+                2 -> (0 until structure.shape[0]).joinToString(
+                    prefix = "[\n",
+                    postfix = "\n]",
+                    separator = ",\n"
+                ) { i ->
+                    (0 until structure.shape[1]).joinToString(prefix = "  [", postfix = "]", separator = ", ") { j ->
                         structure[i, j].toString()
                     }
                 }
+
                 else -> "..."
             }
             val className = structure::class.simpleName ?: "StructureND"
@@ -120,7 +126,7 @@ public interface StructureND<out T> : Featured<StructureFeature>, WithShape {
          */
         public fun <T> buffered(
             strides: Strides,
-            bufferFactory: BufferFactory<T> = Buffer.Companion::boxing,
+            bufferFactory: BufferFactory<T> = BufferFactory.boxing(),
             initializer: (IntArray) -> T,
         ): BufferND<T> = BufferND(strides, bufferFactory(strides.linearSize) { i -> initializer(strides.index(i)) })
 
@@ -140,7 +146,7 @@ public interface StructureND<out T> : Featured<StructureFeature>, WithShape {
 
         public fun <T> buffered(
             shape: IntArray,
-            bufferFactory: BufferFactory<T> = Buffer.Companion::boxing,
+            bufferFactory: BufferFactory<T> = BufferFactory.boxing(),
             initializer: (IntArray) -> T,
         ): BufferND<T> = buffered(DefaultStrides(shape), bufferFactory, initializer)
 
@@ -227,16 +233,8 @@ public interface MutableStructureND<T> : StructureND<T> {
 }
 
 /**
- * Transform a structure element-by element in place.
+ * Set value at specified indices
  */
-@OptIn(PerformancePitfall::class)
-public inline fun <T> MutableStructureND<T>.mapInPlace(action: (index: IntArray, t: T) -> T): Unit =
-    elements().forEach { (index, oldValue) -> this[index] = action(index, oldValue) }
-
-public inline fun <reified T : Any> StructureND<T>.zip(
-    struct: StructureND<T>,
-    crossinline block: (T, T) -> T,
-): StructureND<T> {
-    require(shape.contentEquals(struct.shape)) { "Shape mismatch in structure combination" }
-    return StructureND.auto(shape) { block(this[it], struct[it]) }
+public operator fun <T> MutableStructureND<T>.set(vararg index: Int, value: T) {
+    set(index, value)
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2021 KMath contributors.
+ * Copyright 2018-2022 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -7,8 +7,6 @@ package space.kscience.kmath.operations
 
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.BufferFactory
-import space.kscience.kmath.structures.DoubleBuffer
-import space.kscience.kmath.structures.ShortBuffer
 
 public interface WithSize {
     public val size: Int
@@ -19,11 +17,11 @@ public interface WithSize {
  */
 public interface BufferAlgebra<T, out A : Algebra<T>> : Algebra<Buffer<T>> {
     public val elementAlgebra: A
-    public val bufferFactory: BufferFactory<T>
+    public val elementBufferFactory: BufferFactory<T> get() = elementAlgebra.bufferFactory
 
     public fun buffer(size: Int, vararg elements: T): Buffer<T> {
         require(elements.size == size) { "Expected $size elements but found ${elements.size}" }
-        return bufferFactory(size) { elements[it] }
+        return elementBufferFactory(size) { elements[it] }
     }
 
     //TODO move to multi-receiver inline extension
@@ -36,13 +34,13 @@ public interface BufferAlgebra<T, out A : Algebra<T>> : Algebra<Buffer<T>> {
 
     override fun unaryOperationFunction(operation: String): (arg: Buffer<T>) -> Buffer<T> {
         val operationFunction = elementAlgebra.unaryOperationFunction(operation)
-        return { arg -> bufferFactory(arg.size) { operationFunction(arg[it]) } }
+        return { arg -> elementBufferFactory(arg.size) { operationFunction(arg[it]) } }
     }
 
     override fun binaryOperationFunction(operation: String): (left: Buffer<T>, right: Buffer<T>) -> Buffer<T> {
         val operationFunction = elementAlgebra.binaryOperationFunction(operation)
         return { left, right ->
-            bufferFactory(left.size) { operationFunction(left[it], right[it]) }
+            elementBufferFactory(left.size) { operationFunction(left[it], right[it]) }
         }
     }
 }
@@ -53,7 +51,7 @@ public interface BufferAlgebra<T, out A : Algebra<T>> : Algebra<Buffer<T>> {
 private inline fun <T, A : Algebra<T>> BufferAlgebra<T, A>.mapInline(
     buffer: Buffer<T>,
     crossinline block: A.(T) -> T,
-): Buffer<T> = bufferFactory(buffer.size) { elementAlgebra.block(buffer[it]) }
+): Buffer<T> = elementBufferFactory(buffer.size) { elementAlgebra.block(buffer[it]) }
 
 /**
  * Inline map
@@ -61,7 +59,7 @@ private inline fun <T, A : Algebra<T>> BufferAlgebra<T, A>.mapInline(
 private inline fun <T, A : Algebra<T>> BufferAlgebra<T, A>.mapIndexedInline(
     buffer: Buffer<T>,
     crossinline block: A.(index: Int, arg: T) -> T,
-): Buffer<T> = bufferFactory(buffer.size) { elementAlgebra.block(it, buffer[it]) }
+): Buffer<T> = elementBufferFactory(buffer.size) { elementAlgebra.block(it, buffer[it]) }
 
 /**
  * Inline zip
@@ -72,15 +70,15 @@ private inline fun <T, A : Algebra<T>> BufferAlgebra<T, A>.zipInline(
     crossinline block: A.(l: T, r: T) -> T,
 ): Buffer<T> {
     require(l.size == r.size) { "Incompatible buffer sizes. left: ${l.size}, right: ${r.size}" }
-    return bufferFactory(l.size) { elementAlgebra.block(l[it], r[it]) }
+    return elementBufferFactory(l.size) { elementAlgebra.block(l[it], r[it]) }
 }
 
 public fun <T> BufferAlgebra<T, *>.buffer(size: Int, initializer: (Int) -> T): Buffer<T> {
-    return bufferFactory(size, initializer)
+    return elementBufferFactory(size, initializer)
 }
 
 public fun <T, A> A.buffer(initializer: (Int) -> T): Buffer<T> where A : BufferAlgebra<T, *>, A : WithSize {
-    return bufferFactory(size, initializer)
+    return elementBufferFactory(size, initializer)
 }
 
 public fun <T, A : TrigonometricOperations<T>> BufferAlgebra<T, A>.sin(arg: Buffer<T>): Buffer<T> =
@@ -131,7 +129,6 @@ public fun <T, A : PowerOperations<T>> BufferAlgebra<T, A>.pow(arg: Buffer<T>, p
 
 public open class BufferRingOps<T, A : Ring<T>>(
     override val elementAlgebra: A,
-    override val bufferFactory: BufferFactory<T>,
 ) : BufferAlgebra<T, A>, RingOps<Buffer<T>> {
 
     override fun add(left: Buffer<T>, right: Buffer<T>): Buffer<T> = zipInline(left, right) { l, r -> l + r }
@@ -145,16 +142,17 @@ public open class BufferRingOps<T, A : Ring<T>>(
         super<BufferAlgebra>.binaryOperationFunction(operation)
 }
 
+public val IntRing.bufferAlgebra: BufferRingOps<Int, IntRing>
+    get() = BufferRingOps(IntRing)
+
 public val ShortRing.bufferAlgebra: BufferRingOps<Short, ShortRing>
-    get() = BufferRingOps(ShortRing, ::ShortBuffer)
+    get() = BufferRingOps(ShortRing)
 
 public open class BufferFieldOps<T, A : Field<T>>(
     elementAlgebra: A,
-    bufferFactory: BufferFactory<T>,
-) : BufferRingOps<T, A>(elementAlgebra, bufferFactory), BufferAlgebra<T, A>, FieldOps<Buffer<T>>,
-    ScaleOperations<Buffer<T>> {
+) : BufferRingOps<T, A>(elementAlgebra), BufferAlgebra<T, A>, FieldOps<Buffer<T>>, ScaleOperations<Buffer<T>> {
 
-//    override fun add(left: Buffer<T>, right: Buffer<T>): Buffer<T> = zipInline(left, right) { l, r -> l + r }
+    //    override fun add(left: Buffer<T>, right: Buffer<T>): Buffer<T> = zipInline(left, right) { l, r -> l + r }
 //    override fun multiply(left: Buffer<T>, right: Buffer<T>): Buffer<T> = zipInline(left, right) { l, r -> l * r }
     override fun divide(left: Buffer<T>, right: Buffer<T>): Buffer<T> = zipInline(left, right) { l, r -> l / r }
 
@@ -167,30 +165,26 @@ public open class BufferFieldOps<T, A : Field<T>>(
 
 public class BufferField<T, A : Field<T>>(
     elementAlgebra: A,
-    bufferFactory: BufferFactory<T>,
     override val size: Int,
-) : BufferFieldOps<T, A>(elementAlgebra, bufferFactory), Field<Buffer<T>>, WithSize {
+) : BufferFieldOps<T, A>(elementAlgebra), Field<Buffer<T>>, WithSize {
 
-    override val zero: Buffer<T> = bufferFactory(size) { elementAlgebra.zero }
-    override val one: Buffer<T> = bufferFactory(size) { elementAlgebra.one }
+    override val zero: Buffer<T> = elementAlgebra.bufferFactory(size) { elementAlgebra.zero }
+    override val one: Buffer<T> = elementAlgebra.bufferFactory(size) { elementAlgebra.one }
 }
 
 /**
  * Generate full buffer field from given buffer operations
  */
 public fun <T, A : Field<T>> BufferFieldOps<T, A>.withSize(size: Int): BufferField<T, A> =
-    BufferField(elementAlgebra, bufferFactory, size)
+    BufferField(elementAlgebra, size)
 
 //Double buffer specialization
 
 public fun BufferField<Double, *>.buffer(vararg elements: Number): Buffer<Double> {
     require(elements.size == size) { "Expected $size elements but found ${elements.size}" }
-    return bufferFactory(size) { elements[it].toDouble() }
+    return elementBufferFactory(size) { elements[it].toDouble() }
 }
 
-public fun <T, A : Field<T>> A.bufferAlgebra(bufferFactory: BufferFactory<T>): BufferFieldOps<T, A> =
-    BufferFieldOps(this, bufferFactory)
-
-public val DoubleField.bufferAlgebra: BufferFieldOps<Double, DoubleField>
-    get() = BufferFieldOps(DoubleField, ::DoubleBuffer)
+public val <T, A : Field<T>> A.bufferAlgebra: BufferFieldOps<T, A>
+    get() = BufferFieldOps(this)
 

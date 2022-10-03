@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2021 KMath contributors.
+ * Copyright 2018-2022 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -45,6 +45,7 @@ public sealed interface Nd4jArrayAlgebra<T, out C : Algebra<T>> : AlgebraND<T, C
         return newStruct
     }
 
+    @OptIn(PerformancePitfall::class)
     override fun StructureND<T>.mapIndexed(
         transform: C.(index: IntArray, T) -> T,
     ): Nd4jArrayStructure<T> {
@@ -53,6 +54,7 @@ public sealed interface Nd4jArrayAlgebra<T, out C : Algebra<T>> : AlgebraND<T, C
         return new
     }
 
+    @OptIn(PerformancePitfall::class)
     override fun zip(
         left: StructureND<T>,
         right: StructureND<T>,

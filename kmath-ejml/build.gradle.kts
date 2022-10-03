@@ -1,8 +1,7 @@
 import space.kscience.kmath.ejml.codegen.ejmlCodegen
 
 plugins {
-    kotlin("jvm")
-    id("ru.mipt.npm.gradle.common")
+    id("space.kscience.gradle.jvm")
 }
 
 dependencies {
@@ -14,7 +13,7 @@ dependencies {
 }
 
 readme {
-    maturity = ru.mipt.npm.gradle.Maturity.PROTOTYPE
+    maturity = space.kscience.gradle.Maturity.PROTOTYPE
     propertyByTemplate("artifact", rootProject.file("docs/templates/ARTIFACT-TEMPLATE.md"))
 
     feature(

@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2021 KMath contributors.
+ * Copyright 2018-2022 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -7,6 +7,7 @@ package space.kscience.kmath.misc
 
 import space.kscience.kmath.operations.Ring
 import space.kscience.kmath.operations.invoke
+import space.kscience.kmath.structures.Buffer
 import kotlin.jvm.JvmName
 
 /**
@@ -42,8 +43,8 @@ public inline fun <T, R> List<T>.cumulative(initial: R, crossinline operation: (
 /**
  * Cumulative sum with custom space
  */
-public fun <T> Iterable<T>.cumulativeSum(group: Ring<T>): Iterable<T> =
-    group { cumulative(zero) { element: T, sum: T -> sum + element } }
+public fun <T> Iterable<T>.cumulativeSum(ring: Ring<T>): Iterable<T> =
+    ring { cumulative(zero) { element: T, sum: T -> sum + element } }
 
 @JvmName("cumulativeSumOfDouble")
 public fun Iterable<Double>.cumulativeSum(): Iterable<Double> = cumulative(0.0) { element, sum -> sum + element }
@@ -54,8 +55,8 @@ public fun Iterable<Int>.cumulativeSum(): Iterable<Int> = cumulative(0) { elemen
 @JvmName("cumulativeSumOfLong")
 public fun Iterable<Long>.cumulativeSum(): Iterable<Long> = cumulative(0L) { element, sum -> sum + element }
 
-public fun <T> Sequence<T>.cumulativeSum(group: Ring<T>): Sequence<T> =
-    group { cumulative(zero) { element: T, sum: T -> sum + element } }
+public fun <T> Sequence<T>.cumulativeSum(ring: Ring<T>): Sequence<T> =
+    ring { cumulative(zero) { element: T, sum: T -> sum + element } }
 
 @JvmName("cumulativeSumOfDouble")
 public fun Sequence<Double>.cumulativeSum(): Sequence<Double> = cumulative(0.0) { element, sum -> sum + element }
@@ -77,3 +78,12 @@ public fun List<Int>.cumulativeSum(): List<Int> = cumulative(0) { element, sum -
 
 @JvmName("cumulativeSumOfLong")
 public fun List<Long>.cumulativeSum(): List<Long> = cumulative(0L) { element, sum -> sum + element }
+
+
+public fun <T> Buffer<T>.cumulativeSum(ring: Ring<T>): Buffer<T> = with(ring) {
+    var accumulator: T = zero
+    return bufferFactory(size) {
+        accumulator += get(it)
+        accumulator
+    }
+}

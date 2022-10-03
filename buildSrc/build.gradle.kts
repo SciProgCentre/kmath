@@ -1,7 +1,7 @@
 plugins {
     `kotlin-dsl`
     `version-catalog`
-    alias(miptNpmLibs.plugins.kotlin.plugin.serialization)
+    kotlin("plugin.serialization") version "1.6.21"
 }
 
 java.targetCompatibility = JavaVersion.VERSION_11
@@ -13,17 +13,18 @@ repositories {
     gradlePluginPortal()
 }
 
-val toolsVersion: String by extra
-val kotlinVersion = miptNpmLibs.versions.kotlin.asProvider().get()
-val benchmarksVersion = miptNpmLibs.versions.kotlinx.benchmark.get()
+val toolsVersion = npmlibs.versions.tools.get()
+val kotlinVersion = npmlibs.versions.kotlin.asProvider().get()
+val benchmarksVersion = npmlibs.versions.kotlinx.benchmark.get()
 
 dependencies {
-    api("ru.mipt.npm:gradle-tools:$toolsVersion")
+    api("space.kscience:gradle-tools:$toolsVersion")
+    api(npmlibs.atomicfu.gradle)
     //plugins form benchmarks
     api("org.jetbrains.kotlinx:kotlinx-benchmark-plugin:$benchmarksVersion")
     api("org.jetbrains.kotlin:kotlin-allopen:$kotlinVersion")
     //to be used inside build-script only
-    implementation(miptNpmLibs.kotlinx.serialization.json)
+    implementation(npmlibs.kotlinx.serialization.json)
 }
 
 kotlin.sourceSets.all {

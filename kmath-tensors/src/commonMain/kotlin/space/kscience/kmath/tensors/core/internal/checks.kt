@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2021 KMath contributors.
+ * Copyright 2018-2022 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -9,24 +9,25 @@ import space.kscience.kmath.nd.StructureND
 import space.kscience.kmath.tensors.api.Tensor
 import space.kscience.kmath.tensors.core.DoubleTensor
 import space.kscience.kmath.tensors.core.DoubleTensorAlgebra
+import space.kscience.kmath.tensors.core.asDoubleTensor
 
 
-internal fun checkEmptyShape(shape: IntArray) =
+internal fun checkNotEmptyShape(shape: IntArray) =
     check(shape.isNotEmpty()) {
         "Illegal empty shape provided"
     }
 
-internal fun checkEmptyDoubleBuffer(buffer: DoubleArray) =
-    check(buffer.isNotEmpty()) {
-        "Illegal empty buffer provided"
-    }
+internal fun checkEmptyDoubleBuffer(buffer: DoubleArray) = check(buffer.isNotEmpty()) {
+    "Illegal empty buffer provided"
+}
 
 internal fun checkBufferShapeConsistency(shape: IntArray, buffer: DoubleArray) =
     check(buffer.size == shape.reduce(Int::times)) {
         "Inconsistent shape ${shape.toList()} for buffer of size ${buffer.size} provided"
     }
 
-internal fun <T> checkShapesCompatible(a: StructureND<T>, b: StructureND<T>) =
+@PublishedApi
+internal fun <T> checkShapesCompatible(a: StructureND<T>, b: StructureND<T>): Unit =
     check(a.shape contentEquals b.shape) {
         "Incompatible shapes ${a.shape.toList()} and ${b.shape.toList()} "
     }
@@ -50,16 +51,15 @@ internal fun checkSquareMatrix(shape: IntArray) {
 }
 
 internal fun DoubleTensorAlgebra.checkSymmetric(
-    tensor: Tensor<Double>, epsilon: Double = 1e-6
-) =
-    check(tensor.eq(tensor.transpose(), epsilon)) {
-        "Tensor is not symmetric about the last 2 dimensions at precision $epsilon"
-    }
+    tensor: Tensor<Double>, epsilon: Double = 1e-6,
+) = check(tensor.eq(tensor.transposed(), epsilon)) {
+    "Tensor is not symmetric about the last 2 dimensions at precision $epsilon"
+}
 
 internal fun DoubleTensorAlgebra.checkPositiveDefinite(tensor: DoubleTensor, epsilon: Double = 1e-6) {
     checkSymmetric(tensor, epsilon)
     for (mat in tensor.matrixSequence())
-        check(mat.asTensor().detLU().value() > 0.0) {
-            "Tensor contains matrices which are not positive definite ${mat.asTensor().detLU().value()}"
+        check(mat.asDoubleTensor().detLU().value() > 0.0) {
+            "Tensor contains matrices which are not positive definite ${mat.asDoubleTensor().detLU().value()}"
         }
 }

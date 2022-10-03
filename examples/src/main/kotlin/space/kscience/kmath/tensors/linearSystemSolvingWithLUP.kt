@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2021 KMath contributors.
+ * Copyright 2018-2022 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -66,7 +66,7 @@ fun main() = Double.tensorAlgebra.withBroadcast {// work in context with linear 
         val n = l.shape[0]
         val x = zeros(intArrayOf(n))
         for (i in 0 until n) {
-            x[intArrayOf(i)] = (b[intArrayOf(i)] - l[i].dot(x).value()) / l[intArrayOf(i, i)]
+            x[intArrayOf(i)] = (b[intArrayOf(i)] - l.getTensor(i).dot(x).value()) / l[intArrayOf(i, i)]
         }
         return x
     }
@@ -75,7 +75,7 @@ fun main() = Double.tensorAlgebra.withBroadcast {// work in context with linear 
 
     // solveLT(l, b) function can be easily adapted for upper triangular matrix by the permutation matrix revMat
     // create it by placing ones on side diagonal
-    val revMat = u.zeroesLike()
+    val revMat = zeroesLike(u)
     val n = revMat.shape[0]
     for (i in 0 until n) {
         revMat[intArrayOf(i, n - 1 - i)] = 1.0

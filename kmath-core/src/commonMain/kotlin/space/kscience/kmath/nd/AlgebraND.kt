@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2021 KMath contributors.
+ * Copyright 2018-2022 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -9,25 +9,6 @@ import space.kscience.kmath.misc.PerformancePitfall
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.operations.*
 import kotlin.reflect.KClass
-
-/**
- * An exception is thrown when the expected and actual shape of NDArray differ.
- *
- * @property expected the expected shape.
- * @property actual the actual shape.
- */
-public class ShapeMismatchException(public val expected: IntArray, public val actual: IntArray) :
-    RuntimeException("Shape ${actual.contentToString()} doesn't fit in expected shape ${expected.contentToString()}.")
-
-public typealias Shape = IntArray
-
-public fun Shape(shapeFirst: Int, vararg shapeRest: Int): Shape = intArrayOf(shapeFirst, *shapeRest)
-
-public interface WithShape {
-    public val shape: Shape
-
-    public val indices: ShapeIndexer get() = DefaultStrides(shape)
-}
 
 /**
  * The base interface for all ND-algebra implementations.

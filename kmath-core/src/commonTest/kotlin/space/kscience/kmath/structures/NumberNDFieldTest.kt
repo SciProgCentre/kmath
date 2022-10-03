@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2021 KMath contributors.
+ * Copyright 2018-2022 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -74,7 +74,9 @@ class NumberNDFieldTest {
 
     @Test
     fun combineTest() {
-        val division = array1.zip(array2, Double::div)
+        algebra {
+            val division = zip(array1, array2) { l, r -> l / r }
+        }
     }
 
     object L2Norm : Norm<StructureND<Number>, Double> {

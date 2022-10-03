@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2021 KMath contributors.
+ * Copyright 2018-2022 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -8,6 +8,7 @@ package space.kscience.kmath.stat
 import kotlinx.coroutines.flow.first
 import space.kscience.kmath.chains.Chain
 import space.kscience.kmath.chains.combine
+import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.BufferFactory
 import space.kscience.kmath.structures.DoubleBuffer
@@ -30,10 +31,11 @@ public fun interface Sampler<out T : Any> {
 /**
  * Sample a bunch of values
  */
+@OptIn(UnstableKMathAPI::class)
 public fun <T : Any> Sampler<T>.sampleBuffer(
     generator: RandomGenerator,
     size: Int,
-    bufferFactory: BufferFactory<T> = Buffer.Companion::boxing,
+    bufferFactory: BufferFactory<T> = BufferFactory.boxing(),
 ): Chain<Buffer<T>> {
     require(size > 1)
     //creating temporary storage once

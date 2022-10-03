@@ -1,17 +1,15 @@
 /*
- * Copyright 2018-2021 KMath contributors.
+ * Copyright 2018-2022 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
 package space.kscience.kmath.operations
 
 import space.kscience.kmath.linear.Point
-import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.structures.Buffer
-import space.kscience.kmath.structures.BufferFactory
 import space.kscience.kmath.structures.DoubleBuffer
+import space.kscience.kmath.structures.MutableBufferFactory
 import space.kscience.kmath.structures.asBuffer
-
 import kotlin.math.*
 
 /**
@@ -21,7 +19,7 @@ public abstract class DoubleBufferOps : BufferAlgebra<Double, DoubleField>, Exte
     Norm<Buffer<Double>, Double> {
 
     override val elementAlgebra: DoubleField get() = DoubleField
-    override val bufferFactory: BufferFactory<Double> get() = ::DoubleBuffer
+    override val elementBufferFactory: MutableBufferFactory<Double> get() = elementAlgebra.bufferFactory
 
     override fun Buffer<Double>.map(block: DoubleField.(Double) -> Double): DoubleBuffer =
         mapInline { DoubleField.block(it) }
@@ -134,6 +132,12 @@ public abstract class DoubleBufferOps : BufferAlgebra<Double, DoubleField>, Exte
     override fun norm(arg: Buffer<Double>): Double = DoubleL2Norm.norm(arg)
 
     override fun scale(a: Buffer<Double>, value: Double): DoubleBuffer = a.mapInline { it * value }
+
+    override fun power(arg: Buffer<Double>, pow: Number): Buffer<Double> = if (pow is Int) {
+        arg.mapInline { it.pow(pow) }
+    } else {
+        arg.mapInline { it.pow(pow.toDouble()) }
+    }
 
     public companion object : DoubleBufferOps() {
         public inline fun Buffer<Double>.mapInline(block: (Double) -> Double): DoubleBuffer =

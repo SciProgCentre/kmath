@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2021 KMath contributors.
+ * Copyright 2018-2022 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -13,14 +13,12 @@ import org.jetbrains.kotlinx.multik.api.Multik
 import org.jetbrains.kotlinx.multik.api.ones
 import org.jetbrains.kotlinx.multik.ndarray.data.DN
 import org.jetbrains.kotlinx.multik.ndarray.data.DataType
-import space.kscience.kmath.multik.multikAlgebra
 import space.kscience.kmath.nd.BufferedFieldOpsND
 import space.kscience.kmath.nd.StructureND
 import space.kscience.kmath.nd.ndAlgebra
 import space.kscience.kmath.nd.one
 import space.kscience.kmath.nd4j.nd4j
 import space.kscience.kmath.operations.DoubleField
-import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.tensors.core.DoubleTensor
 import space.kscience.kmath.tensors.core.one
 import space.kscience.kmath.tensors.core.tensorAlgebra
@@ -28,12 +26,6 @@ import space.kscience.kmath.viktor.viktorAlgebra
 
 @State(Scope.Benchmark)
 internal class NDFieldBenchmark {
-    @Benchmark
-    fun autoFieldAdd(blackhole: Blackhole) = with(autoField) {
-        var res: StructureND<Double> = one(shape)
-        repeat(n) { res += 1.0 }
-        blackhole.consume(res)
-    }
 
     @Benchmark
     fun specializedFieldAdd(blackhole: Blackhole) = with(specializedField) {
@@ -50,7 +42,7 @@ internal class NDFieldBenchmark {
     }
 
     @Benchmark
-    fun multikAdd(blackhole: Blackhole) = with(multikField) {
+    fun multikAdd(blackhole: Blackhole) = with(multikAlgebra) {
         var res: StructureND<Double> = one(shape)
         repeat(n) { res += 1.0 }
         blackhole.consume(res)
@@ -78,7 +70,7 @@ internal class NDFieldBenchmark {
     }
 
     @Benchmark
-    fun multikInPlaceAdd(blackhole: Blackhole) = with(DoubleField.multikAlgebra) {
+    fun multikInPlaceAdd(blackhole: Blackhole) = with(multikAlgebra) {
         val res = Multik.ones<Double, DN>(shape, DataType.DoubleDataType).wrap()
         repeat(n) { res += 1.0 }
         blackhole.consume(res)
@@ -95,11 +87,9 @@ internal class NDFieldBenchmark {
         private const val dim = 1000
         private const val n = 100
         private val shape = intArrayOf(dim, dim)
-        private val autoField = BufferedFieldOpsND(DoubleField, Buffer.Companion::auto)
         private val specializedField = DoubleField.ndAlgebra
-        private val genericField = BufferedFieldOpsND(DoubleField, Buffer.Companion::boxing)
+        private val genericField = BufferedFieldOpsND(DoubleField)
         private val nd4jField = DoubleField.nd4j
-        private val multikField = DoubleField.multikAlgebra
         private val viktorField = DoubleField.viktorAlgebra
     }
 }

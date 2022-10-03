@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2021 KMath contributors.
+ * Copyright 2018-2022 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -22,8 +22,9 @@ public class ShortRingND(
 ) : ShortRingOpsND(), RingND<Short, ShortRing>, NumbersAddOps<StructureND<Short>> {
 
     override fun number(value: Number): BufferND<Short> {
-        val d = value.toShort() // minimize conversions
-        return structureND(shape) { d }
+        val short
+        = value.toShort() // minimize conversions
+        return structureND(shape) { short }
     }
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2021 KMath contributors.
+ * Copyright 2018-2022 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -66,7 +66,7 @@ class MCScopeTest {
     }
 
 
-    @OptIn(ObsoleteCoroutinesApi::class)
+    @OptIn(DelicateCoroutinesApi::class)
     fun compareResult(test: ATest) {
         val res1 = runBlocking(Dispatchers.Default) { test() }
         val res2 = runBlocking(newSingleThreadContext("test")) { test() }

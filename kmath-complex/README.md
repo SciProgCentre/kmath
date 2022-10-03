@@ -2,13 +2,13 @@
 
 Complex and hypercomplex number systems in KMath.
 
- - [complex](src/commonMain/kotlin/space/kscience/kmath/complex/Complex.kt) : Complex Numbers
- - [quaternion](src/commonMain/kotlin/space/kscience/kmath/complex/Quaternion.kt) : Quaternions
+ - [complex](src/commonMain/kotlin/space/kscience/kmath/complex/Complex.kt) : Complex numbers operations
+ - [quaternion](src/commonMain/kotlin/space/kscience/kmath/complex/Quaternion.kt) : Quaternions and their composition
 
 
 ## Artifact:
 
-The Maven coordinates of this project are `space.kscience:kmath-complex:0.3.0`.
+The Maven coordinates of this project are `space.kscience:kmath-complex:0.3.1-dev-1`.
 
 **Gradle Groovy:**
 ```groovy
@@ -18,7 +18,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'space.kscience:kmath-complex:0.3.0'
+    implementation 'space.kscience:kmath-complex:0.3.1-dev-1'
 }
 ```
 **Gradle Kotlin DSL:**
@@ -29,6 +29,6 @@ repositories {
 }
 
 dependencies {
-    implementation("space.kscience:kmath-complex:0.3.0")
+    implementation("space.kscience:kmath-complex:0.3.1-dev-1")
 }
 ```

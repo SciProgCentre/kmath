@@ -1,7 +1,13 @@
 plugins {
-    kotlin("multiplatform")
-    id("ru.mipt.npm.gradle.common")
-    id("ru.mipt.npm.gradle.native")
+    id("space.kscience.gradle.mpp")
+}
+
+kscience{
+    native()
+    dependencies {
+        api(projects.kmathCore)
+        api(projects.kmathStat)
+    }
 }
 
 kotlin.sourceSets {
@@ -19,10 +25,16 @@ kotlin.sourceSets {
             api(project(":kmath-stat"))
         }
     }
+
+    commonTest{
+        dependencies{
+            implementation(projects.testUtils)
+        }
+    }
 }
 
 readme {
-    maturity = ru.mipt.npm.gradle.Maturity.PROTOTYPE
+    maturity = space.kscience.gradle.Maturity.PROTOTYPE
     propertyByTemplate("artifact", rootProject.file("docs/templates/ARTIFACT-TEMPLATE.md"))
 
     feature(

@@ -1,19 +1,27 @@
 plugins {
-    kotlin("multiplatform")
-    id("ru.mipt.npm.gradle.common")
-    id("ru.mipt.npm.gradle.native")
+    id("space.kscience.gradle.mpp")
+}
+
+kscience{
+    native()
 }
 
 description = "Functions, integration and interpolation"
 
-kotlin.sourceSets.commonMain {
-    dependencies {
-        api(project(":kmath-core"))
+kotlin.sourceSets {
+    commonMain {
+        dependencies {
+            api(project(":kmath-core"))
+        }
     }
 }
 
+dependencies {
+    dokkaPlugin("org.jetbrains.dokka:mathjax-plugin:${npmlibs.versions.dokka.get()}")
+}
+
 readme {
-    maturity = ru.mipt.npm.gradle.Maturity.EXPERIMENTAL
+    maturity = space.kscience.gradle.Maturity.EXPERIMENTAL
     propertyByTemplate("artifact", rootProject.file("docs/templates/ARTIFACT-TEMPLATE.md"))
 
     feature("piecewise", "src/commonMain/kotlin/space/kscience/kmath/functions/Piecewise.kt") {

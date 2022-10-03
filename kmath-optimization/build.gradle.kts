@@ -1,10 +1,9 @@
 plugins {
-    id("ru.mipt.npm.gradle.mpp")
-    id("ru.mipt.npm.gradle.native")
+    id("space.kscience.gradle.mpp")
 }
 
-kscience {
-    useAtomic()
+kscience{
+    native()
 }
 
 kotlin.sourceSets {
@@ -15,10 +14,11 @@ kotlin.sourceSets {
     commonMain {
         dependencies {
             api(project(":kmath-coroutines"))
+            api(npmlibs.atomicfu)
         }
     }
 }
 
 readme {
-    maturity = ru.mipt.npm.gradle.Maturity.EXPERIMENTAL
+    maturity = space.kscience.gradle.Maturity.EXPERIMENTAL
 }

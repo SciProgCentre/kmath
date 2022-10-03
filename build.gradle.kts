@@ -1,6 +1,10 @@
+import space.kscience.gradle.isInDevelopment
+import space.kscience.gradle.useApache2Licence
+import space.kscience.gradle.useSPCTeam
+
 plugins {
-    id("ru.mipt.npm.gradle.project")
-    id("org.jetbrains.kotlinx.kover") version "0.5.0"
+    id("space.kscience.gradle.project")
+    id("org.jetbrains.kotlinx.kover") version "0.6.0"
 }
 
 allprojects {
@@ -11,13 +15,13 @@ allprojects {
     }
 
     group = "space.kscience"
-    version = "0.3.0"
+    version = "0.3.1-dev-4"
 }
 
 subprojects {
     if (name.startsWith("kmath")) apply<MavenPublishPlugin>()
 
-    plugins.withId("org.jetbrains.dokka"){
+    plugins.withId("org.jetbrains.dokka") {
         tasks.withType<org.jetbrains.dokka.gradle.DokkaTaskPartial> {
             dependsOn(tasks["assemble"])
 
@@ -31,7 +35,7 @@ subprojects {
                     localDirectory.set(kotlinDir)
 
                     remoteUrl.set(
-                        java.net.URL("https://github.com/mipt-npm/kmath/tree/master/${this@subprojects.name}/$kotlinDirPath")
+                        java.net.URL("https://github.com/SciProgCentre/kmath/tree/master/${this@subprojects.name}/$kotlinDirPath")
                     )
                 }
 
@@ -51,14 +55,38 @@ subprojects {
             }
         }
     }
+
+    plugins.withId("org.jetbrains.kotlin.multiplatform") {
+        configure<org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension> {
+            sourceSets {
+                val commonTest by getting {
+                    dependencies {
+                        implementation(projects.testUtils)
+                    }
+                }
+            }
+        }
+    }
 }
 
 readme.readmeTemplate = file("docs/templates/README-TEMPLATE.md")
 
 ksciencePublish {
-    github("kmath", addToRelease = false)
-    space()
+    pom("https://github.com/SciProgCentre/kmath") {
+        useApache2Licence()
+        useSPCTeam()
+    }
+    github("kmath", "SciProgCentre")
+    space(
+        if (isInDevelopment) {
+            "https://maven.pkg.jetbrains.space/mipt-npm/p/sci/dev"
+        } else {
+            "https://maven.pkg.jetbrains.space/mipt-npm/p/sci/release"
+        }
+    )
     sonatype()
 }
 
 apiValidation.nonPublicMarkers.add("space.kscience.kmath.misc.UnstableKMathAPI")
+
+val multikVersion by extra("0.2.0")

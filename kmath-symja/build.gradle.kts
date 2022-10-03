@@ -4,8 +4,7 @@
  */
 
 plugins {
-    kotlin("jvm")
-    id("ru.mipt.npm.gradle.common")
+    id("space.kscience.gradle.jvm")
 }
 
 description = "Symja integration module"
@@ -38,5 +37,5 @@ dependencies {
 }
 
 readme {
-    maturity = ru.mipt.npm.gradle.Maturity.PROTOTYPE
+    maturity = space.kscience.gradle.Maturity.PROTOTYPE
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2021 KMath contributors.
+ * Copyright 2018-2022 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -7,7 +7,6 @@ package space.kscience.kmath.operations
 
 import space.kscience.kmath.complex.Complex
 import space.kscience.kmath.complex.algebra
-import space.kscience.kmath.complex.bufferAlgebra
 import space.kscience.kmath.complex.ndAlgebra
 import space.kscience.kmath.nd.BufferND
 import space.kscience.kmath.nd.StructureND
@@ -18,7 +17,7 @@ fun main() = Complex.algebra {
     println(complex * 8 - 5 * i)
 
     //flat buffer
-    val buffer = with(bufferAlgebra){
+    val buffer = with(bufferAlgebra) {
         buffer(8) { Complex(it, -it) }.map { Complex(it.im, it.re) }
     }
     println(buffer)
@@ -30,7 +29,7 @@ fun main() = Complex.algebra {
     println(element)
 
     // 1d element operation
-    val result: StructureND<Complex> = ndAlgebra{
+    val result: StructureND<Complex> = ndAlgebra {
         val a = structureND(8) { (it) -> i * it - it.toDouble() }
         val b = 3
         val c = Complex(1.0, 1.0)

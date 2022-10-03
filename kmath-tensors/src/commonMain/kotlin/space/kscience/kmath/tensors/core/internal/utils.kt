@@ -1,46 +1,30 @@
 /*
- * Copyright 2018-2021 KMath contributors.
+ * Copyright 2018-2022 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
 package space.kscience.kmath.tensors.core.internal
 
 import space.kscience.kmath.nd.as1D
+import space.kscience.kmath.operations.DoubleBufferOps.Companion.map
 import space.kscience.kmath.operations.toMutableList
 import space.kscience.kmath.samplers.GaussianSampler
 import space.kscience.kmath.stat.RandomGenerator
-import space.kscience.kmath.structures.*
+import space.kscience.kmath.structures.DoubleBuffer
 import space.kscience.kmath.tensors.core.BufferedTensor
 import space.kscience.kmath.tensors.core.DoubleTensor
 import kotlin.math.*
 
-/**
- * Returns a reference to [IntArray] containing all the elements of this [Buffer] or copy the data.
- */
-internal fun Buffer<Int>.array(): IntArray = when (this) {
-    is IntBuffer -> array
-    else -> this.toIntArray()
-}
-
-/**
- * Returns a reference to [DoubleArray] containing all the elements of this [Buffer] or copy the data.
- */
-@PublishedApi
-internal fun Buffer<Double>.array(): DoubleArray = when (this) {
-    is DoubleBuffer -> array
-    else -> this.toDoubleArray()
-}
-
-internal fun getRandomNormals(n: Int, seed: Long): DoubleArray {
+internal fun getRandomNormals(n: Int, seed: Long): DoubleBuffer {
     val distribution = GaussianSampler(0.0, 1.0)
     val generator = RandomGenerator.default(seed)
-    return distribution.sample(generator).nextBufferBlocking(n).toDoubleArray()
+    return distribution.sample(generator).nextBufferBlocking(n)
 }
 
-internal fun getRandomUnitVector(n: Int, seed: Long): DoubleArray {
-    val unnorm = getRandomNormals(n, seed)
-    val norm = sqrt(unnorm.sumOf { it * it })
-    return unnorm.map { it / norm }.toDoubleArray()
+internal fun getRandomUnitVector(n: Int, seed: Long): DoubleBuffer {
+    val unnorm: DoubleBuffer = getRandomNormals(n, seed)
+    val norm = sqrt(unnorm.array.sumOf { it * it })
+    return unnorm.map { it / norm }
 }
 
 internal fun minusIndexFrom(n: Int, i: Int): Int = if (i >= 0) i else {
@@ -71,6 +55,7 @@ internal fun format(value: Double, digits: Int = 4): String = buildString {
                 append("e+")
                 append(order)
             }
+
             else -> {
                 append('e')
                 append(order)
@@ -116,7 +101,7 @@ internal fun DoubleTensor.toPrettyString(): String = buildString {
         }
 
         offset += vectorSize
-        if (this@toPrettyString.numElements == offset) {
+        if (this@toPrettyString.linearSize == offset) {
             break
         }
 

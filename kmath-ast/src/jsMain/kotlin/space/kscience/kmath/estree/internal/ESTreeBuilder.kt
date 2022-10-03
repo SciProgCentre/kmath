@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2021 KMath contributors.
+ * Copyright 2018-2022 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -22,28 +22,20 @@ internal class ESTreeBuilder<T>(val bodyCallback: ESTreeBuilder<T>.() -> BaseExp
         }
     }
 
+    @Suppress("UNUSED_VARIABLE")
     val instance: Expression<T> by lazy {
         val node = Program(
             sourceType = "script",
-            VariableDeclaration(
-                kind = "var",
-                VariableDeclarator(
-                    id = Identifier("executable"),
-                    init = FunctionExpression(
-                        params = arrayOf(Identifier("constants"), Identifier("arguments")),
-                        body = BlockStatement(ReturnStatement(bodyCallback())),
-                    ),
-                ),
-            ),
+            ReturnStatement(bodyCallback())
         )
 
-        eval(generate(node))
-        GeneratedExpression(js("executable"), constants.toTypedArray())
+        val code = generate(node)
+        GeneratedExpression(js("new Function('constants', 'arguments_0', code)"), constants.toTypedArray())
     }
 
     private val constants = mutableListOf<Any>()
 
-    fun constant(value: Any?) = when {
+    fun constant(value: Any?): BaseExpression = when {
         value == null || jsTypeOf(value) == "number" || jsTypeOf(value) == "string" || jsTypeOf(value) == "boolean" ->
             SimpleLiteral(value)
 
@@ -61,7 +53,8 @@ internal class ESTreeBuilder<T>(val bodyCallback: ESTreeBuilder<T>.() -> BaseExp
         }
     }
 
-    fun variable(name: Symbol): BaseExpression = call(getOrFail, Identifier("arguments"), SimpleLiteral(name.identity))
+    fun variable(name: Symbol): BaseExpression =
+        call(getOrFail, Identifier("arguments_0"), SimpleLiteral(name.identity))
 
     fun call(function: Function<T>, vararg args: BaseExpression): BaseExpression = SimpleCallExpression(
         optional = false,

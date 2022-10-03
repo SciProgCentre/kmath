@@ -1,7 +1,9 @@
 /*
- * Copyright 2018-2021 KMath contributors.
+ * Copyright 2018-2022 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
+
+@file:Suppress("unused")
 
 package space.kscience.kmath.internal.estree
 
@@ -28,9 +30,10 @@ internal fun Identifier(name: String) = object : Identifier {
     override var name = name
 }
 
-internal fun FunctionExpression(params: Array<dynamic>, body: BlockStatement) = object : FunctionExpression {
+internal fun FunctionExpression(id: Identifier?, params: Array<dynamic>, body: BlockStatement) = object : FunctionExpression {
     override var params = params
     override var type = "FunctionExpression"
+    override var id: Identifier? = id
     override var body = body
 }
 

@@ -6,7 +6,17 @@
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 dependencyResolutionManagement {
-    val toolsVersion: String by extra
+    val projectProperties = java.util.Properties()
+    file("../gradle.properties").inputStream().use {
+        projectProperties.load(it)
+    }
+
+    projectProperties.forEach { key, value ->
+        extra.set(key.toString(), value)
+    }
+
+
+    val toolsVersion: String = projectProperties["toolsVersion"].toString()
 
     repositories {
         mavenLocal()
@@ -16,8 +26,8 @@ dependencyResolutionManagement {
     }
 
     versionCatalogs {
-        create("miptNpmLibs") {
-            from("ru.mipt.npm:version-catalog:$toolsVersion")
+        create("npmlibs") {
+            from("space.kscience:version-catalog:$toolsVersion")
         }
     }
 }

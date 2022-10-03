@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2021 KMath contributors.
+ * Copyright 2018-2022 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -15,14 +15,12 @@ import kotlin.math.max
  * @param shape the shape of the tensor.
  */
 public class TensorLinearStructure(override val shape: IntArray) : Strides() {
-    override val strides: IntArray
-        get() = stridesFromShape(shape)
+    override val strides: IntArray get() = stridesFromShape(shape)
 
     override fun index(offset: Int): IntArray =
         indexFromOffset(offset, strides, shape.size)
 
-    override val linearSize: Int
-        get() = shape.reduce(Int::times)
+    override val linearSize: Int get() = linearSizeOf(shape)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -40,6 +38,8 @@ public class TensorLinearStructure(override val shape: IntArray) : Strides() {
     }
 
     public companion object {
+
+        public fun linearSizeOf(shape: IntArray): Int = shape.reduce(Int::times)
 
         public fun stridesFromShape(shape: IntArray): IntArray {
             val nDim = shape.size

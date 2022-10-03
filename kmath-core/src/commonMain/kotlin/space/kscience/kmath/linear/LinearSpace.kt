@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2021 KMath contributors.
+ * Copyright 2018-2022 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -11,12 +11,9 @@ import space.kscience.kmath.nd.Structure2D
 import space.kscience.kmath.nd.StructureFeature
 import space.kscience.kmath.nd.as1D
 import space.kscience.kmath.operations.BufferRingOps
-import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.operations.Ring
 import space.kscience.kmath.operations.invoke
 import space.kscience.kmath.structures.Buffer
-import space.kscience.kmath.structures.BufferFactory
-import space.kscience.kmath.structures.DoubleBuffer
 import kotlin.reflect.KClass
 
 /**
@@ -187,18 +184,9 @@ public interface LinearSpace<T, out A : Ring<T>> {
          * A structured matrix with custom buffer
          */
         public fun <T : Any, A : Ring<T>> buffered(
-            algebra: A,
-            bufferFactory: BufferFactory<T> = Buffer.Companion::boxing,
-        ): LinearSpace<T, A> = BufferedLinearSpace(BufferRingOps(algebra, bufferFactory))
+            algebra: A
+        ): LinearSpace<T, A> = BufferedLinearSpace(BufferRingOps(algebra))
 
-        @Deprecated("use DoubleField.linearSpace")
-        public val double: LinearSpace<Double, DoubleField> = buffered(DoubleField, ::DoubleBuffer)
-
-        /**
-         * Automatic buffered matrix, unboxed if it is possible
-         */
-        public inline fun <reified T : Any, A : Ring<T>> auto(ring: A): LinearSpace<T, A> =
-            buffered(ring, Buffer.Companion::auto)
     }
 }
 

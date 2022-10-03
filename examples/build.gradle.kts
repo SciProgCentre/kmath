@@ -8,6 +8,8 @@ repositories {
     maven("https://maven.pkg.jetbrains.space/kotlin/p/kotlin/kotlin-js-wrappers")
 }
 
+val multikVersion: String by rootProject.extra
+
 dependencies {
     implementation(project(":kmath-ast"))
     implementation(project(":kmath-kotlingrad"))
@@ -15,6 +17,8 @@ dependencies {
     implementation(project(":kmath-coroutines"))
     implementation(project(":kmath-commons"))
     implementation(project(":kmath-complex"))
+    implementation(project(":kmath-functions"))
+    implementation(project(":kmath-polynomial"))
     implementation(project(":kmath-optimization"))
     implementation(project(":kmath-stat"))
     implementation(project(":kmath-viktor"))
@@ -28,6 +32,7 @@ dependencies {
     implementation(project(":kmath-jafama"))
     //multik
     implementation(project(":kmath-multik"))
+    implementation("org.jetbrains.kotlinx:multik-default:$multikVersion")
 
 
     implementation("org.nd4j:nd4j-native:1.0.0-beta7")
@@ -66,5 +71,5 @@ tasks.withType<org.jetbrains.kotlin.gradle.dsl.KotlinJvmCompile> {
 }
 
 readme {
-    maturity = ru.mipt.npm.gradle.Maturity.EXPERIMENTAL
+    maturity = space.kscience.gradle.Maturity.EXPERIMENTAL
 }

@@ -1,10 +1,11 @@
 /*
- * Copyright 2018-2021 KMath contributors.
+ * Copyright 2018-2022 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
 package space.kscience.kmath.tensors
 
+import space.kscience.kmath.misc.PerformancePitfall
 import space.kscience.kmath.operations.invoke
 import space.kscience.kmath.tensors.core.DoubleTensor
 import space.kscience.kmath.tensors.core.DoubleTensorAlgebra
@@ -13,6 +14,7 @@ import kotlin.math.abs
 
 // OLS estimator using SVD
 
+@OptIn(PerformancePitfall::class)
 fun main() {
     //seed for random
     val randSeed = 100500L
@@ -50,7 +52,7 @@ fun main() {
         // inverse Sigma matrix can be restored from singular values with diagonalEmbedding function
         val sigma = diagonalEmbedding(singValues.map{ if (abs(it) < 1e-3) 0.0 else 1.0/it })
 
-        val alphaOLS = v dot sigma dot u.transpose() dot y
+        val alphaOLS = v dot sigma dot u.transposed() dot y
         println("Estimated alpha:\n" +
                 "$alphaOLS")
 

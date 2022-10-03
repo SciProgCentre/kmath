@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2021 KMath contributors.
+ * Copyright 2018-2022 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -46,11 +46,6 @@ public inline fun DoubleBuffer(size: Int, init: (Int) -> Double): DoubleBuffer =
  * Returns a new [DoubleBuffer] of given elements.
  */
 public fun DoubleBuffer(vararg doubles: Double): DoubleBuffer = DoubleBuffer(doubles)
-
-/**
- * Simplified [DoubleBuffer] to array comparison
- */
-public fun DoubleBuffer.contentEquals(vararg doubles: Double): Boolean = array.contentEquals(doubles)
 
 /**
  * Returns a new [DoubleArray] containing all the elements of this [Buffer].

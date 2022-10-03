@@ -1,11 +1,13 @@
 /*
- * Copyright 2018-2021 KMath contributors.
+ * Copyright 2018-2022 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
-
+@file:Suppress("NOTHING_TO_INLINE")
 package space.kscience.kmath.operations
 
+import space.kscience.kmath.structures.*
 import kotlin.math.pow as kpow
+
 
 /**
  * Advanced Number-like semifield that implements basic operations.
@@ -14,7 +16,8 @@ public interface ExtendedFieldOps<T> :
     FieldOps<T>,
     TrigonometricOperations<T>,
     ExponentialOperations<T>,
-    ScaleOperations<T> {
+    ScaleOperations<T>,
+    PowerOperations<T> {
     override fun tan(arg: T): T = sin(arg) / cos(arg)
     override fun tanh(arg: T): T = sinh(arg) / cosh(arg)
 
@@ -40,7 +43,7 @@ public interface ExtendedFieldOps<T> :
 /**
  * Advanced Number-like field that implements basic operations.
  */
-public interface ExtendedField<T> : ExtendedFieldOps<T>, Field<T>, PowerOperations<T>, NumericAlgebra<T> {
+public interface ExtendedField<T> : ExtendedFieldOps<T>, Field<T>, NumericAlgebra<T> {
     override fun sinh(arg: T): T = (exp(arg) - exp(-arg)) / 2.0
     override fun cosh(arg: T): T = (exp(arg) + exp(-arg)) / 2.0
     override fun tanh(arg: T): T = (exp(arg) - exp(-arg)) / (exp(-arg) + exp(arg))
@@ -63,8 +66,10 @@ public interface ExtendedField<T> : ExtendedFieldOps<T>, Field<T>, PowerOperatio
 /**
  * A field for [Double] without boxing. Does not produce appropriate field element.
  */
-@Suppress("EXTENSION_SHADOWED_BY_MEMBER", "OVERRIDE_BY_INLINE", "NOTHING_TO_INLINE")
+@Suppress("EXTENSION_SHADOWED_BY_MEMBER", "OVERRIDE_BY_INLINE")
 public object DoubleField : ExtendedField<Double>, Norm<Double, Double>, ScaleOperations<Double> {
+    override val bufferFactory: MutableBufferFactory<Double> = MutableBufferFactory(::DoubleBuffer)
+
     override inline val zero: Double get() = 0.0
     override inline val one: Double get() = 1.0
 
@@ -121,8 +126,10 @@ public val Double.Companion.algebra: DoubleField get() = DoubleField
 /**
  * A field for [Float] without boxing. Does not produce appropriate field element.
  */
-@Suppress("EXTENSION_SHADOWED_BY_MEMBER", "OVERRIDE_BY_INLINE", "NOTHING_TO_INLINE")
+@Suppress("EXTENSION_SHADOWED_BY_MEMBER", "OVERRIDE_BY_INLINE")
 public object FloatField : ExtendedField<Float>, Norm<Float, Float> {
+    override val bufferFactory: MutableBufferFactory<Float> = MutableBufferFactory(::FloatBuffer)
+
     override inline val zero: Float get() = 0.0f
     override inline val one: Float get() = 1.0f
 
@@ -175,13 +182,12 @@ public val Float.Companion.algebra: FloatField get() = FloatField
 /**
  * A field for [Int] without boxing. Does not produce corresponding ring element.
  */
-@Suppress("EXTENSION_SHADOWED_BY_MEMBER", "OVERRIDE_BY_INLINE", "NOTHING_TO_INLINE")
+@Suppress("EXTENSION_SHADOWED_BY_MEMBER", "OVERRIDE_BY_INLINE")
 public object IntRing : Ring<Int>, Norm<Int, Int>, NumericAlgebra<Int> {
-    override inline val zero: Int
-        get() = 0
+    override val bufferFactory: MutableBufferFactory<Int> = MutableBufferFactory(::IntBuffer)
 
-    override inline val one: Int
-        get() = 1
+    override inline val zero: Int get() = 0
+    override inline val one: Int get() = 1
 
     override fun number(value: Number): Int = value.toInt()
     override inline fun add(left: Int, right: Int): Int = left + right
@@ -199,13 +205,12 @@ public val Int.Companion.algebra: IntRing get() = IntRing
 /**
  * A field for [Short] without boxing. Does not produce appropriate ring element.
  */
-@Suppress("EXTENSION_SHADOWED_BY_MEMBER", "OVERRIDE_BY_INLINE", "NOTHING_TO_INLINE")
+@Suppress("EXTENSION_SHADOWED_BY_MEMBER", "OVERRIDE_BY_INLINE")
 public object ShortRing : Ring<Short>, Norm<Short, Short>, NumericAlgebra<Short> {
-    override inline val zero: Short
-        get() = 0
+    override val bufferFactory: MutableBufferFactory<Short> = MutableBufferFactory(::ShortBuffer)
 
-    override inline val one: Short
-        get() = 1
+    override inline val zero: Short get() = 0
+    override inline val one: Short get() = 1
 
     override fun number(value: Number): Short = value.toShort()
     override inline fun add(left: Short, right: Short): Short = (left + right).toShort()
@@ -223,13 +228,12 @@ public val Short.Companion.algebra: ShortRing get() = ShortRing
 /**
  * A field for [Byte] without boxing. Does not produce appropriate ring element.
  */
-@Suppress("EXTENSION_SHADOWED_BY_MEMBER", "OVERRIDE_BY_INLINE", "NOTHING_TO_INLINE")
+@Suppress("EXTENSION_SHADOWED_BY_MEMBER", "OVERRIDE_BY_INLINE")
 public object ByteRing : Ring<Byte>, Norm<Byte, Byte>, NumericAlgebra<Byte> {
-    override inline val zero: Byte
-        get() = 0
+    override val bufferFactory: MutableBufferFactory<Byte> = MutableBufferFactory(::ByteBuffer)
 
-    override inline val one: Byte
-        get() = 1
+    override inline val zero: Byte get() = 0
+    override inline val one: Byte get() = 1
 
     override fun number(value: Number): Byte = value.toByte()
     override inline fun add(left: Byte, right: Byte): Byte = (left + right).toByte()
@@ -247,13 +251,12 @@ public val Byte.Companion.algebra: ByteRing get() = ByteRing
 /**
  * A field for [Double] without boxing. Does not produce appropriate ring element.
  */
-@Suppress("EXTENSION_SHADOWED_BY_MEMBER", "OVERRIDE_BY_INLINE", "NOTHING_TO_INLINE")
+@Suppress("EXTENSION_SHADOWED_BY_MEMBER", "OVERRIDE_BY_INLINE")
 public object LongRing : Ring<Long>, Norm<Long, Long>, NumericAlgebra<Long> {
-    override inline val zero: Long
-        get() = 0L
+    override val bufferFactory: MutableBufferFactory<Long> = MutableBufferFactory(::LongBuffer)
 
-    override inline val one: Long
-        get() = 1L
+    override inline val zero: Long get() = 0L
+    override inline val one: Long get() = 1L
 
     override fun number(value: Number): Long = value.toLong()
     override inline fun add(left: Long, right: Long): Long = left + right

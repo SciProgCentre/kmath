@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2021 KMath contributors.
+ * Copyright 2018-2022 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -55,11 +55,6 @@ public sealed class ComplexFieldOpsND : BufferedFieldOpsND<Complex, ComplexField
 
     public companion object : ComplexFieldOpsND()
 }
-
-@UnstableKMathAPI
-public val ComplexField.bufferAlgebra: BufferFieldOps<Complex, ComplexField>
-    get() = bufferAlgebra(Buffer.Companion::complex)
-
 
 @OptIn(UnstableKMathAPI::class)
 public class ComplexFieldND(override val shape: Shape) :

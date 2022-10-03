@@ -1,10 +1,11 @@
 /*
- * Copyright 2018-2021 KMath contributors.
+ * Copyright 2018-2022 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
 package space.kscience.kmath.tensors.core.internal
 
+import space.kscience.kmath.structures.asBuffer
 import space.kscience.kmath.tensors.core.DoubleTensor
 import kotlin.math.max
 
@@ -24,8 +25,8 @@ internal fun multiIndexBroadCasting(tensor: DoubleTensor, resTensor: DoubleTenso
         }
 
         val curLinearIndex = tensor.indices.offset(curMultiIndex)
-        resTensor.mutableBuffer.array()[linearIndex] =
-            tensor.mutableBuffer.array()[tensor.bufferStart + curLinearIndex]
+        resTensor.source[linearIndex] =
+            tensor.source[curLinearIndex]
     }
 }
 
@@ -63,7 +64,7 @@ internal fun broadcastTo(tensor: DoubleTensor, newShape: IntArray): DoubleTensor
     }
 
     val n = newShape.reduce { acc, i -> acc * i }
-    val resTensor = DoubleTensor(newShape, DoubleArray(n))
+    val resTensor = DoubleTensor(newShape, DoubleArray(n).asBuffer())
 
     for (i in tensor.shape.indices) {
         val curDim = tensor.shape[i]
@@ -82,7 +83,7 @@ internal fun broadcastTensors(vararg tensors: DoubleTensor): List<DoubleTensor> 
     val n = totalShape.reduce { acc, i -> acc * i }
 
     return tensors.map { tensor ->
-        val resTensor = DoubleTensor(totalShape, DoubleArray(n))
+        val resTensor = DoubleTensor(totalShape, DoubleArray(n).asBuffer())
         multiIndexBroadCasting(tensor, resTensor, n)
         resTensor
     }
@@ -106,17 +107,17 @@ internal fun broadcastOuterTensors(vararg tensors: DoubleTensor): List<DoubleTen
         for (tensor in tensors) {
             val matrixShape = tensor.shape.sliceArray(tensor.shape.size - 2 until tensor.shape.size).copyOf()
             val matrixSize = matrixShape[0] * matrixShape[1]
-            val matrix = DoubleTensor(matrixShape, DoubleArray(matrixSize))
+            val matrix = DoubleTensor(matrixShape, DoubleArray(matrixSize).asBuffer())
 
-            val outerTensor = DoubleTensor(totalShape, DoubleArray(n))
-            val resTensor = DoubleTensor(totalShape + matrixShape, DoubleArray(n * matrixSize))
+            val outerTensor = DoubleTensor(totalShape, DoubleArray(n).asBuffer())
+            val resTensor = DoubleTensor(totalShape + matrixShape, DoubleArray(n * matrixSize).asBuffer())
 
             for (linearIndex in 0 until n) {
                 val totalMultiIndex = outerTensor.indices.index(linearIndex)
                 var curMultiIndex = tensor.shape.sliceArray(0..tensor.shape.size - 3).copyOf()
                 curMultiIndex = IntArray(totalMultiIndex.size - curMultiIndex.size) { 1 } + curMultiIndex
 
-                val newTensor = DoubleTensor(curMultiIndex + matrixShape, tensor.mutableBuffer.array())
+                val newTensor = DoubleTensor(curMultiIndex + matrixShape, tensor.source)
 
                 for (i in curMultiIndex.indices) {
                     if (curMultiIndex[i] != 1) {
@@ -136,8 +137,8 @@ internal fun broadcastOuterTensors(vararg tensors: DoubleTensor): List<DoubleTen
                                 matrix.indices.index(i)
                     )
 
-                    resTensor.mutableBuffer.array()[resTensor.bufferStart + newLinearIndex] =
-                        newTensor.mutableBuffer.array()[newTensor.bufferStart + curLinearIndex]
+                    resTensor.source[newLinearIndex] =
+                        newTensor.source[curLinearIndex]
                 }
             }
             add(resTensor)

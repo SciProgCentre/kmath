@@ -1,5 +1,5 @@
 plugins {
-    id("ru.mipt.npm.gradle.jvm")
+    id("space.kscience.gradle.jvm")
 }
 
 description = "Google tensorflow connector"
@@ -11,5 +11,5 @@ dependencies {
 }
 
 readme {
-    maturity = ru.mipt.npm.gradle.Maturity.PROTOTYPE
+    maturity = space.kscience.gradle.Maturity.PROTOTYPE
 }

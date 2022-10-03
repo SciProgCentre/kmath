@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2021 KMath contributors.
+ * Copyright 2018-2022 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -13,10 +13,8 @@ import space.kscience.kmath.commons.linear.CMLinearSpace
 import space.kscience.kmath.ejml.EjmlLinearSpaceDDRM
 import space.kscience.kmath.linear.invoke
 import space.kscience.kmath.linear.linearSpace
-import space.kscience.kmath.multik.multikAlgebra
 import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.operations.invoke
-import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.tensorflow.produceWithTF
 import space.kscience.kmath.tensors.core.DoubleTensorAlgebra
 import space.kscience.kmath.tensors.core.tensorAlgebra
@@ -79,12 +77,12 @@ internal class DotBenchmark {
     }
 
     @Benchmark
-    fun multikDot(blackhole: Blackhole) = with(DoubleField.multikAlgebra) {
+    fun multikDot(blackhole: Blackhole) = with(multikAlgebra) {
         blackhole.consume(matrix1 dot matrix2)
     }
 
     @Benchmark
-    fun bufferedDot(blackhole: Blackhole) = with(DoubleField.linearSpace(Buffer.Companion::auto)) {
+    fun bufferedDot(blackhole: Blackhole) = with(DoubleField.linearSpace) {
         blackhole.consume(matrix1 dot matrix2)
     }
 

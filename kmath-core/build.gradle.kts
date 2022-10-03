@@ -1,8 +1,13 @@
 plugins {
-    kotlin("multiplatform")
-    id("ru.mipt.npm.gradle.common")
-    id("ru.mipt.npm.gradle.native")
-//    id("com.xcporter.metaview") version "0.0.5"
+    id("space.kscience.gradle.mpp")
+}
+
+kscience{
+    native()
+
+    dependencies {
+        api(project(":kmath-memory"))
+    }
 }
 
 kotlin.sourceSets {
@@ -12,23 +17,11 @@ kotlin.sourceSets {
             it.optIn("space.kscience.kmath.misc.PerformancePitfall")
             it.optIn("space.kscience.kmath.misc.UnstableKMathAPI")
         }
-
-    commonMain {
-        dependencies {
-            api(project(":kmath-memory"))
-        }
-    }
 }
-
-//generateUml {
-//    classTree {
-//
-//    }
-//}
 
 readme {
     description = "Core classes, algebra definitions, basic linear algebra"
-    maturity = ru.mipt.npm.gradle.Maturity.DEVELOPMENT
+    maturity = space.kscience.gradle.Maturity.DEVELOPMENT
     propertyByTemplate("artifact", rootProject.file("docs/templates/ARTIFACT-TEMPLATE.md"))
 
     feature(

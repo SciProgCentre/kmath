@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2021 KMath contributors.
+ * Copyright 2018-2022 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -13,7 +13,7 @@ import space.kscience.kmath.structures.MutableBuffer
 @JvmInline
 public value class ViktorBuffer(public val flatArray: F64FlatArray) : MutableBuffer<Double> {
     override val size: Int
-        get() = flatArray.size
+        get() = flatArray.length
 
     override inline fun get(index: Int): Double = flatArray[index]
 

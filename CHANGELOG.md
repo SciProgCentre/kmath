@@ -2,8 +2,16 @@
 
 ## [Unreleased]
 ### Added
+- 2D optimal trajectory computation in a separate module `kmath-trajectory`
+- Autodiff for generic algebra elements in core!
+- Algebra now has an obligatory `bufferFactory` (#477).
 
 ### Changed
+- Major refactor of tensors (only minor API changes)
+- Kotlin 1.7.20
+- `LazyStructure` `deffered` -> `async` to comply with coroutines code style
+- Default `dot` operation in tensor algebra no longer support broadcasting. Instead `matmul` operation is added to `DoubleTensorAlgebra`.
+- Multik went MPP
 
 ### Deprecated
 
