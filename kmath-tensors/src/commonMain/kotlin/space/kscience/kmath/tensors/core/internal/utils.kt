@@ -6,6 +6,8 @@
 package space.kscience.kmath.tensors.core.internal
 
 import space.kscience.kmath.misc.PerformancePitfall
+import space.kscience.kmath.nd.asList
+import space.kscience.kmath.nd.last
 import space.kscience.kmath.operations.DoubleBufferOps.Companion.map
 import space.kscience.kmath.random.RandomGenerator
 import space.kscience.kmath.samplers.GaussianSampler
@@ -92,7 +94,7 @@ public fun DoubleTensor.toPrettyString(): String = buildString {
         append(']')
         charOffset -= 1
 
-        index.reversed().zip(shape.reversed()).drop(1).forEach { (ind, maxInd) ->
+        index.reversed().zip(shape.asList().reversed()).drop(1).forEach { (ind, maxInd) ->
             if (ind != maxInd - 1) {
                 return@forEach
             }

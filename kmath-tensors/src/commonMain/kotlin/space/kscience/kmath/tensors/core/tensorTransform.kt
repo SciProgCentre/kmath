@@ -5,9 +5,7 @@
 
 package space.kscience.kmath.tensors.core
 
-import space.kscience.kmath.nd.DoubleBufferND
-import space.kscience.kmath.nd.RowStrides
-import space.kscience.kmath.nd.StructureND
+import space.kscience.kmath.nd.*
 import space.kscience.kmath.structures.DoubleBuffer
 import space.kscience.kmath.structures.asBuffer
 import space.kscience.kmath.tensors.api.Tensor
@@ -23,7 +21,7 @@ public fun StructureND<Double>.copyToTensor(): DoubleTensor = if (this is Double
 } else {
     DoubleTensor(
         shape,
-        RowStrides(this.shape).map(this::get).toDoubleArray().asBuffer(),
+        RowStrides(this.shape).map(this::getDouble).toDoubleArray().asBuffer(),
     )
 }
 
@@ -36,7 +34,7 @@ public fun StructureND<Int>.toDoubleTensor(): DoubleTensor {
     } else {
         val tensor = DoubleTensorAlgebra.zeroesLike(this)
         indices.forEach {
-            tensor[it] = get(it).toDouble()
+            tensor[it] = getInt(it).toDouble()
         }
         return tensor
     }
@@ -59,7 +57,7 @@ public fun StructureND<Double>.asDoubleTensor(): DoubleTensor = if (this is Doub
 public fun StructureND<Int>.asIntTensor(): IntTensor = when (this) {
     is IntTensor -> this
     else -> IntTensor(
-        this.shape,
-        RowStrides(this.shape).map(this::get).toIntArray().asBuffer()
+        shape,
+        RowStrides(shape).map(this::getInt).toIntArray().asBuffer()
     )
 }

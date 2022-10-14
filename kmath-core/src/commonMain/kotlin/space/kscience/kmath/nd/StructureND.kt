@@ -46,6 +46,7 @@ public interface StructureND<out T> : Featured<StructureFeature>, WithShape {
      * @param index the indices.
      * @return the value.
      */
+    @PerformancePitfall
     public operator fun get(index: IntArray): T
 
     /**
@@ -97,6 +98,7 @@ public interface StructureND<out T> : Featured<StructureFeature>, WithShape {
         /**
          * Debug output to string
          */
+        @OptIn(PerformancePitfall::class)
         public fun toString(structure: StructureND<*>): String {
             val bufferRepr: String = when (structure.shape.size) {
                 1 -> (0 until structure.shape[0]).map { structure[it] }
@@ -116,7 +118,7 @@ public interface StructureND<out T> : Featured<StructureFeature>, WithShape {
             }
             val className = structure::class.simpleName ?: "StructureND"
 
-            return "$className(shape=${structure.shape.contentToString()}, buffer=$bufferRepr)"
+            return "$className(shape=${structure.shape}, buffer=$bufferRepr)"
         }
 
         /**
@@ -145,13 +147,13 @@ public interface StructureND<out T> : Featured<StructureFeature>, WithShape {
         ): BufferND<T> = BufferND(strides, Buffer.auto(type, strides.linearSize) { i -> initializer(strides.index(i)) })
 
         public fun <T> buffered(
-            shape: IntArray,
+            shape: Shape,
             bufferFactory: BufferFactory<T> = BufferFactory.boxing(),
             initializer: (IntArray) -> T,
         ): BufferND<T> = buffered(ColumnStrides(shape), bufferFactory, initializer)
 
         public inline fun <reified T : Any> auto(
-            shape: IntArray,
+            shape: Shape,
             crossinline initializer: (IntArray) -> T,
         ): BufferND<T> = auto(ColumnStrides(shape), initializer)
 
@@ -160,13 +162,13 @@ public interface StructureND<out T> : Featured<StructureFeature>, WithShape {
             vararg shape: Int,
             crossinline initializer: (IntArray) -> T,
         ): BufferND<T> =
-            auto(ColumnStrides(shape), initializer)
+            auto(ColumnStrides(Shape(shape)), initializer)
 
         public inline fun <T : Any> auto(
             type: KClass<T>,
             vararg shape: Int,
             crossinline initializer: (IntArray) -> T,
-        ): BufferND<T> = auto(type, ColumnStrides(shape), initializer)
+        ): BufferND<T> = auto(type, ColumnStrides(Shape(shape)), initializer)
     }
 }
 
@@ -214,7 +216,12 @@ public fun <T : Comparable<T>> LinearSpace<T, Ring<T>>.contentEquals(
  * @param index the indices.
  * @return the value.
  */
+@PerformancePitfall
 public operator fun <T> StructureND<T>.get(vararg index: Int): T = get(index)
+
+public operator fun StructureND<Double>.get(vararg index: Int): Double = getDouble(index)
+
+public operator fun StructureND<Int>.get(vararg index: Int): Int = getInt(index)
 
 //@UnstableKMathAPI
 //public inline fun <reified T : StructureFeature> StructureND<*>.getFeature(): T? = getFeature(T::class)
@@ -229,12 +236,14 @@ public interface MutableStructureND<T> : StructureND<T> {
      * @param index the indices.
      * @param value the value.
      */
+    @PerformancePitfall
     public operator fun set(index: IntArray, value: T)
 }
 
 /**
  * Set value at specified indices
  */
+@PerformancePitfall
 public operator fun <T> MutableStructureND<T>.set(vararg index: Int, value: T) {
     set(index, value)
 }

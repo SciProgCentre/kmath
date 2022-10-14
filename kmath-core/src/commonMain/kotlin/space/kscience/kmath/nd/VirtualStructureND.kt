@@ -5,12 +5,15 @@
 
 package space.kscience.kmath.nd
 
+import space.kscience.kmath.misc.PerformancePitfall
 import space.kscience.kmath.misc.UnstableKMathAPI
 
 public open class VirtualStructureND<T>(
     override val shape: Shape,
     public val producer: (IntArray) -> T,
 ) : StructureND<T> {
+
+    @PerformancePitfall
     override fun get(index: IntArray): T {
         requireIndexInShape(index, shape)
         return producer(index)

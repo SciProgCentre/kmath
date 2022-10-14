@@ -6,7 +6,6 @@
 package space.kscience.kmath.tensors.core.internal
 
 import space.kscience.kmath.nd.*
-import space.kscience.kmath.nd.Strides.Companion.linearSizeOf
 import space.kscience.kmath.structures.DoubleBuffer
 import space.kscience.kmath.structures.asBuffer
 import space.kscience.kmath.structures.indices
@@ -40,7 +39,7 @@ internal fun MutableStructure2D<Double>.jacobiHelper(
         source[i * shape[0] + j] = value
     }
 
-    fun maxOffDiagonal(matrix: BufferedTensor<Double>): Double {
+    fun maxOffDiagonal(matrix: DoubleTensor): Double {
         var maxOffDiagonalElement = 0.0
         for (i in 0 until n - 1) {
             for (j in i + 1 until n) {
@@ -50,7 +49,7 @@ internal fun MutableStructure2D<Double>.jacobiHelper(
         return maxOffDiagonalElement
     }
 
-    fun rotate(a: BufferedTensor<Double>, s: Double, tau: Double, i: Int, j: Int, k: Int, l: Int) {
+    fun rotate(a: DoubleTensor, s: Double, tau: Double, i: Int, j: Int, k: Int, l: Int) {
         val g = a[i, j]
         val h = a[k, l]
         a[i, j] = g - s * (h + g * tau)
@@ -58,8 +57,8 @@ internal fun MutableStructure2D<Double>.jacobiHelper(
     }
 
     fun jacobiIteration(
-        a: BufferedTensor<Double>,
-        v: BufferedTensor<Double>,
+        a: DoubleTensor,
+        v: DoubleTensor,
         d: DoubleBuffer,
         z: DoubleBuffer,
     ) {
@@ -157,7 +156,7 @@ internal val DoubleTensor.vectors: List<DoubleTensor>
     get() {
         val n = shape.size
         val vectorOffset = shape[n - 1]
-        val vectorShape = intArrayOf(shape.last())
+        val vectorShape = Shape(shape.last())
 
         return List(linearSize / vectorOffset) { index ->
             val offset = index * vectorOffset
@@ -174,9 +173,9 @@ internal val DoubleTensor.matrices: List<DoubleTensor>
         val n = shape.size
         check(n >= 2) { "Expected tensor with 2 or more dimensions, got size $n" }
         val matrixOffset = shape[n - 1] * shape[n - 2]
-        val matrixShape = intArrayOf(shape[n - 2], shape[n - 1])
+        val matrixShape = Shape(shape[n - 2], shape[n - 1])
 
-        val size = linearSizeOf(matrixShape)
+        val size = matrixShape.linearSize
 
         return List(linearSize / matrixOffset) { index ->
             val offset = index * matrixOffset

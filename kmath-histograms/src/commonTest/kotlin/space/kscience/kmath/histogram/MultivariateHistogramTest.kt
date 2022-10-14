@@ -7,6 +7,7 @@
 
 package space.kscience.kmath.histogram
 
+import space.kscience.kmath.misc.PerformancePitfall
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.nd.ColumnStrides
 import space.kscience.kmath.operations.invoke
@@ -50,6 +51,7 @@ internal class MultivariateHistogramTest {
         assertEquals(n, histogram.bins.sumOf { it.binValue.toInt() })
     }
 
+    @OptIn(PerformancePitfall::class)
     @Test
     fun testHistogramAlgebra() {
         Histogram.uniformDoubleNDFromRanges(

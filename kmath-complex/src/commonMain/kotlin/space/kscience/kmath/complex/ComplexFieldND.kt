@@ -5,6 +5,7 @@
 
 package space.kscience.kmath.complex
 
+import space.kscience.kmath.misc.PerformancePitfall
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.nd.*
 import space.kscience.kmath.operations.*
@@ -20,6 +21,7 @@ import kotlin.contracts.contract
 public sealed class ComplexFieldOpsND : BufferedFieldOpsND<Complex, ComplexField>(ComplexField.bufferAlgebra),
     ScaleOperations<StructureND<Complex>>, ExtendedFieldOps<StructureND<Complex>>, PowerOperations<StructureND<Complex>> {
 
+    @OptIn(PerformancePitfall::class)
     override fun StructureND<Complex>.toBufferND(): BufferND<Complex> = when (this) {
         is BufferND -> this
         else -> {
@@ -69,12 +71,12 @@ public class ComplexFieldND(override val shape: Shape) :
 
 public val ComplexField.ndAlgebra: ComplexFieldOpsND get() = ComplexFieldOpsND
 
-public fun ComplexField.ndAlgebra(vararg shape: Int): ComplexFieldND = ComplexFieldND(shape)
+public fun ComplexField.ndAlgebra(vararg shape: Int): ComplexFieldND = ComplexFieldND(Shape(shape))
 
 /**
  * Produce a context for n-dimensional operations inside this real field
  */
 public inline fun <R> ComplexField.withNdAlgebra(vararg shape: Int, action: ComplexFieldND.() -> R): R {
     contract { callsInPlace(action, InvocationKind.EXACTLY_ONCE) }
-    return ComplexFieldND(shape).action()
+    return ComplexFieldND(Shape(shape)).action()
 }

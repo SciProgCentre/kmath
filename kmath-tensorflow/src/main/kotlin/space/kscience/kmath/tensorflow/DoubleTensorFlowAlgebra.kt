@@ -28,6 +28,8 @@ public class DoubleTensorFlowOutput(
 
 }
 
+internal fun Shape.toLongArray(): LongArray = LongArray(size) { get(it).toLong() }
+
 public class DoubleTensorFlowAlgebra internal constructor(
     graph: Graph,
 ) : TensorFlowAlgebra<Double, TFloat64, DoubleField>(graph), PowerOperations<StructureND<Double>> {

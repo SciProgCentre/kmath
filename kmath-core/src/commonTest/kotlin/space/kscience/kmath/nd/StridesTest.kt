@@ -10,7 +10,7 @@ import kotlin.test.Test
 class StridesTest {
     @Test
     fun checkRowBasedStrides() {
-        val strides = RowStrides(intArrayOf(3, 3))
+        val strides = RowStrides(Shape(3, 3))
         var counter = 0
         for(i in 0..2){
             for(j in 0..2){
@@ -24,7 +24,7 @@ class StridesTest {
 
     @Test
     fun checkColumnBasedStrides() {
-        val strides = ColumnStrides(intArrayOf(3, 3))
+        val strides = ColumnStrides(Shape(3, 3))
         var counter = 0
         for(i in 0..2){
             for(j in 0..2){

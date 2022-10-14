@@ -5,10 +5,7 @@
 
 package space.kscience.kmath.tensors.core.internal
 
-import space.kscience.kmath.nd.MutableStructure1D
-import space.kscience.kmath.nd.MutableStructure2D
-import space.kscience.kmath.nd.StructureND
-import space.kscience.kmath.nd.as1D
+import space.kscience.kmath.nd.*
 import space.kscience.kmath.operations.invoke
 import space.kscience.kmath.structures.DoubleBuffer
 import space.kscience.kmath.structures.IntBuffer
@@ -98,7 +95,7 @@ internal fun <T> StructureND<T>.setUpPivots(): IntTensor {
     pivotsShape[n - 2] = m + 1
 
     return IntTensor(
-        pivotsShape,
+        Shape(pivotsShape),
         IntBuffer(pivotsShape.reduce(Int::times)) { 0 }
     )
 }
@@ -243,10 +240,10 @@ internal fun DoubleTensorAlgebra.svd1d(a: DoubleTensor, epsilon: Double = 1e-10)
     val b: DoubleTensor
     if (n > m) {
         b = a.transposed(0, 1).dot(a)
-        v = DoubleTensor(intArrayOf(m), DoubleBuffer.randomUnitVector(m, 0))
+        v = DoubleTensor(Shape(m), DoubleBuffer.randomUnitVector(m, 0))
     } else {
         b = a.dot(a.transposed(0, 1))
-        v = DoubleTensor(intArrayOf(n), DoubleBuffer.randomUnitVector(n, 0))
+        v = DoubleTensor(Shape(n), DoubleBuffer.randomUnitVector(n, 0))
     }
 
     var lastV: DoubleTensor
@@ -278,7 +275,7 @@ internal fun DoubleTensorAlgebra.svdHelper(
                     outerProduct[i * v.shape[0] + j] = u.getTensor(i).value() * v.getTensor(j).value()
                 }
             }
-            a = a - singularValue.times(DoubleTensor(intArrayOf(u.shape[0], v.shape[0]), outerProduct.asBuffer()))
+            a = a - singularValue.times(DoubleTensor(Shape(u.shape[0], v.shape[0]), outerProduct.asBuffer()))
         }
         var v: DoubleTensor
         var u: DoubleTensor

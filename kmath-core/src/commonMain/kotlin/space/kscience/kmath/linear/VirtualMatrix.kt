@@ -5,6 +5,8 @@
 
 package space.kscience.kmath.linear
 
+import space.kscience.kmath.nd.Shape
+
 /**
  * The matrix where each element is evaluated each time when is being accessed.
  *
@@ -16,7 +18,7 @@ public class VirtualMatrix<out T : Any>(
     public val generator: (i: Int, j: Int) -> T,
 ) : Matrix<T> {
 
-    override val shape: IntArray get() = intArrayOf(rowNum, colNum)
+    override val shape: Shape get() = Shape(rowNum, colNum)
 
     override operator fun get(i: Int, j: Int): T = generator(i, j)
 }

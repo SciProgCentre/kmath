@@ -5,6 +5,9 @@
 
 package space.kscience.kmath.nd
 
+import space.kscience.kmath.misc.PerformancePitfall
+
+@OptIn(PerformancePitfall::class)
 public fun <T> StructureND<T>.roll(axis: Int, step: Int = 1): StructureND<T> {
     require(axis in shape.indices) { "Axis $axis is outside of shape dimensions: [0, ${shape.size})" }
     return VirtualStructureND(shape) { index ->
@@ -19,6 +22,7 @@ public fun <T> StructureND<T>.roll(axis: Int, step: Int = 1): StructureND<T> {
     }
 }
 
+@OptIn(PerformancePitfall::class)
 public fun <T> StructureND<T>.roll(pair: Pair<Int, Int>, vararg others: Pair<Int, Int>): StructureND<T> {
     val axisMap: Map<Int, Int> = mapOf(pair, *others)
     require(axisMap.keys.all { it in shape.indices }) { "Some of axes ${axisMap.keys} is outside of shape dimensions: [0, ${shape.size})" }

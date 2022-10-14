@@ -13,14 +13,16 @@ import kotlin.jvm.JvmInline
 
 @JvmInline
 public value class MultikTensor<T>(public val array: MutableMultiArray<T, DN>) : Tensor<T> {
-    override val shape: Shape get() = array.shape
+    override val shape: Shape get() = Shape(array.shape)
 
+    @PerformancePitfall
     override fun get(index: IntArray): T = array[index]
 
     @PerformancePitfall
     override fun elements(): Sequence<Pair<IntArray, T>> =
         array.multiIndices.iterator().asSequence().map { it to get(it) }
 
+    @PerformancePitfall
     override fun set(index: IntArray, value: T) {
         array[index] = value
     }

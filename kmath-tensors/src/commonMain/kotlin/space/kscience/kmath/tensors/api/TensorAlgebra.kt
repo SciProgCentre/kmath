@@ -6,6 +6,7 @@
 package space.kscience.kmath.tensors.api
 
 import space.kscience.kmath.nd.RingOpsND
+import space.kscience.kmath.nd.Shape
 import space.kscience.kmath.nd.StructureND
 import space.kscience.kmath.operations.Ring
 
@@ -176,11 +177,13 @@ public interface TensorAlgebra<T, A : Ring<T>> : RingOpsND<T, A> {
      * Returns a tensor that is a transposed version of this tensor. The given dimensions [i] and [j] are swapped.
      * For more information: https://pytorch.org/docs/stable/generated/torch.transpose.html
      *
+     * If axis indices are negative, they are counted from shape end.
+     *
      * @param i the first dimension to be transposed
      * @param j the second dimension to be transposed
      * @return transposed tensor
      */
-    public fun Tensor<T>.transposed(i: Int = -2, j: Int = -1): Tensor<T>
+    public fun StructureND<T>.transposed(i: Int = shape.size - 2, j: Int = shape.size - 1): Tensor<T>
 
     /**
      * Returns a new tensor with the same data as the self tensor but of a different shape.
@@ -190,7 +193,7 @@ public interface TensorAlgebra<T, A : Ring<T>> : RingOpsND<T, A> {
      * @param shape the desired size
      * @return tensor with new shape
      */
-    public fun Tensor<T>.view(shape: IntArray): Tensor<T>
+    public fun Tensor<T>.view(shape: Shape): Tensor<T>
 
     /**
      * View this tensor as the same size as [other].
@@ -248,7 +251,7 @@ public interface TensorAlgebra<T, A : Ring<T>> : RingOpsND<T, A> {
      * are filled by [diagonalEntries]
      */
     public fun diagonalEmbedding(
-        diagonalEntries: Tensor<T>,
+        diagonalEntries: StructureND<T>,
         offset: Int = 0,
         dim1: Int = -2,
         dim2: Int = -1,

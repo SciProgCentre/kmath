@@ -46,5 +46,5 @@ public class IntRingND(
 
 public inline fun <R> IntRing.withNdAlgebra(vararg shape: Int, action: IntRingND.() -> R): R {
     contract { callsInPlace(action, InvocationKind.EXACTLY_ONCE) }
-    return IntRingND(shape).run(action)
+    return IntRingND(Shape(shape)).run(action)
 }

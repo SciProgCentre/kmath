@@ -7,10 +7,7 @@ package space.kscience.kmath.tensors.core
 
 import space.kscience.kmath.misc.PerformancePitfall
 import space.kscience.kmath.misc.UnstableKMathAPI
-import space.kscience.kmath.nd.MutableStructure2D
-import space.kscience.kmath.nd.MutableStructureND
-import space.kscience.kmath.nd.Shape
-import space.kscience.kmath.nd.Strides
+import space.kscience.kmath.nd.*
 import space.kscience.kmath.structures.*
 import space.kscience.kmath.tensors.core.internal.toPrettyString
 import kotlin.jvm.JvmInline
@@ -87,22 +84,30 @@ public inline fun OffsetDoubleBuffer.mapInPlace(operation: (Double) -> Double) {
  * [DoubleTensor] always uses row-based strides
  */
 public class DoubleTensor(
-    shape: IntArray,
+    shape: Shape,
     override val source: OffsetDoubleBuffer,
-) : BufferedTensor<Double>(shape) {
+) : BufferedTensor<Double>(shape), MutableStructureNDOfDouble {
 
     init {
         require(linearSize == source.size) { "Source buffer size must be equal tensor size" }
     }
 
-    public constructor(shape: IntArray, buffer: DoubleBuffer) : this(shape, OffsetDoubleBuffer(buffer, 0, buffer.size))
+    public constructor(shape: Shape, buffer: DoubleBuffer) : this(shape, OffsetDoubleBuffer(buffer, 0, buffer.size))
 
-    override fun get(index: IntArray): Double = this.source[indices.offset(index)]
 
+    @OptIn(PerformancePitfall::class)
+    override fun get(index: IntArray): Double = source[indices.offset(index)]
+
+    @OptIn(PerformancePitfall::class)
     override fun set(index: IntArray, value: Double) {
         source[indices.offset(index)] = value
     }
 
+    override fun getDouble(index: IntArray): Double = get(index)
+
+    override fun setDouble(index: IntArray, value: Double) {
+        set(index, value)
+    }
 
     override fun toString(): String = toPrettyString()
 }
@@ -140,25 +145,26 @@ public value class DoubleTensor2D(public val tensor: DoubleTensor) : MutableStru
 
     @PerformancePitfall
     override fun elements(): Sequence<Pair<IntArray, Double>> = tensor.elements()
+    @OptIn(PerformancePitfall::class)
     override fun get(index: IntArray): Double = tensor[index]
     override val shape: Shape get() = tensor.shape
 }
 
 public fun DoubleTensor.asDoubleTensor2D(): DoubleTensor2D = DoubleTensor2D(this)
 
-public fun DoubleTensor.asDoubleBuffer(): OffsetDoubleBuffer = if(shape.size == 1){
+public fun DoubleTensor.asDoubleBuffer(): OffsetDoubleBuffer = if (shape.size == 1) {
     source
 } else {
-    error("Only 1D tensors could be cast to 1D" )
+    error("Only 1D tensors could be cast to 1D")
 }
 
 public inline fun DoubleTensor.forEachMatrix(block: (index: IntArray, matrix: DoubleTensor2D) -> Unit) {
     val n = shape.size
     check(n >= 2) { "Expected tensor with 2 or more dimensions, got size $n" }
     val matrixOffset = shape[n - 1] * shape[n - 2]
-    val matrixShape = intArrayOf(shape[n - 2], shape[n - 1])
+    val matrixShape = Shape(shape[n - 2], shape[n - 1])
 
-    val size = Strides.linearSizeOf(matrixShape)
+    val size = matrixShape.linearSize
     for (i in 0 until linearSize / matrixOffset) {
         val offset = i * matrixOffset
         val index = indices.index(offset).sliceArray(0 until (shape.size - 2))

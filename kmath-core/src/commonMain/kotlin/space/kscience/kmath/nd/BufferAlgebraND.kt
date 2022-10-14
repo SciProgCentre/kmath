@@ -12,7 +12,7 @@ import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.operations.*
 
 public interface BufferAlgebraND<T, out A : Algebra<T>> : AlgebraND<T, A> {
-    public val indexerBuilder: (IntArray) -> ShapeIndexer
+    public val indexerBuilder: (Shape) -> ShapeIndexer
     public val bufferAlgebra: BufferAlgebra<T, A>
     override val elementAlgebra: A get() = bufferAlgebra.elementAlgebra
 
@@ -26,6 +26,7 @@ public interface BufferAlgebraND<T, out A : Algebra<T>> : AlgebraND<T, A> {
         )
     }
 
+    @OptIn(PerformancePitfall::class)
     public fun StructureND<T>.toBufferND(): BufferND<T> = when (this) {
         is BufferND -> this
         else -> {
@@ -46,7 +47,7 @@ public interface BufferAlgebraND<T, out A : Algebra<T>> : AlgebraND<T, A> {
         zipInline(left.toBufferND(), right.toBufferND(), transform)
 
     public companion object {
-        public val defaultIndexerBuilder: (IntArray) -> ShapeIndexer = ::Strides
+        public val defaultIndexerBuilder: (Shape) -> ShapeIndexer = ::Strides
     }
 }
 
@@ -98,24 +99,24 @@ internal inline fun <T, A : Algebra<T>> BufferAlgebraND<T, A>.zipInline(
 @OptIn(PerformancePitfall::class)
 public open class BufferedGroupNDOps<T, out A : Group<T>>(
     override val bufferAlgebra: BufferAlgebra<T, A>,
-    override val indexerBuilder: (IntArray) -> ShapeIndexer = BufferAlgebraND.defaultIndexerBuilder,
+    override val indexerBuilder: (Shape) -> ShapeIndexer = BufferAlgebraND.defaultIndexerBuilder,
 ) : GroupOpsND<T, A>, BufferAlgebraND<T, A> {
     override fun StructureND<T>.unaryMinus(): StructureND<T> = map { -it }
 }
 
 public open class BufferedRingOpsND<T, out A : Ring<T>>(
     bufferAlgebra: BufferAlgebra<T, A>,
-    indexerBuilder: (IntArray) -> ShapeIndexer = BufferAlgebraND.defaultIndexerBuilder,
+    indexerBuilder: (Shape) -> ShapeIndexer = BufferAlgebraND.defaultIndexerBuilder,
 ) : BufferedGroupNDOps<T, A>(bufferAlgebra, indexerBuilder), RingOpsND<T, A>
 
 public open class BufferedFieldOpsND<T, out A : Field<T>>(
     bufferAlgebra: BufferAlgebra<T, A>,
-    indexerBuilder: (IntArray) -> ShapeIndexer = BufferAlgebraND.defaultIndexerBuilder,
+    indexerBuilder: (Shape) -> ShapeIndexer = BufferAlgebraND.defaultIndexerBuilder,
 ) : BufferedRingOpsND<T, A>(bufferAlgebra, indexerBuilder), FieldOpsND<T, A> {
 
     public constructor(
         elementAlgebra: A,
-        indexerBuilder: (IntArray) -> ShapeIndexer = BufferAlgebraND.defaultIndexerBuilder,
+        indexerBuilder: (Shape) -> ShapeIndexer = BufferAlgebraND.defaultIndexerBuilder,
     ) : this(BufferFieldOps(elementAlgebra), indexerBuilder)
 
     @OptIn(PerformancePitfall::class)
@@ -130,7 +131,7 @@ public val <T, A : Field<T>> BufferAlgebra<T, A>.nd: BufferedFieldOpsND<T, A> ge
 public fun <T, A : Algebra<T>> BufferAlgebraND<T, A>.structureND(
     vararg shape: Int,
     initializer: A.(IntArray) -> T,
-): BufferND<T> = structureND(shape, initializer)
+): BufferND<T> = structureND(Shape(shape), initializer)
 
 public fun <T, EA : Algebra<T>, A> A.structureND(
     initializer: EA.(IntArray) -> T,

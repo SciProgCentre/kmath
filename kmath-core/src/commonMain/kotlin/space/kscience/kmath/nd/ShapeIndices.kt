@@ -49,10 +49,10 @@ public abstract class Strides : ShapeIndexer {
     /**
      * Array strides
      */
-    public abstract val strides: IntArray
+    internal abstract val strides: IntArray
 
     public override fun offset(index: IntArray): Int = index.mapIndexed { i, value ->
-        if (value < 0 || value >= shape[i]) throw IndexOutOfBoundsException("Index $value out of shape bounds: (0,${this.shape[i]})")
+        if (value !in 0 until shape[i]) throw IndexOutOfBoundsException("Index $value out of shape bounds: (0, ${this.shape[i]})")
         value * strides[i]
     }.sum()
 
@@ -63,15 +63,12 @@ public abstract class Strides : ShapeIndexer {
      */
     public override fun asSequence(): Sequence<IntArray> = (0 until linearSize).asSequence().map(::index)
 
-    public companion object{
-        public fun linearSizeOf(shape: IntArray): Int = shape.reduce(Int::times)
-    }
 }
 
 /**
  * Column-first [Strides]. Columns are represented as continuous arrays
  */
-public class ColumnStrides(override val shape: IntArray) : Strides() {
+public class ColumnStrides(override val shape: Shape) : Strides() {
     override val linearSize: Int get() = strides[shape.size]
 
     /**
@@ -121,7 +118,7 @@ public class ColumnStrides(override val shape: IntArray) : Strides() {
  *
  * @param shape the shape of the tensor.
  */
-public class RowStrides(override val shape: IntArray) : Strides() {
+public class RowStrides(override val shape: Shape) : Strides() {
 
     override val strides: IntArray by lazy {
         val nDim = shape.size
@@ -151,7 +148,7 @@ public class RowStrides(override val shape: IntArray) : Strides() {
         return res
     }
 
-    override val linearSize: Int get() = linearSizeOf(shape)
+    override val linearSize: Int get() = shape.linearSize
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -166,9 +163,9 @@ public class RowStrides(override val shape: IntArray) : Strides() {
 }
 
 @ThreadLocal
-private val defaultStridesCache = HashMap<IntArray, Strides>()
+private val defaultStridesCache = HashMap<Shape, Strides>()
 
 /**
  * Cached builder for default strides
  */
-public fun Strides(shape: IntArray): Strides = defaultStridesCache.getOrPut(shape) { RowStrides(shape) }
+public fun Strides(shape: Shape): Strides = defaultStridesCache.getOrPut(shape) { RowStrides(shape) }

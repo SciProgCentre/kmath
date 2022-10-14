@@ -30,5 +30,5 @@ public class ShortRingND(
 
 public inline fun <R> ShortRing.withNdAlgebra(vararg shape: Int, action: ShortRingND.() -> R): R {
     contract { callsInPlace(action, InvocationKind.EXACTLY_ONCE) }
-    return ShortRingND(shape).run(action)
+    return ShortRingND(Shape(shape)).run(action)
 }

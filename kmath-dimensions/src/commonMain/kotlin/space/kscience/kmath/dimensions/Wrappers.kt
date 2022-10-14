@@ -6,6 +6,7 @@
 package space.kscience.kmath.dimensions
 
 import space.kscience.kmath.linear.*
+import space.kscience.kmath.nd.Shape
 import space.kscience.kmath.nd.Structure2D
 import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.operations.Ring
@@ -47,7 +48,7 @@ public interface DMatrix<out T, R : Dimension, C : Dimension> : Structure2D<T> {
 public value class DMatrixWrapper<out T, R : Dimension, C : Dimension>(
     private val structure: Structure2D<T>,
 ) : DMatrix<T, R, C> {
-    override val shape: IntArray get() = structure.shape
+    override val shape: Shape get() = structure.shape
     override val rowNum: Int get() = shape[0]
     override val colNum: Int get() = shape[1]
     override operator fun get(i: Int, j: Int): T = structure[i, j]

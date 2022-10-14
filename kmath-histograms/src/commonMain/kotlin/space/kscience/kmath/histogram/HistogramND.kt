@@ -7,6 +7,7 @@ package space.kscience.kmath.histogram
 
 import space.kscience.kmath.domains.Domain
 import space.kscience.kmath.linear.Point
+import space.kscience.kmath.misc.PerformancePitfall
 import space.kscience.kmath.nd.ColumnStrides
 import space.kscience.kmath.nd.FieldOpsND
 import space.kscience.kmath.nd.Shape
@@ -24,6 +25,7 @@ public class HistogramND<T : Comparable<T>, D : Domain<T>, V : Any>(
     internal val values: StructureND<V>,
 ) : Histogram<T, V, DomainBin<T, D, V>> {
 
+    @OptIn(PerformancePitfall::class)
     override fun get(point: Point<T>): DomainBin<T, D, V>? {
         val index = group.getIndexOrNull(point) ?: return null
         return group.produceBin(index, values[index])
@@ -31,6 +33,7 @@ public class HistogramND<T : Comparable<T>, D : Domain<T>, V : Any>(
 
     override val dimension: Int get() = group.shape.size
 
+    @OptIn(PerformancePitfall::class)
     override val bins: Iterable<DomainBin<T, D, V>>
         get() = ColumnStrides(group.shape).asSequence().map {
             group.produceBin(it, values[it])

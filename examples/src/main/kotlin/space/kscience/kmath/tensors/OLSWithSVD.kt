@@ -6,6 +6,8 @@
 package space.kscience.kmath.tensors
 
 import space.kscience.kmath.misc.PerformancePitfall
+import space.kscience.kmath.nd.Shape
+import space.kscience.kmath.nd.contentEquals
 import space.kscience.kmath.operations.invoke
 import space.kscience.kmath.tensors.core.DoubleTensor
 import space.kscience.kmath.tensors.core.DoubleTensorAlgebra
@@ -23,10 +25,10 @@ fun main() {
     DoubleTensorAlgebra {
         // take coefficient vector from normal distribution
         val alpha = randomNormal(
-            intArrayOf(5),
+            Shape(5),
             randSeed
         ) + fromArray(
-            intArrayOf(5),
+            Shape(5),
             doubleArrayOf(1.0, 2.5, 3.4, 5.0, 10.1)
         )
 
@@ -34,7 +36,7 @@ fun main() {
 
         // also take sample of size 20 from normal distribution for x
         val x = randomNormal(
-            intArrayOf(20, 5),
+            Shape(20, 5),
             randSeed
         )
 
@@ -50,11 +52,13 @@ fun main() {
 
 
         // inverse Sigma matrix can be restored from singular values with diagonalEmbedding function
-        val sigma = diagonalEmbedding(singValues.map{ if (abs(it) < 1e-3) 0.0 else 1.0/it })
+        val sigma = diagonalEmbedding(singValues.map { if (abs(it) < 1e-3) 0.0 else 1.0 / it })
 
         val alphaOLS = v dot sigma dot u.transposed() dot y
-        println("Estimated alpha:\n" +
-                "$alphaOLS")
+        println(
+            "Estimated alpha:\n" +
+                    "$alphaOLS"
+        )
 
         // figure out MSE of approximation
         fun mse(yTrue: DoubleTensor, yPred: DoubleTensor): Double {

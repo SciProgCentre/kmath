@@ -17,7 +17,7 @@ import java.util.stream.IntStream
  * A demonstration implementation of NDField over Real using Java [java.util.stream.DoubleStream] for parallel
  * execution.
  */
-class StreamDoubleFieldND(override val shape: IntArray) : FieldND<Double, DoubleField>,
+class StreamDoubleFieldND(override val shape: Shape) : FieldND<Double, DoubleField>,
     NumbersAddOps<StructureND<Double>>,
     ExtendedField<StructureND<Double>> {
 
@@ -31,6 +31,7 @@ class StreamDoubleFieldND(override val shape: IntArray) : FieldND<Double, Double
         return structureND(shape) { d }
     }
 
+    @OptIn(PerformancePitfall::class)
     private val StructureND<Double>.buffer: DoubleBuffer
         get() = when {
             !shape.contentEquals(this@StreamDoubleFieldND.shape) -> throw ShapeMismatchException(
@@ -110,4 +111,4 @@ class StreamDoubleFieldND(override val shape: IntArray) : FieldND<Double, Double
     override fun atanh(arg: StructureND<Double>): BufferND<Double> = arg.map { atanh(it) }
 }
 
-fun DoubleField.ndStreaming(vararg shape: Int): StreamDoubleFieldND = StreamDoubleFieldND(shape)
+fun DoubleField.ndStreaming(vararg shape: Int): StreamDoubleFieldND = StreamDoubleFieldND(Shape(shape))

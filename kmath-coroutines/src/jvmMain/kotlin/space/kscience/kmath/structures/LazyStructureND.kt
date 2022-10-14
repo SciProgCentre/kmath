@@ -9,11 +9,12 @@ import kotlinx.coroutines.*
 import space.kscience.kmath.coroutines.Math
 import space.kscience.kmath.misc.PerformancePitfall
 import space.kscience.kmath.nd.ColumnStrides
+import space.kscience.kmath.nd.Shape
 import space.kscience.kmath.nd.StructureND
 
 public class LazyStructureND<out T>(
     public val scope: CoroutineScope,
-    override val shape: IntArray,
+    override val shape: Shape,
     public val function: suspend (IntArray) -> T,
 ) : StructureND<T> {
     private val cache: MutableMap<IntArray, Deferred<T>> = HashMap()
@@ -23,6 +24,7 @@ public class LazyStructureND<out T>(
     }
 
     public suspend fun await(index: IntArray): T = async(index).await()
+    @PerformancePitfall
     override operator fun get(index: IntArray): T = runBlocking { async(index).await() }
 
     @OptIn(PerformancePitfall::class)

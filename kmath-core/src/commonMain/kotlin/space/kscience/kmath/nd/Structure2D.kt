@@ -29,7 +29,7 @@ public interface Structure2D<out T> : StructureND<T> {
      */
     public val colNum: Int
 
-    override val shape: IntArray get() = intArrayOf(rowNum, colNum)
+    override val shape: Shape get() = Shape(rowNum, colNum)
 
     /**
      * The buffer of rows of this structure. It gets elements from the structure dynamically.
@@ -54,6 +54,7 @@ public interface Structure2D<out T> : StructureND<T> {
      */
     public operator fun get(i: Int, j: Int): T
 
+    @PerformancePitfall
     override operator fun get(index: IntArray): T {
         require(index.size == 2) { "Index dimension mismatch. Expected 2 but found ${index.size}" }
         return get(index[0], index[1])
@@ -106,6 +107,7 @@ private value class Structure2DWrapper<out T>(val structure: StructureND<T>) : S
     override val rowNum: Int get() = shape[0]
     override val colNum: Int get() = shape[1]
 
+    @PerformancePitfall
     override operator fun get(i: Int, j: Int): T = structure[i, j]
 
     override fun <F : StructureFeature> getFeature(type: KClass<out F>): F? = structure.getFeature(type)
@@ -123,12 +125,15 @@ private class MutableStructure2DWrapper<T>(val structure: MutableStructureND<T>)
     override val rowNum: Int get() = shape[0]
     override val colNum: Int get() = shape[1]
 
+    @PerformancePitfall
     override operator fun get(i: Int, j: Int): T = structure[i, j]
 
+    @PerformancePitfall
     override fun set(index: IntArray, value: T) {
         structure[index] = value
     }
 
+    @PerformancePitfall
     override operator fun set(i: Int, j: Int, value: T) {
         structure[intArrayOf(i, j)] = value
     }

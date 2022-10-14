@@ -21,14 +21,14 @@ internal class TestDoubleTensor {
     @Test
     fun testValue() = DoubleTensorAlgebra {
         val value = 12.5
-        val tensor = fromArray(intArrayOf(1), doubleArrayOf(value))
+        val tensor = fromArray(Shape(1), doubleArrayOf(value))
         assertEquals(tensor.value(), value)
     }
 
     @OptIn(PerformancePitfall::class)
     @Test
     fun testStrides() = DoubleTensorAlgebra {
-        val tensor = fromArray(intArrayOf(2, 2), doubleArrayOf(3.5, 5.8, 58.4, 2.4))
+        val tensor = fromArray(Shape(2, 2), doubleArrayOf(3.5, 5.8, 58.4, 2.4))
         assertEquals(tensor[intArrayOf(0, 1)], 5.8)
         assertTrue(
             tensor.elements().map { it.second }.toList()
@@ -38,7 +38,7 @@ internal class TestDoubleTensor {
 
     @Test
     fun testGet() = DoubleTensorAlgebra {
-        val tensor = fromArray(intArrayOf(1, 2, 2), doubleArrayOf(3.5, 5.8, 58.4, 2.4))
+        val tensor = fromArray(Shape(1, 2, 2), doubleArrayOf(3.5, 5.8, 58.4, 2.4))
         val matrix = tensor.getTensor(0).asDoubleTensor2D()
         assertEquals(matrix[0, 1], 5.8)
 
@@ -67,7 +67,7 @@ internal class TestDoubleTensor {
         val doubleArray = DoubleBuffer(1.0, 2.0, 3.0)
 
         // create ND buffers, no data is copied
-        val ndArray: MutableBufferND<Double> = DoubleBufferND(ColumnStrides(intArrayOf(3)), doubleArray)
+        val ndArray: MutableBufferND<Double> = DoubleBufferND(ColumnStrides(Shape(3)), doubleArray)
 
         // map to tensors
         val tensorArray = ndArray.asDoubleTensor() // Data is copied because of strides change.
@@ -91,7 +91,7 @@ internal class TestDoubleTensor {
 
     @Test
     fun test2D() = with(DoubleTensorAlgebra) {
-        val tensor: DoubleTensor = structureND(intArrayOf(3, 3)) { (i, j) -> (i - j).toDouble() }
+        val tensor: DoubleTensor = structureND(Shape(3, 3)) { (i, j) -> (i - j).toDouble() }
         //println(tensor.toPrettyString())
         val tensor2d = tensor.asDoubleTensor2D()
         assertBufferEquals(DoubleBuffer(1.0, 0.0, -1.0), tensor2d.rows[1])
@@ -100,7 +100,7 @@ internal class TestDoubleTensor {
 
     @Test
     fun testMatrixIteration() = with(DoubleTensorAlgebra) {
-        val tensor = structureND(intArrayOf(3, 3, 3, 3)) { index -> index.sum().toDouble() }
+        val tensor = structureND(Shape(3, 3, 3, 3)) { index -> index.sum().toDouble() }
         tensor.forEachMatrix { index, matrix ->
             println(index.joinToString { it.toString() })
             println(matrix)

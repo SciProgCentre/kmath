@@ -7,6 +7,7 @@
 - Algebra now has an obligatory `bufferFactory` (#477).
 
 ### Changed
+- Shape is read-only
 - Major refactor of tensors (only minor API changes)
 - Kotlin 1.7.20
 - `LazyStructure` `deffered` -> `async` to comply with coroutines code style

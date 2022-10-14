@@ -18,9 +18,12 @@ import org.tensorflow.types.TInt32
 import org.tensorflow.types.family.TNumber
 import org.tensorflow.types.family.TType
 import space.kscience.kmath.misc.PerformancePitfall
+import space.kscience.kmath.misc.UnsafeKMathAPI
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.nd.Shape
 import space.kscience.kmath.nd.StructureND
+import space.kscience.kmath.nd.asArray
+import space.kscience.kmath.nd.contentEquals
 import space.kscience.kmath.operations.Ring
 import space.kscience.kmath.tensors.api.Tensor
 import space.kscience.kmath.tensors.api.TensorAlgebra
@@ -38,7 +41,7 @@ public sealed interface TensorFlowTensor<T> : Tensor<T>
  */
 @JvmInline
 public value class TensorFlowArray<T>(public val tensor: NdArray<T>) : Tensor<T> {
-    override val shape: Shape get() = tensor.shape().asArray().toIntArray()
+    override val shape: Shape get() = Shape(tensor.shape().asArray().toIntArray())
 
     override fun get(index: IntArray): T = tensor.getObject(*index.toLongArray())
 
@@ -62,7 +65,7 @@ public abstract class TensorFlowOutput<T, TT : TType>(
     public var output: Output<TT> = output
         internal set
 
-    override val shape: Shape get() = output.shape().asArray().toIntArray()
+    override val shape: Shape get() = Shape(output.shape().asArray().toIntArray())
 
     protected abstract fun org.tensorflow.Tensor.actualizeTensor(): NdArray<T>
 
@@ -96,8 +99,8 @@ public abstract class TensorFlowAlgebra<T, TT : TNumber, A : Ring<T>> internal c
 
     protected abstract fun const(value: T): Constant<TT>
 
-    override fun StructureND<T>.valueOrNull(): T? = if (shape contentEquals intArrayOf(1))
-        get(Shape(0)) else null
+    override fun StructureND<T>.valueOrNull(): T? = if (shape contentEquals Shape(1))
+        get(intArrayOf(0)) else null
 
     /**
      * Perform binary lazy operation on tensor. Both arguments are implicitly converted
@@ -188,12 +191,13 @@ public abstract class TensorFlowAlgebra<T, TT : TNumber, A : Ring<T>> internal c
         StridedSliceHelper.stridedSlice(ops.scope(), it, Indices.at(i.toLong()))
     }
 
-    override fun Tensor<T>.transposed(i: Int, j: Int): Tensor<T> = operate {
+    override fun StructureND<T>.transposed(i: Int, j: Int): Tensor<T> = operate {
         ops.linalg.transpose(it, ops.constant(intArrayOf(i, j)))
     }
 
-    override fun Tensor<T>.view(shape: IntArray): Tensor<T> = operate {
-        ops.reshape(it, ops.constant(shape))
+    override fun Tensor<T>.view(shape: Shape): Tensor<T> = operate {
+        @OptIn(UnsafeKMathAPI::class)
+        ops.reshape(it, ops.constant(shape.asArray()))
     }
 
     override fun Tensor<T>.viewAs(other: StructureND<T>): Tensor<T> = operate(other) { l, r ->
@@ -208,7 +212,7 @@ public abstract class TensorFlowAlgebra<T, TT : TNumber, A : Ring<T>> internal c
     }
 
     override fun diagonalEmbedding(
-        diagonalEntries: Tensor<T>,
+        diagonalEntries: StructureND<T>,
         offset: Int,
         dim1: Int,
         dim2: Int,

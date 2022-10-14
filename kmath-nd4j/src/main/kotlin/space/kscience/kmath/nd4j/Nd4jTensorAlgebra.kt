@@ -13,9 +13,8 @@ import org.nd4j.linalg.factory.Nd4j
 import org.nd4j.linalg.factory.ops.NDBase
 import org.nd4j.linalg.ops.transforms.Transforms
 import space.kscience.kmath.misc.PerformancePitfall
-import space.kscience.kmath.nd.ColumnStrides
-import space.kscience.kmath.nd.Shape
-import space.kscience.kmath.nd.StructureND
+import space.kscience.kmath.misc.UnsafeKMathAPI
+import space.kscience.kmath.nd.*
 import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.operations.Field
 import space.kscience.kmath.tensors.api.AnalyticTensorAlgebra
@@ -96,7 +95,7 @@ public sealed interface Nd4jTensorAlgebra<T : Number, A : Field<T>> : AnalyticTe
 
     override fun StructureND<T>.unaryMinus(): Nd4jArrayStructure<T> = ndArray.neg().wrap()
     override fun Tensor<T>.getTensor(i: Int): Nd4jArrayStructure<T> = ndArray.slice(i.toLong()).wrap()
-    override fun Tensor<T>.transposed(i: Int, j: Int): Nd4jArrayStructure<T> = ndArray.swapAxes(i, j).wrap()
+    override fun StructureND<T>.transposed(i: Int, j: Int): Nd4jArrayStructure<T> = ndArray.swapAxes(i, j).wrap()
     override fun StructureND<T>.dot(other: StructureND<T>): Nd4jArrayStructure<T> = ndArray.mmul(other.ndArray).wrap()
 
     override fun StructureND<T>.min(dim: Int, keepDim: Boolean): Nd4jArrayStructure<T> =
@@ -108,7 +107,9 @@ public sealed interface Nd4jTensorAlgebra<T : Number, A : Field<T>> : AnalyticTe
     override fun StructureND<T>.max(dim: Int, keepDim: Boolean): Nd4jArrayStructure<T> =
         ndArray.max(keepDim, dim).wrap()
 
-    override fun Tensor<T>.view(shape: IntArray): Nd4jArrayStructure<T> = ndArray.reshape(shape).wrap()
+    @OptIn(UnsafeKMathAPI::class)
+    override fun Tensor<T>.view(shape: Shape): Nd4jArrayStructure<T> = ndArray.reshape(shape.asArray()).wrap()
+
     override fun Tensor<T>.viewAs(other: StructureND<T>): Nd4jArrayStructure<T> = view(other.shape)
 
     override fun StructureND<T>.argMin(dim: Int, keepDim: Boolean): Tensor<Int> =
@@ -176,8 +177,9 @@ public object DoubleNd4jTensorAlgebra : Nd4jTensorAlgebra<Double, DoubleField> {
 
     override fun INDArray.wrap(): Nd4jArrayStructure<Double> = asDoubleStructure()
 
+    @OptIn(UnsafeKMathAPI::class)
     override fun structureND(shape: Shape, initializer: DoubleField.(IntArray) -> Double): Nd4jArrayStructure<Double> {
-        val array: INDArray = Nd4j.zeros(*shape)
+        val array: INDArray = Nd4j.zeros(*shape.asArray())
         val indices = ColumnStrides(shape)
         indices.asSequence().forEach { index ->
             array.putScalar(index, elementAlgebra.initializer(index))
@@ -186,21 +188,21 @@ public object DoubleNd4jTensorAlgebra : Nd4jTensorAlgebra<Double, DoubleField> {
     }
 
 
-    @OptIn(PerformancePitfall::class)
+    @OptIn(PerformancePitfall::class, UnsafeKMathAPI::class)
     override val StructureND<Double>.ndArray: INDArray
         get() = when (this) {
             is Nd4jArrayStructure<Double> -> ndArray
-            else -> Nd4j.zeros(*shape).also {
+            else -> Nd4j.zeros(*shape.asArray()).also {
                 elements().forEach { (idx, value) -> it.putScalar(idx, value) }
             }
         }
 
     override fun StructureND<Double>.valueOrNull(): Double? =
-        if (shape contentEquals intArrayOf(1)) ndArray.getDouble(0) else null
+        if (shape contentEquals Shape(1)) ndArray.getDouble(0) else null
 
     // TODO rewrite
     override fun diagonalEmbedding(
-        diagonalEntries: Tensor<Double>,
+        diagonalEntries: StructureND<Double>,
         offset: Int,
         dim1: Int,
         dim2: Int,
