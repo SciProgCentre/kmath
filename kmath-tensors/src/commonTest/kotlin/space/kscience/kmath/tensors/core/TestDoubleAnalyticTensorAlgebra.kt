@@ -5,7 +5,7 @@
 
 package space.kscience.kmath.tensors.core
 
-import space.kscience.kmath.nd.Shape
+import space.kscience.kmath.nd.ShapeND
 import space.kscience.kmath.operations.invoke
 import space.kscience.kmath.structures.asBuffer
 import kotlin.math.*
@@ -14,7 +14,7 @@ import kotlin.test.assertTrue
 
 internal class TestDoubleAnalyticTensorAlgebra {
 
-    val shape = Shape(2, 1, 3, 2)
+    val shape = ShapeND(2, 1, 3, 2)
     val buffer = doubleArrayOf(
         27.1, 20.0, 19.84,
         23.123, 3.0, 2.0,
@@ -103,7 +103,7 @@ internal class TestDoubleAnalyticTensorAlgebra {
         assertTrue { tensor.floor() eq expectedTensor(::floor) }
     }
 
-    val shape2 = Shape(2, 2)
+    val shape2 = ShapeND(2, 2)
     val buffer2 = doubleArrayOf(
         1.0, 2.0,
         -3.0, 4.0
@@ -115,13 +115,13 @@ internal class TestDoubleAnalyticTensorAlgebra {
         assertTrue { tensor2.min() == -3.0 }
         assertTrue {
             tensor2.min(0, true) eq fromArray(
-                Shape(1, 2),
+                ShapeND(1, 2),
                 doubleArrayOf(-3.0, 2.0)
             )
         }
         assertTrue {
             tensor2.min(1, false) eq fromArray(
-                Shape(2),
+                ShapeND(2),
                 doubleArrayOf(1.0, -3.0)
             )
         }
@@ -132,13 +132,13 @@ internal class TestDoubleAnalyticTensorAlgebra {
         assertTrue { tensor2.max() == 4.0 }
         assertTrue {
             tensor2.max(0, true) eq fromArray(
-                Shape(1, 2),
+                ShapeND(1, 2),
                 doubleArrayOf(1.0, 4.0)
             )
         }
         assertTrue {
             tensor2.max(1, false) eq fromArray(
-                Shape(2),
+                ShapeND(2),
                 doubleArrayOf(2.0, 4.0)
             )
         }
@@ -149,13 +149,13 @@ internal class TestDoubleAnalyticTensorAlgebra {
         assertTrue { tensor2.sum() == 4.0 }
         assertTrue {
             tensor2.sum(0, true) eq fromArray(
-                Shape(1, 2),
+                ShapeND(1, 2),
                 doubleArrayOf(-2.0, 6.0)
             )
         }
         assertTrue {
             tensor2.sum(1, false) eq fromArray(
-                Shape(2),
+                ShapeND(2),
                 doubleArrayOf(3.0, 1.0)
             )
         }
@@ -166,13 +166,13 @@ internal class TestDoubleAnalyticTensorAlgebra {
         assertTrue { tensor2.mean() == 1.0 }
         assertTrue {
             tensor2.mean(0, true) eq fromArray(
-                Shape(1, 2),
+                ShapeND(1, 2),
                 doubleArrayOf(-1.0, 3.0)
             )
         }
         assertTrue {
             tensor2.mean(1, false) eq fromArray(
-                Shape(2),
+                ShapeND(2),
                 doubleArrayOf(1.5, 0.5)
             )
         }

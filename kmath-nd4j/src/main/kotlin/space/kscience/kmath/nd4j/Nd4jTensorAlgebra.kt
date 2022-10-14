@@ -37,7 +37,7 @@ public sealed interface Nd4jTensorAlgebra<T : Number, A : Field<T>> : AnalyticTe
      */
     public val StructureND<T>.ndArray: INDArray
 
-    override fun structureND(shape: Shape, initializer: A.(IntArray) -> T): Nd4jArrayStructure<T>
+    override fun structureND(shape: ShapeND, initializer: A.(IntArray) -> T): Nd4jArrayStructure<T>
 
     @OptIn(PerformancePitfall::class)
     override fun StructureND<T>.map(transform: A.(T) -> T): Nd4jArrayStructure<T> =
@@ -108,7 +108,7 @@ public sealed interface Nd4jTensorAlgebra<T : Number, A : Field<T>> : AnalyticTe
         ndArray.max(keepDim, dim).wrap()
 
     @OptIn(UnsafeKMathAPI::class)
-    override fun Tensor<T>.view(shape: Shape): Nd4jArrayStructure<T> = ndArray.reshape(shape.asArray()).wrap()
+    override fun Tensor<T>.view(shape: ShapeND): Nd4jArrayStructure<T> = ndArray.reshape(shape.asArray()).wrap()
 
     override fun Tensor<T>.viewAs(other: StructureND<T>): Nd4jArrayStructure<T> = view(other.shape)
 
@@ -178,7 +178,7 @@ public object DoubleNd4jTensorAlgebra : Nd4jTensorAlgebra<Double, DoubleField> {
     override fun INDArray.wrap(): Nd4jArrayStructure<Double> = asDoubleStructure()
 
     @OptIn(UnsafeKMathAPI::class)
-    override fun structureND(shape: Shape, initializer: DoubleField.(IntArray) -> Double): Nd4jArrayStructure<Double> {
+    override fun structureND(shape: ShapeND, initializer: DoubleField.(IntArray) -> Double): Nd4jArrayStructure<Double> {
         val array: INDArray = Nd4j.zeros(*shape.asArray())
         val indices = ColumnStrides(shape)
         indices.asSequence().forEach { index ->
@@ -198,7 +198,7 @@ public object DoubleNd4jTensorAlgebra : Nd4jTensorAlgebra<Double, DoubleField> {
         }
 
     override fun StructureND<Double>.valueOrNull(): Double? =
-        if (shape contentEquals Shape(1)) ndArray.getDouble(0) else null
+        if (shape contentEquals ShapeND(1)) ndArray.getDouble(0) else null
 
     // TODO rewrite
     override fun diagonalEmbedding(

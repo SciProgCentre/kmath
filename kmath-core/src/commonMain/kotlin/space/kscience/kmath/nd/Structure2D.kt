@@ -29,7 +29,7 @@ public interface Structure2D<out T> : StructureND<T> {
      */
     public val colNum: Int
 
-    override val shape: Shape get() = Shape(rowNum, colNum)
+    override val shape: ShapeND get() = ShapeND(rowNum, colNum)
 
     /**
      * The buffer of rows of this structure. It gets elements from the structure dynamically.
@@ -102,7 +102,7 @@ public interface MutableStructure2D<T> : Structure2D<T>, MutableStructureND<T> {
  */
 @JvmInline
 private value class Structure2DWrapper<out T>(val structure: StructureND<T>) : Structure2D<T> {
-    override val shape: Shape get() = structure.shape
+    override val shape: ShapeND get() = structure.shape
 
     override val rowNum: Int get() = shape[0]
     override val colNum: Int get() = shape[1]
@@ -120,7 +120,7 @@ private value class Structure2DWrapper<out T>(val structure: StructureND<T>) : S
  * A 2D wrapper for a mutable nd-structure
  */
 private class MutableStructure2DWrapper<T>(val structure: MutableStructureND<T>) : MutableStructure2D<T> {
-    override val shape: Shape get() = structure.shape
+    override val shape: ShapeND get() = structure.shape
 
     override val rowNum: Int get() = shape[0]
     override val colNum: Int get() = shape[1]

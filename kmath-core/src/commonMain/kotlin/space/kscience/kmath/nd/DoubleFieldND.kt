@@ -74,7 +74,7 @@ public sealed class DoubleFieldOpsND : BufferedFieldOpsND<Double, DoubleField>(D
         transform: DoubleField.(Double, Double) -> Double,
     ): BufferND<Double> = zipInline(left.toBufferND(), right.toBufferND()) { l, r -> DoubleField.transform(l, r) }
 
-    override fun structureND(shape: Shape, initializer: DoubleField.(IntArray) -> Double): DoubleBufferND {
+    override fun structureND(shape: ShapeND, initializer: DoubleField.(IntArray) -> Double): DoubleBufferND {
         val indexer = indexerBuilder(shape)
         return DoubleBufferND(
             indexer,
@@ -189,7 +189,7 @@ public sealed class DoubleFieldOpsND : BufferedFieldOpsND<Double, DoubleField>(D
 }
 
 @OptIn(UnstableKMathAPI::class)
-public class DoubleFieldND(override val shape: Shape) :
+public class DoubleFieldND(override val shape: ShapeND) :
     DoubleFieldOpsND(), FieldND<Double, DoubleField>, NumbersAddOps<StructureND<Double>>,
     ExtendedField<StructureND<Double>> {
 
@@ -231,8 +231,8 @@ public class DoubleFieldND(override val shape: Shape) :
 
 public val DoubleField.ndAlgebra: DoubleFieldOpsND get() = DoubleFieldOpsND
 
-public fun DoubleField.ndAlgebra(vararg shape: Int): DoubleFieldND = DoubleFieldND(Shape(shape))
-public fun DoubleField.ndAlgebra(shape: Shape): DoubleFieldND = DoubleFieldND(shape)
+public fun DoubleField.ndAlgebra(vararg shape: Int): DoubleFieldND = DoubleFieldND(ShapeND(shape))
+public fun DoubleField.ndAlgebra(shape: ShapeND): DoubleFieldND = DoubleFieldND(shape)
 
 /**
  * Produce a context for n-dimensional operations inside this real field
@@ -240,5 +240,5 @@ public fun DoubleField.ndAlgebra(shape: Shape): DoubleFieldND = DoubleFieldND(sh
 @UnstableKMathAPI
 public inline fun <R> DoubleField.withNdAlgebra(vararg shape: Int, action: DoubleFieldND.() -> R): R {
     contract { callsInPlace(action, InvocationKind.EXACTLY_ONCE) }
-    return DoubleFieldND(Shape(shape)).run(action)
+    return DoubleFieldND(ShapeND(shape)).run(action)
 }

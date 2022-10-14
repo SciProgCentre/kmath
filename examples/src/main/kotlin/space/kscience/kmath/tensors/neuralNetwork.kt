@@ -5,7 +5,7 @@
 
 package space.kscience.kmath.tensors
 
-import space.kscience.kmath.nd.Shape
+import space.kscience.kmath.nd.ShapeND
 import space.kscience.kmath.nd.contentEquals
 import space.kscience.kmath.operations.asIterable
 import space.kscience.kmath.operations.invoke
@@ -70,12 +70,12 @@ class Dense(
 
     private val weights: DoubleTensor = DoubleTensorAlgebra {
         randomNormal(
-            Shape(inputUnits, outputUnits),
+            ShapeND(inputUnits, outputUnits),
             seed
         ) * sqrt(2.0 / (inputUnits + outputUnits))
     }
 
-    private val bias: DoubleTensor = DoubleTensorAlgebra { zeros(Shape(outputUnits)) }
+    private val bias: DoubleTensor = DoubleTensorAlgebra { zeros(ShapeND(outputUnits)) }
 
     override fun forward(input: DoubleTensor): DoubleTensor = BroadcastDoubleTensorAlgebra {
         (input dot weights) + bias
@@ -184,17 +184,17 @@ fun main() = BroadcastDoubleTensorAlgebra {
     //val testSize = sampleSize - trainSize
 
     // take sample of features from normal distribution
-    val x = randomNormal(Shape(sampleSize, features), seed) * 2.5
+    val x = randomNormal(ShapeND(sampleSize, features), seed) * 2.5
 
     x += fromArray(
-        Shape(5),
+        ShapeND(5),
         doubleArrayOf(0.0, -1.0, -2.5, -3.0, 5.5) // row means
     )
 
 
     // define class like '1' if the sum of features > 0 and '0' otherwise
     val y = fromArray(
-        Shape(sampleSize, 1),
+        ShapeND(sampleSize, 1),
         DoubleArray(sampleSize) { i ->
             if (x.getTensor(i).sum() > 0.0) {
                 1.0

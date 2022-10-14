@@ -9,7 +9,7 @@ import space.kscience.kmath.misc.PerformancePitfall
 import space.kscience.kmath.misc.UnstableKMathAPI
 
 public open class VirtualStructureND<T>(
-    override val shape: Shape,
+    override val shape: ShapeND,
     public val producer: (IntArray) -> T,
 ) : StructureND<T> {
 
@@ -22,12 +22,12 @@ public open class VirtualStructureND<T>(
 
 @UnstableKMathAPI
 public class VirtualDoubleStructureND(
-    shape: Shape,
+    shape: ShapeND,
     producer: (IntArray) -> Double,
 ) : VirtualStructureND<Double>(shape, producer)
 
 @UnstableKMathAPI
 public class VirtualIntStructureND(
-    shape: Shape,
+    shape: ShapeND,
     producer: (IntArray) -> Int,
 ) : VirtualStructureND<Int>(shape, producer)

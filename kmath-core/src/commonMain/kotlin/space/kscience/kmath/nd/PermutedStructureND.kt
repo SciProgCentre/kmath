@@ -13,7 +13,7 @@ public class PermutedStructureND<T>(
     public val permutation: (IntArray) -> IntArray,
 ) : StructureND<T> {
 
-    override val shape: Shape
+    override val shape: ShapeND
         get() = origin.shape
 
     @OptIn(PerformancePitfall::class)
@@ -28,7 +28,7 @@ public fun <T> StructureND<T>.permute(
 
 public class PermutedMutableStructureND<T>(
     public val origin: MutableStructureND<T>,
-    override val shape: Shape = origin.shape,
+    override val shape: ShapeND = origin.shape,
     public val permutation: (IntArray) -> IntArray,
 ) : MutableStructureND<T> {
 
@@ -45,6 +45,6 @@ public class PermutedMutableStructureND<T>(
 }
 
 public fun <T> MutableStructureND<T>.permute(
-    newShape: Shape = shape,
+    newShape: ShapeND = shape,
     permutation: (IntArray) -> IntArray,
 ): PermutedMutableStructureND<T> = PermutedMutableStructureND(this, newShape, permutation)

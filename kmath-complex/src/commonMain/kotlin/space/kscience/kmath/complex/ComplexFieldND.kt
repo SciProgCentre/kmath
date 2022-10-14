@@ -59,7 +59,7 @@ public sealed class ComplexFieldOpsND : BufferedFieldOpsND<Complex, ComplexField
 }
 
 @OptIn(UnstableKMathAPI::class)
-public class ComplexFieldND(override val shape: Shape) :
+public class ComplexFieldND(override val shape: ShapeND) :
     ComplexFieldOpsND(), FieldND<Complex, ComplexField>,
     NumbersAddOps<StructureND<Complex>> {
 
@@ -71,12 +71,12 @@ public class ComplexFieldND(override val shape: Shape) :
 
 public val ComplexField.ndAlgebra: ComplexFieldOpsND get() = ComplexFieldOpsND
 
-public fun ComplexField.ndAlgebra(vararg shape: Int): ComplexFieldND = ComplexFieldND(Shape(shape))
+public fun ComplexField.ndAlgebra(vararg shape: Int): ComplexFieldND = ComplexFieldND(ShapeND(shape))
 
 /**
  * Produce a context for n-dimensional operations inside this real field
  */
 public inline fun <R> ComplexField.withNdAlgebra(vararg shape: Int, action: ComplexFieldND.() -> R): R {
     contract { callsInPlace(action, InvocationKind.EXACTLY_ONCE) }
-    return ComplexFieldND(Shape(shape)).action()
+    return ComplexFieldND(ShapeND(shape)).action()
 }

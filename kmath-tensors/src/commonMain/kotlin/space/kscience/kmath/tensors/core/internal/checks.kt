@@ -5,7 +5,7 @@
 
 package space.kscience.kmath.tensors.core.internal
 
-import space.kscience.kmath.nd.Shape
+import space.kscience.kmath.nd.ShapeND
 import space.kscience.kmath.nd.StructureND
 import space.kscience.kmath.nd.contentEquals
 import space.kscience.kmath.nd.linearSize
@@ -15,7 +15,7 @@ import space.kscience.kmath.tensors.core.DoubleTensorAlgebra
 import space.kscience.kmath.tensors.core.asDoubleTensor
 
 
-internal fun checkNotEmptyShape(shape: Shape) =
+internal fun checkNotEmptyShape(shape: ShapeND) =
     check(shape.size > 0) {
         "Illegal empty shape provided"
     }
@@ -24,7 +24,7 @@ internal fun checkEmptyDoubleBuffer(buffer: DoubleArray) = check(buffer.isNotEmp
     "Illegal empty buffer provided"
 }
 
-internal fun checkBufferShapeConsistency(shape: Shape, buffer: DoubleArray) =
+internal fun checkBufferShapeConsistency(shape: ShapeND, buffer: DoubleArray) =
     check(buffer.size == shape.linearSize) {
         "Inconsistent shape ${shape} for buffer of size ${buffer.size} provided"
     }
@@ -40,10 +40,10 @@ internal fun checkTranspose(dim: Int, i: Int, j: Int) =
         "Cannot transpose $i to $j for a tensor of dim $dim"
     }
 
-internal fun <T> checkView(a: Tensor<T>, shape: Shape) =
+internal fun <T> checkView(a: Tensor<T>, shape: ShapeND) =
     check(a.shape.linearSize == shape.linearSize)
 
-internal fun checkSquareMatrix(shape: Shape) {
+internal fun checkSquareMatrix(shape: ShapeND) {
     val n = shape.size
     check(n >= 2) {
         "Expected tensor with 2 or more dimensions, got size $n instead"

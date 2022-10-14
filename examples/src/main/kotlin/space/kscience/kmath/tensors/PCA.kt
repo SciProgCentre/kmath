@@ -5,7 +5,7 @@
 
 package space.kscience.kmath.tensors
 
-import space.kscience.kmath.nd.Shape
+import space.kscience.kmath.nd.ShapeND
 import space.kscience.kmath.tensors.core.tensorAlgebra
 import space.kscience.kmath.tensors.core.withBroadcast
 
@@ -17,7 +17,7 @@ fun main(): Unit = Double.tensorAlgebra.withBroadcast {  // work in context with
 
     // assume x is range from 0 until 10
     val x = fromArray(
-        Shape(10),
+        ShapeND(10),
         DoubleArray(10) { it.toDouble() }
     )
 
@@ -42,13 +42,13 @@ fun main(): Unit = Double.tensorAlgebra.withBroadcast {  // work in context with
 
     // save means ans standard deviations for further recovery
     val mean = fromArray(
-        Shape(2),
+        ShapeND(2),
         doubleArrayOf(xMean, yMean)
     )
     println("Means:\n$mean")
 
     val std = fromArray(
-        Shape(2),
+        ShapeND(2),
         doubleArrayOf(xStd, yStd)
     )
     println("Standard deviations:\n$std")
@@ -69,7 +69,7 @@ fun main(): Unit = Double.tensorAlgebra.withBroadcast {  // work in context with
     // we can restore original data from reduced data;
     // for example, find 7th element of dataset.
     val n = 7
-    val restored = (datasetReduced.getTensor(n) dot v.view(Shape(1, 2))) * std + mean
+    val restored = (datasetReduced.getTensor(n) dot v.view(ShapeND(1, 2))) * std + mean
     println("Original value:\n${dataset.getTensor(n)}")
     println("Restored value:\n$restored")
 }

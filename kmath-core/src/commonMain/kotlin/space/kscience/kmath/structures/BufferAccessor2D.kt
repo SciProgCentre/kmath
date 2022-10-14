@@ -28,7 +28,7 @@ internal class BufferAccessor2D<T>(
 
     //TODO optimize wrapper
     fun MutableBuffer<T>.collect(): Structure2D<T> = StructureND.buffered(
-        ColumnStrides(Shape(rowNum, colNum)),
+        ColumnStrides(ShapeND(rowNum, colNum)),
         factory
     ) { (i, j) ->
         get(i, j)

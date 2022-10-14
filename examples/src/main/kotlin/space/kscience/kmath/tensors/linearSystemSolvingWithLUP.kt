@@ -5,7 +5,7 @@
 
 package space.kscience.kmath.tensors
 
-import space.kscience.kmath.nd.Shape
+import space.kscience.kmath.nd.ShapeND
 import space.kscience.kmath.tensors.core.DoubleTensor
 import space.kscience.kmath.tensors.core.tensorAlgebra
 import space.kscience.kmath.tensors.core.withBroadcast
@@ -16,13 +16,13 @@ fun main() = Double.tensorAlgebra.withBroadcast {// work in context with linear 
 
     // set true value of x
     val trueX = fromArray(
-        Shape(4),
+        ShapeND(4),
         doubleArrayOf(-2.0, 1.5, 6.8, -2.4)
     )
 
     // and A matrix
     val a = fromArray(
-        Shape(4, 4),
+        ShapeND(4, 4),
         doubleArrayOf(
             0.5, 10.5, 4.5, 1.0,
             8.5, 0.9, 12.8, 0.1,
@@ -65,7 +65,7 @@ fun main() = Double.tensorAlgebra.withBroadcast {// work in context with linear 
     // this function returns solution x of a system lx = b, l should be lower triangular
     fun solveLT(l: DoubleTensor, b: DoubleTensor): DoubleTensor {
         val n = l.shape[0]
-        val x = zeros(Shape(n))
+        val x = zeros(ShapeND(n))
         for (i in 0 until n) {
             x[intArrayOf(i)] = (b[intArrayOf(i)] - l.getTensor(i).dot(x).value()) / l[intArrayOf(i, i)]
         }

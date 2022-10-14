@@ -33,7 +33,7 @@ public interface StructureND<out T> : Featured<StructureFeature>, WithShape {
      * The shape of structure i.e., non-empty sequence of non-negative integers that specify sizes of dimensions of
      * this structure.
      */
-    override val shape: Shape
+    override val shape: ShapeND
 
     /**
      * The count of dimensions in this structure. It should be equal to size of [shape].
@@ -147,13 +147,13 @@ public interface StructureND<out T> : Featured<StructureFeature>, WithShape {
         ): BufferND<T> = BufferND(strides, Buffer.auto(type, strides.linearSize) { i -> initializer(strides.index(i)) })
 
         public fun <T> buffered(
-            shape: Shape,
+            shape: ShapeND,
             bufferFactory: BufferFactory<T> = BufferFactory.boxing(),
             initializer: (IntArray) -> T,
         ): BufferND<T> = buffered(ColumnStrides(shape), bufferFactory, initializer)
 
         public inline fun <reified T : Any> auto(
-            shape: Shape,
+            shape: ShapeND,
             crossinline initializer: (IntArray) -> T,
         ): BufferND<T> = auto(ColumnStrides(shape), initializer)
 
@@ -162,13 +162,13 @@ public interface StructureND<out T> : Featured<StructureFeature>, WithShape {
             vararg shape: Int,
             crossinline initializer: (IntArray) -> T,
         ): BufferND<T> =
-            auto(ColumnStrides(Shape(shape)), initializer)
+            auto(ColumnStrides(ShapeND(shape)), initializer)
 
         public inline fun <T : Any> auto(
             type: KClass<T>,
             vararg shape: Int,
             crossinline initializer: (IntArray) -> T,
-        ): BufferND<T> = auto(type, ColumnStrides(Shape(shape)), initializer)
+        ): BufferND<T> = auto(type, ColumnStrides(ShapeND(shape)), initializer)
     }
 }
 

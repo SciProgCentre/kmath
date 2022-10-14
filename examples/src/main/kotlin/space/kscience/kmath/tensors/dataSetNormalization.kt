@@ -5,7 +5,7 @@
 
 package space.kscience.kmath.tensors
 
-import space.kscience.kmath.nd.Shape
+import space.kscience.kmath.nd.ShapeND
 import space.kscience.kmath.tensors.core.tensorAlgebra
 import space.kscience.kmath.tensors.core.withBroadcast
 
@@ -14,10 +14,10 @@ import space.kscience.kmath.tensors.core.withBroadcast
 
 fun main() = Double.tensorAlgebra.withBroadcast {  // work in context with broadcast methods
     // take dataset of 5-element vectors from normal distribution
-    val dataset = randomNormal(Shape(100, 5)) * 1.5 // all elements from N(0, 1.5)
+    val dataset = randomNormal(ShapeND(100, 5)) * 1.5 // all elements from N(0, 1.5)
 
     dataset += fromArray(
-        Shape(5),
+        ShapeND(5),
         doubleArrayOf(0.0, 1.0, 1.5, 3.0, 5.0) // row means
     )
 

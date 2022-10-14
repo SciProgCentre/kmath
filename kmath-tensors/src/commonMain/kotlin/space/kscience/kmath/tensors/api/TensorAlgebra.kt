@@ -6,7 +6,7 @@
 package space.kscience.kmath.tensors.api
 
 import space.kscience.kmath.nd.RingOpsND
-import space.kscience.kmath.nd.Shape
+import space.kscience.kmath.nd.ShapeND
 import space.kscience.kmath.nd.StructureND
 import space.kscience.kmath.operations.Ring
 
@@ -193,7 +193,7 @@ public interface TensorAlgebra<T, A : Ring<T>> : RingOpsND<T, A> {
      * @param shape the desired size
      * @return tensor with new shape
      */
-    public fun Tensor<T>.view(shape: Shape): Tensor<T>
+    public fun Tensor<T>.view(shape: ShapeND): Tensor<T>
 
     /**
      * View this tensor as the same size as [other].

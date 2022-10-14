@@ -156,7 +156,7 @@ internal val DoubleTensor.vectors: List<DoubleTensor>
     get() {
         val n = shape.size
         val vectorOffset = shape[n - 1]
-        val vectorShape = Shape(shape.last())
+        val vectorShape = ShapeND(shape.last())
 
         return List(linearSize / vectorOffset) { index ->
             val offset = index * vectorOffset
@@ -173,7 +173,7 @@ internal val DoubleTensor.matrices: List<DoubleTensor>
         val n = shape.size
         check(n >= 2) { "Expected tensor with 2 or more dimensions, got size $n" }
         val matrixOffset = shape[n - 1] * shape[n - 2]
-        val matrixShape = Shape(shape[n - 2], shape[n - 1])
+        val matrixShape = ShapeND(shape[n - 2], shape[n - 1])
 
         val size = matrixShape.linearSize
 

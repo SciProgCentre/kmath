@@ -84,7 +84,7 @@ public inline fun OffsetDoubleBuffer.mapInPlace(operation: (Double) -> Double) {
  * [DoubleTensor] always uses row-based strides
  */
 public class DoubleTensor(
-    shape: Shape,
+    shape: ShapeND,
     override val source: OffsetDoubleBuffer,
 ) : BufferedTensor<Double>(shape), MutableStructureNDOfDouble {
 
@@ -92,7 +92,7 @@ public class DoubleTensor(
         require(linearSize == source.size) { "Source buffer size must be equal tensor size" }
     }
 
-    public constructor(shape: Shape, buffer: DoubleBuffer) : this(shape, OffsetDoubleBuffer(buffer, 0, buffer.size))
+    public constructor(shape: ShapeND, buffer: DoubleBuffer) : this(shape, OffsetDoubleBuffer(buffer, 0, buffer.size))
 
 
     @OptIn(PerformancePitfall::class)
@@ -147,7 +147,7 @@ public value class DoubleTensor2D(public val tensor: DoubleTensor) : MutableStru
     override fun elements(): Sequence<Pair<IntArray, Double>> = tensor.elements()
     @OptIn(PerformancePitfall::class)
     override fun get(index: IntArray): Double = tensor[index]
-    override val shape: Shape get() = tensor.shape
+    override val shape: ShapeND get() = tensor.shape
 }
 
 public fun DoubleTensor.asDoubleTensor2D(): DoubleTensor2D = DoubleTensor2D(this)
@@ -162,7 +162,7 @@ public inline fun DoubleTensor.forEachMatrix(block: (index: IntArray, matrix: Do
     val n = shape.size
     check(n >= 2) { "Expected tensor with 2 or more dimensions, got size $n" }
     val matrixOffset = shape[n - 1] * shape[n - 2]
-    val matrixShape = Shape(shape[n - 2], shape[n - 1])
+    val matrixShape = ShapeND(shape[n - 2], shape[n - 1])
 
     val size = matrixShape.linearSize
     for (i in 0 until linearSize / matrixOffset) {

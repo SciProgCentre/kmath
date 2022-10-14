@@ -17,7 +17,7 @@ import java.util.stream.IntStream
  * A demonstration implementation of NDField over Real using Java [java.util.stream.DoubleStream] for parallel
  * execution.
  */
-class StreamDoubleFieldND(override val shape: Shape) : FieldND<Double, DoubleField>,
+class StreamDoubleFieldND(override val shape: ShapeND) : FieldND<Double, DoubleField>,
     NumbersAddOps<StructureND<Double>>,
     ExtendedField<StructureND<Double>> {
 
@@ -43,7 +43,7 @@ class StreamDoubleFieldND(override val shape: Shape) : FieldND<Double, DoubleFie
             else -> DoubleBuffer(strides.linearSize) { offset -> get(strides.index(offset)) }
         }
 
-    override fun structureND(shape: Shape, initializer: DoubleField.(IntArray) -> Double): BufferND<Double> {
+    override fun structureND(shape: ShapeND, initializer: DoubleField.(IntArray) -> Double): BufferND<Double> {
         val array = IntStream.range(0, strides.linearSize).parallel().mapToDouble { offset ->
             val index = strides.index(offset)
             DoubleField.initializer(index)
@@ -111,4 +111,4 @@ class StreamDoubleFieldND(override val shape: Shape) : FieldND<Double, DoubleFie
     override fun atanh(arg: StructureND<Double>): BufferND<Double> = arg.map { atanh(it) }
 }
 
-fun DoubleField.ndStreaming(vararg shape: Int): StreamDoubleFieldND = StreamDoubleFieldND(Shape(shape))
+fun DoubleField.ndStreaming(vararg shape: Int): StreamDoubleFieldND = StreamDoubleFieldND(ShapeND(shape))

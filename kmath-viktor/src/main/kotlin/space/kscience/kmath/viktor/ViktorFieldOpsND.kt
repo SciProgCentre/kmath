@@ -33,7 +33,7 @@ public open class ViktorFieldOpsND :
     override val elementAlgebra: DoubleField get() = DoubleField
 
     @OptIn(UnsafeKMathAPI::class)
-    override fun structureND(shape: Shape, initializer: DoubleField.(IntArray) -> Double): ViktorStructureND =
+    override fun structureND(shape: ShapeND, initializer: DoubleField.(IntArray) -> Double): ViktorStructureND =
         F64Array(*shape.asArray()).apply {
             ColumnStrides(shape).asSequence().forEach { index ->
                 set(value = DoubleField.initializer(index), indices = index)
@@ -46,7 +46,7 @@ public open class ViktorFieldOpsND :
     @PerformancePitfall
     override fun StructureND<Double>.map(transform: DoubleField.(Double) -> Double): ViktorStructureND =
         F64Array(*shape.asArray()).apply {
-            ColumnStrides(Shape(shape)).asSequence().forEach { index ->
+            ColumnStrides(ShapeND(shape)).asSequence().forEach { index ->
                 set(value = DoubleField.transform(this@map[index]), indices = index)
             }
         }.asStructure()
@@ -56,7 +56,7 @@ public open class ViktorFieldOpsND :
     override fun StructureND<Double>.mapIndexed(
         transform: DoubleField.(index: IntArray, Double) -> Double,
     ): ViktorStructureND = F64Array(*shape.asArray()).apply {
-        ColumnStrides(Shape(shape)).asSequence().forEach { index ->
+        ColumnStrides(ShapeND(shape)).asSequence().forEach { index ->
             set(value = DoubleField.transform(index, this@mapIndexed[index]), indices = index)
         }
     }.asStructure()
@@ -127,7 +127,7 @@ public open class ViktorFieldND(
     private val shapeAsArray: IntArray,
 ) : ViktorFieldOpsND(), FieldND<Double, DoubleField>, NumbersAddOps<StructureND<Double>> {
 
-    override val shape: Shape = Shape(shapeAsArray)
+    override val shape: ShapeND = ShapeND(shapeAsArray)
 
 
     override val zero: ViktorStructureND by lazy { F64Array.full(init = 0.0, shape = shapeAsArray).asStructure() }

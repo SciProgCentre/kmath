@@ -9,11 +9,11 @@ import org.jetbrains.bio.viktor.F64Array
 import space.kscience.kmath.misc.PerformancePitfall
 import space.kscience.kmath.nd.ColumnStrides
 import space.kscience.kmath.nd.MutableStructureND
-import space.kscience.kmath.nd.Shape
+import space.kscience.kmath.nd.ShapeND
 
 @Suppress("OVERRIDE_BY_INLINE", "NOTHING_TO_INLINE")
 public class ViktorStructureND(public val f64Buffer: F64Array) : MutableStructureND<Double> {
-    override val shape: Shape get() = Shape(f64Buffer.shape)
+    override val shape: ShapeND get() = ShapeND(f64Buffer.shape)
 
     @OptIn(PerformancePitfall::class)
     override inline fun get(index: IntArray): Double = f64Buffer.get(*index)

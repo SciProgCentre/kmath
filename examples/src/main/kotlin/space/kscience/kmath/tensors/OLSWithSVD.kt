@@ -6,7 +6,7 @@
 package space.kscience.kmath.tensors
 
 import space.kscience.kmath.misc.PerformancePitfall
-import space.kscience.kmath.nd.Shape
+import space.kscience.kmath.nd.ShapeND
 import space.kscience.kmath.nd.contentEquals
 import space.kscience.kmath.operations.invoke
 import space.kscience.kmath.tensors.core.DoubleTensor
@@ -25,10 +25,10 @@ fun main() {
     DoubleTensorAlgebra {
         // take coefficient vector from normal distribution
         val alpha = randomNormal(
-            Shape(5),
+            ShapeND(5),
             randSeed
         ) + fromArray(
-            Shape(5),
+            ShapeND(5),
             doubleArrayOf(1.0, 2.5, 3.4, 5.0, 10.1)
         )
 
@@ -36,7 +36,7 @@ fun main() {
 
         // also take sample of size 20 from normal distribution for x
         val x = randomNormal(
-            Shape(20, 5),
+            ShapeND(20, 5),
             randSeed
         )
 

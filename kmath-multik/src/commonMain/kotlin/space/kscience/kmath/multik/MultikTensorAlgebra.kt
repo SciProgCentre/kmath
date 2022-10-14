@@ -32,7 +32,7 @@ public abstract class MultikTensorAlgebra<T, A : Ring<T>>(
     protected val multikStat: Statistics = multikEngine.getStatistics()
 
     @OptIn(UnsafeKMathAPI::class)
-    override fun structureND(shape: Shape, initializer: A.(IntArray) -> T): MultikTensor<T> {
+    override fun structureND(shape: ShapeND, initializer: A.(IntArray) -> T): MultikTensor<T> {
         val strides = ColumnStrides(shape)
         val memoryView = initMemoryView<T>(strides.linearSize, type)
         strides.asSequence().forEachIndexed { linearIndex, tensorIndex ->
@@ -123,7 +123,7 @@ public abstract class MultikTensorAlgebra<T, A : Ring<T>>(
     public fun MutableMultiArray<T, *>.wrap(): MultikTensor<T> = MultikTensor(this.asDNArray())
 
     @OptIn(PerformancePitfall::class)
-    override fun StructureND<T>.valueOrNull(): T? = if (shape contentEquals Shape(1)) {
+    override fun StructureND<T>.valueOrNull(): T? = if (shape contentEquals ShapeND(1)) {
         get(intArrayOf(0))
     } else null
 
@@ -211,7 +211,7 @@ public abstract class MultikTensorAlgebra<T, A : Ring<T>>(
 
     override fun StructureND<T>.transposed(i: Int, j: Int): MultikTensor<T> = asMultik().array.transpose(i, j).wrap()
 
-    override fun Tensor<T>.view(shape: Shape): MultikTensor<T> {
+    override fun Tensor<T>.view(shape: ShapeND): MultikTensor<T> {
         require(shape.asList().all { it > 0 })
         require(shape.linearSize == this.shape.size) {
             "Cannot reshape array of size ${this.shape.size} into a new shape ${
@@ -223,7 +223,7 @@ public abstract class MultikTensorAlgebra<T, A : Ring<T>>(
         }
 
         val mt = asMultik().array
-        return if (Shape(mt.shape).contentEquals(shape)) {
+        return if (ShapeND(mt.shape).contentEquals(shape)) {
             mt
         } else {
             @OptIn(UnsafeKMathAPI::class)

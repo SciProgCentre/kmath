@@ -29,7 +29,7 @@ fun main() {
     Nd4j.zeros(0)
     val dim = 1000
     val n = 1000
-    val shape = Shape(dim, dim)
+    val shape = ShapeND(dim, dim)
 
 
     // specialized nd-field for Double. It works as generic Double field as well.

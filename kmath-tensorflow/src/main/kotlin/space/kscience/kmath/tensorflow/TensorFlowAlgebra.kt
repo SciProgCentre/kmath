@@ -20,7 +20,7 @@ import org.tensorflow.types.family.TType
 import space.kscience.kmath.misc.PerformancePitfall
 import space.kscience.kmath.misc.UnsafeKMathAPI
 import space.kscience.kmath.misc.UnstableKMathAPI
-import space.kscience.kmath.nd.Shape
+import space.kscience.kmath.nd.ShapeND
 import space.kscience.kmath.nd.StructureND
 import space.kscience.kmath.nd.asArray
 import space.kscience.kmath.nd.contentEquals
@@ -41,12 +41,14 @@ public sealed interface TensorFlowTensor<T> : Tensor<T>
  */
 @JvmInline
 public value class TensorFlowArray<T>(public val tensor: NdArray<T>) : Tensor<T> {
-    override val shape: Shape get() = Shape(tensor.shape().asArray().toIntArray())
+    override val shape: ShapeND get() = ShapeND(tensor.shape().asArray().toIntArray())
 
+    @PerformancePitfall
     override fun get(index: IntArray): T = tensor.getObject(*index.toLongArray())
 
     //TODO implement native element sequence
 
+    @PerformancePitfall
     override fun set(index: IntArray, value: T) {
         tensor.setObject(value, *index.toLongArray())
     }
@@ -65,7 +67,7 @@ public abstract class TensorFlowOutput<T, TT : TType>(
     public var output: Output<TT> = output
         internal set
 
-    override val shape: Shape get() = Shape(output.shape().asArray().toIntArray())
+    override val shape: ShapeND get() = ShapeND(output.shape().asArray().toIntArray())
 
     protected abstract fun org.tensorflow.Tensor.actualizeTensor(): NdArray<T>
 
@@ -99,7 +101,7 @@ public abstract class TensorFlowAlgebra<T, TT : TNumber, A : Ring<T>> internal c
 
     protected abstract fun const(value: T): Constant<TT>
 
-    override fun StructureND<T>.valueOrNull(): T? = if (shape contentEquals Shape(1))
+    override fun StructureND<T>.valueOrNull(): T? = if (shape contentEquals ShapeND(1))
         get(intArrayOf(0)) else null
 
     /**
@@ -195,7 +197,7 @@ public abstract class TensorFlowAlgebra<T, TT : TNumber, A : Ring<T>> internal c
         ops.linalg.transpose(it, ops.constant(intArrayOf(i, j)))
     }
 
-    override fun Tensor<T>.view(shape: Shape): Tensor<T> = operate {
+    override fun Tensor<T>.view(shape: ShapeND): Tensor<T> = operate {
         @OptIn(UnsafeKMathAPI::class)
         ops.reshape(it, ops.constant(shape.asArray()))
     }

@@ -85,7 +85,7 @@ internal class NDFieldBenchmark {
     private companion object {
         private const val dim = 1000
         private const val n = 100
-        private val shape = Shape(dim, dim)
+        private val shape = ShapeND(dim, dim)
         private val specializedField = DoubleField.ndAlgebra
         private val genericField = BufferedFieldOpsND(DoubleField)
         private val nd4jField = DoubleField.nd4j

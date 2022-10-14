@@ -6,7 +6,7 @@
 package space.kscience.kmath.tensors.core
 
 import space.kscience.kmath.misc.PerformancePitfall
-import space.kscience.kmath.nd.Shape
+import space.kscience.kmath.nd.ShapeND
 import space.kscience.kmath.structures.*
 
 /**
@@ -75,7 +75,7 @@ public inline fun OffsetIntBuffer.mapInPlace(operation: (Int) -> Int) {
  * Default [BufferedTensor] implementation for [Int] values
  */
 public class IntTensor(
-    shape: Shape,
+    shape: ShapeND,
     override val source: OffsetIntBuffer,
 ) : BufferedTensor<Int>(shape) {
 
@@ -83,7 +83,7 @@ public class IntTensor(
         require(linearSize == source.size) { "Source buffer size must be equal tensor size" }
     }
 
-    public constructor(shape: Shape, buffer: IntBuffer) : this(shape, OffsetIntBuffer(buffer, 0, buffer.size))
+    public constructor(shape: ShapeND, buffer: IntBuffer) : this(shape, OffsetIntBuffer(buffer, 0, buffer.size))
 
     @OptIn(PerformancePitfall::class)
     override fun get(index: IntArray): Int = this.source[indices.offset(index)]

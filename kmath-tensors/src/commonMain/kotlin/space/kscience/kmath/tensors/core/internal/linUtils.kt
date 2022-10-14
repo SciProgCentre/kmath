@@ -95,7 +95,7 @@ internal fun <T> StructureND<T>.setUpPivots(): IntTensor {
     pivotsShape[n - 2] = m + 1
 
     return IntTensor(
-        Shape(pivotsShape),
+        ShapeND(pivotsShape),
         IntBuffer(pivotsShape.reduce(Int::times)) { 0 }
     )
 }
@@ -240,10 +240,10 @@ internal fun DoubleTensorAlgebra.svd1d(a: DoubleTensor, epsilon: Double = 1e-10)
     val b: DoubleTensor
     if (n > m) {
         b = a.transposed(0, 1).dot(a)
-        v = DoubleTensor(Shape(m), DoubleBuffer.randomUnitVector(m, 0))
+        v = DoubleTensor(ShapeND(m), DoubleBuffer.randomUnitVector(m, 0))
     } else {
         b = a.dot(a.transposed(0, 1))
-        v = DoubleTensor(Shape(n), DoubleBuffer.randomUnitVector(n, 0))
+        v = DoubleTensor(ShapeND(n), DoubleBuffer.randomUnitVector(n, 0))
     }
 
     var lastV: DoubleTensor
@@ -275,7 +275,7 @@ internal fun DoubleTensorAlgebra.svdHelper(
                     outerProduct[i * v.shape[0] + j] = u.getTensor(i).value() * v.getTensor(j).value()
                 }
             }
-            a = a - singularValue.times(DoubleTensor(Shape(u.shape[0], v.shape[0]), outerProduct.asBuffer()))
+            a = a - singularValue.times(DoubleTensor(ShapeND(u.shape[0], v.shape[0]), outerProduct.asBuffer()))
         }
         var v: DoubleTensor
         var u: DoubleTensor

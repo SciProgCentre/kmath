@@ -39,7 +39,7 @@ public class UniformHistogramGroupND<V : Any, A : Field<V>>(
 
     public val dimension: Int get() = lower.size
 
-    override val shape: Shape = Shape(IntArray(binNums.size) { binNums[it] + 2 })
+    override val shape: ShapeND = ShapeND(IntArray(binNums.size) { binNums[it] + 2 })
 
     private val binSize = DoubleBuffer(dimension) { (upper[it] - lower[it]) / binNums[it] }
 

@@ -7,7 +7,7 @@ package space.kscience.kmath.multik
 
 import org.jetbrains.kotlinx.multik.default.DefaultEngine
 import space.kscience.kmath.misc.PerformancePitfall
-import space.kscience.kmath.nd.Shape
+import space.kscience.kmath.nd.ShapeND
 import space.kscience.kmath.nd.StructureND
 import space.kscience.kmath.nd.one
 import space.kscience.kmath.operations.DoubleField
@@ -29,8 +29,8 @@ internal class MultikNDTest {
     fun dotResult() {
         val dim = 100
 
-        val tensor1 = DoubleTensorAlgebra.randomNormal(shape = Shape(dim, dim), 12224)
-        val tensor2 = DoubleTensorAlgebra.randomNormal(shape = Shape(dim, dim), 12225)
+        val tensor1 = DoubleTensorAlgebra.randomNormal(shape = ShapeND(dim, dim), 12224)
+        val tensor2 = DoubleTensorAlgebra.randomNormal(shape = ShapeND(dim, dim), 12225)
 
         val multikResult = with(multikAlgebra) {
             tensor1 dot tensor2

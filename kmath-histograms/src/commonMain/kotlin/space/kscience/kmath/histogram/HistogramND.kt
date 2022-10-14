@@ -10,7 +10,7 @@ import space.kscience.kmath.linear.Point
 import space.kscience.kmath.misc.PerformancePitfall
 import space.kscience.kmath.nd.ColumnStrides
 import space.kscience.kmath.nd.FieldOpsND
-import space.kscience.kmath.nd.Shape
+import space.kscience.kmath.nd.ShapeND
 import space.kscience.kmath.nd.StructureND
 import space.kscience.kmath.operations.Group
 import space.kscience.kmath.operations.ScaleOperations
@@ -45,7 +45,7 @@ public class HistogramND<T : Comparable<T>, D : Domain<T>, V : Any>(
  */
 public interface HistogramGroupND<T : Comparable<T>, D : Domain<T>, V : Any> :
     Group<HistogramND<T, D, V>>, ScaleOperations<HistogramND<T, D, V>> {
-    public val shape: Shape
+    public val shape: ShapeND
     public val valueAlgebraND: FieldOpsND<V, *> //= NDAlgebra.space(valueSpace, Buffer.Companion::boxing, *shape),
 
     /**

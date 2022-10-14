@@ -24,7 +24,7 @@ public open class BufferND<out T>(
     @PerformancePitfall
     override operator fun get(index: IntArray): T = buffer[indices.offset(index)]
 
-    override val shape: Shape get() = indices.shape
+    override val shape: ShapeND get() = indices.shape
 
     override fun toString(): String = StructureND.toString(this)
 }

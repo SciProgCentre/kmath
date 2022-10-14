@@ -32,7 +32,7 @@ internal fun multiIndexBroadCasting(tensor: DoubleTensor, resTensor: DoubleTenso
     }
 }
 
-internal fun broadcastShapes(shapes: List<Shape>): Shape {
+internal fun broadcastShapes(shapes: List<ShapeND>): ShapeND {
     var totalDim = 0
     for (shape in shapes) {
         totalDim = max(totalDim, shape.size)
@@ -57,10 +57,10 @@ internal fun broadcastShapes(shapes: List<Shape>): Shape {
         }
     }
 
-    return Shape(totalShape)
+    return ShapeND(totalShape)
 }
 
-internal fun broadcastTo(tensor: DoubleTensor, newShape: Shape): DoubleTensor {
+internal fun broadcastTo(tensor: DoubleTensor, newShape: ShapeND): DoubleTensor {
     require(tensor.shape.size <= newShape.size) {
         "Tensor is not compatible with the new shape"
     }
@@ -120,7 +120,7 @@ internal fun broadcastOuterTensors(vararg tensors: DoubleTensor): List<DoubleTen
                 var curMultiIndex = tensor.shape.slice(0..tensor.shape.size - 3).asArray()
                 curMultiIndex = IntArray(totalMultiIndex.size - curMultiIndex.size) { 1 } + curMultiIndex
 
-                val newTensor = DoubleTensor(Shape(curMultiIndex) + matrixShape, tensor.source)
+                val newTensor = DoubleTensor(ShapeND(curMultiIndex) + matrixShape, tensor.source)
 
                 for (i in curMultiIndex.indices) {
                     if (curMultiIndex[i] != 1) {
