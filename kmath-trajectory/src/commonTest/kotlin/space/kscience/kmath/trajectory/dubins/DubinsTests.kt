@@ -16,11 +16,11 @@ class DubinsTests {
 
     @Test
     fun dubinsTest() = with(Euclidean2DSpace){
-        val straight = StraightTrajectory(vector(0.0, 0.0), vector(100.0, 100.0))
+        val straight = StraightTrajectory2D(vector(0.0, 0.0), vector(100.0, 100.0))
         val lineP1 = straight.shift(1, 10.0).inverse()
 
-        val start = Pose2D(straight.end, straight.theta)
-        val end = Pose2D(lineP1.start, lineP1.theta)
+        val start = Pose2D(straight.end, straight.bearing)
+        val end = Pose2D(lineP1.start, lineP1.bearing)
         val radius = 2.0
         val dubins = DubinsPath.all(start, end, radius)
 
@@ -45,14 +45,14 @@ class DubinsTests {
             assertTrue(end.equalsFloat(path.c.end))
 
             // Not working, theta double precision inaccuracy
-            if (path.b is CircleTrajectory) {
-                val b = path.b as CircleTrajectory
+            if (path.b is CircleTrajectory2D) {
+                val b = path.b as CircleTrajectory2D
                 assertTrue(path.a.end.equalsFloat(b.start))
                 assertTrue(path.c.start.equalsFloat(b.end))
-            } else if (path.b is StraightTrajectory) {
-                val b = path.b as StraightTrajectory
-                assertTrue(path.a.end.equalsFloat(Pose2D(b.start, b.theta)))
-                assertTrue(path.c.start.equalsFloat(Pose2D(b.end, b.theta)))
+            } else if (path.b is StraightTrajectory2D) {
+                val b = path.b as StraightTrajectory2D
+                assertTrue(path.a.end.equalsFloat(Pose2D(b.start, b.bearing)))
+                assertTrue(path.c.start.equalsFloat(Pose2D(b.end, b.bearing)))
             }
         }
     }

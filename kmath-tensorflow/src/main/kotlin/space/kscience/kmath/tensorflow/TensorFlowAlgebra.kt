@@ -77,11 +77,13 @@ public abstract class TensorFlowOutput<T, TT : TType>(
         }
     }
 
+    @PerformancePitfall
     override fun get(index: IntArray): T = actualTensor[index]
 
     @PerformancePitfall
     override fun elements(): Sequence<Pair<IntArray, T>> = actualTensor.elements()
 
+    @PerformancePitfall
     override fun set(index: IntArray, value: T) {
         actualTensor[index] = value
     }
@@ -101,6 +103,7 @@ public abstract class TensorFlowAlgebra<T, TT : TNumber, A : Ring<T>> internal c
 
     protected abstract fun const(value: T): Constant<TT>
 
+    @OptIn(PerformancePitfall::class)
     override fun StructureND<T>.valueOrNull(): T? = if (shape contentEquals ShapeND(1))
         get(intArrayOf(0)) else null
 

@@ -15,14 +15,14 @@ const val maxFloatDelta = 0.000001
 fun Double.radiansToDegrees() = this * 180 / PI
 
 fun Double.equalFloat(other: Double) = abs(this - other) < maxFloatDelta
-fun Pose2D.equalsFloat(other: Pose2D) = x.equalFloat(other.x) && y.equalFloat(other.y) && theta.equalFloat(other.theta)
+fun DubinsPose2D.equalsFloat(other: DubinsPose2D) = x.equalFloat(other.x) && y.equalFloat(other.y) && bearing.equalFloat(other.bearing)
 
-fun StraightTrajectory.inverse() = StraightTrajectory(end, start)
-fun StraightTrajectory.shift(shift: Int, width: Double): StraightTrajectory = with(Euclidean2DSpace){
-    val dX = width * sin(inverse().theta)
-    val dY = width * sin(theta)
+fun StraightTrajectory2D.inverse() = StraightTrajectory2D(end, start)
+fun StraightTrajectory2D.shift(shift: Int, width: Double): StraightTrajectory2D = with(Euclidean2DSpace){
+    val dX = width * sin(inverse().bearing)
+    val dY = width * sin(bearing)
 
-    return StraightTrajectory(
+    return StraightTrajectory2D(
         vector(start.x - dX * shift, start.y - dY * shift),
         vector(end.x - dX * shift, end.y - dY * shift)
     )
