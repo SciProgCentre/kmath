@@ -19,12 +19,12 @@ public sealed interface Trajectory2D {
  * Straight path segment. The order of start and end defines the direction
  */
 public data class StraightTrajectory2D(
-    internal val start: DoubleVector2D,
-    internal val end: DoubleVector2D,
+    public val start: DoubleVector2D,
+    public val end: DoubleVector2D,
 ) : Trajectory2D {
     override val length: Double get() = start.distanceTo(end)
 
-    internal val bearing: Double get() = theta(atan2(end.x - start.x, end.y - start.y))
+    public val bearing: Double get() = theta(atan2(end.x - start.x, end.y - start.y))
 }
 
 /**
@@ -56,7 +56,7 @@ public data class CircleTrajectory2D(
         circle.radius * arcLength
     }
 
-    internal val direction: Direction by lazy {
+    public val direction: Direction by lazy {
         if (start.y < circle.center.y) {
             if (start.bearing > PI) Direction.RIGHT else Direction.LEFT
         } else if (start.y > circle.center.y) {
@@ -81,7 +81,7 @@ public data class CircleTrajectory2D(
                 vector: DoubleVector2D,
                 theta: Double,
                 direction: Direction,
-            ): DubinsPose2D = Pose2D(
+            ): DubinsPose2D = DubinsPose2D(
                 vector,
                 when (direction) {
                     Direction.LEFT -> theta(theta - PI / 2)

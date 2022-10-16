@@ -1,3 +1,4 @@
+import space.kscience.gradle.isInDevelopment
 import space.kscience.gradle.useApache2Licence
 import space.kscience.gradle.useSPCTeam
 
@@ -77,12 +78,11 @@ ksciencePublish {
     }
     github("kmath", "SciProgCentre")
     space(
-        "https://maven.pkg.jetbrains.space/spc/p/sci/maven"
-//        if (isInDevelopment) {
-//            "https://maven.pkg.jetbrains.space/spc/p/sci/dev"
-//        } else {
-//            "https://maven.pkg.jetbrains.space/spc/p/sci/release"
-//        }
+        if (isInDevelopment) {
+            "https://maven.pkg.jetbrains.space/spc/p/sci/dev"
+        } else {
+            "https://maven.pkg.jetbrains.space/spc/p/sci/maven"
+        }
     )
     sonatype()
 }

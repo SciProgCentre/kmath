@@ -24,7 +24,7 @@ public class PhaseVector2D(
     override val bearing: Double get() = atan2(velocity.x, velocity.y)
 }
 
-internal class Pose2DImpl(
+private class DubinsPose2DImpl(
     override val coordinate: DoubleVector2D,
     override val bearing: Double,
 ) : DubinsPose2D, DoubleVector2D by coordinate{
@@ -33,4 +33,4 @@ internal class Pose2DImpl(
 }
 
 
-public fun Pose2D(coordinate: DoubleVector2D, theta: Double): DubinsPose2D = Pose2DImpl(coordinate, theta)
+public fun DubinsPose2D(coordinate: DoubleVector2D, theta: Double): DubinsPose2D = DubinsPose2DImpl(coordinate, theta)
