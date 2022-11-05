@@ -8,17 +8,20 @@ package space.kscience.kmath.structures
 import space.kscience.kmath.nd.BufferND
 import space.kscience.kmath.nd.ShapeND
 import space.kscience.kmath.nd.StructureND
-import space.kscience.kmath.operations.map
+import space.kscience.kmath.operations.mapToBuffer
 import kotlin.system.measureTimeMillis
 
-private inline fun <T, reified R: Any> BufferND<T>.map(block: (T) -> R): BufferND<R> = BufferND(indices, buffer.map(block))
+private inline fun <T, reified R : Any> BufferND<T>.mapToBufferND(
+    bufferFactory: BufferFactory<R> = BufferFactory.auto(),
+    crossinline block: (T) -> R,
+): BufferND<R> = BufferND(indices, buffer.mapToBuffer(bufferFactory, block))
 
 @Suppress("UNUSED_VARIABLE")
 fun main() {
     val n = 6000
     val structure = StructureND.buffered(ShapeND(n, n), Buffer.Companion::auto) { 1.0 }
-    structure.map { it + 1 } // warm-up
-    val time1 = measureTimeMillis { val res = structure.map { it + 1 } }
+    structure.mapToBufferND { it + 1 } // warm-up
+    val time1 = measureTimeMillis { val res = structure.mapToBufferND { it + 1 } }
     println("Structure mapping finished in $time1 millis")
     val array = DoubleArray(n * n) { 1.0 }
 

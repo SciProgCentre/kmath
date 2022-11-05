@@ -33,7 +33,7 @@ internal class HessianGradientCalculator(fcn: MnFcn, par: MnUserTransformation, 
         val g2: RealVector = gradient.getGradientDerivative()
         val gstep: RealVector = gradient.getStep()
         val fcnmin: Double = par.fval()
-        //   std::cout<<"fval: "<<fcnmin<<std::endl;
+        //   standardDiviation::cout<<"fval: "<<fcnmin<<standardDiviation::endl;
         val dfmin: Double = 4.0 * precision().eps2() * (abs(fcnmin) + theFcn.errorDef())
         val n: Int = x.getDimension()
         val dgrd: RealVector = ArrayRealVector(n)

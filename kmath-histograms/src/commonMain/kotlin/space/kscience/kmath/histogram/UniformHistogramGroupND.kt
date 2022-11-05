@@ -97,7 +97,7 @@ public class UniformHistogramGroupND<V : Any, A : Field<V>>(
             }
         }
         hBuilder.apply(builder)
-        val values: BufferND<V> = BufferND(ndCounter.indices, ndCounter.buffer.map(valueBufferFactory) { it.value })
+        val values: BufferND<V> = BufferND(ndCounter.indices, ndCounter.buffer.mapToBuffer(valueBufferFactory) { it.value })
 
         return HistogramND(this, values)
     }

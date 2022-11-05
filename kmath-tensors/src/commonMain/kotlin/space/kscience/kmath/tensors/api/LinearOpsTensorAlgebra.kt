@@ -47,7 +47,7 @@ public interface LinearOpsTensorAlgebra<T, A : Field<T>> : TensorPartialDivision
      * @receiver the `input`.
      * @return the batch of `L` matrices.
      */
-    public fun StructureND<T>.cholesky(): StructureND<T>
+    public fun cholesky(structureND: StructureND<T>): StructureND<T>
 
     /**
      * QR decomposition.
@@ -61,7 +61,7 @@ public interface LinearOpsTensorAlgebra<T, A : Field<T>> : TensorPartialDivision
      * @receiver the `input`.
      * @return pair of `Q` and `R` tensors.
      */
-    public fun StructureND<T>.qr(): Pair<StructureND<T>, StructureND<T>>
+    public fun qr(structureND: StructureND<T>): Pair<StructureND<T>, StructureND<T>>
 
     /**
      * LUP decomposition
@@ -75,7 +75,7 @@ public interface LinearOpsTensorAlgebra<T, A : Field<T>> : TensorPartialDivision
      * @receiver the `input`.
      * @return triple of P, L and U tensors
      */
-    public fun StructureND<T>.lu(): Triple<StructureND<T>, StructureND<T>, StructureND<T>>
+    public fun lu(structureND: StructureND<T>): Triple<StructureND<T>, StructureND<T>, StructureND<T>>
 
     /**
      * Singular Value Decomposition.
@@ -91,7 +91,7 @@ public interface LinearOpsTensorAlgebra<T, A : Field<T>> : TensorPartialDivision
      * @receiver the `input`.
      * @return triple `Triple(U, S, V)`.
      */
-    public fun StructureND<T>.svd(): Triple<StructureND<T>, StructureND<T>, StructureND<T>>
+    public fun svd(structureND: StructureND<T>): Triple<StructureND<T>, StructureND<T>, StructureND<T>>
 
     /**
      * Returns eigenvalues and eigenvectors of a real symmetric matrix `input` or a batch of real symmetric matrices,
@@ -101,6 +101,6 @@ public interface LinearOpsTensorAlgebra<T, A : Field<T>> : TensorPartialDivision
      * @receiver the `input`.
      * @return a pair `eigenvalues to eigenvectors`
      */
-    public fun StructureND<T>.symEig(): Pair<StructureND<T>, StructureND<T>>
+    public fun symEig(structureND: StructureND<T>): Pair<StructureND<T>, StructureND<T>>
 
 }

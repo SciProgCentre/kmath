@@ -41,7 +41,7 @@ fun main() = Double.tensorAlgebra.withBroadcast {// work in context with linear 
     // solve `Ax = b` system using LUP decomposition
 
     // get P, L, U such that PA = LU
-    val (p, l, u) = a.lu()
+    val (p, l, u) = lu(a)
 
     // check P is permutation matrix
     println("P:\n$p")

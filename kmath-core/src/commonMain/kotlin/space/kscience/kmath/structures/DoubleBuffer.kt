@@ -57,6 +57,9 @@ public fun Buffer<Double>.toDoubleArray(): DoubleArray = when (this) {
     else -> DoubleArray(size, ::get)
 }
 
+/**
+ * Represent this buffer as [DoubleBuffer]. Does not guarantee that changes in the original buffer are reflected on this buffer.
+ */
 public fun Buffer<Double>.toDoubleBuffer(): DoubleBuffer = when (this) {
     is DoubleBuffer -> this
     else -> DoubleArray(size, ::get).asBuffer()

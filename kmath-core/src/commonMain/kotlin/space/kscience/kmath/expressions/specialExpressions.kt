@@ -11,6 +11,8 @@ import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.indices
 import kotlin.jvm.JvmName
 
+//TODO move to stat
+
 /**
  * Generate a chi squared expression from given x-y-sigma data and inline model. Provides automatic
  * differentiation.

@@ -13,6 +13,7 @@ import space.kscience.kmath.nd.structureND
 import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.tensors.core.DoubleTensorAlgebra
 import space.kscience.kmath.tensors.core.DoubleTensorAlgebra.Companion.sum
+import space.kscience.kmath.tensors.core.randomNormal
 import kotlin.test.assertEquals
 
 @OptIn(UnstableKMathAPI::class)

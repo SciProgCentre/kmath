@@ -2,11 +2,14 @@
 
 ## [Unreleased]
 ### Added
+- Type-aliases for numbers like `Float64`
 - 2D optimal trajectory computation in a separate module `kmath-trajectory`
 - Autodiff for generic algebra elements in core!
 - Algebra now has an obligatory `bufferFactory` (#477).
 
 ### Changed
+- Tensor operations switched to prefix notation
+- Row-wise and column-wise ND shapes in the core
 - Shape is read-only
 - Major refactor of tensors (only minor API changes)
 - Kotlin 1.7.20

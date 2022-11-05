@@ -5,7 +5,7 @@
 
 package space.kscience.kmath.integration
 
-import space.kscience.kmath.operations.map
+import space.kscience.kmath.operations.mapToBuffer
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.DoubleBuffer
 import space.kscience.kmath.structures.asBuffer
@@ -33,11 +33,11 @@ public fun GaussIntegratorRuleFactory.build(
     val normalized: Pair<Buffer<Double>, Buffer<Double>> = build(numPoints)
     val length = range.endInclusive - range.start
 
-    val points = normalized.first.map(::DoubleBuffer) {
+    val points = normalized.first.mapToBuffer(::DoubleBuffer) {
         range.start + length / 2 + length / 2 * it
     }
 
-    val weights = normalized.second.map(::DoubleBuffer) {
+    val weights = normalized.second.mapToBuffer(::DoubleBuffer) {
         it * length / 2
     }
 

@@ -35,7 +35,7 @@ internal class TestDoubleLinearOpsTensorAlgebra {
                 -7.0
             )
         )
-        val detTensor = tensor.detLU()
+        val detTensor = detLU(tensor)
 
         assertTrue(detTensor.eq(expectedTensor))
 
@@ -88,7 +88,7 @@ internal class TestDoubleLinearOpsTensorAlgebra {
             )
         )
 
-        val invTensor = tensor.invLU()
+        val invTensor = invLU(tensor)
         assertTrue(invTensor.eq(expectedTensor))
     }
 
@@ -111,7 +111,7 @@ internal class TestDoubleLinearOpsTensorAlgebra {
 
         val tensor = fromArray(shape, buffer)
 
-        val (q, r) = tensor.qr()
+        val (q, r) = qr(tensor)
 
         assertTrue { q.shape contentEquals shape }
         assertTrue { r.shape contentEquals shape }
@@ -131,7 +131,7 @@ internal class TestDoubleLinearOpsTensorAlgebra {
         )
         val tensor = fromArray(shape, buffer)
 
-        val (p, l, u) = tensor.lu()
+        val (p, l, u) = lu(tensor)
 
         assertTrue { p.shape contentEquals shape }
         assertTrue { l.shape contentEquals shape }
@@ -146,7 +146,7 @@ internal class TestDoubleLinearOpsTensorAlgebra {
         val sigma = (tensor matmul tensor.transposed()) + diagonalEmbedding(
             fromArray(ShapeND(2, 5), DoubleArray(10) { 0.1 })
         )
-        val low = sigma.cholesky()
+        val low = cholesky(sigma)
         val sigmChol = low matmul low.transposed()
         assertTrue(sigma.eq(sigmChol))
     }
@@ -171,7 +171,7 @@ internal class TestDoubleLinearOpsTensorAlgebra {
     @Test
     fun testBatchedSVD() = DoubleTensorAlgebra {
         val tensor = randomNormal(ShapeND(2, 5, 3), 0)
-        val (tensorU, tensorS, tensorV) = tensor.svd()
+        val (tensorU, tensorS, tensorV) = svd(tensor)
         val tensorSVD = tensorU matmul (diagonalEmbedding(tensorS) matmul tensorV.transposed())
         assertTrue(tensor.eq(tensorSVD))
     }
@@ -180,7 +180,7 @@ internal class TestDoubleLinearOpsTensorAlgebra {
     fun testBatchedSymEig() = DoubleTensorAlgebra {
         val tensor = randomNormal(shape = ShapeND(2, 3, 3), 0)
         val tensorSigma = tensor + tensor.transposed()
-        val (tensorS, tensorV) = tensorSigma.symEig()
+        val (tensorS, tensorV) = symEig(tensorSigma)
         val tensorSigmaCalc = tensorV matmul (diagonalEmbedding(tensorS) matmul tensorV.transposed())
         assertTrue(tensorSigma.eq(tensorSigmaCalc))
     }
@@ -190,7 +190,7 @@ internal class TestDoubleLinearOpsTensorAlgebra {
 
 
 private fun DoubleTensorAlgebra.testSVDFor(tensor: DoubleTensor, epsilon: Double = 1e-10) {
-    val svd = tensor.svd()
+    val svd = svd(tensor)
 
     val tensorSVD = svd.first
         .dot(

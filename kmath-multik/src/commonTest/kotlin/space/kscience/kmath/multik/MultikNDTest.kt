@@ -12,6 +12,7 @@ import space.kscience.kmath.nd.StructureND
 import space.kscience.kmath.nd.one
 import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.tensors.core.DoubleTensorAlgebra
+import space.kscience.kmath.tensors.core.randomNormal
 import space.kscience.kmath.tensors.core.tensorAlgebra
 import kotlin.test.Test
 import kotlin.test.assertTrue

@@ -268,7 +268,7 @@ public open class DSRing<T, A>(
 
     protected fun DS<T, A>.mapData(block: A.(T) -> T): DS<T, A> {
         require(derivativeAlgebra == this@DSRing) { "All derivative operations should be done in the same algebra" }
-        val newData: Buffer<T> = data.map(valueBufferFactory) {
+        val newData: Buffer<T> = data.mapToBuffer(valueBufferFactory) {
             algebra.block(it)
         }
         return DS(newData)
@@ -276,7 +276,7 @@ public open class DSRing<T, A>(
 
     protected fun DS<T, A>.mapDataIndexed(block: (Int, T) -> T): DS<T, A> {
         require(derivativeAlgebra == this@DSRing) { "All derivative operations should be done in the same algebra" }
-        val newData: Buffer<T> = data.mapIndexed(valueBufferFactory, block)
+        val newData: Buffer<T> = data.mapIndexedToBuffer(valueBufferFactory, block)
         return DS(newData)
     }
 

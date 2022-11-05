@@ -13,6 +13,7 @@ import space.kscience.kmath.tensors.api.Tensor
 import space.kscience.kmath.tensors.core.DoubleTensor
 import space.kscience.kmath.tensors.core.DoubleTensorAlgebra
 import space.kscience.kmath.tensors.core.asDoubleTensor
+import space.kscience.kmath.tensors.core.detLU
 
 
 internal fun checkNotEmptyShape(shape: ShapeND) =
@@ -26,7 +27,7 @@ internal fun checkEmptyDoubleBuffer(buffer: DoubleArray) = check(buffer.isNotEmp
 
 internal fun checkBufferShapeConsistency(shape: ShapeND, buffer: DoubleArray) =
     check(buffer.size == shape.linearSize) {
-        "Inconsistent shape ${shape} for buffer of size ${buffer.size} provided"
+        "Inconsistent shape $shape for buffer of size ${buffer.size} provided"
     }
 
 @PublishedApi
@@ -62,7 +63,7 @@ internal fun DoubleTensorAlgebra.checkSymmetric(
 internal fun DoubleTensorAlgebra.checkPositiveDefinite(tensor: DoubleTensor, epsilon: Double = 1e-6) {
     checkSymmetric(tensor, epsilon)
     for (mat in tensor.matrixSequence())
-        check(mat.asDoubleTensor().detLU().value() > 0.0) {
-            "Tensor contains matrices which are not positive definite ${mat.asDoubleTensor().detLU().value()}"
+        check(detLU(mat.asDoubleTensor()).value() > 0.0) {
+            "Tensor contains matrices which are not positive definite ${detLU(mat.asDoubleTensor()).value()}"
         }
 }

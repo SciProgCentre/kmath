@@ -227,7 +227,7 @@ internal fun DoubleTensorAlgebra.qrHelper(
                 }
             }
         }
-        r[j, j] = DoubleTensorAlgebra { (v dot v).sqrt().value() }
+        r[j, j] = DoubleTensorAlgebra { sqrt((v dot v)).value() }
         for (i in 0 until n) {
             qM[i, j] = vv[i] / r[j, j]
         }
@@ -250,7 +250,7 @@ internal fun DoubleTensorAlgebra.svd1d(a: DoubleTensor, epsilon: Double = 1e-10)
     while (true) {
         lastV = v
         v = b.dot(lastV)
-        val norm = DoubleTensorAlgebra { (v dot v).sqrt().value() }
+        val norm = DoubleTensorAlgebra { sqrt((v dot v)).value() }
         v = v.times(1.0 / norm)
         if (abs(v.dot(lastV).value()) > 1 - epsilon) {
             return v
@@ -283,12 +283,12 @@ internal fun DoubleTensorAlgebra.svdHelper(
         if (n > m) {
             v = svd1d(a, epsilon)
             u = matrix.dot(v)
-            norm = DoubleTensorAlgebra { (u dot u).sqrt().value() }
+            norm = DoubleTensorAlgebra { sqrt((u dot u)).value() }
             u = u.times(1.0 / norm)
         } else {
             u = svd1d(a, epsilon)
             v = matrix.transposed(0, 1).dot(u)
-            norm = DoubleTensorAlgebra { (v dot v).sqrt().value() }
+            norm = DoubleTensorAlgebra { sqrt((v dot v)).value() }
             v = v.times(1.0 / norm)
         }
 

@@ -21,7 +21,7 @@ public interface AnalyticTensorAlgebra<T, A : Field<T>> :
     /**
      * @return the mean of all elements in the input tensor.
      */
-    public fun StructureND<T>.mean(): T
+    public fun mean(structureND: StructureND<T>): T
 
     /**
      * Returns the mean of each row of the input tensor in the given dimension [dim].
@@ -34,12 +34,12 @@ public interface AnalyticTensorAlgebra<T, A : Field<T>> :
      * @param keepDim whether the output tensor has [dim] retained or not.
      * @return the mean of each row of the input tensor in the given dimension [dim].
      */
-    public fun StructureND<T>.mean(dim: Int, keepDim: Boolean): Tensor<T>
+    public fun mean(structureND: StructureND<T>, dim: Int, keepDim: Boolean): Tensor<T>
 
     /**
      * @return the standard deviation of all elements in the input tensor.
      */
-    public fun StructureND<T>.std(): T
+    public fun std(structureND: StructureND<T>): T
 
     /**
      * Returns the standard deviation of each row of the input tensor in the given dimension [dim].
@@ -52,12 +52,12 @@ public interface AnalyticTensorAlgebra<T, A : Field<T>> :
      * @param keepDim whether the output tensor has [dim] retained or not.
      * @return the standard deviation of each row of the input tensor in the given dimension [dim].
      */
-    public fun StructureND<T>.std(dim: Int, keepDim: Boolean): Tensor<T>
+    public fun std(structureND: StructureND<T>, dim: Int, keepDim: Boolean): Tensor<T>
 
     /**
      * @return the variance of all elements in the input tensor.
      */
-    public fun StructureND<T>.variance(): T
+    public fun variance(structureND: StructureND<T>): T
 
     /**
      * Returns the variance of each row of the input tensor in the given dimension [dim].
@@ -70,80 +70,45 @@ public interface AnalyticTensorAlgebra<T, A : Field<T>> :
      * @param keepDim whether the output tensor has [dim] retained or not.
      * @return the variance of each row of the input tensor in the given dimension [dim].
      */
-    public fun StructureND<T>.variance(dim: Int, keepDim: Boolean): Tensor<T>
-
-    //For information: https://pytorch.org/docs/stable/generated/torch.exp.html
-    public fun StructureND<T>.exp(): Tensor<T>
-
-    //For information: https://pytorch.org/docs/stable/generated/torch.log.html
-    public fun StructureND<T>.ln(): Tensor<T>
+    public fun variance(structureND: StructureND<T>, dim: Int, keepDim: Boolean): Tensor<T>
 
     //For information: https://pytorch.org/docs/stable/generated/torch.sqrt.html
-    public fun StructureND<T>.sqrt(): Tensor<T>
-
-    //For information: https://pytorch.org/docs/stable/generated/torch.acos.html#torch.cos
-    public fun StructureND<T>.cos(): Tensor<T>
-
-    //For information: https://pytorch.org/docs/stable/generated/torch.acos.html#torch.acos
-    public fun StructureND<T>.acos(): Tensor<T>
-
-    //For information: https://pytorch.org/docs/stable/generated/torch.acosh.html#torch.cosh
-    public fun StructureND<T>.cosh(): Tensor<T>
-
-    //For information: https://pytorch.org/docs/stable/generated/torch.acosh.html#torch.acosh
-    public fun StructureND<T>.acosh(): Tensor<T>
-
-    //For information: https://pytorch.org/docs/stable/generated/torch.asin.html#torch.sin
-    public fun StructureND<T>.sin(): Tensor<T>
-
-    //For information: https://pytorch.org/docs/stable/generated/torch.asin.html#torch.asin
-    public fun StructureND<T>.asin(): Tensor<T>
-
-    //For information: https://pytorch.org/docs/stable/generated/torch.asin.html#torch.sinh
-    public fun StructureND<T>.sinh(): Tensor<T>
-
-    //For information: https://pytorch.org/docs/stable/generated/torch.asin.html#torch.asinh
-    public fun StructureND<T>.asinh(): Tensor<T>
+    override fun sqrt(arg: StructureND<T>): Tensor<T>
 
     //For information: https://pytorch.org/docs/stable/generated/torch.atan.html#torch.tan
-    public fun StructureND<T>.tan(): Tensor<T>
+    override fun tan(arg: StructureND<T>): Tensor<T>
 
     //https://pytorch.org/docs/stable/generated/torch.atan.html#torch.atan
-    public fun StructureND<T>.atan(): Tensor<T>
+    override fun atan(arg: StructureND<T>): Tensor<T>
 
     //For information: https://pytorch.org/docs/stable/generated/torch.atanh.html#torch.tanh
-    public fun StructureND<T>.tanh(): Tensor<T>
-
-    //For information: https://pytorch.org/docs/stable/generated/torch.atanh.html#torch.atanh
-    public fun StructureND<T>.atanh(): Tensor<T>
+    override fun tanh(arg: StructureND<T>): Tensor<T>
 
     //For information: https://pytorch.org/docs/stable/generated/torch.ceil.html#torch.ceil
-    public fun StructureND<T>.ceil(): Tensor<T>
+    public fun ceil(arg: StructureND<T>): Tensor<T>
 
     //For information: https://pytorch.org/docs/stable/generated/torch.floor.html#torch.floor
-    public fun StructureND<T>.floor(): Tensor<T>
+    public fun floor(structureND: StructureND<T>): Tensor<T>
 
-    override fun sin(arg: StructureND<T>): StructureND<T> = arg.sin()
+    override fun sin(arg: StructureND<T>): StructureND<T> 
 
-    override fun cos(arg: StructureND<T>): StructureND<T> = arg.cos()
+    override fun cos(arg: StructureND<T>): StructureND<T> 
 
-    override fun asin(arg: StructureND<T>): StructureND<T> = arg.asin()
+    override fun asin(arg: StructureND<T>): StructureND<T>
 
-    override fun acos(arg: StructureND<T>): StructureND<T> = arg.acos()
+    override fun acos(arg: StructureND<T>): StructureND<T>
 
-    override fun atan(arg: StructureND<T>): StructureND<T> = arg.atan()
+    override fun exp(arg: StructureND<T>): StructureND<T> 
 
-    override fun exp(arg: StructureND<T>): StructureND<T> = arg.exp()
+    override fun ln(arg: StructureND<T>): StructureND<T>
 
-    override fun ln(arg: StructureND<T>): StructureND<T> = arg.ln()
+    override fun sinh(arg: StructureND<T>): StructureND<T>
 
-    override fun sinh(arg: StructureND<T>): StructureND<T> = arg.sinh()
+    override fun cosh(arg: StructureND<T>): StructureND<T>
 
-    override fun cosh(arg: StructureND<T>): StructureND<T> = arg.cosh()
+    override fun asinh(arg: StructureND<T>): StructureND<T>
 
-    override fun asinh(arg: StructureND<T>): StructureND<T> = arg.asinh()
+    override fun acosh(arg: StructureND<T>): StructureND<T>
 
-    override fun acosh(arg: StructureND<T>): StructureND<T> = arg.acosh()
-
-    override fun atanh(arg: StructureND<T>): StructureND<T> = arg.atanh()
+    override fun atanh(arg: StructureND<T>): StructureND<T>
 }

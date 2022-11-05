@@ -11,12 +11,12 @@ package space.kscience.kmath.tensors.core
 import space.kscience.kmath.misc.PerformancePitfall
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.nd.*
+import space.kscience.kmath.operations.DoubleBufferOps
 import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.structures.*
 import space.kscience.kmath.tensors.api.AnalyticTensorAlgebra
 import space.kscience.kmath.tensors.api.LinearOpsTensorAlgebra
 import space.kscience.kmath.tensors.api.Tensor
-import space.kscience.kmath.tensors.api.TensorPartialDivisionAlgebra
 import space.kscience.kmath.tensors.core.internal.*
 import kotlin.math.*
 
@@ -25,13 +25,14 @@ import kotlin.math.*
  */
 @OptIn(PerformancePitfall::class)
 public open class DoubleTensorAlgebra :
-    TensorPartialDivisionAlgebra<Double, DoubleField>,
     AnalyticTensorAlgebra<Double, DoubleField>,
     LinearOpsTensorAlgebra<Double, DoubleField> {
 
     public companion object : DoubleTensorAlgebra()
 
     override val elementAlgebra: DoubleField get() = DoubleField
+
+    public val bufferAlgebra: DoubleBufferOps get() = DoubleBufferOps
 
 
     /**
@@ -98,6 +99,16 @@ public open class DoubleTensorAlgebra :
     override fun StructureND<Double>.value(): Double = valueOrNull()
         ?: throw IllegalArgumentException("The tensor shape is $shape, but value method is allowed only for shape [1]")
 
+    public fun fromBuffer(shape: ShapeND, buffer: Buffer<Double>): DoubleTensor {
+        checkNotEmptyShape(shape)
+        check(buffer.size > 0) { "Illegal empty buffer provided" }
+        check(buffer.size == shape.linearSize) {
+            "Inconsistent shape $shape for buffer of size ${buffer.size} provided"
+        }
+        return DoubleTensor(shape, buffer.toDoubleBuffer())
+    }
+
+
     /**
      * Constructs a tensor with the specified shape and data.
      *
@@ -105,12 +116,7 @@ public open class DoubleTensorAlgebra :
      * @param array one-dimensional data array.
      * @return tensor with the [shape] shape and [array] data.
      */
-    public fun fromArray(shape: ShapeND, array: DoubleArray): DoubleTensor {
-        checkNotEmptyShape(shape)
-        checkEmptyDoubleBuffer(array)
-        checkBufferShapeConsistency(shape, array)
-        return DoubleTensor(shape, array.asBuffer())
-    }
+    public fun fromArray(shape: ShapeND, array: DoubleArray): DoubleTensor = fromBuffer(shape, array.asBuffer())
 
     /**
      * Constructs a tensor with the specified shape and initializer.
@@ -271,7 +277,7 @@ public open class DoubleTensorAlgebra :
 
     override fun StructureND<Double>.transposed(i: Int, j: Int): Tensor<Double> {
         val actualI = if (i >= 0) i else shape.size + i
-        val actualJ = if(j>=0) j else shape.size + j
+        val actualJ = if (j >= 0) j else shape.size + j
         return asDoubleTensor().permute(
             shape.transposed(actualI, actualJ)
         ) { originIndex ->
@@ -499,48 +505,6 @@ public open class DoubleTensorAlgebra :
     }
 
     /**
-     * Returns a tensor of random numbers drawn from normal distributions with `0.0` mean and `1.0` standard deviation.
-     *
-     * @param shape the desired shape for the output tensor.
-     * @param seed the random seed of the pseudo-random number generator.
-     * @return tensor of a given shape filled with numbers from the normal distribution
-     * with `0.0` mean and `1.0` standard deviation.
-     */
-    public fun randomNormal(shape: ShapeND, seed: Long = 0): DoubleTensor =
-        DoubleTensor(shape, DoubleBuffer.randomNormals(shape.linearSize, seed))
-
-    /**
-     * Returns a tensor with the same shape as `input` of random numbers drawn from normal distributions
-     * with `0.0` mean and `1.0` standard deviation.
-     *
-     * @receiver the `input`.
-     * @param seed the random seed of the pseudo-random number generator.
-     * @return a tensor with the same shape as `input` filled with numbers from the normal distribution
-     * with `0.0` mean and `1.0` standard deviation.
-     */
-    public fun Tensor<Double>.randomNormalLike(seed: Long = 0): DoubleTensor =
-        DoubleTensor(shape, DoubleBuffer.randomNormals(shape.linearSize, seed))
-
-    /**
-     * Concatenates a sequence of tensors with equal shapes along the first dimension.
-     *
-     * @param tensors the [List] of tensors with same shapes to concatenate
-     * @return tensor with concatenation result
-     */
-    public fun stack(tensors: List<Tensor<Double>>): DoubleTensor {
-        check(tensors.isNotEmpty()) { "List must have at least 1 element" }
-        val shape = tensors[0].shape
-        check(tensors.all { it.shape contentEquals shape }) { "Tensors must have same shapes" }
-        val resShape = ShapeND(tensors.size) + shape
-//        val resBuffer: List<Double> = tensors.flatMap {
-//            it.asDoubleTensor().source.array.drop(it.asDoubleTensor().bufferStart)
-//                .take(it.asDoubleTensor().linearSize)
-//        }
-        val resBuffer = tensors.map { it.asDoubleTensor().source }.concat()
-        return DoubleTensor(resShape, resBuffer)
-    }
-
-    /**
      * Builds tensor from rows of the input tensor.
      *
      * @param indices the [IntArray] of 1-dimensional indices
@@ -631,102 +595,75 @@ public open class DoubleTensorAlgebra :
         }
 
 
-    override fun StructureND<Double>.mean(): Double = sum() / indices.linearSize
+    override fun mean(structureND: StructureND<Double>): Double = structureND.sum() / structureND.indices.linearSize
 
-    override fun StructureND<Double>.mean(dim: Int, keepDim: Boolean): DoubleTensor =
-        foldDimToDouble(dim, keepDim) { arr ->
-            check(dim < dimension) { "Dimension $dim out of range $dimension" }
-            arr.sum() / shape[dim]
+    override fun mean(structureND: StructureND<Double>, dim: Int, keepDim: Boolean): Tensor<Double> =
+        structureND.foldDimToDouble(dim, keepDim) { arr ->
+            check(dim < structureND.dimension) { "Dimension $dim out of range ${structureND.dimension}" }
+            arr.sum() / structureND.shape[dim]
         }
 
-    override fun StructureND<Double>.std(): Double = reduceElements { arr ->
-        val mean = arr.array.sum() / indices.linearSize
-        sqrt(arr.array.sumOf { (it - mean) * (it - mean) } / (indices.linearSize - 1))
+    override fun std(structureND: StructureND<Double>): Double = structureND.reduceElements { arr ->
+        val mean = arr.array.sum() / structureND.indices.linearSize
+        sqrt(arr.array.sumOf { (it - mean) * (it - mean) } / (structureND.indices.linearSize - 1))
     }
 
-    override fun StructureND<Double>.std(dim: Int, keepDim: Boolean): DoubleTensor = foldDimToDouble(
-        dim,
-        keepDim
-    ) { arr ->
-        check(dim < dimension) { "Dimension $dim out of range $dimension" }
-        val mean = arr.sum() / shape[dim]
-        sqrt(arr.sumOf { (it - mean) * (it - mean) } / (shape[dim] - 1))
-    }
+    override fun std(structureND: StructureND<Double>, dim: Int, keepDim: Boolean): Tensor<Double> =
+        structureND.foldDimToDouble(
+            dim,
+            keepDim
+        ) { arr ->
+            check(dim < structureND.dimension) { "Dimension $dim out of range ${structureND.dimension}" }
+            val mean = arr.sum() / structureND.shape[dim]
+            sqrt(arr.sumOf { (it - mean) * (it - mean) } / (structureND.shape[dim] - 1))
+        }
 
-    override fun StructureND<Double>.variance(): Double = reduceElements { arr ->
-        val linearSize = indices.linearSize
+    override fun variance(structureND: StructureND<Double>): Double = structureND.reduceElements { arr ->
+        val linearSize = structureND.indices.linearSize
         val mean = arr.array.sum() / linearSize
         arr.array.sumOf { (it - mean) * (it - mean) } / (linearSize - 1)
     }
 
-    override fun StructureND<Double>.variance(dim: Int, keepDim: Boolean): DoubleTensor = foldDimToDouble(
-        dim,
-        keepDim
-    ) { arr ->
-        check(dim < dimension) { "Dimension $dim out of range $dimension" }
-        val mean = arr.sum() / shape[dim]
-        arr.sumOf { (it - mean) * (it - mean) } / (shape[dim] - 1)
-    }
-
-    private fun cov(x: StructureND<Double>, y: StructureND<Double>): Double {
-        val n = x.shape[0]
-        return ((x - x.mean()) * (y - y.mean())).mean() * n / (n - 1)
-    }
-
-    /**
-     * Returns the covariance matrix `M` of given vectors.
-     *
-     * `M[i, j]` contains covariance of `i`-th and `j`-th given vectors
-     *
-     * @param tensors the [List] of 1-dimensional tensors with same shape
-     * @return `M`.
-     */
-    public fun cov(tensors: List<StructureND<Double>>): DoubleTensor {
-        check(tensors.isNotEmpty()) { "List must have at least 1 element" }
-        val n = tensors.size
-        val m = tensors[0].shape[0]
-        check(tensors.all { it.shape contentEquals ShapeND(m) }) { "Tensors must have same shapes" }
-        val resTensor = DoubleTensor(
-            ShapeND(n, n),
-            DoubleBuffer(n * n) { 0.0 }
-        )
-        for (i in 0 until n) {
-            for (j in 0 until n) {
-                resTensor[intArrayOf(i, j)] = cov(tensors[i], tensors[j])
-            }
+    override fun variance(structureND: StructureND<Double>, dim: Int, keepDim: Boolean): Tensor<Double> =
+        structureND.foldDimToDouble(
+            dim,
+            keepDim
+        ) { arr ->
+            check(dim < structureND.dimension) { "Dimension $dim out of range ${structureND.dimension}" }
+            val mean = arr.sum() / structureND.shape[dim]
+            arr.sumOf { (it - mean) * (it - mean) } / (structureND.shape[dim] - 1)
         }
-        return resTensor
-    }
 
-    override fun StructureND<Double>.exp(): DoubleTensor = map { exp(it) }
 
-    override fun StructureND<Double>.ln(): DoubleTensor = map { ln(it) }
+    override fun exp(arg: StructureND<Double>): DoubleTensor = arg.map { this.exp(it) }
 
-    override fun StructureND<Double>.sqrt(): DoubleTensor = map { sqrt(it) }
+    override fun ln(arg: StructureND<Double>): DoubleTensor = arg.map { this.ln(it) }
 
-    override fun StructureND<Double>.cos(): DoubleTensor = map { cos(it) }
+    override fun sqrt(arg: StructureND<Double>): DoubleTensor = arg.map { this.sqrt(it) }
 
-    override fun StructureND<Double>.acos(): DoubleTensor = map { acos(it) }
+    override fun cos(arg: StructureND<Double>): DoubleTensor = arg.map { this.cos(it) }
 
-    override fun StructureND<Double>.cosh(): DoubleTensor = map { cosh(it) }
+    override fun acos(arg: StructureND<Double>): DoubleTensor = arg.map { this.acos(it) }
 
-    override fun StructureND<Double>.acosh(): DoubleTensor = map { acosh(it) }
+    override fun cosh(arg: StructureND<Double>): DoubleTensor = arg.map { this.cosh(it) }
 
-    override fun StructureND<Double>.sin(): DoubleTensor = map { sin(it) }
+    override fun acosh(arg: StructureND<Double>): DoubleTensor = arg.map { this.acosh(it) }
 
-    override fun StructureND<Double>.asin(): DoubleTensor = map { asin(it) }
+    override fun sin(arg: StructureND<Double>): DoubleTensor = arg.map { this.sin(it) }
 
-    override fun StructureND<Double>.sinh(): DoubleTensor = map { sinh(it) }
+    override fun asin(arg: StructureND<Double>): DoubleTensor = arg.map { this.asin(it) }
 
-    override fun StructureND<Double>.asinh(): DoubleTensor = map { asinh(it) }
+    override fun sinh(arg: StructureND<Double>): DoubleTensor = arg.map { this.sinh(it) }
 
-    override fun StructureND<Double>.tan(): DoubleTensor = map { tan(it) }
+    override fun asinh(arg: StructureND<Double>): DoubleTensor = arg.map { this.asinh(it) }
 
-    override fun StructureND<Double>.atan(): DoubleTensor = map { atan(it) }
+    override fun tan(arg: StructureND<Double>): DoubleTensor = arg.map { this.tan(it) }
 
-    override fun StructureND<Double>.tanh(): DoubleTensor = map { tanh(it) }
+    override fun atan(arg: StructureND<Double>): DoubleTensor = arg.map { this.atan(it) }
 
-    override fun StructureND<Double>.atanh(): DoubleTensor = map { atanh(it) }
+    override fun tanh(arg: StructureND<Double>): DoubleTensor = arg.map { this.tanh(it) }
+
+    override fun atanh(arg: StructureND<Double>): DoubleTensor = arg.map { this.atanh(it) }
 
     override fun power(arg: StructureND<Double>, pow: Number): StructureND<Double> = if (pow is Int) {
         arg.map { it.pow(pow) }
@@ -734,115 +671,26 @@ public open class DoubleTensorAlgebra :
         arg.map { it.pow(pow.toDouble()) }
     }
 
-    override fun StructureND<Double>.ceil(): DoubleTensor = map { ceil(it) }
+    override fun ceil(arg: StructureND<Double>): DoubleTensor = arg.map { ceil(it) }
 
-    override fun StructureND<Double>.floor(): DoubleTensor = map { floor(it) }
+    override fun floor(structureND: StructureND<Double>): DoubleTensor = structureND.map { floor(it) }
 
-    override fun StructureND<Double>.inv(): DoubleTensor = invLU(1e-9)
+    override fun StructureND<Double>.inv(): DoubleTensor = invLU(this, 1e-9)
 
-    override fun StructureND<Double>.det(): DoubleTensor = detLU(1e-9)
+    override fun StructureND<Double>.det(): DoubleTensor = detLU(this, 1e-9)
 
-    /**
-     * Computes the LU factorization of a matrix or batches of matrices `input`.
-     * Returns a tuple containing the LU factorization and pivots of `input`.
-     *
-     * @param epsilon permissible error when comparing the determinant of a matrix with zero
-     * @return pair of `factorization` and `pivots`.
-     * The `factorization` has the shape ``(*, m, n)``, where``(*, m, n)`` is the shape of the `input` tensor.
-     * The `pivots`  has the shape ``(∗, min(m, n))``. `pivots` stores all the intermediate transpositions of rows.
-     */
-    public fun StructureND<Double>.luFactor(epsilon: Double): Pair<DoubleTensor, IntTensor> =
-        computeLU(this, epsilon)
-            ?: throw IllegalArgumentException("Tensor contains matrices which are singular at precision $epsilon")
+    override fun lu(structureND: StructureND<Double>): Triple<DoubleTensor, DoubleTensor, DoubleTensor> =
+        lu(structureND, 1e-9)
 
-    /**
-     * Computes the LU factorization of a matrix or batches of matrices `input`.
-     * Returns a tuple containing the LU factorization and pivots of `input`.
-     * Uses an error of ``1e-9`` when calculating whether a matrix is degenerate.
-     *
-     * @return pair of `factorization` and `pivots`.
-     * The `factorization` has the shape ``(*, m, n)``, where``(*, m, n)`` is the shape of the `input` tensor.
-     * The `pivots`  has the shape ``(∗, min(m, n))``. `pivots` stores all the intermediate transpositions of rows.
-     */
-    public fun StructureND<Double>.luFactor(): Pair<DoubleTensor, IntTensor> = luFactor(1e-9)
+    override fun cholesky(structureND: StructureND<Double>): DoubleTensor = cholesky(structureND, 1e-6)
 
-    /**
-     * Unpacks the data and pivots from a LU factorization of a tensor.
-     * Given a tensor [luTensor], return tensors `Triple(P, L, U)` satisfying `P dot luTensor = L dot U`,
-     * with `P` being a permutation matrix or batch of matrices,
-     * `L` being a lower triangular matrix or batch of matrices,
-     * `U` being an upper triangular matrix or batch of matrices.
-     *
-     * @param luTensor the packed LU factorization data
-     * @param pivotsTensor the packed LU factorization pivots
-     * @return triple of `P`, `L` and `U` tensors
-     */
-    public fun luPivot(
-        luTensor: StructureND<Double>,
-        pivotsTensor: Tensor<Int>,
-    ): Triple<DoubleTensor, DoubleTensor, DoubleTensor> {
-        checkSquareMatrix(luTensor.shape)
-        check(
-            luTensor.shape.first(luTensor.shape.size - 2) contentEquals pivotsTensor.shape.first(pivotsTensor.shape.size - 1) ||
-                    luTensor.shape.last() == pivotsTensor.shape.last() - 1
-        ) { "Inappropriate shapes of input tensors" }
-
-        val n = luTensor.shape.last()
-        val pTensor = zeroesLike(luTensor)
-        pTensor
-            .matrixSequence()
-            .zip(pivotsTensor.asIntTensor().vectorSequence())
-            .forEach { (p, pivot) -> pivInit(p.asDoubleTensor2D(), pivot.as1D(), n) }
-
-        val lTensor = zeroesLike(luTensor)
-        val uTensor = zeroesLike(luTensor)
-
-        lTensor.matrixSequence()
-            .zip(uTensor.matrixSequence())
-            .zip(luTensor.asDoubleTensor().matrixSequence())
-            .forEach { (pairLU, lu) ->
-                val (l, u) = pairLU
-                luPivotHelper(l.asDoubleTensor2D(), u.asDoubleTensor2D(), lu.asDoubleTensor2D(), n)
-            }
-
-        return Triple(pTensor, lTensor, uTensor)
-    }
-
-    /**
-     * QR decomposition.
-     *
-     * Computes the QR decomposition of a matrix or a batch of matrices, and returns a pair `Q to R` of tensors.
-     * Given a tensor `input`, return tensors `Q to R` satisfying `input == Q dot R`,
-     * with `Q` being an orthogonal matrix or batch of orthogonal matrices
-     * and `R` being an upper triangular matrix or batch of upper triangular matrices.
-     *
-     * @receiver the `input`.
-     * @param epsilon the permissible error when comparing tensors for equality.
-     * Used when checking the positive definiteness of the input matrix or matrices.
-     * @return a pair of `Q` and `R` tensors.
-     */
-    public fun StructureND<Double>.cholesky(epsilon: Double): DoubleTensor {
-        checkSquareMatrix(shape)
-        checkPositiveDefinite(asDoubleTensor(), epsilon)
-
-        val n = shape.last()
-        val lTensor = zeroesLike(this)
-
-        for ((a, l) in asDoubleTensor().matrixSequence().zip(lTensor.matrixSequence()))
-            for (i in 0 until n) choleskyHelper(a.asDoubleTensor2D(), l.asDoubleTensor2D(), n)
-
-        return lTensor
-    }
-
-    override fun StructureND<Double>.cholesky(): DoubleTensor = cholesky(1e-6)
-
-    override fun StructureND<Double>.qr(): Pair<DoubleTensor, DoubleTensor> {
-        checkSquareMatrix(shape)
-        val qTensor = zeroesLike(this)
-        val rTensor = zeroesLike(this)
+    override fun qr(structureND: StructureND<Double>): Pair<DoubleTensor, DoubleTensor> {
+        checkSquareMatrix(structureND.shape)
+        val qTensor = zeroesLike(structureND)
+        val rTensor = zeroesLike(structureND)
 
         //TODO replace with cycle
-        asDoubleTensor().matrixSequence()
+        structureND.asDoubleTensor().matrixSequence()
             .zip(
                 (qTensor.matrixSequence()
                     .zip(rTensor.matrixSequence()))
@@ -854,200 +702,14 @@ public open class DoubleTensorAlgebra :
         return qTensor to rTensor
     }
 
-    override fun StructureND<Double>.svd(): Triple<StructureND<Double>, StructureND<Double>, StructureND<Double>> =
-        svd(epsilon = 1e-10)
+    override fun svd(
+        structureND: StructureND<Double>,
+    ): Triple<StructureND<Double>, StructureND<Double>, StructureND<Double>> =
+        svd(structureND = structureND, epsilon = 1e-10)
 
+    override fun symEig(structureND: StructureND<Double>): Pair<DoubleTensor, DoubleTensor> =
+        symEigJacobi(structureND = structureND, maxIteration = 50, epsilon = 1e-15)
 
-    /**
-     * Singular Value Decomposition.
-     *
-     * Computes the singular value decomposition of either a matrix or batch of matrices `input`.
-     * The singular value decomposition is represented as a triple `Triple(U, S, V)`,
-     * such that `input == U dot diagonalEmbedding(S) dot V.transpose()`.
-     * If `input` is a batch of tensors, then U, S, and Vh are also batched with the same batch dimensions as `input.
-     *
-     * @receiver the `input`.
-     * @param epsilon permissible error when calculating the dot product of vectors
-     * i.e., the precision with which the cosine approaches 1 in an iterative algorithm.
-     * @return a triple `Triple(U, S, V)`.
-     */
-    public fun StructureND<Double>.svd(epsilon: Double): Triple<StructureND<Double>, StructureND<Double>, StructureND<Double>> {
-        val size = dimension
-        val commonShape = shape.slice(0 until size - 2)
-        val (n, m) = shape.slice(size - 2 until size)
-        val uTensor = zeros(commonShape + ShapeND(min(n, m), n))
-        val sTensor = zeros(commonShape + ShapeND(min(n, m)))
-        val vTensor = zeros(commonShape + ShapeND(min(n, m), m))
-
-        val matrices = asDoubleTensor().matrices
-        val uTensors = uTensor.matrices
-        val sTensorVectors = sTensor.vectors
-        val vTensors = vTensor.matrices
-
-        for (index in matrices.indices) {
-            val matrix = matrices[index]
-            val usv = Triple(
-                uTensors[index],
-                sTensorVectors[index],
-                vTensors[index]
-            )
-            val matrixSize = matrix.shape.linearSize
-            val curMatrix = DoubleTensor(
-                matrix.shape,
-                matrix.source.view(0, matrixSize)
-            )
-            svdHelper(curMatrix, usv, m, n, epsilon)
-        }
-
-        return Triple(uTensor.transposed(), sTensor, vTensor.transposed())
-    }
-
-    override fun StructureND<Double>.symEig(): Pair<DoubleTensor, DoubleTensor> =
-        symEigJacobi(maxIteration = 50, epsilon = 1e-15)
-
-    /**
-     * Returns eigenvalues and eigenvectors of a real symmetric matrix input or a batch of real symmetric matrices,
-     * represented by a pair `eigenvalues to eigenvectors`.
-     *
-     * @param epsilon the permissible error when comparing tensors for equality
-     * and when the cosine approaches 1 in the SVD algorithm.
-     * @return a pair `eigenvalues to eigenvectors`.
-     */
-    public fun StructureND<Double>.symEigSvd(epsilon: Double): Pair<DoubleTensor, StructureND<Double>> {
-        //TODO optimize conversion
-        checkSymmetric(asDoubleTensor(), epsilon)
-
-        fun MutableStructure2D<Double>.cleanSym(n: Int) {
-            for (i in 0 until n) {
-                for (j in 0 until n) {
-                    if (i == j) {
-                        this[i, j] = sign(this[i, j])
-                    } else {
-                        this[i, j] = 0.0
-                    }
-                }
-            }
-        }
-
-        val (u, s, v) = svd(epsilon)
-        val shp = s.shape + intArrayOf(1)
-        val utv = u.transposed() matmul v
-        val n = s.shape.last()
-        for (matrix in utv.matrixSequence()) {
-            matrix.asDoubleTensor2D().cleanSym(n)
-        }
-
-        val eig = (utv dot s.asDoubleTensor().view(shp)).view(s.shape)
-        return eig to v
-    }
-
-    public fun StructureND<Double>.symEigJacobi(maxIteration: Int, epsilon: Double): Pair<DoubleTensor, DoubleTensor> {
-        //TODO optimize conversion
-        checkSymmetric(asDoubleTensor(), epsilon)
-
-        val size = this.dimension
-        val eigenvectors = zeros(shape)
-        val eigenvalues = zeros(shape.slice(0 until size - 1))
-
-        var eigenvalueStart = 0
-        var eigenvectorStart = 0
-        for (matrix in asDoubleTensor().matrixSequence()) {
-            val matrix2D = matrix.asDoubleTensor2D()
-            val (d, v) = matrix2D.jacobiHelper(maxIteration, epsilon)
-
-            for (i in 0 until matrix2D.rowNum) {
-                for (j in 0 until matrix2D.colNum) {
-                    eigenvectors.source[eigenvectorStart + i * matrix2D.rowNum + j] = v[i, j]
-                }
-            }
-
-            for (i in 0 until matrix2D.rowNum) {
-                eigenvalues.source[eigenvalueStart + i] = d[i]
-            }
-
-            eigenvalueStart += this.shape.last()
-            eigenvectorStart += this.shape.last() * this.shape.last()
-        }
-
-        return eigenvalues to eigenvectors
-    }
-
-    /**
-     * Computes the determinant of a square matrix input, or of each square matrix in a batched input
-     * using LU factorization algorithm.
-     *
-     * @param epsilon the error in the LU algorithm&mdash;permissible error when comparing the determinant of a matrix
-     * with zero.
-     * @return the determinant.
-     */
-    public fun StructureND<Double>.detLU(epsilon: Double = 1e-9): DoubleTensor {
-        checkSquareMatrix(shape)
-        //TODO check for unnecessary copies
-        val luTensor = copyToTensor()
-        val pivotsTensor = setUpPivots()
-
-        val n = shape.size
-
-        val detTensorShape = ShapeND(IntArray(n - 1) { i -> shape[i] }.apply {
-            set(n - 2, 1)
-        })
-
-        val resBuffer = DoubleBuffer(detTensorShape.linearSize) { 0.0 }
-
-        val detTensor = DoubleTensor(
-            detTensorShape,
-            resBuffer
-        )
-
-        luTensor.matrixSequence().zip(pivotsTensor.vectorSequence()).forEachIndexed { index, (lu, pivots) ->
-            resBuffer[index] = if (luHelper(lu.asDoubleTensor2D(), pivots.as1D(), epsilon))
-                0.0 else luMatrixDet(lu.asDoubleTensor2D(), pivots.as1D())
-        }
-
-        return detTensor
-    }
-
-    /**
-     * Computes the multiplicative inverse matrix of a square matrix input, or of each square matrix in a batched input
-     * using LU factorization algorithm.
-     * Given a square matrix `a`, return the matrix `aInv` satisfying
-     * `a dot aInv == aInv dot a == eye(a.shape[0])`.
-     *
-     * @param epsilon error in the LU algorithm&mdash;permissible error when comparing the determinant of a matrix with zero
-     * @return the multiplicative inverse of a matrix.
-     */
-    public fun StructureND<Double>.invLU(epsilon: Double = 1e-9): DoubleTensor {
-        val (luTensor, pivotsTensor) = luFactor(epsilon)
-        val invTensor = zeroesLike(luTensor)
-
-        //TODO replace sequence with a cycle
-        val seq = luTensor.matrixSequence().zip(pivotsTensor.vectorSequence()).zip(invTensor.matrixSequence())
-        for ((luP, invMatrix) in seq) {
-            val (lu, pivots) = luP
-            luMatrixInv(lu.asDoubleTensor2D(), pivots.as1D(), invMatrix.asDoubleTensor2D())
-        }
-
-        return invTensor
-    }
-
-    /**
-     * LUP decomposition.
-     *
-     * Computes the LUP decomposition of a matrix or a batch of matrices.
-     * Given a tensor `input`, return tensors `Triple(P, L, U)` satisfying `P dot input == L dot U`,
-     * with `P` being a permutation matrix or batch of matrices,
-     * `L` being a lower triangular matrix or batch of matrices,
-     * `U` being an upper triangular matrix or batch of matrices.
-     *
-     * @param epsilon permissible error when comparing the determinant of a matrix with zero.
-     * @return triple of `P`, `L` and `U` tensors.
-     */
-    public fun StructureND<Double>.lu(epsilon: Double = 1e-9): Triple<DoubleTensor, DoubleTensor, DoubleTensor> {
-        val (lu, pivots) = luFactor(epsilon)
-        return luPivot(lu, pivots)
-    }
-
-    override fun StructureND<Double>.lu(): Triple<DoubleTensor, DoubleTensor, DoubleTensor> = lu(1e-9)
 }
 
 public val Double.Companion.tensorAlgebra: DoubleTensorAlgebra get() = DoubleTensorAlgebra

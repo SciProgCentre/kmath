@@ -52,16 +52,16 @@ public class Mean<T>(
         @Deprecated("Use Long.mean instead")
         public val long: Mean<Long> = Mean(LongRing) { sum, count -> sum / count }
 
-        public fun evaluate(buffer: Buffer<Double>): Double = Double.mean.evaluateBlocking(buffer)
-        public fun evaluate(buffer: Buffer<Int>): Int = Int.mean.evaluateBlocking(buffer)
-        public fun evaluate(buffer: Buffer<Long>): Long = Long.mean.evaluateBlocking(buffer)
+        public fun evaluate(buffer: Buffer<Double>): Double = DoubleField.mean.evaluateBlocking(buffer)
+        public fun evaluate(buffer: Buffer<Int>): Int = IntRing.mean.evaluateBlocking(buffer)
+        public fun evaluate(buffer: Buffer<Long>): Long = LongRing.mean.evaluateBlocking(buffer)
     }
 }
 
 
 //TODO replace with optimized version which respects overflow
-public val Double.Companion.mean: Mean<Double> get() = Mean(DoubleField) { sum, count -> sum / count }
-public val Int.Companion.mean: Mean<Int> get() = Mean(IntRing) { sum, count -> sum / count }
-public val Long.Companion.mean: Mean<Long> get() = Mean(LongRing) { sum, count -> sum / count }
+public val DoubleField.mean: Mean<Double> get() = Mean(DoubleField) { sum, count -> sum / count }
+public val IntRing.mean: Mean<Int> get() = Mean(IntRing) { sum, count -> sum / count }
+public val LongRing.mean: Mean<Long> get() = Mean(LongRing) { sum, count -> sum / count }
 
 
