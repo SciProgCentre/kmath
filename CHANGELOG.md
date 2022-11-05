@@ -20,6 +20,7 @@
 ### Deprecated
 
 ### Removed
+- Polynomials moved to https://github.com/SciProgCentre/kmath-polynomial
 
 ### Fixed
 
