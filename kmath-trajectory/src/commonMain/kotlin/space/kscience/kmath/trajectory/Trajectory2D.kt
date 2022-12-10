@@ -102,7 +102,7 @@ public data class CircleTrajectory2D(
     }
 }
 
-public open class CompositeTrajectory2D(public val segments: Collection<Trajectory2D>) : Trajectory2D {
+public open class CompositeTrajectory2D(public val segments: List<Trajectory2D>) : Trajectory2D {
     override val length: Double get() = segments.sumOf { it.length }
 }
 
