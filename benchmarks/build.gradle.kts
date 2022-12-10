@@ -50,6 +50,8 @@ kotlin {
 
         val jvmMain by getting {
             dependencies {
+                implementation("org.openjdk.jmh:jmh-core:1.36")
+                implementation("org.openjdk.jmh:jmh-generator-annprocess:1.36")
                 implementation(project(":kmath-commons"))
                 implementation(project(":kmath-ejml"))
                 implementation(project(":kmath-nd4j"))
@@ -141,13 +143,6 @@ benchmark {
     configurations.register("viktorLog") {
         commonConfiguration()
         include("ViktorLogBenchmark")
-    }
-}
-
-// Fix kotlinx-benchmarks bug
-afterEvaluate {
-    val jvmBenchmarkJar by tasks.getting(org.gradle.jvm.tasks.Jar::class) {
-        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     }
 }
 
