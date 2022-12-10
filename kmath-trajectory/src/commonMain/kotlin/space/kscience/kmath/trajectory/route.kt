@@ -12,5 +12,5 @@ public fun interface MaxCurvature {
 public fun DubinsPath.Companion.shortest(
     start: PhaseVector2D,
     end: PhaseVector2D,
-    computer: MaxCurvature,
-): DubinsPath = shortest(start, end, computer.compute(start))
+    maxCurvature: MaxCurvature,
+): DubinsPath = shortest(start, end, maxCurvature.compute(start))

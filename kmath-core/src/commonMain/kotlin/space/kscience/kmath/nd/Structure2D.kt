@@ -7,6 +7,7 @@ package space.kscience.kmath.nd
 
 import space.kscience.kmath.misc.PerformancePitfall
 import space.kscience.kmath.structures.Buffer
+import space.kscience.kmath.structures.MutableBuffer
 import space.kscience.kmath.structures.MutableListBuffer
 import space.kscience.kmath.structures.VirtualBuffer
 import kotlin.jvm.JvmInline
@@ -28,7 +29,7 @@ public interface Structure2D<out T> : StructureND<T> {
      */
     public val colNum: Int
 
-    override val shape: IntArray get() = intArrayOf(rowNum, colNum)
+    override val shape: ShapeND get() = ShapeND(rowNum, colNum)
 
     /**
      * The buffer of rows of this structure. It gets elements from the structure dynamically.
@@ -53,6 +54,7 @@ public interface Structure2D<out T> : StructureND<T> {
      */
     public operator fun get(i: Int, j: Int): T
 
+    @PerformancePitfall
     override operator fun get(index: IntArray): T {
         require(index.size == 2) { "Index dimension mismatch. Expected 2 but found ${index.size}" }
         return get(index[0], index[1])
@@ -84,15 +86,15 @@ public interface MutableStructure2D<T> : Structure2D<T>, MutableStructureND<T> {
      * The buffer of rows of this structure. It gets elements from the structure dynamically.
      */
     @PerformancePitfall
-    override val rows: List<MutableStructure1D<T>>
-        get() = List(rowNum) { i -> MutableBuffer1DWrapper(MutableListBuffer(colNum) { j -> get(i, j) }) }
+    override val rows: List<MutableBuffer<T>>
+        get() = List(rowNum) { i -> MutableListBuffer(colNum) { j -> get(i, j) } }
 
     /**
      * The buffer of columns of this structure. It gets elements from the structure dynamically.
      */
     @PerformancePitfall
-    override val columns: List<MutableStructure1D<T>>
-        get() = List(colNum) { j -> MutableBuffer1DWrapper(MutableListBuffer(rowNum) { i -> get(i, j) }) }
+    override val columns: List<MutableBuffer<T>>
+        get() = List(colNum) { j -> MutableListBuffer(rowNum) { i -> get(i, j) } }
 }
 
 /**
@@ -100,11 +102,12 @@ public interface MutableStructure2D<T> : Structure2D<T>, MutableStructureND<T> {
  */
 @JvmInline
 private value class Structure2DWrapper<out T>(val structure: StructureND<T>) : Structure2D<T> {
-    override val shape: Shape get() = structure.shape
+    override val shape: ShapeND get() = structure.shape
 
     override val rowNum: Int get() = shape[0]
     override val colNum: Int get() = shape[1]
 
+    @PerformancePitfall
     override operator fun get(i: Int, j: Int): T = structure[i, j]
 
     override fun <F : StructureFeature> getFeature(type: KClass<out F>): F? = structure.getFeature(type)
@@ -117,17 +120,20 @@ private value class Structure2DWrapper<out T>(val structure: StructureND<T>) : S
  * A 2D wrapper for a mutable nd-structure
  */
 private class MutableStructure2DWrapper<T>(val structure: MutableStructureND<T>) : MutableStructure2D<T> {
-    override val shape: Shape get() = structure.shape
+    override val shape: ShapeND get() = structure.shape
 
     override val rowNum: Int get() = shape[0]
     override val colNum: Int get() = shape[1]
 
+    @PerformancePitfall
     override operator fun get(i: Int, j: Int): T = structure[i, j]
 
+    @PerformancePitfall
     override fun set(index: IntArray, value: T) {
         structure[index] = value
     }
 
+    @PerformancePitfall
     override operator fun set(i: Int, j: Int, value: T) {
         structure[intArrayOf(i, j)] = value
     }

@@ -5,6 +5,21 @@
 
 package space.kscience.kmath.operations
 
+import space.kscience.kmath.misc.PerformancePitfall
+import space.kscience.kmath.structures.Buffer
+
+/**
+ * Returns the sum of all elements in the iterable in this [Group].
+ *
+ * @receiver the algebra that provides addition.
+ * @param data the iterable to sum up.
+ * @return the sum.
+ */
+@PerformancePitfall("Potential boxing access to buffer elements")
+public fun <T> Group<T>.sum(data: Buffer<T>): T = data.fold(zero) { left, right ->
+    add(left, right)
+}
+
 /**
  * Returns the sum of all elements in the iterable in this [Group].
  *
@@ -28,6 +43,18 @@ public fun <T> Group<T>.sum(data: Iterable<T>): T = data.fold(zero) { left, righ
 public fun <T> Group<T>.sum(data: Sequence<T>): T = data.fold(zero) { left, right ->
     add(left, right)
 }
+
+/**
+ * Returns an average value of elements in the iterable in this [Group].
+ *
+ * @receiver the algebra that provides addition and division.
+ * @param data the iterable to find average.
+ * @return the average value.
+ * @author Iaroslav Postovalov
+ */
+@PerformancePitfall("Potential boxing access to buffer elements")
+public fun <T, S> S.average(data: Buffer<T>): T where S : Group<T>, S : ScaleOperations<T> =
+    sum(data) / data.size
 
 /**
  * Returns an average value of elements in the iterable in this [Group].
@@ -95,4 +122,3 @@ public fun <T, S> Iterable<T>.averageWith(space: S): T where S : Group<T>, S : S
  */
 public fun <T, S> Sequence<T>.averageWith(space: S): T where S : Group<T>, S : ScaleOperations<T> =
     space.average(this)
-

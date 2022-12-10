@@ -88,7 +88,7 @@ class NumberNDFieldTest {
     @Test
     fun testInternalContext() {
         algebra {
-            (DoubleField.ndAlgebra(*array1.shape)) { with(L2Norm) { 1 + norm(array1) + exp(array2) } }
+            (DoubleField.ndAlgebra(array1.shape)) { with(L2Norm) { 1 + norm(array1) + exp(array2) } }
         }
     }
 }

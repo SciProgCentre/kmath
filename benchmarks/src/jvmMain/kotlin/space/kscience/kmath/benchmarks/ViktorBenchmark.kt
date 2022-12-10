@@ -10,7 +10,7 @@ import kotlinx.benchmark.Blackhole
 import kotlinx.benchmark.Scope
 import kotlinx.benchmark.State
 import org.jetbrains.bio.viktor.F64Array
-import space.kscience.kmath.nd.Shape
+import space.kscience.kmath.nd.ShapeND
 import space.kscience.kmath.nd.StructureND
 import space.kscience.kmath.nd.ndAlgebra
 import space.kscience.kmath.nd.one
@@ -49,7 +49,7 @@ internal class ViktorBenchmark {
     private companion object {
         private const val dim = 1000
         private const val n = 100
-        private val shape = Shape(dim, dim)
+        private val shape = ShapeND(dim, dim)
 
         // automatically build context most suited for given type.
         private val doubleField = DoubleField.ndAlgebra

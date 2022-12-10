@@ -15,7 +15,7 @@ allprojects {
     }
 
     group = "space.kscience"
-    version = "0.3.1-dev-4"
+    version = "0.3.1-dev-7"
 }
 
 subprojects {
@@ -79,9 +79,9 @@ ksciencePublish {
     github("kmath", "SciProgCentre")
     space(
         if (isInDevelopment) {
-            "https://maven.pkg.jetbrains.space/mipt-npm/p/sci/dev"
+            "https://maven.pkg.jetbrains.space/spc/p/sci/dev"
         } else {
-            "https://maven.pkg.jetbrains.space/mipt-npm/p/sci/release"
+            "https://maven.pkg.jetbrains.space/spc/p/sci/maven"
         }
     )
     sonatype()

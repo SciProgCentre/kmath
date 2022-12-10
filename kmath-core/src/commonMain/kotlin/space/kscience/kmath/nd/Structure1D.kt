@@ -18,6 +18,7 @@ import kotlin.jvm.JvmInline
 public interface Structure1D<out T> : StructureND<T>, Buffer<T> {
     override val dimension: Int get() = 1
 
+    @PerformancePitfall
     override operator fun get(index: IntArray): T {
         require(index.size == 1) { "Index dimension mismatch. Expected 1 but found ${index.size}" }
         return get(index[0])
@@ -32,6 +33,8 @@ public interface Structure1D<out T> : StructureND<T>, Buffer<T> {
  * A mutable structure that is guaranteed to be one-dimensional
  */
 public interface MutableStructure1D<T> : Structure1D<T>, MutableStructureND<T>, MutableBuffer<T> {
+
+    @PerformancePitfall
     override operator fun set(index: IntArray, value: T) {
         require(index.size == 1) { "Index dimension mismatch. Expected 1 but found ${index.size}" }
         set(index[0], value)
@@ -43,9 +46,10 @@ public interface MutableStructure1D<T> : Structure1D<T>, MutableStructureND<T>, 
  */
 @JvmInline
 private value class Structure1DWrapper<out T>(val structure: StructureND<T>) : Structure1D<T> {
-    override val shape: IntArray get() = structure.shape
+    override val shape: ShapeND get() = structure.shape
     override val size: Int get() = structure.shape[0]
 
+    @PerformancePitfall
     override operator fun get(index: Int): T = structure[index]
 
     @PerformancePitfall
@@ -56,13 +60,16 @@ private value class Structure1DWrapper<out T>(val structure: StructureND<T>) : S
  * A 1D wrapper for a mutable nd-structure
  */
 private class MutableStructure1DWrapper<T>(val structure: MutableStructureND<T>) : MutableStructure1D<T> {
-    override val shape: IntArray get() = structure.shape
+    override val shape: ShapeND get() = structure.shape
     override val size: Int get() = structure.shape[0]
 
     @PerformancePitfall
     override fun elements(): Sequence<Pair<IntArray, T>> = structure.elements()
 
+    @PerformancePitfall
     override fun get(index: Int): T = structure[index]
+
+    @PerformancePitfall
     override fun set(index: Int, value: T) {
         structure[intArrayOf(index)] = value
     }
@@ -83,7 +90,7 @@ private class MutableStructure1DWrapper<T>(val structure: MutableStructureND<T>)
  */
 @JvmInline
 private value class Buffer1DWrapper<out T>(val buffer: Buffer<T>) : Structure1D<T> {
-    override val shape: IntArray get() = intArrayOf(buffer.size)
+    override val shape: ShapeND get() = ShapeND(buffer.size)
     override val size: Int get() = buffer.size
 
     @PerformancePitfall
@@ -95,7 +102,7 @@ private value class Buffer1DWrapper<out T>(val buffer: Buffer<T>) : Structure1D<
 }
 
 internal class MutableBuffer1DWrapper<T>(val buffer: MutableBuffer<T>) : MutableStructure1D<T> {
-    override val shape: IntArray get() = intArrayOf(buffer.size)
+    override val shape: ShapeND get() = ShapeND(buffer.size)
     override val size: Int get() = buffer.size
 
     @PerformancePitfall

@@ -18,10 +18,10 @@ import space.kscience.kmath.optimization.FunctionOptimizationTarget
 import space.kscience.kmath.optimization.optimizeWith
 import space.kscience.kmath.optimization.resultPoint
 import space.kscience.kmath.optimization.resultValue
+import space.kscience.kmath.random.RandomGenerator
 import space.kscience.kmath.real.DoubleVector
 import space.kscience.kmath.real.map
 import space.kscience.kmath.real.step
-import space.kscience.kmath.stat.RandomGenerator
 import space.kscience.plotly.*
 import space.kscience.plotly.models.ScatterMode
 import space.kscience.plotly.models.TraceValues

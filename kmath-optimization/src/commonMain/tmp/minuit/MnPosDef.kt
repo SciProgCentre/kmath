@@ -36,7 +36,7 @@ internal object MnPosDef {
         if (err.size() === 1 && err[0, 0] > prec.eps()) {
             return e
         }
-        //   std::cout<<"MnPosDef init matrix= "<<err<<std::endl;
+        //   standardDiviation::cout<<"MnPosDef init matrix= "<<err<<standardDiviation::endl;
         val epspdf: Double = max(1e-6, prec.eps2())
         var dgmin: Double = err[0, 0]
         for (i in 0 until err.nrow()) {
@@ -66,11 +66,11 @@ internal object MnPosDef {
             }
         }
 
-        //   std::cout<<"MnPosDef p: "<<p<<std::endl;
+        //   standardDiviation::cout<<"MnPosDef p: "<<p<<standardDiviation::endl;
         val eval: RealVector = p.eigenvalues()
         val pmin: Double = eval.getEntry(0)
         var pmax: Double = eval.getEntry(eval.getDimension() - 1)
-        //   std::cout<<"pmin= "<<pmin<<" pmax= "<<pmax<<std::endl;
+        //   standardDiviation::cout<<"pmin= "<<pmin<<" pmax= "<<pmax<<standardDiviation::endl;
         pmax = max(abs(pmax), 1.0)
         if (pmin > epspdf * pmax) {
             return e
@@ -81,9 +81,9 @@ internal object MnPosDef {
             err[i, i] = err[i, i] * (1.0 + padd)
             MINUITPlugin.logStatic(java.lang.Double.toString(eval.getEntry(i)))
         }
-        //   std::cout<<"MnPosDef final matrix: "<<err<<std::endl;
+        //   standardDiviation::cout<<"MnPosDef final matrix: "<<err<<standardDiviation::endl;
         MINUITPlugin.logStatic("matrix forced pos-def by adding $padd to diagonal")
-        //   std::cout<<"eigenvalues: "<<eval<<std::endl;
+        //   standardDiviation::cout<<"eigenvalues: "<<eval<<standardDiviation::endl;
         return MinimumError(err, MnMadePosDef())
     }
 }

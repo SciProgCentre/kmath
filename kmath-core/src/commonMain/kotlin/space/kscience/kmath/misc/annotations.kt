@@ -29,3 +29,16 @@ public annotation class UnstableKMathAPI
 public annotation class PerformancePitfall(
     val message: String = "Potential performance problem",
 )
+
+/**
+ * Marks API that is public, but should not be used without clear understanding what it does.
+ */
+@MustBeDocumented
+@Retention(value = AnnotationRetention.BINARY)
+@RequiresOptIn(
+    "This API is unsafe and should be used carefully",
+    RequiresOptIn.Level.ERROR,
+)
+public annotation class UnsafeKMathAPI(
+    val message: String = "Unsafe API",
+)

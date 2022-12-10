@@ -5,15 +5,19 @@
 
 package space.kscience.kmath.tensors.core.internal
 
+import space.kscience.kmath.nd.ShapeND
 import space.kscience.kmath.nd.StructureND
+import space.kscience.kmath.nd.contentEquals
+import space.kscience.kmath.nd.linearSize
 import space.kscience.kmath.tensors.api.Tensor
 import space.kscience.kmath.tensors.core.DoubleTensor
 import space.kscience.kmath.tensors.core.DoubleTensorAlgebra
 import space.kscience.kmath.tensors.core.asDoubleTensor
+import space.kscience.kmath.tensors.core.detLU
 
 
-internal fun checkNotEmptyShape(shape: IntArray) =
-    check(shape.isNotEmpty()) {
+internal fun checkNotEmptyShape(shape: ShapeND) =
+    check(shape.size > 0) {
         "Illegal empty shape provided"
     }
 
@@ -21,15 +25,15 @@ internal fun checkEmptyDoubleBuffer(buffer: DoubleArray) = check(buffer.isNotEmp
     "Illegal empty buffer provided"
 }
 
-internal fun checkBufferShapeConsistency(shape: IntArray, buffer: DoubleArray) =
-    check(buffer.size == shape.reduce(Int::times)) {
-        "Inconsistent shape ${shape.toList()} for buffer of size ${buffer.size} provided"
+internal fun checkBufferShapeConsistency(shape: ShapeND, buffer: DoubleArray) =
+    check(buffer.size == shape.linearSize) {
+        "Inconsistent shape $shape for buffer of size ${buffer.size} provided"
     }
 
 @PublishedApi
 internal fun <T> checkShapesCompatible(a: StructureND<T>, b: StructureND<T>): Unit =
     check(a.shape contentEquals b.shape) {
-        "Incompatible shapes ${a.shape.toList()} and ${b.shape.toList()} "
+        "Incompatible shapes ${a.shape} and ${b.shape} "
     }
 
 internal fun checkTranspose(dim: Int, i: Int, j: Int) =
@@ -37,10 +41,10 @@ internal fun checkTranspose(dim: Int, i: Int, j: Int) =
         "Cannot transpose $i to $j for a tensor of dim $dim"
     }
 
-internal fun <T> checkView(a: Tensor<T>, shape: IntArray) =
-    check(a.shape.reduce(Int::times) == shape.reduce(Int::times))
+internal fun <T> checkView(a: Tensor<T>, shape: ShapeND) =
+    check(a.shape.linearSize == shape.linearSize)
 
-internal fun checkSquareMatrix(shape: IntArray) {
+internal fun checkSquareMatrix(shape: ShapeND) {
     val n = shape.size
     check(n >= 2) {
         "Expected tensor with 2 or more dimensions, got size $n instead"
@@ -59,7 +63,7 @@ internal fun DoubleTensorAlgebra.checkSymmetric(
 internal fun DoubleTensorAlgebra.checkPositiveDefinite(tensor: DoubleTensor, epsilon: Double = 1e-6) {
     checkSymmetric(tensor, epsilon)
     for (mat in tensor.matrixSequence())
-        check(mat.asDoubleTensor().detLU().value() > 0.0) {
-            "Tensor contains matrices which are not positive definite ${mat.asDoubleTensor().detLU().value()}"
+        check(detLU(mat.asDoubleTensor()).value() > 0.0) {
+            "Tensor contains matrices which are not positive definite ${detLU(mat.asDoubleTensor()).value()}"
         }
 }

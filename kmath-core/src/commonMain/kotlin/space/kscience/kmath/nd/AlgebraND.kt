@@ -25,7 +25,7 @@ public interface AlgebraND<T, out C : Algebra<T>>: Algebra<StructureND<T>> {
     /**
      * Produces a new [StructureND] using given initializer function.
      */
-    public fun structureND(shape: Shape, initializer: C.(IntArray) -> T): StructureND<T>
+    public fun structureND(shape: ShapeND, initializer: C.(IntArray) -> T): StructureND<T>
 
     /**
      * Maps elements from one structure to another one by applying [transform] to them.

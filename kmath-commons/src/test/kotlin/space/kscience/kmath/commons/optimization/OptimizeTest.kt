@@ -13,12 +13,11 @@ import space.kscience.kmath.expressions.Symbol.Companion.x
 import space.kscience.kmath.expressions.Symbol.Companion.y
 import space.kscience.kmath.expressions.chiSquaredExpression
 import space.kscience.kmath.expressions.symbol
-import space.kscience.kmath.operations.map
+import space.kscience.kmath.operations.DoubleBufferOps.Companion.map
 import space.kscience.kmath.optimization.*
-import space.kscience.kmath.stat.RandomGenerator
+import space.kscience.kmath.random.RandomGenerator
 import space.kscience.kmath.structures.DoubleBuffer
 import space.kscience.kmath.structures.asBuffer
-import kotlin.math.pow
 import kotlin.test.Test
 
 internal class OptimizeTest {

@@ -18,7 +18,6 @@ dependencies {
     implementation(project(":kmath-commons"))
     implementation(project(":kmath-complex"))
     implementation(project(":kmath-functions"))
-    implementation(project(":kmath-polynomial"))
     implementation(project(":kmath-optimization"))
     implementation(project(":kmath-stat"))
     implementation(project(":kmath-viktor"))

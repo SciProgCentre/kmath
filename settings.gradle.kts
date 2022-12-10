@@ -26,7 +26,6 @@ include(
     ":kmath-core",
     ":kmath-coroutines",
     ":kmath-functions",
-    ":kmath-polynomial",
     ":kmath-histograms",
     ":kmath-commons",
     ":kmath-viktor",

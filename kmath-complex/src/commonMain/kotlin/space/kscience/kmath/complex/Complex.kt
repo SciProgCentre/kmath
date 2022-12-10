@@ -193,7 +193,6 @@ public object ComplexField :
  * @property re The real part.
  * @property im The imaginary part.
  */
-@OptIn(UnstableKMathAPI::class)
 public data class Complex(val re: Double, val im: Double) {
     public constructor(re: Number, im: Number) : this(re.toDouble(), im.toDouble())
     public constructor(re: Number) : this(re.toDouble(), 0.0)

@@ -5,6 +5,9 @@
 
 package space.kscience.kmath.tensors.core.internal
 
+import space.kscience.kmath.nd.ShapeND
+import space.kscience.kmath.nd.first
+import space.kscience.kmath.nd.last
 import space.kscience.kmath.operations.asSequence
 import space.kscience.kmath.structures.IntBuffer
 import space.kscience.kmath.structures.VirtualBuffer
@@ -32,20 +35,19 @@ internal fun List<OffsetIntBuffer>.concat(): IntBuffer {
 }
 
 
-internal val IntTensor.vectors: VirtualBuffer<IntTensor>
-    get() {
-        val n = shape.size
-        val vectorOffset = shape[n - 1]
-        val vectorShape = intArrayOf(shape.last())
+internal fun IntTensor.vectors(): VirtualBuffer<IntTensor> {
+    val n = shape.size
+    val vectorOffset = shape[n - 1]
+    val vectorShape = shape.last(1)
 
-        return VirtualBuffer(linearSize / vectorOffset) { index ->
-            val offset = index * vectorOffset
-            IntTensor(vectorShape, source.view(offset, vectorShape.first()))
-        }
+    return VirtualBuffer(linearSize / vectorOffset) { index ->
+        val offset = index * vectorOffset
+        IntTensor(vectorShape, source.view(offset, vectorShape.first()))
     }
+}
 
 
-internal fun IntTensor.vectorSequence(): Sequence<IntTensor> = vectors.asSequence()
+internal fun IntTensor.vectorSequence(): Sequence<IntTensor> = vectors().asSequence()
 
 
 internal val IntTensor.matrices: VirtualBuffer<IntTensor>
@@ -53,7 +55,7 @@ internal val IntTensor.matrices: VirtualBuffer<IntTensor>
         val n = shape.size
         check(n >= 2) { "Expected tensor with 2 or more dimensions, got size $n" }
         val matrixOffset = shape[n - 1] * shape[n - 2]
-        val matrixShape = intArrayOf(shape[n - 2], shape[n - 1])
+        val matrixShape = ShapeND(shape[n - 2], shape[n - 1])
 
         return VirtualBuffer(linearSize / matrixOffset) { index ->
             val offset = index * matrixOffset

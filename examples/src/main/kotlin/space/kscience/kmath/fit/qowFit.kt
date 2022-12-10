@@ -19,9 +19,9 @@ import space.kscience.kmath.optimization.QowOptimizer
 import space.kscience.kmath.optimization.chiSquaredOrNull
 import space.kscience.kmath.optimization.fitWith
 import space.kscience.kmath.optimization.resultPoint
+import space.kscience.kmath.random.RandomGenerator
 import space.kscience.kmath.real.map
 import space.kscience.kmath.real.step
-import space.kscience.kmath.stat.RandomGenerator
 import space.kscience.plotly.*
 import space.kscience.plotly.models.ScatterMode
 import kotlin.math.abs

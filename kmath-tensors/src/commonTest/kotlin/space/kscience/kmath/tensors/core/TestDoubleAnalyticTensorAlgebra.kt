@@ -5,6 +5,7 @@
 
 package space.kscience.kmath.tensors.core
 
+import space.kscience.kmath.nd.ShapeND
 import space.kscience.kmath.operations.invoke
 import space.kscience.kmath.structures.asBuffer
 import kotlin.math.*
@@ -13,7 +14,7 @@ import kotlin.test.assertTrue
 
 internal class TestDoubleAnalyticTensorAlgebra {
 
-    val shape = intArrayOf(2, 1, 3, 2)
+    val shape = ShapeND(2, 1, 3, 2)
     val buffer = doubleArrayOf(
         27.1, 20.0, 19.84,
         23.123, 3.0, 2.0,
@@ -33,76 +34,76 @@ internal class TestDoubleAnalyticTensorAlgebra {
 
     @Test
     fun testExp() = DoubleTensorAlgebra {
-        assertTrue { tensor.exp() eq expectedTensor(::exp) }
+        assertTrue { exp(tensor) eq expectedTensor(::exp) }
     }
 
     @Test
     fun testLog() = DoubleTensorAlgebra {
-        assertTrue { tensor.ln() eq expectedTensor(::ln) }
+        assertTrue { ln(tensor) eq expectedTensor(::ln) }
     }
 
     @Test
     fun testSqrt() = DoubleTensorAlgebra {
-        assertTrue { tensor.sqrt() eq expectedTensor(::sqrt) }
+        assertTrue { sqrt(tensor) eq expectedTensor(::sqrt) }
     }
 
     @Test
     fun testCos() = DoubleTensorAlgebra {
-        assertTrue { tensor.cos() eq expectedTensor(::cos) }
+        assertTrue { cos(tensor) eq expectedTensor(::cos) }
     }
 
 
     @Test
     fun testCosh() = DoubleTensorAlgebra {
-        assertTrue { tensor.cosh() eq expectedTensor(::cosh) }
+        assertTrue { cosh(tensor) eq expectedTensor(::cosh) }
     }
 
     @Test
     fun testAcosh() = DoubleTensorAlgebra {
-        assertTrue { tensor.acosh() eq expectedTensor(::acosh) }
+        assertTrue { acosh(tensor) eq expectedTensor(::acosh) }
     }
 
     @Test
     fun testSin() = DoubleTensorAlgebra {
-        assertTrue { tensor.sin() eq expectedTensor(::sin) }
+        assertTrue { sin(tensor) eq expectedTensor(::sin) }
     }
 
     @Test
     fun testSinh() = DoubleTensorAlgebra {
-        assertTrue { tensor.sinh() eq expectedTensor(::sinh) }
+        assertTrue { sinh(tensor) eq expectedTensor(::sinh) }
     }
 
     @Test
     fun testAsinh() = DoubleTensorAlgebra {
-        assertTrue { tensor.asinh() eq expectedTensor(::asinh) }
+        assertTrue { asinh(tensor) eq expectedTensor(::asinh) }
     }
 
     @Test
     fun testTan() = DoubleTensorAlgebra {
-        assertTrue { tensor.tan() eq expectedTensor(::tan) }
+        assertTrue { tan(tensor) eq expectedTensor(::tan) }
     }
 
     @Test
     fun testAtan() = DoubleTensorAlgebra {
-        assertTrue { tensor.atan() eq expectedTensor(::atan) }
+        assertTrue { atan(tensor) eq expectedTensor(::atan) }
     }
 
     @Test
     fun testTanh() = DoubleTensorAlgebra {
-        assertTrue { tensor.tanh() eq expectedTensor(::tanh) }
+        assertTrue { tanh(tensor) eq expectedTensor(::tanh) }
     }
 
     @Test
     fun testCeil() = DoubleTensorAlgebra {
-        assertTrue { tensor.ceil() eq expectedTensor(::ceil) }
+        assertTrue { ceil(tensor) eq expectedTensor(::ceil) }
     }
 
     @Test
     fun testFloor() = DoubleTensorAlgebra {
-        assertTrue { tensor.floor() eq expectedTensor(::floor) }
+        assertTrue { floor(tensor) eq expectedTensor(::floor) }
     }
 
-    val shape2 = intArrayOf(2, 2)
+    val shape2 = ShapeND(2, 2)
     val buffer2 = doubleArrayOf(
         1.0, 2.0,
         -3.0, 4.0
@@ -114,13 +115,13 @@ internal class TestDoubleAnalyticTensorAlgebra {
         assertTrue { tensor2.min() == -3.0 }
         assertTrue {
             tensor2.min(0, true) eq fromArray(
-                intArrayOf(1, 2),
+                ShapeND(1, 2),
                 doubleArrayOf(-3.0, 2.0)
             )
         }
         assertTrue {
             tensor2.min(1, false) eq fromArray(
-                intArrayOf(2),
+                ShapeND(2),
                 doubleArrayOf(1.0, -3.0)
             )
         }
@@ -131,13 +132,13 @@ internal class TestDoubleAnalyticTensorAlgebra {
         assertTrue { tensor2.max() == 4.0 }
         assertTrue {
             tensor2.max(0, true) eq fromArray(
-                intArrayOf(1, 2),
+                ShapeND(1, 2),
                 doubleArrayOf(1.0, 4.0)
             )
         }
         assertTrue {
             tensor2.max(1, false) eq fromArray(
-                intArrayOf(2),
+                ShapeND(2),
                 doubleArrayOf(2.0, 4.0)
             )
         }
@@ -148,13 +149,13 @@ internal class TestDoubleAnalyticTensorAlgebra {
         assertTrue { tensor2.sum() == 4.0 }
         assertTrue {
             tensor2.sum(0, true) eq fromArray(
-                intArrayOf(1, 2),
+                ShapeND(1, 2),
                 doubleArrayOf(-2.0, 6.0)
             )
         }
         assertTrue {
             tensor2.sum(1, false) eq fromArray(
-                intArrayOf(2),
+                ShapeND(2),
                 doubleArrayOf(3.0, 1.0)
             )
         }
@@ -162,16 +163,16 @@ internal class TestDoubleAnalyticTensorAlgebra {
 
     @Test
     fun testMean() = DoubleTensorAlgebra {
-        assertTrue { tensor2.mean() == 1.0 }
+        assertTrue { mean(tensor2) == 1.0 }
         assertTrue {
-            tensor2.mean(0, true) eq fromArray(
-                intArrayOf(1, 2),
+            mean(tensor2, 0, true) eq fromArray(
+                ShapeND(1, 2),
                 doubleArrayOf(-1.0, 3.0)
             )
         }
         assertTrue {
-            tensor2.mean(1, false) eq fromArray(
-                intArrayOf(2),
+            mean(tensor2, 1, false) eq fromArray(
+                ShapeND(2),
                 doubleArrayOf(1.5, 0.5)
             )
         }

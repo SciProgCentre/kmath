@@ -131,7 +131,7 @@ public fun RealMatrix.extractColumn(columnIndex: Int): RealMatrix =
     extractColumns(columnIndex..columnIndex)
 
 public fun RealMatrix.sumByColumn(): DoubleBuffer = DoubleBuffer(colNum) { j ->
-    columns[j].asIterable().sum()
+    columns[j].sum()
 }
 
 public fun RealMatrix.minByColumn(): DoubleBuffer = DoubleBuffer(colNum) { j ->

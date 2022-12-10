@@ -47,11 +47,13 @@ internal class KMathJupyter : JupyterIntegration() {
                 syntaxRender.renderPart(mathRender.render(MST.Numeric(it)), s)
                 +s.toString()
             }
+
             is MST -> {
                 val s = StringBuilder()
                 syntaxRender.renderPart(mathRender.render(it), s)
                 +s.toString()
             }
+
             else -> {
                 +"<ms>"
                 +it.toString()

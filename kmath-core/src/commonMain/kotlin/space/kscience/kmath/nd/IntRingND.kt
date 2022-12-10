@@ -20,7 +20,7 @@ public class IntBufferND(
 
 public sealed class IntRingOpsND : BufferedRingOpsND<Int, IntRing>(IntRing.bufferAlgebra) {
 
-    override fun structureND(shape: Shape, initializer: IntRing.(IntArray) -> Int): IntBufferND {
+    override fun structureND(shape: ShapeND, initializer: IntRing.(IntArray) -> Int): IntBufferND {
         val indexer = indexerBuilder(shape)
         return IntBufferND(
             indexer,
@@ -35,7 +35,7 @@ public sealed class IntRingOpsND : BufferedRingOpsND<Int, IntRing>(IntRing.buffe
 
 @OptIn(UnstableKMathAPI::class)
 public class IntRingND(
-    override val shape: Shape
+    override val shape: ShapeND
 ) : IntRingOpsND(), RingND<Int, IntRing>, NumbersAddOps<StructureND<Int>> {
 
     override fun number(value: Number): BufferND<Int> {
@@ -46,5 +46,5 @@ public class IntRingND(
 
 public inline fun <R> IntRing.withNdAlgebra(vararg shape: Int, action: IntRingND.() -> R): R {
     contract { callsInPlace(action, InvocationKind.EXACTLY_ONCE) }
-    return IntRingND(shape).run(action)
+    return IntRingND(ShapeND(shape)).run(action)
 }
