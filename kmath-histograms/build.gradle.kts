@@ -12,7 +12,7 @@ kotlin.sourceSets {
     commonMain {
         dependencies {
             api(project(":kmath-core"))
-            api(npmlibs.atomicfu)
+            api(spclibs.atomicfu)
         }
     }
     commonTest {

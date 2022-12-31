@@ -7,10 +7,10 @@ package space.kscience.kmath.fit
 
 import kotlinx.html.br
 import kotlinx.html.h3
-import space.kscience.kmath.commons.expressions.DSProcessor
 import space.kscience.kmath.data.XYErrorColumnarData
 import space.kscience.kmath.distributions.NormalDistribution
 import space.kscience.kmath.expressions.Symbol
+import space.kscience.kmath.expressions.autodiff
 import space.kscience.kmath.expressions.binding
 import space.kscience.kmath.expressions.symbol
 import space.kscience.kmath.operations.asIterable
@@ -63,7 +63,7 @@ suspend fun main() {
 
     val result = XYErrorColumnarData.of(x, y, yErr).fitWith(
         QowOptimizer,
-        DSProcessor,
+        Double.autodiff,
         mapOf(a to 0.9, b to 1.2, c to 2.0)
     ) { arg ->
         //bind variables to autodiff context

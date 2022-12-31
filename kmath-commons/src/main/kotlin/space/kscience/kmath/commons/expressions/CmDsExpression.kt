@@ -18,7 +18,8 @@ import space.kscience.kmath.operations.NumbersAddOps
  * @param bindings The map of bindings values. All bindings are considered free parameters
  */
 @OptIn(UnstableKMathAPI::class)
-public class DerivativeStructureField(
+@Deprecated("Use generic DSAlgebra from the core")
+public class CmDsField(
     public val order: Int,
     bindings: Map<Symbol, Double>,
 ) : ExtendedField<DerivativeStructure>, ExpressionAlgebra<Double, DerivativeStructure>,
@@ -108,25 +109,27 @@ public class DerivativeStructureField(
 /**
  * Auto-diff processor based on Commons-math [DerivativeStructure]
  */
-public object DSProcessor : AutoDiffProcessor<Double, DerivativeStructure, DerivativeStructureField> {
+@Deprecated("Use generic DSAlgebra from the core")
+public object CmDsProcessor : AutoDiffProcessor<Double, DerivativeStructure, CmDsField> {
      override fun differentiate(
-        function: DerivativeStructureField.() -> DerivativeStructure,
-    ): DerivativeStructureExpression = DerivativeStructureExpression(function)
+         function: CmDsField.() -> DerivativeStructure,
+    ): CmDsExpression = CmDsExpression(function)
 }
 
 /**
  * A constructs that creates a derivative structure with required order on-demand
  */
-public class DerivativeStructureExpression(
-    public val function: DerivativeStructureField.() -> DerivativeStructure,
+@Deprecated("Use generic DSAlgebra from the core")
+public class CmDsExpression(
+    public val function: CmDsField.() -> DerivativeStructure,
 ) : DifferentiableExpression<Double> {
     override operator fun invoke(arguments: Map<Symbol, Double>): Double =
-        DerivativeStructureField(0, arguments).function().value
+        CmDsField(0, arguments).function().value
 
     /**
      * Get the derivative expression with given orders
      */
     override fun derivativeOrNull(symbols: List<Symbol>): Expression<Double> = Expression { arguments ->
-        with(DerivativeStructureField(symbols.size, arguments)) { function().derivative(symbols) }
+        with(CmDsField(symbols.size, arguments)) { function().derivative(symbols) }
     }
 }

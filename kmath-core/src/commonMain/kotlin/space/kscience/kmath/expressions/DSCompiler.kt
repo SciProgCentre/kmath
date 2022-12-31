@@ -9,7 +9,6 @@ package space.kscience.kmath.expressions
 import space.kscience.kmath.operations.*
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.MutableBuffer
-import space.kscience.kmath.structures.MutableBufferFactory
 import kotlin.math.min
 
 internal fun <T> MutableBuffer<T>.fill(element: T, fromIndex: Int = 0, toIndex: Int = size) {
@@ -56,7 +55,6 @@ internal fun <T> MutableBuffer<T>.fill(element: T, fromIndex: Int = 0, toIndex: 
  */
 public class DSCompiler<T, out A : Algebra<T>> internal constructor(
     public val algebra: A,
-    public val bufferFactory: MutableBufferFactory<T>,
     public val freeParameters: Int,
     public val order: Int,
     valueCompiler: DSCompiler<T, A>?,

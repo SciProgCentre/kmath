@@ -13,7 +13,7 @@ dependencyResolutionManagement {
     }
 
     versionCatalogs {
-        create("npmlibs") {
+        create("spclibs") {
             from("space.kscience:version-catalog:$toolsVersion")
         }
     }

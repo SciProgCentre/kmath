@@ -3,6 +3,8 @@
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
+@file:Suppress("DEPRECATION")
+
 package space.kscience.kmath.commons.expressions
 
 import space.kscience.kmath.expressions.*
@@ -15,10 +17,10 @@ import kotlin.test.assertFails
 internal inline fun diff(
     order: Int,
     vararg parameters: Pair<Symbol, Double>,
-    block: DerivativeStructureField.() -> Unit,
+    block: CmDsField.() -> Unit,
 ) {
     contract { callsInPlace(block, InvocationKind.EXACTLY_ONCE) }
-    DerivativeStructureField(order, mapOf(*parameters)).run(block)
+    CmDsField(order, mapOf(*parameters)).run(block)
 }
 
 internal class AutoDiffTest {
@@ -41,7 +43,7 @@ internal class AutoDiffTest {
 
     @Test
     fun autoDifTest() {
-        val f = DerivativeStructureExpression {
+        val f = CmDsExpression {
             val x by binding
             val y by binding
             x.pow(2) + 2 * x * y + y.pow(2) + 1
