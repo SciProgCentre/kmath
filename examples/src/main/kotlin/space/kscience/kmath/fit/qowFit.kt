@@ -15,10 +15,7 @@ import space.kscience.kmath.expressions.binding
 import space.kscience.kmath.expressions.symbol
 import space.kscience.kmath.operations.asIterable
 import space.kscience.kmath.operations.toList
-import space.kscience.kmath.optimization.QowOptimizer
-import space.kscience.kmath.optimization.chiSquaredOrNull
-import space.kscience.kmath.optimization.fitWith
-import space.kscience.kmath.optimization.resultPoint
+import space.kscience.kmath.optimization.*
 import space.kscience.kmath.random.RandomGenerator
 import space.kscience.kmath.real.map
 import space.kscience.kmath.real.step
@@ -32,6 +29,8 @@ import kotlin.math.sqrt
 private val a by symbol
 private val b by symbol
 private val c by symbol
+private val d by symbol
+private val e by symbol
 
 
 /**
@@ -64,15 +63,21 @@ suspend fun main() {
     val result = XYErrorColumnarData.of(x, y, yErr).fitWith(
         QowOptimizer,
         Double.autodiff,
-        mapOf(a to 0.9, b to 1.2, c to 2.0)
+        mapOf(a to 0.9, b to 1.2, c to 2.0, e to 1.0, d to 1.0, e to 0.0),
+        OptimizationParameters(a, b, c, d)
     ) { arg ->
         //bind variables to autodiff context
         val a by binding
         val b by binding
         //Include default value for c if it is not provided as a parameter
         val c = bindSymbolOrNull(c) ?: one
-        a * arg.pow(2) + b * arg + c
+        val d by binding
+        val e by binding
+
+        a * arg.pow(2) + b * arg + c + d * arg.pow(3) + e / arg
     }
+
+    println("Resulting chi2/dof: ${result.chiSquaredOrNull}/${result.dof}")
 
     //display a page with plot and numerical results
     val page = Plotly.page {
@@ -89,7 +94,7 @@ suspend fun main() {
             scatter {
                 mode = ScatterMode.lines
                 x(x)
-                y(x.map { result.model(result.resultPoint + (Symbol.x to it)) })
+                y(x.map { result.model(result.startPoint + result.resultPoint + (Symbol.x to it)) })
                 name = "fit"
             }
         }
@@ -98,7 +103,7 @@ suspend fun main() {
             +"Fit result: ${result.resultPoint}"
         }
         h3 {
-            +"Chi2/dof = ${result.chiSquaredOrNull!! / (x.size - 3)}"
+            +"Chi2/dof = ${result.chiSquaredOrNull!! / result.dof}"
         }
     }
 

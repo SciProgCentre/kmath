@@ -10,7 +10,6 @@ import kotlinx.html.h3
 import space.kscience.kmath.commons.optimization.CMOptimizer
 import space.kscience.kmath.distributions.NormalDistribution
 import space.kscience.kmath.expressions.autodiff
-import space.kscience.kmath.expressions.chiSquaredExpression
 import space.kscience.kmath.expressions.symbol
 import space.kscience.kmath.operations.asIterable
 import space.kscience.kmath.operations.toList
@@ -22,6 +21,7 @@ import space.kscience.kmath.random.RandomGenerator
 import space.kscience.kmath.real.DoubleVector
 import space.kscience.kmath.real.map
 import space.kscience.kmath.real.step
+import space.kscience.kmath.stat.chiSquaredExpression
 import space.kscience.plotly.*
 import space.kscience.plotly.models.ScatterMode
 import space.kscience.plotly.models.TraceValues

@@ -152,7 +152,7 @@ public suspend fun <I : Any, A> XYColumnarData<Double, Double, Double>.fitWith(
  */
 public val XYFit.chiSquaredOrNull: Double?
     get() {
-        val result = resultPointOrNull ?: return null
+        val result = startPoint + (resultPointOrNull ?: return null)
 
         return data.indices.sumOf { index ->
 
@@ -165,3 +165,6 @@ public val XYFit.chiSquaredOrNull: Double?
             ((y - mu) / yErr).pow(2)
         }
     }
+
+public val XYFit.dof: Int
+    get() = data.size - (getFeature<OptimizationParameters>()?.symbols?.size ?: startPoint.size)
