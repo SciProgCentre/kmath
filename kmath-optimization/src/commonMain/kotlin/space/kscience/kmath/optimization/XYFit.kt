@@ -30,7 +30,7 @@ public interface PointToCurveDistance : OptimizationFeature {
 
                 return object : DifferentiableExpression<Double> {
                     override fun derivativeOrNull(
-                        symbols: List<Symbol>
+                        symbols: List<Symbol>,
                     ): Expression<Double>? = problem.model.derivativeOrNull(symbols)?.let { derivExpression ->
                         Expression { arguments ->
                             derivExpression.invoke(arguments + (Symbol.x to x))
@@ -93,24 +93,15 @@ public fun XYFit.withFeature(vararg features: OptimizationFeature): XYFit {
     return XYFit(data, model, this.features.with(*features), pointToCurveDistance, pointWeight)
 }
 
-/**
- * Fit given dta with
- */
-public suspend fun <I : Any, A> XYColumnarData<Double, Double, Double>.fitWith(
+public suspend fun XYColumnarData<Double, Double, Double>.fitWith(
     optimizer: Optimizer<Double, XYFit>,
-    processor: AutoDiffProcessor<Double, I, A>,
+    modelExpression: DifferentiableExpression<Double>,
     startingPoint: Map<Symbol, Double>,
     vararg features: OptimizationFeature = emptyArray(),
     xSymbol: Symbol = Symbol.x,
     pointToCurveDistance: PointToCurveDistance = PointToCurveDistance.byY,
     pointWeight: PointWeight = PointWeight.byYSigma,
-    model: A.(I) -> I
-): XYFit where A : ExtendedField<I>, A : ExpressionAlgebra<Double, I> {
-    val modelExpression = processor.differentiate {
-        val x = bindSymbol(xSymbol)
-        model(x)
-    }
-
+): XYFit {
     var actualFeatures = FeatureSet.of(*features, OptimizationStartPoint(startingPoint))
 
     if (actualFeatures.getFeature<OptimizationLog>() == null) {
@@ -128,19 +119,49 @@ public suspend fun <I : Any, A> XYColumnarData<Double, Double, Double>.fitWith(
 }
 
 /**
+ * Fit given data with a model provided as an expression
+ */
+public suspend fun <I : Any, A> XYColumnarData<Double, Double, Double>.fitWith(
+    optimizer: Optimizer<Double, XYFit>,
+    processor: AutoDiffProcessor<Double, I, A>,
+    startingPoint: Map<Symbol, Double>,
+    vararg features: OptimizationFeature = emptyArray(),
+    xSymbol: Symbol = Symbol.x,
+    pointToCurveDistance: PointToCurveDistance = PointToCurveDistance.byY,
+    pointWeight: PointWeight = PointWeight.byYSigma,
+    model: A.(I) -> I,
+): XYFit where A : ExtendedField<I>, A : ExpressionAlgebra<Double, I> {
+    val modelExpression: DifferentiableExpression<Double> = processor.differentiate {
+        val x = bindSymbol(xSymbol)
+        model(x)
+    }
+
+    return fitWith(
+        optimizer = optimizer,
+        modelExpression = modelExpression,
+        startingPoint = startingPoint,
+        features = features,
+        xSymbol = xSymbol,
+        pointToCurveDistance = pointToCurveDistance,
+        pointWeight = pointWeight
+    )
+}
+
+/**
  * Compute chi squared value for completed fit. Return null for incomplete fit
  */
-public val XYFit.chiSquaredOrNull: Double? get() {
-    val result = resultPointOrNull ?: return null
+public val XYFit.chiSquaredOrNull: Double?
+    get() {
+        val result = resultPointOrNull ?: return null
 
-    return data.indices.sumOf { index->
+        return data.indices.sumOf { index ->
 
-        val x = data.x[index]
-        val y = data.y[index]
-        val yErr = data[Symbol.yError]?.get(index) ?: 1.0
+            val x = data.x[index]
+            val y = data.y[index]
+            val yErr = data[Symbol.yError]?.get(index) ?: 1.0
 
-        val mu = model.invoke(result + (xSymbol to x) )
+            val mu = model.invoke(result + (xSymbol to x))
 
-        ((y - mu)/yErr).pow(2)
+            ((y - mu) / yErr).pow(2)
+        }
     }
-}
