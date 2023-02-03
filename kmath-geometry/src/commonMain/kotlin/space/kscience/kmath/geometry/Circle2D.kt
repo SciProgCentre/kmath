@@ -5,13 +5,15 @@
 
 package space.kscience.kmath.geometry
 
+import kotlinx.serialization.Serializable
 import kotlin.math.PI
 
 /**
  * A circle in 2D space
  */
+@Serializable
 public data class Circle2D(
-    public val center: DoubleVector2D,
+    @Serializable(Euclidean2DSpace.VectorSerializer::class) public val center: DoubleVector2D,
     public val radius: Double
 )
 

@@ -28,31 +28,33 @@ class DubinsTests {
         println("Absolute distance: $absoluteDistance")
 
         val expectedLengths = mapOf(
-            DubinsPath.TYPE.RLR to 13.067681939031397,
-            DubinsPath.TYPE.RSR to 12.28318530717957,
-            DubinsPath.TYPE.LSL to 32.84955592153878,
-            DubinsPath.TYPE.RSL to 23.37758938854081,
-            DubinsPath.TYPE.LSR to 23.37758938854081
+            DubinsPath.Type.RLR to 13.067681939031397,
+            DubinsPath.Type.RSR to 12.28318530717957,
+            DubinsPath.Type.LSL to 32.84955592153878,
+            DubinsPath.Type.RSL to 23.37758938854081,
+            DubinsPath.Type.LSR to 23.37758938854081
         )
 
         expectedLengths.forEach {
-            val path = dubins.find { p -> p.type === it.key }
+            val path = dubins.find { p -> DubinsPath.trajectoryTypeOf(p) === it.key }
             assertNotNull(path, "Path ${it.key} not found")
             println("${it.key}: ${path.length}")
             assertTrue(it.value.equalFloat(path.length))
 
-            assertTrue(start.equalsFloat(path.a.start))
-            assertTrue(end.equalsFloat(path.c.end))
+            val a = path.segments[0] as CircleTrajectory2D
+            val b = path.segments[1]
+            val c = path.segments[2] as CircleTrajectory2D
+
+            assertTrue(start.equalsFloat(a.start))
+            assertTrue(end.equalsFloat(c.end))
 
             // Not working, theta double precision inaccuracy
-            if (path.b is CircleTrajectory2D) {
-                val b = path.b as CircleTrajectory2D
-                assertTrue(path.a.end.equalsFloat(b.start))
-                assertTrue(path.c.start.equalsFloat(b.end))
-            } else if (path.b is StraightTrajectory2D) {
-                val b = path.b as StraightTrajectory2D
-                assertTrue(path.a.end.equalsFloat(DubinsPose2D(b.start, b.bearing)))
-                assertTrue(path.c.start.equalsFloat(DubinsPose2D(b.end, b.bearing)))
+            if (b is CircleTrajectory2D) {
+                assertTrue(a.end.equalsFloat(b.start))
+                assertTrue(c.start.equalsFloat(b.end))
+            } else if (b is StraightTrajectory2D) {
+                assertTrue(a.end.equalsFloat(DubinsPose2D(b.start, b.bearing)))
+                assertTrue(c.start.equalsFloat(DubinsPose2D(b.end, b.bearing)))
             }
         }
     }

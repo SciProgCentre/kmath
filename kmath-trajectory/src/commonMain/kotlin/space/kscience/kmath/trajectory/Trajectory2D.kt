@@ -2,15 +2,19 @@
  * Copyright 2018-2022 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
-
+@file:UseSerializers(Euclidean2DSpace.VectorSerializer::class)
 package space.kscience.kmath.trajectory
 
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.UseSerializers
 import space.kscience.kmath.geometry.Circle2D
 import space.kscience.kmath.geometry.DoubleVector2D
+import space.kscience.kmath.geometry.Euclidean2DSpace
 import space.kscience.kmath.geometry.Euclidean2DSpace.distanceTo
 import kotlin.math.PI
 import kotlin.math.atan2
 
+@Serializable
 public sealed interface Trajectory2D {
     public val length: Double
 }
@@ -18,6 +22,7 @@ public sealed interface Trajectory2D {
 /**
  * Straight path segment. The order of start and end defines the direction
  */
+@Serializable
 public data class StraightTrajectory2D(
     public val start: DoubleVector2D,
     public val end: DoubleVector2D,
@@ -30,6 +35,7 @@ public data class StraightTrajectory2D(
 /**
  * An arc segment
  */
+@Serializable
 public data class CircleTrajectory2D(
     public val circle: Circle2D,
     public val start: DubinsPose2D,
@@ -102,7 +108,10 @@ public data class CircleTrajectory2D(
     }
 }
 
-public open class CompositeTrajectory2D(public val segments: List<Trajectory2D>) : Trajectory2D {
+@Serializable
+public class CompositeTrajectory2D(public val segments: List<Trajectory2D>) : Trajectory2D {
     override val length: Double get() = segments.sumOf { it.length }
 }
+
+public fun CompositeTrajectory2D(vararg segments: Trajectory2D): CompositeTrajectory2D = CompositeTrajectory2D(segments.toList())
 
