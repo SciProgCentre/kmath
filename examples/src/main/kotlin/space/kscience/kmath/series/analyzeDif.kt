@@ -37,7 +37,7 @@ fun main() = with(Double.algebra.bufferAlgebra.seriesAlgebra()) {
     val s3: Buffer<Double> = s1.zip(s2) { l, r -> l + r } //s1 + s2
     val s4 = DoubleBufferOps.ln(s3)
 
-    val kmTest: KMComparisonResult<Double> = ksComparisonStatistic(s1, s2)
+    @Suppress("UNUSED_VARIABLE") val kmTest: KMComparisonResult<Double> = ksComparisonStatistic(s1, s2)
 
     Plotly.page {
         h1 { +"This is my plot" }

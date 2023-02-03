@@ -12,23 +12,21 @@ import space.kscience.kmath.nd.StructureND
 import space.kscience.kmath.nd.structureND
 import space.kscience.kmath.nd.withNdAlgebra
 import space.kscience.kmath.operations.algebra
-import space.kscience.kmath.operations.invoke
+import kotlin.math.pow
 
-fun main(): Unit = Double.algebra {
-    withNdAlgebra(2, 2) {
+fun main(): Unit = Double.algebra.withNdAlgebra(2, 2) {
 
-        //Produce a diagonal StructureND
-        fun diagonal(v: Double) = structureND { (i, j) ->
-            if (i == j) v else 0.0
-        }
-
-        //Define a function in a nd space
-        val function: (Double) -> StructureND<Double> = { x: Double -> 3 * x.pow(2) + 2 * diagonal(x) + 1 }
-
-        //get the result of the integration
-        val result = gaussIntegrator.integrate(0.0..10.0, function = function)
-
-        //the value is nullable because in some cases the integration could not succeed
-        println(result.value)
+    //Produce a diagonal StructureND
+    fun diagonal(v: Double) = structureND { (i, j) ->
+        if (i == j) v else 0.0
     }
+
+    //Define a function in a nd space
+    val function: (Double) -> StructureND<Double> = { x: Double -> 3 * x.pow(2) + 2 * diagonal(x) + 1 }
+
+    //get the result of the integration
+    val result = gaussIntegrator.integrate(0.0..10.0, function = function)
+
+    //the value is nullable because in some cases the integration could not succeed
+    println(result.value)
 }

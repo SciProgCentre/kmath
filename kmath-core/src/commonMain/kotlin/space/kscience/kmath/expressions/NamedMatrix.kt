@@ -8,6 +8,7 @@
 package space.kscience.kmath.expressions
 
 import space.kscience.kmath.linear.Matrix
+import space.kscience.kmath.misc.PerformancePitfall
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.structures.getOrNull
 
@@ -16,6 +17,7 @@ public class NamedMatrix<T>(public val values: Matrix<T>, public val indexer: Sy
 
     public companion object {
 
+        @OptIn(PerformancePitfall::class)
         public fun toStringWithSymbols(values: Matrix<*>, indexer: SymbolIndexer): String = buildString {
             appendLine(indexer.symbols.joinToString(separator = "\t", prefix = "\t\t"))
             indexer.symbols.forEach { i ->

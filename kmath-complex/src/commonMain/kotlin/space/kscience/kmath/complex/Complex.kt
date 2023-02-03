@@ -80,6 +80,8 @@ public object ComplexField :
     override fun add(left: Complex, right: Complex): Complex = Complex(left.re + right.re, left.im + right.im)
 //    override fun multiply(a: Complex, k: Number): Complex = Complex(a.re * k.toDouble(), a.im * k.toDouble())
 
+//    override fun Complex.minus(arg: Complex): Complex = Complex(re - arg.re, im - arg.im)
+
     override fun multiply(left: Complex, right: Complex): Complex =
         Complex(left.re * right.re - left.im * right.im, left.re * right.im + left.im * right.re)
 

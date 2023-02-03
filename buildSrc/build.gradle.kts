@@ -19,7 +19,7 @@ val benchmarksVersion = spclibs.versions.kotlinx.benchmark.get()
 dependencies {
     api("space.kscience:gradle-tools:$toolsVersion")
     //plugins form benchmarks
-    api("org.jetbrains.kotlinx:kotlinx-benchmark-plugin:$benchmarksVersion")
+    api("org.jetbrains.kotlinx:kotlinx-benchmark-plugin:0.4.7")
     //api("org.jetbrains.kotlin:kotlin-allopen:$kotlinVersion")
     //to be used inside build-script only
     //implementation(spclibs.kotlinx.serialization.json)

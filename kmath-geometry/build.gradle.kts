@@ -3,8 +3,12 @@ plugins {
 }
 
 kscience{
+    jvm()
+    js()
     native()
-    withContextReceivers()
+
+    useContextReceivers()
+    useSerialization()
     dependencies{
         api(projects.kmath.kmathComplex)
     }
