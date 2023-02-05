@@ -12,9 +12,7 @@ import kotlinx.serialization.UseSerializers
 import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
-import space.kscience.kmath.geometry.DoubleVector2D
-import space.kscience.kmath.geometry.Euclidean2DSpace
-import space.kscience.kmath.geometry.Vector
+import space.kscience.kmath.geometry.*
 import kotlin.math.atan2
 
 /**
@@ -23,7 +21,7 @@ import kotlin.math.atan2
 @Serializable(DubinsPose2DSerializer::class)
 public interface DubinsPose2D : DoubleVector2D {
     public val coordinates: DoubleVector2D
-    public val bearing: Double
+    public val bearing: Angle
 }
 
 @Serializable
@@ -31,14 +29,14 @@ public class PhaseVector2D(
     override val coordinates: DoubleVector2D,
     public val velocity: DoubleVector2D,
 ) : DubinsPose2D, DoubleVector2D by coordinates {
-    override val bearing: Double get() = atan2(velocity.x, velocity.y)
+    override val bearing: Angle get() = atan2(velocity.x, velocity.y).radians
 }
 
 @Serializable
 @SerialName("DubinsPose2D")
 private class DubinsPose2DImpl(
     override val coordinates: DoubleVector2D,
-    override val bearing: Double,
+    override val bearing: Angle,
 ) : DubinsPose2D, DoubleVector2D by coordinates{
 
     override fun toString(): String = "DubinsPose2D(x=$x, y=$y, bearing=$bearing)"
@@ -60,4 +58,4 @@ public object DubinsPose2DSerializer: KSerializer<DubinsPose2D>{
     }
 }
 
-public fun DubinsPose2D(coordinate: DoubleVector2D, theta: Double): DubinsPose2D = DubinsPose2DImpl(coordinate, theta)
+public fun DubinsPose2D(coordinate: DoubleVector2D, theta: Angle): DubinsPose2D = DubinsPose2DImpl(coordinate, theta)

@@ -7,8 +7,9 @@ package space.kscience.kmath.geometry
 
 import kotlin.jvm.JvmInline
 import kotlin.math.PI
+import kotlin.math.floor
 
-public sealed interface Angle {
+public sealed interface Angle : Comparable<Angle> {
     public fun toRadians(): Radians
     public fun toDegrees(): Degrees
 
@@ -17,7 +18,15 @@ public sealed interface Angle {
 
     public operator fun times(other: Number): Angle
     public operator fun div(other: Number): Angle
+    public operator fun div(other: Angle): Double
     public operator fun unaryMinus(): Angle
+
+    public companion object {
+        public val zero: Radians = Radians(0.0)
+        public val pi: Radians = Radians(PI)
+        public val piTimes2: Radians = Radians(PI * 2)
+        public val piDiv2: Radians = Radians(PI / 2)
+    }
 }
 
 /**
@@ -28,12 +37,16 @@ public value class Radians(public val value: Double) : Angle {
     override fun toRadians(): Radians = this
     override fun toDegrees(): Degrees = Degrees(value * 180 / PI)
 
-    public override fun plus(other: Angle): Radians = Radians(value + other.toRadians().value)
-    public override fun minus(other: Angle): Radians = Radians(value - other.toRadians().value)
+    public override fun plus(other: Angle): Radians = Radians(value + other.radians)
+    public override fun minus(other: Angle): Radians = Radians(value - other.radians)
 
-    public override fun times(other: Number): Radians = Radians(value + other.toDouble())
+    public override fun times(other: Number): Radians = Radians(value * other.toDouble())
     public override fun div(other: Number): Radians = Radians(value / other.toDouble())
+    override fun div(other: Angle): Double = value / other.radians
+
     public override fun unaryMinus(): Radians = Radians(-value)
+
+    override fun compareTo(other: Angle): Int = value.compareTo(other.radians)
 }
 
 public fun sin(angle: Angle): Double = kotlin.math.sin(angle.toRadians().value)
@@ -41,6 +54,8 @@ public fun cos(angle: Angle): Double = kotlin.math.cos(angle.toRadians().value)
 public fun tan(angle: Angle): Double = kotlin.math.tan(angle.toRadians().value)
 
 public val Number.radians: Radians get() = Radians(toDouble())
+
+public val Angle.radians: Double get() = toRadians().value
 
 /**
  * Type safe degrees
@@ -50,30 +65,26 @@ public value class Degrees(public val value: Double) : Angle {
     override fun toRadians(): Radians = Radians(value * PI / 180)
     override fun toDegrees(): Degrees = this
 
-    public override fun plus(other: Angle): Degrees = Degrees(value + other.toDegrees().value)
-    public override fun minus(other: Angle): Degrees = Degrees(value - other.toDegrees().value)
+    public override fun plus(other: Angle): Degrees = Degrees(value + other.degrees)
+    public override fun minus(other: Angle): Degrees = Degrees(value - other.degrees)
 
-    public override fun times(other: Number): Degrees = Degrees(value + other.toDouble())
+    public override fun times(other: Number): Degrees = Degrees(value * other.toDouble())
     public override fun div(other: Number): Degrees = Degrees(value / other.toDouble())
+    override fun div(other: Angle): Double = value / other.degrees
+
     public override fun unaryMinus(): Degrees = Degrees(-value)
+
+    override fun compareTo(other: Angle): Int = value.compareTo(other.degrees)
 }
 
 public val Number.degrees: Degrees get() = Degrees(toDouble())
 
+public val Angle.degrees: Double get() = toDegrees().value
+
 /**
- * A holder class for Pi representation in radians and degrees
+ * Normalized angle 2 PI range symmetric around [center]. By default, uses (0, 2PI) range.
  */
-public object Pi {
-    public val radians: Radians = Radians(PI)
-    public val degrees: Degrees = radians.toDegrees()
-}
+public fun Angle.normalized(center: Angle = Angle.pi): Angle =
+    this - Angle.piTimes2 * floor((radians + PI - center.radians) / PI / 2)
 
-public object PiTimes2 {
-    public val radians: Radians = Radians(2 * PI)
-    public val degrees: Degrees = radians.toDegrees()
-}
-
-public object PiDiv2 {
-    public val radians: Radians = Radians(PI / 2)
-    public val degrees: Degrees = radians.toDegrees()
-}
+public fun abs(angle: Angle): Angle = if (angle < Angle.zero) -angle else angle

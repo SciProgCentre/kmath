@@ -5,13 +5,9 @@
 
 package space.kscience.kmath.trajectory
 
-import space.kscience.kmath.geometry.Circle2D
-import space.kscience.kmath.geometry.Euclidean2DSpace
+import space.kscience.kmath.geometry.*
 import space.kscience.kmath.geometry.Euclidean2DSpace.distanceTo
-import kotlin.math.PI
 import kotlin.math.acos
-import kotlin.math.cos
-import kotlin.math.sin
 
 internal fun DubinsPose2D.getLeftCircle(radius: Double): Circle2D = getTangentCircles(radius).first
 
@@ -65,20 +61,17 @@ private fun innerTangent(
     with(Euclidean2DSpace) {
         val centers = StraightTrajectory2D(base.center, direction.center)
         if (centers.length < base.radius * 2) return null
-        val angle = theta(
-            when (side) {
-                CircleTrajectory2D.Direction.LEFT -> centers.bearing + acos(base.radius * 2 / centers.length)
-                CircleTrajectory2D.Direction.RIGHT -> centers.bearing - acos(base.radius * 2 / centers.length)
-            }
-        )
+        val angle = when (side) {
+            CircleTrajectory2D.Direction.LEFT -> centers.bearing + acos(base.radius * 2 / centers.length).radians
+            CircleTrajectory2D.Direction.RIGHT -> centers.bearing - acos(base.radius * 2 / centers.length).radians
+        }.normalized()
+
         val dX = base.radius * sin(angle)
         val dY = base.radius * cos(angle)
         val p1 = vector(base.center.x + dX, base.center.y + dY)
         val p2 = vector(direction.center.x - dX, direction.center.y - dY)
         return StraightTrajectory2D(p1, p2)
     }
-
-internal fun theta(theta: Double): Double = (theta + (2 * PI)) % (2 * PI)
 
 
 @Suppress("DuplicatedCode")
@@ -91,8 +84,8 @@ public object DubinsPath {
     /**
      * Return Dubins trajectory type or null if trajectory is not a Dubins path
      */
-    public fun trajectoryTypeOf(trajectory2D: CompositeTrajectory2D): Type?{
-        if(trajectory2D.segments.size != 3) return null
+    public fun trajectoryTypeOf(trajectory2D: CompositeTrajectory2D): Type? {
+        if (trajectory2D.segments.size != 3) return null
         val a = trajectory2D.segments.first() as? CircleTrajectory2D ?: return null
         val b = trajectory2D.segments[1]
         val c = trajectory2D.segments.last() as? CircleTrajectory2D ?: return null
@@ -129,13 +122,13 @@ public object DubinsPath {
             if (centers.length > turningRadius * 4) return null
 
             val firstVariant = run {
-                var theta = theta(centers.bearing - acos(centers.length / (turningRadius * 4)))
+                var theta = (centers.bearing - acos(centers.length / (turningRadius * 4)).radians).normalized()
                 var dX = turningRadius * sin(theta)
                 var dY = turningRadius * cos(theta)
                 val p = vector(c1.center.x + dX * 2, c1.center.y + dY * 2)
                 val e = Circle2D(p, turningRadius)
                 val p1 = vector(c1.center.x + dX, c1.center.y + dY)
-                theta = theta(centers.bearing + acos(centers.length / (turningRadius * 4)))
+                theta = (centers.bearing + acos(centers.length / (turningRadius * 4)).radians).normalized()
                 dX = turningRadius * sin(theta)
                 dY = turningRadius * cos(theta)
                 val p2 = vector(e.center.x + dX, e.center.y + dY)
@@ -146,13 +139,13 @@ public object DubinsPath {
             }
 
             val secondVariant = run {
-                var theta = theta(centers.bearing + acos(centers.length / (turningRadius * 4)))
+                var theta = (centers.bearing + acos(centers.length / (turningRadius * 4)).radians).normalized()
                 var dX = turningRadius * sin(theta)
                 var dY = turningRadius * cos(theta)
                 val p = vector(c1.center.x + dX * 2, c1.center.y + dY * 2)
                 val e = Circle2D(p, turningRadius)
                 val p1 = vector(c1.center.x + dX, c1.center.y + dY)
-                theta = theta(centers.bearing - acos(centers.length / (turningRadius * 4)))
+                theta = (centers.bearing - acos(centers.length / (turningRadius * 4)).radians).normalized()
                 dX = turningRadius * sin(theta)
                 dY = turningRadius * cos(theta)
                 val p2 = vector(e.center.x + dX, e.center.y + dY)
@@ -173,13 +166,13 @@ public object DubinsPath {
             if (centers.length > turningRadius * 4) return null
 
             val firstVariant = run {
-                var theta = theta(centers.bearing + acos(centers.length / (turningRadius * 4)))
+                var theta = (centers.bearing + acos(centers.length / (turningRadius * 4)).radians).normalized()
                 var dX = turningRadius * sin(theta)
                 var dY = turningRadius * cos(theta)
                 val p = vector(c1.center.x + dX * 2, c1.center.y + dY * 2)
                 val e = Circle2D(p, turningRadius)
                 val p1 = vector(c1.center.x + dX, c1.center.y + dY)
-                theta = theta(centers.bearing - acos(centers.length / (turningRadius * 4)))
+                theta = (centers.bearing - acos(centers.length / (turningRadius * 4)).radians).normalized()
                 dX = turningRadius * sin(theta)
                 dY = turningRadius * cos(theta)
                 val p2 = vector(e.center.x + dX, e.center.y + dY)
@@ -190,13 +183,13 @@ public object DubinsPath {
             }
 
             val secondVariant = run {
-                var theta = theta(centers.bearing - acos(centers.length / (turningRadius * 4)))
+                var theta = (centers.bearing - acos(centers.length / (turningRadius * 4)).radians).normalized()
                 var dX = turningRadius * sin(theta)
                 var dY = turningRadius * cos(theta)
                 val p = vector(c1.center.x + dX * 2, c1.center.y + dY * 2)
                 val e = Circle2D(p, turningRadius)
                 val p1 = vector(c1.center.x + dX, c1.center.y + dY)
-                theta = theta(centers.bearing + acos(centers.length / (turningRadius * 4)))
+                theta = (centers.bearing + acos(centers.length / (turningRadius * 4)).radians).normalized()
                 dX = turningRadius * sin(theta)
                 dY = turningRadius * cos(theta)
                 val p2 = vector(e.center.x + dX, e.center.y + dY)

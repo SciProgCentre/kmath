@@ -10,6 +10,7 @@
 - Algebra now has an obligatory `bufferFactory` (#477).
 
 ### Changed
+- Trajectory use type-safe angles
 - Tensor operations switched to prefix notation
 - Row-wise and column-wise ND shapes in the core
 - Shape is read-only

@@ -8,8 +8,8 @@ package space.kscience.kmath.trajectory.segments
 import space.kscience.kmath.geometry.Circle2D
 import space.kscience.kmath.geometry.Euclidean2DSpace
 import space.kscience.kmath.geometry.circumference
+import space.kscience.kmath.geometry.degrees
 import space.kscience.kmath.trajectory.CircleTrajectory2D
-import space.kscience.kmath.trajectory.radiansToDegrees
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -20,7 +20,7 @@ class ArcTests {
         val circle = Circle2D(vector(0.0, 0.0), 2.0)
         val arc = CircleTrajectory2D.of(circle.center, vector(-2.0, 0.0), vector(0.0, 2.0), CircleTrajectory2D.Direction.RIGHT)
         assertEquals(circle.circumference / 4, arc.length, 1.0)
-        assertEquals(0.0, arc.start.bearing.radiansToDegrees())
-        assertEquals(90.0, arc.end.bearing.radiansToDegrees())
+        assertEquals(0.0, arc.start.bearing.degrees)
+        assertEquals(90.0, arc.end.bearing.degrees)
     }
 }

@@ -6,19 +6,21 @@
 package space.kscience.kmath.trajectory
 
 import space.kscience.kmath.geometry.Euclidean2DSpace
+import space.kscience.kmath.geometry.radians
+import space.kscience.kmath.geometry.sin
 import kotlin.math.PI
 import kotlin.math.abs
-import kotlin.math.sin
 
 const val maxFloatDelta = 0.000001
 
 fun Double.radiansToDegrees() = this * 180 / PI
 
 fun Double.equalFloat(other: Double) = abs(this - other) < maxFloatDelta
-fun DubinsPose2D.equalsFloat(other: DubinsPose2D) = x.equalFloat(other.x) && y.equalFloat(other.y) && bearing.equalFloat(other.bearing)
+fun DubinsPose2D.equalsFloat(other: DubinsPose2D) =
+    x.equalFloat(other.x) && y.equalFloat(other.y) && bearing.radians.equalFloat(other.bearing.radians)
 
 fun StraightTrajectory2D.inverse() = StraightTrajectory2D(end, start)
-fun StraightTrajectory2D.shift(shift: Int, width: Double): StraightTrajectory2D = with(Euclidean2DSpace){
+fun StraightTrajectory2D.shift(shift: Int, width: Double): StraightTrajectory2D = with(Euclidean2DSpace) {
     val dX = width * sin(inverse().bearing)
     val dY = width * sin(bearing)
 

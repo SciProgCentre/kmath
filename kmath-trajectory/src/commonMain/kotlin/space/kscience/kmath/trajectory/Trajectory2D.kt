@@ -3,15 +3,13 @@
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 @file:UseSerializers(Euclidean2DSpace.VectorSerializer::class)
+
 package space.kscience.kmath.trajectory
 
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
-import space.kscience.kmath.geometry.Circle2D
-import space.kscience.kmath.geometry.DoubleVector2D
-import space.kscience.kmath.geometry.Euclidean2DSpace
+import space.kscience.kmath.geometry.*
 import space.kscience.kmath.geometry.Euclidean2DSpace.distanceTo
-import kotlin.math.PI
 import kotlin.math.atan2
 
 @Serializable
@@ -29,7 +27,7 @@ public data class StraightTrajectory2D(
 ) : Trajectory2D {
     override val length: Double get() = start.distanceTo(end)
 
-    public val bearing: Double get() = theta(atan2(end.x - start.x, end.y - start.y))
+    public val bearing: Angle get() = (atan2(end.x - start.x, end.y - start.y).radians).normalized()
 }
 
 /**
@@ -49,26 +47,25 @@ public data class CircleTrajectory2D(
     /**
      * Arc length in radians
      */
-    val arcLength: Double
-        get() = theta(
-            if (direction == Direction.LEFT) {
-                start.bearing - end.bearing
-            } else {
-                end.bearing - start.bearing
-            }
-        )
+    val arcLength: Angle
+        get() = if (direction == Direction.LEFT) {
+            start.bearing - end.bearing
+        } else {
+            end.bearing - start.bearing
+        }.normalized()
+
 
     override val length: Double by lazy {
-        circle.radius * arcLength
+        circle.radius * arcLength.radians
     }
 
     public val direction: Direction by lazy {
         if (start.y < circle.center.y) {
-            if (start.bearing > PI) Direction.RIGHT else Direction.LEFT
+            if (start.bearing > Angle.pi) Direction.RIGHT else Direction.LEFT
         } else if (start.y > circle.center.y) {
-            if (start.bearing < PI) Direction.RIGHT else Direction.LEFT
+            if (start.bearing < Angle.pi) Direction.RIGHT else Direction.LEFT
         } else {
-            if (start.bearing == 0.0) {
+            if (start.bearing == Angle.zero) {
                 if (start.x < circle.center.x) Direction.RIGHT else Direction.LEFT
             } else {
                 if (start.x > circle.center.x) Direction.RIGHT else Direction.LEFT
@@ -85,13 +82,13 @@ public data class CircleTrajectory2D(
         ): CircleTrajectory2D {
             fun calculatePose(
                 vector: DoubleVector2D,
-                theta: Double,
+                theta: Angle,
                 direction: Direction,
             ): DubinsPose2D = DubinsPose2D(
                 vector,
                 when (direction) {
-                    Direction.LEFT -> theta(theta - PI / 2)
-                    Direction.RIGHT -> theta(theta + PI / 2)
+                    Direction.LEFT -> (theta - Angle.piDiv2).normalized()
+                    Direction.RIGHT -> (theta + Angle.piDiv2).normalized()
                 }
             )
 
@@ -100,7 +97,7 @@ public data class CircleTrajectory2D(
             val pose1 = calculatePose(start, s1.bearing, direction)
             val pose2 = calculatePose(end, s2.bearing, direction)
             val trajectory = CircleTrajectory2D(Circle2D(center, s1.length), pose1, pose2)
-            if(trajectory.direction != direction){
+            if (trajectory.direction != direction) {
                 error("Trajectory direction mismatch")
             }
             return trajectory
@@ -113,5 +110,6 @@ public class CompositeTrajectory2D(public val segments: List<Trajectory2D>) : Tr
     override val length: Double get() = segments.sumOf { it.length }
 }
 
-public fun CompositeTrajectory2D(vararg segments: Trajectory2D): CompositeTrajectory2D = CompositeTrajectory2D(segments.toList())
+public fun CompositeTrajectory2D(vararg segments: Trajectory2D): CompositeTrajectory2D =
+    CompositeTrajectory2D(segments.toList())
 
