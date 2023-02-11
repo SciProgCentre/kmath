@@ -5,10 +5,17 @@
 
 package space.kscience.kmath.geometry
 
+import kotlinx.serialization.KSerializer
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.builtins.serializer
+import kotlinx.serialization.descriptors.SerialDescriptor
+import kotlinx.serialization.encoding.Decoder
+import kotlinx.serialization.encoding.Encoder
 import kotlin.jvm.JvmInline
 import kotlin.math.PI
 import kotlin.math.floor
 
+@Serializable(AngleSerializer::class)
 public sealed interface Angle : Comparable<Angle> {
     public fun toRadians(): Radians
     public fun toDegrees(): Degrees
@@ -29,9 +36,21 @@ public sealed interface Angle : Comparable<Angle> {
     }
 }
 
+
+public object AngleSerializer : KSerializer<Angle> {
+    override val descriptor: SerialDescriptor get() = Double.serializer().descriptor
+
+    override fun deserialize(decoder: Decoder): Angle = decoder.decodeDouble().degrees
+
+    override fun serialize(encoder: Encoder, value: Angle) {
+        encoder.encodeDouble(value.degrees)
+    }
+}
+
 /**
  * Type safe radians
  */
+@Serializable
 @JvmInline
 public value class Radians(public val value: Double) : Angle {
     override fun toRadians(): Radians = this
