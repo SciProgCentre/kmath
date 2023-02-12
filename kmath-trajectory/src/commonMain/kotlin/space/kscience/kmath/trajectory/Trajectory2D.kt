@@ -6,6 +6,7 @@
 
 package space.kscience.kmath.trajectory
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
 import space.kscience.kmath.geometry.*
@@ -21,6 +22,7 @@ public sealed interface Trajectory2D {
  * Straight path segment. The order of start and end defines the direction
  */
 @Serializable
+@SerialName("straight")
 public data class StraightTrajectory2D(
     public val start: DoubleVector2D,
     public val end: DoubleVector2D,
@@ -34,6 +36,7 @@ public data class StraightTrajectory2D(
  * An arc segment
  */
 @Serializable
+@SerialName("arc")
 public data class CircleTrajectory2D(
     public val circle: Circle2D,
     public val start: DubinsPose2D,
@@ -106,6 +109,7 @@ public data class CircleTrajectory2D(
 }
 
 @Serializable
+@SerialName("composite")
 public class CompositeTrajectory2D(public val segments: List<Trajectory2D>) : Trajectory2D {
     override val length: Double get() = segments.sumOf { it.length }
 }
