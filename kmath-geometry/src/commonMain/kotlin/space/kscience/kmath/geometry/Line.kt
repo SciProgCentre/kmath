@@ -27,5 +27,15 @@ public fun <V : Vector> LineSegment<V>.line(algebra: GeometrySpace<V>): Line<V> 
     Line(begin, end - begin)
 }
 
+public fun equalLineSegments(line1: LineSegment<DoubleVector2D>, line2: LineSegment<DoubleVector2D>): Boolean {
+    val maxFloatDelta = 0.000001
+    return line1.begin.x.equalFloat(line2.begin.x) && line1.begin.y.equalFloat(line2.begin.y) &&
+            line1.end.x.equalFloat(line2.end.x) && line1.end.y.equalFloat(line2.end.y)
+//    return line1.begin == line2.begin && line1.end == line2.end
+}
+
+public fun Double.equalFloat(other: Double, maxFloatDelta: Double = 0.000001):
+        Boolean = kotlin.math.abs(this - other) < maxFloatDelta
+
 public typealias LineSegment2D = LineSegment<DoubleVector2D>
 public typealias LineSegment3D = LineSegment<DoubleVector3D>

@@ -8,6 +8,7 @@ package space.kscience.kmath.geometry
 import space.kscience.kmath.geometry.Euclidean2DSpace.vector
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 class TangentTest {
     @Test
@@ -15,25 +16,24 @@ class TangentTest {
         val c1 = Circle2D(vector(0.0, 0.0), 1.0)
         val c2 = Circle2D(vector(4.0, 0.0), 1.0)
         val routes = arrayListOf<String>("RSR", "RSL", "LSR", "LSL")
-        val segments = arrayListOf<Segment>(
-            Segment(startPoint = vector(0.0, 1.0),
-                terminalPoint = vector(4.0, 1.0)),
-            Segment(startPoint = vector(0.5, 0.8660254),
-                terminalPoint = vector(3.5, -0.8660254)),
-            Segment(startPoint = vector(0.5, -0.8660254),
-                terminalPoint = vector(3.5, 0.8660254)),
-            Segment(startPoint = vector(0.0, -1.0),
-                terminalPoint = vector(4.0, -1.0))
+        val segments = arrayListOf<LineSegment<DoubleVector2D>>(
+            LineSegment<DoubleVector2D>(begin = vector(0.0, 1.0),
+                end = vector(4.0, 1.0)),
+            LineSegment<DoubleVector2D>(begin = vector(0.5, 0.8660254),
+                end = vector(3.5, -0.8660254)),
+            LineSegment<DoubleVector2D>(begin = vector(0.5, -0.8660254),
+                end = vector(3.5, 0.8660254)),
+            LineSegment<DoubleVector2D>(begin = vector(0.0, -1.0),
+                end = vector(4.0, -1.0))
         )
 
-        val tangentMap = tangentsToCircles(c1, c2)
+        val tangentMap = c1.tangentsToCircle(c2)
         val tangentMapKeys = tangentMap.keys.toList()
         val tangentMapValues = tangentMap.values.toList()
 
         assertEquals(routes, tangentMapKeys)
         for (i in segments.indices) {
-            assertEquals(segments[i], tangentMapValues[i])
+            assertTrue(equalLineSegments(segments[i], tangentMapValues[i]))
         }
-//        assertEquals(segments, tangentMapValues)
     }
 }
