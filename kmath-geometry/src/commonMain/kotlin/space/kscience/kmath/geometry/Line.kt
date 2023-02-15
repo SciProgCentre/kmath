@@ -27,7 +27,6 @@ public fun <V : Vector> LineSegment<V>.line(algebra: GeometrySpace<V>): Line<V> 
     Line(begin, end - begin)
 }
 
-
 public fun Double.equalFloat(other: Double, maxFloatDelta: Double = 0.000001):
         Boolean = kotlin.math.abs(this - other) < maxFloatDelta
 
