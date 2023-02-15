@@ -18,7 +18,11 @@ public data class Circle2D(
     public val radius: Double
 )
 
-public fun Circle2D.tangentsToCircle(other: Circle2D): kotlin.collections.MutableMap<String, LineSegment<DoubleVector2D>> {
+public enum class DubinsRoutes {
+    RSR, RSL, LSR, LSL
+}
+
+public fun Circle2D.tangentsToCircle(other: Circle2D): Map<DubinsRoutes, LineSegment<DoubleVector2D>> {
     val R1 = this.radius
     val R2 = other.radius
     val line = LineSegment(this.center, other.center)
@@ -26,11 +30,12 @@ public fun Circle2D.tangentsToCircle(other: Circle2D): kotlin.collections.Mutabl
     val angle1 = atan2(other.center.x - this.center.x, other.center.y - this.center.y)
     var r: Double
     var angle2: Double
-    val routes = mapOf("RSR" to Pair(R1, R2),
-        "RSL" to Pair(R1, -R2),
-        "LSR" to Pair(-R1, R2),
-        "LSL" to Pair(-R1, -R2))
-    val segments = mutableMapOf<String, LineSegment<DoubleVector2D>>()
+    val routes = mapOf(
+        DubinsRoutes.RSR to Pair(R1, R2),
+        DubinsRoutes.RSL to Pair(R1, -R2),
+        DubinsRoutes.LSR to Pair(-R1, R2),
+        DubinsRoutes.LSL to Pair(-R1, -R2))
+    val segments = mutableMapOf<DubinsRoutes, LineSegment<DoubleVector2D>>()
     for ((route, r1r2) in routes) {
         val r1 = r1r2.first
         val r2 = r1r2.second

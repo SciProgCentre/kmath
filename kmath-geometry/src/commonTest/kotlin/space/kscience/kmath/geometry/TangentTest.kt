@@ -5,6 +5,7 @@
 
 package space.kscience.kmath.geometry
 
+import space.kscience.kmath.geometry.Euclidean2DSpace.equalLineSegments
 import space.kscience.kmath.geometry.Euclidean2DSpace.vector
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -15,7 +16,12 @@ class TangentTest {
     fun tangent() {
         val c1 = Circle2D(vector(0.0, 0.0), 1.0)
         val c2 = Circle2D(vector(4.0, 0.0), 1.0)
-        val routes = arrayListOf<String>("RSR", "RSL", "LSR", "LSL")
+        val routes = arrayListOf<DubinsRoutes>(
+            DubinsRoutes.RSR,
+            DubinsRoutes.RSL,
+            DubinsRoutes.LSR,
+            DubinsRoutes.LSL
+        )
         val segments = arrayListOf<LineSegment<DoubleVector2D>>(
             LineSegment<DoubleVector2D>(begin = vector(0.0, 1.0),
                 end = vector(4.0, 1.0)),

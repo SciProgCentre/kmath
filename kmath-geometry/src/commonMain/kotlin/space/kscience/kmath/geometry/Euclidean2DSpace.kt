@@ -85,6 +85,13 @@ public object Euclidean2DSpace : GeometrySpace<DoubleVector2D>,
     override fun scale(a: DoubleVector2D, value: Double): DoubleVector2D = vector(a.x * value, a.y * value)
     override fun DoubleVector2D.dot(other: DoubleVector2D): Double = x * other.x + y * other.y
 
+    public fun equalLineSegments(line1: LineSegment<DoubleVector2D>, line2: LineSegment<DoubleVector2D>): Boolean {
+        val maxFloatDelta = 0.000001
+        return line1.begin.x.equalFloat(line2.begin.x) && line1.begin.y.equalFloat(line2.begin.y) &&
+                line1.end.x.equalFloat(line2.end.x) && line1.end.y.equalFloat(line2.end.y)
+    }
+
+
     public val xAxis: DoubleVector2D = vector(1.0, 0.0)
     public val yAxis: DoubleVector2D = vector(0.0, 1.0)
 }
