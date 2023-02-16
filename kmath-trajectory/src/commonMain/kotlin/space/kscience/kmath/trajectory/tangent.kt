@@ -38,20 +38,25 @@ public fun Circle2D.tangentsToCircle(
             } else {
                 r1.absoluteValue + r2.absoluteValue
             }
-            val l = (d * d - r * r).pow(0.5)
-            angle2 = if (r1.absoluteValue > r2.absoluteValue) {
-                angle1 + r1.sign * atan2(r.absoluteValue, l)
-            } else {
-                angle1 - r2.sign * atan2(r.absoluteValue, l)
-            }
-            val w = vector(-cos(angle2), sin(angle2))
-            put(
-                route,
-                LineSegment(
-                    center + w * r1,
-                    other.center + w * r2
+            if (d * d > r * r) {
+                val l = (d * d - r * r).pow(0.5)
+                angle2 = if (r1.absoluteValue > r2.absoluteValue) {
+                    angle1 + r1.sign * atan2(r.absoluteValue, l)
+                } else {
+                    angle1 - r2.sign * atan2(r.absoluteValue, l)
+                }
+                val w = vector(-cos(angle2), sin(angle2))
+                put(
+                    route,
+                    LineSegment(
+                        center + w * r1,
+                        other.center + w * r2
+                    )
                 )
-            )
+            }
+            else {
+                throw Exception("Circles should not be")
+            }
         }
     }
 }

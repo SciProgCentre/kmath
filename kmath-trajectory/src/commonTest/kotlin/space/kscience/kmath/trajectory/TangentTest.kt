@@ -13,6 +13,7 @@ import space.kscience.kmath.geometry.equalsLine
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
+import kotlin.test.assertFailsWith
 
 class TangentTest {
     @Test
@@ -51,6 +52,30 @@ class TangentTest {
         assertEquals(routes, tangentMapKeys)
         for (i in segments.indices) {
             assertTrue(segments[i].equalsLine(Euclidean2DSpace, tangentMapValues[i]))
+        }
+    }
+
+    @Test
+    fun nonExistingTangents() {
+        assertFailsWith<Exception> {
+            val c1 = Circle2D(vector(0.0, 0.0), 10.0)
+            val c2 = Circle2D(vector(0.0, 0.0), 1.0)
+            val segments = c1.tangentsToCircle(c2)
+        }
+        assertFailsWith<Exception> {
+            val c1 = Circle2D(vector(0.0, 0.0), 1.0)
+            val c2 = Circle2D(vector(0.0, 0.0), 10.0)
+            val segments = c1.tangentsToCircle(c2)
+        }
+        assertFailsWith<Exception> {
+            val c1 = Circle2D(vector(0.0, 0.0), 1.0)
+            val c2 = Circle2D(vector(2.0, 0.0), 1.0)
+            val segments = c1.tangentsToCircle(c2)
+        }
+        assertFailsWith<Exception> {
+            val c1 = Circle2D(vector(0.0, 0.0), 1.0)
+            val c2 = Circle2D(vector(0.5, 0.0), 1.0)
+            val segments = c1.tangentsToCircle(c2)
         }
     }
 }
