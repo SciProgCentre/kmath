@@ -11,6 +11,10 @@ import space.kscience.kmath.geometry.Euclidean2DSpace
 import space.kscience.kmath.geometry.LineSegment
 import kotlin.math.*
 
+/**
+ * Create inner and outer tangents between two circles.
+ * This method returns a map of segments using [DubinsPath] connection type notation.
+ */
 public fun Circle2D.tangentsToCircle(
     other: Circle2D,
 ): Map<DubinsPath.Type, LineSegment<DoubleVector2D>> = with(Euclidean2DSpace) {
