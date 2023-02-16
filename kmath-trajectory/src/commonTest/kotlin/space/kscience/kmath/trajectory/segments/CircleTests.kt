@@ -8,7 +8,6 @@ package space.kscience.kmath.trajectory.segments
 import space.kscience.kmath.geometry.Circle2D
 import space.kscience.kmath.geometry.Euclidean2DSpace
 import space.kscience.kmath.geometry.circumference
-import space.kscience.kmath.trajectory.maxFloatDelta
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -20,6 +19,6 @@ class CircleTests {
         val radius = 2.0
         val expectedCircumference = 12.56637
         val circle = Circle2D(center, radius)
-        assertEquals(expectedCircumference, circle.circumference, maxFloatDelta)
+        assertEquals(expectedCircumference, circle.circumference)
     }
 }

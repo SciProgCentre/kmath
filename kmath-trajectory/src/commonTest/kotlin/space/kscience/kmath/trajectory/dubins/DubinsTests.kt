@@ -6,6 +6,7 @@
 package space.kscience.kmath.trajectory.dubins
 
 import space.kscience.kmath.geometry.Euclidean2DSpace
+import space.kscience.kmath.geometry.equalsFloat
 import space.kscience.kmath.trajectory.*
 import kotlin.test.Test
 import kotlin.test.assertNotNull
@@ -39,7 +40,7 @@ class DubinsTests {
             val path = dubins.find { p -> DubinsPath.trajectoryTypeOf(p) === it.key }
             assertNotNull(path, "Path ${it.key} not found")
             println("${it.key}: ${path.length}")
-            assertTrue(it.value.equalFloat(path.length))
+            assertTrue(it.value.equalsFloat(path.length))
 
             val a = path.segments[0] as CircleTrajectory2D
             val b = path.segments[1]

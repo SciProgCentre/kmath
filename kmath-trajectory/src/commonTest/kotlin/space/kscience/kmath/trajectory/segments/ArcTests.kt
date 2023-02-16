@@ -18,7 +18,12 @@ class ArcTests {
     @Test
     fun arcTest() = with(Euclidean2DSpace){
         val circle = Circle2D(vector(0.0, 0.0), 2.0)
-        val arc = CircleTrajectory2D.of(circle.center, vector(-2.0, 0.0), vector(0.0, 2.0), CircleTrajectory2D.Direction.RIGHT)
+        val arc = CircleTrajectory2D.of(
+            circle.center,
+            vector(-2.0, 0.0),
+            vector(0.0, 2.0),
+            CircleTrajectory2D.Direction.RIGHT
+        )
         assertEquals(circle.circumference / 4, arc.length, 1.0)
         assertEquals(0.0, arc.start.bearing.degrees)
         assertEquals(90.0, arc.end.bearing.degrees)

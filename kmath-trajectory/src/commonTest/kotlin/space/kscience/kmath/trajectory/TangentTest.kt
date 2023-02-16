@@ -16,7 +16,7 @@ import kotlin.test.assertTrue
 
 class TangentTest {
     @Test
-    fun tangent() {
+    fun tangents() {
         val c1 = Circle2D(vector(0.0, 0.0), 1.0)
         val c2 = Circle2D(vector(4.0, 0.0), 1.0)
         val routes = listOf(

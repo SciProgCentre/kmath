@@ -100,9 +100,7 @@ public data class CircleTrajectory2D(
             val pose1 = calculatePose(start, s1.bearing, direction)
             val pose2 = calculatePose(end, s2.bearing, direction)
             val trajectory = CircleTrajectory2D(Circle2D(center, s1.length), pose1, pose2)
-            if (trajectory.direction != direction) {
-                error("Trajectory direction mismatch")
-            }
+            if (trajectory.direction != direction) error("Trajectory direction mismatch")
             return trajectory
         }
     }
