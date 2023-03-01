@@ -77,9 +77,117 @@ private fun innerTangent(
 @Suppress("DuplicatedCode")
 public object DubinsPath {
 
+//    public class ArcType(private val type: Type){
+//        public val first: SimpleType
+//            get() {
+//                if (this.type in listOf(Type.RSR, Type.RSL, Type.RLR)) {
+//                    return SimpleType.R
+//                }
+//                else if (type in listOf(Type.LSL, Type.LSR, Type.LRL)) {
+//                    return SimpleType.L
+//                }
+//                error("Wrong DubinsPath.Type")
+//            }
+//
+//        public val last: SimpleType
+//            get() {
+//                if (type in listOf(Type.RSR, Type.LSR, Type.RLR)) {
+//                    return SimpleType.R
+//                }
+//                else if (type in listOf(Type.LSL, Type.RSL, Type.LRL)) {
+//                    return SimpleType.L
+//                }
+//                error("Wrong DubinsPath.Type")
+//            }
+//        public val intermediate: SimpleType
+//            get() {
+//                if (type == Type.RLR) {
+//                    return SimpleType.L
+//                }
+//                else if (type == Type.LRL) {
+//                    return SimpleType.R
+//                }
+//                error("This DubinsPath.Type doesn't contain intermediate arc")
+//            }
+//    }
+
+    public enum class SimpleType {
+        R, S, L
+    }
+
     public enum class Type {
         RLR, LRL, RSR, LSL, RSL, LSR
     }
+
+    public fun toSimpleTypes(type: Type): List<SimpleType> {
+        when (type) {
+            Type.RLR -> {
+                return listOf(SimpleType.R, SimpleType.L, SimpleType.R)
+            }
+            Type.LRL -> {
+                return listOf(SimpleType.L, SimpleType.R, SimpleType.L)
+            }
+            Type.RSR -> {
+                return listOf(SimpleType.R, SimpleType.S, SimpleType.R)
+            }
+            Type.LSL -> {
+                return listOf(SimpleType.L, SimpleType.S, SimpleType.L)
+            }
+            Type.RSL -> {
+                return listOf(SimpleType.R, SimpleType.S, SimpleType.L)
+            }
+            Type.LSR -> {
+                return listOf(SimpleType.L, SimpleType.S, SimpleType.R)
+            }
+            else -> error("This type doesn't exist")
+        }
+    }
+
+    public fun toType(types: List<SimpleType>): Type {
+        when (types) {
+            listOf(SimpleType.R, SimpleType.L, SimpleType.R) -> {
+                return Type.RLR
+            }
+            listOf(SimpleType.L, SimpleType.R, SimpleType.L) -> {
+                return Type.LRL
+            }
+            listOf(SimpleType.R, SimpleType.S, SimpleType.R) -> {
+                return Type.RSR
+            }
+            listOf(SimpleType.L, SimpleType.S, SimpleType.L) -> {
+                return Type.LSL
+            }
+            listOf(SimpleType.R, SimpleType.S, SimpleType.L) -> {
+                return Type.RSL
+            }
+            listOf(SimpleType.L, SimpleType.S, SimpleType.R) -> {
+                return Type.LSR
+            }
+            else -> error("This type doesn't exist")
+        }
+    }
+
+//    public class PathTypes(private val inputTypes: List<SimpleType>) {
+//        public val type: Type
+//            get() {
+//                when (this.inputTypes) {
+//                    listOf(SimpleType.R, SimpleType.S, SimpleType.R) -> {
+//                        return Type.RSR
+//                    }
+//                    listOf(SimpleType.R, SimpleType.S, SimpleType.L) -> {
+//                        return Type.RSL
+//                    }
+//                    listOf(SimpleType.L, SimpleType.S, SimpleType.R) -> {
+//                        return Type.LSR
+//                    }
+//                    listOf(SimpleType.L, SimpleType.S, SimpleType.L) -> {
+//                        return Type.LSL
+//                    }
+//                    else -> error("Wrong list of SimpleTypes")
+//                }
+//            }
+//        public val chain: List<SimpleType> = this.inputTypes
+//    }
 
     /**
      * Return Dubins trajectory type or null if trajectory is not a Dubins path
@@ -242,6 +350,8 @@ public object DubinsPath {
         return CompositeTrajectory2D(a1, s, a3)
     }
 }
+
+public typealias PathTypes = List<DubinsPath.SimpleType>
 
 public fun interface MaxCurvature {
     public fun compute(startPoint: PhaseVector2D): Double

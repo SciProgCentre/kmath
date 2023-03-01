@@ -6,6 +6,7 @@
 package space.kscience.kmath.geometry
 
 import kotlinx.serialization.Serializable
+import space.kscience.kmath.operations.DoubleField.pow
 
 /**
  * A line formed by [base] vector of start and a [direction] vector. Direction vector is not necessarily normalized,
