@@ -276,7 +276,7 @@ public fun tangentsAlongTheObstacle(initialCircle: Circle2D,
 public fun allFinished(paths: List<List<DubinsTangent>>,
                        finalObstacle: DubinsObstacle): Boolean {
     for (path in paths) {
-        if (path[-1].endObstacle != finalObstacle) {
+        if (path.last().endObstacle != finalObstacle) {
             return false
         }
     }
@@ -296,8 +296,8 @@ public fun pathLength(path: List<DubinsTangent>): Double {
     return tangentsLength + arcsLength
 }
 
-public fun shortestPath(path: List<List<DubinsTangent>>): List<List<DubinsTangent>> {
-    return path.sortedBy { pathLength(it) }
+public fun shortestPath(path: List<List<DubinsTangent>>): List<DubinsTangent> {
+    return path.sortedBy { pathLength(it) }[0]
 }
 
 public typealias Path = List<DubinsTangent>
@@ -309,7 +309,7 @@ public fun findAllPaths(
     finalDirection: DoubleVector2D,
     finalRadius: Double,
     obstacles: List<DubinsObstacle>
-) {
+): List<MutableList<DubinsTangent>> {
     val initialCircles = constructTangentCircles(
         startingPoint,
         startingDirection,
@@ -318,15 +318,15 @@ public fun findAllPaths(
         finalPoint,
         finalDirection,
         finalRadius)
-    var outputTangents = mutableMapOf<PathTypes, List<Path>>()
+    var outputTangents = mutableMapOf<PathTypes, MutableList<MutableList<DubinsTangent>>>()
     for (i in listOf(DubinsPath.SimpleType.L, DubinsPath.SimpleType.R)) {
         for (j in listOf(DubinsPath.SimpleType.L, DubinsPath.SimpleType.R)) {
             val finalCircle = finalCircles[j]!!
             val finalObstacle = DubinsObstacle(listOf(finalCircle))
             outputTangents[listOf(i,
                            DubinsPath.SimpleType.S,
-                           j)] = listOf(
-                                    listOf(DubinsTangent(
+                           j)] = mutableListOf(
+                                    mutableListOf(DubinsTangent(
                                         initialCircles[i]!!,
                                         initialCircles[i]!!,
                                         DubinsObstacle(listOf(initialCircles[i]!!)),
@@ -338,13 +338,13 @@ public fun findAllPaths(
             while (!allFinished(outputTangents[listOf(i,
                     DubinsPath.SimpleType.S,
                     j)]!!, finalObstacle)) {
-                var newOutputTangents = listOf<Path>()
+                var newOutputTangents = mutableListOf<MutableList<DubinsTangent>>()
                 for (line in outputTangents[listOf(i,
                     DubinsPath.SimpleType.S,
                     j)]!!) {
-                    var currentCircle = line[-1].endCircle
-                    var currentDirection = line[-1].route[-1]
-                    var currentObstacle = line[-1].endObstacle
+                    var currentCircle = line.last().endCircle
+                    var currentDirection = line.last().route.last()
+                    var currentObstacle = line.last().endObstacle
                     var nextObstacle = DubinsObstacle(listOf())
                     if (currentObstacle != finalObstacle) {
                         var tangentToFinal = outerTangents(currentObstacle, finalObstacle)[DubinsPath.toType(listOf(
@@ -362,20 +362,7 @@ public fun findAllPaths(
                             nextObstacle = finalObstacle
                         }
                         var nextTangents = outerTangents(currentObstacle, nextObstacle)
-//                        for (pathType in listOf(
-//                            listOf(DubinsPath.SimpleType.L,
-//                                DubinsPath.SimpleType.S,
-//                                DubinsPath.SimpleType.L),
-//                            listOf(DubinsPath.SimpleType.L,
-//                                DubinsPath.SimpleType.S,
-//                                DubinsPath.SimpleType.R),
-//                            listOf(DubinsPath.SimpleType.R,
-//                                DubinsPath.SimpleType.S,
-//                                DubinsPath.SimpleType.L),
-//                            listOf(DubinsPath.SimpleType.R,
-//                                DubinsPath.SimpleType.S,
-//                                DubinsPath.SimpleType.R)
-//                        )) {
+
                         for (pathType in nextTangents.keys) {
                             for (obstacle in obstacles) {
                                 // in Python code here try/except was used, but seems unneeded
@@ -396,12 +383,117 @@ public fun findAllPaths(
                                 nextTangents.filter {(DubinsPath.toSimpleTypes(it.key)[0] == currentDirection)}
                                         as MutableMap<DubinsPath.Type, DubinsTangent>
                         }
-                        TODO("rewrite fragment from Python")
+                        val tangentsAlong = mutableListOf<DubinsTangent>()
+                        for (tangent in nextTangents.values) {
+                            if (tangent.startCircle == line.last().endCircle) {
+                                val lengthMaxPossible = arcLength(
+                                    tangent.startCircle,
+                                    line.last().lineSegment.end,
+                                    tangent.startObstacle.nextTangent(
+                                        tangent.startCircle,
+                                        DubinsPath.toType(listOf(currentDirection, DubinsPath.SimpleType.S, currentDirection)),
+                                    ).lineSegment.begin,
+                                    currentDirection
+                                    )
+                                val lengthCalculated = arcLength(
+                                    tangent.startCircle,
+                                    line.last().lineSegment.end,
+                                    tangent.lineSegment.begin,
+                                    currentDirection)
+                                if (lengthCalculated > lengthMaxPossible) {
+                                    val tangentsAlong = tangentsAlongTheObstacle(
+                                        currentCircle,
+                                        DubinsPath.toType(listOf(
+                                            currentDirection,
+                                            DubinsPath.SimpleType.S,
+                                            currentDirection)),
+                                        tangent.startCircle,
+                                        currentObstacle
+                                    )
+                                }
+                                else {
+                                    val tangentsAlong = mutableListOf<DubinsTangent>()
+                                }
+                            }
+                            else {
+                                val tangentsAlong = tangentsAlongTheObstacle(
+                                    currentCircle,
+                                    DubinsPath.toType(listOf(
+                                        currentDirection,
+                                        DubinsPath.SimpleType.S,
+                                        currentDirection)),
+                                    tangent.startCircle,
+                                    currentObstacle
+                                )
+                            }
+                            newOutputTangents.add((line + tangentsAlong + listOf(tangent)).toMutableList())
+                        }
+                        outputTangents[listOf(
+                            i,
+                            DubinsPath.SimpleType.S,
+                            j
+                        )] = newOutputTangents
+                    }
+                    else {
+                        // minor changes from Python code
+                        newOutputTangents.add(line)
+                        outputTangents[listOf(
+                            i,
+                            DubinsPath.SimpleType.S,
+                            j
+                        )] = newOutputTangents
                     }
                 }
             }
+            for (lineId in outputTangents[listOf(
+                i,
+                DubinsPath.SimpleType.S,
+                j
+            )]!!.indices) {
+                val lastDirection = outputTangents[listOf(
+                    i,
+                    DubinsPath.SimpleType.S,
+                    j
+                )]!![lineId].last().route[2]
+                outputTangents[listOf(
+                    i,
+                    DubinsPath.SimpleType.S,
+                    j
+                )]!![lineId].add(DubinsTangent(
+                    finalCircles[j]!!,
+                    finalCircles[j]!!,
+                    DubinsObstacle(
+                        listOf(finalCircles[j]!!)
+                    ),
+                    DubinsObstacle(
+                        listOf(finalCircles[j]!!)
+                    ),
+                    LineSegment2D(finalPoint, finalPoint),
+                    listOf(
+                        lastDirection,
+                        DubinsPath.SimpleType.S,
+                        j
+                    )
+                ))
+            }
         }
     }
+    return outputTangents[listOf(
+        DubinsPath.SimpleType.L,
+        DubinsPath.SimpleType.S,
+        DubinsPath.SimpleType.L
+        )]!! + outputTangents[listOf(
+        DubinsPath.SimpleType.L,
+        DubinsPath.SimpleType.S,
+        DubinsPath.SimpleType.R
+        )]!! + outputTangents[listOf(
+        DubinsPath.SimpleType.R,
+        DubinsPath.SimpleType.S,
+        DubinsPath.SimpleType.L
+        )]!! + outputTangents[listOf(
+        DubinsPath.SimpleType.R,
+        DubinsPath.SimpleType.S,
+        DubinsPath.SimpleType.L)]!!
 }
 
 
