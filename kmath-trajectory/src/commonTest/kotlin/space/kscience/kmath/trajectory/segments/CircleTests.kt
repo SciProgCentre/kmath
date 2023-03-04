@@ -19,6 +19,6 @@ class CircleTests {
         val radius = 2.0
         val expectedCircumference = 12.56637
         val circle = Circle2D(center, radius)
-        assertEquals(expectedCircumference, circle.circumference)
+        assertEquals(expectedCircumference, circle.circumference, 1e-4)
     }
 }

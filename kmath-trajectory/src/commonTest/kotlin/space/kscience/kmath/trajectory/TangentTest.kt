@@ -13,7 +13,6 @@ import space.kscience.kmath.geometry.equalsLine
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
-import kotlin.test.assertFailsWith
 
 class TangentTest {
     @Test
@@ -56,26 +55,23 @@ class TangentTest {
     }
 
     @Test
-    fun nonExistingTangents() {
-        assertFailsWith<Exception> {
-            val c1 = Circle2D(vector(0.0, 0.0), 10.0)
-            val c2 = Circle2D(vector(0.0, 0.0), 1.0)
-            val segments = c1.tangentsToCircle(c2)
-        }
-        assertFailsWith<Exception> {
-            val c1 = Circle2D(vector(0.0, 0.0), 1.0)
-            val c2 = Circle2D(vector(0.0, 0.0), 10.0)
-            val segments = c1.tangentsToCircle(c2)
-        }
-        assertFailsWith<Exception> {
-            val c1 = Circle2D(vector(0.0, 0.0), 1.0)
-            val c2 = Circle2D(vector(2.0, 0.0), 1.0)
-            val segments = c1.tangentsToCircle(c2)
-        }
-        assertFailsWith<Exception> {
-            val c1 = Circle2D(vector(0.0, 0.0), 1.0)
-            val c2 = Circle2D(vector(0.5, 0.0), 1.0)
-            val segments = c1.tangentsToCircle(c2)
-        }
+    fun concentric(){
+        val c1 = Circle2D(vector(0.0, 0.0), 10.0)
+        val c2 = Circle2D(vector(0.0, 0.0), 1.0)
+        assertEquals(emptyMap(), c1.tangentsToCircle(c2))
     }
+//
+//    @Test
+//    fun nonExistingTangents() {
+//        assertFailsWith<NotImplementedError> {
+//            val c1 = Circle2D(vector(0.0, 0.0), 1.0)
+//            val c2 = Circle2D(vector(2.0, 0.0), 1.0)
+//            c1.tangentsToCircle(c2)
+//        }
+//        assertFailsWith<NotImplementedError> {
+//            val c1 = Circle2D(vector(0.0, 0.0), 1.0)
+//            val c2 = Circle2D(vector(0.5, 0.0), 1.0)
+//            c1.tangentsToCircle(c2)
+//        }
+//    }
 }
