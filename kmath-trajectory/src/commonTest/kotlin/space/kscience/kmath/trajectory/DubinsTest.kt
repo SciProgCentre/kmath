@@ -36,4 +36,37 @@ class DubinsTest {
         TODO("fix negative indices in boundaryTangents and accomplish test")
         assertTrue(false)
     }
+    @Test
+    fun outerTangentsTest1() {
+        // works incorrectly
+        val circles1 = listOf(
+            Circle2D(vector(0.0, 0.0), 1.0))
+        val circles2 = listOf(
+            Circle2D(vector(5.0, 5.0), 1.0)
+        )
+        println(outerTangents(DubinsObstacle(circles1), DubinsObstacle(circles2)))
+        assertTrue(false)
+    }
+    @Test
+    fun outerTangentsTest2() {
+        // works incorrectly
+        val circles1 = listOf(
+            Circle2D(vector(0.0, 0.0), 1.0),
+            Circle2D(vector( 2.0, 0.0), 1.0))
+        val circles2 = listOf(
+            Circle2D(vector(5.0, 5.0), 1.0),
+            Circle2D(vector(7.0, 5.0), 1.0)
+        )
+        println(outerTangents(DubinsObstacle(circles1), DubinsObstacle(circles2)))
+
+        for (circle1 in circles1) {
+            for (circle2 in circles2) {
+                for (tangent in dubinsTangentsToCircles(circle1, circle2,
+                    DubinsObstacle(circles1), DubinsObstacle(circles2))) {
+                    println(tangent)
+                }
+            }
+        }
+        assertTrue(false)
+    }
 }

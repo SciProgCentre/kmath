@@ -95,7 +95,7 @@ public fun dubinsTangentsToCircles(
                 } else {
                     angle1 - r2.sign * atan2(r.absoluteValue, l)
                 }
-                val w = Euclidean2DSpace.vector(-cos(angle2), sin(angle2))
+                val w = vector(-cos(angle2), sin(angle2))
                 put(route, DubinsTangent(Circle2D(firstCircle.center, firstCircle.radius),
                     secondCircle,
                     firstObstacle,

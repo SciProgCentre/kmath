@@ -39,8 +39,8 @@ public class DubinsObstacle(
             var angle2: Double
             val routes = mapOf(
                 DubinsPath.Type.RSR to Pair(radius, other.radius),
-                DubinsPath.Type.RSL to Pair(radius, -other.radius),
-                DubinsPath.Type.LSR to Pair(-radius, other.radius),
+//                DubinsPath.Type.RSL to Pair(radius, -other.radius),
+//                DubinsPath.Type.LSR to Pair(-radius, other.radius),
                 DubinsPath.Type.LSL to Pair(-radius, -other.radius)
             )
             return buildMap {
@@ -52,7 +52,7 @@ public class DubinsObstacle(
                     } else {
                         r1.absoluteValue + r2.absoluteValue
                     }
-                    if (d * d > r * r) {
+                    if (d * d >= r * r) {
                         val l = (d * d - r * r).pow(0.5)
                         angle2 = if (r1.absoluteValue > r2.absoluteValue) {
                             angle1 + r1.sign * atan2(r.absoluteValue, l)
@@ -76,8 +76,11 @@ public class DubinsObstacle(
                 }
             }
         }
-        val firstCircles = this.circles.slice(-this.circles.size..-1)
-        val secondCircles = this.circles.slice(-this.circles.size+1..0)
+//        val firstCircles = this.circles.slice(-this.circles.size..-1)
+//        val secondCircles = this.circles.slice(-this.circles.size+1..0)
+        val firstCircles = this.circles
+        val secondCircles = this.circles.slice(1..this.circles.lastIndex) +
+                this.circles[0]
         val lslTangents = firstCircles.zip(secondCircles)
         {a, b -> a.dubinsTangentsToCircles(b)[DubinsPath.Type.LSL]!!}
         val rsrTangents = firstCircles.zip(secondCircles)
@@ -345,7 +348,7 @@ public fun findAllPaths(
                     var currentCircle = line.last().endCircle
                     var currentDirection = line.last().route.last()
                     var currentObstacle = line.last().endObstacle
-                    var nextObstacle = DubinsObstacle(listOf())
+                    var nextObstacle: DubinsObstacle? = null
                     if (currentObstacle != finalObstacle) {
                         var tangentToFinal = outerTangents(currentObstacle, finalObstacle)[DubinsPath.toType(listOf(
                             currentDirection,
@@ -358,7 +361,7 @@ public fun findAllPaths(
                                 break
                             }
                         }
-                        if (nextObstacle == DubinsObstacle(listOf())) {
+                        if (nextObstacle == null) {
                             nextObstacle = finalObstacle
                         }
                         var nextTangents = outerTangents(currentObstacle, nextObstacle)
@@ -372,16 +375,13 @@ public fun findAllPaths(
 
                             }
                         }
-                        if (nextObstacle == finalObstacle) {
-                            nextTangents =
-                                nextTangents.filter {(DubinsPath.toSimpleTypes(it.key)[0] == currentDirection) and
+                        nextTangents = if (nextObstacle == finalObstacle) {
+                            nextTangents.filter {(DubinsPath.toSimpleTypes(it.key)[0] == currentDirection) and
                                     (DubinsPath.toSimpleTypes(it.key)[0] == j)}
                                     as MutableMap<DubinsPath.Type, DubinsTangent>
-                        }
-                        else {
-                            nextTangents =
-                                nextTangents.filter {(DubinsPath.toSimpleTypes(it.key)[0] == currentDirection)}
-                                        as MutableMap<DubinsPath.Type, DubinsTangent>
+                        } else {
+                            nextTangents.filter {(DubinsPath.toSimpleTypes(it.key)[0] == currentDirection)}
+                                    as MutableMap<DubinsPath.Type, DubinsTangent>
                         }
                         val tangentsAlong = mutableListOf<DubinsTangent>()
                         for (tangent in nextTangents.values) {
