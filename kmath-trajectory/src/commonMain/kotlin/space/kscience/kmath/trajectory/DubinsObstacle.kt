@@ -111,13 +111,24 @@ public class DubinsObstacle(
         else {
             for (i in this.circles.indices) {
                 if (this.circles[i] == circle) {
-                    return DubinsTangent(this.circles[i],
-                                         this.circles[i-1],
-                                         this,
-                                         this,
-                                         LineSegment2D(this.tangents[i-1].lineSegment.end,
-                                                        this.tangents[i-1].lineSegment.begin),
-                                         DubinsPath.toSimpleTypes(route))
+                    if (i > 0) {
+                        return DubinsTangent(this.circles[i],
+                            this.circles[i-1],
+                            this,
+                            this,
+                            LineSegment2D(this.tangents[i-1].lineSegment.end,
+                                this.tangents[i-1].lineSegment.begin),
+                            DubinsPath.toSimpleTypes(route))
+                    }
+                    else {
+                        return DubinsTangent(this.circles[0],
+                            this.circles.last(),
+                            this,
+                            this,
+                            LineSegment2D(this.tangents.last().lineSegment.end,
+                                this.tangents.last().lineSegment.begin),
+                            DubinsPath.toSimpleTypes(route))
+                    }
                 }
             }
         }
@@ -156,7 +167,7 @@ public fun LineSegment2D.intersectCircle(circle: Circle2D): Boolean {
     val a = (this.begin.x - this.end.x).pow(2.0) + (this.begin.y - this.end.y).pow(2.0)
     val b = 2 * ((this.begin.x - this.end.x) * (this.end.x - circle.center.x) +
             (this.begin.y - this.end.y) * (this.end.y - circle.center.y))
-    val c = (this.end.x - circle.center.x).pow(2.0) + (this.end.y - circle.center.y) -
+    val c = (this.end.x - circle.center.x).pow(2.0) + (this.end.y - circle.center.y).pow(2.0) -
             circle.radius.pow(2.0)
     val d = b.pow(2.0) - 4 * a * c
     if (d < 1e-6) {
@@ -289,7 +300,7 @@ public fun allFinished(paths: List<List<DubinsTangent>>,
 public fun pathLength(path: List<DubinsTangent>): Double {
     val tangentsLength = path.sumOf{norm(it.lineSegment.end - it.lineSegment.begin)}
     val arcsLength = buildList<Double>{
-        for (i in 1..path.size) {
+        for (i in 1..path.lastIndex) {
             add(arcLength(path[i].startCircle,
                 path[i-1].lineSegment.end,
                 path[i].lineSegment.begin,
@@ -366,13 +377,14 @@ public fun findAllPaths(
                         }
                         var nextTangents = outerTangents(currentObstacle, nextObstacle)
 
-                        for (pathType in nextTangents.keys) {
+                        for (pathType in DubinsPath.Type.values()) {
                             for (obstacle in obstacles) {
                                 // in Python code here try/except was used, but seems unneeded
-                                if (nextTangents[pathType]!!.intersectObstacle(obstacle)) {
-                                    nextTangents.remove(pathType)
+                                if (nextTangents.containsKey(pathType)) {
+                                    if (nextTangents[pathType]!!.intersectObstacle(obstacle)) {
+                                        nextTangents.remove(pathType)
+                                    }
                                 }
-
                             }
                         }
                         nextTangents = if (nextObstacle == finalObstacle) {

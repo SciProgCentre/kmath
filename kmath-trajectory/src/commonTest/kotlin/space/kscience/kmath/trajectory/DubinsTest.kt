@@ -33,8 +33,41 @@ class DubinsTest {
             finalRadius,
             obstacles)
         val length = pathLength(shortestPath(outputTangents))
-        TODO("fix negative indices in boundaryTangents and accomplish test")
-        assertTrue(false)
+        println(length)
+    }
+
+    @Test
+    fun secondPath() {
+        val startPoint = vector(-5.0, -1.0)
+        val startDirection = vector(1.0, 1.0)
+        val startRadius = 0.5
+        val finalPoint = vector(20.0, 4.0)
+        val finalDirection = vector(1.0, -1.0)
+        val finalRadius = 0.5
+
+        val obstacles = listOf(
+            DubinsObstacle(listOf(
+                Circle2D(vector(1.0, 6.5), 0.5),
+                Circle2D(vector(2.0, 1.0), 0.5),
+                Circle2D(vector(6.0, 0.0), 0.5),
+                Circle2D(vector(5.0, 5.0), 0.5)
+            )), DubinsObstacle(listOf(
+                Circle2D(vector(10.0, 1.0), 0.5),
+                Circle2D(vector(16.0, 0.0), 0.5),
+                Circle2D(vector(14.0, 6.0), 0.5),
+                Circle2D(vector(9.0, 4.0), 0.5)
+            ))
+        )
+        val outputTangents = findAllPaths(
+            startPoint,
+            startDirection,
+            startRadius,
+            finalPoint,
+            finalDirection,
+            finalRadius,
+            obstacles)
+        val length = pathLength(shortestPath(outputTangents))
+        println(length)
     }
     @Test
     fun outerTangentsTest1() {
