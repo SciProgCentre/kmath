@@ -24,7 +24,9 @@ internal operator fun IntRange.contains(other: IntRange): Boolean = (other.first
 //TODO add permutation sort
 //TODO check rank statistics
 
-
+/**
+ * A [Buffer] with an offset relative to the [SeriesAlgebra] zero.
+ */
 public interface Series<T> : Buffer<T> {
     public val origin: Buffer<T>
 
@@ -54,9 +56,9 @@ private class SeriesImpl<T>(
 /**
  * A scope to operation on series
  */
-public class SeriesAlgebra<T, out A : Ring<T>, out BA : BufferAlgebra<T, A>, L>(
+public open class SeriesAlgebra<T, out A : Ring<T>, out BA : BufferAlgebra<T, A>, L>(
     override val bufferAlgebra: BA,
-    private val labelResolver: (Int) -> L,
+    public val offsetToLabel: (Int) -> L,
 ) : RingOps<Buffer<T>>, StatisticalAlgebra<T, A, BA> {
 
     /**
@@ -107,20 +109,22 @@ public class SeriesAlgebra<T, out A : Ring<T>, out BA : BufferAlgebra<T, A>, L>(
      */
     public val Buffer<T>.startOffset: Int get() = if (this is Series) position else 0
 
+    public val Buffer<T>.startLabel: L get() = offsetToLabel(startOffset)
+
     /**
      * Build a new series positioned at [startOffset].
      */
     public fun series(size: Int, startOffset: Int = 0, block: A.(label: L) -> T): Series<T> {
         return elementAlgebra.bufferFactory(size) {
             val index = it + startOffset
-            elementAlgebra.block(labelResolver(index))
+            elementAlgebra.block(offsetToLabel(index))
         }.moveTo(startOffset)
     }
 
     /**
      * Get a label buffer for given buffer.
      */
-    public val Buffer<T>.labels: List<L> get() = offsetIndices.map(labelResolver)
+    public val Buffer<T>.labels: List<L> get() = offsetIndices.map(offsetToLabel)
 
     /**
      * Try to resolve element by label and return null if element with a given label is not found
@@ -187,6 +191,8 @@ public class SeriesAlgebra<T, out A : Ring<T>, out BA : BufferAlgebra<T, A>, L>(
     override fun add(left: Buffer<T>, right: Buffer<T>): Series<T> = left.zip(right) { l, r -> l + r }
 
     override fun multiply(left: Buffer<T>, right: Buffer<T>): Buffer<T> = left.zip(right) { l, r -> l * r }
+
+    public companion object
 }
 
 public fun <T, A : Ring<T>, BA : BufferAlgebra<T, A>, L> BA.seriesAlgebra(labels: Iterable<L>): SeriesAlgebra<T, A, BA, L> {

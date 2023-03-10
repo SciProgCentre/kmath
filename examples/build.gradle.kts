@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
+
 plugins {
     kotlin("jvm")
 }
@@ -33,6 +35,8 @@ dependencies {
     implementation(project(":kmath-multik"))
     implementation("org.jetbrains.kotlinx:multik-default:$multikVersion")
 
+    //datetime
+    implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
 
     implementation("org.nd4j:nd4j-native:1.0.0-beta7")
 
@@ -45,9 +49,6 @@ dependencies {
 //        os == "Mac OS X" -> implementation("org.nd4j:nd4j-native:1.0.0-beta7:macosx-x86_64-avx2")
 //    } else
     implementation("org.nd4j:nd4j-native-platform:1.0.0-beta7")
-
-    // multik implementation
-    implementation("org.jetbrains.kotlinx:multik-default:0.1.0")
 
     implementation("org.slf4j:slf4j-simple:1.7.32")
     // plotting
@@ -62,7 +63,7 @@ kotlin.sourceSets.all {
     }
 }
 
-tasks.withType<org.jetbrains.kotlin.gradle.dsl.KotlinJvmCompile> {
+tasks.withType<KotlinJvmCompile> {
     kotlinOptions {
         jvmTarget = "11"
         freeCompilerArgs = freeCompilerArgs + "-Xjvm-default=all" + "-Xopt-in=kotlin.RequiresOptIn" + "-Xlambdas=indy"
