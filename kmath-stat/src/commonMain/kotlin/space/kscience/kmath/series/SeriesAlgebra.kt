@@ -6,6 +6,7 @@ import space.kscience.kmath.operations.RingOps
 import space.kscience.kmath.stat.StatisticalAlgebra
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.BufferView
+import space.kscience.kmath.structures.getOrNull
 import kotlin.math.max
 import kotlin.math.min
 
@@ -33,8 +34,6 @@ public interface Series<T> : Buffer<T> {
     public val position: Int
 }
 
-public val <T> Series<T>.absoluteIndices: IntRange get() = position until position + size
-
 /**
  * A [BufferView] with index offset (both positive and negative) and possible size change
  */
@@ -60,54 +59,68 @@ public class SeriesAlgebra<T, out A : Ring<T>, out BA : BufferAlgebra<T, A>, L>(
     private val labelResolver: (Int) -> L,
 ) : RingOps<Buffer<T>>, StatisticalAlgebra<T, A, BA> {
 
-    public val Buffer<T>.indices: IntRange
+    /**
+     * A range of valid offset indices. In general, does not start with zero.
+     */
+    public val Buffer<T>.offsetIndices: IntRange
         get() = if (this is Series) {
-            absoluteIndices
+            position until position + size
         } else {
             0 until size
         }
 
     /**
-     * Get the value by absolute index in the series algebra or return null if index is out of range
+     * Get the value by absolute offset in the series algebra or return null if index is out of range
      */
-    public fun Buffer<T>.getAbsoluteOrNull(index: Int): T? = when {
-        index !in indices -> null
-        this is Series -> origin[index - position]
-        else -> get(index)
+    public fun Buffer<T>.getByOffsetOrNull(index: Int): T? = when {
+        index !in offsetIndices -> null
+        this is Series -> origin.getOrNull(index - position)
+        else -> getOrNull(index)
     }
 
     /**
      * Get the value by absolute index in the series algebra or throw [IndexOutOfBoundsException] if index is out of range
      */
-    public fun Buffer<T>.getAbsolute(index: Int): T =
-        getAbsoluteOrNull(index) ?: throw IndexOutOfBoundsException("Index $index is not in $indices")
+    public fun Buffer<T>.getByOffset(index: Int): T =
+        getByOffsetOrNull(index) ?: throw IndexOutOfBoundsException("Index $index is not in $offsetIndices")
 
     /**
-     * Create an offset series with index starting point at [index]
+     *  Zero-copy move [Buffer] or [Series] to given [position] ignoring series offset if it is present.
      */
-    public fun Buffer<T>.moveTo(index: Int): Series<T> = if (this is Series) {
-        SeriesImpl(origin, index, size)
+    public fun Buffer<T>.moveTo(position: Int): Series<T> = if (this is Series) {
+        SeriesImpl(origin, position, size)
     } else {
-        SeriesImpl(this, index, size)
+        SeriesImpl(this, position, size)
     }
 
-    public val Buffer<T>.offset: Int get() = if (this is Series) position else 0
+    /**
+     * Zero-copy move [Buffer] or [Series] by given [offset]. If it is [Series], sum intrinsic series position and the [offset].
+     */
+    public fun Buffer<T>.moveBy(offset: Int): Series<T> = if (this is Series) {
+        SeriesImpl(origin, position + offset, size)
+    } else {
+        SeriesImpl(this, offset, size)
+    }
 
     /**
-     * Build a new series
+     * An offset of the buffer start relative to [SeriesAlgebra] zero offset
      */
-    public fun series(size: Int, fromIndex: Int = 0, block: A.(label: L) -> T): Series<T> {
+    public val Buffer<T>.startOffset: Int get() = if (this is Series) position else 0
+
+    /**
+     * Build a new series positioned at [startOffset].
+     */
+    public fun series(size: Int, startOffset: Int = 0, block: A.(label: L) -> T): Series<T> {
         return elementAlgebra.bufferFactory(size) {
-            val index = it + fromIndex
+            val index = it + startOffset
             elementAlgebra.block(labelResolver(index))
-        }.moveTo(fromIndex)
+        }.moveTo(startOffset)
     }
 
     /**
      * Get a label buffer for given buffer.
      */
-    public val Buffer<T>.labels: List<L> get() = indices.map(labelResolver)
-
+    public val Buffer<T>.labels: List<L> get() = offsetIndices.map(labelResolver)
 
     /**
      * Try to resolve element by label and return null if element with a given label is not found
@@ -115,7 +128,7 @@ public class SeriesAlgebra<T, out A : Ring<T>, out BA : BufferAlgebra<T, A>, L>(
     public operator fun Buffer<T>.get(label: L): T? {
         val index = labels.indexOf(label)
         if (index == -1) return null
-        return getAbsolute(index + offset)
+        return getByOffset(index + startOffset)
     }
 
     /**
@@ -123,9 +136,9 @@ public class SeriesAlgebra<T, out A : Ring<T>, out BA : BufferAlgebra<T, A>, L>(
      */
     public inline fun Buffer<T>.map(crossinline transform: A.(T) -> T): Series<T> {
         val buf = elementAlgebra.bufferFactory(size) {
-            elementAlgebra.transform(getAbsolute(it))
+            elementAlgebra.transform(getByOffset(it))
         }
-        return buf.moveTo(indices.first)
+        return buf.moveTo(offsetIndices.first)
     }
 
     /**
@@ -134,22 +147,22 @@ public class SeriesAlgebra<T, out A : Ring<T>, out BA : BufferAlgebra<T, A>, L>(
     public inline fun Buffer<T>.mapWithLabel(crossinline transform: A.(arg: T, label: L) -> T): Series<T> {
         val labels = labels
         val buf = elementAlgebra.bufferFactory(size) {
-            elementAlgebra.transform(getAbsolute(it), labels[it])
+            elementAlgebra.transform(getByOffset(it), labels[it])
         }
-        return buf.moveTo(indices.first)
+        return buf.moveTo(offsetIndices.first)
     }
 
     public inline fun <R> Buffer<T>.fold(initial: R, operation: A.(acc: R, T) -> R): R {
         var accumulator = initial
-        for (index in this.indices) accumulator = elementAlgebra.operation(accumulator, getAbsolute(index))
+        for (index in this.offsetIndices) accumulator = elementAlgebra.operation(accumulator, getByOffset(index))
         return accumulator
     }
 
     public inline fun <R> Buffer<T>.foldWithLabel(initial: R, operation: A.(acc: R, arg: T, label: L) -> R): R {
         val labels = labels
         var accumulator = initial
-        for (index in this.indices) accumulator =
-            elementAlgebra.operation(accumulator, getAbsolute(index), labels[index])
+        for (index in this.offsetIndices) accumulator =
+            elementAlgebra.operation(accumulator, getByOffset(index), labels[index])
         return accumulator
     }
 
@@ -160,11 +173,11 @@ public class SeriesAlgebra<T, out A : Ring<T>, out BA : BufferAlgebra<T, A>, L>(
         other: Buffer<T>,
         crossinline operation: A.(left: T, right: T) -> T,
     ): Series<T> {
-        val newRange = indices.intersect(other.indices)
+        val newRange = offsetIndices.intersect(other.offsetIndices)
         return elementAlgebra.bufferFactory(newRange.size) {
             elementAlgebra.operation(
-                getAbsolute(it),
-                other.getAbsolute(it)
+                getByOffset(it),
+                other.getByOffset(it)
             )
         }.moveTo(newRange.first)
     }
