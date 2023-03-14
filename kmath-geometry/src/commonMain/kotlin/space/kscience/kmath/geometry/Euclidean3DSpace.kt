@@ -103,45 +103,21 @@ public object Euclidean3DSpace : GeometrySpace<DoubleVector3D>, ScaleOperations<
     override fun DoubleVector3D.dot(other: DoubleVector3D): Double =
         x * other.x + y * other.y + z * other.z
 
-    private fun leviCivita(i: Int, j: Int, k: Int): Int = when {
-        // even permutation
-        i == 0 && j == 1 && k == 2 -> 1
-        i == 1 && j == 2 && k == 0 -> 1
-        i == 2 && j == 0 && k == 1 -> 1
-        // odd permutations
-        i == 2 && j == 1 && k == 0 -> -1
-        i == 0 && j == 2 && k == 1 -> -1
-        i == 1 && j == 0 && k == 2 -> -1
-
-        else -> 0
-    }
-
     /**
-     * Compute vector product of [first] and [second]. The basis assumed to be right-handed if [rightBasis] is true and
-     * left-handed otherwise
+     * Compute vector product of [first] and [second]. The basis assumed to be right-handed.
      */
     public fun vectorProduct(
         first: DoubleVector3D,
         second: DoubleVector3D,
-        rightBasis: Boolean = true,
     ): DoubleVector3D {
-        var x = 0.0
-        var y = 0.0
-        var z = 0.0
+        val (x1, y1, z1) = first
+        val (x2, y2, z2) = second
 
-        for (j in (0..2)) {
-            for (k in (0..2)) {
-                x += leviCivita(0, j, k) * first[j] * second[k]
-                y += leviCivita(1, j, k) * first[j] * second[k]
-                z += leviCivita(2, j, k) * first[j] * second[k]
-            }
-        }
-
-        return vector(x, y, z) * (if (rightBasis) 1 else -1)
+        return vector(y1 * z2 - y2 * z2, z1 * x2 - z2 * x2, x1 * y2 - x2 * y2)
     }
 
     /**
-     * Vector product with right basis
+     * Vector product with a right basis
      */
     public infix fun DoubleVector3D.cross(other: DoubleVector3D): Vector3D<Double> = vectorProduct(this, other)
 
