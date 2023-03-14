@@ -7,6 +7,8 @@ package space.kscience.kmath.trajectory
 
 import space.kscience.kmath.geometry.Circle2D
 import space.kscience.kmath.geometry.DoubleVector2D
+import space.kscience.kmath.geometry.Euclidean2DSpace
+import space.kscience.kmath.geometry.Euclidean2DSpace.minus
 import space.kscience.kmath.geometry.Euclidean2DSpace.vector
 import kotlin.test.Test
 import kotlin.test.assertTrue
@@ -68,6 +70,18 @@ class DubinsTest {
             obstacles)
         val length = pathLength(shortestPath(outputTangents))
         println(length)
+        for (path in outputTangents) {
+            println(pathLength(path))
+            println(path.size)
+            for (tangent in path) {
+//                println(tangent.route)
+//                println(tangent.startCircle)
+//                println(tangent.endCircle)
+//                println(Euclidean2DSpace.norm(tangent.lineSegment.end - tangent.lineSegment.begin))
+            }
+            println()
+            println()
+        }
     }
     @Test
     fun outerTangentsTest1() {
@@ -78,7 +92,6 @@ class DubinsTest {
             Circle2D(vector(5.0, 5.0), 1.0)
         )
         println(outerTangents(DubinsObstacle(circles1), DubinsObstacle(circles2)))
-        assertTrue(false)
     }
     @Test
     fun outerTangentsTest2() {
@@ -100,6 +113,28 @@ class DubinsTest {
                 }
             }
         }
-        assertTrue(false)
+    }
+    @Test
+    fun tangentsTest() {
+        val circle1 = Circle2D(vector(1.0, 6.5), 0.5)
+        val circle2 = Circle2D(vector(1.0, 6.5), 0.5)
+        val obstacle1 = DubinsObstacle(listOf(circle1))
+        val obstacle2 = DubinsObstacle(listOf(circle2))
+        val tangent = dubinsTangentsToCircles(circle1, circle2, obstacle1, obstacle2)
+        println(tangent)
+    }
+    @Test
+    fun equalCircles() {
+        val circle1 = Circle2D(vector(1.0, 6.5), 0.5)
+        val circle2 = Circle2D(vector(1.0, 6.5), 0.5)
+        println(circle1 == circle2)
+    }
+    @Test
+    fun equalObstacles() {
+        val circle1 = Circle2D(vector(1.0, 6.5), 0.5)
+        val circle2 = Circle2D(vector(1.0, 6.5), 0.5)
+        val obstacle1 = DubinsObstacle(listOf(circle1))
+        val obstacle2 = DubinsObstacle(listOf(circle2))
+        println(obstacle1 == obstacle2)
     }
 }

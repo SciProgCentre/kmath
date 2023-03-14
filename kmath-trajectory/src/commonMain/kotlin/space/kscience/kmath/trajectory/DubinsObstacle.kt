@@ -136,7 +136,8 @@ public class DubinsObstacle(
     error("next tangent not found")
     }
 
-    public fun equals(other: DubinsObstacle): Boolean {
+    override fun equals(other: Any?): Boolean {
+        if (other == null || other !is DubinsObstacle) return false
         return this.circles == other.circles
     }
 }
@@ -258,7 +259,7 @@ public fun constructTangentCircles(point: DoubleVector2D,
     val center2 = point + normalVectors(direction, r).second
     val p1 = center1 - point
     val p2 = center2 - point
-    return if (atan2(p1.y, p1.x) - atan2(p2.y, p2.x) in listOf(PI/2, -3*PI/2)) {
+    return if (atan2(p1.y, p1.x) - atan2(direction.y, direction.x) in listOf(PI/2, -3*PI/2)) {
         mapOf(DubinsPath.SimpleType.L to Circle2D(center1, r),
             DubinsPath.SimpleType.R to Circle2D(center2, r))
     }
@@ -270,7 +271,7 @@ public fun constructTangentCircles(point: DoubleVector2D,
 
 public fun sortedObstacles(currentObstacle: DubinsObstacle,
                            obstacles: List<DubinsObstacle>): List<DubinsObstacle> {
-    return obstacles.sortedBy {norm(it.center - currentObstacle.center)}.reversed()
+    return obstacles.sortedBy {norm(it.center - currentObstacle.center)}//.reversed()
 }
 
 public fun tangentsAlongTheObstacle(initialCircle: Circle2D,
@@ -389,13 +390,13 @@ public fun findAllPaths(
                         }
                         nextTangents = if (nextObstacle == finalObstacle) {
                             nextTangents.filter {(DubinsPath.toSimpleTypes(it.key)[0] == currentDirection) and
-                                    (DubinsPath.toSimpleTypes(it.key)[0] == j)}
+                                    (DubinsPath.toSimpleTypes(it.key)[2] == j)}
                                     as MutableMap<DubinsPath.Type, DubinsTangent>
                         } else {
                             nextTangents.filter {(DubinsPath.toSimpleTypes(it.key)[0] == currentDirection)}
                                     as MutableMap<DubinsPath.Type, DubinsTangent>
                         }
-                        val tangentsAlong = mutableListOf<DubinsTangent>()
+                        var tangentsAlong = mutableListOf<DubinsTangent>()
                         for (tangent in nextTangents.values) {
                             if (tangent.startCircle == line.last().endCircle) {
                                 val lengthMaxPossible = arcLength(
@@ -413,7 +414,7 @@ public fun findAllPaths(
                                     tangent.lineSegment.begin,
                                     currentDirection)
                                 if (lengthCalculated > lengthMaxPossible) {
-                                    val tangentsAlong = tangentsAlongTheObstacle(
+                                    tangentsAlong = tangentsAlongTheObstacle(
                                         currentCircle,
                                         DubinsPath.toType(listOf(
                                             currentDirection,
@@ -424,11 +425,11 @@ public fun findAllPaths(
                                     )
                                 }
                                 else {
-                                    val tangentsAlong = mutableListOf<DubinsTangent>()
+                                    tangentsAlong = mutableListOf<DubinsTangent>()
                                 }
                             }
                             else {
-                                val tangentsAlong = tangentsAlongTheObstacle(
+                                tangentsAlong = tangentsAlongTheObstacle(
                                     currentCircle,
                                     DubinsPath.toType(listOf(
                                         currentDirection,
@@ -456,6 +457,11 @@ public fun findAllPaths(
                         )] = newOutputTangents
                     }
                 }
+                outputTangents[listOf(
+                    i,
+                    DubinsPath.SimpleType.S,
+                    j
+                )] = newOutputTangents
             }
             for (lineId in outputTangents[listOf(
                 i,
@@ -505,7 +511,7 @@ public fun findAllPaths(
         )]!! + outputTangents[listOf(
         DubinsPath.SimpleType.R,
         DubinsPath.SimpleType.S,
-        DubinsPath.SimpleType.L)]!!
+        DubinsPath.SimpleType.R)]!!
 }
 
 
