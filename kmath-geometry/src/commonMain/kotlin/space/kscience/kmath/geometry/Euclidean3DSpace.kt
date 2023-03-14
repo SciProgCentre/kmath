@@ -78,8 +78,11 @@ public object Euclidean3DSpace : GeometrySpace<DoubleVector3D>, ScaleOperations<
         }
     }
 
+    public fun vector(x: Double, y: Double, z: Double): DoubleVector3D =
+        Vector3DImpl(x, y, z)
+
     public fun vector(x: Number, y: Number, z: Number): DoubleVector3D =
-        Vector3DImpl(x.toDouble(), y.toDouble(), z.toDouble())
+        vector(x.toDouble(), y.toDouble(), z.toDouble())
 
     override val zero: DoubleVector3D by lazy { vector(0.0, 0.0, 0.0) }
 
@@ -99,6 +102,24 @@ public object Euclidean3DSpace : GeometrySpace<DoubleVector3D>, ScaleOperations<
 
     override fun DoubleVector3D.dot(other: DoubleVector3D): Double =
         x * other.x + y * other.y + z * other.z
+
+    /**
+     * Compute vector product of [first] and [second]. The basis assumed to be right-handed.
+     */
+    public fun vectorProduct(
+        first: DoubleVector3D,
+        second: DoubleVector3D,
+    ): DoubleVector3D {
+        val (x1, y1, z1) = first
+        val (x2, y2, z2) = second
+
+        return vector(y1 * z2 - y2 * z2, z1 * x2 - z2 * x2, x1 * y2 - x2 * y2)
+    }
+
+    /**
+     * Vector product with a right basis
+     */
+    public infix fun DoubleVector3D.cross(other: DoubleVector3D): Vector3D<Double> = vectorProduct(this, other)
 
     public val xAxis: DoubleVector3D = vector(1.0, 0.0, 0.0)
     public val yAxis: DoubleVector3D = vector(0.0, 1.0, 0.0)
