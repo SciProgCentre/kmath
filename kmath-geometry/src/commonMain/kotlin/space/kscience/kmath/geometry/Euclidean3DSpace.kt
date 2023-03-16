@@ -117,13 +117,11 @@ public object Euclidean3DSpace : GeometrySpace<DoubleVector3D>, ScaleOperations<
     }
 
     /**
-     * Compute vector product of [first] and [second]. The basis assumed to be right-handed if [rightBasis] is true and
-     * left-handed otherwise
+     * Compute vector product of [first] and [second]. The basis assumed to be right-handed.
      */
     public fun vectorProduct(
         first: DoubleVector3D,
         second: DoubleVector3D,
-        rightBasis: Boolean = true,
     ): DoubleVector3D {
         var x = 0.0
         var y = 0.0
@@ -137,7 +135,7 @@ public object Euclidean3DSpace : GeometrySpace<DoubleVector3D>, ScaleOperations<
             }
         }
 
-        return vector(x, y, z) * (if (rightBasis) 1 else -1)
+        return vector(x, y, z)
     }
 
     /**

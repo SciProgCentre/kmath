@@ -55,17 +55,19 @@ dependencies {
     implementation("space.kscience:plotlykt-server:0.5.0")
 }
 
-kotlin.sourceSets.all {
-    with(languageSettings) {
-        optIn("kotlin.contracts.ExperimentalContracts")
-        optIn("kotlin.ExperimentalUnsignedTypes")
-        optIn("space.kscience.kmath.misc.UnstableKMathAPI")
+kotlin {
+    jvmToolchain(11)
+    sourceSets.all {
+        with(languageSettings) {
+            optIn("kotlin.contracts.ExperimentalContracts")
+            optIn("kotlin.ExperimentalUnsignedTypes")
+            optIn("space.kscience.kmath.misc.UnstableKMathAPI")
+        }
     }
 }
 
 tasks.withType<KotlinJvmCompile> {
     kotlinOptions {
-        jvmTarget = "11"
         freeCompilerArgs = freeCompilerArgs + "-Xjvm-default=all" + "-Xopt-in=kotlin.RequiresOptIn" + "-Xlambdas=indy"
     }
 }

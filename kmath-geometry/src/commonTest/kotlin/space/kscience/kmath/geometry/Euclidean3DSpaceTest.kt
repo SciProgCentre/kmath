@@ -78,7 +78,6 @@ internal class Euclidean3DSpaceTest {
         assertVectorEquals(zAxis, vectorProduct(xAxis, yAxis))
         assertVectorEquals(zAxis, xAxis cross yAxis)
         assertVectorEquals(-zAxis, vectorProduct(yAxis, xAxis))
-        assertVectorEquals(zAxis, vectorProduct(yAxis, xAxis, rightBasis = false))
     }
 
     @Test
