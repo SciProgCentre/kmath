@@ -40,10 +40,10 @@ jobs:
         uses: gradle/gradle-build-action@v2.4.0
         with:
           arguments: |
-            publishMacosX64PublicationsToSpaceRepository
-            publishIosX64PublicationsToSpaceRepository
-            publishIosArm64PublicationsToSpaceRepository
-            publishIosSimulatorArm64PublicationsToSpaceRepository
+            publishMacosX64PublicationToSpaceRepository
+            publishIosX64PublicationToSpaceRepository
+            publishIosArm64PublicationToSpaceRepository
+            publishIosSimulatorArm64PublicationToSpaceRepository
             -Ppublishing.enabled=true
             -Ppublishing.space.user=${{ secrets.SPACE_APP_ID }}
             -Ppublishing.space.token=${{ secrets.SPACE_APP_SECRET }}
