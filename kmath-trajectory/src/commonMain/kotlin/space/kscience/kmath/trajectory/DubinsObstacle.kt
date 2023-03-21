@@ -39,8 +39,6 @@ public class DubinsObstacle(
             var angle2: Double
             val routes = mapOf(
                 DubinsPath.Type.RSR to Pair(radius, other.radius),
-//                DubinsPath.Type.RSL to Pair(radius, -other.radius),
-//                DubinsPath.Type.LSR to Pair(-radius, other.radius),
                 DubinsPath.Type.LSL to Pair(-radius, -other.radius)
             )
             return buildMap {
@@ -76,8 +74,7 @@ public class DubinsObstacle(
                 }
             }
         }
-//        val firstCircles = this.circles.slice(-this.circles.size..-1)
-//        val secondCircles = this.circles.slice(-this.circles.size+1..0)
+
         val firstCircles = this.circles
         val secondCircles = this.circles.slice(1..this.circles.lastIndex) +
                 this.circles[0]
@@ -149,7 +146,7 @@ public data class DubinsTangent(val startCircle: Circle2D,
                                 val lineSegment: LineSegment2D,
                                 val route: PathTypes)
 
-public fun LineSegment2D.intersectSegment(other: LineSegment2D): Boolean {
+private fun LineSegment2D.intersectSegment(other: LineSegment2D): Boolean {
     fun crossProduct(v1: DoubleVector2D, v2: DoubleVector2D): Double {
         return v1.x * v2.y - v1.y * v2.x
     }
@@ -164,7 +161,7 @@ public fun LineSegment2D.intersectSegment(other: LineSegment2D): Boolean {
     return true
 }
 
-public fun LineSegment2D.intersectCircle(circle: Circle2D): Boolean {
+private fun LineSegment2D.intersectCircle(circle: Circle2D): Boolean {
     val a = (this.begin.x - this.end.x).pow(2.0) + (this.begin.y - this.end.y).pow(2.0)
     val b = 2 * ((this.begin.x - this.end.x) * (this.end.x - circle.center.x) +
             (this.begin.y - this.end.y) * (this.end.y - circle.center.y))
@@ -184,7 +181,7 @@ public fun LineSegment2D.intersectCircle(circle: Circle2D): Boolean {
     return false
 }
 
-public fun DubinsTangent.intersectObstacle(obstacle: DubinsObstacle): Boolean {
+private fun DubinsTangent.intersectObstacle(obstacle: DubinsObstacle): Boolean {
     for (tangent in obstacle.tangents) {
         if (this.lineSegment.intersectSegment(tangent.lineSegment)) {
             return true
@@ -198,7 +195,7 @@ public fun DubinsTangent.intersectObstacle(obstacle: DubinsObstacle): Boolean {
     return false
 }
 
-public fun outerTangents(first: DubinsObstacle, second: DubinsObstacle): MutableMap<DubinsPath.Type, DubinsTangent> {
+private fun outerTangents(first: DubinsObstacle, second: DubinsObstacle): MutableMap<DubinsPath.Type, DubinsTangent> {
     return buildMap {
         for (circle1 in first.circles) {
             for (circle2 in second.circles) {
@@ -216,7 +213,7 @@ public fun outerTangents(first: DubinsObstacle, second: DubinsObstacle): Mutable
     }.toMutableMap()
 }
 
-public fun arcLength(circle: Circle2D,
+private fun arcLength(circle: Circle2D,
                      point1: DoubleVector2D,
                      point2: DoubleVector2D,
                      route: DubinsPath.SimpleType): Double {
@@ -245,14 +242,14 @@ public fun arcLength(circle: Circle2D,
     return circle.radius * angle
 }
 
-public fun normalVectors(v: DoubleVector2D, r: Double): Pair<DoubleVector2D, DoubleVector2D> {
+private fun normalVectors(v: DoubleVector2D, r: Double): Pair<DoubleVector2D, DoubleVector2D> {
     return Pair(
         r * vector(v.y / norm(v), -v.x / norm(v)),
         r * vector(-v.y / norm(v), v.x / norm(v))
     )
 }
 
-public fun constructTangentCircles(point: DoubleVector2D,
+private fun constructTangentCircles(point: DoubleVector2D,
                                    direction: DoubleVector2D,
                                    r: Double): Map<DubinsPath.SimpleType, Circle2D> {
     val center1 = point + normalVectors(direction, r).first
@@ -269,12 +266,12 @@ public fun constructTangentCircles(point: DoubleVector2D,
     }
 }
 
-public fun sortedObstacles(currentObstacle: DubinsObstacle,
+private fun sortedObstacles(currentObstacle: DubinsObstacle,
                            obstacles: List<DubinsObstacle>): List<DubinsObstacle> {
     return obstacles.sortedBy {norm(it.center - currentObstacle.center)}//.reversed()
 }
 
-public fun tangentsAlongTheObstacle(initialCircle: Circle2D,
+private fun tangentsAlongTheObstacle(initialCircle: Circle2D,
                                     initialRoute: DubinsPath.Type,
                                     finalCircle: Circle2D,
                                     obstacle: DubinsObstacle): MutableList<DubinsTangent> {
@@ -288,7 +285,7 @@ public fun tangentsAlongTheObstacle(initialCircle: Circle2D,
     return dubinsTangents
 }
 
-public fun allFinished(paths: List<List<DubinsTangent>>,
+private fun allFinished(paths: List<List<DubinsTangent>>,
                        finalObstacle: DubinsObstacle): Boolean {
     for (path in paths) {
         if (path.last().endObstacle != finalObstacle) {
@@ -333,28 +330,28 @@ public fun findAllPaths(
         finalPoint,
         finalDirection,
         finalRadius)
-    var outputTangents = mutableMapOf<PathTypes, MutableList<MutableList<DubinsTangent>>>()
+    var path = mutableMapOf<PathTypes, MutableList<MutableList<DubinsTangent>>>()
     for (i in listOf(DubinsPath.SimpleType.L, DubinsPath.SimpleType.R)) {
         for (j in listOf(DubinsPath.SimpleType.L, DubinsPath.SimpleType.R)) {
             val finalCircle = finalCircles[j]!!
             val finalObstacle = DubinsObstacle(listOf(finalCircle))
-            outputTangents[listOf(i,
-                           DubinsPath.SimpleType.S,
-                           j)] = mutableListOf(
-                                    mutableListOf(DubinsTangent(
-                                        initialCircles[i]!!,
-                                        initialCircles[i]!!,
-                                        DubinsObstacle(listOf(initialCircles[i]!!)),
-                                        DubinsObstacle(listOf(initialCircles[i]!!)),
-                                        LineSegment2D(startingPoint, startingPoint),
-                                        listOf(i, DubinsPath.SimpleType.S, i)
-                                    )))
-            var currentObstacle = DubinsObstacle(listOf(initialCircles[i]!!))
-            while (!allFinished(outputTangents[listOf(i,
+            path[listOf(i,
+                        DubinsPath.SimpleType.S,
+                        j)] = mutableListOf(
+                                mutableListOf(DubinsTangent(
+                                    initialCircles[i]!!,
+                                    initialCircles[i]!!,
+                                    DubinsObstacle(listOf(initialCircles[i]!!)),
+                                    DubinsObstacle(listOf(initialCircles[i]!!)),
+                                    LineSegment2D(startingPoint, startingPoint),
+                                    listOf(i, DubinsPath.SimpleType.S, i)
+                                )))
+            //var currentObstacle = DubinsObstacle(listOf(initialCircles[i]!!))
+            while (!allFinished(path[listOf(i,
                     DubinsPath.SimpleType.S,
                     j)]!!, finalObstacle)) {
-                var newOutputTangents = mutableListOf<MutableList<DubinsTangent>>()
-                for (line in outputTangents[listOf(i,
+                var newPaths = mutableListOf<MutableList<DubinsTangent>>()
+                for (line in path[listOf(i,
                     DubinsPath.SimpleType.S,
                     j)]!!) {
                     var currentCircle = line.last().endCircle
@@ -439,41 +436,41 @@ public fun findAllPaths(
                                     currentObstacle
                                 )
                             }
-                            newOutputTangents.add((line + tangentsAlong + listOf(tangent)).toMutableList())
+                            newPaths.add((line + tangentsAlong + listOf(tangent)).toMutableList())
                         }
-                        outputTangents[listOf(
+                        path[listOf(
                             i,
                             DubinsPath.SimpleType.S,
                             j
-                        )] = newOutputTangents
+                        )] = newPaths
                     }
                     else {
                         // minor changes from Python code
-                        newOutputTangents.add(line)
-                        outputTangents[listOf(
+                        newPaths.add(line)
+                        path[listOf(
                             i,
                             DubinsPath.SimpleType.S,
                             j
-                        )] = newOutputTangents
+                        )] = newPaths
                     }
                 }
-                outputTangents[listOf(
+                path[listOf(
                     i,
                     DubinsPath.SimpleType.S,
                     j
-                )] = newOutputTangents
+                )] = newPaths
             }
-            for (lineId in outputTangents[listOf(
+            for (lineId in path[listOf(
                 i,
                 DubinsPath.SimpleType.S,
                 j
             )]!!.indices) {
-                val lastDirection = outputTangents[listOf(
+                val lastDirection = path[listOf(
                     i,
                     DubinsPath.SimpleType.S,
                     j
                 )]!![lineId].last().route[2]
-                outputTangents[listOf(
+                path[listOf(
                     i,
                     DubinsPath.SimpleType.S,
                     j
@@ -496,19 +493,19 @@ public fun findAllPaths(
             }
         }
     }
-    return outputTangents[listOf(
+    return path[listOf(
         DubinsPath.SimpleType.L,
         DubinsPath.SimpleType.S,
         DubinsPath.SimpleType.L
-        )]!! + outputTangents[listOf(
+        )]!! + path[listOf(
         DubinsPath.SimpleType.L,
         DubinsPath.SimpleType.S,
         DubinsPath.SimpleType.R
-        )]!! + outputTangents[listOf(
+        )]!! + path[listOf(
         DubinsPath.SimpleType.R,
         DubinsPath.SimpleType.S,
         DubinsPath.SimpleType.L
-        )]!! + outputTangents[listOf(
+        )]!! + path[listOf(
         DubinsPath.SimpleType.R,
         DubinsPath.SimpleType.S,
         DubinsPath.SimpleType.R)]!!
