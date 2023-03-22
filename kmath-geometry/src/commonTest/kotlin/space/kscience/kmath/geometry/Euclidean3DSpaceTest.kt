@@ -57,23 +57,38 @@ internal class Euclidean3DSpaceTest {
     }
 
     @Test
-    fun add() {
-        with(Euclidean3DSpace) {
-            assertVectorEquals(
-                vector(1.0, -2.0, 0.001),
-                vector(1.0, -2.0, 0.001) + zero
-            )
-            assertVectorEquals(
-                vector(8.0, -3.0, 3.001),
-                vector(1.0, 2.0, 3.0) + vector(7.0, -5.0, 0.001)
-            )
-        }
+    fun add() = with(Euclidean3DSpace) {
+        assertVectorEquals(
+            vector(1.0, -2.0, 0.001),
+            vector(1.0, -2.0, 0.001) + zero
+        )
+        assertVectorEquals(
+            vector(8.0, -3.0, 3.001),
+            vector(1.0, 2.0, 3.0) + vector(7.0, -5.0, 0.001)
+        )
     }
 
     @Test
-    fun multiply() {
-        with(Euclidean3DSpace) {
-            assertVectorEquals(vector(2.0, -4.0, 0.0), vector(1.0, -2.0, 0.0) * 2)
-        }
+    fun multiply() = with(Euclidean3DSpace) {
+        assertVectorEquals(vector(2.0, -4.0, 0.0), vector(1.0, -2.0, 0.0) * 2)
     }
+
+    @Test
+    fun vectorProduct() = with(Euclidean3DSpace) {
+        assertVectorEquals(zAxis, vectorProduct(xAxis, yAxis))
+        assertVectorEquals(zAxis, xAxis cross yAxis)
+        assertVectorEquals(-zAxis, vectorProduct(yAxis, xAxis))
+    }
+
+    @Test
+    fun doubleVectorProduct() = with(Euclidean3DSpace) {
+        val a = vector(1, 2, -3)
+        val b = vector(-1, 0, 1)
+        val c = vector(4, 5, 6)
+
+        val res = a cross (b cross c)
+        val expected = b * (a dot c) - c * (a dot b)
+        assertVectorEquals(expected, res)
+    }
+
 }

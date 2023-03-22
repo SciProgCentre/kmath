@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 ### Added
+- Generic builders for `BufferND` and `MutableBufferND`
 - `NamedMatrix` - matrix with symbol-based indexing
 - `Expression` with default arguments
 - Type-aliases for numbers like `Float64`
