@@ -32,7 +32,7 @@ jobs:
         with:
           arguments: |
             publishAllPublicationsToSpaceRepository
-            -Ppublishing.enabled=true
+            -Ppublishing.targets=all
             -Ppublishing.space.user=${{ secrets.SPACE_APP_ID }}
             -Ppublishing.space.token=${{ secrets.SPACE_APP_SECRET }}
       - name: Publish Mac Artifacts
@@ -44,6 +44,6 @@ jobs:
             publishIosX64PublicationToSpaceRepository
             publishIosArm64PublicationToSpaceRepository
             publishIosSimulatorArm64PublicationToSpaceRepository
-            -Ppublishing.enabled=true
+            -Ppublishing.targets=all
             -Ppublishing.space.user=${{ secrets.SPACE_APP_ID }}
             -Ppublishing.space.token=${{ secrets.SPACE_APP_SECRET }}
