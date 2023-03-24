@@ -12,6 +12,7 @@ import space.kscience.kmath.geometry.LineSegment
 import space.kscience.kmath.geometry.equalsLine
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 import kotlin.test.assertTrue
 
 class TangentTest {
@@ -60,18 +61,4 @@ class TangentTest {
         val c2 = Circle2D(vector(0.0, 0.0), 1.0)
         assertEquals(emptyMap(), c1.tangentsToCircle(c2))
     }
-//
-//    @Test
-//    fun nonExistingTangents() {
-//        assertFailsWith<NotImplementedError> {
-//            val c1 = Circle2D(vector(0.0, 0.0), 1.0)
-//            val c2 = Circle2D(vector(2.0, 0.0), 1.0)
-//            c1.tangentsToCircle(c2)
-//        }
-//        assertFailsWith<NotImplementedError> {
-//            val c1 = Circle2D(vector(0.0, 0.0), 1.0)
-//            val c2 = Circle2D(vector(0.5, 0.0), 1.0)
-//            c1.tangentsToCircle(c2)
-//        }
-//    }
 }

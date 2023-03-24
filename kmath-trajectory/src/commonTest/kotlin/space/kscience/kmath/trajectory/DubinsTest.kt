@@ -7,7 +7,9 @@ package space.kscience.kmath.trajectory
 
 import space.kscience.kmath.geometry.Circle2D
 import space.kscience.kmath.geometry.Euclidean2DSpace.vector
+import space.kscience.kmath.geometry.equalsFloat
 import kotlin.test.Test
+import kotlin.test.assertTrue
 
 class DubinsTest {
     @Test
@@ -31,7 +33,7 @@ class DubinsTest {
             finalRadius,
             obstacles)
         val length = pathLength(shortestPath(outputTangents))
-        println(length)
+        assertTrue(length.equalsFloat(27.2113183))
     }
 
     @Test
@@ -65,19 +67,7 @@ class DubinsTest {
             finalRadius,
             obstacles)
         val length = pathLength(shortestPath(paths))
-        println(length)
-        for (path in paths) {
-            println(pathLength(path))
-            println(path.size)
-            for (tangent in path) {
-//                println(tangent.route)
-//                println(tangent.startCircle)
-//                println(tangent.endCircle)
-//                println(Euclidean2DSpace.norm(tangent.lineSegment.end - tangent.lineSegment.begin))
-            }
-            println()
-            println()
-        }
+        assertTrue(length.equalsFloat(28.9678224))
     }
     @Test
     fun equalCircles() {
