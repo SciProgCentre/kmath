@@ -255,7 +255,6 @@ private fun constructTangentCircles(point: DoubleVector2D,
     val center1 = point + normalVectors(direction, r).first
     val center2 = point + normalVectors(direction, r).second
     val p1 = center1 - point
-    val p2 = center2 - point
     return if (atan2(p1.y, p1.x) - atan2(direction.y, direction.x) in listOf(PI/2, -3*PI/2)) {
         mapOf(DubinsPath.SimpleType.L to Circle2D(center1, r),
             DubinsPath.SimpleType.R to Circle2D(center2, r))
