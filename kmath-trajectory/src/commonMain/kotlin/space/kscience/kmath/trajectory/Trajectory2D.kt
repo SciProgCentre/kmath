@@ -17,10 +17,21 @@ import kotlin.math.atan2
 public sealed interface Trajectory2D {
     public val length: Double
 
-    public enum class Type {
-        R,
-        S,
-        L
+
+    public sealed interface Type
+
+    public sealed interface Direction: Type
+
+    public object R : Direction {
+        override fun toString(): String = "R"
+    }
+
+    public object S : Type {
+        override fun toString(): String = "L"
+    }
+
+    public object L : Direction {
+        override fun toString(): String = "L"
     }
 }
 
@@ -56,7 +67,7 @@ public data class CircleTrajectory2D(
      * Arc length in radians
      */
     val arcLength: Angle
-        get() = if (direction == Trajectory2D.Type.L) {
+        get() = if (direction == Trajectory2D.L) {
             start.bearing - end.bearing
         } else {
             end.bearing - start.bearing
@@ -67,16 +78,16 @@ public data class CircleTrajectory2D(
         circle.radius * arcLength.radians
     }
 
-    public val direction: Trajectory2D.Type by lazy {
+    public val direction: Trajectory2D.Direction by lazy {
         if (start.y < circle.center.y) {
-            if (start.bearing > Angle.pi) Trajectory2D.Type.R else Trajectory2D.Type.L
+            if (start.bearing > Angle.pi) Trajectory2D.R else Trajectory2D.L
         } else if (start.y > circle.center.y) {
-            if (start.bearing < Angle.pi) Trajectory2D.Type.R else Trajectory2D.Type.L
+            if (start.bearing < Angle.pi) Trajectory2D.R else Trajectory2D.L
         } else {
             if (start.bearing == Angle.zero) {
-                if (start.x < circle.center.x) Trajectory2D.Type.R else Trajectory2D.Type.L
+                if (start.x < circle.center.x) Trajectory2D.R else Trajectory2D.L
             } else {
-                if (start.x > circle.center.x) Trajectory2D.Type.R else Trajectory2D.Type.L
+                if (start.x > circle.center.x) Trajectory2D.R else Trajectory2D.L
             }
         }
     }
@@ -86,18 +97,17 @@ public data class CircleTrajectory2D(
             center: DoubleVector2D,
             start: DoubleVector2D,
             end: DoubleVector2D,
-            direction: Trajectory2D.Type,
+            direction: Trajectory2D.Direction,
         ): CircleTrajectory2D {
             fun calculatePose(
                 vector: DoubleVector2D,
                 theta: Angle,
-                direction: Trajectory2D.Type,
+                direction: Trajectory2D.Direction,
             ): DubinsPose2D = DubinsPose2D(
                 vector,
                 when (direction) {
-                    Trajectory2D.Type.L -> (theta - Angle.piDiv2).normalized()
-                    Trajectory2D.Type.R -> (theta + Angle.piDiv2).normalized()
-                    else -> error("S trajectory type is not allowed in circle constructor")
+                    Trajectory2D.L -> (theta - Angle.piDiv2).normalized()
+                    Trajectory2D.R -> (theta + Angle.piDiv2).normalized()
                 }
             )
 

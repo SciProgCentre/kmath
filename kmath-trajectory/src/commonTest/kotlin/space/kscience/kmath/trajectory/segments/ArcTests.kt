@@ -23,7 +23,7 @@ class ArcTests {
             circle.center,
             vector(-2.0, 0.0),
             vector(0.0, 2.0),
-            Trajectory2D.Type.R
+            Trajectory2D.R
         )
         assertEquals(circle.circumference / 4, arc.length, 1.0)
         assertEquals(0.0, arc.start.bearing.degrees)

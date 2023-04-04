@@ -38,7 +38,7 @@ class ObstacleTest {
             obstacles
         )
         val length = outputTangents.minOf { it.length }
-        assertEquals(length, 27.2113183, 1e-6)
+        assertEquals(27.2113183, length, 1e-6)
     }
 
     @Test
@@ -77,7 +77,7 @@ class ObstacleTest {
             obstacles
         )
         val length = paths.minOf { it.length }
-        assertEquals(length, 28.9678224, 1e-6)
+        assertEquals(28.9678224, length, 1e-6)
     }
 
     @Test
