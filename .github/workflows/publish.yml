@@ -41,6 +41,7 @@ jobs:
         with:
           arguments: |
             publishMacosX64PublicationToSpaceRepository
+            publishMacosArm64PublicationToSpaceRepository
             publishIosX64PublicationToSpaceRepository
             publishIosArm64PublicationToSpaceRepository
             publishIosSimulatorArm64PublicationToSpaceRepository
