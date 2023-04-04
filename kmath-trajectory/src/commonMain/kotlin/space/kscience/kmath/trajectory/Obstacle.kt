@@ -21,7 +21,8 @@ internal data class Tangent(
     val startObstacle: Obstacle,
     val endObstacle: Obstacle,
     val lineSegment: LineSegment2D,
-    val trajectoryType: List<Trajectory2D.Type>,
+    val startDirection: Trajectory2D.Direction,
+    val endDirection: Trajectory2D.Direction = startDirection
 )
 
 private class TangentPath(val tangents: List<Tangent>) {
@@ -131,7 +132,8 @@ private fun dubinsTangentsToCircles(
                             firstCircle.center + w * r1,
                             secondCircle.center + w * r2
                         ),
-                        trajectoryType = route.toList()
+                        startDirection = route.first,
+                        endDirection = route.third
                     )
                 )
             } else {
@@ -194,7 +196,8 @@ public class Obstacle(
                                     center + w * r1,
                                     other.center + w * r2
                                 ),
-                                routeType.toList()
+                                startDirection = routeType.first,
+                                endDirection = routeType.third
                             )
                         )
                     } else {
@@ -256,7 +259,8 @@ private fun Obstacle.nextTangent(circle: Circle2D, routeType: DubinsPath.Type): 
                             tangents[i - 1].lineSegment.end,
                             tangents[i - 1].lineSegment.begin
                         ),
-                        routeType.toList()
+                        startDirection = routeType.first,
+                        endDirection = routeType.third
                     )
                 } else {
                     return Tangent(
@@ -268,7 +272,8 @@ private fun Obstacle.nextTangent(circle: Circle2D, routeType: DubinsPath.Type): 
                             tangents.last().lineSegment.end,
                             tangents.last().lineSegment.begin
                         ),
-                        routeType.toList()
+                        startDirection = routeType.first,
+                        endDirection = routeType.third
                     )
                 }
             }
@@ -450,7 +455,7 @@ private fun TangentPath.toTrajectory(): CompositeTrajectory2D = CompositeTraject
                     right.startCircle.center,
                     left.lineSegment.end,
                     right.lineSegment.begin,
-                    right.trajectoryType.first()
+                    right.startDirection
                 )
             )
         }
@@ -491,7 +496,7 @@ internal fun findAllPaths(
                         Obstacle(listOf(initialCircles[i]!!)),
                         Obstacle(listOf(initialCircles[i]!!)),
                         LineSegment2D(startingPoint, startingPoint),
-                        listOf(i, Trajectory2D.S, i)
+                        i
                     )
                 )
             )
@@ -499,7 +504,7 @@ internal fun findAllPaths(
                 val newPaths = mutableListOf<TangentPath>()
                 for (tangentPath: TangentPath in currentPaths) {
                     val currentCircle = tangentPath.last().endCircle
-                    val currentDirection: Trajectory2D.Direction = tangentPath.last().trajectoryType.last()
+                    val currentDirection: Trajectory2D.Direction = tangentPath.last().endDirection
                     val currentObstacle = tangentPath.last().endObstacle
                     var nextObstacle: Obstacle? = null
                     if (currentObstacle != finalObstacle) {
@@ -583,7 +588,7 @@ internal fun findAllPaths(
             }
 
             trajectories += currentPaths.map { tangentPath ->
-                val lastDirection: Trajectory2D.Type = tangentPath.last().trajectoryType[2]
+                val lastDirection: Trajectory2D.Direction = tangentPath.last().endDirection
                 val end = finalCircles[j]!!
                 TangentPath(
                     tangentPath.tangents +
@@ -593,11 +598,8 @@ internal fun findAllPaths(
                                 Obstacle(end),
                                 Obstacle(end),
                                 LineSegment2D(finalPoint, finalPoint),
-                                listOf(
-                                    lastDirection,
-                                    Trajectory2D.S,
-                                    j
-                                )
+                                startDirection = lastDirection,
+                                endDirection = j
                             )
                 )
             }.map { it.toTrajectory() }
