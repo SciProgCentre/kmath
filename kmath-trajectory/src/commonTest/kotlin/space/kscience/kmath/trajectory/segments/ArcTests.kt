@@ -10,6 +10,7 @@ import space.kscience.kmath.geometry.Euclidean2DSpace
 import space.kscience.kmath.geometry.circumference
 import space.kscience.kmath.geometry.degrees
 import space.kscience.kmath.trajectory.CircleTrajectory2D
+import space.kscience.kmath.trajectory.Trajectory2D
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -22,7 +23,7 @@ class ArcTests {
             circle.center,
             vector(-2.0, 0.0),
             vector(0.0, 2.0),
-            CircleTrajectory2D.Direction.RIGHT
+            Trajectory2D.Type.R
         )
         assertEquals(circle.circumference / 4, arc.length, 1.0)
         assertEquals(0.0, arc.start.bearing.degrees)

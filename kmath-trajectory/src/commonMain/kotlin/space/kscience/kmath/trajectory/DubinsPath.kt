@@ -7,6 +7,8 @@ package space.kscience.kmath.trajectory
 
 import space.kscience.kmath.geometry.*
 import space.kscience.kmath.geometry.Euclidean2DSpace.distanceTo
+import space.kscience.kmath.trajectory.Trajectory2D.Type
+import space.kscience.kmath.trajectory.Trajectory2D.Type.*
 import kotlin.math.acos
 
 internal fun DubinsPose2D.getLeftCircle(radius: Double): Circle2D = getTangentCircles(radius).first
@@ -19,27 +21,21 @@ internal fun DubinsPose2D.getTangentCircles(radius: Double): Pair<Circle2D, Circ
     return Circle2D(vector(x - dX, y + dY), radius) to Circle2D(vector(x + dX, y - dY), radius)
 }
 
-internal fun leftOuterTangent(a: Circle2D, b: Circle2D): StraightTrajectory2D =
-    outerTangent(a, b, CircleTrajectory2D.Direction.LEFT)
-
-internal fun rightOuterTangent(a: Circle2D, b: Circle2D): StraightTrajectory2D = outerTangent(
-    a, b,
-    CircleTrajectory2D.Direction.RIGHT
-)
-
-private fun outerTangent(a: Circle2D, b: Circle2D, side: CircleTrajectory2D.Direction): StraightTrajectory2D =
+private fun outerTangent(from: Circle2D, to: Circle2D, direction: Type): StraightTrajectory2D =
     with(Euclidean2DSpace) {
-        val centers = StraightTrajectory2D(a.center, b.center)
-        val p1 = when (side) {
-            CircleTrajectory2D.Direction.LEFT -> vector(
-                a.center.x - a.radius * cos(centers.bearing),
-                a.center.y + a.radius * sin(centers.bearing)
+        val centers = StraightTrajectory2D(from.center, to.center)
+        val p1 = when (direction) {
+            L -> vector(
+                from.center.x - from.radius * cos(centers.bearing),
+                from.center.y + from.radius * sin(centers.bearing)
             )
 
-            CircleTrajectory2D.Direction.RIGHT -> vector(
-                a.center.x + a.radius * cos(centers.bearing),
-                a.center.y - a.radius * sin(centers.bearing)
+            R -> vector(
+                from.center.x + from.radius * cos(centers.bearing),
+                from.center.y - from.radius * sin(centers.bearing)
             )
+
+            else -> error("S trajectory type not allowed")
         }
         return StraightTrajectory2D(
             p1,
@@ -47,29 +43,25 @@ private fun outerTangent(a: Circle2D, b: Circle2D, side: CircleTrajectory2D.Dire
         )
     }
 
-internal fun leftInnerTangent(base: Circle2D, direction: Circle2D): StraightTrajectory2D? =
-    innerTangent(base, direction, CircleTrajectory2D.Direction.LEFT)
-
-internal fun rightInnerTangent(base: Circle2D, direction: Circle2D): StraightTrajectory2D? =
-    innerTangent(base, direction, CircleTrajectory2D.Direction.RIGHT)
 
 private fun innerTangent(
-    base: Circle2D,
-    direction: Circle2D,
-    side: CircleTrajectory2D.Direction,
+    from: Circle2D,
+    to: Circle2D,
+    direction: Type,
 ): StraightTrajectory2D? =
     with(Euclidean2DSpace) {
-        val centers = StraightTrajectory2D(base.center, direction.center)
-        if (centers.length < base.radius * 2) return null
-        val angle = when (side) {
-            CircleTrajectory2D.Direction.LEFT -> centers.bearing + acos(base.radius * 2 / centers.length).radians
-            CircleTrajectory2D.Direction.RIGHT -> centers.bearing - acos(base.radius * 2 / centers.length).radians
+        val centers = StraightTrajectory2D(from.center, to.center)
+        if (centers.length < from.radius * 2) return null
+        val angle = when (direction) {
+            L -> centers.bearing + acos(from.radius * 2 / centers.length).radians
+            R -> centers.bearing - acos(from.radius * 2 / centers.length).radians
+            else -> error("S trajectory type not allowed")
         }.normalized()
 
-        val dX = base.radius * sin(angle)
-        val dY = base.radius * cos(angle)
-        val p1 = vector(base.center.x + dX, base.center.y + dY)
-        val p2 = vector(direction.center.x - dX, direction.center.y - dY)
+        val dX = from.radius * sin(angle)
+        val dY = from.radius * cos(angle)
+        val p1 = vector(from.center.x + dX, from.center.y + dY)
+        val p2 = vector(to.center.x - dX, to.center.y - dY)
         return StraightTrajectory2D(p1, p2)
     }
 
@@ -77,117 +69,24 @@ private fun innerTangent(
 @Suppress("DuplicatedCode")
 public object DubinsPath {
 
-//    public class ArcType(private val type: Type){
-//        public val first: SimpleType
-//            get() {
-//                if (this.type in listOf(Type.RSR, Type.RSL, Type.RLR)) {
-//                    return SimpleType.R
-//                }
-//                else if (type in listOf(Type.LSL, Type.LSR, Type.LRL)) {
-//                    return SimpleType.L
-//                }
-//                error("Wrong DubinsPath.Type")
-//            }
-//
-//        public val last: SimpleType
-//            get() {
-//                if (type in listOf(Type.RSR, Type.LSR, Type.RLR)) {
-//                    return SimpleType.R
-//                }
-//                else if (type in listOf(Type.LSL, Type.RSL, Type.LRL)) {
-//                    return SimpleType.L
-//                }
-//                error("Wrong DubinsPath.Type")
-//            }
-//        public val intermediate: SimpleType
-//            get() {
-//                if (type == Type.RLR) {
-//                    return SimpleType.L
-//                }
-//                else if (type == Type.LRL) {
-//                    return SimpleType.R
-//                }
-//                error("This DubinsPath.Type doesn't contain intermediate arc")
-//            }
-//    }
+    public data class Type(
+        public val first: Trajectory2D.Type,
+        public val second: Trajectory2D.Type,
+        public val third: Trajectory2D.Type,
+    ) {
+        public fun toList(): List<Trajectory2D.Type> = listOf(first, second, third)
 
-    public enum class SimpleType {
-        R, S, L
-    }
+        override fun toString(): String = "${first.name}${second.name}${third.name}"
 
-    public enum class Type {
-        RLR, LRL, RSR, LSL, RSL, LSR
-    }
-
-    public fun toSimpleTypes(type: Type): List<SimpleType> {
-        when (type) {
-            Type.RLR -> {
-                return listOf(SimpleType.R, SimpleType.L, SimpleType.R)
-            }
-            Type.LRL -> {
-                return listOf(SimpleType.L, SimpleType.R, SimpleType.L)
-            }
-            Type.RSR -> {
-                return listOf(SimpleType.R, SimpleType.S, SimpleType.R)
-            }
-            Type.LSL -> {
-                return listOf(SimpleType.L, SimpleType.S, SimpleType.L)
-            }
-            Type.RSL -> {
-                return listOf(SimpleType.R, SimpleType.S, SimpleType.L)
-            }
-            Type.LSR -> {
-                return listOf(SimpleType.L, SimpleType.S, SimpleType.R)
-            }
-            else -> error("This type doesn't exist")
+        public companion object {
+            public val RLR: Type = Type(R, L, R)
+            public val LRL: Type = Type(L, R, L)
+            public val RSR: Type = Type(R, S, R)
+            public val LSL: Type = Type(L, S, L)
+            public val RSL: Type = Type(R, S, L)
+            public val LSR: Type = Type(L, S, R)
         }
     }
-
-    public fun toType(types: List<SimpleType>): Type {
-        when (types) {
-            listOf(SimpleType.R, SimpleType.L, SimpleType.R) -> {
-                return Type.RLR
-            }
-            listOf(SimpleType.L, SimpleType.R, SimpleType.L) -> {
-                return Type.LRL
-            }
-            listOf(SimpleType.R, SimpleType.S, SimpleType.R) -> {
-                return Type.RSR
-            }
-            listOf(SimpleType.L, SimpleType.S, SimpleType.L) -> {
-                return Type.LSL
-            }
-            listOf(SimpleType.R, SimpleType.S, SimpleType.L) -> {
-                return Type.RSL
-            }
-            listOf(SimpleType.L, SimpleType.S, SimpleType.R) -> {
-                return Type.LSR
-            }
-            else -> error("This type doesn't exist")
-        }
-    }
-
-//    public class PathTypes(private val inputTypes: List<SimpleType>) {
-//        public val type: Type
-//            get() {
-//                when (this.inputTypes) {
-//                    listOf(SimpleType.R, SimpleType.S, SimpleType.R) -> {
-//                        return Type.RSR
-//                    }
-//                    listOf(SimpleType.R, SimpleType.S, SimpleType.L) -> {
-//                        return Type.RSL
-//                    }
-//                    listOf(SimpleType.L, SimpleType.S, SimpleType.R) -> {
-//                        return Type.LSR
-//                    }
-//                    listOf(SimpleType.L, SimpleType.S, SimpleType.L) -> {
-//                        return Type.LSL
-//                    }
-//                    else -> error("Wrong list of SimpleTypes")
-//                }
-//            }
-//        public val chain: List<SimpleType> = this.inputTypes
-//    }
 
     /**
      * Return Dubins trajectory type or null if trajectory is not a Dubins path
@@ -197,12 +96,10 @@ public object DubinsPath {
         val a = trajectory2D.segments.first() as? CircleTrajectory2D ?: return null
         val b = trajectory2D.segments[1]
         val c = trajectory2D.segments.last() as? CircleTrajectory2D ?: return null
-        return Type.valueOf(
-            arrayOf(
-                a.direction.name[0],
-                if (b is CircleTrajectory2D) b.direction.name[0] else 'S',
-                c.direction.name[0]
-            ).toCharArray().concatToString()
+        return Type(
+            a.direction,
+            if (b is CircleTrajectory2D) b.direction else Trajectory2D.Type.S,
+            c.direction
         )
     }
 
@@ -240,9 +137,9 @@ public object DubinsPath {
                 dX = turningRadius * sin(theta)
                 dY = turningRadius * cos(theta)
                 val p2 = vector(e.center.x + dX, e.center.y + dY)
-                val a1 = CircleTrajectory2D.of(c1.center, start, p1, CircleTrajectory2D.Direction.RIGHT)
-                val a2 = CircleTrajectory2D.of(e.center, p1, p2, CircleTrajectory2D.Direction.LEFT)
-                val a3 = CircleTrajectory2D.of(c2.center, p2, end, CircleTrajectory2D.Direction.RIGHT)
+                val a1 = CircleTrajectory2D.of(c1.center, start, p1, Trajectory2D.Type.R)
+                val a2 = CircleTrajectory2D.of(e.center, p1, p2, Trajectory2D.Type.L)
+                val a3 = CircleTrajectory2D.of(c2.center, p2, end, Trajectory2D.Type.R)
                 CompositeTrajectory2D(a1, a2, a3)
             }
 
@@ -257,9 +154,9 @@ public object DubinsPath {
                 dX = turningRadius * sin(theta)
                 dY = turningRadius * cos(theta)
                 val p2 = vector(e.center.x + dX, e.center.y + dY)
-                val a1 = CircleTrajectory2D.of(c1.center, start, p1, CircleTrajectory2D.Direction.RIGHT)
-                val a2 = CircleTrajectory2D.of(e.center, p1, p2, CircleTrajectory2D.Direction.LEFT)
-                val a3 = CircleTrajectory2D.of(c2.center, p2, end, CircleTrajectory2D.Direction.RIGHT)
+                val a1 = CircleTrajectory2D.of(c1.center, start, p1, Trajectory2D.Type.R)
+                val a2 = CircleTrajectory2D.of(e.center, p1, p2, Trajectory2D.Type.L)
+                val a3 = CircleTrajectory2D.of(c2.center, p2, end, Trajectory2D.Type.R)
                 CompositeTrajectory2D(a1, a2, a3)
             }
 
@@ -284,9 +181,9 @@ public object DubinsPath {
                 dX = turningRadius * sin(theta)
                 dY = turningRadius * cos(theta)
                 val p2 = vector(e.center.x + dX, e.center.y + dY)
-                val a1 = CircleTrajectory2D.of(c1.center, start, p1, CircleTrajectory2D.Direction.LEFT)
-                val a2 = CircleTrajectory2D.of(e.center, p1, p2, CircleTrajectory2D.Direction.RIGHT)
-                val a3 = CircleTrajectory2D.of(c2.center, p2, end, CircleTrajectory2D.Direction.LEFT)
+                val a1 = CircleTrajectory2D.of(c1.center, start, p1, Trajectory2D.Type.L)
+                val a2 = CircleTrajectory2D.of(e.center, p1, p2, Trajectory2D.Type.R)
+                val a3 = CircleTrajectory2D.of(c2.center, p2, end, Trajectory2D.Type.L)
                 CompositeTrajectory2D(a1, a2, a3)
             }
 
@@ -301,9 +198,9 @@ public object DubinsPath {
                 dX = turningRadius * sin(theta)
                 dY = turningRadius * cos(theta)
                 val p2 = vector(e.center.x + dX, e.center.y + dY)
-                val a1 = CircleTrajectory2D.of(c1.center, start, p1, CircleTrajectory2D.Direction.LEFT)
-                val a2 = CircleTrajectory2D.of(e.center, p1, p2, CircleTrajectory2D.Direction.RIGHT)
-                val a3 = CircleTrajectory2D.of(c2.center, p2, end, CircleTrajectory2D.Direction.LEFT)
+                val a1 = CircleTrajectory2D.of(c1.center, start, p1, Trajectory2D.Type.L)
+                val a2 = CircleTrajectory2D.of(e.center, p1, p2, Trajectory2D.Type.R)
+                val a3 = CircleTrajectory2D.of(c2.center, p2, end, Trajectory2D.Type.L)
                 CompositeTrajectory2D(a1, a2, a3)
             }
 
@@ -313,45 +210,45 @@ public object DubinsPath {
     public fun rsr(start: DubinsPose2D, end: DubinsPose2D, turningRadius: Double): CompositeTrajectory2D {
         val c1 = start.getRightCircle(turningRadius)
         val c2 = end.getRightCircle(turningRadius)
-        val s = leftOuterTangent(c1, c2)
-        val a1 = CircleTrajectory2D.of(c1.center, start, s.start, CircleTrajectory2D.Direction.RIGHT)
-        val a3 = CircleTrajectory2D.of(c2.center, s.end, end, CircleTrajectory2D.Direction.RIGHT)
+        val s = outerTangent(c1, c2, L)
+        val a1 = CircleTrajectory2D.of(c1.center, start, s.start, Trajectory2D.Type.R)
+        val a3 = CircleTrajectory2D.of(c2.center, s.end, end, Trajectory2D.Type.R)
         return CompositeTrajectory2D(a1, s, a3)
     }
 
     public fun lsl(start: DubinsPose2D, end: DubinsPose2D, turningRadius: Double): CompositeTrajectory2D {
         val c1 = start.getLeftCircle(turningRadius)
         val c2 = end.getLeftCircle(turningRadius)
-        val s = rightOuterTangent(c1, c2)
-        val a1 = CircleTrajectory2D.of(c1.center, start, s.start, CircleTrajectory2D.Direction.LEFT)
-        val a3 = CircleTrajectory2D.of(c2.center, s.end, end, CircleTrajectory2D.Direction.LEFT)
+        val s = outerTangent(c1, c2, R)
+        val a1 = CircleTrajectory2D.of(c1.center, start, s.start, Trajectory2D.Type.L)
+        val a3 = CircleTrajectory2D.of(c2.center, s.end, end, Trajectory2D.Type.L)
         return CompositeTrajectory2D(a1, s, a3)
     }
 
     public fun rsl(start: DubinsPose2D, end: DubinsPose2D, turningRadius: Double): CompositeTrajectory2D? {
         val c1 = start.getRightCircle(turningRadius)
         val c2 = end.getLeftCircle(turningRadius)
-        val s = rightInnerTangent(c1, c2)
+        val s = innerTangent(c1, c2, R)
         if (s == null || c1.center.distanceTo(c2.center) < turningRadius * 2) return null
 
-        val a1 = CircleTrajectory2D.of(c1.center, start, s.start, CircleTrajectory2D.Direction.RIGHT)
-        val a3 = CircleTrajectory2D.of(c2.center, s.end, end, CircleTrajectory2D.Direction.LEFT)
+        val a1 = CircleTrajectory2D.of(c1.center, start, s.start, Trajectory2D.Type.R)
+        val a3 = CircleTrajectory2D.of(c2.center, s.end, end, Trajectory2D.Type.L)
         return CompositeTrajectory2D(a1, s, a3)
     }
 
     public fun lsr(start: DubinsPose2D, end: DubinsPose2D, turningRadius: Double): CompositeTrajectory2D? {
         val c1 = start.getLeftCircle(turningRadius)
         val c2 = end.getRightCircle(turningRadius)
-        val s = leftInnerTangent(c1, c2)
+        val s = innerTangent(c1, c2, L)
         if (s == null || c1.center.distanceTo(c2.center) < turningRadius * 2) return null
 
-        val a1 = CircleTrajectory2D.of(c1.center, start, s.start, CircleTrajectory2D.Direction.LEFT)
-        val a3 = CircleTrajectory2D.of(c2.center, s.end, end, CircleTrajectory2D.Direction.RIGHT)
+        val a1 = CircleTrajectory2D.of(c1.center, start, s.start, Trajectory2D.Type.L)
+        val a3 = CircleTrajectory2D.of(c2.center, s.end, end, Trajectory2D.Type.R)
         return CompositeTrajectory2D(a1, s, a3)
     }
 }
 
-public typealias PathTypes = List<DubinsPath.SimpleType>
+public typealias PathTypes = List<Type>
 
 public fun interface MaxCurvature {
     public fun compute(startPoint: PhaseVector2D): Double
