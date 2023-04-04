@@ -350,13 +350,13 @@ private fun arcLength(
     circle: Circle2D,
     point1: DoubleVector2D,
     point2: DoubleVector2D,
-    route: Trajectory2D.Type,
+    direction: Trajectory2D.Direction,
 ): Double {
     val phi1 = atan2(point1.y - circle.center.y, point1.x - circle.center.x)
     val phi2 = atan2(point2.y - circle.center.y, point2.x - circle.center.x)
     var angle = 0.0
-    when (route) {
-        Trajectory2D.Type.L -> {
+    when (direction) {
+        Trajectory2D.L -> {
             angle = if (phi2 >= phi1) {
                 phi2 - phi1
             } else {
@@ -364,16 +364,12 @@ private fun arcLength(
             }
         }
 
-        Trajectory2D.Type.R -> {
+        Trajectory2D.R -> {
             angle = if (phi2 >= phi1) {
                 2 * PI - (phi2 - phi1)
             } else {
                 -(phi2 - phi1)
             }
-        }
-
-        Trajectory2D.Type.S -> {
-            error("L or R route is expected")
         }
     }
     return circle.radius * angle
@@ -396,13 +392,13 @@ private fun constructTangentCircles(
     val p1 = center1 - point
     return if (atan2(p1.y, p1.x) - atan2(direction.y, direction.x) in listOf(PI / 2, -3 * PI / 2)) {
         mapOf(
-            Trajectory2D.Type.L to Circle2D(center1, r),
-            Trajectory2D.Type.R to Circle2D(center2, r)
+            Trajectory2D.L to Circle2D(center1, r),
+            Trajectory2D.R to Circle2D(center2, r)
         )
     } else {
         mapOf(
-            Trajectory2D.Type.L to Circle2D(center2, r),
-            Trajectory2D.Type.R to Circle2D(center1, r)
+            Trajectory2D.L to Circle2D(center2, r),
+            Trajectory2D.R to Circle2D(center1, r)
         )
     }
 }
@@ -483,8 +479,8 @@ internal fun findAllPaths(
         finalRadius
     )
     val trajectories = mutableListOf<CompositeTrajectory2D>()
-    for (i in listOf(Trajectory2D.Type.L, Trajectory2D.Type.R)) {
-        for (j in listOf(Trajectory2D.Type.L, Trajectory2D.Type.R)) {
+    for (i in listOf(Trajectory2D.L, Trajectory2D.R)) {
+        for (j in listOf(Trajectory2D.L, Trajectory2D.R)) {
             val finalCircle = finalCircles[j]!!
             val finalObstacle = Obstacle(listOf(finalCircle))
             var currentPaths: List<TangentPath> = listOf(
@@ -495,7 +491,7 @@ internal fun findAllPaths(
                         Obstacle(listOf(initialCircles[i]!!)),
                         Obstacle(listOf(initialCircles[i]!!)),
                         LineSegment2D(startingPoint, startingPoint),
-                        listOf(i, Trajectory2D.Type.S, i)
+                        listOf(i, Trajectory2D.S, i)
                     )
                 )
             )
@@ -503,13 +499,13 @@ internal fun findAllPaths(
                 val newPaths = mutableListOf<TangentPath>()
                 for (tangentPath: TangentPath in currentPaths) {
                     val currentCircle = tangentPath.last().endCircle
-                    val currentDirection = tangentPath.last().trajectoryType.last()
+                    val currentDirection: Trajectory2D.Direction = tangentPath.last().trajectoryType.last()
                     val currentObstacle = tangentPath.last().endObstacle
                     var nextObstacle: Obstacle? = null
                     if (currentObstacle != finalObstacle) {
                         val tangentToFinal = outerTangents(currentObstacle, finalObstacle)[DubinsPath.Type(
                             currentDirection,
-                            Trajectory2D.Type.S,
+                            Trajectory2D.S,
                             j
                         )]
                         for (obstacle in sortedObstacles(currentObstacle, obstacles)) {
@@ -538,7 +534,7 @@ internal fun findAllPaths(
                                         tangent.startCircle,
                                         DubinsPath.Type(
                                             currentDirection,
-                                            Trajectory2D.Type.S,
+                                            Trajectory2D.S,
                                             currentDirection
                                         ),
                                     ).lineSegment.begin,
@@ -555,7 +551,7 @@ internal fun findAllPaths(
                                         currentCircle,
                                         DubinsPath.Type(
                                             currentDirection,
-                                            Trajectory2D.Type.S,
+                                            Trajectory2D.S,
                                             currentDirection
                                         ),
                                         tangent.startCircle,
@@ -569,7 +565,7 @@ internal fun findAllPaths(
                                     currentCircle,
                                     DubinsPath.Type(
                                         currentDirection,
-                                        Trajectory2D.Type.S,
+                                        Trajectory2D.S,
                                         currentDirection
                                     ),
                                     tangent.startCircle,
@@ -599,7 +595,7 @@ internal fun findAllPaths(
                                 LineSegment2D(finalPoint, finalPoint),
                                 listOf(
                                     lastDirection,
-                                    Trajectory2D.Type.S,
+                                    Trajectory2D.S,
                                     j
                                 )
                             )
