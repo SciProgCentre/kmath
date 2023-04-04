@@ -229,6 +229,48 @@ public class Obstacle(
         }
     }
 
+    internal fun nextTangent(circle: Circle2D, direction: Trajectory2D.Direction): Tangent {
+        if (direction == boundaryRoute.first) {
+            for (i in circles.indices) {
+                if (circles[i] == circle) {
+                    return tangents[i]
+                }
+            }
+        } else {
+            for (i in circles.indices) {
+                if (circles[i] == circle) {
+                    if (i > 0) {
+                        return Tangent(
+                            circles[i],
+                            circles[i - 1],
+                            this,
+                            this,
+                            LineSegment2D(
+                                tangents[i - 1].lineSegment.end,
+                                tangents[i - 1].lineSegment.begin
+                            ),
+                            direction
+                        )
+                    } else {
+                        return Tangent(
+                            circles[0],
+                            circles.last(),
+                            this,
+                            this,
+                            LineSegment2D(
+                                tangents.last().lineSegment.end,
+                                tangents.last().lineSegment.begin
+                            ),
+                            direction
+                        )
+                    }
+                }
+            }
+        }
+
+        error("next tangent not found")
+    }
+
     override fun equals(other: Any?): Boolean {
         if (other == null || other !is Obstacle) return false
         return circles == other.circles
@@ -237,50 +279,6 @@ public class Obstacle(
     override fun hashCode(): Int {
         return circles.hashCode()
     }
-}
-
-private fun Obstacle.nextTangent(circle: Circle2D, routeType: DubinsPath.Type): Tangent {
-    if (routeType == boundaryRoute) {
-        for (i in circles.indices) {
-            if (circles[i] == circle) {
-                return tangents[i]
-            }
-        }
-    } else {
-        for (i in circles.indices) {
-            if (circles[i] == circle) {
-                if (i > 0) {
-                    return Tangent(
-                        circles[i],
-                        circles[i - 1],
-                        this,
-                        this,
-                        LineSegment2D(
-                            tangents[i - 1].lineSegment.end,
-                            tangents[i - 1].lineSegment.begin
-                        ),
-                        startDirection = routeType.first,
-                        endDirection = routeType.third
-                    )
-                } else {
-                    return Tangent(
-                        circles[0],
-                        circles.last(),
-                        this,
-                        this,
-                        LineSegment2D(
-                            tangents.last().lineSegment.end,
-                            tangents.last().lineSegment.begin
-                        ),
-                        startDirection = routeType.first,
-                        endDirection = routeType.third
-                    )
-                }
-            }
-        }
-    }
-
-    error("next tangent not found")
 }
 
 public fun Obstacle(vararg circles: Circle2D): Obstacle = Obstacle(listOf(*circles))
@@ -417,15 +415,15 @@ private fun sortedObstacles(
 
 private fun tangentsAlongTheObstacle(
     initialCircle: Circle2D,
-    initialRoute: DubinsPath.Type,
+    direction: Trajectory2D.Direction,
     finalCircle: Circle2D,
     obstacle: Obstacle,
 ): List<Tangent> {
     val dubinsTangents = mutableListOf<Tangent>()
-    var tangent = obstacle.nextTangent(initialCircle, initialRoute)
+    var tangent = obstacle.nextTangent(initialCircle, direction)
     dubinsTangents.add(tangent)
     while (tangent.endCircle != finalCircle) {
-        tangent = obstacle.nextTangent(tangent.endCircle, initialRoute)
+        tangent = obstacle.nextTangent(tangent.endCircle, direction)
         dubinsTangents.add(tangent)
     }
     return dubinsTangents
@@ -471,7 +469,7 @@ internal fun findAllPaths(
     finalRadius: Double,
     obstacles: List<Obstacle>,
 ): List<CompositeTrajectory2D> {
-    fun DubinsPose2D.direction() = vector(cos(bearing),sin(bearing))
+    fun DubinsPose2D.direction() = vector(cos(bearing), sin(bearing))
 
     val initialCircles = constructTangentCircles(
         start,
@@ -537,11 +535,7 @@ internal fun findAllPaths(
                                     tangentPath.last().lineSegment.end,
                                     tangent.startObstacle.nextTangent(
                                         tangent.startCircle,
-                                        DubinsPath.Type(
-                                            currentDirection,
-                                            Trajectory2D.S,
-                                            currentDirection
-                                        ),
+                                        currentDirection
                                     ).lineSegment.begin,
                                     currentDirection
                                 )
@@ -554,11 +548,7 @@ internal fun findAllPaths(
                                 tangentsAlong = if (lengthCalculated > lengthMaxPossible) {
                                     tangentsAlongTheObstacle(
                                         currentCircle,
-                                        DubinsPath.Type(
-                                            currentDirection,
-                                            Trajectory2D.S,
-                                            currentDirection
-                                        ),
+                                        currentDirection,
                                         tangent.startCircle,
                                         currentObstacle
                                     )
@@ -568,11 +558,7 @@ internal fun findAllPaths(
                             } else {
                                 tangentsAlong = tangentsAlongTheObstacle(
                                     currentCircle,
-                                    DubinsPath.Type(
-                                        currentDirection,
-                                        Trajectory2D.S,
-                                        currentDirection
-                                    ),
+                                    currentDirection,
                                     tangent.startCircle,
                                     currentObstacle
                                 )
