@@ -23,7 +23,7 @@ internal data class Tangent(
     val lineSegment: LineSegment2D,
     val startDirection: Trajectory2D.Direction,
     val endDirection: Trajectory2D.Direction = startDirection,
-)
+): LineSegment2D by lineSegment
 
 private class TangentPath(val tangents: List<Tangent>) {
     fun last() = tangents.last()
@@ -128,7 +128,7 @@ private fun dubinsTangentsToCircles(
                         endCircle = secondCircle,
                         startObstacle = firstObstacle,
                         endObstacle = secondObstacle,
-                        lineSegment = LineSegment2D(
+                        lineSegment = LineSegment(
                             firstCircle.center + w * r1,
                             secondCircle.center + w * r2
                         ),
@@ -192,7 +192,7 @@ public class Obstacle(
                                 other,
                                 this@Obstacle,
                                 this@Obstacle,
-                                LineSegment2D(
+                                LineSegment(
                                     center + w * r1,
                                     other.center + w * r2
                                 ),
@@ -245,7 +245,7 @@ public class Obstacle(
                             circles[i - 1],
                             this,
                             this,
-                            LineSegment2D(
+                            LineSegment(
                                 tangents[i - 1].lineSegment.end,
                                 tangents[i - 1].lineSegment.begin
                             ),
@@ -257,7 +257,7 @@ public class Obstacle(
                             circles.last(),
                             this,
                             this,
-                            LineSegment2D(
+                            LineSegment(
                                 tangents.last().lineSegment.end,
                                 tangents.last().lineSegment.begin
                             ),
@@ -493,7 +493,7 @@ internal fun findAllPaths(
                         initialCircles[i]!!,
                         Obstacle(listOf(initialCircles[i]!!)),
                         Obstacle(listOf(initialCircles[i]!!)),
-                        LineSegment2D(start, start),
+                        LineSegment(start, start),
                         i
                     )
                 )
@@ -582,7 +582,7 @@ internal fun findAllPaths(
                                 end,
                                 Obstacle(end),
                                 Obstacle(end),
-                                LineSegment2D(finish, finish),
+                                LineSegment(finish, finish),
                                 startDirection = lastDirection,
                                 endDirection = j
                             )

@@ -50,7 +50,7 @@ public data class StraightTrajectory2D(
     public val bearing: Angle get() = (atan2(end.x - start.x, end.y - start.y).radians).normalized()
 }
 
-public fun StraightTrajectory2D.toSegment(): LineSegment<Vector2D<Double>> = LineSegment2D(start, end)
+public fun StraightTrajectory2D.toSegment(): LineSegment<Vector2D<Double>> = LineSegment(start, end)
 
 /**
  * An arc segment
