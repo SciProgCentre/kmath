@@ -69,7 +69,7 @@ internal fun Circle2D.tangentsToCircle(
                 } else {
                     angle1 - r2.sign * atan2(r.absoluteValue, l)
                 }
-                val w = Euclidean2DSpace.vector(-cos(angle2), sin(angle2))
+                val w = vector(-cos(angle2), sin(angle2))
                 put(
                     route,
                     LineSegment(
@@ -412,7 +412,7 @@ private fun sortedObstacles(
     currentObstacle: Obstacle,
     obstacles: List<Obstacle>,
 ): List<Obstacle> {
-    return obstacles.sortedBy { norm(it.center - currentObstacle.center) }//.reversed()
+    return obstacles.sortedBy { norm(it.center - currentObstacle.center) }
 }
 
 private fun tangentsAlongTheObstacle(
@@ -580,7 +580,6 @@ internal fun findAllPaths(
                             newPaths.add(TangentPath(tangentPath.tangents + tangentsAlong + tangent))
                         }
                     } else {
-                        // minor changes from Python code
                         newPaths.add(tangentPath)
                     }
                 }
