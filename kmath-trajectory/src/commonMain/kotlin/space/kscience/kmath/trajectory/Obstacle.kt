@@ -22,7 +22,7 @@ internal data class Tangent(
     val endObstacle: Obstacle,
     val lineSegment: LineSegment2D,
     val startDirection: Trajectory2D.Direction,
-    val endDirection: Trajectory2D.Direction = startDirection
+    val endDirection: Trajectory2D.Direction = startDirection,
 )
 
 private class TangentPath(val tangents: List<Tangent>) {
@@ -465,22 +465,22 @@ private fun TangentPath.toTrajectory(): CompositeTrajectory2D = CompositeTraject
 )
 
 internal fun findAllPaths(
-    startingPoint: DoubleVector2D,
-    startingDirection: DoubleVector2D,
+    start: DubinsPose2D,
     startingRadius: Double,
-    finalPoint: DoubleVector2D,
-    finalDirection: DoubleVector2D,
+    finish: DubinsPose2D,
     finalRadius: Double,
     obstacles: List<Obstacle>,
 ): List<CompositeTrajectory2D> {
+    fun DubinsPose2D.direction() = vector(cos(bearing),sin(bearing))
+
     val initialCircles = constructTangentCircles(
-        startingPoint,
-        startingDirection,
+        start,
+        start.direction(),
         startingRadius
     )
     val finalCircles = constructTangentCircles(
-        finalPoint,
-        finalDirection,
+        finish,
+        finish.direction(),
         finalRadius
     )
     val trajectories = mutableListOf<CompositeTrajectory2D>()
@@ -495,7 +495,7 @@ internal fun findAllPaths(
                         initialCircles[i]!!,
                         Obstacle(listOf(initialCircles[i]!!)),
                         Obstacle(listOf(initialCircles[i]!!)),
-                        LineSegment2D(startingPoint, startingPoint),
+                        LineSegment2D(start, start),
                         i
                     )
                 )
@@ -596,7 +596,7 @@ internal fun findAllPaths(
                                 end,
                                 Obstacle(end),
                                 Obstacle(end),
-                                LineSegment2D(finalPoint, finalPoint),
+                                LineSegment2D(finish, finish),
                                 startDirection = lastDirection,
                                 endDirection = j
                             )

@@ -29,11 +29,9 @@ class ObstacleTest {
         )
 
         val outputTangents = findAllPaths(
-            startPoint,
-            startDirection,
+            DubinsPose2D.of(startPoint, startDirection),
             startRadius,
-            finalPoint,
-            finalDirection,
+            DubinsPose2D.of(finalPoint, finalDirection),
             finalRadius,
             obstacles
         )
@@ -68,11 +66,9 @@ class ObstacleTest {
             )
         )
         val paths = findAllPaths(
-            startPoint,
-            startDirection,
+            DubinsPose2D.of(startPoint, startDirection),
             startRadius,
-            finalPoint,
-            finalDirection,
+            DubinsPose2D.of(finalPoint, finalDirection),
             finalRadius,
             obstacles
         )

@@ -3,6 +3,7 @@
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 @file:UseSerializers(Euclidean2DSpace.VectorSerializer::class)
+
 package space.kscience.kmath.trajectory
 
 import kotlinx.serialization.KSerializer
@@ -22,6 +23,19 @@ import kotlin.math.atan2
 public interface DubinsPose2D : DoubleVector2D {
     public val coordinates: DoubleVector2D
     public val bearing: Angle
+
+    public companion object {
+        public fun bearingToVector(bearing: Angle): Vector2D<Double> =
+            Euclidean2DSpace.vector(cos(bearing), sin(bearing))
+
+        public fun vectorToBearing(vector2D: DoubleVector2D): Angle {
+            require(vector2D.x != 0.0 || vector2D.y != 0.0) { "Can't get bearing of zero vector" }
+            return atan2(vector2D.y, vector2D.x).radians
+        }
+
+        public fun of(point: DoubleVector2D, direction: DoubleVector2D): DubinsPose2D =
+            DubinsPose2D(point, vectorToBearing(direction))
+    }
 }
 
 @Serializable
@@ -37,12 +51,12 @@ public class PhaseVector2D(
 private class DubinsPose2DImpl(
     override val coordinates: DoubleVector2D,
     override val bearing: Angle,
-) : DubinsPose2D, DoubleVector2D by coordinates{
+) : DubinsPose2D, DoubleVector2D by coordinates {
 
     override fun toString(): String = "DubinsPose2D(x=$x, y=$y, bearing=$bearing)"
 }
 
-public object DubinsPose2DSerializer: KSerializer<DubinsPose2D>{
+public object DubinsPose2DSerializer : KSerializer<DubinsPose2D> {
     private val proxySerializer = DubinsPose2DImpl.serializer()
 
     override val descriptor: SerialDescriptor
