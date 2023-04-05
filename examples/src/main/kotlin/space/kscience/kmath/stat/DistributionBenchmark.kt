@@ -10,6 +10,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
 import org.apache.commons.rng.sampling.distribution.BoxMullerNormalizedGaussianSampler
 import org.apache.commons.rng.simple.RandomSource
+import space.kscience.kmath.random.RandomGenerator
 import space.kscience.kmath.samplers.GaussianSampler
 import java.time.Duration
 import java.time.Instant
@@ -35,7 +36,7 @@ private suspend fun runKMathChained(): Duration {
     return Duration.between(startTime, Instant.now())
 }
 
-private fun runApacheDirect(): Duration {
+private fun runCMDirect(): Duration {
     val rng = RandomSource.create(RandomSource.MT, 123L)
 
     val sampler = CMGaussianSampler.of(
@@ -64,7 +65,7 @@ private fun runApacheDirect(): Duration {
  * Comparing chain sampling performance with direct sampling performance
  */
 fun main(): Unit = runBlocking(Dispatchers.Default) {
-    val directJob = async { runApacheDirect() }
+    val directJob = async { runCMDirect() }
     val chainJob = async { runKMathChained() }
     println("KMath Chained: ${chainJob.await()}")
     println("Apache Direct: ${directJob.await()}")

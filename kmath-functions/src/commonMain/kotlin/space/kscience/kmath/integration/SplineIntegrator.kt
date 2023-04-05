@@ -65,9 +65,9 @@ public class SplineIntegrator<T : Comparable<T>>(
             DoubleBuffer(numPoints) { i -> range.start + i * step }
         }
 
-        val values = nodes.map(bufferFactory) { integrand.function(it) }
+        val values = nodes.mapToBuffer(bufferFactory) { integrand.function(it) }
         val polynomials = interpolator.interpolatePolynomials(
-            nodes.map(bufferFactory) { number(it) },
+            nodes.mapToBuffer(bufferFactory) { number(it) },
             values
         )
         val res = polynomials.integrate(algebra, number(range.start)..number(range.endInclusive))
@@ -93,7 +93,7 @@ public object DoubleSplineIntegrator : UnivariateIntegrator<Double> {
             DoubleBuffer(numPoints) { i -> range.start + i * step }
         }
 
-        val values = nodes.map { integrand.function(it) }
+        val values = nodes.mapToBuffer(::DoubleBuffer) { integrand.function(it) }
         val polynomials = interpolator.interpolatePolynomials(nodes, values)
         val res = polynomials.integrate(DoubleField, range)
         return integrand + IntegrandValue(res) + IntegrandCallsPerformed(integrand.calls + nodes.size)

@@ -6,6 +6,11 @@ description = "JetBrains Multik connector"
 
 val multikVersion: String by rootProject.extra
 
+kscience {
+    jvm()
+    js()
+}
+
 kotlin{
     sourceSets{
         commonMain{

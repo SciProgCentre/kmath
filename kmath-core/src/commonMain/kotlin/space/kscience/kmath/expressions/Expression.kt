@@ -48,6 +48,10 @@ public interface DoubleExpression : Expression<Double> {
      * @return the value.
      */
     public operator fun invoke(arguments: DoubleArray): Double
+
+    public companion object{
+        internal val EMPTY_DOUBLE_ARRAY = DoubleArray(0)
+    }
 }
 
 /**
@@ -73,6 +77,10 @@ public interface IntExpression : Expression<Int> {
      * @return the value.
      */
     public operator fun invoke(arguments: IntArray): Int
+
+    public companion object{
+        internal val EMPTY_INT_ARRAY = IntArray(0)
+    }
 }
 
 /**
@@ -98,6 +106,10 @@ public interface LongExpression : Expression<Long> {
      * @return the value.
      */
     public operator fun invoke(arguments: LongArray): Long
+
+    public companion object{
+        internal val EMPTY_LONG_ARRAY = LongArray(0)
+    }
 }
 
 /**
@@ -145,7 +157,7 @@ public operator fun <T> Expression<T>.invoke(vararg pairs: Pair<String, T>): T =
     }
 )
 
-private val EMPTY_DOUBLE_ARRAY = DoubleArray(0)
+
 
 /**
  * Calls this expression without providing any arguments.
@@ -153,7 +165,7 @@ private val EMPTY_DOUBLE_ARRAY = DoubleArray(0)
  * @return a value.
  */
 @UnstableKMathAPI
-public operator fun DoubleExpression.invoke(): Double = this(EMPTY_DOUBLE_ARRAY)
+public operator fun DoubleExpression.invoke(): Double = this(DoubleExpression.EMPTY_DOUBLE_ARRAY)
 
 /**
  * Calls this expression from arguments.
@@ -164,15 +176,13 @@ public operator fun DoubleExpression.invoke(): Double = this(EMPTY_DOUBLE_ARRAY)
 @UnstableKMathAPI
 public operator fun DoubleExpression.invoke(vararg arguments: Double): Double = this(arguments)
 
-private val EMPTY_INT_ARRAY = IntArray(0)
-
 /**
  * Calls this expression without providing any arguments.
  *
  * @return a value.
  */
 @UnstableKMathAPI
-public operator fun IntExpression.invoke(): Int = this(EMPTY_INT_ARRAY)
+public operator fun IntExpression.invoke(): Int = this(IntExpression.EMPTY_INT_ARRAY)
 
 /**
  * Calls this expression from arguments.
@@ -183,15 +193,13 @@ public operator fun IntExpression.invoke(): Int = this(EMPTY_INT_ARRAY)
 @UnstableKMathAPI
 public operator fun IntExpression.invoke(vararg arguments: Int): Int = this(arguments)
 
-private val EMPTY_LONG_ARRAY = LongArray(0)
-
 /**
  * Calls this expression without providing any arguments.
  *
  * @return a value.
  */
 @UnstableKMathAPI
-public operator fun LongExpression.invoke(): Long = this(EMPTY_LONG_ARRAY)
+public operator fun LongExpression.invoke(): Long = this(LongExpression.EMPTY_LONG_ARRAY)
 
 /**
  * Calls this expression from arguments.

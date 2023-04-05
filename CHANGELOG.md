@@ -2,11 +2,19 @@
 
 ## [Unreleased]
 ### Added
+- Generic builders for `BufferND` and `MutableBufferND`
+- `NamedMatrix` - matrix with symbol-based indexing
+- `Expression` with default arguments
+- Type-aliases for numbers like `Float64`
 - 2D optimal trajectory computation in a separate module `kmath-trajectory`
 - Autodiff for generic algebra elements in core!
 - Algebra now has an obligatory `bufferFactory` (#477).
 
 ### Changed
+- Trajectory use type-safe angles
+- Tensor operations switched to prefix notation
+- Row-wise and column-wise ND shapes in the core
+- Shape is read-only
 - Major refactor of tensors (only minor API changes)
 - Kotlin 1.7.20
 - `LazyStructure` `deffered` -> `async` to comply with coroutines code style
@@ -16,6 +24,8 @@
 ### Deprecated
 
 ### Removed
+- Trajectory moved to https://github.com/SciProgCentre/maps-kt
+- Polynomials moved to https://github.com/SciProgCentre/kmath-polynomial
 
 ### Fixed
 

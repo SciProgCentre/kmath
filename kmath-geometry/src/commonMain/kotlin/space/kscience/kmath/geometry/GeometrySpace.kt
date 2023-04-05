@@ -21,4 +21,11 @@ public interface GeometrySpace<V : Vector> : Group<V>, ScaleOperations<V>, Norm<
      * Scalar product
      */
     public infix fun V.dot(other: V): Double
+
+    public companion object{
+        /**
+         * Default precision for geometry objects comparison
+         */
+        internal const val DEFAULT_PRECISION = 1e-6
+    }
 }

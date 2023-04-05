@@ -3,9 +3,12 @@
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
+@file:OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
+
 package space.kscience.kmath.coroutines
 
 import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.channels.produce
 import kotlinx.coroutines.flow.*
 
@@ -55,7 +58,7 @@ public suspend fun <T> AsyncFlow<T>.collect(concurrency: Int, collector: FlowCol
 
     coroutineScope {
         //Starting up to N deferred coroutines ahead of time
-        val channel = produce(capacity = concurrency - 1) {
+        val channel: ReceiveChannel<LazyDeferred<T>> = produce(capacity = concurrency - 1) {
             deferredFlow.collect { value ->
                 value.start(this@coroutineScope)
                 send(value)
@@ -81,9 +84,7 @@ public suspend fun <T> AsyncFlow<T>.collect(concurrency: Int, collector: FlowCol
 public suspend inline fun <T> AsyncFlow<T>.collect(
     concurrency: Int,
     crossinline action: suspend (value: T) -> Unit,
-): Unit = collect(concurrency, object : FlowCollector<T> {
-    override suspend fun emit(value: T): Unit = action(value)
-})
+): Unit = collect(concurrency, FlowCollector<T> { value -> action(value) })
 
 public inline fun <T, R> Flow<T>.mapParallel(
     dispatcher: CoroutineDispatcher = Dispatchers.Default,

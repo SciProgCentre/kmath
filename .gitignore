@@ -3,9 +3,8 @@ build/
 out/
 
 .idea/
-
-
 .vscode/
+
 
 # Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)
 !gradle-wrapper.jar
@@ -19,4 +18,5 @@ out/
 
 !/.idea/copyright/
 !/.idea/scopes/
-/kotlin-js-store/yarn.lock
+/gradle/yarn.lock
+

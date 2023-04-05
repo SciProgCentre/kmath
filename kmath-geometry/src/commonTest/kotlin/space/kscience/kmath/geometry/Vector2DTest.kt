@@ -5,6 +5,7 @@
 
 package space.kscience.kmath.geometry
 
+
 import space.kscience.kmath.operations.toList
 import kotlin.test.Test
 import kotlin.test.assertEquals

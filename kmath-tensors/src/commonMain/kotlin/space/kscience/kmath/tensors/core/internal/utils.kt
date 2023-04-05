@@ -5,24 +5,25 @@
 
 package space.kscience.kmath.tensors.core.internal
 
-import space.kscience.kmath.nd.as1D
+import space.kscience.kmath.misc.PerformancePitfall
+import space.kscience.kmath.nd.asList
+import space.kscience.kmath.nd.last
 import space.kscience.kmath.operations.DoubleBufferOps.Companion.map
-import space.kscience.kmath.operations.toMutableList
+import space.kscience.kmath.random.RandomGenerator
 import space.kscience.kmath.samplers.GaussianSampler
-import space.kscience.kmath.stat.RandomGenerator
 import space.kscience.kmath.structures.DoubleBuffer
 import space.kscience.kmath.tensors.core.BufferedTensor
 import space.kscience.kmath.tensors.core.DoubleTensor
 import kotlin.math.*
 
-internal fun getRandomNormals(n: Int, seed: Long): DoubleBuffer {
+internal fun DoubleBuffer.Companion.randomNormals(n: Int, seed: Long): DoubleBuffer {
     val distribution = GaussianSampler(0.0, 1.0)
     val generator = RandomGenerator.default(seed)
     return distribution.sample(generator).nextBufferBlocking(n)
 }
 
-internal fun getRandomUnitVector(n: Int, seed: Long): DoubleBuffer {
-    val unnorm: DoubleBuffer = getRandomNormals(n, seed)
+internal fun DoubleBuffer.Companion.randomUnitVector(n: Int, seed: Long): DoubleBuffer {
+    val unnorm: DoubleBuffer = randomNormals(n, seed)
     val norm = sqrt(unnorm.array.sumOf { it * it })
     return unnorm.map { it / norm }
 }
@@ -67,7 +68,8 @@ internal fun format(value: Double, digits: Int = 4): String = buildString {
     repeat(fLength - res.length) { append(' ') }
 }
 
-internal fun DoubleTensor.toPrettyString(): String = buildString {
+@OptIn(PerformancePitfall::class)
+public fun DoubleTensor.toPrettyString(): String = buildString {
     var offset = 0
     val shape = this@toPrettyString.shape
     val linearStructure = this@toPrettyString.indices
@@ -85,14 +87,14 @@ internal fun DoubleTensor.toPrettyString(): String = buildString {
             charOffset += 1
         }
 
-        val values = vector.as1D().toMutableList().map(::format)
+        val values = vector.elements().map { format(it.second) }
 
         values.joinTo(this, separator = ", ")
 
         append(']')
         charOffset -= 1
 
-        index.reversed().zip(shape.reversed()).drop(1).forEach { (ind, maxInd) ->
+        index.reversed().zip(shape.asList().reversed()).drop(1).forEach { (ind, maxInd) ->
             if (ind != maxInd - 1) {
                 return@forEach
             }
@@ -101,7 +103,7 @@ internal fun DoubleTensor.toPrettyString(): String = buildString {
         }
 
         offset += vectorSize
-        if (this@toPrettyString.linearSize == offset) {
+        if (this@toPrettyString.indices.linearSize == offset) {
             break
         }
 

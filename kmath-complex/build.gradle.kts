@@ -3,14 +3,12 @@ plugins {
 }
 
 kscience {
+    jvm()
+    js()
     native()
-}
 
-kotlin.sourceSets {
-    commonMain {
-        dependencies {
-            api(project(":kmath-core"))
-        }
+    dependencies {
+        api(projects.kmathCore)
     }
 }
 

@@ -14,6 +14,7 @@ import org.jetbrains.kotlinx.multik.api.stat.Statistics
 import org.jetbrains.kotlinx.multik.ndarray.data.*
 import org.jetbrains.kotlinx.multik.ndarray.operations.*
 import space.kscience.kmath.misc.PerformancePitfall
+import space.kscience.kmath.misc.UnsafeKMathAPI
 import space.kscience.kmath.nd.*
 import space.kscience.kmath.operations.*
 import space.kscience.kmath.tensors.api.Tensor
@@ -30,21 +31,22 @@ public abstract class MultikTensorAlgebra<T, A : Ring<T>>(
     protected val multikLinAl: LinAlg = multikEngine.getLinAlg()
     protected val multikStat: Statistics = multikEngine.getStatistics()
 
-    override fun structureND(shape: Shape, initializer: A.(IntArray) -> T): MultikTensor<T> {
-        val strides = DefaultStrides(shape)
+    @OptIn(UnsafeKMathAPI::class)
+    override fun structureND(shape: ShapeND, initializer: A.(IntArray) -> T): MultikTensor<T> {
+        val strides = ColumnStrides(shape)
         val memoryView = initMemoryView<T>(strides.linearSize, type)
         strides.asSequence().forEachIndexed { linearIndex, tensorIndex ->
             memoryView[linearIndex] = elementAlgebra.initializer(tensorIndex)
         }
-        return MultikTensor(NDArray(memoryView, shape = shape, dim = DN(shape.size)))
+        return MultikTensor(NDArray(memoryView, shape = shape.asArray(), dim = DN(shape.size)))
     }
 
-    @OptIn(PerformancePitfall::class)
+    @OptIn(PerformancePitfall::class, UnsafeKMathAPI::class)
     override fun StructureND<T>.map(transform: A.(T) -> T): MultikTensor<T> = if (this is MultikTensor) {
         val data = initMemoryView<T>(array.size, type)
         var count = 0
         for (el in array) data[count++] = elementAlgebra.transform(el)
-        NDArray(data, shape = shape, dim = array.dim).wrap()
+        NDArray(data, shape = shape.asArray(), dim = array.dim).wrap()
     } else {
         structureND(shape) { index ->
             transform(get(index))
@@ -75,6 +77,7 @@ public abstract class MultikTensorAlgebra<T, A : Ring<T>>(
     /**
      * Transform a structure element-by element in place.
      */
+    @OptIn(PerformancePitfall::class)
     public inline fun <T> MutableStructureND<T>.mapIndexedInPlace(operation: (index: IntArray, t: T) -> T): Unit {
         if (this is MultikTensor) {
             array.multiIndices.iterator().forEach {
@@ -106,10 +109,11 @@ public abstract class MultikTensorAlgebra<T, A : Ring<T>>(
      * Convert a tensor to [MultikTensor] if necessary. If tensor is converted, changes on the resulting tensor
      * are not reflected back onto the source
      */
+    @OptIn(UnsafeKMathAPI::class, PerformancePitfall::class)
     public fun StructureND<T>.asMultik(): MultikTensor<T> = if (this is MultikTensor) {
         this
     } else {
-        val res = mk.zeros<T, DN>(shape, type).asDNArray()
+        val res = mk.zeros<T, DN>(shape.asArray(), type).asDNArray()
         for (index in res.multiIndices) {
             res[index] = this[index]
         }
@@ -118,7 +122,8 @@ public abstract class MultikTensorAlgebra<T, A : Ring<T>>(
 
     public fun MutableMultiArray<T, *>.wrap(): MultikTensor<T> = MultikTensor(this.asDNArray())
 
-    override fun StructureND<T>.valueOrNull(): T? = if (shape contentEquals intArrayOf(1)) {
+    @OptIn(PerformancePitfall::class)
+    override fun StructureND<T>.valueOrNull(): T? = if (shape contentEquals ShapeND(1)) {
         get(intArrayOf(0))
     } else null
 
@@ -139,6 +144,7 @@ public abstract class MultikTensorAlgebra<T, A : Ring<T>>(
         }
     }
 
+    @OptIn(PerformancePitfall::class)
     override fun Tensor<T>.plusAssign(arg: StructureND<T>) {
         if (this is MultikTensor) {
             array.plusAssign(arg.asMultik().array)
@@ -163,6 +169,7 @@ public abstract class MultikTensorAlgebra<T, A : Ring<T>>(
         }
     }
 
+    @OptIn(PerformancePitfall::class)
     override fun Tensor<T>.minusAssign(arg: StructureND<T>) {
         if (this is MultikTensor) {
             array.minusAssign(arg.asMultik().array)
@@ -188,6 +195,7 @@ public abstract class MultikTensorAlgebra<T, A : Ring<T>>(
         }
     }
 
+    @OptIn(PerformancePitfall::class)
     override fun Tensor<T>.timesAssign(arg: StructureND<T>) {
         if (this is MultikTensor) {
             array.timesAssign(arg.asMultik().array)
@@ -201,13 +209,13 @@ public abstract class MultikTensorAlgebra<T, A : Ring<T>>(
 
     override fun Tensor<T>.getTensor(i: Int): MultikTensor<T> = asMultik().array.mutableView(i).wrap()
 
-    override fun Tensor<T>.transposed(i: Int, j: Int): MultikTensor<T> = asMultik().array.transpose(i, j).wrap()
+    override fun StructureND<T>.transposed(i: Int, j: Int): MultikTensor<T> = asMultik().array.transpose(i, j).wrap()
 
-    override fun Tensor<T>.view(shape: IntArray): MultikTensor<T> {
-        require(shape.all { it > 0 })
-        require(shape.fold(1, Int::times) == this.shape.size) {
+    override fun Tensor<T>.view(shape: ShapeND): MultikTensor<T> {
+        require(shape.asList().all { it > 0 })
+        require(shape.linearSize == this.shape.size) {
             "Cannot reshape array of size ${this.shape.size} into a new shape ${
-                shape.joinToString(
+                shape.asList().joinToString(
                     prefix = "(",
                     postfix = ")"
                 )
@@ -215,10 +223,11 @@ public abstract class MultikTensorAlgebra<T, A : Ring<T>>(
         }
 
         val mt = asMultik().array
-        return if (mt.shape.contentEquals(shape)) {
+        return if (ShapeND(mt.shape).contentEquals(shape)) {
             mt
         } else {
-            NDArray(mt.data, mt.offset, shape, dim = DN(shape.size), base = mt.base ?: mt)
+            @OptIn(UnsafeKMathAPI::class)
+            NDArray(mt.data, mt.offset, shape.asArray(), dim = DN(shape.size), base = mt.base ?: mt)
         }.wrap()
     }
 
@@ -241,7 +250,7 @@ public abstract class MultikTensorAlgebra<T, A : Ring<T>>(
             TODO("Not implemented for broadcasting")
         }
 
-    override fun diagonalEmbedding(diagonalEntries: Tensor<T>, offset: Int, dim1: Int, dim2: Int): MultikTensor<T> {
+    override fun diagonalEmbedding(diagonalEntries: StructureND<T>, offset: Int, dim1: Int, dim2: Int): MultikTensor<T> {
 
         TODO("Diagonal embedding not implemented")
     }
@@ -284,8 +293,9 @@ public abstract class MultikDivisionTensorAlgebra<T, A : Field<T>>(
     multikEngine: Engine,
 ) : MultikTensorAlgebra<T, A>(multikEngine), TensorPartialDivisionAlgebra<T, A> where T : Number, T : Comparable<T> {
 
+    @OptIn(UnsafeKMathAPI::class)
     override fun T.div(arg: StructureND<T>): MultikTensor<T> =
-        Multik.ones<T, DN>(arg.shape, type).apply { divAssign(arg.asMultik().array) }.wrap()
+        Multik.ones<T, DN>(arg.shape.asArray(), type).apply { divAssign(arg.asMultik().array) }.wrap()
 
     override fun StructureND<T>.div(arg: T): MultikTensor<T> =
         asMultik().array.div(arg).wrap()
@@ -301,6 +311,7 @@ public abstract class MultikDivisionTensorAlgebra<T, A : Field<T>>(
         }
     }
 
+    @OptIn(PerformancePitfall::class)
     override fun Tensor<T>.divAssign(arg: StructureND<T>) {
         if (this is MultikTensor) {
             array.divAssign(arg.asMultik().array)

@@ -6,23 +6,25 @@
 package space.kscience.kmath.commons.optimization
 
 import kotlinx.coroutines.runBlocking
-import space.kscience.kmath.commons.expressions.DSProcessor
-import space.kscience.kmath.commons.expressions.DerivativeStructureExpression
 import space.kscience.kmath.distributions.NormalDistribution
+import space.kscience.kmath.expressions.DSFieldExpression
 import space.kscience.kmath.expressions.Symbol.Companion.x
 import space.kscience.kmath.expressions.Symbol.Companion.y
-import space.kscience.kmath.expressions.chiSquaredExpression
+import space.kscience.kmath.expressions.autodiff
 import space.kscience.kmath.expressions.symbol
-import space.kscience.kmath.operations.map
+import space.kscience.kmath.misc.UnstableKMathAPI
+import space.kscience.kmath.operations.DoubleBufferOps.Companion.map
+import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.optimization.*
-import space.kscience.kmath.stat.RandomGenerator
+import space.kscience.kmath.random.RandomGenerator
+import space.kscience.kmath.stat.chiSquaredExpression
 import space.kscience.kmath.structures.DoubleBuffer
 import space.kscience.kmath.structures.asBuffer
-import kotlin.math.pow
 import kotlin.test.Test
 
+@OptIn(UnstableKMathAPI::class)
 internal class OptimizeTest {
-    val normal = DerivativeStructureExpression {
+    val normal = DSFieldExpression(DoubleField) {
         exp(-bindSymbol(x).pow(2) / 2) + exp(-bindSymbol(y).pow(2) / 2)
     }
 
@@ -61,7 +63,7 @@ internal class OptimizeTest {
 
         val yErr = DoubleBuffer(x.size) { sigma }
 
-        val chi2 = DSProcessor.chiSquaredExpression(
+        val chi2 = Double.autodiff.chiSquaredExpression(
             x, y, yErr
         ) { arg ->
             val cWithDefault = bindSymbolOrNull(c) ?: one

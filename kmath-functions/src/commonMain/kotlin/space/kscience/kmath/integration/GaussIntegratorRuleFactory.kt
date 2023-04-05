@@ -5,11 +5,10 @@
 
 package space.kscience.kmath.integration
 
-import space.kscience.kmath.operations.map
+import space.kscience.kmath.operations.mapToBuffer
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.DoubleBuffer
 import space.kscience.kmath.structures.asBuffer
-import kotlin.jvm.Synchronized
 import kotlin.math.ulp
 import kotlin.native.concurrent.ThreadLocal
 
@@ -30,14 +29,14 @@ public fun GaussIntegratorRuleFactory.build(
     numPoints: Int,
     range: ClosedRange<Double>,
 ): Pair<Buffer<Double>, Buffer<Double>> {
-    val normalized = build(numPoints)
+    val normalized: Pair<Buffer<Double>, Buffer<Double>> = build(numPoints)
     val length = range.endInclusive - range.start
 
-    val points = normalized.first.map(::DoubleBuffer) {
+    val points = normalized.first.mapToBuffer(::DoubleBuffer) {
         range.start + length / 2 + length / 2 * it
     }
 
-    val weights = normalized.second.map(::DoubleBuffer) {
+    val weights = normalized.second.mapToBuffer(::DoubleBuffer) {
         it * length / 2
     }
 
@@ -57,7 +56,6 @@ public object GaussLegendreRuleFactory : GaussIntegratorRuleFactory {
 
     private val cache = HashMap<Int, Pair<Buffer<Double>, Buffer<Double>>>()
 
-    @Synchronized
     private fun getOrBuildRule(numPoints: Int): Pair<Buffer<Double>, Buffer<Double>> =
         cache.getOrPut(numPoints) { buildRule(numPoints) }
 

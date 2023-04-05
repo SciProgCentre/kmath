@@ -3,6 +3,8 @@ plugins {
 }
 
 kscience {
+    jvm()
+    js()
     native()
 }
 

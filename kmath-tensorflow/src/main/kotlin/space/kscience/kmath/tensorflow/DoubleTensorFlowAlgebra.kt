@@ -13,8 +13,8 @@ import org.tensorflow.types.TFloat64
 import space.kscience.kmath.expressions.Symbol
 import space.kscience.kmath.misc.PerformancePitfall
 import space.kscience.kmath.misc.UnstableKMathAPI
-import space.kscience.kmath.nd.DefaultStrides
-import space.kscience.kmath.nd.Shape
+import space.kscience.kmath.nd.ColumnStrides
+import space.kscience.kmath.nd.ShapeND
 import space.kscience.kmath.nd.StructureND
 import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.operations.PowerOperations
@@ -28,6 +28,8 @@ public class DoubleTensorFlowOutput(
 
 }
 
+internal fun ShapeND.toLongArray(): LongArray = LongArray(size) { get(it).toLong() }
+
 public class DoubleTensorFlowAlgebra internal constructor(
     graph: Graph,
 ) : TensorFlowAlgebra<Double, TFloat64, DoubleField>(graph), PowerOperations<StructureND<Double>> {
@@ -35,11 +37,11 @@ public class DoubleTensorFlowAlgebra internal constructor(
     override val elementAlgebra: DoubleField get() = DoubleField
 
     override fun structureND(
-        shape: Shape,
+        shape: ShapeND,
         initializer: DoubleField.(IntArray) -> Double,
     ): StructureND<Double> {
         val res = TFloat64.tensorOf(org.tensorflow.ndarray.Shape.of(*shape.toLongArray())) { array ->
-            DefaultStrides(shape).forEach { index ->
+            ColumnStrides(shape).forEach { index ->
                 array.setDouble(elementAlgebra.initializer(index), *index.toLongArray())
             }
         }

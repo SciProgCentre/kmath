@@ -5,7 +5,7 @@ import space.kscience.kmath.benchmarks.addBenchmarkProperties
 
 plugins {
     kotlin("multiplatform")
-    kotlin("plugin.allopen")
+    alias(spclibs.plugins.kotlin.plugin.allopen)
     id("org.jetbrains.kotlinx.benchmark")
 }
 
@@ -44,7 +44,7 @@ kotlin {
                 implementation(project(":kmath-tensors"))
                 implementation(project(":kmath-multik"))
                 implementation("org.jetbrains.kotlinx:multik-default:$multikVersion")
-                implementation(npmlibs.kotlinx.benchmark.runtime)
+                implementation(spclibs.kotlinx.benchmark.runtime)
             }
         }
 
@@ -142,12 +142,10 @@ benchmark {
         commonConfiguration()
         include("ViktorLogBenchmark")
     }
-}
 
-// Fix kotlinx-benchmarks bug
-afterEvaluate {
-    val jvmBenchmarkJar by tasks.getting(org.gradle.jvm.tasks.Jar::class) {
-        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    configurations.register("integration") {
+        commonConfiguration()
+        include("IntegrationBenchmark")
     }
 }
 

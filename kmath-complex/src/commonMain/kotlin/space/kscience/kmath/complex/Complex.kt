@@ -80,6 +80,8 @@ public object ComplexField :
     override fun add(left: Complex, right: Complex): Complex = Complex(left.re + right.re, left.im + right.im)
 //    override fun multiply(a: Complex, k: Number): Complex = Complex(a.re * k.toDouble(), a.im * k.toDouble())
 
+//    override fun Complex.minus(arg: Complex): Complex = Complex(re - arg.re, im - arg.im)
+
     override fun multiply(left: Complex, right: Complex): Complex =
         Complex(left.re * right.re - left.im * right.im, left.re * right.im + left.im * right.re)
 
@@ -193,7 +195,6 @@ public object ComplexField :
  * @property re The real part.
  * @property im The imaginary part.
  */
-@OptIn(UnstableKMathAPI::class)
 public data class Complex(val re: Double, val im: Double) {
     public constructor(re: Number, im: Number) : this(re.toDouble(), im.toDouble())
     public constructor(re: Number) : this(re.toDouble(), 0.0)

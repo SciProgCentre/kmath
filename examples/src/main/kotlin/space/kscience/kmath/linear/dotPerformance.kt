@@ -7,8 +7,10 @@ package space.kscience.kmath.linear
 
 import space.kscience.kmath.operations.algebra
 import kotlin.random.Random
-import kotlin.system.measureTimeMillis
+import kotlin.time.ExperimentalTime
+import kotlin.time.measureTime
 
+@OptIn(ExperimentalTime::class)
 fun main() {
     val random = Random(12224)
     val dim = 1000
@@ -21,7 +23,7 @@ fun main() {
         if (i <= j) random.nextDouble() else 0.0
     }
 
-    val time = measureTimeMillis {
+    val time = measureTime {
         with(Double.algebra.linearSpace) {
             repeat(10) {
                 matrix1 dot matrix2

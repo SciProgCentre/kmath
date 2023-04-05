@@ -18,7 +18,7 @@ public sealed class ShortRingOpsND : BufferedRingOpsND<Short, ShortRing>(ShortRi
 
 @OptIn(UnstableKMathAPI::class)
 public class ShortRingND(
-    override val shape: Shape
+    override val shape: ShapeND
 ) : ShortRingOpsND(), RingND<Short, ShortRing>, NumbersAddOps<StructureND<Short>> {
 
     override fun number(value: Number): BufferND<Short> {
@@ -30,5 +30,5 @@ public class ShortRingND(
 
 public inline fun <R> ShortRing.withNdAlgebra(vararg shape: Int, action: ShortRingND.() -> R): R {
     contract { callsInPlace(action, InvocationKind.EXACTLY_ONCE) }
-    return ShortRingND(shape).run(action)
+    return ShortRingND(ShapeND(shape)).run(action)
 }

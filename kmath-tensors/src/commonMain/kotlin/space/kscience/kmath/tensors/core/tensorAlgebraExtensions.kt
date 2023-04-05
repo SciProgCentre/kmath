@@ -8,15 +8,15 @@
 package space.kscience.kmath.tensors.core
 
 import space.kscience.kmath.misc.PerformancePitfall
-import space.kscience.kmath.nd.Shape
+import space.kscience.kmath.nd.ShapeND
 import kotlin.jvm.JvmName
 
 @JvmName("varArgOne")
-public fun DoubleTensorAlgebra.one(vararg shape: Int): DoubleTensor = ones(intArrayOf(*shape))
+public fun DoubleTensorAlgebra.one(vararg shape: Int): DoubleTensor = ones(ShapeND(shape))
 
-public fun DoubleTensorAlgebra.one(shape: Shape): DoubleTensor = ones(shape)
+public fun DoubleTensorAlgebra.one(shape: ShapeND): DoubleTensor = ones(shape)
 
 @JvmName("varArgZero")
-public fun DoubleTensorAlgebra.zero(vararg shape: Int): DoubleTensor = zeros(intArrayOf(*shape))
+public fun DoubleTensorAlgebra.zero(vararg shape: Int): DoubleTensor = zeros(ShapeND(shape))
 
-public fun DoubleTensorAlgebra.zero(shape: Shape): DoubleTensor = zeros(shape)
+public fun DoubleTensorAlgebra.zero(shape: ShapeND): DoubleTensor = zeros(shape)

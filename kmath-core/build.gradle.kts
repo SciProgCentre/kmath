@@ -3,10 +3,12 @@ plugins {
 }
 
 kscience{
+    jvm()
+    js()
     native()
 
     dependencies {
-        api(project(":kmath-memory"))
+        api(projects.kmathMemory)
     }
 }
 

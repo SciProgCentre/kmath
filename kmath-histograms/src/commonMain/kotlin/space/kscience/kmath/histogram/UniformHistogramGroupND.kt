@@ -9,11 +9,10 @@ package space.kscience.kmath.histogram
 
 import space.kscience.kmath.domains.HyperSquareDomain
 import space.kscience.kmath.linear.Point
+import space.kscience.kmath.misc.PerformancePitfall
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.nd.*
-import space.kscience.kmath.operations.DoubleField
-import space.kscience.kmath.operations.Field
-import space.kscience.kmath.operations.invoke
+import space.kscience.kmath.operations.*
 import space.kscience.kmath.structures.*
 import kotlin.math.floor
 
@@ -40,7 +39,7 @@ public class UniformHistogramGroupND<V : Any, A : Field<V>>(
 
     public val dimension: Int get() = lower.size
 
-    override val shape: IntArray = IntArray(binNums.size) { binNums[it] + 2 }
+    override val shape: ShapeND = ShapeND(IntArray(binNums.size) { binNums[it] + 2 })
 
     private val binSize = DoubleBuffer(dimension) { (upper[it] - lower[it]) / binNums[it] }
 
@@ -83,8 +82,12 @@ public class UniformHistogramGroupND<V : Any, A : Field<V>>(
     }
 
 
-    override fun produce(builder: HistogramBuilder<Double, V>.() -> Unit): HistogramND<Double, HyperSquareDomain, V> {
-        val ndCounter = StructureND.buffered(shape) { Counter.of(valueAlgebraND.elementAlgebra) }
+    @OptIn(PerformancePitfall::class)
+    override fun produce(
+        builder: HistogramBuilder<Double, V>.() -> Unit,
+    ): HistogramND<Double, HyperSquareDomain, V> {
+        val ndCounter: BufferND<ObjectCounter<V>> =
+            StructureND.buffered(shape) { Counter.of(valueAlgebraND.elementAlgebra) }
         val hBuilder = object : HistogramBuilder<Double, V> {
             override val defaultValue: V get() = valueAlgebraND.elementAlgebra.one
 
@@ -94,7 +97,8 @@ public class UniformHistogramGroupND<V : Any, A : Field<V>>(
             }
         }
         hBuilder.apply(builder)
-        val values: BufferND<V> = ndCounter.mapToBuffer(valueBufferFactory) { it.value }
+        val values: BufferND<V> = BufferND(ndCounter.indices, ndCounter.buffer.mapToBuffer(valueBufferFactory) { it.value })
+
         return HistogramND(this, values)
     }
 

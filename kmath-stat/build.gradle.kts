@@ -3,6 +3,8 @@ plugins {
 }
 
 kscience{
+    jvm()
+    js()
     native()
 }
 
@@ -10,11 +12,11 @@ kotlin.sourceSets {
     commonMain {
         dependencies {
             api(project(":kmath-coroutines"))
-            implementation(npmlibs.atomicfu)
+            implementation(spclibs.atomicfu)
         }
     }
 
-    jvmMain {
+    getByName("jvmMain") {
         dependencies {
             api("org.apache.commons:commons-rng-sampling:1.3")
             api("org.apache.commons:commons-rng-simple:1.3")

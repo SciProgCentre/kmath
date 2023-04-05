@@ -15,6 +15,7 @@ import space.kscience.kmath.linear.*
 import space.kscience.kmath.misc.PerformancePitfall
 import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.nd.StructureND
+import space.kscience.kmath.nd.toArray
 import space.kscience.kmath.operations.algebra
 import kotlin.random.Random
 import kotlin.random.asJavaRandom
@@ -52,7 +53,7 @@ internal class EjmlMatrixTest {
     fun shape() {
         val m = randomMatrix
         val w = EjmlDoubleMatrix(m)
-        assertContentEquals(intArrayOf(m.numRows, m.numCols), w.shape)
+        assertContentEquals(intArrayOf(m.numRows, m.numCols), w.shape.toArray())
     }
 
     @OptIn(UnstableKMathAPI::class)

@@ -3,11 +3,15 @@ plugins {
 }
 
 kscience {
+    jvm()
+    js()
     native()
+
     dependencies {
         api(projects.kmathCore)
     }
-    dependencies("commonTest") {
+
+    testDependencies {
         implementation(projects.testUtils)
     }
 }

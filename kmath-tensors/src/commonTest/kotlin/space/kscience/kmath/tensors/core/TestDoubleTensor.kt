@@ -11,6 +11,7 @@ import space.kscience.kmath.operations.invoke
 import space.kscience.kmath.structures.DoubleBuffer
 import space.kscience.kmath.structures.toDoubleArray
 import space.kscience.kmath.tensors.core.internal.matrixSequence
+import space.kscience.kmath.testutils.assertBufferEquals
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -20,14 +21,14 @@ internal class TestDoubleTensor {
     @Test
     fun testValue() = DoubleTensorAlgebra {
         val value = 12.5
-        val tensor = fromArray(intArrayOf(1), doubleArrayOf(value))
+        val tensor = fromArray(ShapeND(1), doubleArrayOf(value))
         assertEquals(tensor.value(), value)
     }
 
     @OptIn(PerformancePitfall::class)
     @Test
     fun testStrides() = DoubleTensorAlgebra {
-        val tensor = fromArray(intArrayOf(2, 2), doubleArrayOf(3.5, 5.8, 58.4, 2.4))
+        val tensor = fromArray(ShapeND(2, 2), doubleArrayOf(3.5, 5.8, 58.4, 2.4))
         assertEquals(tensor[intArrayOf(0, 1)], 5.8)
         assertTrue(
             tensor.elements().map { it.second }.toList()
@@ -37,8 +38,8 @@ internal class TestDoubleTensor {
 
     @Test
     fun testGet() = DoubleTensorAlgebra {
-        val tensor = fromArray(intArrayOf(1, 2, 2), doubleArrayOf(3.5, 5.8, 58.4, 2.4))
-        val matrix = tensor.getTensor(0).as2D()
+        val tensor = fromArray(ShapeND(1, 2, 2), doubleArrayOf(3.5, 5.8, 58.4, 2.4))
+        val matrix = tensor.getTensor(0).asDoubleTensor2D()
         assertEquals(matrix[0, 1], 5.8)
 
         val vector = tensor.getTensor(0, 1).as1D()
@@ -52,8 +53,8 @@ internal class TestDoubleTensor {
 
         tensor.matrixSequence().forEach {
             val a = it.asDoubleTensor()
-            val secondRow = a.getTensor(1).as1D()
-            val secondColumn = a.transposed(0, 1).getTensor(1).as1D()
+            val secondRow = a.getTensor(1).asDoubleBuffer()
+            val secondColumn = a.transposed(0, 1).getTensor(1).asDoubleBuffer()
             assertEquals(secondColumn[0], 77.89)
             assertEquals(secondRow[1], secondColumn[1])
         }
@@ -66,7 +67,7 @@ internal class TestDoubleTensor {
         val doubleArray = DoubleBuffer(1.0, 2.0, 3.0)
 
         // create ND buffers, no data is copied
-        val ndArray: MutableBufferND<Double> = DoubleBufferND(DefaultStrides(intArrayOf(3)), doubleArray)
+        val ndArray: MutableBufferND<Double> = DoubleBufferND(ColumnStrides(ShapeND(3)), doubleArray)
 
         // map to tensors
         val tensorArray = ndArray.asDoubleTensor() // Data is copied because of strides change.
@@ -86,6 +87,23 @@ internal class TestDoubleTensor {
 
         tensorArray[intArrayOf(0)] = 55.9
         assertEquals(ndArray[intArrayOf(0)], 1.0)
+    }
 
+    @Test
+    fun test2D() = with(DoubleTensorAlgebra) {
+        val tensor: DoubleTensor = structureND(ShapeND(3, 3)) { (i, j) -> (i - j).toDouble() }
+        //println(tensor.toPrettyString())
+        val tensor2d = tensor.asDoubleTensor2D()
+        assertBufferEquals(DoubleBuffer(1.0, 0.0, -1.0), tensor2d.rows[1])
+        assertBufferEquals(DoubleBuffer(-2.0, -1.0, 0.0), tensor2d.columns[2])
+    }
+
+    @Test
+    fun testMatrixIteration() = with(DoubleTensorAlgebra) {
+        val tensor = structureND(ShapeND(3, 3, 3, 3)) { index -> index.sum().toDouble() }
+        tensor.forEachMatrix { index, matrix ->
+            println(index.joinToString { it.toString() })
+            println(matrix)
+        }
     }
 }

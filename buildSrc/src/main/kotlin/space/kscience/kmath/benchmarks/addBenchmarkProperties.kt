@@ -6,8 +6,8 @@
 package space.kscience.kmath.benchmarks
 
 import kotlinx.benchmark.gradle.BenchmarksExtension
-import kotlinx.serialization.decodeFromString
-import kotlinx.serialization.json.Json
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.fasterxml.jackson.module.kotlin.readValue
 import org.gradle.api.Project
 import space.kscience.gradle.KScienceReadmeExtension
 import java.time.LocalDateTime
@@ -45,6 +45,8 @@ private val ISO_DATE_TIME: DateTimeFormatter = DateTimeFormatterBuilder().run {
 
 private fun noun(number: Number, singular: String, plural: String) = if (number.toLong() == 1L) singular else plural
 
+private val jsonMapper = jacksonObjectMapper()
+
 fun Project.addBenchmarkProperties() {
     val benchmarksProject = this
     rootProject.subprojects.forEach { p ->
@@ -60,8 +62,7 @@ fun Project.addBenchmarkProperties() {
                     if (resDirectory == null || !(resDirectory.resolve("jvm.json")).exists()) {
                         "> **Can't find appropriate benchmark data. Try generating readme files after running benchmarks**."
                     } else {
-                        val reports =
-                            Json.decodeFromString<List<JmhReport>>(resDirectory.resolve("jvm.json").readText())
+                        val reports: List<JmhReport> = jsonMapper.readValue<List<JmhReport>>(resDirectory.resolve("jvm.json"))
 
                         buildString {
                             appendLine("<details>")

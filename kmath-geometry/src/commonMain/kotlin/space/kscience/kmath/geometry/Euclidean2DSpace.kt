@@ -5,6 +5,12 @@
 
 package space.kscience.kmath.geometry
 
+import kotlinx.serialization.KSerializer
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.descriptors.SerialDescriptor
+import kotlinx.serialization.encoding.Decoder
+import kotlinx.serialization.encoding.Encoder
 import space.kscience.kmath.linear.Point
 import space.kscience.kmath.operations.Norm
 import space.kscience.kmath.operations.ScaleOperations
@@ -33,6 +39,7 @@ public operator fun <T> Vector2D<T>.component1(): T = x
 public operator fun <T> Vector2D<T>.component2(): T = y
 
 public typealias DoubleVector2D = Vector2D<Double>
+public typealias Float64Vector2D = Vector2D<Double>
 
 public val Vector2D<Double>.r: Double get() = Euclidean2DSpace.norm(this)
 
@@ -44,10 +51,24 @@ public object Euclidean2DSpace : GeometrySpace<DoubleVector2D>,
     ScaleOperations<DoubleVector2D>,
     Norm<DoubleVector2D, Double> {
 
+    @Serializable
+    @SerialName("Float64Vector2D")
     private data class Vector2DImpl(
         override val x: Double,
         override val y: Double,
     ) : DoubleVector2D
+
+    public object VectorSerializer : KSerializer<DoubleVector2D> {
+        private val proxySerializer = Vector2DImpl.serializer()
+        override val descriptor: SerialDescriptor get() = proxySerializer.descriptor
+
+        override fun deserialize(decoder: Decoder): DoubleVector2D = decoder.decodeSerializableValue(proxySerializer)
+
+        override fun serialize(encoder: Encoder, value: DoubleVector2D) {
+            val vector = value as? Vector2DImpl ?: Vector2DImpl(value.x, value.y)
+            encoder.encodeSerializableValue(proxySerializer, vector)
+        }
+    }
 
     public fun vector(x: Number, y: Number): DoubleVector2D = Vector2DImpl(x.toDouble(), y.toDouble())
 

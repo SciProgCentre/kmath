@@ -13,10 +13,8 @@ import org.jetbrains.kotlinx.multik.api.Multik
 import org.jetbrains.kotlinx.multik.api.ones
 import org.jetbrains.kotlinx.multik.ndarray.data.DN
 import org.jetbrains.kotlinx.multik.ndarray.data.DataType
-import space.kscience.kmath.nd.BufferedFieldOpsND
-import space.kscience.kmath.nd.StructureND
-import space.kscience.kmath.nd.ndAlgebra
-import space.kscience.kmath.nd.one
+import space.kscience.kmath.misc.UnsafeKMathAPI
+import space.kscience.kmath.nd.*
 import space.kscience.kmath.nd4j.nd4j
 import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.tensors.core.DoubleTensor
@@ -69,9 +67,10 @@ internal class NDFieldBenchmark {
         blackhole.consume(res)
     }
 
+    @OptIn(UnsafeKMathAPI::class)
     @Benchmark
     fun multikInPlaceAdd(blackhole: Blackhole) = with(multikAlgebra) {
-        val res = Multik.ones<Double, DN>(shape, DataType.DoubleDataType).wrap()
+        val res = Multik.ones<Double, DN>(shape.asArray(), DataType.DoubleDataType).wrap()
         repeat(n) { res += 1.0 }
         blackhole.consume(res)
     }
@@ -86,7 +85,7 @@ internal class NDFieldBenchmark {
     private companion object {
         private const val dim = 1000
         private const val n = 100
-        private val shape = intArrayOf(dim, dim)
+        private val shape = ShapeND(dim, dim)
         private val specializedField = DoubleField.ndAlgebra
         private val genericField = BufferedFieldOpsND(DoubleField)
         private val nd4jField = DoubleField.nd4j
