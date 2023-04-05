@@ -24,6 +24,7 @@
 ### Deprecated
 
 ### Removed
+- Trajectory moved to https://github.com/SciProgCentre/maps-kt
 - Polynomials moved to https://github.com/SciProgCentre/kmath-polynomial
 
 ### Fixed
