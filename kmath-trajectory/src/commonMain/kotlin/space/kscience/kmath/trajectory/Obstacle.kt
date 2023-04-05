@@ -23,7 +23,7 @@ internal data class Tangent(
     val lineSegment: LineSegment2D,
     val startDirection: Trajectory2D.Direction,
     val endDirection: Trajectory2D.Direction = startDirection,
-): LineSegment2D by lineSegment
+) : LineSegment2D by lineSegment
 
 private class TangentPath(val tangents: List<Tangent>) {
     fun last() = tangents.last()
@@ -143,7 +143,7 @@ private fun dubinsTangentsToCircles(
     }
 }
 
-public class Obstacle(
+internal class Obstacle(
     public val circles: List<Circle2D>,
 ) {
     internal val tangents: List<Tangent> = boundaryTangents().first
@@ -281,7 +281,7 @@ public class Obstacle(
     }
 }
 
-public fun Obstacle(vararg circles: Circle2D): Obstacle = Obstacle(listOf(*circles))
+internal fun Obstacle(vararg circles: Circle2D): Obstacle = Obstacle(listOf(*circles))
 
 private fun LineSegment2D.intersectSegment(other: LineSegment2D): Boolean {
     fun crossProduct(v1: DoubleVector2D, v2: DoubleVector2D): Double {
@@ -594,7 +594,19 @@ internal fun findAllPaths(
 }
 
 
-
+public object Obstacles {
+    public fun allPathsAvoiding(
+        start: DubinsPose2D,
+        finish: DubinsPose2D,
+        trajectoryRadius: Double,
+        obstaclePolygons: List<Polygon<Double>>,
+    ): List<CompositeTrajectory2D> {
+        val obstacles: List<Obstacle> = obstaclePolygons.map { polygon ->
+            Obstacle(polygon.points.map { point -> Circle2D(point, trajectoryRadius) })
+        }
+        return findAllPaths(start, trajectoryRadius, finish, trajectoryRadius, obstacles)
+    }
+}
 
 
 

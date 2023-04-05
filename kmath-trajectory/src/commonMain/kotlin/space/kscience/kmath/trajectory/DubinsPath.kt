@@ -36,7 +36,7 @@ private fun outerTangent(from: Circle2D, to: Circle2D, direction: Direction): St
         }
         return StraightTrajectory2D(
             p1,
-            vector(p1.x + (centers.end.x - centers.start.x), p1.y + (centers.end.y - centers.start.y))
+            vector(p1.x + (centers.end.x - centers.begin.x), p1.y + (centers.end.y - centers.begin.y))
         )
     }
 
@@ -207,7 +207,7 @@ public object DubinsPath {
         val c1 = start.getRightCircle(turningRadius)
         val c2 = end.getRightCircle(turningRadius)
         val s = outerTangent(c1, c2, L)
-        val a1 = CircleTrajectory2D.of(c1.center, start, s.start, R)
+        val a1 = CircleTrajectory2D.of(c1.center, start, s.begin, R)
         val a3 = CircleTrajectory2D.of(c2.center, s.end, end, R)
         return CompositeTrajectory2D(a1, s, a3)
     }
@@ -216,7 +216,7 @@ public object DubinsPath {
         val c1 = start.getLeftCircle(turningRadius)
         val c2 = end.getLeftCircle(turningRadius)
         val s = outerTangent(c1, c2, R)
-        val a1 = CircleTrajectory2D.of(c1.center, start, s.start, L)
+        val a1 = CircleTrajectory2D.of(c1.center, start, s.begin, L)
         val a3 = CircleTrajectory2D.of(c2.center, s.end, end, L)
         return CompositeTrajectory2D(a1, s, a3)
     }
@@ -227,7 +227,7 @@ public object DubinsPath {
         val s = innerTangent(c1, c2, R)
         if (s == null || c1.center.distanceTo(c2.center) < turningRadius * 2) return null
 
-        val a1 = CircleTrajectory2D.of(c1.center, start, s.start, R)
+        val a1 = CircleTrajectory2D.of(c1.center, start, s.begin, R)
         val a3 = CircleTrajectory2D.of(c2.center, s.end, end, L)
         return CompositeTrajectory2D(a1, s, a3)
     }
@@ -238,7 +238,7 @@ public object DubinsPath {
         val s = innerTangent(c1, c2, L)
         if (s == null || c1.center.distanceTo(c2.center) < turningRadius * 2) return null
 
-        val a1 = CircleTrajectory2D.of(c1.center, start, s.start, L)
+        val a1 = CircleTrajectory2D.of(c1.center, start, s.begin, L)
         val a3 = CircleTrajectory2D.of(c2.center, s.end, end, R)
         return CompositeTrajectory2D(a1, s, a3)
     }

@@ -63,7 +63,7 @@ internal class ProjectionOntoLineTest {
 
     @Test
     fun projectionOntoLine3d() = with(Euclidean3DSpace) {
-        val line = Line3D(
+        val line = Line(
             base = vector(1.0, 3.5, 0.07),
             direction = vector(2.0, -0.0037, 11.1111)
         )
@@ -77,7 +77,7 @@ internal class ProjectionOntoLineTest {
                     val result = projectToLine(v, line)
 
                     // assert that result is on the line
-                    assertTrue(isCollinear(result - line.base, line.direction))
+                    assertTrue(isCollinear(result - line.start, line.direction))
                     // assert that PV vector is orthogonal to direction vector
                     assertTrue(isOrthogonal(v - result, line.direction))
                 }

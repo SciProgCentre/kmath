@@ -20,7 +20,7 @@ class DubinsTests {
         val lineP1 = straight.shift(1, 10.0).inverse()
 
         val start = DubinsPose2D(straight.end, straight.bearing)
-        val end = DubinsPose2D(lineP1.start, lineP1.bearing)
+        val end = DubinsPose2D(lineP1.begin, lineP1.bearing)
         val radius = 2.0
         val dubins = DubinsPath.all(start, end, radius)
 
@@ -53,7 +53,7 @@ class DubinsTests {
                 assertTrue(a.end.equalsFloat(b.start))
                 assertTrue(c.start.equalsFloat(b.end))
             } else if (b is StraightTrajectory2D) {
-                assertTrue(a.end.equalsFloat(DubinsPose2D(b.start, b.bearing)))
+                assertTrue(a.end.equalsFloat(DubinsPose2D(b.begin, b.bearing)))
                 assertTrue(c.start.equalsFloat(DubinsPose2D(b.end, b.bearing)))
             }
         }

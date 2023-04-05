@@ -41,16 +41,14 @@ public sealed interface Trajectory2D {
 @Serializable
 @SerialName("straight")
 public data class StraightTrajectory2D(
-    public val start: DoubleVector2D,
-    public val end: DoubleVector2D,
-) : Trajectory2D {
+    override val begin: DoubleVector2D,
+    override val end: DoubleVector2D,
+) : Trajectory2D, LineSegment2D {
 
-    override val length: Double get() = start.distanceTo(end)
+    override val length: Double get() = begin.distanceTo(end)
 
-    public val bearing: Angle get() = (atan2(end.x - start.x, end.y - start.y).radians).normalized()
+    public val bearing: Angle get() = (atan2(end.x - begin.x, end.y - begin.y).radians).normalized()
 }
-
-public fun StraightTrajectory2D.toSegment(): LineSegment<Vector2D<Double>> = LineSegment(start, end)
 
 /**
  * An arc segment
