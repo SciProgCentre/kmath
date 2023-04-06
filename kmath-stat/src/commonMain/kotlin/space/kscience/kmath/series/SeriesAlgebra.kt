@@ -155,17 +155,6 @@ public class SeriesAlgebra<T, out A : Ring<T>, out BA : BufferAlgebra<T, A>, L>(
         return accumulator
     }
 
-    // TODO: add fold with recorded accumulation
-//    public inline fun <R> Buffer<T>.traceFold(initial: R, operation: A.(acc: R, T) -> R): Buffer<R> {
-//        var tempBuffer = elementAlgebra.bufferFactory(this.size) {i -> getAbsolute(i)}
-//        var accumulator = initial
-//        for (index in this.indices) {
-//            accumulator = elementAlgebra.operation(accumulator, getAbsolute(index))
-//            tempBuffer.set(index, accumulator)
-//        }
-//        return elementAlgebra.bufferFactory(this.size) {i -> tempBuffer.getAbsolute(i)}
-//    }
-
     public inline fun <R> Buffer<T>.foldWithLabel(initial: R, operation: A.(acc: R, arg: T, label: L) -> R): R {
         val labels = labels
         var accumulator = initial
