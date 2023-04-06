@@ -3,15 +3,20 @@ package space.kscience.kmath.series
 import space.kscience.kmath.operations.BufferAlgebra
 import space.kscience.kmath.operations.Ring
 import space.kscience.kmath.operations.RingOps
+import space.kscience.kmath.operations.reduce
 import space.kscience.kmath.stat.StatisticalAlgebra
 import space.kscience.kmath.structures.Buffer
+import space.kscience.kmath.structures.BufferFactory
 import space.kscience.kmath.structures.BufferView
 import kotlin.math.max
 import kotlin.math.min
 
+
+// TODO: check if ranges are intersected
 @PublishedApi
 internal fun IntRange.intersect(other: IntRange): IntRange =
     max(first, other.first)..min(last, other.last)
+
 
 @PublishedApi
 internal val IntRange.size: Int
@@ -33,11 +38,14 @@ public interface Series<T> : Buffer<T> {
     public val position: Int
 }
 
+
+
 public val <T> Series<T>.absoluteIndices: IntRange get() = position until position + size
 
 /**
  * A [BufferView] with index offset (both positive and negative) and possible size change
  */
+
 private class SeriesImpl<T>(
     override val origin: Buffer<T>,
     override val position: Int,
@@ -107,6 +115,8 @@ public class SeriesAlgebra<T, out A : Ring<T>, out BA : BufferAlgebra<T, A>, L>(
      * Get a label buffer for given buffer.
      */
     public val Buffer<T>.labels: List<L> get() = indices.map(labelResolver)
+    // TODO: there can be troubles with label consistency after moving position argument
+    // TODO: so offset should be reflected in the labelResolver also
 
 
     /**
@@ -145,6 +155,17 @@ public class SeriesAlgebra<T, out A : Ring<T>, out BA : BufferAlgebra<T, A>, L>(
         return accumulator
     }
 
+    // TODO: add fold with recorded accumulation
+//    public inline fun <R> Buffer<T>.traceFold(initial: R, operation: A.(acc: R, T) -> R): Buffer<R> {
+//        var tempBuffer = elementAlgebra.bufferFactory(this.size) {i -> getAbsolute(i)}
+//        var accumulator = initial
+//        for (index in this.indices) {
+//            accumulator = elementAlgebra.operation(accumulator, getAbsolute(index))
+//            tempBuffer.set(index, accumulator)
+//        }
+//        return elementAlgebra.bufferFactory(this.size) {i -> tempBuffer.getAbsolute(i)}
+//    }
+
     public inline fun <R> Buffer<T>.foldWithLabel(initial: R, operation: A.(acc: R, arg: T, label: L) -> R): R {
         val labels = labels
         var accumulator = initial
@@ -154,7 +175,7 @@ public class SeriesAlgebra<T, out A : Ring<T>, out BA : BufferAlgebra<T, A>, L>(
     }
 
     /**
-     * Zip two buffers in the range whe they overlap
+     * Zip two buffers in the range where they overlap
      */
     public inline fun Buffer<T>.zip(
         other: Buffer<T>,
@@ -169,11 +190,24 @@ public class SeriesAlgebra<T, out A : Ring<T>, out BA : BufferAlgebra<T, A>, L>(
         }.moveTo(newRange.first)
     }
 
+    /**
+     * Zip buffer with itself, but shifted
+     * */
+    public inline fun Buffer<T>.shiftOp(
+        shift: Int = 1,
+        crossinline operation: A.(left: T, right: T) -> T
+    ): Buffer<T> {
+        val shifted = this.moveTo(this.offset+shift)
+        return zip(shifted, operation)
+    }
+
     override fun Buffer<T>.unaryMinus(): Buffer<T> = map { -it }
 
     override fun add(left: Buffer<T>, right: Buffer<T>): Series<T> = left.zip(right) { l, r -> l + r }
 
     override fun multiply(left: Buffer<T>, right: Buffer<T>): Buffer<T> = left.zip(right) { l, r -> l * r }
+
+    public inline fun Buffer<T>.diff(): Buffer<T> = this.shiftOp {l, r -> r - l}
 }
 
 public fun <T, A : Ring<T>, BA : BufferAlgebra<T, A>, L> BA.seriesAlgebra(labels: Iterable<L>): SeriesAlgebra<T, A, BA, L> {
