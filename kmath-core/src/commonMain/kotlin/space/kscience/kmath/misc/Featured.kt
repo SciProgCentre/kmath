@@ -9,7 +9,7 @@ import kotlin.jvm.JvmInline
 import kotlin.reflect.KClass
 
 /**
- * A entity that contains a set of features defined by their types
+ * An entity that contains a set of features defined by their types
  */
 public interface Featured<F : Any> {
     public fun <T : F> getFeature(type: FeatureKey<T>): T?

@@ -15,7 +15,7 @@ jobs:
     runs-on: ${{matrix.os}}
     steps:
       - uses: actions/checkout@v3.0.0
-      - uses: actions/setup-java@v3.0.0
+      - uses: actions/setup-java@v3.10.0
         with:
           java-version: 11
           distribution: liberica
@@ -26,26 +26,25 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('*.gradle.kts') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
-      - uses: gradle/wrapper-validation-action@v1.0.4
       - name: Publish Windows Artifacts
         if: matrix.os == 'windows-latest'
-        uses: gradle/gradle-build-action@v2.1.5
+        uses: gradle/gradle-build-action@v2.4.0
         with:
           arguments: |
-            releaseAll
-            -Ppublishing.enabled=true
-            -Ppublishing.sonatype=false
+            publishAllPublicationsToSpaceRepository
+            -Ppublishing.targets=all
             -Ppublishing.space.user=${{ secrets.SPACE_APP_ID }}
             -Ppublishing.space.token=${{ secrets.SPACE_APP_SECRET }}
       - name: Publish Mac Artifacts
         if: matrix.os == 'macOS-latest'
-        uses: gradle/gradle-build-action@v2.1.5
+        uses: gradle/gradle-build-action@v2.4.0
         with:
           arguments: |
-            releaseMacosX64
-            releaseIosArm64
-            releaseIosX64
-            -Ppublishing.enabled=true
-            -Ppublishing.sonatype=false            
+            publishMacosX64PublicationToSpaceRepository
+            publishMacosArm64PublicationToSpaceRepository
+            publishIosX64PublicationToSpaceRepository
+            publishIosArm64PublicationToSpaceRepository
+            publishIosSimulatorArm64PublicationToSpaceRepository
+            -Ppublishing.targets=all
             -Ppublishing.space.user=${{ secrets.SPACE_APP_ID }}
             -Ppublishing.space.token=${{ secrets.SPACE_APP_SECRET }}

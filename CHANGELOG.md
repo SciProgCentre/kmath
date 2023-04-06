@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 ### Added
+- Generic builders for `BufferND` and `MutableBufferND`
 - `NamedMatrix` - matrix with symbol-based indexing
 - `Expression` with default arguments
 - Type-aliases for numbers like `Float64`
@@ -23,6 +24,7 @@
 ### Deprecated
 
 ### Removed
+- Trajectory moved to https://github.com/SciProgCentre/maps-kt
 - Polynomials moved to https://github.com/SciProgCentre/kmath-polynomial
 
 ### Fixed

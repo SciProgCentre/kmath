@@ -18,4 +18,5 @@ out/
 
 !/.idea/copyright/
 !/.idea/scopes/
-/kotlin-js-store/yarn.lock
+/gradle/yarn.lock
+
