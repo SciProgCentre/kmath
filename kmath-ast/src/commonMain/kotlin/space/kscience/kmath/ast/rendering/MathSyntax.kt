@@ -5,7 +5,7 @@
 
 package space.kscience.kmath.ast.rendering
 
-import space.kscience.kmath.misc.UnstableKMathAPI
+import space.kscience.kmath.UnstableKMathAPI
 
 /**
  * Syntax node for mathematical typography.

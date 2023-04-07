@@ -7,8 +7,8 @@
 
 package space.kscience.kmath.nd
 
-import space.kscience.kmath.misc.PerformancePitfall
-import space.kscience.kmath.misc.UnstableKMathAPI
+import space.kscience.kmath.PerformancePitfall
+import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.operations.*
 
 public interface BufferAlgebraND<T, out A : Algebra<T>> : AlgebraND<T, A> {

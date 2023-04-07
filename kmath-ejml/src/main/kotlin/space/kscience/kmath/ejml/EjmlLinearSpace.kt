@@ -5,11 +5,11 @@
 
 package space.kscience.kmath.ejml
 
+import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.linear.InverseMatrixFeature
 import space.kscience.kmath.linear.LinearSpace
 import space.kscience.kmath.linear.Matrix
 import space.kscience.kmath.linear.Point
-import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.nd.Structure2D
 import space.kscience.kmath.operations.Ring
 

@@ -5,13 +5,18 @@
 
 package space.kscience.kmath.structures
 
+import space.kscience.kmath.PerformancePitfall
 import space.kscience.kmath.linear.linearSpace
-import space.kscience.kmath.misc.PerformancePitfall
-import space.kscience.kmath.nd.*
+import space.kscience.kmath.nd.StructureND
+import space.kscience.kmath.nd.get
+import space.kscience.kmath.nd.ndAlgebra
+import space.kscience.kmath.nd.structureND
 import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.operations.Norm
 import space.kscience.kmath.operations.algebra
 import space.kscience.kmath.operations.invoke
+import kotlin.collections.component1
+import kotlin.collections.component2
 import kotlin.math.abs
 import kotlin.math.pow
 import kotlin.test.Test

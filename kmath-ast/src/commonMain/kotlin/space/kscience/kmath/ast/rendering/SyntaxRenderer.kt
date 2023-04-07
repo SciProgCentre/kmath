@@ -5,7 +5,7 @@
 
 package space.kscience.kmath.ast.rendering
 
-import space.kscience.kmath.misc.UnstableKMathAPI
+import space.kscience.kmath.UnstableKMathAPI
 
 /**
  * Abstraction of writing [MathSyntax] as a string of an actual markup language. Typical implementation should

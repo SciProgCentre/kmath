@@ -5,8 +5,8 @@
 
 package space.kscience.kmath.real
 
+import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.linear.Point
-import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.operations.DoubleL2Norm
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.MutableBuffer.Companion.double

@@ -5,6 +5,7 @@
 
 package space.kscience.kmath.estree
 
+import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.ast.TypedMst
 import space.kscience.kmath.ast.evaluateConstants
 import space.kscience.kmath.estree.internal.ESTreeBuilder
@@ -13,7 +14,6 @@ import space.kscience.kmath.expressions.MST
 import space.kscience.kmath.expressions.Symbol
 import space.kscience.kmath.expressions.invoke
 import space.kscience.kmath.internal.estree.BaseExpression
-import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.operations.Algebra
 
 /**

@@ -5,9 +5,9 @@
 
 package space.kscience.kmath.operations
 
+import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.expressions.Symbol
 import space.kscience.kmath.expressions.symbol
-import space.kscience.kmath.misc.UnstableKMathAPI
 
 /**
  * An algebra for generic boolean logic

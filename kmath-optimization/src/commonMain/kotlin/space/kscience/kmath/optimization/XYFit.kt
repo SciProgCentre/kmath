@@ -6,12 +6,12 @@
 
 package space.kscience.kmath.optimization
 
+import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.data.XYColumnarData
 import space.kscience.kmath.data.indices
 import space.kscience.kmath.expressions.*
 import space.kscience.kmath.misc.FeatureSet
 import space.kscience.kmath.misc.Loggable
-import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.operations.ExtendedField
 import space.kscience.kmath.operations.bindSymbol
 import kotlin.math.pow

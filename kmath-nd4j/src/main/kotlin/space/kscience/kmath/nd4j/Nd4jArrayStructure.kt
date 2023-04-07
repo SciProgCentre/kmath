@@ -6,7 +6,7 @@
 package space.kscience.kmath.nd4j
 
 import org.nd4j.linalg.api.ndarray.INDArray
-import space.kscience.kmath.misc.PerformancePitfall
+import space.kscience.kmath.PerformancePitfall
 import space.kscience.kmath.nd.*
 
 /**

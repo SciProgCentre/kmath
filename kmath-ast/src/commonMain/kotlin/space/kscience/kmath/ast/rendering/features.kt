@@ -5,10 +5,10 @@
 
 package space.kscience.kmath.ast.rendering
 
+import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.ast.rendering.FeaturedMathRenderer.RenderFeature
 import space.kscience.kmath.expressions.MST
 import space.kscience.kmath.expressions.Symbol
-import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.operations.*
 import kotlin.reflect.KClass
 

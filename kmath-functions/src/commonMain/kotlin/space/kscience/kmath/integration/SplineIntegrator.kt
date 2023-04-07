@@ -5,13 +5,13 @@
 
 package space.kscience.kmath.integration
 
+import space.kscience.kmath.PerformancePitfall
+import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.functions.PiecewisePolynomial
 import space.kscience.kmath.functions.integrate
 import space.kscience.kmath.interpolation.PolynomialInterpolator
 import space.kscience.kmath.interpolation.SplineInterpolator
 import space.kscience.kmath.interpolation.interpolatePolynomials
-import space.kscience.kmath.misc.PerformancePitfall
-import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.operations.*
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.DoubleBuffer

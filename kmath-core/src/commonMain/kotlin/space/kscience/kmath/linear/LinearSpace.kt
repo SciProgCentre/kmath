@@ -5,7 +5,7 @@
 
 package space.kscience.kmath.linear
 
-import space.kscience.kmath.misc.UnstableKMathAPI
+import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.nd.MutableStructure2D
 import space.kscience.kmath.nd.Structure2D
 import space.kscience.kmath.nd.StructureFeature

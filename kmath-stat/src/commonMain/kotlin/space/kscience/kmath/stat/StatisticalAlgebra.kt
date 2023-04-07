@@ -1,6 +1,6 @@
 package space.kscience.kmath.stat
 
-import space.kscience.kmath.misc.UnstableKMathAPI
+import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.misc.sorted
 import space.kscience.kmath.operations.*
 import space.kscience.kmath.structures.Buffer
@@ -33,7 +33,7 @@ public data class KMComparisonResult<T : Comparable<T>>(val n: Int, val m: Int, 
 public fun <T : Comparable<T>, A, BA : BufferAlgebra<T, A>> StatisticalAlgebra<T, A, BA>.ksComparisonStatistic(
     x: Buffer<T>,
     y: Buffer<T>,
-): KMComparisonResult<T> where A : Group<T>, A : NumericAlgebra<T> = elementAlgebra.invoke {
+): KMComparisonResult<T> where A : Group<T>, A : NumericAlgebra<T> = with(elementAlgebra) {
     // Copy and sort the sample arrays
     val sx = x.sorted()
     val sy = y.sorted()

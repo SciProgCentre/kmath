@@ -5,7 +5,7 @@
 
 package space.kscience.kmath.functions
 
-import space.kscience.kmath.misc.UnstableKMathAPI
+import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.operations.*
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract

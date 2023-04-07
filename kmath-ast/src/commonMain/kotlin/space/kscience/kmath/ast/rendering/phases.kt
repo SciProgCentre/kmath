@@ -5,8 +5,8 @@
 
 package space.kscience.kmath.ast.rendering
 
+import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.ast.rendering.FeaturedMathRendererWithPostProcess.PostProcessPhase
-import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.operations.FieldOps
 import space.kscience.kmath.operations.GroupOps
 import space.kscience.kmath.operations.PowerOperations

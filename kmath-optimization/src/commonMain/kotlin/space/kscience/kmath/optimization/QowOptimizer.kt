@@ -5,9 +5,9 @@
 
 package space.kscience.kmath.optimization
 
+import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.expressions.*
 import space.kscience.kmath.linear.*
-import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.misc.log
 import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.operations.DoubleL2Norm

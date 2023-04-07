@@ -7,8 +7,8 @@ package space.kscience.kmath.commons.integration
 
 import org.apache.commons.math3.analysis.integration.IterativeLegendreGaussIntegrator
 import org.apache.commons.math3.analysis.integration.SimpsonIntegrator
+import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.integration.*
-import space.kscience.kmath.misc.UnstableKMathAPI
 
 /**
  * Integration wrapper for Common-maths UnivariateIntegrator

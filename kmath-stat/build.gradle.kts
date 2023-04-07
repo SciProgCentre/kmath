@@ -12,7 +12,7 @@ kotlin.sourceSets {
     commonMain {
         dependencies {
             api(project(":kmath-coroutines"))
-            implementation(spclibs.atomicfu)
+            //implementation(spclibs.atomicfu)
         }
     }
 

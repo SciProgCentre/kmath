@@ -53,7 +53,7 @@ internal class ByteBufferMemory(
 
         override fun readLong(offset: Int) = buffer.getLong(position(offset))
 
-        override fun release() {
+        override fun close() {
             // does nothing on JVM
         }
     }
@@ -87,7 +87,7 @@ internal class ByteBufferMemory(
             buffer.putLong(position(offset), value)
         }
 
-        override fun release() {
+        override fun close() {
             // does nothing on JVM
         }
     }

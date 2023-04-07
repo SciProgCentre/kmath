@@ -5,7 +5,7 @@
 
 package space.kscience.kmath.ast.rendering
 
-import space.kscience.kmath.misc.UnstableKMathAPI
+import space.kscience.kmath.UnstableKMathAPI
 
 /**
  * [SyntaxRenderer] implementation for MathML.

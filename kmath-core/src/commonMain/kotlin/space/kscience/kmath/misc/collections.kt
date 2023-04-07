@@ -19,4 +19,4 @@ public inline fun <T, R> List<T>.zipWithNextCircular(transform: (a: T, b: T) -> 
     }
 }
 
-public inline fun <T> List<T>.zipWithNextCircular(): List<Pair<T,T>> = zipWithNextCircular { l, r -> l to r  }
+public fun <T> List<T>.zipWithNextCircular(): List<Pair<T,T>> = zipWithNextCircular { l, r -> l to r  }

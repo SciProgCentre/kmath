@@ -5,9 +5,9 @@
 
 package space.kscience.kmath.ast
 
+import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.expressions.Expression
 import space.kscience.kmath.expressions.Symbol
-import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.operations.Algebra
 import space.kscience.kmath.operations.NumericAlgebra
 

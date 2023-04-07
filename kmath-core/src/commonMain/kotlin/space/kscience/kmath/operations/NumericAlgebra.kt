@@ -5,7 +5,7 @@
 
 package space.kscience.kmath.operations
 
-import space.kscience.kmath.misc.UnstableKMathAPI
+import space.kscience.kmath.UnstableKMathAPI
 import kotlin.math.E
 import kotlin.math.PI
 

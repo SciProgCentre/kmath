@@ -17,9 +17,9 @@ import org.tensorflow.op.core.*
 import org.tensorflow.types.TInt32
 import org.tensorflow.types.family.TNumber
 import org.tensorflow.types.family.TType
-import space.kscience.kmath.misc.PerformancePitfall
-import space.kscience.kmath.misc.UnsafeKMathAPI
-import space.kscience.kmath.misc.UnstableKMathAPI
+import space.kscience.kmath.PerformancePitfall
+import space.kscience.kmath.UnsafeKMathAPI
+import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.nd.ShapeND
 import space.kscience.kmath.nd.StructureND
 import space.kscience.kmath.nd.asArray

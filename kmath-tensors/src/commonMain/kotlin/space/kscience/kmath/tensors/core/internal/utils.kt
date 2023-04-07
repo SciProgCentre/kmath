@@ -5,7 +5,7 @@
 
 package space.kscience.kmath.tensors.core.internal
 
-import space.kscience.kmath.misc.PerformancePitfall
+import space.kscience.kmath.PerformancePitfall
 import space.kscience.kmath.nd.asList
 import space.kscience.kmath.nd.last
 import space.kscience.kmath.operations.DoubleBufferOps.Companion.map

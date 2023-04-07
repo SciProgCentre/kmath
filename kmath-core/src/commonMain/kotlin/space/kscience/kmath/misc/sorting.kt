@@ -6,6 +6,7 @@
 
 package space.kscience.kmath.misc
 
+import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.VirtualBuffer
 

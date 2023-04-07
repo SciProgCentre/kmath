@@ -5,8 +5,8 @@
 
 package space.kscience.kmath.ast.rendering
 
+import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.expressions.MST
-import space.kscience.kmath.misc.UnstableKMathAPI
 
 /**
  * Renders [MST] to [MathSyntax].

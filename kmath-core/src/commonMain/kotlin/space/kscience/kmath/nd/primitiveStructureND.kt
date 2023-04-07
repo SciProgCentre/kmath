@@ -5,7 +5,7 @@
 
 package space.kscience.kmath.nd
 
-import space.kscience.kmath.misc.PerformancePitfall
+import space.kscience.kmath.PerformancePitfall
 
 public interface StructureNDOfDouble : StructureND<Double> {
     /**

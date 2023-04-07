@@ -5,7 +5,7 @@
 
 package space.kscience.kmath.nd
 
-import space.kscience.kmath.misc.UnstableKMathAPI
+import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.operations.NumbersAddOps
 import space.kscience.kmath.operations.ShortRing
 import space.kscience.kmath.operations.bufferAlgebra
