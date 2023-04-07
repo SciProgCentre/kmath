@@ -78,8 +78,11 @@ public object Euclidean3DSpace : GeometrySpace<DoubleVector3D>, ScaleOperations<
         }
     }
 
+    public fun vector(x: Double, y: Double, z: Double): DoubleVector3D =
+        Vector3DImpl(x, y, z)
+
     public fun vector(x: Number, y: Number, z: Number): DoubleVector3D =
-        Vector3DImpl(x.toDouble(), y.toDouble(), z.toDouble())
+        vector(x.toDouble(), y.toDouble(), z.toDouble())
 
     override val zero: DoubleVector3D by lazy { vector(0.0, 0.0, 0.0) }
 
@@ -99,6 +102,46 @@ public object Euclidean3DSpace : GeometrySpace<DoubleVector3D>, ScaleOperations<
 
     override fun DoubleVector3D.dot(other: DoubleVector3D): Double =
         x * other.x + y * other.y + z * other.z
+
+    private fun leviCivita(i: Int, j: Int, k: Int): Int = when {
+        // even permutation
+        i == 0 && j == 1 && k == 2 -> 1
+        i == 1 && j == 2 && k == 0 -> 1
+        i == 2 && j == 0 && k == 1 -> 1
+        // odd permutations
+        i == 2 && j == 1 && k == 0 -> -1
+        i == 0 && j == 2 && k == 1 -> -1
+        i == 1 && j == 0 && k == 2 -> -1
+
+        else -> 0
+    }
+
+    /**
+     * Compute vector product of [first] and [second]. The basis assumed to be right-handed.
+     */
+    public fun vectorProduct(
+        first: DoubleVector3D,
+        second: DoubleVector3D,
+    ): DoubleVector3D {
+        var x = 0.0
+        var y = 0.0
+        var z = 0.0
+
+        for (j in (0..2)) {
+            for (k in (0..2)) {
+                x += leviCivita(0, j, k) * first[j] * second[k]
+                y += leviCivita(1, j, k) * first[j] * second[k]
+                z += leviCivita(2, j, k) * first[j] * second[k]
+            }
+        }
+
+        return vector(x, y, z)
+    }
+
+    /**
+     * Vector product with right basis
+     */
+    public infix fun DoubleVector3D.cross(other: DoubleVector3D): Vector3D<Double> = vectorProduct(this, other)
 
     public val xAxis: DoubleVector3D = vector(1.0, 0.0, 0.0)
     public val yAxis: DoubleVector3D = vector(0.0, 1.0, 0.0)
