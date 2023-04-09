@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 ### Added
+- Wasm support for `memory`, `core`, `complex` and `functions` modules.
 - Generic builders for `BufferND` and `MutableBufferND`
 - `NamedMatrix` - matrix with symbol-based indexing
 - `Expression` with default arguments

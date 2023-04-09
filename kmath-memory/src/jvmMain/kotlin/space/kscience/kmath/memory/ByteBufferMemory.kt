@@ -20,8 +20,7 @@ internal class ByteBufferMemory(
     val startOffset: Int = 0,
     override val size: Int = buffer.limit(),
 ) : Memory {
-    @Suppress("NOTHING_TO_INLINE")
-    private inline fun position(o: Int): Int = startOffset + o
+    private fun position(offset: Int): Int = startOffset + offset
 
     override fun view(offset: Int, length: Int): Memory {
         require(offset >= 0) { "offset shouldn't be negative: $offset" }
@@ -120,7 +119,7 @@ public fun ByteBuffer.asMemory(startOffset: Int = 0, size: Int = limit()): Memor
     ByteBufferMemory(this, startOffset, size)
 
 /**
- * Uses direct memory-mapped buffer from file to read something and close it afterwards.
+ * Uses direct memory-mapped buffer from file to read something and close it afterward.
  */
 @Throws(IOException::class)
 public inline fun <R> Path.readAsMemory(position: Long = 0, size: Long = Files.size(this), block: Memory.() -> R): R {

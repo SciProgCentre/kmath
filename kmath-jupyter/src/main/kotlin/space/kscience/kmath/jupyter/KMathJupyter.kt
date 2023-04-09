@@ -13,6 +13,7 @@ import org.jetbrains.kotlinx.jupyter.api.DisplayResult
 import org.jetbrains.kotlinx.jupyter.api.HTML
 import org.jetbrains.kotlinx.jupyter.api.libraries.JupyterIntegration
 import space.kscience.kmath.PerformancePitfall
+import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.ast.rendering.FeaturedMathRendererWithPostProcess
 import space.kscience.kmath.ast.rendering.MathMLSyntaxRenderer
 import space.kscience.kmath.ast.rendering.renderWithStringBuilder
@@ -30,6 +31,7 @@ import space.kscience.kmath.structures.Buffer
  */
 public fun Number.toMst(): MST.Numeric = MST.Numeric(this)
 
+@OptIn(UnstableKMathAPI::class)
 internal class KMathJupyter : JupyterIntegration() {
     private val mathRender = FeaturedMathRendererWithPostProcess.Default
     private val syntaxRender = MathMLSyntaxRenderer

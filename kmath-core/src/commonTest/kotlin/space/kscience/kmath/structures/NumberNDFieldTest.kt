@@ -22,6 +22,7 @@ import kotlin.math.pow
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
+@OptIn(PerformancePitfall::class)
 @Suppress("UNUSED_VARIABLE")
 class NumberNDFieldTest {
     val algebra = DoubleField.ndAlgebra

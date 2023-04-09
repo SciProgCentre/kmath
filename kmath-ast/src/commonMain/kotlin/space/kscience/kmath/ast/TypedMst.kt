@@ -5,7 +5,6 @@
 
 package space.kscience.kmath.ast
 
-import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.expressions.Expression
 import space.kscience.kmath.expressions.Symbol
 import space.kscience.kmath.operations.Algebra
@@ -16,7 +15,6 @@ import space.kscience.kmath.operations.NumericAlgebra
  *
  * @param T the type.
  */
-@UnstableKMathAPI
 public sealed interface TypedMst<T> {
     /**
      * A node containing a unary operation.
@@ -133,7 +131,6 @@ public sealed interface TypedMst<T> {
 /**
  * Interprets the [TypedMst] node with this [Algebra] and [arguments].
  */
-@UnstableKMathAPI
 public fun <T> TypedMst<T>.interpret(algebra: Algebra<T>, arguments: Map<Symbol, T>): T = when (this) {
     is TypedMst.Unary -> algebra.unaryOperation(operation, interpret(algebra, arguments))
 
@@ -158,7 +155,6 @@ public fun <T> TypedMst<T>.interpret(algebra: Algebra<T>, arguments: Map<Symbol,
 /**
  * Interprets the [TypedMst] node with this [Algebra] and optional [arguments].
  */
-@UnstableKMathAPI
 public fun <T> TypedMst<T>.interpret(algebra: Algebra<T>, vararg arguments: Pair<Symbol, T>): T = interpret(
     algebra,
     when (arguments.size) {
@@ -171,7 +167,6 @@ public fun <T> TypedMst<T>.interpret(algebra: Algebra<T>, vararg arguments: Pair
 /**
  * Interpret this [TypedMst] node as expression.
  */
-@UnstableKMathAPI
 public fun <T : Any> TypedMst<T>.toExpression(algebra: Algebra<T>): Expression<T> = Expression { arguments ->
     interpret(algebra, arguments)
 }

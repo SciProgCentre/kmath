@@ -5,7 +5,6 @@
 
 package space.kscience.kmath.ast.rendering
 
-import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.expressions.MST
 
 /**
@@ -13,7 +12,6 @@ import space.kscience.kmath.expressions.MST
  *
  * @author Iaroslav Postovalov
  */
-@UnstableKMathAPI
 public fun interface MathRenderer {
     /**
      * Renders [MST] to [MathSyntax].
@@ -27,7 +25,6 @@ public fun interface MathRenderer {
  * @property features The applied features.
  * @author Iaroslav Postovalov
  */
-@UnstableKMathAPI
 public open class FeaturedMathRenderer(public val features: List<RenderFeature>) : MathRenderer {
     override fun render(mst: MST): MathSyntax {
         for (feature in features) feature.render(this, mst)?.let { return it }
@@ -51,7 +48,6 @@ public open class FeaturedMathRenderer(public val features: List<RenderFeature>)
  * @property stages The applied stages.
  * @author Iaroslav Postovalov
  */
-@UnstableKMathAPI
 public open class FeaturedMathRendererWithPostProcess(
     features: List<RenderFeature>,
     public val stages: List<PostProcessPhase>,
