@@ -1,13 +1,27 @@
 # KMath
 
-## [Unreleased]
+## Unreleased
+
+### Added
+
+### Changed
+
+### Deprecated
+
+### Removed
+
+### Fixed
+
+### Security
+
+## 0.3.1-dev-RC - 2023-04-09
+
 ### Added
 - Wasm support for `memory`, `core`, `complex` and `functions` modules.
 - Generic builders for `BufferND` and `MutableBufferND`
 - `NamedMatrix` - matrix with symbol-based indexing
 - `Expression` with default arguments
 - Type-aliases for numbers like `Float64`
-- 2D optimal trajectory computation in a separate module `kmath-trajectory`
 - Autodiff for generic algebra elements in core!
 - Algebra now has an obligatory `bufferFactory` (#477).
 
@@ -17,22 +31,17 @@
 - Row-wise and column-wise ND shapes in the core
 - Shape is read-only
 - Major refactor of tensors (only minor API changes)
-- Kotlin 1.7.20
+- Kotlin 1.8.20
 - `LazyStructure` `deffered` -> `async` to comply with coroutines code style
 - Default `dot` operation in tensor algebra no longer support broadcasting. Instead `matmul` operation is added to `DoubleTensorAlgebra`.
 - Multik went MPP
-
-### Deprecated
 
 ### Removed
 - Trajectory moved to https://github.com/SciProgCentre/maps-kt
 - Polynomials moved to https://github.com/SciProgCentre/kmath-polynomial
 
-### Fixed
+## 0.3.0
 
-### Security
-
-## [0.3.0]
 ### Added
 - `ScaleOperations` interface
 - `Field` extends `ScaleOperations`
@@ -57,9 +66,8 @@
 - `contentEquals` with tolerance: #364
 - Compilation to TeX for MST: #254
 
-
 ### Changed
-- Annotations moved to `space.kscience.kmath` 
+- Annotations moved to `space.kscience.kmath`
 - Exponential operations merged with hyperbolic functions
 - Space is replaced by Group. Space is reserved for vector spaces.
 - VectorSpace is now a vector space
@@ -91,10 +99,8 @@
 - Rework of histograms.
 - `UnivariateFunction` -> `Function1D`, `MultivariateFunction` -> `FunctionND`
 
-
 ### Deprecated
 - Specialized `DoubleBufferAlgebra`
-
 
 ### Removed
 - Nearest in Domain. To be implemented in geometry package.
@@ -106,15 +112,12 @@
 - Second generic from DifferentiableExpression
 - Algebra elements are completely removed. Use algebra contexts instead.
 
-
 ### Fixed
 - Ring inherits RingOperations, not GroupOperations
 - Univariate histogram filling
 
+## 0.2.0
 
-### Security
-
-## [0.2.0]
 ### Added
 - `fun` annotation for SAM interfaces in library
 - Explicit `public` visibility for all public APIs
@@ -133,7 +136,6 @@
 - Generic operation result parameter to `MatrixContext`
 - New `MatrixFeature` interfaces for matrix decompositions
 - Basic Quaternion vector support in `kmath-complex`.
-
 
 ### Changed
 - Package changed from `scientifik` to `space.kscience`
@@ -159,7 +161,6 @@
 - `symbol` method in `Algebra` renamed to `bindSymbol` to avoid ambiguity
 - Add `out` projection to `Buffer` generic
 
-
 ### Removed
 - `kmath-koma` module because it doesn't support Kotlin 1.4.
 - Support of `legacy` JS backend (we will support only IR)
@@ -168,11 +169,11 @@
 - `Real` class
 - StructureND identity and equals
 
-
 ### Fixed
 - `symbol` method in `MstExtendedField` (https://github.com/mipt-npm/kmath/pull/140)
 
-## [0.1.4]
+## 0.1.4
+
 ### Added
 - Functional Expressions API
 - Mathematical Syntax Tree, its interpreter and API
@@ -190,7 +191,6 @@
 - Full hyperbolic functions support and default implementations within `ExtendedField`
 - Norm support for `Complex`
 
-
 ### Changed
 - `readAsMemory` now has `throws IOException` in JVM signature.
 - Several functions taking functional types were made `inline`.
@@ -201,7 +201,6 @@
 - `tg` function is renamed to `tan` (https://github.com/mipt-npm/kmath/pull/114)
 - Gradle version: 6.3 -> 6.6
 - Moved probability distributions to commons-rng and to `kmath-prob`
-
 
 ### Fixed
 - Missing copy method in Memory implementation on JS (https://github.com/mipt-npm/kmath/pull/106)
