@@ -1,259 +1,667 @@
+<!doctype html>
 <html>
-  <head>
+<head>
     <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
     <title>space.kscience.kmath.tensors.core</title>
-</head><body><link href="../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../";</script>
-    <script type="text/javascript" src="../../scripts/sourceset_dependencies.js" async></script><link href="../../styles/style.css" rel="Stylesheet"><link href="../../styles/jetbrains-mono.css" rel="Stylesheet"><link href="../../styles/main.css" rel="Stylesheet"><link href="../../styles/prism.css" rel="Stylesheet"><link href="../../styles/logo-styles.css" rel="Stylesheet"><script type="text/javascript" src="../../scripts/clipboard.js" async></script><script type="text/javascript" src="../../scripts/navigation-loader.js" async></script><script type="text/javascript" src="../../scripts/platform-content-handler.js" async></script><script type="text/javascript" src="../../scripts/main.js" defer></script><script type="text/javascript" src="../../scripts/prism.js" async></script><script>const storage = localStorage.getItem("dokka-dark-mode")
-const savedDarkMode = storage ? JSON.parse(storage) : false
-if(savedDarkMode === true){
-    document.getElementsByTagName("html")[0].classList.add("theme-dark")
-}</script>
-
-  
-    <div class="navigation-wrapper" id="navigation-wrapper">
-      <div id="leftToggler"><span class="icon-toggler"></span></div>
-      <div class="library-name"><a href="../../index.html"><span>kmath</span></a></div>
-      <div></div>
-      <div class="pull-right d-flex"><button id="theme-toggle-button"><span id="theme-toggle"></span></button>
-        <div id="searchBar"></div>
-      </div>
+<link href="../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../";</script>    <script>const storage = localStorage.getItem("dokka-dark-mode")
+    if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    } else {
+        const savedDarkMode = JSON.parse(storage)
+        if(savedDarkMode === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    }
+    </script>
+<script type="text/javascript" src="../../scripts/sourceset_dependencies.js" async></script>
+<link href="../../styles/style.css" rel="Stylesheet">
+<link href="../../styles/jetbrains-mono.css" rel="Stylesheet">
+<link href="../../styles/main.css" rel="Stylesheet">
+<link href="../../styles/prism.css" rel="Stylesheet">
+<link href="../../styles/logo-styles.css" rel="Stylesheet">
+<script type="text/javascript" src="../../scripts/clipboard.js" async></script>
+<script type="text/javascript" src="../../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../../scripts/main.js" defer></script>
+<script type="text/javascript" src="../../scripts/prism.js" async></script>
+<script type="text/javascript" src="../../scripts/symbol-parameters-wrapper_deferred.js" defer></script></head>
+<body>
+<div class="navigation-wrapper" id="navigation-wrapper">
+    <div id="leftToggler"><span class="icon-toggler"></span></div>
+    <div class="library-name">
+<a href="../../index.html">
+<span>kmath</span>            </a>    </div>
+    <div>0.3.1-dev-RC
     </div>
-    <div id="container">
-      <div id="leftColumn">
+    <div class="pull-right d-flex">
+        <div class="filter-section" id="filter-section">
+                <button class="platform-tag platform-selector common-like" data-active="" data-filter=":kmath-tensors:dokkaHtmlPartial/commonMain">common</button>
+        </div>
+        <button id="theme-toggle-button"><span id="theme-toggle"></span></button>
+        <div id="searchBar"></div>
+    </div>
+</div>
+<div id="container">
+    <div id="leftColumn">
         <div id="sideMenu"></div>
-      </div>
-      <div id="main">
-        <div class="main-content" id="content" pageids="kmath-tensors::space.kscience.kmath.tensors.core////PointingToDeclaration//-1345790395">
-          <div class="breadcrumbs"><a href="../index.html">kmath-tensors</a>/<a href="index.html">space.kscience.kmath.tensors.core</a></div>
-          <div class="cover ">
-            <h1 class="cover"><span><span>Package</span></span> <span>space.</span><wbr><span>kscience.</span><wbr><span>kmath.</span><wbr><span>tensors.</span><wbr><span>core</span></h1>
-          </div>
-          <div class="tabbedcontent">
-            <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="Types">Types</button><button class="section-tab" data-togglable="Functions">Functions</button><button class="section-tab" data-togglable="Properties">Properties</button></div>
-            <div class="tabs-section-body">
-              <h2 class="">Types</h2>
-              <div class="table" data-togglable="Types"><a data-name="-917530272%2FClasslikes%2F-1345790395" anchor-label="BroadcastDoubleTensorAlgebra" id="-917530272%2FClasslikes%2F-1345790395" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-tensors:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="-broadcast-double-tensor-algebra/index.html"><span>Broadcast</span><wbr><span>Double</span><wbr><span>Tensor</span><wbr><span><span>Algebra</span></span></a></div>
+    </div>
+    <div id="main">
+<div class="main-content" data-page-type="package" id="content" pageids="kmath-tensors::space.kscience.kmath.tensors.core////PointingToDeclaration//-1345790395">
+  <div class="breadcrumbs"><a href="../index.html">kmath-tensors</a><span class="delimiter">/</span><span class="current">space.kscience.kmath.tensors.core</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span><span>Package-level</span></span> <span><span>declarations</span></span></h1>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="TYPE">Types</button><button class="section-tab" data-togglable="FUNCTION,EXTENSION_FUNCTION">Functions</button><button class="section-tab" data-togglable="PROPERTY,EXTENSION_PROPERTY">Properties</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="TYPE">
+        <h2 class="">Types</h2>
+        <div class="table"><a data-name="-917530272%2FClasslikes%2F-1345790395" anchor-label="BroadcastDoubleTensorAlgebra" id="-917530272%2FClasslikes%2F-1345790395" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-filterable-current=":kmath-tensors:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-broadcast-double-tensor-algebra/index.html"><span>Broadcast</span><wbr><span>Double</span><wbr><span>Tensor</span><wbr><span><span>Algebra</span></span></a></div>
 <span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-917530272%2FClasslikes%2F-1345790395"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-tensors:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation">@</span><a href="../../kmath-core/space.kscience.kmath.misc/-performance-pitfall/index.html"><span class="token annotation">PerformancePitfall</span></a></div></div><span class="token keyword">object </span><a href="-broadcast-double-tensor-algebra/index.html">BroadcastDoubleTensorAlgebra</a> : <a href="-double-tensor-algebra/index.html">DoubleTensorAlgebra</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Basic linear algebra operations implemented with broadcasting. For more information: https://pytorch.org/docs/stable/notes/broadcasting.html</p></div></div></div>
-                      </div>
-                    </div>
-                  </div>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-tensors:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">object </span><a href="-broadcast-double-tensor-algebra/index.html">BroadcastDoubleTensorAlgebra</a> : <a href="-double-tensor-algebra/index.html">DoubleTensorAlgebra</a></div><div class="brief "><p class="paragraph">Basic linear algebra operations implemented with broadcasting. For more information: https://pytorch.org/docs/stable/notes/broadcasting.html</p></div></div></div>
                 </div>
+              </div>
+            </div>
+          </div>
 <a data-name="-1266582939%2FClasslikes%2F-1345790395" anchor-label="BufferedTensor" id="-1266582939%2FClasslikes%2F-1345790395" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-tensors:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="-buffered-tensor/index.html"><span>Buffered</span><wbr><span><span>Tensor</span></span></a></div>
+          <div class="table-row" data-filterable-current=":kmath-tensors:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-buffered-tensor/index.html"><span>Buffered</span><wbr><span><span>Tensor</span></span></a></div>
 <span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1266582939%2FClasslikes%2F-1345790395"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-tensors:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">class </span><a href="-buffered-tensor/index.html">BufferedTensor</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="-buffered-tensor/index.html">T</a><span class="token operator">&gt;</span> : <a href="../../kmath-core/space.kscience.kmath.nd/-mutable-structure-n-d/index.html">MutableStructureND</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="-buffered-tensor/index.html">T</a><span class="token operator">&gt; </span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Represents <a href="../space.kscience.kmath.tensors.api/index.html#-1680022905%2FClasslikes%2F-1345790395">Tensor</a> over a <a href="../../kmath-core/space.kscience.kmath.structures/-mutable-buffer/index.html">MutableBuffer</a> intended to be used through <a href="-double-tensor/index.html">DoubleTensor</a> and <a href="-int-tensor/index.html">IntTensor</a></p></div></div></div>
-                      </div>
-                    </div>
-                  </div>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-tensors:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">class </span><a href="-buffered-tensor/index.html">BufferedTensor</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="-buffered-tensor/index.html">T</a><span class="token operator">&gt;</span><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>shape<span class="token operator">: </span><a href="../../kmath-core/space.kscience.kmath.nd/-shape-n-d/index.html">ShapeND</a></span></span><span class="token punctuation">)</span> : <a href="../../kmath-core/space.kscience.kmath.nd/-mutable-structure-n-d/index.html">MutableStructureND</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="-buffered-tensor/index.html">T</a><span class="token operator">&gt; </span></div><div class="brief "><p class="paragraph">Represents <a href="../space.kscience.kmath.tensors.api/index.html#-1680022905%2FClasslikes%2F-1345790395">Tensor</a> over a <a href="../../kmath-core/space.kscience.kmath.structures/-mutable-buffer/index.html">MutableBuffer</a> intended to be used through <a href="-double-tensor/index.html">DoubleTensor</a> and <a href="-int-tensor/index.html">IntTensor</a></p></div></div></div>
                 </div>
+              </div>
+            </div>
+          </div>
 <a data-name="666375219%2FClasslikes%2F-1345790395" anchor-label="DoubleTensor" id="666375219%2FClasslikes%2F-1345790395" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-tensors:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="-double-tensor/index.html"><span>Double</span><wbr><span><span>Tensor</span></span></a></div>
+          <div class="table-row" data-filterable-current=":kmath-tensors:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-double-tensor/index.html"><span>Double</span><wbr><span><span>Tensor</span></span></a></div>
 <span class="anchor-wrapper"><span class="anchor-icon" pointing-to="666375219%2FClasslikes%2F-1345790395"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-tensors:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-double-tensor/index.html">DoubleTensor</a> : <a href="-buffered-tensor/index.html">BufferedTensor</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token operator">&gt; </span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Default <a href="-buffered-tensor/index.html">BufferedTensor</a> implementation for <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a> values</p></div></div></div>
-                      </div>
-                    </div>
-                  </div>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-tensors:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">class </span><a href="-double-tensor/index.html">DoubleTensor</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">shape<span class="token operator">: </span><a href="../../kmath-core/space.kscience.kmath.nd/-shape-n-d/index.html">ShapeND</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>source<span class="token operator">: </span><a href="-offset-double-buffer/index.html">OffsetDoubleBuffer</a></span></span><span class="token punctuation">)</span> : <a href="-buffered-tensor/index.html">BufferedTensor</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token operator">&gt; </span>, <a href="../../kmath-core/space.kscience.kmath.nd/-mutable-structure-n-d-of-double/index.html">MutableStructureNDOfDouble</a></div><div class="brief "><p class="paragraph">Default <a href="-buffered-tensor/index.html">BufferedTensor</a> implementation for <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a> values.</p></div></div></div>
                 </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1635706080%2FClasslikes%2F-1345790395" anchor-label="DoubleTensor1D" id="1635706080%2FClasslikes%2F-1345790395" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-filterable-current=":kmath-tensors:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-double-tensor1-d/index.html"><span>Double</span><wbr><span><span>Tensor1D</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1635706080%2FClasslikes%2F-1345790395"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-tensors:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-double-tensor1-d/index.html">DoubleTensor1D</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>source<span class="token operator">: </span><a href="-offset-double-buffer/index.html">OffsetDoubleBuffer</a></span></span><span class="token punctuation">)</span> : <a href="-double-tensor/index.html">DoubleTensor</a>, <a href="../../kmath-core/space.kscience.kmath.nd/-mutable-structure1-d/index.html">MutableStructure1D</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token operator">&gt; </span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1697647199%2FClasslikes%2F-1345790395" anchor-label="DoubleTensor2D" id="-1697647199%2FClasslikes%2F-1345790395" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-filterable-current=":kmath-tensors:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-double-tensor2-d/index.html"><span>Double</span><wbr><span><span>Tensor2D</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1697647199%2FClasslikes%2F-1345790395"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-tensors:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-double-tensor2-d/index.html">DoubleTensor2D</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>rowNum<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>colNum<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>source<span class="token operator">: </span><a href="-offset-double-buffer/index.html">OffsetDoubleBuffer</a></span></span><span class="token punctuation">)</span> : <a href="-double-tensor/index.html">DoubleTensor</a>, <a href="../../kmath-core/space.kscience.kmath.nd/-mutable-structure2-d/index.html">MutableStructure2D</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token operator">&gt; </span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
 <a data-name="-596189209%2FClasslikes%2F-1345790395" anchor-label="DoubleTensorAlgebra" id="-596189209%2FClasslikes%2F-1345790395" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-tensors:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="-double-tensor-algebra/index.html"><span>Double</span><wbr><span>Tensor</span><wbr><span><span>Algebra</span></span></a></div>
+          <div class="table-row" data-filterable-current=":kmath-tensors:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-double-tensor-algebra/index.html"><span>Double</span><wbr><span>Tensor</span><wbr><span><span>Algebra</span></span></a></div>
 <span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-596189209%2FClasslikes%2F-1345790395"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-tensors:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">class </span><a href="-double-tensor-algebra/index.html">DoubleTensorAlgebra</a> : <a href="../space.kscience.kmath.tensors.api/-tensor-partial-division-algebra/index.html">TensorPartialDivisionAlgebra</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="../../kmath-core/space.kscience.kmath.operations/-double-field/index.html">DoubleField</a><span class="token operator">&gt; </span>, <a href="../space.kscience.kmath.tensors.api/-analytic-tensor-algebra/index.html">AnalyticTensorAlgebra</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="../../kmath-core/space.kscience.kmath.operations/-double-field/index.html">DoubleField</a><span class="token operator">&gt; </span>, <a href="../space.kscience.kmath.tensors.api/-linear-ops-tensor-algebra/index.html">LinearOpsTensorAlgebra</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="../../kmath-core/space.kscience.kmath.operations/-double-field/index.html">DoubleField</a><span class="token operator">&gt; </span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Implementation of basic operations over double tensors and basic algebra operations on them.</p></div></div></div>
-                      </div>
-                    </div>
-                  </div>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-tensors:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">class </span><a href="-double-tensor-algebra/index.html">DoubleTensorAlgebra</a> : <a href="../space.kscience.kmath.tensors.api/-analytic-tensor-algebra/index.html">AnalyticTensorAlgebra</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="../../kmath-core/space.kscience.kmath.operations/-double-field/index.html">DoubleField</a><span class="token operator">&gt; </span>, <a href="../space.kscience.kmath.tensors.api/-linear-ops-tensor-algebra/index.html">LinearOpsTensorAlgebra</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="../../kmath-core/space.kscience.kmath.operations/-double-field/index.html">DoubleField</a><span class="token operator">&gt; </span></div><div class="brief "><p class="paragraph">Implementation of basic operations over double tensors and basic algebra operations on them.</p></div></div></div>
                 </div>
+              </div>
+            </div>
+          </div>
 <a data-name="-862489795%2FClasslikes%2F-1345790395" anchor-label="IntTensor" id="-862489795%2FClasslikes%2F-1345790395" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-tensors:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="-int-tensor/index.html"><span>Int</span><wbr><span><span>Tensor</span></span></a></div>
+          <div class="table-row" data-filterable-current=":kmath-tensors:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-int-tensor/index.html"><span>Int</span><wbr><span><span>Tensor</span></span></a></div>
 <span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-862489795%2FClasslikes%2F-1345790395"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-tensors:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-int-tensor/index.html">IntTensor</a> : <a href="-buffered-tensor/index.html">BufferedTensor</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token operator">&gt; </span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Default <a href="-buffered-tensor/index.html">BufferedTensor</a> implementation for <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a> values</p></div></div></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="-597509936%2FClasslikes%2F-1345790395" anchor-label="TensorLinearStructure" id="-597509936%2FClasslikes%2F-1345790395" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-tensors:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="-tensor-linear-structure/index.html"><span>Tensor</span><wbr><span>Linear</span><wbr><span><span>Structure</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-597509936%2FClasslikes%2F-1345790395"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-tensors:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-tensor-linear-structure/index.html">TensorLinearStructure</a><span class="token punctuation">(</span>shape<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int-array/index.html">IntArray</a><span class="token punctuation">)</span> : <a href="../../kmath-core/space.kscience.kmath.nd/-strides/index.html">Strides</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">This <a href="../../kmath-core/space.kscience.kmath.nd/-strides/index.html">Strides</a> implementation follows the last dimension first convention For more information: https://numpy.org/doc/stable/reference/generated/numpy.ndarray.strides.html</p></div></div></div>
-                      </div>
-                    </div>
-                  </div>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-tensors:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-int-tensor/index.html">IntTensor</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">shape<span class="token operator">: </span><a href="../../kmath-core/space.kscience.kmath.nd/-shape-n-d/index.html">ShapeND</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>source<span class="token operator">: </span><a href="-offset-int-buffer/index.html">OffsetIntBuffer</a></span></span><span class="token punctuation">)</span> : <a href="-buffered-tensor/index.html">BufferedTensor</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token operator">&gt; </span></div><div class="brief "><p class="paragraph">Default <a href="-buffered-tensor/index.html">BufferedTensor</a> implementation for <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a> values</p></div></div></div>
                 </div>
               </div>
-              <h2 class="">Functions</h2>
-              <div class="table" data-togglable="Functions"><a data-name="-1699635806%2FFunctions%2F-1345790395" anchor-label="copyArray" id="-1699635806%2FFunctions%2F-1345790395" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-tensors:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="copy-array.html"><span>copy</span><wbr><span><span>Array</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1699635806%2FFunctions%2F-1345790395"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-tensors:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="-double-tensor/index.html">DoubleTensor</a><span class="token punctuation">.</span><a href="copy-array.html"><span class="token function">copyArray</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double-array/index.html">DoubleArray</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Returns a copy-protected <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double-array/index.html">DoubleArray</a> of tensor elements</p></div><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="-int-tensor/index.html">IntTensor</a><span class="token punctuation">.</span><a href="copy-array.html"><span class="token function">copyArray</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int-array/index.html">IntArray</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Returns a copy-protected <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int-array/index.html">IntArray</a> of tensor elements</p></div></div></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="-1608671210%2FFunctions%2F-1345790395" anchor-label="one" id="-1608671210%2FFunctions%2F-1345790395" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-tensors:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="one.html"><span><span>one</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1608671210%2FFunctions%2F-1345790395"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-tensors:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation">@</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.jvm/-jvm-name/index.html"><span class="token annotation">JvmName</span></a><span class="token punctuation">(</span><span>name<span class="token operator"> = </span><span class="breakable-word"><span class="token string">"varArgOne"</span></span></span><wbr><span class="token punctuation">)</span></div></div><span class="token keyword"></span><span class="token keyword">fun </span><a href="-double-tensor-algebra/index.html">DoubleTensorAlgebra</a><span class="token punctuation">.</span><a href="one.html"><span class="token function">one</span></a><span class="token punctuation">(</span><span class="token keyword">vararg </span>shape<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">)</span><span class="token operator">: </span><a href="-double-tensor/index.html">DoubleTensor</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="-double-tensor-algebra/index.html">DoubleTensorAlgebra</a><span class="token punctuation">.</span><a href="one.html"><span class="token function">one</span></a><span class="token punctuation">(</span>shape<span class="token operator">: </span><a href="../../kmath-core/space.kscience.kmath.nd/-shape/index.html">Shape</a><span class="token punctuation">)</span><span class="token operator">: </span><a href="-double-tensor/index.html">DoubleTensor</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="-1825815162%2FFunctions%2F-1345790395" anchor-label="toDoubleTensor" id="-1825815162%2FFunctions%2F-1345790395" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-tensors:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="to-double-tensor.html"><span>to</span><wbr><span>Double</span><wbr><span><span>Tensor</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1825815162%2FFunctions%2F-1345790395"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-tensors:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="../space.kscience.kmath.tensors.api/index.html#-1680022905%2FClasslikes%2F-1345790395">Tensor</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="to-double-tensor.html"><span class="token function">toDoubleTensor</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-double-tensor/index.html">DoubleTensor</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Casts <a href="../space.kscience.kmath.tensors.api/index.html#-1680022905%2FClasslikes%2F-1345790395">Tensor</a> of <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a> to <a href="-double-tensor/index.html">DoubleTensor</a></p></div></div></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="-826744482%2FFunctions%2F-1345790395" anchor-label="toIntTensor" id="-826744482%2FFunctions%2F-1345790395" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-tensors:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="to-int-tensor.html"><span>to</span><wbr><span>Int</span><wbr><span><span>Tensor</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-826744482%2FFunctions%2F-1345790395"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-tensors:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="../space.kscience.kmath.tensors.api/index.html#-1680022905%2FClasslikes%2F-1345790395">Tensor</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="to-int-tensor.html"><span class="token function">toIntTensor</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-int-tensor/index.html">IntTensor</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Casts <a href="../space.kscience.kmath.tensors.api/index.html#-1680022905%2FClasslikes%2F-1345790395">Tensor</a> of <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a> to <a href="-int-tensor/index.html">IntTensor</a></p></div></div></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="1669981028%2FFunctions%2F-1345790395" anchor-label="withBroadcast" id="1669981028%2FFunctions%2F-1345790395" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-tensors:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="with-broadcast.html"><span>with</span><wbr><span><span>Broadcast</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1669981028%2FFunctions%2F-1345790395"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-tensors:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation">@</span><a href="../../kmath-core/space.kscience.kmath.misc/-unstable-k-math-a-p-i/index.html"><span class="token annotation">UnstableKMathAPI</span></a></div><div class="block"><span class="token annotation">@</span><a href="../../kmath-core/space.kscience.kmath.misc/-performance-pitfall/index.html"><span class="token annotation">PerformancePitfall</span></a></div></div><span class="token keyword"></span><span class="token keyword">fun </span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="with-broadcast.html">R</a><span class="token operator">&gt; </span><a href="-double-tensor-algebra/index.html">DoubleTensorAlgebra</a><span class="token punctuation">.</span><a href="with-broadcast.html"><span class="token function">withBroadcast</span></a><span class="token punctuation">(</span>block<span class="token operator">: </span><span class="token keyword"></span><a href="-broadcast-double-tensor-algebra/index.html">BroadcastDoubleTensorAlgebra</a><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><span class="token keyword"></span><a href="with-broadcast.html">R</a><span class="token punctuation">)</span><span class="token operator">: </span><a href="with-broadcast.html">R</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Compute a value using broadcast double tensor algebra</p></div></div></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="-266712770%2FFunctions%2F-1345790395" anchor-label="zero" id="-266712770%2FFunctions%2F-1345790395" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-tensors:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="zero.html"><span><span>zero</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-266712770%2FFunctions%2F-1345790395"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-tensors:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation">@</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.jvm/-jvm-name/index.html"><span class="token annotation">JvmName</span></a><span class="token punctuation">(</span><span>name<span class="token operator"> = </span><span class="breakable-word"><span class="token string">"varArgZero"</span></span></span><wbr><span class="token punctuation">)</span></div></div><span class="token keyword"></span><span class="token keyword">fun </span><a href="-double-tensor-algebra/index.html">DoubleTensorAlgebra</a><span class="token punctuation">.</span><a href="zero.html"><span class="token function">zero</span></a><span class="token punctuation">(</span><span class="token keyword">vararg </span>shape<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">)</span><span class="token operator">: </span><a href="-double-tensor/index.html">DoubleTensor</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="-double-tensor-algebra/index.html">DoubleTensorAlgebra</a><span class="token punctuation">.</span><a href="zero.html"><span class="token function">zero</span></a><span class="token punctuation">(</span>shape<span class="token operator">: </span><a href="../../kmath-core/space.kscience.kmath.nd/-shape/index.html">Shape</a><span class="token punctuation">)</span><span class="token operator">: </span><a href="-double-tensor/index.html">DoubleTensor</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-                      </div>
-                    </div>
-                  </div>
+            </div>
+          </div>
+<a data-name="1831494045%2FClasslikes%2F-1345790395" anchor-label="IntTensorAlgebra" id="1831494045%2FClasslikes%2F-1345790395" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-filterable-current=":kmath-tensors:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-int-tensor-algebra/index.html"><span>Int</span><wbr><span>Tensor</span><wbr><span><span>Algebra</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1831494045%2FClasslikes%2F-1345790395"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-tensors:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">class </span><a href="-int-tensor-algebra/index.html">IntTensorAlgebra</a> : <a href="../space.kscience.kmath.tensors.api/-tensor-algebra/index.html">TensorAlgebra</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="../../kmath-core/space.kscience.kmath.operations/-int-ring/index.html">IntRing</a><span class="token operator">&gt; </span></div><div class="brief "><p class="paragraph">Implementation of basic operations over double tensors and basic algebra operations on them.</p></div></div></div>
                 </div>
               </div>
-              <h2 class="">Properties</h2>
-              <div class="table" data-togglable="Properties"><a data-name="107279055%2FProperties%2F-1345790395" anchor-label="tensorAlgebra" id="107279055%2FProperties%2F-1345790395" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-tensors:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="tensor-algebra.html">tensorAlgebra</a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="107279055%2FProperties%2F-1345790395"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-tensors:dokkaHtmlPartial/commonMain"><a data-name="107279055%2FProperties%2F-1345790395" anchor-label="tensorAlgebra" id="107279055%2FProperties%2F-1345790395" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double.Companion</a><span class="token punctuation">.</span><a href="tensor-algebra.html">tensorAlgebra</a><span class="token operator">: </span><a href="-double-tensor-algebra/-companion/index.html">DoubleTensorAlgebra.Companion</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-                      </div>
-                    </div>
-                  </div>
+            </div>
+          </div>
+<a data-name="-1274396583%2FClasslikes%2F-1345790395" anchor-label="OffsetDoubleBuffer" id="-1274396583%2FClasslikes%2F-1345790395" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-filterable-current=":kmath-tensors:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-offset-double-buffer/index.html"><span>Offset</span><wbr><span>Double</span><wbr><span><span>Buffer</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1274396583%2FClasslikes%2F-1345790395"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-tensors:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-offset-double-buffer/index.html">OffsetDoubleBuffer</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>origin<span class="token operator">: </span><a href="../../kmath-core/space.kscience.kmath.structures/-double-buffer/index.html">DoubleBuffer</a><span class="token punctuation">, </span></span><span class="parameter ">offset<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>size<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a></span></span><span class="token punctuation">)</span> : <a href="../../kmath-core/space.kscience.kmath.structures/-mutable-buffer/index.html">MutableBuffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token operator">&gt; </span>, <a href="../../kmath-core/space.kscience.kmath.structures/-buffer-view/index.html">BufferView</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token operator">&gt; </span></div></div></div>
                 </div>
-<a data-name="1759591682%2FProperties%2F-1345790395" anchor-label="tensorAlgebra" id="1759591682%2FProperties%2F-1345790395" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-tensors:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="tensor-algebra.html">tensorAlgebra</a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1759591682%2FProperties%2F-1345790395"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-tensors:dokkaHtmlPartial/commonMain"><a data-name="1759591682%2FProperties%2F-1345790395" anchor-label="tensorAlgebra" id="1759591682%2FProperties%2F-1345790395" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="../../kmath-core/space.kscience.kmath.operations/-double-field/index.html">DoubleField</a><span class="token punctuation">.</span><a href="tensor-algebra.html">tensorAlgebra</a><span class="token operator">: </span><a href="-double-tensor-algebra/-companion/index.html">DoubleTensorAlgebra.Companion</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-                      </div>
-                    </div>
-                  </div>
+              </div>
+            </div>
+          </div>
+<a data-name="940061225%2FClasslikes%2F-1345790395" anchor-label="OffsetIntBuffer" id="940061225%2FClasslikes%2F-1345790395" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-filterable-current=":kmath-tensors:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-offset-int-buffer/index.html"><span>Offset</span><wbr><span>Int</span><wbr><span><span>Buffer</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="940061225%2FClasslikes%2F-1345790395"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-tensors:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-offset-int-buffer/index.html">OffsetIntBuffer</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">source<span class="token operator">: </span><a href="../../kmath-core/space.kscience.kmath.structures/-int-buffer/index.html">IntBuffer</a><span class="token punctuation">, </span></span><span class="parameter ">offset<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>size<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a></span></span><span class="token punctuation">)</span> : <a href="../../kmath-core/space.kscience.kmath.structures/-mutable-buffer/index.html">MutableBuffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token operator">&gt; </span></div><div class="brief "><p class="paragraph">Default <a href="-buffered-tensor/index.html">BufferedTensor</a> implementation for <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a> values</p></div></div></div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <div class="footer"><span class="go-to-top-icon"><a href="#content" id="go-to-top-link"></a></span><span>© 2022 Copyright</span><span class="pull-right"><span>Generated by </span><a href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span></div>
+      </div>
+      <div data-togglable="FUNCTION">
+        <h2 class="">Functions</h2>
+        <div class="table"><a data-name="878703580%2FFunctions%2F-1345790395" anchor-label="asDoubleBuffer" id="878703580%2FFunctions%2F-1345790395" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-tensors:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="as-double-buffer.html"><span>as</span><wbr><span>Double</span><wbr><span><span>Buffer</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="878703580%2FFunctions%2F-1345790395"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-tensors:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="-double-tensor/index.html">DoubleTensor</a><span class="token punctuation">.</span><a href="as-double-buffer.html"><span class="token function">asDoubleBuffer</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-offset-double-buffer/index.html">OffsetDoubleBuffer</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="357923655%2FFunctions%2F-1345790395" anchor-label="asDoubleTensor" id="357923655%2FFunctions%2F-1345790395" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-tensors:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="as-double-tensor.html"><span>as</span><wbr><span>Double</span><wbr><span><span>Tensor</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="357923655%2FFunctions%2F-1345790395"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-tensors:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="../../kmath-core/space.kscience.kmath.nd/-structure-n-d/index.html">StructureND</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="as-double-tensor.html"><span class="token function">asDoubleTensor</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-double-tensor/index.html">DoubleTensor</a></div><div class="brief "><p class="paragraph">Transforms <a href="../../kmath-core/space.kscience.kmath.nd/-structure-n-d/index.html">StructureND</a> of <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a> to <a href="-double-tensor/index.html">DoubleTensor</a>. Zero copy if possible, but is not guaranteed</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-225414704%2FFunctions%2F-1345790395" anchor-label="asDoubleTensor1D" id="-225414704%2FFunctions%2F-1345790395" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-tensors:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="as-double-tensor1-d.html"><span>as</span><wbr><span>Double</span><wbr><span><span>Tensor1D</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-225414704%2FFunctions%2F-1345790395"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-tensors:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="-double-tensor/index.html">DoubleTensor</a><span class="token punctuation">.</span><a href="as-double-tensor1-d.html"><span class="token function">asDoubleTensor1D</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-double-tensor1-d/index.html">DoubleTensor1D</a></div><div class="brief "><p class="paragraph">A zero-copy cast to 1D structure. Changes in resulting structure are reflected on original tensor.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1180935983%2FFunctions%2F-1345790395" anchor-label="asDoubleTensor2D" id="-1180935983%2FFunctions%2F-1345790395" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-tensors:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="as-double-tensor2-d.html"><span>as</span><wbr><span>Double</span><wbr><span><span>Tensor2D</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1180935983%2FFunctions%2F-1345790395"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-tensors:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="-double-tensor/index.html">DoubleTensor</a><span class="token punctuation">.</span><a href="as-double-tensor2-d.html"><span class="token function">asDoubleTensor2D</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-double-tensor2-d/index.html">DoubleTensor2D</a></div><div class="brief "><p class="paragraph">A zero-copy cast to 2D structure. Changes in resulting structure are reflected on original tensor.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1895697235%2FFunctions%2F-1345790395" anchor-label="asIntTensor" id="1895697235%2FFunctions%2F-1345790395" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-tensors:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="as-int-tensor.html"><span>as</span><wbr><span>Int</span><wbr><span><span>Tensor</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1895697235%2FFunctions%2F-1345790395"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-tensors:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="../../kmath-core/space.kscience.kmath.nd/-structure-n-d/index.html">StructureND</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="as-int-tensor.html"><span class="token function">asIntTensor</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-int-tensor/index.html">IntTensor</a></div><div class="brief "><p class="paragraph">Casts <a href="../space.kscience.kmath.tensors.api/index.html#-1680022905%2FClasslikes%2F-1345790395">Tensor</a> of <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a> to <a href="-int-tensor/index.html">IntTensor</a></p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1027715961%2FFunctions%2F-1345790395" anchor-label="cholesky" id="-1027715961%2FFunctions%2F-1345790395" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-tensors:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="cholesky.html"><span><span>cholesky</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1027715961%2FFunctions%2F-1345790395"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-tensors:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="-double-tensor-algebra/index.html">DoubleTensorAlgebra</a><span class="token punctuation">.</span><a href="cholesky.html"><span class="token function">cholesky</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">structureND<span class="token operator">: </span><a href="../../kmath-core/space.kscience.kmath.nd/-structure-n-d/index.html">StructureND</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">epsilon<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token operator"> = </span><span class="token constant">1.0E-6</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-double-tensor/index.html">DoubleTensor</a></div><div class="brief "><p class="paragraph">QR decomposition.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-87235078%2FFunctions%2F-1345790395" anchor-label="copyToTensor" id="-87235078%2FFunctions%2F-1345790395" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-tensors:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="copy-to-tensor.html"><span>copy</span><wbr><span>To</span><wbr><span><span>Tensor</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-87235078%2FFunctions%2F-1345790395"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-tensors:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="../../kmath-core/space.kscience.kmath.nd/-structure-n-d/index.html">StructureND</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="copy-to-tensor.html"><span class="token function">copyToTensor</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-double-tensor/index.html">DoubleTensor</a></div><div class="brief "><p class="paragraph">Create a mutable copy of given <a href="../../kmath-core/space.kscience.kmath.nd/-structure-n-d/index.html">StructureND</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="544129058%2FFunctions%2F-1345790395" anchor-label="covariance" id="544129058%2FFunctions%2F-1345790395" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-tensors:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="covariance.html"><span><span>covariance</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="544129058%2FFunctions%2F-1345790395"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-tensors:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="-double-tensor-algebra/index.html">DoubleTensorAlgebra</a><span class="token punctuation">.</span><a href="covariance.html"><span class="token function">covariance</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">vectors<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token operator">&gt;</span><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-double-tensor/index.html">DoubleTensor</a></div><div class="brief "><p class="paragraph">Returns the covariance matrix <code class="lang-kotlin">M</code> of given vectors.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1561459857%2FFunctions%2F-1345790395" anchor-label="detLU" id="-1561459857%2FFunctions%2F-1345790395" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-tensors:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="det-l-u.html"><span>det</span><wbr><span><span>LU</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1561459857%2FFunctions%2F-1345790395"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-tensors:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="-double-tensor-algebra/index.html">DoubleTensorAlgebra</a><span class="token punctuation">.</span><a href="det-l-u.html"><span class="token function">detLU</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">structureND<span class="token operator">: </span><a href="../../kmath-core/space.kscience.kmath.nd/-structure-n-d/index.html">StructureND</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">epsilon<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token operator"> = </span><span class="token constant">1.0E-9</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-double-tensor/index.html">DoubleTensor</a></div><div class="brief "><p class="paragraph">Computes the determinant of a square matrix input, or of each square matrix in a batched input using LU factorization algorithm.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="70808164%2FFunctions%2F-1345790395" anchor-label="forEachMatrix" id="70808164%2FFunctions%2F-1345790395" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-tensors:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="for-each-matrix.html"><span>for</span><wbr><span>Each</span><wbr><span><span>Matrix</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="70808164%2FFunctions%2F-1345790395"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-tensors:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">inline </span><span class="token keyword">fun </span><a href="-double-tensor/index.html">DoubleTensor</a><span class="token punctuation">.</span><a href="for-each-matrix.html"><span class="token function">forEachMatrix</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">block<span class="token operator">: </span><span class="token punctuation">(</span><span class="token keyword"></span>index<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int-array/index.html">IntArray</a><span class="token punctuation">, </span><span class="token keyword"></span>matrix<span class="token operator">: </span><a href="-double-tensor2-d/index.html">DoubleTensor2D</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-790971571%2FFunctions%2F-1345790395" anchor-label="invLU" id="-790971571%2FFunctions%2F-1345790395" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-tensors:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="inv-l-u.html"><span>inv</span><wbr><span><span>LU</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-790971571%2FFunctions%2F-1345790395"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-tensors:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="-double-tensor-algebra/index.html">DoubleTensorAlgebra</a><span class="token punctuation">.</span><a href="inv-l-u.html"><span class="token function">invLU</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">structureND<span class="token operator">: </span><a href="../../kmath-core/space.kscience.kmath.nd/-structure-n-d/index.html">StructureND</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">epsilon<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token operator"> = </span><span class="token constant">1.0E-9</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-double-tensor/index.html">DoubleTensor</a></div><div class="brief "><p class="paragraph">Computes the multiplicative inverse matrix of a square matrix input, or of each square matrix in a batched input using LU factorization algorithm. Given a square matrix <code class="lang-kotlin">a</code>, return the matrix <code class="lang-kotlin">aInv</code> satisfying <code class="lang-kotlin">a dot aInv == aInv dot a == eye(a.shape[0])</code>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="868182130%2FFunctions%2F-1345790395" anchor-label="lu" id="868182130%2FFunctions%2F-1345790395" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-tensors:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="lu.html"><span><span>lu</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="868182130%2FFunctions%2F-1345790395"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-tensors:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="-double-tensor-algebra/index.html">DoubleTensorAlgebra</a><span class="token punctuation">.</span><a href="lu.html"><span class="token function">lu</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">structureND<span class="token operator">: </span><a href="../../kmath-core/space.kscience.kmath.nd/-structure-n-d/index.html">StructureND</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">epsilon<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token operator"> = </span><span class="token constant">1.0E-9</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-triple/index.html">Triple</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="-double-tensor/index.html">DoubleTensor</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="-double-tensor/index.html">DoubleTensor</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="-double-tensor/index.html">DoubleTensor</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">LUP decomposition.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-2119510879%2FFunctions%2F-1345790395" anchor-label="luFactor" id="-2119510879%2FFunctions%2F-1345790395" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-tensors:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="lu-factor.html"><span>lu</span><wbr><span><span>Factor</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2119510879%2FFunctions%2F-1345790395"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-tensors:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="-double-tensor-algebra/index.html">DoubleTensorAlgebra</a><span class="token punctuation">.</span><a href="lu-factor.html"><span class="token function">luFactor</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">structureND<span class="token operator">: </span><a href="../../kmath-core/space.kscience.kmath.nd/-structure-n-d/index.html">StructureND</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">epsilon<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token operator"> = </span><span class="token constant">1.0E-9</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-pair/index.html">Pair</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="-double-tensor/index.html">DoubleTensor</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="-int-tensor/index.html">IntTensor</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Computes the LU factorization of a matrix or batches of matrices <code class="lang-kotlin">input</code>. Returns a tuple containing the LU factorization and pivots of <code class="lang-kotlin">input</code>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-715105979%2FFunctions%2F-1345790395" anchor-label="luPivot" id="-715105979%2FFunctions%2F-1345790395" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-tensors:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="lu-pivot.html"><span>lu</span><wbr><span><span>Pivot</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-715105979%2FFunctions%2F-1345790395"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-tensors:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="-double-tensor-algebra/index.html">DoubleTensorAlgebra</a><span class="token punctuation">.</span><a href="lu-pivot.html"><span class="token function">luPivot</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">luTensor<span class="token operator">: </span><a href="../../kmath-core/space.kscience.kmath.nd/-structure-n-d/index.html">StructureND</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">pivotsTensor<span class="token operator">: </span><a href="../space.kscience.kmath.tensors.api/index.html#-1680022905%2FClasslikes%2F-1345790395">Tensor</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-triple/index.html">Triple</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="-double-tensor/index.html">DoubleTensor</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="-double-tensor/index.html">DoubleTensor</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="-double-tensor/index.html">DoubleTensor</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Unpacks the data and pivots from a LU factorization of a tensor. Given a tensor <a href="lu-pivot.html">luTensor</a>, return tensors <code class="lang-kotlin">Triple(P, L, U)</code> satisfying <code class="lang-kotlin">P dot luTensor = L dot U</code>, with <code class="lang-kotlin">P</code> being a permutation matrix or batch of matrices, <code class="lang-kotlin">L</code> being a lower triangular matrix or batch of matrices, <code class="lang-kotlin">U</code> being an upper triangular matrix or batch of matrices.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-414278638%2FFunctions%2F-1345790395" anchor-label="map" id="-414278638%2FFunctions%2F-1345790395" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-tensors:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="map.html"><span><span>map</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-414278638%2FFunctions%2F-1345790395"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-tensors:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">inline </span><span class="token keyword">fun </span><a href="-offset-double-buffer/index.html">OffsetDoubleBuffer</a><span class="token punctuation">.</span><a href="map.html"><span class="token function">map</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">operation<span class="token operator">: </span><span class="token punctuation">(</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../kmath-core/space.kscience.kmath.structures/-double-buffer/index.html">DoubleBuffer</a></div><div class="symbol monospace"><span class="token keyword">inline </span><span class="token keyword">fun </span><a href="-offset-int-buffer/index.html">OffsetIntBuffer</a><span class="token punctuation">.</span><a href="map.html"><span class="token function">map</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">operation<span class="token operator">: </span><span class="token punctuation">(</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../kmath-core/space.kscience.kmath.structures/-int-buffer/index.html">IntBuffer</a></div><div class="brief "><p class="paragraph">Map only operable content of the offset buffer</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="842037760%2FFunctions%2F-1345790395" anchor-label="mapInPlace" id="842037760%2FFunctions%2F-1345790395" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-tensors:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="map-in-place.html"><span>map</span><wbr><span>In</span><wbr><span><span>Place</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="842037760%2FFunctions%2F-1345790395"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-tensors:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">inline </span><span class="token keyword">fun </span><a href="-offset-double-buffer/index.html">OffsetDoubleBuffer</a><span class="token punctuation">.</span><a href="map-in-place.html"><span class="token function">mapInPlace</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">operation<span class="token operator">: </span><span class="token punctuation">(</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a></span></span><span class="token punctuation">)</span></div><div class="symbol monospace"><span class="token keyword">inline </span><span class="token keyword">fun </span><a href="-offset-int-buffer/index.html">OffsetIntBuffer</a><span class="token punctuation">.</span><a href="map-in-place.html"><span class="token function">mapInPlace</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">operation<span class="token operator">: </span><span class="token punctuation">(</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">map in place</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1117461124%2FFunctions%2F-1345790395" anchor-label="one" id="-1117461124%2FFunctions%2F-1345790395" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-tensors:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="one.html"><span><span>one</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1117461124%2FFunctions%2F-1345790395"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-tensors:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.jvm/-jvm-name/index.html"><span class="token annotation builtin">JvmName</span></a><span class="token punctuation">(</span><span>name<span class="token operator"> = </span><span class="breakable-word"><span class="token string">"varArgOne"</span></span></span><wbr><span class="token punctuation">)</span></div></div><span class="token keyword"></span><span class="token keyword">fun </span><a href="-double-tensor-algebra/index.html">DoubleTensorAlgebra</a><span class="token punctuation">.</span><a href="one.html"><span class="token function">one</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">vararg </span>shape<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-double-tensor/index.html">DoubleTensor</a></div><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="-double-tensor-algebra/index.html">DoubleTensorAlgebra</a><span class="token punctuation">.</span><a href="one.html"><span class="token function">one</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">shape<span class="token operator">: </span><a href="../../kmath-core/space.kscience.kmath.nd/-shape-n-d/index.html">ShapeND</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-double-tensor/index.html">DoubleTensor</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1681401254%2FFunctions%2F-1345790395" anchor-label="randomNormal" id="1681401254%2FFunctions%2F-1345790395" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-tensors:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="random-normal.html"><span>random</span><wbr><span><span>Normal</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1681401254%2FFunctions%2F-1345790395"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-tensors:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="-double-tensor-algebra/index.html">DoubleTensorAlgebra</a><span class="token punctuation">.</span><a href="random-normal.html"><span class="token function">randomNormal</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">shape<span class="token operator">: </span><a href="../../kmath-core/space.kscience.kmath.nd/-shape-n-d/index.html">ShapeND</a><span class="token punctuation">, </span></span><span class="parameter ">seed<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html">Long</a><span class="token operator"> = </span><span class="token constant">0</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-double-tensor/index.html">DoubleTensor</a></div><div class="brief "><p class="paragraph">Returns a tensor of random numbers drawn from normal distributions with <code class="lang-kotlin">0.0</code> mean and <code class="lang-kotlin">1.0</code> standard deviation.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="13697451%2FFunctions%2F-1345790395" anchor-label="randomNormalLike" id="13697451%2FFunctions%2F-1345790395" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-tensors:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="random-normal-like.html"><span>random</span><wbr><span>Normal</span><wbr><span><span>Like</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="13697451%2FFunctions%2F-1345790395"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-tensors:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="-double-tensor-algebra/index.html">DoubleTensorAlgebra</a><span class="token punctuation">.</span><a href="random-normal-like.html"><span class="token function">randomNormalLike</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">structure<span class="token operator">: </span><a href="../../kmath-core/space.kscience.kmath.nd/-with-shape/index.html">WithShape</a><span class="token punctuation">, </span></span><span class="parameter ">seed<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html">Long</a><span class="token operator"> = </span><span class="token constant">0</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-double-tensor/index.html">DoubleTensor</a></div><div class="brief "><p class="paragraph">Returns a tensor with the same shape as <code class="lang-kotlin">input</code> of random numbers drawn from normal distributions with <code class="lang-kotlin">0.0</code> mean and <code class="lang-kotlin">1.0</code> standard deviation.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1788518562%2FFunctions%2F-1345790395" anchor-label="slice" id="-1788518562%2FFunctions%2F-1345790395" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-tensors:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="slice.html"><span><span>slice</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1788518562%2FFunctions%2F-1345790395"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-tensors:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="-offset-double-buffer/index.html">OffsetDoubleBuffer</a><span class="token punctuation">.</span><a href="slice.html"><span class="token function">slice</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">range<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.ranges/-int-range/index.html">IntRange</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-offset-double-buffer/index.html">OffsetDoubleBuffer</a></div><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="-offset-int-buffer/index.html">OffsetIntBuffer</a><span class="token punctuation">.</span><a href="slice.html"><span class="token function">slice</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">range<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.ranges/-int-range/index.html">IntRange</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-offset-int-buffer/index.html">OffsetIntBuffer</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1373380637%2FFunctions%2F-1345790395" anchor-label="stack" id="-1373380637%2FFunctions%2F-1345790395" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-filterable-current=":kmath-tensors:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="stack.html"><span><span>stack</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1373380637%2FFunctions%2F-1345790395"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-tensors:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="stack.html"><span class="token function">stack</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">tensors<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../space.kscience.kmath.tensors.api/index.html#-1680022905%2FClasslikes%2F-1345790395">Tensor</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token operator">&gt;</span><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-double-tensor/index.html">DoubleTensor</a></div><div class="brief "><p class="paragraph">Concatenates a sequence of tensors with equal shapes along the first dimension.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="870657396%2FFunctions%2F-1345790395" anchor-label="svd" id="870657396%2FFunctions%2F-1345790395" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-tensors:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="svd.html"><span><span>svd</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="870657396%2FFunctions%2F-1345790395"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-tensors:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="-double-tensor-algebra/index.html">DoubleTensorAlgebra</a><span class="token punctuation">.</span><a href="svd.html"><span class="token function">svd</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">structureND<span class="token operator">: </span><a href="../../kmath-core/space.kscience.kmath.nd/-structure-n-d/index.html">StructureND</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">epsilon<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-triple/index.html">Triple</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../../kmath-core/space.kscience.kmath.nd/-structure-n-d/index.html">StructureND</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token operator">&gt;</span><span class="token punctuation">, </span><span class="token keyword"></span><a href="../../kmath-core/space.kscience.kmath.nd/-structure-n-d/index.html">StructureND</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token operator">&gt;</span><span class="token punctuation">, </span><span class="token keyword"></span><a href="../../kmath-core/space.kscience.kmath.nd/-structure-n-d/index.html">StructureND</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token operator">&gt;</span><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Singular Value Decomposition.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1351673416%2FFunctions%2F-1345790395" anchor-label="symEigJacobi" id="-1351673416%2FFunctions%2F-1345790395" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-tensors:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="sym-eig-jacobi.html"><span>sym</span><wbr><span>Eig</span><wbr><span><span>Jacobi</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1351673416%2FFunctions%2F-1345790395"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-tensors:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="-double-tensor-algebra/index.html">DoubleTensorAlgebra</a><span class="token punctuation">.</span><a href="sym-eig-jacobi.html"><span class="token function">symEigJacobi</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">structureND<span class="token operator">: </span><a href="../../kmath-core/space.kscience.kmath.nd/-structure-n-d/index.html">StructureND</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">maxIteration<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter ">epsilon<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-pair/index.html">Pair</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="-double-tensor/index.html">DoubleTensor</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="-double-tensor/index.html">DoubleTensor</a><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1108134632%2FFunctions%2F-1345790395" anchor-label="symEigSvd" id="-1108134632%2FFunctions%2F-1345790395" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-tensors:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="sym-eig-svd.html"><span>sym</span><wbr><span>Eig</span><wbr><span><span>Svd</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1108134632%2FFunctions%2F-1345790395"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-tensors:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="-double-tensor-algebra/index.html">DoubleTensorAlgebra</a><span class="token punctuation">.</span><a href="sym-eig-svd.html"><span class="token function">symEigSvd</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">structureND<span class="token operator">: </span><a href="../../kmath-core/space.kscience.kmath.nd/-structure-n-d/index.html">StructureND</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">epsilon<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-pair/index.html">Pair</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="-double-tensor/index.html">DoubleTensor</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="../../kmath-core/space.kscience.kmath.nd/-structure-n-d/index.html">StructureND</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token operator">&gt;</span><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Returns eigenvalues and eigenvectors of a real symmetric matrix input or a batch of real symmetric matrices, represented by a pair <code class="lang-kotlin">eigenvalues to eigenvectors</code>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-805168200%2FFunctions%2F-1345790395" anchor-label="toDoubleTensor" id="-805168200%2FFunctions%2F-1345790395" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-tensors:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="to-double-tensor.html"><span>to</span><wbr><span>Double</span><wbr><span><span>Tensor</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-805168200%2FFunctions%2F-1345790395"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-tensors:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="../../kmath-core/space.kscience.kmath.nd/-structure-n-d/index.html">StructureND</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="to-double-tensor.html"><span class="token function">toDoubleTensor</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-double-tensor/index.html">DoubleTensor</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1669981028%2FFunctions%2F-1345790395" anchor-label="withBroadcast" id="1669981028%2FFunctions%2F-1345790395" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-tensors:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="with-broadcast.html"><span>with</span><wbr><span><span>Broadcast</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1669981028%2FFunctions%2F-1345790395"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-tensors:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="../../kmath-memory/space.kscience.kmath/-unstable-k-math-a-p-i/index.html"><span class="token annotation builtin">UnstableKMathAPI</span></a></div></div><span class="token keyword"></span><span class="token keyword">fun </span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="with-broadcast.html">R</a><span class="token operator">&gt; </span><a href="-double-tensor-algebra/index.html">DoubleTensorAlgebra</a><span class="token punctuation">.</span><a href="with-broadcast.html"><span class="token function">withBroadcast</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">block<span class="token operator">: </span><span class="token keyword"></span><a href="-broadcast-double-tensor-algebra/index.html">BroadcastDoubleTensorAlgebra</a><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><span class="token keyword"></span><a href="with-broadcast.html">R</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="with-broadcast.html">R</a></div><div class="brief "><p class="paragraph">Compute a value using broadcast double tensor algebra</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1969716960%2FFunctions%2F-1345790395" anchor-label="zero" id="-1969716960%2FFunctions%2F-1345790395" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-tensors:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="zero.html"><span><span>zero</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1969716960%2FFunctions%2F-1345790395"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-tensors:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.jvm/-jvm-name/index.html"><span class="token annotation builtin">JvmName</span></a><span class="token punctuation">(</span><span>name<span class="token operator"> = </span><span class="breakable-word"><span class="token string">"varArgZero"</span></span></span><wbr><span class="token punctuation">)</span></div></div><span class="token keyword"></span><span class="token keyword">fun </span><a href="-double-tensor-algebra/index.html">DoubleTensorAlgebra</a><span class="token punctuation">.</span><a href="zero.html"><span class="token function">zero</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">vararg </span>shape<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-double-tensor/index.html">DoubleTensor</a></div><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="-double-tensor-algebra/index.html">DoubleTensorAlgebra</a><span class="token punctuation">.</span><a href="zero.html"><span class="token function">zero</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">shape<span class="token operator">: </span><a href="../../kmath-core/space.kscience.kmath.nd/-shape-n-d/index.html">ShapeND</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-double-tensor/index.html">DoubleTensor</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1563450420%2FFunctions%2F-1345790395" anchor-label="zip" id="-1563450420%2FFunctions%2F-1345790395" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-tensors:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="zip.html"><span><span>zip</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1563450420%2FFunctions%2F-1345790395"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-tensors:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">inline </span><span class="token keyword">fun </span><a href="-offset-double-buffer/index.html">OffsetDoubleBuffer</a><span class="token punctuation">.</span><a href="zip.html"><span class="token function">zip</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">other<span class="token operator">: </span><a href="-offset-double-buffer/index.html">OffsetDoubleBuffer</a><span class="token punctuation">, </span></span><span class="parameter ">operation<span class="token operator">: </span><span class="token punctuation">(</span><span class="token keyword"></span>l<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span><span class="token keyword"></span>r<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../kmath-core/space.kscience.kmath.structures/-double-buffer/index.html">DoubleBuffer</a></div><div class="symbol monospace"><span class="token keyword">inline </span><span class="token keyword">fun </span><a href="-offset-int-buffer/index.html">OffsetIntBuffer</a><span class="token punctuation">.</span><a href="zip.html"><span class="token function">zip</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">other<span class="token operator">: </span><a href="-offset-int-buffer/index.html">OffsetIntBuffer</a><span class="token punctuation">, </span></span><span class="parameter ">operation<span class="token operator">: </span><span class="token punctuation">(</span><span class="token keyword"></span>l<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span><span class="token keyword"></span>r<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../kmath-core/space.kscience.kmath.structures/-int-buffer/index.html">IntBuffer</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="EXTENSION_PROPERTY">
+        <h2 class="">Properties</h2>
+        <div class="table"><a data-name="-782427992%2FProperties%2F-1345790395" anchor-label="tensorAlgebra" id="-782427992%2FProperties%2F-1345790395" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_PROPERTY" data-filterable-current=":kmath-tensors:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="tensor-algebra.html"><span>tensor</span><wbr><span><span>Algebra</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-782427992%2FProperties%2F-1345790395"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-tensors:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double.Companion</a><span class="token punctuation">.</span><a href="tensor-algebra.html">tensorAlgebra</a><span class="token operator">: </span><a href="-double-tensor-algebra/index.html">DoubleTensorAlgebra</a></div><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int.Companion</a><span class="token punctuation">.</span><a href="tensor-algebra.html">tensorAlgebra</a><span class="token operator">: </span><a href="-int-tensor-algebra/index.html">IntTensorAlgebra</a></div><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="../../kmath-core/space.kscience.kmath.operations/-double-field/index.html">DoubleField</a><span class="token punctuation">.</span><a href="tensor-algebra.html">tensorAlgebra</a><span class="token operator">: </span><a href="-double-tensor-algebra/index.html">DoubleTensorAlgebra</a></div><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="../../kmath-core/space.kscience.kmath.operations/-int-ring/index.html">IntRing</a><span class="token punctuation">.</span><a href="tensor-algebra.html">tensorAlgebra</a><span class="token operator">: </span><a href="-int-tensor-algebra/index.html">IntTensorAlgebra</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-  
-</body></html>
-
+  </div>
+</div>
+      <div class="footer">
+        <span class="go-to-top-icon"><a href="#content" id="go-to-top-link"></a></span><span>© 2023 Copyright</span><span class="pull-right"><span>Generated by </span><a href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span>
+      </div>
+    </div>
+</div>
+</body>
+</html>
 

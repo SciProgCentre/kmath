@@ -1,140 +1,120 @@
+<!doctype html>
 <html>
-  <head>
+<head>
     <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
     <title>BlockingStatistic</title>
-</head><body><link href="../../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../../";</script>
-    <script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async></script><link href="../../../styles/style.css" rel="Stylesheet"><link href="../../../styles/jetbrains-mono.css" rel="Stylesheet"><link href="../../../styles/main.css" rel="Stylesheet"><link href="../../../styles/prism.css" rel="Stylesheet"><link href="../../../styles/logo-styles.css" rel="Stylesheet"><script type="text/javascript" src="../../../scripts/clipboard.js" async></script><script type="text/javascript" src="../../../scripts/navigation-loader.js" async></script><script type="text/javascript" src="../../../scripts/platform-content-handler.js" async></script><script type="text/javascript" src="../../../scripts/main.js" defer></script><script type="text/javascript" src="../../../scripts/prism.js" async></script><script>const storage = localStorage.getItem("dokka-dark-mode")
-const savedDarkMode = storage ? JSON.parse(storage) : false
-if(savedDarkMode === true){
-    document.getElementsByTagName("html")[0].classList.add("theme-dark")
-}</script>
-
-  
-    <div class="navigation-wrapper" id="navigation-wrapper">
-      <div id="leftToggler"><span class="icon-toggler"></span></div>
-      <div class="library-name"><a href="../../../index.html"><span>kmath</span></a></div>
-      <div></div>
-      <div class="pull-right d-flex">
-        <div class="filter-section" id="filter-section"><button class="platform-tag platform-selector common-like" data-active="" data-filter=":kmath-stat:dokkaHtmlPartial/commonMain">common</button></div>
-<button id="theme-toggle-button"><span id="theme-toggle"></span></button>
-        <div id="searchBar"></div>
-      </div>
+<link href="../../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../../";</script>    <script>const storage = localStorage.getItem("dokka-dark-mode")
+    if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    } else {
+        const savedDarkMode = JSON.parse(storage)
+        if(savedDarkMode === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    }
+    </script>
+<script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async></script>
+<link href="../../../styles/style.css" rel="Stylesheet">
+<link href="../../../styles/jetbrains-mono.css" rel="Stylesheet">
+<link href="../../../styles/main.css" rel="Stylesheet">
+<link href="../../../styles/prism.css" rel="Stylesheet">
+<link href="../../../styles/logo-styles.css" rel="Stylesheet">
+<script type="text/javascript" src="../../../scripts/clipboard.js" async></script>
+<script type="text/javascript" src="../../../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../../../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../../../scripts/main.js" defer></script>
+<script type="text/javascript" src="../../../scripts/prism.js" async></script>
+<script type="text/javascript" src="../../../scripts/symbol-parameters-wrapper_deferred.js" defer></script></head>
+<body>
+<div class="navigation-wrapper" id="navigation-wrapper">
+    <div id="leftToggler"><span class="icon-toggler"></span></div>
+    <div class="library-name">
+<a href="../../../index.html">
+<span>kmath</span>            </a>    </div>
+    <div>0.3.1-dev-RC
     </div>
-    <div id="container">
-      <div id="leftColumn">
+    <div class="pull-right d-flex">
+        <div class="filter-section" id="filter-section">
+                <button class="platform-tag platform-selector common-like" data-active="" data-filter=":kmath-stat:dokkaHtmlPartial/commonMain">common</button>
+        </div>
+        <button id="theme-toggle-button"><span id="theme-toggle"></span></button>
+        <div id="searchBar"></div>
+    </div>
+</div>
+<div id="container">
+    <div id="leftColumn">
         <div id="sideMenu"></div>
-      </div>
-      <div id="main">
-        <div class="main-content" id="content" pageids="kmath-stat::space.kscience.kmath.stat/BlockingStatistic///PointingToDeclaration//-443365019">
-          <div class="breadcrumbs"><a href="../../index.html">kmath-stat</a>/<a href="../index.html">space.kscience.kmath.stat</a>/<a href="index.html">BlockingStatistic</a></div>
-          <div class="cover ">
-            <h1 class="cover"><span>Blocking</span><wbr><span><span>Statistic</span></span></h1>
-            <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
-              <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":kmath-stat:dokkaHtmlPartial/commonMain">common</button></div>
-<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><span class="token keyword">interface </span><a href="index.html">BlockingStatistic</a><span class="token operator">&lt;</span><span class="token keyword">in </span><a href="index.html">T</a><span class="token punctuation">, </span><span class="token keyword">out </span><a href="index.html">R</a><span class="token operator">&gt;</span> : <a href="../-statistic/index.html">Statistic</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="index.html">T</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="index.html">R</a><span class="token operator">&gt; </span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><p class="paragraph">A statistic that is computed in a synchronous blocking mode</p></div>            </div>
-          </div>
-          <div class="tabbedcontent">
-            <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="Functions">Functions</button><button class="section-tab" data-togglable="Extensions">Extensions</button><button class="section-tab" data-togglable="Sources">Sources</button><button class="section-tab" data-togglable="Inheritors">Inheritors</button></div>
-            <div class="tabs-section-body">
-              <h2 class="">Functions</h2>
-              <div class="table" data-togglable="Functions"><a data-name="-1980188009%2FFunctions%2F-443365019" anchor-label="evaluate" id="-1980188009%2FFunctions%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="evaluate.html"><span><span>evaluate</span></span></a></div>
+    </div>
+    <div id="main">
+<div class="main-content" data-page-type="classlike" id="content" pageids="kmath-stat::space.kscience.kmath.stat/BlockingStatistic///PointingToDeclaration//-443365019">
+  <div class="breadcrumbs"><a href="../../index.html">kmath-stat</a><span class="delimiter">/</span><a href="../index.html">space.kscience.kmath.stat</a><span class="delimiter">/</span><span class="current">BlockingStatistic</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span>Blocking</span><wbr><span><span>Statistic</span></span></h1>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><span class="token keyword">interface </span><a href="index.html">BlockingStatistic</a><span class="token operator">&lt;</span><span class="token keyword">in </span><a href="index.html">T</a><span class="token punctuation">, </span><span class="token keyword">out </span><a href="index.html">R</a><span class="token operator">&gt;</span> : <a href="../-statistic/index.html">Statistic</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="index.html">T</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="index.html">R</a><span class="token operator">&gt; </span><span class="clearfix"><span class="floating-right">(<a href="https://github.com/SciProgCentre/kmath/tree/master/kmath-stat/src/commonMain/kotlin/space/kscience/kmath/stat/Statistic.kt#L29">source</a>)</span></span></div><p class="paragraph">A statistic that is computed in a synchronous blocking mode</p><h4 class="">Inheritors</h4><div class="table"><div class="table-row" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><a href="../-mean/index.html">Mean</a></div></span></div><div></div></div></div><div class="table-row" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><a href="../-median/index.html">Median</a></div></span></div><div></div></div></div><div class="table-row" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><a href="../-rank/index.html">Rank</a></div></span></div><div></div></div></div></div></div></div>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,FUNCTION,PROPERTY">Members</button><button class="section-tab" data-togglable="CONSTRUCTOR,TYPE,FUNCTION,PROPERTY,EXTENSION_PROPERTY,EXTENSION_FUNCTION">Members &amp; Extensions</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="FUNCTION">
+        <h2 class="">Functions</h2>
+        <div class="table"><a data-name="-1980188009%2FFunctions%2F-443365019" anchor-label="evaluate" id="-1980188009%2FFunctions%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="evaluate.html"><span><span>evaluate</span></span></a></div>
 <span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1980188009%2FFunctions%2F-443365019"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
-                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":kmath-stat:dokkaHtmlPartial/commonMain">common</button></div>
-<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">suspend override </span><span class="token keyword">fun </span><a href="evaluate.html"><span class="token function">evaluate</span></a><span class="token punctuation">(</span>data<span class="token operator">: </span><a href="../../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="index.html">T</a><span class="token operator">&gt;</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">R</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div>                        </div>
-                      </div>
-                    </div>
-                  </div>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">suspend override </span><span class="token keyword">fun </span><a href="evaluate.html"><span class="token function">evaluate</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">data<span class="token operator">: </span><a href="../../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="index.html">T</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">R</a></div></div></div>
                 </div>
+              </div>
+            </div>
+          </div>
 <a data-name="-1041158420%2FFunctions%2F-443365019" anchor-label="evaluateBlocking" id="-1041158420%2FFunctions%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="evaluate-blocking.html"><span>evaluate</span><wbr><span><span>Blocking</span></span></a></div>
+          <div class="table-row" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="evaluate-blocking.html"><span>evaluate</span><wbr><span><span>Blocking</span></span></a></div>
 <span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1041158420%2FFunctions%2F-443365019"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
-                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":kmath-stat:dokkaHtmlPartial/commonMain">common</button></div>
-<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword"></span><span class="token keyword">fun </span><a href="evaluate-blocking.html"><span class="token function">evaluateBlocking</span></a><span class="token punctuation">(</span>data<span class="token operator">: </span><a href="../../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="index.html">T</a><span class="token operator">&gt;</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">R</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div>                        </div>
-                      </div>
-                    </div>
-                  </div>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword"></span><span class="token keyword">fun </span><a href="evaluate-blocking.html"><span class="token function">evaluateBlocking</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">data<span class="token operator">: </span><a href="../../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="index.html">T</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">R</a></div></div></div>
                 </div>
               </div>
-              <h2 class="">Inheritors</h2>
-              <div class="table" data-togglable="Inheritors"><a data-name="2080768281%2FInheritors%2F-443365019" anchor-label="Mean" id="2080768281%2FInheritors%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="../-mean/index.html">Mean</a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2080768281%2FInheritors%2F-443365019"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div></div>
-                  </div>
-                </div>
-<a data-name="-1363509196%2FInheritors%2F-443365019" anchor-label="Median" id="-1363509196%2FInheritors%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="../-median/index.html">Median</a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1363509196%2FInheritors%2F-443365019"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div></div>
-                  </div>
-                </div>
-              </div>
-              <h2 class="tabbedcontent">Extensions</h2>
-              <div class="table" data-togglable="Extensions"><a data-name="1548712696%2FExtensions%2F-443365019" anchor-label="invoke" id="1548712696%2FExtensions%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="../invoke.html"><span><span>invoke</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1548712696%2FExtensions%2F-443365019"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
-                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":kmath-stat:dokkaHtmlPartial/commonMain">common</button></div>
-<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">operator </span><span class="token keyword">fun </span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../invoke.html">T</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="../invoke.html">R</a><span class="token operator">&gt; </span><a href="index.html">BlockingStatistic</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../invoke.html">T</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="../invoke.html">R</a><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="../invoke.html"><span class="token function">invoke</span></a><span class="token punctuation">(</span>data<span class="token operator">: </span><a href="../../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../invoke.html">T</a><span class="token operator">&gt;</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../invoke.html">R</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div>                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <h2 class="">Sources</h2>
-              <div class="table" data-togglable="Sources"><a data-name="913819657%2FSource%2F-443365019" anchor-label="https://github.com/mipt-npm/kmath/tree/master/kmath-stat/src/commonMain/kotlin/space/kscience/kmath/stat/Statistic.kt#L26" id="913819657%2FSource%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="https://github.com/mipt-npm/kmath/tree/master/kmath-stat/src/commonMain/kotlin/space/kscience/kmath/stat/Statistic.kt#L26">common source</a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="913819657%2FSource%2F-443365019"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div></div>
-                  </div>
+            </div>
+          </div>
+<a data-name="140061633%2FFunctions%2F-443365019" anchor-label="invoke" id="140061633%2FFunctions%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../invoke.html"><span><span>invoke</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="140061633%2FFunctions%2F-443365019"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">operator </span><span class="token keyword">fun </span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../invoke.html">T</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="../invoke.html">R</a><span class="token operator">&gt; </span><a href="index.html">BlockingStatistic</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../invoke.html">T</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="../invoke.html">R</a><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="../invoke.html"><span class="token function">invoke</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">data<span class="token operator">: </span><a href="../../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../invoke.html">T</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../invoke.html">R</a></div><div class="symbol monospace"><span class="token keyword">suspend operator </span><span class="token keyword">fun </span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../invoke.html">T</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="../invoke.html">R</a><span class="token operator">&gt; </span><a href="../-statistic/index.html">Statistic</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../invoke.html">T</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="../invoke.html">R</a><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="../invoke.html"><span class="token function">invoke</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">data<span class="token operator">: </span><a href="../../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../invoke.html">T</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../invoke.html">R</a></div></div></div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <div class="footer"><span class="go-to-top-icon"><a href="#content" id="go-to-top-link"></a></span><span>© 2022 Copyright</span><span class="pull-right"><span>Generated by </span><a href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span></div>
       </div>
     </div>
-  
-</body></html>
-
+  </div>
+</div>
+      <div class="footer">
+        <span class="go-to-top-icon"><a href="#content" id="go-to-top-link"></a></span><span>© 2023 Copyright</span><span class="pull-right"><span>Generated by </span><a href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span>
+      </div>
+    </div>
+</div>
+</body>
+</html>
 

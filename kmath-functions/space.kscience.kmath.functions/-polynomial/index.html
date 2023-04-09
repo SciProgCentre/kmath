@@ -1,174 +1,188 @@
+<!doctype html>
 <html>
-  <head>
+<head>
     <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
     <title>Polynomial</title>
-</head><body><link href="../../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../../";</script>
-    <script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async></script><link href="../../../styles/style.css" rel="Stylesheet"><link href="../../../styles/jetbrains-mono.css" rel="Stylesheet"><link href="../../../styles/main.css" rel="Stylesheet"><link href="../../../styles/prism.css" rel="Stylesheet"><link href="../../../styles/logo-styles.css" rel="Stylesheet"><script type="text/javascript" src="../../../scripts/clipboard.js" async></script><script type="text/javascript" src="../../../scripts/navigation-loader.js" async></script><script type="text/javascript" src="../../../scripts/platform-content-handler.js" async></script><script type="text/javascript" src="../../../scripts/main.js" defer></script><script type="text/javascript" src="../../../scripts/prism.js" async></script><script>const storage = localStorage.getItem("dokka-dark-mode")
-const savedDarkMode = storage ? JSON.parse(storage) : false
-if(savedDarkMode === true){
-    document.getElementsByTagName("html")[0].classList.add("theme-dark")
-}</script>
-
-  
-    <div class="navigation-wrapper" id="navigation-wrapper">
-      <div id="leftToggler"><span class="icon-toggler"></span></div>
-      <div class="library-name"><a href="../../../index.html"><span>kmath</span></a></div>
-      <div></div>
-      <div class="pull-right d-flex"><button id="theme-toggle-button"><span id="theme-toggle"></span></button>
-        <div id="searchBar"></div>
-      </div>
+<link href="../../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../../";</script>    <script>const storage = localStorage.getItem("dokka-dark-mode")
+    if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    } else {
+        const savedDarkMode = JSON.parse(storage)
+        if(savedDarkMode === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    }
+    </script>
+<script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async></script>
+<link href="../../../styles/style.css" rel="Stylesheet">
+<link href="../../../styles/jetbrains-mono.css" rel="Stylesheet">
+<link href="../../../styles/main.css" rel="Stylesheet">
+<link href="../../../styles/prism.css" rel="Stylesheet">
+<link href="../../../styles/logo-styles.css" rel="Stylesheet">
+<script type="text/javascript" src="../../../scripts/clipboard.js" async></script>
+<script type="text/javascript" src="../../../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../../../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../../../scripts/main.js" defer></script>
+<script type="text/javascript" src="../../../scripts/prism.js" async></script>
+<script type="text/javascript" src="../../../scripts/symbol-parameters-wrapper_deferred.js" defer></script></head>
+<body>
+<div class="navigation-wrapper" id="navigation-wrapper">
+    <div id="leftToggler"><span class="icon-toggler"></span></div>
+    <div class="library-name">
+<a href="../../../index.html">
+<span>kmath</span>            </a>    </div>
+    <div>0.3.1-dev-RC
     </div>
-    <div id="container">
-      <div id="leftColumn">
+    <div class="pull-right d-flex">
+        <div class="filter-section" id="filter-section">
+                <button class="platform-tag platform-selector common-like" data-active="" data-filter=":kmath-functions:dokkaHtmlPartial/commonMain">common</button>
+        </div>
+        <button id="theme-toggle-button"><span id="theme-toggle"></span></button>
+        <div id="searchBar"></div>
+    </div>
+</div>
+<div id="container">
+    <div id="leftColumn">
         <div id="sideMenu"></div>
-      </div>
-      <div id="main">
-        <div class="main-content" id="content" pageids="kmath-functions::space.kscience.kmath.functions/Polynomial///PointingToDeclaration//-597741372">
-          <div class="breadcrumbs"><a href="../../index.html">kmath-functions</a>/<a href="../index.html">space.kscience.kmath.functions</a>/<a href="index.html">Polynomial</a></div>
-          <div class="cover ">
-            <h1 class="cover"><span><span>Polynomial</span></span></h1>
-            <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-functions:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="index.html">Polynomial</a><span class="token operator">&lt;</span><span class="token keyword">out </span><a href="index.html">T</a><span class="token operator">&gt;</span><span class="token punctuation">(</span>coefficients<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="index.html">T</a><span class="token operator">&gt;</span><span class="token punctuation">)</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><p class="paragraph">Polynomial coefficients model without fixation on specific context they are applied to.</p></div></div>
-          </div>
-          <div class="tabbedcontent">
-            <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="Constructors">Constructors</button><button class="section-tab" data-togglable="Functions">Functions</button><button class="section-tab" data-togglable="Properties">Properties</button><button class="section-tab" data-togglable="Extensions">Extensions</button><button class="section-tab" data-togglable="Parameters">Parameters</button><button class="section-tab" data-togglable="Sources">Sources</button></div>
-            <div class="tabs-section-body">
-              <h2 class="">Parameters</h2>
-              <div data-togglable="Parameters">
-                <div class="platform-hinted WithExtraAttributes" data-platform-hinted="data-platform-hinted" data-togglable="Parameters"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-functions:dokkaHtmlPartial/commonMain"><div data-togglable="Parameters"><div class="table" data-togglable="Parameters"><div class="table-row" data-filterable-current=":kmath-functions:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-functions:dokkaHtmlPartial/commonMain"><div class="main-subrow keyValue WithExtraAttributes"><div class=""><span class="inline-flex"><div><span><span>coefficients</span></span></div></span></div><div><div class="title"><div data-togglable="Parameters"><p class="paragraph">constant is the leftmost coefficient.</p></div></div></div></div></div></div></div></div></div>
-              </div>
-              <h2 class="tabbedcontent">Constructors</h2>
-              <div class="table" data-togglable="Constructors"><a data-name="449823258%2FConstructors%2F-597741372" anchor-label="Polynomial" id="449823258%2FConstructors%2F-597741372" data-filterable-set=":kmath-functions:dokkaHtmlPartial/commonMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-functions:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-functions:dokkaHtmlPartial/commonMain">
-                  <div class="main-subrow keyValue TabbedContent">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="-polynomial.html"><span><span>Polynomial</span></span></a></div>
+    </div>
+    <div id="main">
+<div class="main-content" data-page-type="classlike" id="content" pageids="kmath-functions::space.kscience.kmath.functions/Polynomial///PointingToDeclaration//-597741372">
+  <div class="breadcrumbs"><a href="../../index.html">kmath-functions</a><span class="delimiter">/</span><a href="../index.html">space.kscience.kmath.functions</a><span class="delimiter">/</span><span class="current">Polynomial</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span><span>Polynomial</span></span></h1>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-functions:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">class </span><a href="index.html">Polynomial</a><span class="token operator">&lt;</span><span class="token keyword">out </span><a href="index.html">C</a><span class="token operator">&gt;</span><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>coefficients<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="index.html">C</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="clearfix"><span class="floating-right">(<a href="https://github.com/SciProgCentre/kmath/tree/master/kmath-functions/src/commonMain/kotlin/space/kscience/kmath/functions/Polynomial.kt#L22">source</a>)</span></span></div><p class="paragraph">Represents univariate polynomial that stores its coefficients in a <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>.</p><h4 class="">Parameters</h4><div class="table"><div class="table-row" data-filterable-current=":kmath-functions:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-functions:dokkaHtmlPartial/commonMain"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span><span>C</span></span></u></div></span></div><div><div class="title"><p class="paragraph">the type of constants.</p></div></div></div></div></div></div></div>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,FUNCTION,PROPERTY">Members</button><button class="section-tab" data-togglable="CONSTRUCTOR,TYPE,FUNCTION,PROPERTY,EXTENSION_PROPERTY,EXTENSION_FUNCTION">Members &amp; Extensions</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="CONSTRUCTOR">
+        <h2 class="">Constructors</h2>
+        <div class="table"><a data-name="449823258%2FConstructors%2F-597741372" anchor-label="Polynomial" id="449823258%2FConstructors%2F-597741372" data-filterable-set=":kmath-functions:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-togglable="CONSTRUCTOR" data-filterable-current=":kmath-functions:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-functions:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-polynomial.html"><span><span>Polynomial</span></span></a></div>
 <span class="anchor-wrapper"><span class="anchor-icon" pointing-to="449823258%2FConstructors%2F-597741372"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-functions:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><span class="token operator">&lt;</span><span class="token keyword">out </span><a href="index.html">T</a><span class="token operator">&gt; </span><a href="-polynomial.html"><span class="token function">Polynomial</span></a><span class="token punctuation">(</span>coefficients<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="index.html">T</a><span class="token operator">&gt;</span><span class="token punctuation">)</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <h2 class="">Functions</h2>
-              <div class="table" data-togglable="Functions"><a data-name="1251237394%2FFunctions%2F-597741372" anchor-label="toString" id="1251237394%2FFunctions%2F-597741372" data-filterable-set=":kmath-functions:dokkaHtmlPartial/commonMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-functions:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-functions:dokkaHtmlPartial/commonMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="to-string.html"><span>to</span><wbr><span><span>String</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1251237394%2FFunctions%2F-597741372"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-functions:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="to-string.html"><span class="token function">toString</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <h2 class="">Properties</h2>
-              <div class="table" data-togglable="Properties"><a data-name="748621408%2FProperties%2F-597741372" anchor-label="coefficients" id="748621408%2FProperties%2F-597741372" data-filterable-set=":kmath-functions:dokkaHtmlPartial/commonMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-functions:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-functions:dokkaHtmlPartial/commonMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="coefficients.html">coefficients</a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="748621408%2FProperties%2F-597741372"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-functions:dokkaHtmlPartial/commonMain"><a data-name="748621408%2FProperties%2F-597741372" anchor-label="coefficients" id="748621408%2FProperties%2F-597741372" data-filterable-set=":kmath-functions:dokkaHtmlPartial/commonMain"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="coefficients.html">coefficients</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="index.html">T</a><span class="token operator">&gt;</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <h2 class="tabbedcontent">Extensions</h2>
-              <div class="table" data-togglable="Extensions"><a data-name="623091503%2FExtensions%2F-597741372" anchor-label="asFunction" id="623091503%2FExtensions%2F-597741372" data-filterable-set=":kmath-functions:dokkaHtmlPartial/commonMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-functions:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-functions:dokkaHtmlPartial/commonMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="../as-function.html"><span>as</span><wbr><span><span>Function</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="623091503%2FExtensions%2F-597741372"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-functions:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../as-function.html">T</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="../as-function.html">C</a><span class="token operator"> : </span><a href="../../../kmath-core/space.kscience.kmath.operations/-ring/index.html">Ring</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../as-function.html">T</a><span class="token operator">&gt;</span><span class="token operator">&gt; </span><a href="index.html">Polynomial</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../as-function.html">T</a><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="../as-function.html"><span class="token function">asFunction</span></a><span class="token punctuation">(</span>ring<span class="token operator">: </span><a href="../as-function.html">C</a><span class="token punctuation">)</span><span class="token operator">: </span><span class="token punctuation">(</span><span class="token keyword"></span><a href="../as-function.html">T</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><span class="token keyword"></span><a href="../as-function.html">T</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Represent the polynomial as a regular context-less function.</p></div></div></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="-920703650%2FExtensions%2F-597741372" anchor-label="differentiate" id="-920703650%2FExtensions%2F-597741372" data-filterable-set=":kmath-functions:dokkaHtmlPartial/commonMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-functions:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-functions:dokkaHtmlPartial/commonMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="../differentiate.html"><span><span>differentiate</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-920703650%2FExtensions%2F-597741372"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-functions:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation">@</span><a href="../../../kmath-core/space.kscience.kmath.misc/-unstable-k-math-a-p-i/index.html"><span class="token annotation">UnstableKMathAPI</span></a></div></div><span class="token keyword"></span><span class="token keyword">fun </span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../differentiate.html">T</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="../differentiate.html">A</a><span class="token operator"> : </span><a href="../../../kmath-core/space.kscience.kmath.operations/-ring/index.html">Ring</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../differentiate.html">T</a><span class="token operator">&gt;</span>, <a href="../../../kmath-core/space.kscience.kmath.operations/-numeric-algebra/index.html">NumericAlgebra</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../differentiate.html">T</a><span class="token operator">&gt;</span><span class="token operator">&gt; </span><a href="index.html">Polynomial</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../differentiate.html">T</a><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="../differentiate.html"><span class="token function">differentiate</span></a><span class="token punctuation">(</span>algebra<span class="token operator">: </span><a href="../differentiate.html">A</a><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">Polynomial</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../differentiate.html">T</a><span class="token operator">&gt;</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Create a polynomial witch represents differentiated version of this polynomial</p></div></div></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="458363129%2FExtensions%2F-597741372" anchor-label="integrate" id="458363129%2FExtensions%2F-597741372" data-filterable-set=":kmath-functions:dokkaHtmlPartial/commonMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-functions:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-functions:dokkaHtmlPartial/commonMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="../integrate.html"><span><span>integrate</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="458363129%2FExtensions%2F-597741372"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-functions:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation">@</span><a href="../../../kmath-core/space.kscience.kmath.misc/-unstable-k-math-a-p-i/index.html"><span class="token annotation">UnstableKMathAPI</span></a></div></div><span class="token keyword"></span><span class="token keyword">fun </span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../integrate.html">T</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="../integrate.html">A</a><span class="token operator"> : </span><a href="../../../kmath-core/space.kscience.kmath.operations/-field/index.html">Field</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../integrate.html">T</a><span class="token operator">&gt;</span>, <a href="../../../kmath-core/space.kscience.kmath.operations/-numeric-algebra/index.html">NumericAlgebra</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../integrate.html">T</a><span class="token operator">&gt;</span><span class="token operator">&gt; </span><a href="index.html">Polynomial</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../integrate.html">T</a><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="../integrate.html"><span class="token function">integrate</span></a><span class="token punctuation">(</span>algebra<span class="token operator">: </span><a href="../integrate.html">A</a><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">Polynomial</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../integrate.html">T</a><span class="token operator">&gt;</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Create a polynomial witch represents indefinite integral version of this polynomial</p></div><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation">@</span><a href="../../../kmath-core/space.kscience.kmath.misc/-unstable-k-math-a-p-i/index.html"><span class="token annotation">UnstableKMathAPI</span></a></div></div><span class="token keyword"></span><span class="token keyword">fun </span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../integrate.html">T</a><span class="token operator"> : </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-comparable/index.html">Comparable</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../integrate.html">T</a><span class="token operator">&gt;</span><span class="token operator">&gt; </span><a href="index.html">Polynomial</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../integrate.html">T</a><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="../integrate.html"><span class="token function">integrate</span></a><span class="token punctuation">(</span>algebra<span class="token operator">: </span><a href="../../../kmath-core/space.kscience.kmath.operations/-field/index.html">Field</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../integrate.html">T</a><span class="token operator">&gt;</span><span class="token punctuation">, </span>range<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.ranges/-closed-range/index.html">ClosedRange</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../integrate.html">T</a><span class="token operator">&gt;</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../integrate.html">T</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Compute a definite integral of a given polynomial in a <a href="../integrate.html">range</a></p></div></div></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="-1499184233%2FExtensions%2F-597741372" anchor-label="value" id="-1499184233%2FExtensions%2F-597741372" data-filterable-set=":kmath-functions:dokkaHtmlPartial/commonMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-functions:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-functions:dokkaHtmlPartial/commonMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="../value.html"><span><span>value</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1499184233%2FExtensions%2F-597741372"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-functions:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="index.html">Polynomial</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="../value.html"><span class="token function">value</span></a><span class="token punctuation">(</span>arg<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Evaluates the value of the given double polynomial for given double argument.</p></div><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../value.html">T</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="../value.html">C</a><span class="token operator"> : </span><a href="../../../kmath-core/space.kscience.kmath.operations/-ring/index.html">Ring</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../value.html">T</a><span class="token operator">&gt;</span><span class="token operator">&gt; </span><a href="index.html">Polynomial</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../value.html">T</a><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="../value.html"><span class="token function">value</span></a><span class="token punctuation">(</span>ring<span class="token operator">: </span><a href="../value.html">C</a><span class="token punctuation">, </span>arg<span class="token operator">: </span><a href="../value.html">T</a><span class="token punctuation">)</span><span class="token operator">: </span><a href="../value.html">T</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Evaluates the value of the given polynomial for given argument. https://en.wikipedia.org/wiki/Horner%27s_method</p></div></div></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <h2 class="">Sources</h2>
-              <div class="table" data-togglable="Sources"><a data-name="1242143393%2FSource%2F-597741372" anchor-label="https://github.com/mipt-npm/kmath/tree/master/kmath-functions/src/commonMain/kotlin/space/kscience/kmath/functions/Polynomial.kt#L15" id="1242143393%2FSource%2F-597741372" data-filterable-set=":kmath-functions:dokkaHtmlPartial/commonMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-functions:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-functions:dokkaHtmlPartial/commonMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="https://github.com/mipt-npm/kmath/tree/master/kmath-functions/src/commonMain/kotlin/space/kscience/kmath/functions/Polynomial.kt#L15">common source</a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1242143393%2FSource%2F-597741372"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div></div>
-                  </div>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-functions:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">coefficients<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="index.html">C</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span></div></div></div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <div class="footer"><span class="go-to-top-icon"><a href="#content" id="go-to-top-link"></a></span><span>© 2022 Copyright</span><span class="pull-right"><span>Generated by </span><a href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span></div>
+      </div>
+      <div data-togglable="FUNCTION">
+        <h2 class="">Functions</h2>
+        <div class="table"><a data-name="981156771%2FFunctions%2F-597741372" anchor-label="asFunctionOver" id="981156771%2FFunctions%2F-597741372" data-filterable-set=":kmath-functions:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-functions:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-functions:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../as-function-over.html"><span>as</span><wbr><span>Function</span><wbr><span><span>Over</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="981156771%2FFunctions%2F-597741372"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-functions:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../as-function-over.html">C</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="../as-function-over.html">A</a><span class="token operator"> : </span><a href="../../../kmath-core/space.kscience.kmath.operations/-ring/index.html">Ring</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../as-function-over.html">C</a><span class="token operator">&gt;</span><span class="token operator">&gt; </span><a href="index.html">Polynomial</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../as-function-over.html">C</a><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="../as-function-over.html"><span class="token function">asFunctionOver</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">ring<span class="token operator">: </span><a href="../as-function-over.html">A</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span class="token punctuation">(</span><span class="token keyword"></span><a href="../as-function-over.html">C</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><span class="token keyword"></span><a href="../as-function-over.html">C</a></div><div class="brief "><p class="paragraph">Represent <a href="../../../kmath-functions/space.kscience.kmath.functions/index.html">this</a> polynomial as a regular context-less function.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-920703650%2FFunctions%2F-597741372" anchor-label="differentiate" id="-920703650%2FFunctions%2F-597741372" data-filterable-set=":kmath-functions:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-functions:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-functions:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../differentiate.html"><span><span>differentiate</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-920703650%2FFunctions%2F-597741372"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-functions:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="../../../kmath-memory/space.kscience.kmath/-unstable-k-math-a-p-i/index.html"><span class="token annotation builtin">UnstableKMathAPI</span></a></div></div><span class="token keyword"></span><span class="token keyword">fun </span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../differentiate.html">C</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="../differentiate.html">A</a><span class="token operator"> : </span><a href="../../../kmath-core/space.kscience.kmath.operations/-ring/index.html">Ring</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../differentiate.html">C</a><span class="token operator">&gt;</span>, <a href="../../../kmath-core/space.kscience.kmath.operations/-numeric-algebra/index.html">NumericAlgebra</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../differentiate.html">C</a><span class="token operator">&gt;</span><span class="token operator">&gt; </span><a href="index.html">Polynomial</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../differentiate.html">C</a><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="../differentiate.html"><span class="token function">differentiate</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">ring<span class="token operator">: </span><a href="../differentiate.html">A</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">Polynomial</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../differentiate.html">C</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Returns algebraic derivative of received polynomial.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="458363129%2FFunctions%2F-597741372" anchor-label="integrate" id="458363129%2FFunctions%2F-597741372" data-filterable-set=":kmath-functions:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-functions:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-functions:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../integrate.html"><span><span>integrate</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="458363129%2FFunctions%2F-597741372"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-functions:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="../../../kmath-memory/space.kscience.kmath/-unstable-k-math-a-p-i/index.html"><span class="token annotation builtin">UnstableKMathAPI</span></a></div></div><span class="token keyword"></span><span class="token keyword">fun </span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../integrate.html">C</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="../integrate.html">A</a><span class="token operator"> : </span><a href="../../../kmath-core/space.kscience.kmath.operations/-field/index.html">Field</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../integrate.html">C</a><span class="token operator">&gt;</span>, <a href="../../../kmath-core/space.kscience.kmath.operations/-numeric-algebra/index.html">NumericAlgebra</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../integrate.html">C</a><span class="token operator">&gt;</span><span class="token operator">&gt; </span><a href="index.html">Polynomial</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../integrate.html">C</a><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="../integrate.html"><span class="token function">integrate</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">ring<span class="token operator">: </span><a href="../integrate.html">A</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">Polynomial</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../integrate.html">C</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Returns algebraic antiderivative of received polynomial.</p></div><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="../../../kmath-memory/space.kscience.kmath/-unstable-k-math-a-p-i/index.html"><span class="token annotation builtin">UnstableKMathAPI</span></a></div></div><span class="token keyword"></span><span class="token keyword">fun </span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../integrate.html">C</a><span class="token operator"> : </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-comparable/index.html">Comparable</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../integrate.html">C</a><span class="token operator">&gt;</span><span class="token operator">&gt; </span><a href="index.html">Polynomial</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../integrate.html">C</a><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="../integrate.html"><span class="token function">integrate</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">ring<span class="token operator">: </span><a href="../../../kmath-core/space.kscience.kmath.operations/-field/index.html">Field</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../integrate.html">C</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">range<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.ranges/-closed-range/index.html">ClosedRange</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../integrate.html">C</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../integrate.html">C</a></div><div class="brief "><p class="paragraph">Computes a definite integral of <a href="../../../kmath-functions/space.kscience.kmath.functions/index.html">this</a> polynomial in the specified <a href="../integrate.html">range</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1251237394%2FFunctions%2F-597741372" anchor-label="toString" id="1251237394%2FFunctions%2F-597741372" data-filterable-set=":kmath-functions:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-filterable-current=":kmath-functions:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-functions:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="to-string.html"><span>to</span><wbr><span><span>String</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1251237394%2FFunctions%2F-597741372"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-functions:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="to-string.html"><span class="token function">toString</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1781643923%2FFunctions%2F-597741372" anchor-label="value" id="1781643923%2FFunctions%2F-597741372" data-filterable-set=":kmath-functions:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-functions:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-functions:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../value.html"><span><span>value</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1781643923%2FFunctions%2F-597741372"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-functions:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="index.html">Polynomial</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="../value.html"><span class="token function">value</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">arg<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a></div><div class="brief "><p class="paragraph">Evaluates value of <a href="../../../kmath-functions/space.kscience.kmath.functions/index.html">this</a> Double polynomial on provided Double argument.</p></div><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../value.html">C</a><span class="token operator">&gt; </span><a href="index.html">Polynomial</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../value.html">C</a><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="../value.html"><span class="token function">value</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">ring<span class="token operator">: </span><a href="../../../kmath-core/space.kscience.kmath.operations/-ring/index.html">Ring</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../value.html">C</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">arg<span class="token operator">: </span><a href="../value.html">C</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../value.html">C</a></div><div class="brief "><p class="paragraph">Evaluates value of <a href="../../../kmath-functions/space.kscience.kmath.functions/index.html">this</a> polynomial on provided argument.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="PROPERTY">
+        <h2 class="">Properties</h2>
+        <div class="table"><a data-name="748621408%2FProperties%2F-597741372" anchor-label="coefficients" id="748621408%2FProperties%2F-597741372" data-filterable-set=":kmath-functions:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-filterable-current=":kmath-functions:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-functions:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="coefficients.html"><span><span>coefficients</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="748621408%2FProperties%2F-597741372"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-functions:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="coefficients.html">coefficients</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="index.html">C</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">List that contains coefficients of the polynomial.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-  
-</body></html>
-
+  </div>
+</div>
+      <div class="footer">
+        <span class="go-to-top-icon"><a href="#content" id="go-to-top-link"></a></span><span>© 2023 Copyright</span><span class="pull-right"><span>Generated by </span><a href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span>
+      </div>
+    </div>
+</div>
+</body>
+</html>
 

@@ -1,0 +1,66 @@
+<!doctype html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>diagonalEmbedding</title>
+<link href="../../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../../";</script>    <script>const storage = localStorage.getItem("dokka-dark-mode")
+    if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    } else {
+        const savedDarkMode = JSON.parse(storage)
+        if(savedDarkMode === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    }
+    </script>
+<script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async></script>
+<link href="../../../styles/style.css" rel="Stylesheet">
+<link href="../../../styles/jetbrains-mono.css" rel="Stylesheet">
+<link href="../../../styles/main.css" rel="Stylesheet">
+<link href="../../../styles/prism.css" rel="Stylesheet">
+<link href="../../../styles/logo-styles.css" rel="Stylesheet">
+<script type="text/javascript" src="../../../scripts/clipboard.js" async></script>
+<script type="text/javascript" src="../../../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../../../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../../../scripts/main.js" defer></script>
+<script type="text/javascript" src="../../../scripts/prism.js" async></script>
+<script type="text/javascript" src="../../../scripts/symbol-parameters-wrapper_deferred.js" defer></script></head>
+<body>
+<div class="navigation-wrapper" id="navigation-wrapper">
+    <div id="leftToggler"><span class="icon-toggler"></span></div>
+    <div class="library-name">
+<a href="../../../index.html">
+<span>kmath</span>            </a>    </div>
+    <div>0.3.1-dev-RC
+    </div>
+    <div class="pull-right d-flex">
+        <div class="filter-section" id="filter-section">
+                <button class="platform-tag platform-selector common-like" data-active="" data-filter=":kmath-tensors:dokkaHtmlPartial/commonMain">common</button>
+        </div>
+        <button id="theme-toggle-button"><span id="theme-toggle"></span></button>
+        <div id="searchBar"></div>
+    </div>
+</div>
+<div id="container">
+    <div id="leftColumn">
+        <div id="sideMenu"></div>
+    </div>
+    <div id="main">
+<div class="main-content" data-page-type="member" id="content" pageids="kmath-tensors::space.kscience.kmath.tensors.core/IntTensorAlgebra/diagonalEmbedding/#space.kscience.kmath.nd.StructureND[kotlin.Int]#kotlin.Int#kotlin.Int#kotlin.Int/PointingToDeclaration//-1345790395">
+  <div class="breadcrumbs"><a href="../../index.html">kmath-tensors</a><span class="delimiter">/</span><a href="../index.html">space.kscience.kmath.tensors.core</a><span class="delimiter">/</span><a href="index.html">IntTensorAlgebra</a><span class="delimiter">/</span><span class="current">diagonalEmbedding</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span>diagonal</span><wbr><span><span>Embedding</span></span></h1>
+  </div>
+  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-tensors:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="diagonal-embedding.html"><span class="token function">diagonalEmbedding</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">diagonalEntries<span class="token operator">: </span><a href="../../../kmath-core/space.kscience.kmath.nd/-structure-n-d/index.html">StructureND</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">offset<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter ">dim1<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter ">dim2<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-int-tensor/index.html">IntTensor</a><span class="clearfix"><span class="floating-right">(<a href="https://github.com/SciProgCentre/kmath/tree/master/kmath-tensors/src/commonMain/kotlin/space/kscience/kmath/tensors/core/IntTensorAlgebra.kt#L302">source</a>)</span></span></div><p class="paragraph">Creates a tensor whose diagonals of certain 2D planes (specified by <a href="diagonal-embedding.html">dim1</a> and <a href="diagonal-embedding.html">dim2</a>) are filled by <a href="diagonal-embedding.html">diagonalEntries</a>. To facilitate creating batched diagonal matrices, the 2D planes formed by the last two dimensions of the returned tensor are chosen by default.</p><p class="paragraph">The argument <a href="diagonal-embedding.html">offset</a> controls, which diagonal to consider:</p><ol><li><p class="paragraph">If <a href="diagonal-embedding.html">offset</a> = 0, it is the main diagonal.</p></li><li><p class="paragraph">If <a href="diagonal-embedding.html">offset</a> 0, it is above the main diagonal.</p></li><li><p class="paragraph">If <a href="diagonal-embedding.html">offset</a>&lt; 0, it is below the main diagonal.</p></li></ol><p class="paragraph">The size of the new matrix will be calculated to make the specified diagonal of the size of the last input dimension. For more information: https://pytorch.org/docs/stable/generated/torch.diag_embed.html</p><span class="kdoc-tag"><h4 class="">Return</h4><p class="paragraph">tensor whose diagonals of certain 2D planes (specified by <a href="diagonal-embedding.html">dim1</a> and <a href="diagonal-embedding.html">dim2</a>) are filled by <a href="diagonal-embedding.html">diagonalEntries</a></p></span><h4 class="">Parameters</h4><div class="table"><div class="table-row" data-filterable-current=":kmath-tensors:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span>diagonal</span><wbr><span><span>Entries</span></span></u></div></span></div><div><div class="title"><p class="paragraph">the input tensor. Must be at least 1-dimensional.</p></div></div></div></div><div class="table-row" data-filterable-current=":kmath-tensors:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span><span>offset</span></span></u></div></span></div><div><div class="title"><p class="paragraph">which diagonal to consider. Default: 0 (main diagonal).</p></div></div></div></div><div class="table-row" data-filterable-current=":kmath-tensors:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span><span>dim1</span></span></u></div></span></div><div><div class="title"><p class="paragraph">first dimension with respect to which to take diagonal. Default: -2.</p></div></div></div></div><div class="table-row" data-filterable-current=":kmath-tensors:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-tensors:dokkaHtmlPartial/commonMain"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span><span>dim2</span></span></u></div></span></div><div><div class="title"><p class="paragraph">second dimension with respect to which to take diagonal. Default: -1.</p></div></div></div></div></div></div></div>
+</div>
+      <div class="footer">
+        <span class="go-to-top-icon"><a href="#content" id="go-to-top-link"></a></span><span>© 2023 Copyright</span><span class="pull-right"><span>Generated by </span><a href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span>
+      </div>
+    </div>
+</div>
+</body>
+</html>
+

@@ -1,318 +1,424 @@
+<!doctype html>
 <html>
-  <head>
+<head>
     <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
     <title>Vector3D</title>
-</head><body><link href="../../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../../";</script>
-    <script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async></script><link href="../../../styles/style.css" rel="Stylesheet"><link href="../../../styles/jetbrains-mono.css" rel="Stylesheet"><link href="../../../styles/main.css" rel="Stylesheet"><link href="../../../styles/prism.css" rel="Stylesheet"><link href="../../../styles/logo-styles.css" rel="Stylesheet"><script type="text/javascript" src="../../../scripts/clipboard.js" async></script><script type="text/javascript" src="../../../scripts/navigation-loader.js" async></script><script type="text/javascript" src="../../../scripts/platform-content-handler.js" async></script><script type="text/javascript" src="../../../scripts/main.js" defer></script><script type="text/javascript" src="../../../scripts/prism.js" async></script><script>const storage = localStorage.getItem("dokka-dark-mode")
-const savedDarkMode = storage ? JSON.parse(storage) : false
-if(savedDarkMode === true){
-    document.getElementsByTagName("html")[0].classList.add("theme-dark")
-}</script>
-
-  
-    <div class="navigation-wrapper" id="navigation-wrapper">
-      <div id="leftToggler"><span class="icon-toggler"></span></div>
-      <div class="library-name"><a href="../../../index.html"><span>kmath</span></a></div>
-      <div></div>
-      <div class="pull-right d-flex"><button id="theme-toggle-button"><span id="theme-toggle"></span></button>
-        <div id="searchBar"></div>
-      </div>
+<link href="../../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../../";</script>    <script>const storage = localStorage.getItem("dokka-dark-mode")
+    if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    } else {
+        const savedDarkMode = JSON.parse(storage)
+        if(savedDarkMode === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    }
+    </script>
+<script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async></script>
+<link href="../../../styles/style.css" rel="Stylesheet">
+<link href="../../../styles/jetbrains-mono.css" rel="Stylesheet">
+<link href="../../../styles/main.css" rel="Stylesheet">
+<link href="../../../styles/prism.css" rel="Stylesheet">
+<link href="../../../styles/logo-styles.css" rel="Stylesheet">
+<script type="text/javascript" src="../../../scripts/clipboard.js" async></script>
+<script type="text/javascript" src="../../../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../../../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../../../scripts/main.js" defer></script>
+<script type="text/javascript" src="../../../scripts/prism.js" async></script>
+<script type="text/javascript" src="../../../scripts/symbol-parameters-wrapper_deferred.js" defer></script></head>
+<body>
+<div class="navigation-wrapper" id="navigation-wrapper">
+    <div id="leftToggler"><span class="icon-toggler"></span></div>
+    <div class="library-name">
+<a href="../../../index.html">
+<span>kmath</span>            </a>    </div>
+    <div>0.3.1-dev-RC
     </div>
-    <div id="container">
-      <div id="leftColumn">
+    <div class="pull-right d-flex">
+        <div class="filter-section" id="filter-section">
+                <button class="platform-tag platform-selector common-like" data-active="" data-filter=":kmath-geometry:dokkaHtmlPartial/commonMain">common</button>
+        </div>
+        <button id="theme-toggle-button"><span id="theme-toggle"></span></button>
+        <div id="searchBar"></div>
+    </div>
+</div>
+<div id="container">
+    <div id="leftColumn">
         <div id="sideMenu"></div>
-      </div>
-      <div id="main">
-        <div class="main-content" id="content" pageids="kmath-geometry::space.kscience.kmath.geometry/Vector3D///PointingToDeclaration//-1055449721">
-          <div class="breadcrumbs"><a href="../../index.html">kmath-geometry</a>/<a href="../index.html">space.kscience.kmath.geometry</a>/<a href="index.html">Vector3D</a></div>
-          <div class="cover ">
-            <h1 class="cover"><span><span>Vector3D</span></span></h1>
-            <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-geometry:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">interface </span><a href="index.html">Vector3D</a> : <a href="../../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token operator">&gt; </span>, <a href="../-vector/index.html">Vector</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+    </div>
+    <div id="main">
+<div class="main-content" data-page-type="classlike" id="content" pageids="kmath-geometry::space.kscience.kmath.geometry/Vector3D///PointingToDeclaration//-1055449721">
+  <div class="breadcrumbs"><a href="../../index.html">kmath-geometry</a><span class="delimiter">/</span><a href="../index.html">space.kscience.kmath.geometry</a><span class="delimiter">/</span><span class="current">Vector3D</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span><span>Vector3D</span></span></h1>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-geometry:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">interface </span><a href="index.html">Vector3D</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="index.html">T</a><span class="token operator">&gt;</span> : <a href="../../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="index.html">T</a><span class="token operator">&gt; </span>, <a href="../-vector/index.html">Vector</a><span class="clearfix"><span class="floating-right">(<a href="https://github.com/SciProgCentre/kmath/tree/master/kmath-geometry/src/commonMain/kotlin/space/kscience/kmath/geometry/Euclidean3DSpace.kt#L21">source</a>)</span></span></div></div></div>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,FUNCTION,PROPERTY">Members</button><button class="section-tab" data-togglable="CONSTRUCTOR,TYPE,FUNCTION,PROPERTY,EXTENSION_PROPERTY,EXTENSION_FUNCTION">Members &amp; Extensions</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="FUNCTION">
+        <h2 class="">Functions</h2>
+        <div class="table"><a data-name="93862125%2FFunctions%2F-1055449721" anchor-label="asVector3D" id="93862125%2FFunctions%2F-1055449721" data-filterable-set=":kmath-geometry:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-geometry:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-geometry:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../as-vector3-d.html"><span>as</span><wbr><span><span>Vector3D</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="93862125%2FFunctions%2F-1055449721"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-geometry:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../as-vector3-d.html">T</a><span class="token operator">&gt; </span><a href="../../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../as-vector3-d.html">T</a><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="../as-vector3-d.html"><span class="token function">asVector3D</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">Vector3D</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../as-vector3-d.html">T</a><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="tabbedcontent">
-            <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="Functions">Functions</button><button class="section-tab" data-togglable="Properties">Properties</button><button class="section-tab" data-togglable="Extensions">Extensions</button><button class="section-tab" data-togglable="Sources">Sources</button></div>
-            <div class="tabs-section-body">
-              <h2 class="">Functions</h2>
-              <div class="table" data-togglable="Functions"><a data-name="-746814101%2FFunctions%2F-1055449721" anchor-label="get" id="-746814101%2FFunctions%2F-1055449721" data-filterable-set=":kmath-geometry:dokkaHtmlPartial/commonMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-geometry:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-geometry:dokkaHtmlPartial/commonMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="get.html"><span><span>get</span></span></a></div>
+<a data-name="-954682279%2FFunctions%2F-1055449721" anchor-label="component1" id="-954682279%2FFunctions%2F-1055449721" data-filterable-set=":kmath-geometry:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-geometry:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-geometry:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../component1.html"><span><span>component1</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-954682279%2FFunctions%2F-1055449721"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-geometry:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">operator </span><span class="token keyword">fun </span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../component1.html">T</a><span class="token operator">&gt; </span><a href="index.html">Vector3D</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../component1.html">T</a><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="../component1.html"><span class="token function">component1</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../component1.html">T</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-154146726%2FFunctions%2F-1055449721" anchor-label="component2" id="-154146726%2FFunctions%2F-1055449721" data-filterable-set=":kmath-geometry:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-geometry:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-geometry:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../component2.html"><span><span>component2</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-154146726%2FFunctions%2F-1055449721"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-geometry:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">operator </span><span class="token keyword">fun </span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../component2.html">T</a><span class="token operator">&gt; </span><a href="index.html">Vector3D</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../component2.html">T</a><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="../component2.html"><span class="token function">component2</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../component2.html">T</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="646388827%2FFunctions%2F-1055449721" anchor-label="component3" id="646388827%2FFunctions%2F-1055449721" data-filterable-set=":kmath-geometry:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-geometry:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-geometry:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../component3.html"><span><span>component3</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="646388827%2FFunctions%2F-1055449721"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-geometry:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">operator </span><span class="token keyword">fun </span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../component3.html">T</a><span class="token operator">&gt; </span><a href="index.html">Vector3D</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../component3.html">T</a><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="../component3.html"><span class="token function">component3</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../component3.html">T</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="2122054914%2FFunctions%2F-1055449721" anchor-label="cross" id="2122054914%2FFunctions%2F-1055449721" data-filterable-set=":kmath-geometry:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-geometry:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-geometry:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-euclidean3-d-space/cross.html"><span><span>cross</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2122054914%2FFunctions%2F-1055449721"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-geometry:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">infix </span><span class="token keyword">fun </span><a href="../index.html#-644062505%2FClasslikes%2F-1055449721">DoubleVector3D</a><span class="token punctuation">.</span><a href="../-euclidean3-d-space/cross.html"><span class="token function">cross</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">other<span class="token operator">: </span><a href="../index.html#-644062505%2FClasslikes%2F-1055449721">DoubleVector3D</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">Vector3D</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Vector product with right basis</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-383017396%2FFunctions%2F-1055449721" anchor-label="distanceTo" id="-383017396%2FFunctions%2F-1055449721" data-filterable-set=":kmath-geometry:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-geometry:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-geometry:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-euclidean3-d-space/distance-to.html"><span>distance</span><wbr><span><span>To</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-383017396%2FFunctions%2F-1055449721"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-geometry:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="../index.html#-644062505%2FClasslikes%2F-1055449721">DoubleVector3D</a><span class="token punctuation">.</span><a href="../-euclidean3-d-space/distance-to.html"><span class="token function">distanceTo</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">other<span class="token operator">: </span><a href="../index.html#-644062505%2FClasslikes%2F-1055449721">DoubleVector3D</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a></div><div class="brief "><p class="paragraph">L2 distance</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="866745982%2FFunctions%2F-1055449721" anchor-label="div" id="866745982%2FFunctions%2F-1055449721" data-filterable-set=":kmath-geometry:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-geometry:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-geometry:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-euclidean3-d-space/index.html#866745982%2FExtensions%2F-1055449721"><span><span>div</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="866745982%2FFunctions%2F-1055449721"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-geometry:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">operator </span><span class="token keyword">fun </span><a href="../index.html#-644062505%2FClasslikes%2F-1055449721">DoubleVector3D</a><span class="token punctuation">.</span><a href="../-euclidean3-d-space/index.html#866745982%2FExtensions%2F-1055449721"><span class="token function">div</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">k<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-number/index.html">Number</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../index.html#-644062505%2FClasslikes%2F-1055449721">DoubleVector3D</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="10284057%2FFunctions%2F-1055449721" anchor-label="dot" id="10284057%2FFunctions%2F-1055449721" data-filterable-set=":kmath-geometry:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-geometry:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-geometry:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-euclidean3-d-space/dot.html"><span><span>dot</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="10284057%2FFunctions%2F-1055449721"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-geometry:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">infix override </span><span class="token keyword">fun </span><a href="../index.html#-644062505%2FClasslikes%2F-1055449721">DoubleVector3D</a><span class="token punctuation">.</span><a href="../-euclidean3-d-space/dot.html"><span class="token function">dot</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">other<span class="token operator">: </span><a href="../index.html#-644062505%2FClasslikes%2F-1055449721">DoubleVector3D</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a></div><div class="brief "><p class="paragraph">Scalar product</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-883923832%2FFunctions%2F-1055449721" anchor-label="equalsVector" id="-883923832%2FFunctions%2F-1055449721" data-filterable-set=":kmath-geometry:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-geometry:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-geometry:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../equals-vector.html"><span>equals</span><wbr><span><span>Vector</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-883923832%2FFunctions%2F-1055449721"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-geometry:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="../index.html#-510557896%2FClasslikes%2F-1055449721">Float64Vector3D</a><span class="token punctuation">.</span><a href="../equals-vector.html"><span class="token function">equalsVector</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">other<span class="token operator">: </span><a href="../index.html#-510557896%2FClasslikes%2F-1055449721">Float64Vector3D</a><span class="token punctuation">, </span></span><span class="parameter ">precision<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token operator"> = </span>DEFAULT_PRECISION</span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a></div><div class="brief "><p class="paragraph">Vector equality using Euclidian L2 norm and given <a href="../equals-vector.html">precision</a></p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-746814101%2FFunctions%2F-1055449721" anchor-label="get" id="-746814101%2FFunctions%2F-1055449721" data-filterable-set=":kmath-geometry:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-filterable-current=":kmath-geometry:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-geometry:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="get.html"><span><span>get</span></span></a></div>
 <span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-746814101%2FFunctions%2F-1055449721"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-geometry:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">operator override </span><span class="token keyword">fun </span><a href="get.html"><span class="token function">get</span></a><span class="token punctuation">(</span>index<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-                      </div>
-                    </div>
-                  </div>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-geometry:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">operator override </span><span class="token keyword">fun </span><a href="get.html"><span class="token function">get</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">index<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">T</a></div></div></div>
                 </div>
+              </div>
+            </div>
+          </div>
 <a data-name="-1158276119%2FFunctions%2F-1055449721" anchor-label="iterator" id="-1158276119%2FFunctions%2F-1055449721" data-filterable-set=":kmath-geometry:dokkaHtmlPartial/commonMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-geometry:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-geometry:dokkaHtmlPartial/commonMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="iterator.html"><span><span>iterator</span></span></a></div>
+          <div class="table-row" data-filterable-current=":kmath-geometry:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-geometry:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="iterator.html"><span><span>iterator</span></span></a></div>
 <span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1158276119%2FFunctions%2F-1055449721"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-geometry:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">operator override </span><span class="token keyword">fun </span><a href="iterator.html"><span class="token function">iterator</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-iterator/index.html">Iterator</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token operator">&gt;</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-                      </div>
-                    </div>
-                  </div>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-geometry:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">operator override </span><span class="token keyword">fun </span><a href="iterator.html"><span class="token function">iterator</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-iterator/index.html">Iterator</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="index.html">T</a><span class="token operator">&gt;</span></div></div></div>
                 </div>
+              </div>
+            </div>
+          </div>
+<a data-name="605275408%2FFunctions%2F-1055449721" anchor-label="minus" id="605275408%2FFunctions%2F-1055449721" data-filterable-set=":kmath-geometry:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-geometry:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-geometry:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-euclidean3-d-space/index.html#605275408%2FExtensions%2F-1055449721"><span><span>minus</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="605275408%2FFunctions%2F-1055449721"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-geometry:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">operator </span><span class="token keyword">fun </span><a href="../index.html#-644062505%2FClasslikes%2F-1055449721">DoubleVector3D</a><span class="token punctuation">.</span><a href="../-euclidean3-d-space/index.html#605275408%2FExtensions%2F-1055449721"><span class="token function">minus</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">arg<span class="token operator">: </span><a href="../index.html#-644062505%2FClasslikes%2F-1055449721">DoubleVector3D</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../index.html#-644062505%2FClasslikes%2F-1055449721">DoubleVector3D</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="240171728%2FFunctions%2F-1055449721" anchor-label="norm" id="240171728%2FFunctions%2F-1055449721" data-filterable-set=":kmath-geometry:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-geometry:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-geometry:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-euclidean3-d-space/norm.html"><span><span>norm</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="240171728%2FFunctions%2F-1055449721"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-geometry:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="../index.html#-644062505%2FClasslikes%2F-1055449721">DoubleVector3D</a><span class="token punctuation">.</span><a href="../-euclidean3-d-space/norm.html"><span class="token function">norm</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1132696964%2FFunctions%2F-1055449721" anchor-label="plus" id="1132696964%2FFunctions%2F-1055449721" data-filterable-set=":kmath-geometry:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-geometry:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-geometry:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-euclidean3-d-space/index.html#1132696964%2FExtensions%2F-1055449721"><span><span>plus</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1132696964%2FFunctions%2F-1055449721"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-geometry:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">operator </span><span class="token keyword">fun </span><a href="../index.html#-644062505%2FClasslikes%2F-1055449721">DoubleVector3D</a><span class="token punctuation">.</span><a href="../-euclidean3-d-space/index.html#1132696964%2FExtensions%2F-1055449721"><span class="token function">plus</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">arg<span class="token operator">: </span><a href="../index.html#-644062505%2FClasslikes%2F-1055449721">DoubleVector3D</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../index.html#-644062505%2FClasslikes%2F-1055449721">DoubleVector3D</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="112907689%2FFunctions%2F-1055449721" anchor-label="times" id="112907689%2FFunctions%2F-1055449721" data-filterable-set=":kmath-geometry:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-geometry:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-geometry:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-euclidean3-d-space/index.html#112907689%2FExtensions%2F-1055449721"><span><span>times</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="112907689%2FFunctions%2F-1055449721"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-geometry:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">operator </span><span class="token keyword">fun </span><a href="../index.html#-644062505%2FClasslikes%2F-1055449721">DoubleVector3D</a><span class="token punctuation">.</span><a href="../-euclidean3-d-space/index.html#112907689%2FExtensions%2F-1055449721"><span class="token function">times</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">k<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-number/index.html">Number</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../index.html#-644062505%2FClasslikes%2F-1055449721">DoubleVector3D</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
 <a data-name="-1175074807%2FFunctions%2F-1055449721" anchor-label="toString" id="-1175074807%2FFunctions%2F-1055449721" data-filterable-set=":kmath-geometry:dokkaHtmlPartial/commonMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-geometry:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-geometry:dokkaHtmlPartial/commonMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="index.html#-1175074807%2FFunctions%2F-1055449721"><span>to</span><wbr><span><span>String</span></span></a></div>
+          <div class="table-row" data-filterable-current=":kmath-geometry:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-geometry:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#-1175074807%2FFunctions%2F-1055449721"><span>to</span><wbr><span><span>String</span></span></a></div>
 <span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1175074807%2FFunctions%2F-1055449721"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-geometry:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="index.html#-1175074807%2FFunctions%2F-1055449721"><span class="token function">toString</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-                      </div>
-                    </div>
-                  </div>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-geometry:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="index.html#-1175074807%2FFunctions%2F-1055449721"><span class="token function">toString</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a></div></div></div>
                 </div>
               </div>
-              <h2 class="">Properties</h2>
-              <div class="table" data-togglable="Properties"><a data-name="1688296630%2FProperties%2F-1055449721" anchor-label="size" id="1688296630%2FProperties%2F-1055449721" data-filterable-set=":kmath-geometry:dokkaHtmlPartial/commonMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-geometry:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-geometry:dokkaHtmlPartial/commonMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="size.html">size</a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1688296630%2FProperties%2F-1055449721"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-geometry:dokkaHtmlPartial/commonMain"><a data-name="1688296630%2FProperties%2F-1055449721" anchor-label="size" id="1688296630%2FProperties%2F-1055449721" data-filterable-set=":kmath-geometry:dokkaHtmlPartial/commonMain"></a><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="size.html">size</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="-52186453%2FProperties%2F-1055449721" anchor-label="x" id="-52186453%2FProperties%2F-1055449721" data-filterable-set=":kmath-geometry:dokkaHtmlPartial/commonMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-geometry:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-geometry:dokkaHtmlPartial/commonMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="x.html">x</a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-52186453%2FProperties%2F-1055449721"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-geometry:dokkaHtmlPartial/commonMain"><a data-name="-52186453%2FProperties%2F-1055449721" anchor-label="x" id="-52186453%2FProperties%2F-1055449721" data-filterable-set=":kmath-geometry:dokkaHtmlPartial/commonMain"></a><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword"></span><span class="token keyword">val </span><a href="x.html">x</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="-21166646%2FProperties%2F-1055449721" anchor-label="y" id="-21166646%2FProperties%2F-1055449721" data-filterable-set=":kmath-geometry:dokkaHtmlPartial/commonMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-geometry:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-geometry:dokkaHtmlPartial/commonMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="y.html">y</a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-21166646%2FProperties%2F-1055449721"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-geometry:dokkaHtmlPartial/commonMain"><a data-name="-21166646%2FProperties%2F-1055449721" anchor-label="y" id="-21166646%2FProperties%2F-1055449721" data-filterable-set=":kmath-geometry:dokkaHtmlPartial/commonMain"></a><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword"></span><span class="token keyword">val </span><a href="y.html">y</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="9853161%2FProperties%2F-1055449721" anchor-label="z" id="9853161%2FProperties%2F-1055449721" data-filterable-set=":kmath-geometry:dokkaHtmlPartial/commonMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-geometry:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-geometry:dokkaHtmlPartial/commonMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="z.html">z</a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="9853161%2FProperties%2F-1055449721"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-geometry:dokkaHtmlPartial/commonMain"><a data-name="9853161%2FProperties%2F-1055449721" anchor-label="z" id="9853161%2FProperties%2F-1055449721" data-filterable-set=":kmath-geometry:dokkaHtmlPartial/commonMain"></a><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword"></span><span class="token keyword">val </span><a href="z.html">z</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-                      </div>
-                    </div>
-                  </div>
+            </div>
+          </div>
+<a data-name="-1720861547%2FFunctions%2F-1055449721" anchor-label="unaryMinus" id="-1720861547%2FFunctions%2F-1055449721" data-filterable-set=":kmath-geometry:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-geometry:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-geometry:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-euclidean3-d-space/unary-minus.html"><span>unary</span><wbr><span><span>Minus</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1720861547%2FFunctions%2F-1055449721"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-geometry:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">operator override </span><span class="token keyword">fun </span><a href="../index.html#-644062505%2FClasslikes%2F-1055449721">DoubleVector3D</a><span class="token punctuation">.</span><a href="../-euclidean3-d-space/unary-minus.html"><span class="token function">unaryMinus</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../index.html#-644062505%2FClasslikes%2F-1055449721">DoubleVector3D</a></div></div></div>
                 </div>
               </div>
-              <h2 class="tabbedcontent">Extensions</h2>
-              <div class="table" data-togglable="Extensions"><a data-name="-702952694%2FExtensions%2F-1055449721" anchor-label="distanceTo" id="-702952694%2FExtensions%2F-1055449721" data-filterable-set=":kmath-geometry:dokkaHtmlPartial/commonMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-geometry:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-geometry:dokkaHtmlPartial/commonMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="../-euclidean3-d-space/distance-to.html"><span>distance</span><wbr><span><span>To</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-702952694%2FExtensions%2F-1055449721"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-geometry:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="index.html">Vector3D</a><span class="token punctuation">.</span><a href="../-euclidean3-d-space/distance-to.html"><span class="token function">distanceTo</span></a><span class="token punctuation">(</span>other<span class="token operator">: </span><a href="index.html">Vector3D</a><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">L2 distance</p></div></div></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="-1995292860%2FExtensions%2F-1055449721" anchor-label="div" id="-1995292860%2FExtensions%2F-1055449721" data-filterable-set=":kmath-geometry:dokkaHtmlPartial/commonMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-geometry:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-geometry:dokkaHtmlPartial/commonMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="../-euclidean3-d-space/index.html#-1995292860%2FFunctions%2F-1055449721"><span><span>div</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1995292860%2FExtensions%2F-1055449721"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-geometry:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">operator </span><span class="token keyword">fun </span><a href="index.html">Vector3D</a><span class="token punctuation">.</span><a href="../-euclidean3-d-space/index.html#-1995292860%2FFunctions%2F-1055449721"><span class="token function">div</span></a><span class="token punctuation">(</span>k<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-number/index.html">Number</a><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">Vector3D</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="-1591456361%2FExtensions%2F-1055449721" anchor-label="dot" id="-1591456361%2FExtensions%2F-1055449721" data-filterable-set=":kmath-geometry:dokkaHtmlPartial/commonMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-geometry:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-geometry:dokkaHtmlPartial/commonMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="../-euclidean3-d-space/dot.html"><span><span>dot</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1591456361%2FExtensions%2F-1055449721"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-geometry:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">infix override </span><span class="token keyword">fun </span><a href="index.html">Vector3D</a><span class="token punctuation">.</span><a href="../-euclidean3-d-space/dot.html"><span class="token function">dot</span></a><span class="token punctuation">(</span>other<span class="token operator">: </span><a href="index.html">Vector3D</a><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Scalar product</p></div></div></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="-772054834%2FExtensions%2F-1055449721" anchor-label="minus" id="-772054834%2FExtensions%2F-1055449721" data-filterable-set=":kmath-geometry:dokkaHtmlPartial/commonMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-geometry:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-geometry:dokkaHtmlPartial/commonMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="../-euclidean3-d-space/index.html#-772054834%2FFunctions%2F-1055449721"><span><span>minus</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-772054834%2FExtensions%2F-1055449721"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-geometry:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">operator </span><span class="token keyword">fun </span><a href="index.html">Vector3D</a><span class="token punctuation">.</span><a href="../-euclidean3-d-space/index.html#-772054834%2FFunctions%2F-1055449721"><span class="token function">minus</span></a><span class="token punctuation">(</span>arg<span class="token operator">: </span><a href="index.html">Vector3D</a><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">Vector3D</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="1853730054%2FExtensions%2F-1055449721" anchor-label="norm" id="1853730054%2FExtensions%2F-1055449721" data-filterable-set=":kmath-geometry:dokkaHtmlPartial/commonMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-geometry:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-geometry:dokkaHtmlPartial/commonMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="../-euclidean3-d-space/norm.html"><span><span>norm</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1853730054%2FExtensions%2F-1055449721"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-geometry:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="index.html">Vector3D</a><span class="token punctuation">.</span><a href="../-euclidean3-d-space/norm.html"><span class="token function">norm</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="-50088894%2FExtensions%2F-1055449721" anchor-label="plus" id="-50088894%2FExtensions%2F-1055449721" data-filterable-set=":kmath-geometry:dokkaHtmlPartial/commonMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-geometry:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-geometry:dokkaHtmlPartial/commonMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="../-euclidean3-d-space/index.html#-50088894%2FFunctions%2F-1055449721"><span><span>plus</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-50088894%2FExtensions%2F-1055449721"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-geometry:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">operator </span><span class="token keyword">fun </span><a href="index.html">Vector3D</a><span class="token punctuation">.</span><a href="../-euclidean3-d-space/index.html#-50088894%2FFunctions%2F-1055449721"><span class="token function">plus</span></a><span class="token punctuation">(</span>arg<span class="token operator">: </span><a href="index.html">Vector3D</a><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">Vector3D</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="1913477037%2FExtensions%2F-1055449721" anchor-label="r" id="1913477037%2FExtensions%2F-1055449721" data-filterable-set=":kmath-geometry:dokkaHtmlPartial/commonMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-geometry:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-geometry:dokkaHtmlPartial/commonMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="../r.html"><span><span>r</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1913477037%2FExtensions%2F-1055449721"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-geometry:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="index.html">Vector3D</a><span class="token punctuation">.</span><a href="../r.html">r</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="-2060396679%2FExtensions%2F-1055449721" anchor-label="times" id="-2060396679%2FExtensions%2F-1055449721" data-filterable-set=":kmath-geometry:dokkaHtmlPartial/commonMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-geometry:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-geometry:dokkaHtmlPartial/commonMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="../-euclidean3-d-space/index.html#-2060396679%2FFunctions%2F-1055449721"><span><span>times</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2060396679%2FExtensions%2F-1055449721"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-geometry:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">operator </span><span class="token keyword">fun </span><a href="index.html">Vector3D</a><span class="token punctuation">.</span><a href="../-euclidean3-d-space/index.html#-2060396679%2FFunctions%2F-1055449721"><span class="token function">times</span></a><span class="token punctuation">(</span>k<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-number/index.html">Number</a><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">Vector3D</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="-1412957727%2FExtensions%2F-1055449721" anchor-label="unaryMinus" id="-1412957727%2FExtensions%2F-1055449721" data-filterable-set=":kmath-geometry:dokkaHtmlPartial/commonMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-geometry:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-geometry:dokkaHtmlPartial/commonMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="../-euclidean3-d-space/unary-minus.html"><span>unary</span><wbr><span><span>Minus</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1412957727%2FExtensions%2F-1055449721"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-geometry:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">operator override </span><span class="token keyword">fun </span><a href="index.html">Vector3D</a><span class="token punctuation">.</span><a href="../-euclidean3-d-space/unary-minus.html"><span class="token function">unaryMinus</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">Vector3D</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="-1718168227%2FExtensions%2F-1055449721" anchor-label="unaryPlus" id="-1718168227%2FExtensions%2F-1055449721" data-filterable-set=":kmath-geometry:dokkaHtmlPartial/commonMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-geometry:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-geometry:dokkaHtmlPartial/commonMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="../-euclidean3-d-space/index.html#-1718168227%2FFunctions%2F-1055449721"><span>unary</span><wbr><span><span>Plus</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1718168227%2FExtensions%2F-1055449721"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-geometry:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">operator </span><span class="token keyword">fun </span><a href="index.html">Vector3D</a><span class="token punctuation">.</span><a href="../-euclidean3-d-space/index.html#-1718168227%2FFunctions%2F-1055449721"><span class="token function">unaryPlus</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">Vector3D</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <h2 class="">Sources</h2>
-              <div class="table" data-togglable="Sources"><a data-name="726674664%2FSource%2F-1055449721" anchor-label="https://github.com/mipt-npm/kmath/tree/master/kmath-geometry/src/commonMain/kotlin/space/kscience/kmath/geometry/Euclidean3DSpace.kt#L14" id="726674664%2FSource%2F-1055449721" data-filterable-set=":kmath-geometry:dokkaHtmlPartial/commonMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-geometry:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-geometry:dokkaHtmlPartial/commonMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="https://github.com/mipt-npm/kmath/tree/master/kmath-geometry/src/commonMain/kotlin/space/kscience/kmath/geometry/Euclidean3DSpace.kt#L14">common source</a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="726674664%2FSource%2F-1055449721"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div></div>
-                  </div>
+            </div>
+          </div>
+<a data-name="-1588266599%2FFunctions%2F-1055449721" anchor-label="unaryPlus" id="-1588266599%2FFunctions%2F-1055449721" data-filterable-set=":kmath-geometry:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-geometry:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-geometry:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-euclidean3-d-space/index.html#-1588266599%2FExtensions%2F-1055449721"><span>unary</span><wbr><span><span>Plus</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1588266599%2FFunctions%2F-1055449721"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-geometry:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">operator </span><span class="token keyword">fun </span><a href="../index.html#-644062505%2FClasslikes%2F-1055449721">DoubleVector3D</a><span class="token punctuation">.</span><a href="../-euclidean3-d-space/index.html#-1588266599%2FExtensions%2F-1055449721"><span class="token function">unaryPlus</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../index.html#-644062505%2FClasslikes%2F-1055449721">DoubleVector3D</a></div></div></div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <div class="footer"><span class="go-to-top-icon"><a href="#content" id="go-to-top-link"></a></span><span>© 2022 Copyright</span><span class="pull-right"><span>Generated by </span><a href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span></div>
+      </div>
+      <div data-togglable="PROPERTY">
+        <h2 class="">Properties</h2>
+        <div class="table"><a data-name="-1637905079%2FProperties%2F-1055449721" anchor-label="r" id="-1637905079%2FProperties%2F-1055449721" data-filterable-set=":kmath-geometry:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_PROPERTY" data-filterable-current=":kmath-geometry:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-geometry:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../r.html"><span><span>r</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1637905079%2FProperties%2F-1055449721"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-geometry:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="../index.html#-644062505%2FClasslikes%2F-1055449721">DoubleVector3D</a><span class="token punctuation">.</span><a href="../r.html">r</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1688296630%2FProperties%2F-1055449721" anchor-label="size" id="1688296630%2FProperties%2F-1055449721" data-filterable-set=":kmath-geometry:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-filterable-current=":kmath-geometry:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-geometry:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="size.html"><span><span>size</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1688296630%2FProperties%2F-1055449721"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-geometry:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="size.html">size</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-52186453%2FProperties%2F-1055449721" anchor-label="x" id="-52186453%2FProperties%2F-1055449721" data-filterable-set=":kmath-geometry:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-filterable-current=":kmath-geometry:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-geometry:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="x.html"><span><span>x</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-52186453%2FProperties%2F-1055449721"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-geometry:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword"></span><span class="token keyword">val </span><a href="x.html">x</a><span class="token operator">: </span><a href="index.html">T</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-21166646%2FProperties%2F-1055449721" anchor-label="y" id="-21166646%2FProperties%2F-1055449721" data-filterable-set=":kmath-geometry:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-filterable-current=":kmath-geometry:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-geometry:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="y.html"><span><span>y</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-21166646%2FProperties%2F-1055449721"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-geometry:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword"></span><span class="token keyword">val </span><a href="y.html">y</a><span class="token operator">: </span><a href="index.html">T</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="9853161%2FProperties%2F-1055449721" anchor-label="z" id="9853161%2FProperties%2F-1055449721" data-filterable-set=":kmath-geometry:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-filterable-current=":kmath-geometry:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-geometry:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="z.html"><span><span>z</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="9853161%2FProperties%2F-1055449721"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-geometry:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword"></span><span class="token keyword">val </span><a href="z.html">z</a><span class="token operator">: </span><a href="index.html">T</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-  
-</body></html>
-
+  </div>
+</div>
+      <div class="footer">
+        <span class="go-to-top-icon"><a href="#content" id="go-to-top-link"></a></span><span>© 2023 Copyright</span><span class="pull-right"><span>Generated by </span><a href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span>
+      </div>
+    </div>
+</div>
+</body>
+</html>
 

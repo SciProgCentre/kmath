@@ -1,287 +1,295 @@
+<!doctype html>
 <html>
-  <head>
+<head>
     <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
     <title>space.kscience.kmath.dimensions</title>
-</head><body><link href="../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../";</script>
-    <script type="text/javascript" src="../../scripts/sourceset_dependencies.js" async></script><link href="../../styles/style.css" rel="Stylesheet"><link href="../../styles/jetbrains-mono.css" rel="Stylesheet"><link href="../../styles/main.css" rel="Stylesheet"><link href="../../styles/prism.css" rel="Stylesheet"><link href="../../styles/logo-styles.css" rel="Stylesheet"><script type="text/javascript" src="../../scripts/clipboard.js" async></script><script type="text/javascript" src="../../scripts/navigation-loader.js" async></script><script type="text/javascript" src="../../scripts/platform-content-handler.js" async></script><script type="text/javascript" src="../../scripts/main.js" defer></script><script type="text/javascript" src="../../scripts/prism.js" async></script><script>const storage = localStorage.getItem("dokka-dark-mode")
-const savedDarkMode = storage ? JSON.parse(storage) : false
-if(savedDarkMode === true){
-    document.getElementsByTagName("html")[0].classList.add("theme-dark")
-}</script>
-
-  
-    <div class="navigation-wrapper" id="navigation-wrapper">
-      <div id="leftToggler"><span class="icon-toggler"></span></div>
-      <div class="library-name"><a href="../../index.html"><span>kmath</span></a></div>
-      <div></div>
-      <div class="pull-right d-flex">
-        <div class="filter-section" id="filter-section"><button class="platform-tag platform-selector common-like" data-active="" data-filter=":kmath-dimensions:dokkaHtmlPartial/commonMain">common</button><button class="platform-tag platform-selector js-like" data-active="" data-filter=":kmath-dimensions:dokkaHtmlPartial/jsMain">js</button><button class="platform-tag platform-selector jvm-like" data-active="" data-filter=":kmath-dimensions:dokkaHtmlPartial/jvmMain">jvm</button><button class="platform-tag platform-selector native-like" data-active="" data-filter=":kmath-dimensions:dokkaHtmlPartial/nativeMain">native</button></div>
-<button id="theme-toggle-button"><span id="theme-toggle"></span></button>
-        <div id="searchBar"></div>
-      </div>
+<link href="../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../";</script>    <script>const storage = localStorage.getItem("dokka-dark-mode")
+    if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    } else {
+        const savedDarkMode = JSON.parse(storage)
+        if(savedDarkMode === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    }
+    </script>
+<script type="text/javascript" src="../../scripts/sourceset_dependencies.js" async></script>
+<link href="../../styles/style.css" rel="Stylesheet">
+<link href="../../styles/jetbrains-mono.css" rel="Stylesheet">
+<link href="../../styles/main.css" rel="Stylesheet">
+<link href="../../styles/prism.css" rel="Stylesheet">
+<link href="../../styles/logo-styles.css" rel="Stylesheet">
+<script type="text/javascript" src="../../scripts/clipboard.js" async></script>
+<script type="text/javascript" src="../../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../../scripts/main.js" defer></script>
+<script type="text/javascript" src="../../scripts/prism.js" async></script>
+<script type="text/javascript" src="../../scripts/symbol-parameters-wrapper_deferred.js" defer></script></head>
+<body>
+<div class="navigation-wrapper" id="navigation-wrapper">
+    <div id="leftToggler"><span class="icon-toggler"></span></div>
+    <div class="library-name">
+<a href="../../index.html">
+<span>kmath</span>            </a>    </div>
+    <div>0.3.1-dev-RC
     </div>
-    <div id="container">
-      <div id="leftColumn">
+    <div class="pull-right d-flex">
+        <div class="filter-section" id="filter-section">
+                <button class="platform-tag platform-selector common-like" data-active="" data-filter=":kmath-dimensions:dokkaHtmlPartial/commonMain">common</button>
+                <button class="platform-tag platform-selector js-like" data-active="" data-filter=":kmath-dimensions:dokkaHtmlPartial/jsMain">js</button>
+                <button class="platform-tag platform-selector jvm-like" data-active="" data-filter=":kmath-dimensions:dokkaHtmlPartial/jvmMain">jvm</button>
+                <button class="platform-tag platform-selector native-like" data-active="" data-filter=":kmath-dimensions:dokkaHtmlPartial/nativeMain">native</button>
+        </div>
+        <button id="theme-toggle-button"><span id="theme-toggle"></span></button>
+        <div id="searchBar"></div>
+    </div>
+</div>
+<div id="container">
+    <div id="leftColumn">
         <div id="sideMenu"></div>
-      </div>
-      <div id="main">
-        <div class="main-content" id="content" pageids="kmath-dimensions::space.kscience.kmath.dimensions////PointingToDeclaration//-1128599328">
-          <div class="breadcrumbs"><a href="../index.html">kmath-dimensions</a>/<a href="index.html">space.kscience.kmath.dimensions</a></div>
-          <div class="cover ">
-            <h1 class="cover"><span><span>Package</span></span> <span>space.</span><wbr><span>kscience.</span><wbr><span>kmath.</span><wbr><span>dimensions</span></h1>
-          </div>
-          <div class="tabbedcontent">
-            <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="Types">Types</button><button class="section-tab" data-togglable="Functions">Functions</button></div>
-            <div class="tabs-section-body">
-              <h2 class="">Types</h2>
-              <div class="table" data-togglable="Types"><a data-name="-1764430646%2FClasslikes%2F1353985228" anchor-label="D1" id="-1764430646%2FClasslikes%2F1353985228" data-filterable-set=":kmath-dimensions:dokkaHtmlPartial/commonMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-dimensions:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-dimensions:dokkaHtmlPartial/commonMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="-d1/index.html"><span><span>D1</span></span></a></div>
+    </div>
+    <div id="main">
+<div class="main-content" data-page-type="package" id="content" pageids="kmath-dimensions::space.kscience.kmath.dimensions////PointingToDeclaration//-1128599328">
+  <div class="breadcrumbs"><a href="../index.html">kmath-dimensions</a><span class="delimiter">/</span><span class="current">space.kscience.kmath.dimensions</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span><span>Package-level</span></span> <span><span>declarations</span></span></h1>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="TYPE">Types</button><button class="section-tab" data-togglable="FUNCTION,EXTENSION_FUNCTION">Functions</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="TYPE">
+        <h2 class="">Types</h2>
+        <div class="table"><a data-name="-1764430646%2FClasslikes%2F1353985228" anchor-label="D1" id="-1764430646%2FClasslikes%2F1353985228" data-filterable-set=":kmath-dimensions:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-filterable-current=":kmath-dimensions:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-dimensions:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-d1/index.html"><span><span>D1</span></span></a></div>
 <span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1764430646%2FClasslikes%2F1353985228"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
-                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":kmath-dimensions:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-dimensions:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":kmath-dimensions:dokkaHtmlPartial/commonMain">common</button></div>
-<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-dimensions:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">object </span><a href="-d1/index.html">D1</a> : <a href="-dimension/index.html">Dimension</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Type representing 1 dimension.</p></div></div>                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="-1733410839%2FClasslikes%2F1353985228" anchor-label="D2" id="-1733410839%2FClasslikes%2F1353985228" data-filterable-set=":kmath-dimensions:dokkaHtmlPartial/commonMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-dimensions:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-dimensions:dokkaHtmlPartial/commonMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="-d2/index.html"><span><span>D2</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1733410839%2FClasslikes%2F1353985228"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
-                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":kmath-dimensions:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-dimensions:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":kmath-dimensions:dokkaHtmlPartial/commonMain">common</button></div>
-<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-dimensions:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">object </span><a href="-d2/index.html">D2</a> : <a href="-dimension/index.html">Dimension</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Type representing 2 dimensions.</p></div></div>                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="-1702391032%2FClasslikes%2F1353985228" anchor-label="D3" id="-1702391032%2FClasslikes%2F1353985228" data-filterable-set=":kmath-dimensions:dokkaHtmlPartial/commonMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-dimensions:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-dimensions:dokkaHtmlPartial/commonMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="-d3/index.html"><span><span>D3</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1702391032%2FClasslikes%2F1353985228"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
-                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":kmath-dimensions:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-dimensions:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":kmath-dimensions:dokkaHtmlPartial/commonMain">common</button></div>
-<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-dimensions:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">object </span><a href="-d3/index.html">D3</a> : <a href="-dimension/index.html">Dimension</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Type representing 3 dimensions.</p></div></div>                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="1602980485%2FClasslikes%2F1353985228" anchor-label="Dimension" id="1602980485%2FClasslikes%2F1353985228" data-filterable-set=":kmath-dimensions:dokkaHtmlPartial/commonMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-dimensions:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-dimensions:dokkaHtmlPartial/commonMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="-dimension/index.html"><span><span>Dimension</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1602980485%2FClasslikes%2F1353985228"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
-                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":kmath-dimensions:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-dimensions:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":kmath-dimensions:dokkaHtmlPartial/commonMain">common</button></div>
-<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-dimensions:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">interface </span><a href="-dimension/index.html">Dimension</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Represents a quantity of dimensions in certain structure. <strong>This interface must be implemented only by objects.</strong></p></div></div>                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="730697222%2FClasslikes%2F1353985228" anchor-label="DMatrix" id="730697222%2FClasslikes%2F1353985228" data-filterable-set=":kmath-dimensions:dokkaHtmlPartial/commonMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-dimensions:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-dimensions:dokkaHtmlPartial/commonMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="-d-matrix/index.html"><span><span>DMatrix</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="730697222%2FClasslikes%2F1353985228"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
-                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":kmath-dimensions:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-dimensions:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":kmath-dimensions:dokkaHtmlPartial/commonMain">common</button></div>
-<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-dimensions:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">interface </span><a href="-d-matrix/index.html">DMatrix</a><span class="token operator">&lt;</span><span class="token keyword">out </span><a href="-d-matrix/index.html">T</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="-d-matrix/index.html">R</a><span class="token operator"> : </span><a href="-dimension/index.html">Dimension</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="-d-matrix/index.html">C</a><span class="token operator"> : </span><a href="-dimension/index.html">Dimension</a><span class="token operator">&gt;</span> : <a href="../../kmath-core/space.kscience.kmath.nd/-structure2-d/index.html">Structure2D</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="-d-matrix/index.html">T</a><span class="token operator">&gt; </span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">A matrix with compile-time controlled dimension</p></div></div>                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="-389294579%2FClasslikes%2F1353985228" anchor-label="DMatrixContext" id="-389294579%2FClasslikes%2F1353985228" data-filterable-set=":kmath-dimensions:dokkaHtmlPartial/commonMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-dimensions:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-dimensions:dokkaHtmlPartial/commonMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="-d-matrix-context/index.html"><span>DMatrix</span><wbr><span><span>Context</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-389294579%2FClasslikes%2F1353985228"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
-                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":kmath-dimensions:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-dimensions:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":kmath-dimensions:dokkaHtmlPartial/commonMain">common</button></div>
-<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-dimensions:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation">@</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.jvm/-jvm-inline/index.html"><span class="token annotation">JvmInline</span></a></div></div><span class="token keyword">value </span><span class="token keyword">class </span><a href="-d-matrix-context/index.html">DMatrixContext</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="-d-matrix-context/index.html">T</a><span class="token operator"> : </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a><span class="token punctuation">, </span><span class="token keyword">out </span><a href="-d-matrix-context/index.html">A</a><span class="token operator"> : </span><a href="../../kmath-core/space.kscience.kmath.operations/-ring/index.html">Ring</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="-d-matrix-context/index.html">T</a><span class="token operator">&gt;</span><span class="token operator">&gt;</span><span class="token punctuation">(</span>context<span class="token operator">: </span><a href="../../kmath-core/space.kscience.kmath.linear/-linear-space/index.html">LinearSpace</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="-d-matrix-context/index.html">T</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="-d-matrix-context/index.html">A</a><span class="token operator">&gt;</span><span class="token punctuation">)</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Basic operations on dimension-safe matrices. Operates on <a href="../../kmath-core/space.kscience.kmath.linear/-matrix/index.html">Matrix</a></p></div></div>                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="831213481%2FClasslikes%2F1353985228" anchor-label="DMatrixWrapper" id="831213481%2FClasslikes%2F1353985228" data-filterable-set=":kmath-dimensions:dokkaHtmlPartial/commonMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-dimensions:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-dimensions:dokkaHtmlPartial/commonMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="-d-matrix-wrapper/index.html"><span>DMatrix</span><wbr><span><span>Wrapper</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="831213481%2FClasslikes%2F1353985228"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
-                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":kmath-dimensions:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-dimensions:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":kmath-dimensions:dokkaHtmlPartial/commonMain">common</button></div>
-<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-dimensions:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation">@</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.jvm/-jvm-inline/index.html"><span class="token annotation">JvmInline</span></a></div></div><span class="token keyword">value </span><span class="token keyword">class </span><a href="-d-matrix-wrapper/index.html">DMatrixWrapper</a><span class="token operator">&lt;</span><span class="token keyword">out </span><a href="-d-matrix-wrapper/index.html">T</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="-d-matrix-wrapper/index.html">R</a><span class="token operator"> : </span><a href="-dimension/index.html">Dimension</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="-d-matrix-wrapper/index.html">C</a><span class="token operator"> : </span><a href="-dimension/index.html">Dimension</a><span class="token operator">&gt;</span><span class="token punctuation">(</span>structure<span class="token operator">: </span><a href="../../kmath-core/space.kscience.kmath.nd/-structure2-d/index.html">Structure2D</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="-d-matrix-wrapper/index.html">T</a><span class="token operator">&gt;</span><span class="token punctuation">)</span> : <a href="-d-matrix/index.html">DMatrix</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="-d-matrix-wrapper/index.html">T</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="-d-matrix-wrapper/index.html">R</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="-d-matrix-wrapper/index.html">C</a><span class="token operator">&gt; </span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">An inline wrapper for a Matrix</p></div></div>                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="-1751271573%2FClasslikes%2F1353985228" anchor-label="DPoint" id="-1751271573%2FClasslikes%2F1353985228" data-filterable-set=":kmath-dimensions:dokkaHtmlPartial/commonMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-dimensions:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-dimensions:dokkaHtmlPartial/commonMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="-d-point/index.html"><span><span>DPoint</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1751271573%2FClasslikes%2F1353985228"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
-                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":kmath-dimensions:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-dimensions:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":kmath-dimensions:dokkaHtmlPartial/commonMain">common</button></div>
-<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-dimensions:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">interface </span><a href="-d-point/index.html">DPoint</a><span class="token operator">&lt;</span><span class="token keyword">out </span><a href="-d-point/index.html">T</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="-d-point/index.html">D</a><span class="token operator"> : </span><a href="-dimension/index.html">Dimension</a><span class="token operator">&gt;</span> : <a href="../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="-d-point/index.html">T</a><span class="token operator">&gt; </span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Dimension-safe point</p></div></div>                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="528595620%2FClasslikes%2F1353985228" anchor-label="DPointWrapper" id="528595620%2FClasslikes%2F1353985228" data-filterable-set=":kmath-dimensions:dokkaHtmlPartial/commonMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-dimensions:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-dimensions:dokkaHtmlPartial/commonMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="-d-point-wrapper/index.html"><span>DPoint</span><wbr><span><span>Wrapper</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="528595620%2FClasslikes%2F1353985228"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
-                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":kmath-dimensions:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-dimensions:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":kmath-dimensions:dokkaHtmlPartial/commonMain">common</button></div>
-<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-dimensions:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation">@</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.jvm/-jvm-inline/index.html"><span class="token annotation">JvmInline</span></a></div></div><span class="token keyword">value </span><span class="token keyword">class </span><a href="-d-point-wrapper/index.html">DPointWrapper</a><span class="token operator">&lt;</span><span class="token keyword">out </span><a href="-d-point-wrapper/index.html">T</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="-d-point-wrapper/index.html">D</a><span class="token operator"> : </span><a href="-dimension/index.html">Dimension</a><span class="token operator">&gt;</span><span class="token punctuation">(</span>point<span class="token operator">: </span><a href="../../kmath-core/space.kscience.kmath.linear/-point/index.html">Point</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="-d-point-wrapper/index.html">T</a><span class="token operator">&gt;</span><span class="token punctuation">)</span> : <a href="-d-point/index.html">DPoint</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="-d-point-wrapper/index.html">T</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="-d-point-wrapper/index.html">D</a><span class="token operator">&gt; </span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Dimension-safe point wrapper</p></div></div>                        </div>
-                      </div>
-                    </div>
-                  </div>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-dimensions:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">object </span><a href="-d1/index.html">D1</a> : <a href="-dimension/index.html">Dimension</a></div><div class="brief "><p class="paragraph">Type representing 1 dimension.</p></div></div></div>
                 </div>
               </div>
-              <h2 class="">Functions</h2>
-              <div class="table" data-togglable="Functions"><a data-name="-880575369%2FFunctions%2F1353985228" anchor-label="dim" id="-880575369%2FFunctions%2F1353985228" data-filterable-set=":kmath-dimensions:dokkaHtmlPartial/commonMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-dimensions:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-dimensions:dokkaHtmlPartial/commonMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="dim.html"><span><span>dim</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-880575369%2FFunctions%2F1353985228"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
-                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":kmath-dimensions:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-dimensions:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":kmath-dimensions:dokkaHtmlPartial/commonMain">common</button></div>
-<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-dimensions:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="dim.html">D</a><span class="token operator"> : </span><a href="-dimension/index.html">Dimension</a><span class="token operator">&gt; </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.reflect/-k-class/index.html">KClass</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="dim.html">D</a><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="dim.html"><span class="token function">dim</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><br><div class="symbol monospace"><span class="token keyword">inline </span><span class="token keyword">fun </span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="dim.html">D</a><span class="token operator"> : </span><a href="-dimension/index.html">Dimension</a><span class="token operator">&gt; </span><a href="-dimension/-companion/index.html">Dimension.Companion</a><span class="token punctuation">.</span><a href="dim.html"><span class="token function">dim</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Finds <a href="-dimension/dim.html">Dimension.dim</a> of given type <a href="dim.html">D</a>.</p></div></div>                        </div>
-                      </div>
-                    </div>
-                  </div>
+            </div>
+          </div>
+<a data-name="-1733410839%2FClasslikes%2F1353985228" anchor-label="D2" id="-1733410839%2FClasslikes%2F1353985228" data-filterable-set=":kmath-dimensions:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-filterable-current=":kmath-dimensions:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-dimensions:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-d2/index.html"><span><span>D2</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1733410839%2FClasslikes%2F1353985228"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-dimensions:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">object </span><a href="-d2/index.html">D2</a> : <a href="-dimension/index.html">Dimension</a></div><div class="brief "><p class="paragraph">Type representing 2 dimensions.</p></div></div></div>
                 </div>
-<a data-name="1190238484%2FFunctions%2F-1128599328" anchor-label="of" id="1190238484%2FFunctions%2F-1128599328" data-filterable-set=":kmath-dimensions:dokkaHtmlPartial/commonMain :kmath-dimensions:dokkaHtmlPartial/jsMain :kmath-dimensions:dokkaHtmlPartial/jvmMain :kmath-dimensions:dokkaHtmlPartial/nativeMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-dimensions:dokkaHtmlPartial/commonMain :kmath-dimensions:dokkaHtmlPartial/jsMain :kmath-dimensions:dokkaHtmlPartial/jvmMain :kmath-dimensions:dokkaHtmlPartial/nativeMain" data-filterable-set=":kmath-dimensions:dokkaHtmlPartial/commonMain :kmath-dimensions:dokkaHtmlPartial/jsMain :kmath-dimensions:dokkaHtmlPartial/jvmMain :kmath-dimensions:dokkaHtmlPartial/nativeMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="of.html"><span><span>of</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1190238484%2FFunctions%2F-1128599328"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
-                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":kmath-dimensions:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-dimensions:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":kmath-dimensions:dokkaHtmlPartial/commonMain">common</button><button class="platform-bookmark js-like" data-filterable-current=":kmath-dimensions:dokkaHtmlPartial/jsMain" data-filterable-set=":kmath-dimensions:dokkaHtmlPartial/jsMain" data-toggle=":kmath-dimensions:dokkaHtmlPartial/jsMain">js</button><button class="platform-bookmark jvm-like" data-filterable-current=":kmath-dimensions:dokkaHtmlPartial/jvmMain" data-filterable-set=":kmath-dimensions:dokkaHtmlPartial/jvmMain" data-toggle=":kmath-dimensions:dokkaHtmlPartial/jvmMain">jvm</button><button class="platform-bookmark native-like" data-filterable-current=":kmath-dimensions:dokkaHtmlPartial/nativeMain" data-filterable-set=":kmath-dimensions:dokkaHtmlPartial/nativeMain" data-toggle=":kmath-dimensions:dokkaHtmlPartial/nativeMain">native</button></div>
-<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-dimensions:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">expect </span><span class="token keyword"></span><span class="token keyword">fun </span><a href="-dimension/-companion/index.html">Dimension.Companion</a><span class="token punctuation">.</span><a href="of.html"><span class="token function">of</span></a><span class="token punctuation">(</span>dim<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">)</span><span class="token operator">: </span><a href="-dimension/index.html">Dimension</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Finds or creates <a href="-dimension/index.html">Dimension</a> with <a href="-dimension/dim.html">Dimension.dim</a> equal to <a href="of.html">dim</a>.</p></div></div><div class="content sourceset-depenent-content" data-togglable=":kmath-dimensions:dokkaHtmlPartial/jsMain"><div class="symbol monospace"><span class="token keyword">actual </span><span class="token keyword"></span><span class="token keyword">fun </span><a href="-dimension/-companion/index.html#1943700679%2FExtensions%2F-2064071058">Dimension.Companion</a><span class="token punctuation">.</span><a href="of.html"><span class="token function">of</span></a><span class="token punctuation">(</span>dim<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../kmath-dimensions/space.kscience.kmath.dimensions/-dimension/index.html">Dimension</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div><div class="content sourceset-depenent-content" data-togglable=":kmath-dimensions:dokkaHtmlPartial/jvmMain"><div class="symbol monospace"><span class="token keyword">actual </span><span class="token keyword"></span><span class="token keyword">fun </span><a href="-dimension/-companion/index.html#1943700679%2FExtensions%2F-941074262">Dimension.Companion</a><span class="token punctuation">.</span><a href="of.html"><span class="token function">of</span></a><span class="token punctuation">(</span>dim<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../kmath-dimensions/space.kscience.kmath.dimensions/-dimension/index.html">Dimension</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div><div class="content sourceset-depenent-content" data-togglable=":kmath-dimensions:dokkaHtmlPartial/nativeMain"><div class="symbol monospace"><span class="token keyword">actual </span><span class="token keyword"></span><span class="token keyword">fun </span><a href="-dimension/-companion/index.html#1943700679%2FExtensions%2F-613170016">Dimension.Companion</a><span class="token punctuation">.</span><a href="of.html"><span class="token function">of</span></a><span class="token punctuation">(</span>dim<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../kmath-dimensions/space.kscience.kmath.dimensions/-dimension/index.html">Dimension</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div>                        </div>
-                      </div>
-                    </div>
-                  </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1702391032%2FClasslikes%2F1353985228" anchor-label="D3" id="-1702391032%2FClasslikes%2F1353985228" data-filterable-set=":kmath-dimensions:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-filterable-current=":kmath-dimensions:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-dimensions:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-d3/index.html"><span><span>D3</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1702391032%2FClasslikes%2F1353985228"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-dimensions:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">object </span><a href="-d3/index.html">D3</a> : <a href="-dimension/index.html">Dimension</a></div><div class="brief "><p class="paragraph">Type representing 3 dimensions.</p></div></div></div>
                 </div>
-<a data-name="-1963183100%2FFunctions%2F1353985228" anchor-label="one" id="-1963183100%2FFunctions%2F1353985228" data-filterable-set=":kmath-dimensions:dokkaHtmlPartial/commonMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-dimensions:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-dimensions:dokkaHtmlPartial/commonMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="one.html"><span><span>one</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1963183100%2FFunctions%2F1353985228"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
-                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":kmath-dimensions:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-dimensions:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":kmath-dimensions:dokkaHtmlPartial/commonMain">common</button></div>
-<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-dimensions:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">inline </span><span class="token keyword">fun </span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="one.html">D</a><span class="token operator"> : </span><a href="-dimension/index.html">Dimension</a><span class="token operator">&gt; </span><a href="-d-matrix-context/index.html">DMatrixContext</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="../../kmath-core/space.kscience.kmath.operations/-double-field/index.html">DoubleField</a><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="one.html"><span class="token function">one</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-d-matrix/index.html">DMatrix</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="one.html">D</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="one.html">D</a><span class="token operator">&gt;</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">A square unit matrix</p></div></div>                        </div>
-                      </div>
-                    </div>
-                  </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1602980485%2FClasslikes%2F1353985228" anchor-label="Dimension" id="1602980485%2FClasslikes%2F1353985228" data-filterable-set=":kmath-dimensions:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-filterable-current=":kmath-dimensions:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-dimensions:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-dimension/index.html"><span><span>Dimension</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1602980485%2FClasslikes%2F1353985228"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-dimensions:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">interface </span><a href="-dimension/index.html">Dimension</a></div><div class="brief "><p class="paragraph">Represents a quantity of dimensions in certain structure. <strong>This interface must be implemented only by objects.</strong></p></div></div></div>
                 </div>
-<a data-name="-505661211%2FFunctions%2F-1128599328" anchor-label="resolve" id="-505661211%2FFunctions%2F-1128599328" data-filterable-set=":kmath-dimensions:dokkaHtmlPartial/commonMain :kmath-dimensions:dokkaHtmlPartial/jsMain :kmath-dimensions:dokkaHtmlPartial/jvmMain :kmath-dimensions:dokkaHtmlPartial/nativeMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-dimensions:dokkaHtmlPartial/commonMain :kmath-dimensions:dokkaHtmlPartial/jsMain :kmath-dimensions:dokkaHtmlPartial/jvmMain :kmath-dimensions:dokkaHtmlPartial/nativeMain" data-filterable-set=":kmath-dimensions:dokkaHtmlPartial/commonMain :kmath-dimensions:dokkaHtmlPartial/jsMain :kmath-dimensions:dokkaHtmlPartial/jvmMain :kmath-dimensions:dokkaHtmlPartial/nativeMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="resolve.html"><span><span>resolve</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-505661211%2FFunctions%2F-1128599328"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
-                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":kmath-dimensions:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-dimensions:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":kmath-dimensions:dokkaHtmlPartial/commonMain">common</button><button class="platform-bookmark js-like" data-filterable-current=":kmath-dimensions:dokkaHtmlPartial/jsMain" data-filterable-set=":kmath-dimensions:dokkaHtmlPartial/jsMain" data-toggle=":kmath-dimensions:dokkaHtmlPartial/jsMain">js</button><button class="platform-bookmark jvm-like" data-filterable-current=":kmath-dimensions:dokkaHtmlPartial/jvmMain" data-filterable-set=":kmath-dimensions:dokkaHtmlPartial/jvmMain" data-toggle=":kmath-dimensions:dokkaHtmlPartial/jvmMain">jvm</button><button class="platform-bookmark native-like" data-filterable-current=":kmath-dimensions:dokkaHtmlPartial/nativeMain" data-filterable-set=":kmath-dimensions:dokkaHtmlPartial/nativeMain" data-toggle=":kmath-dimensions:dokkaHtmlPartial/nativeMain">native</button></div>
-<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-dimensions:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">expect </span><span class="token keyword"></span><span class="token keyword">fun </span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="resolve.html">D</a><span class="token operator"> : </span><a href="-dimension/index.html">Dimension</a><span class="token operator">&gt; </span><a href="-dimension/-companion/index.html">Dimension.Companion</a><span class="token punctuation">.</span><a href="resolve.html"><span class="token function">resolve</span></a><span class="token punctuation">(</span>type<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.reflect/-k-class/index.html">KClass</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="resolve.html">D</a><span class="token operator">&gt;</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="resolve.html">D</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div><div class="content sourceset-depenent-content" data-togglable=":kmath-dimensions:dokkaHtmlPartial/jsMain"><div class="symbol monospace"><span class="token keyword">actual </span><span class="token keyword"></span><span class="token keyword">fun </span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="resolve.html">D</a><span class="token operator"> : </span><a href="../../kmath-dimensions/space.kscience.kmath.dimensions/-dimension/index.html">Dimension</a><span class="token operator">&gt; </span><a href="-dimension/-companion/index.html#1943700679%2FExtensions%2F-2064071058">Dimension.Companion</a><span class="token punctuation">.</span><a href="resolve.html"><span class="token function">resolve</span></a><span class="token punctuation">(</span>type<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.reflect/-k-class/index.html">KClass</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="resolve.html">D</a><span class="token operator">&gt;</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="resolve.html">D</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div><div class="content sourceset-depenent-content" data-togglable=":kmath-dimensions:dokkaHtmlPartial/jvmMain"><div class="symbol monospace"><span class="token keyword">actual </span><span class="token keyword"></span><span class="token keyword">fun </span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="resolve.html">D</a><span class="token operator"> : </span><a href="../../kmath-dimensions/space.kscience.kmath.dimensions/-dimension/index.html">Dimension</a><span class="token operator">&gt; </span><a href="-dimension/-companion/index.html#1943700679%2FExtensions%2F-941074262">Dimension.Companion</a><span class="token punctuation">.</span><a href="resolve.html"><span class="token function">resolve</span></a><span class="token punctuation">(</span>type<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.reflect/-k-class/index.html">KClass</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="resolve.html">D</a><span class="token operator">&gt;</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="resolve.html">D</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div><div class="content sourceset-depenent-content" data-togglable=":kmath-dimensions:dokkaHtmlPartial/nativeMain"><div class="symbol monospace"><span class="token keyword">actual </span><span class="token keyword"></span><span class="token keyword">fun </span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="resolve.html">D</a><span class="token operator"> : </span><a href="../../kmath-dimensions/space.kscience.kmath.dimensions/-dimension/index.html">Dimension</a><span class="token operator">&gt; </span><a href="-dimension/-companion/index.html#1943700679%2FExtensions%2F-613170016">Dimension.Companion</a><span class="token punctuation">.</span><a href="resolve.html"><span class="token function">resolve</span></a><span class="token punctuation">(</span>type<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.reflect/-k-class/index.html">KClass</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="resolve.html">D</a><span class="token operator">&gt;</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="resolve.html">D</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div>                        </div>
-                      </div>
-                    </div>
-                  </div>
+              </div>
+            </div>
+          </div>
+<a data-name="730697222%2FClasslikes%2F1353985228" anchor-label="DMatrix" id="730697222%2FClasslikes%2F1353985228" data-filterable-set=":kmath-dimensions:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-filterable-current=":kmath-dimensions:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-dimensions:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-d-matrix/index.html"><span><span>DMatrix</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="730697222%2FClasslikes%2F1353985228"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-dimensions:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">interface </span><a href="-d-matrix/index.html">DMatrix</a><span class="token operator">&lt;</span><span class="token keyword">out </span><a href="-d-matrix/index.html">T</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="-d-matrix/index.html">R</a><span class="token operator"> : </span><a href="-dimension/index.html">Dimension</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="-d-matrix/index.html">C</a><span class="token operator"> : </span><a href="-dimension/index.html">Dimension</a><span class="token operator">&gt;</span> : <a href="../../kmath-core/space.kscience.kmath.nd/-structure2-d/index.html">Structure2D</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="-d-matrix/index.html">T</a><span class="token operator">&gt; </span></div><div class="brief "><p class="paragraph">A matrix with compile-time controlled dimension</p></div></div></div>
                 </div>
-<a data-name="-1070174448%2FFunctions%2F1353985228" anchor-label="zero" id="-1070174448%2FFunctions%2F1353985228" data-filterable-set=":kmath-dimensions:dokkaHtmlPartial/commonMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-dimensions:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-dimensions:dokkaHtmlPartial/commonMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="zero.html"><span><span>zero</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1070174448%2FFunctions%2F1353985228"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
-                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":kmath-dimensions:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-dimensions:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":kmath-dimensions:dokkaHtmlPartial/commonMain">common</button></div>
-<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-dimensions:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">inline </span><span class="token keyword">fun </span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="zero.html">R</a><span class="token operator"> : </span><a href="-dimension/index.html">Dimension</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="zero.html">C</a><span class="token operator"> : </span><a href="-dimension/index.html">Dimension</a><span class="token operator">&gt; </span><a href="-d-matrix-context/index.html">DMatrixContext</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="../../kmath-core/space.kscience.kmath.operations/-double-field/index.html">DoubleField</a><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="zero.html"><span class="token function">zero</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-d-matrix/index.html">DMatrix</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="zero.html">R</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="zero.html">C</a><span class="token operator">&gt;</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div>                        </div>
-                      </div>
-                    </div>
-                  </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-389294579%2FClasslikes%2F1353985228" anchor-label="DMatrixContext" id="-389294579%2FClasslikes%2F1353985228" data-filterable-set=":kmath-dimensions:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-filterable-current=":kmath-dimensions:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-dimensions:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-d-matrix-context/index.html"><span>DMatrix</span><wbr><span><span>Context</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-389294579%2FClasslikes%2F1353985228"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-dimensions:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.jvm/-jvm-inline/index.html"><span class="token annotation builtin">JvmInline</span></a></div></div><span class="token keyword">value </span><span class="token keyword">class </span><a href="-d-matrix-context/index.html">DMatrixContext</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="-d-matrix-context/index.html">T</a><span class="token operator"> : </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a><span class="token punctuation">, </span><span class="token keyword">out </span><a href="-d-matrix-context/index.html">A</a><span class="token operator"> : </span><a href="../../kmath-core/space.kscience.kmath.operations/-ring/index.html">Ring</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="-d-matrix-context/index.html">T</a><span class="token operator">&gt;</span><span class="token operator">&gt;</span><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>context<span class="token operator">: </span><a href="../../kmath-core/space.kscience.kmath.linear/-linear-space/index.html">LinearSpace</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="-d-matrix-context/index.html">T</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="-d-matrix-context/index.html">A</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Basic operations on dimension-safe matrices. Operates on <a href="../../kmath-core/space.kscience.kmath.linear/-matrix/index.html">Matrix</a></p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="831213481%2FClasslikes%2F1353985228" anchor-label="DMatrixWrapper" id="831213481%2FClasslikes%2F1353985228" data-filterable-set=":kmath-dimensions:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-filterable-current=":kmath-dimensions:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-dimensions:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-d-matrix-wrapper/index.html"><span>DMatrix</span><wbr><span><span>Wrapper</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="831213481%2FClasslikes%2F1353985228"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-dimensions:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.jvm/-jvm-inline/index.html"><span class="token annotation builtin">JvmInline</span></a></div></div><span class="token keyword">value </span><span class="token keyword">class </span><a href="-d-matrix-wrapper/index.html">DMatrixWrapper</a><span class="token operator">&lt;</span><span class="token keyword">out </span><a href="-d-matrix-wrapper/index.html">T</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="-d-matrix-wrapper/index.html">R</a><span class="token operator"> : </span><a href="-dimension/index.html">Dimension</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="-d-matrix-wrapper/index.html">C</a><span class="token operator"> : </span><a href="-dimension/index.html">Dimension</a><span class="token operator">&gt;</span><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">structure<span class="token operator">: </span><a href="../../kmath-core/space.kscience.kmath.nd/-structure2-d/index.html">Structure2D</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="-d-matrix-wrapper/index.html">T</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span> : <a href="-d-matrix/index.html">DMatrix</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="-d-matrix-wrapper/index.html">T</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="-d-matrix-wrapper/index.html">R</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="-d-matrix-wrapper/index.html">C</a><span class="token operator">&gt; </span></div><div class="brief "><p class="paragraph">An inline wrapper for a Matrix</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1751271573%2FClasslikes%2F1353985228" anchor-label="DPoint" id="-1751271573%2FClasslikes%2F1353985228" data-filterable-set=":kmath-dimensions:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-filterable-current=":kmath-dimensions:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-dimensions:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-d-point/index.html"><span><span>DPoint</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1751271573%2FClasslikes%2F1353985228"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-dimensions:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">interface </span><a href="-d-point/index.html">DPoint</a><span class="token operator">&lt;</span><span class="token keyword">out </span><a href="-d-point/index.html">T</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="-d-point/index.html">D</a><span class="token operator"> : </span><a href="-dimension/index.html">Dimension</a><span class="token operator">&gt;</span> : <a href="../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="-d-point/index.html">T</a><span class="token operator">&gt; </span></div><div class="brief "><p class="paragraph">Dimension-safe point</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="528595620%2FClasslikes%2F1353985228" anchor-label="DPointWrapper" id="528595620%2FClasslikes%2F1353985228" data-filterable-set=":kmath-dimensions:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-filterable-current=":kmath-dimensions:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-dimensions:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-d-point-wrapper/index.html"><span>DPoint</span><wbr><span><span>Wrapper</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="528595620%2FClasslikes%2F1353985228"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-dimensions:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.jvm/-jvm-inline/index.html"><span class="token annotation builtin">JvmInline</span></a></div></div><span class="token keyword">value </span><span class="token keyword">class </span><a href="-d-point-wrapper/index.html">DPointWrapper</a><span class="token operator">&lt;</span><span class="token keyword">out </span><a href="-d-point-wrapper/index.html">T</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="-d-point-wrapper/index.html">D</a><span class="token operator"> : </span><a href="-dimension/index.html">Dimension</a><span class="token operator">&gt;</span><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>point<span class="token operator">: </span><a href="../../kmath-core/space.kscience.kmath.linear/-point/index.html">Point</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="-d-point-wrapper/index.html">T</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span> : <a href="-d-point/index.html">DPoint</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="-d-point-wrapper/index.html">T</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="-d-point-wrapper/index.html">D</a><span class="token operator">&gt; </span></div><div class="brief "><p class="paragraph">Dimension-safe point wrapper</p></div></div></div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <div class="footer"><span class="go-to-top-icon"><a href="#content" id="go-to-top-link"></a></span><span>© 2022 Copyright</span><span class="pull-right"><span>Generated by </span><a href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span></div>
+      </div>
+      <div data-togglable="EXTENSION_FUNCTION">
+        <h2 class="">Functions</h2>
+        <div class="table"><a data-name="-880575369%2FFunctions%2F1353985228" anchor-label="dim" id="-880575369%2FFunctions%2F1353985228" data-filterable-set=":kmath-dimensions:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-dimensions:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-dimensions:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="dim.html"><span><span>dim</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-880575369%2FFunctions%2F1353985228"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-dimensions:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="dim.html">D</a><span class="token operator"> : </span><a href="-dimension/index.html">Dimension</a><span class="token operator">&gt; </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.reflect/-k-class/index.html">KClass</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="dim.html">D</a><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="dim.html"><span class="token function">dim</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a></div><br><div class="symbol monospace"><span class="token keyword">inline </span><span class="token keyword">fun </span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="dim.html">D</a><span class="token operator"> : </span><a href="-dimension/index.html">Dimension</a><span class="token operator">&gt; </span><a href="-dimension/-companion/index.html">Dimension.Companion</a><span class="token punctuation">.</span><a href="dim.html"><span class="token function">dim</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a></div><div class="brief "><p class="paragraph">Finds <a href="-dimension/dim.html">Dimension.dim</a> of given type <a href="dim.html">D</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1190238484%2FFunctions%2F-1128599328" anchor-label="of" id="1190238484%2FFunctions%2F-1128599328" data-filterable-set=":kmath-dimensions:dokkaHtmlPartial/commonMain :kmath-dimensions:dokkaHtmlPartial/jsMain :kmath-dimensions:dokkaHtmlPartial/jvmMain :kmath-dimensions:dokkaHtmlPartial/nativeMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-dimensions:dokkaHtmlPartial/commonMain :kmath-dimensions:dokkaHtmlPartial/jsMain :kmath-dimensions:dokkaHtmlPartial/jvmMain :kmath-dimensions:dokkaHtmlPartial/nativeMain" data-filterable-set=":kmath-dimensions:dokkaHtmlPartial/commonMain :kmath-dimensions:dokkaHtmlPartial/jsMain :kmath-dimensions:dokkaHtmlPartial/jvmMain :kmath-dimensions:dokkaHtmlPartial/nativeMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="of.html"><span><span>of</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1190238484%2FFunctions%2F-1128599328"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":kmath-dimensions:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-dimensions:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":kmath-dimensions:dokkaHtmlPartial/commonMain">common</button><button class="platform-bookmark" data-filterable-current=":kmath-dimensions:dokkaHtmlPartial/jsMain" data-filterable-set=":kmath-dimensions:dokkaHtmlPartial/jsMain" data-toggle=":kmath-dimensions:dokkaHtmlPartial/jsMain">js</button><button class="platform-bookmark" data-filterable-current=":kmath-dimensions:dokkaHtmlPartial/jvmMain" data-filterable-set=":kmath-dimensions:dokkaHtmlPartial/jvmMain" data-toggle=":kmath-dimensions:dokkaHtmlPartial/jvmMain">jvm</button><button class="platform-bookmark" data-filterable-current=":kmath-dimensions:dokkaHtmlPartial/nativeMain" data-filterable-set=":kmath-dimensions:dokkaHtmlPartial/nativeMain" data-toggle=":kmath-dimensions:dokkaHtmlPartial/nativeMain">native</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-dimensions:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">expect </span><span class="token keyword"></span><span class="token keyword">fun </span><a href="-dimension/-companion/index.html">Dimension.Companion</a><span class="token punctuation">.</span><a href="of.html"><span class="token function">of</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">dim<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-dimension/index.html">Dimension</a></div><div class="brief "><p class="paragraph">Finds or creates <a href="-dimension/index.html">Dimension</a> with <a href="-dimension/dim.html">Dimension.dim</a> equal to <a href="of.html">dim</a>.</p></div></div><div class="content sourceset-dependent-content" data-togglable=":kmath-dimensions:dokkaHtmlPartial/jsMain"><div class="symbol monospace"><span class="token keyword">actual </span><span class="token keyword"></span><span class="token keyword">fun </span><a href="-dimension/-companion/index.html#1943700679%2FMain%2F-2064071058">Dimension.Companion</a><span class="token punctuation">.</span><a href="of.html"><span class="token function">of</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">dim<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../kmath-dimensions/space.kscience.kmath.dimensions/-dimension/index.html">Dimension</a></div></div><div class="content sourceset-dependent-content" data-togglable=":kmath-dimensions:dokkaHtmlPartial/jvmMain"><div class="symbol monospace"><span class="token keyword">actual </span><span class="token keyword"></span><span class="token keyword">fun </span><a href="-dimension/-companion/index.html#1943700679%2FMain%2F-941074262">Dimension.Companion</a><span class="token punctuation">.</span><a href="of.html"><span class="token function">of</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">dim<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../kmath-dimensions/space.kscience.kmath.dimensions/-dimension/index.html">Dimension</a></div></div><div class="content sourceset-dependent-content" data-togglable=":kmath-dimensions:dokkaHtmlPartial/nativeMain"><div class="symbol monospace"><span class="token keyword">actual </span><span class="token keyword"></span><span class="token keyword">fun </span><a href="-dimension/-companion/index.html#1943700679%2FMain%2F-613170016">Dimension.Companion</a><span class="token punctuation">.</span><a href="of.html"><span class="token function">of</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">dim<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../kmath-dimensions/space.kscience.kmath.dimensions/-dimension/index.html">Dimension</a></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1963183100%2FFunctions%2F1353985228" anchor-label="one" id="-1963183100%2FFunctions%2F1353985228" data-filterable-set=":kmath-dimensions:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-dimensions:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-dimensions:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="one.html"><span><span>one</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1963183100%2FFunctions%2F1353985228"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-dimensions:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">inline </span><span class="token keyword">fun </span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="one.html">D</a><span class="token operator"> : </span><a href="-dimension/index.html">Dimension</a><span class="token operator">&gt; </span><a href="-d-matrix-context/index.html">DMatrixContext</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="../../kmath-core/space.kscience.kmath.operations/-double-field/index.html">DoubleField</a><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="one.html"><span class="token function">one</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-d-matrix/index.html">DMatrix</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="one.html">D</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="one.html">D</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">A square unit matrix</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-505661211%2FFunctions%2F-1128599328" anchor-label="resolve" id="-505661211%2FFunctions%2F-1128599328" data-filterable-set=":kmath-dimensions:dokkaHtmlPartial/commonMain :kmath-dimensions:dokkaHtmlPartial/jsMain :kmath-dimensions:dokkaHtmlPartial/jvmMain :kmath-dimensions:dokkaHtmlPartial/nativeMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-dimensions:dokkaHtmlPartial/commonMain :kmath-dimensions:dokkaHtmlPartial/jsMain :kmath-dimensions:dokkaHtmlPartial/jvmMain :kmath-dimensions:dokkaHtmlPartial/nativeMain" data-filterable-set=":kmath-dimensions:dokkaHtmlPartial/commonMain :kmath-dimensions:dokkaHtmlPartial/jsMain :kmath-dimensions:dokkaHtmlPartial/jvmMain :kmath-dimensions:dokkaHtmlPartial/nativeMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="resolve.html"><span><span>resolve</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-505661211%2FFunctions%2F-1128599328"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":kmath-dimensions:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-dimensions:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":kmath-dimensions:dokkaHtmlPartial/commonMain">common</button><button class="platform-bookmark" data-filterable-current=":kmath-dimensions:dokkaHtmlPartial/jsMain" data-filterable-set=":kmath-dimensions:dokkaHtmlPartial/jsMain" data-toggle=":kmath-dimensions:dokkaHtmlPartial/jsMain">js</button><button class="platform-bookmark" data-filterable-current=":kmath-dimensions:dokkaHtmlPartial/jvmMain" data-filterable-set=":kmath-dimensions:dokkaHtmlPartial/jvmMain" data-toggle=":kmath-dimensions:dokkaHtmlPartial/jvmMain">jvm</button><button class="platform-bookmark" data-filterable-current=":kmath-dimensions:dokkaHtmlPartial/nativeMain" data-filterable-set=":kmath-dimensions:dokkaHtmlPartial/nativeMain" data-toggle=":kmath-dimensions:dokkaHtmlPartial/nativeMain">native</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-dimensions:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">expect </span><span class="token keyword"></span><span class="token keyword">fun </span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="resolve.html">D</a><span class="token operator"> : </span><a href="-dimension/index.html">Dimension</a><span class="token operator">&gt; </span><a href="-dimension/-companion/index.html">Dimension.Companion</a><span class="token punctuation">.</span><a href="resolve.html"><span class="token function">resolve</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">type<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.reflect/-k-class/index.html">KClass</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="resolve.html">D</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="resolve.html">D</a></div></div><div class="content sourceset-dependent-content" data-togglable=":kmath-dimensions:dokkaHtmlPartial/jsMain"><div class="symbol monospace"><span class="token keyword">actual </span><span class="token keyword"></span><span class="token keyword">fun </span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="resolve.html">D</a><span class="token operator"> : </span><a href="../../kmath-dimensions/space.kscience.kmath.dimensions/-dimension/index.html">Dimension</a><span class="token operator">&gt; </span><a href="-dimension/-companion/index.html#1943700679%2FMain%2F-2064071058">Dimension.Companion</a><span class="token punctuation">.</span><a href="resolve.html"><span class="token function">resolve</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">type<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.reflect/-k-class/index.html">KClass</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="resolve.html">D</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="resolve.html">D</a></div></div><div class="content sourceset-dependent-content" data-togglable=":kmath-dimensions:dokkaHtmlPartial/jvmMain"><div class="symbol monospace"><span class="token keyword">actual </span><span class="token keyword"></span><span class="token keyword">fun </span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="resolve.html">D</a><span class="token operator"> : </span><a href="../../kmath-dimensions/space.kscience.kmath.dimensions/-dimension/index.html">Dimension</a><span class="token operator">&gt; </span><a href="-dimension/-companion/index.html#1943700679%2FMain%2F-941074262">Dimension.Companion</a><span class="token punctuation">.</span><a href="resolve.html"><span class="token function">resolve</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">type<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.reflect/-k-class/index.html">KClass</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="resolve.html">D</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="resolve.html">D</a></div></div><div class="content sourceset-dependent-content" data-togglable=":kmath-dimensions:dokkaHtmlPartial/nativeMain"><div class="symbol monospace"><span class="token keyword">actual </span><span class="token keyword"></span><span class="token keyword">fun </span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="resolve.html">D</a><span class="token operator"> : </span><a href="../../kmath-dimensions/space.kscience.kmath.dimensions/-dimension/index.html">Dimension</a><span class="token operator">&gt; </span><a href="-dimension/-companion/index.html#1943700679%2FMain%2F-613170016">Dimension.Companion</a><span class="token punctuation">.</span><a href="resolve.html"><span class="token function">resolve</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">type<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.reflect/-k-class/index.html">KClass</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="resolve.html">D</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="resolve.html">D</a></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1070174448%2FFunctions%2F1353985228" anchor-label="zero" id="-1070174448%2FFunctions%2F1353985228" data-filterable-set=":kmath-dimensions:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-dimensions:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-dimensions:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="zero.html"><span><span>zero</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1070174448%2FFunctions%2F1353985228"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-dimensions:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">inline </span><span class="token keyword">fun </span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="zero.html">R</a><span class="token operator"> : </span><a href="-dimension/index.html">Dimension</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="zero.html">C</a><span class="token operator"> : </span><a href="-dimension/index.html">Dimension</a><span class="token operator">&gt; </span><a href="-d-matrix-context/index.html">DMatrixContext</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="../../kmath-core/space.kscience.kmath.operations/-double-field/index.html">DoubleField</a><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="zero.html"><span class="token function">zero</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-d-matrix/index.html">DMatrix</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="zero.html">R</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="zero.html">C</a><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-  
-</body></html>
-
+  </div>
+</div>
+      <div class="footer">
+        <span class="go-to-top-icon"><a href="#content" id="go-to-top-link"></a></span><span>© 2023 Copyright</span><span class="pull-right"><span>Generated by </span><a href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span>
+      </div>
+    </div>
+</div>
+</body>
+</html>
 

@@ -1,0 +1,953 @@
+<!doctype html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>MonotonicSeriesAlgebra</title>
+<link href="../../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../../";</script>    <script>const storage = localStorage.getItem("dokka-dark-mode")
+    if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    } else {
+        const savedDarkMode = JSON.parse(storage)
+        if(savedDarkMode === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    }
+    </script>
+<script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async></script>
+<link href="../../../styles/style.css" rel="Stylesheet">
+<link href="../../../styles/jetbrains-mono.css" rel="Stylesheet">
+<link href="../../../styles/main.css" rel="Stylesheet">
+<link href="../../../styles/prism.css" rel="Stylesheet">
+<link href="../../../styles/logo-styles.css" rel="Stylesheet">
+<script type="text/javascript" src="../../../scripts/clipboard.js" async></script>
+<script type="text/javascript" src="../../../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../../../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../../../scripts/main.js" defer></script>
+<script type="text/javascript" src="../../../scripts/prism.js" async></script>
+<script type="text/javascript" src="../../../scripts/symbol-parameters-wrapper_deferred.js" defer></script></head>
+<body>
+<div class="navigation-wrapper" id="navigation-wrapper">
+    <div id="leftToggler"><span class="icon-toggler"></span></div>
+    <div class="library-name">
+<a href="../../../index.html">
+<span>kmath</span>            </a>    </div>
+    <div>0.3.1-dev-RC
+    </div>
+    <div class="pull-right d-flex">
+        <div class="filter-section" id="filter-section">
+                <button class="platform-tag platform-selector common-like" data-active="" data-filter=":kmath-stat:dokkaHtmlPartial/commonMain">common</button>
+        </div>
+        <button id="theme-toggle-button"><span id="theme-toggle"></span></button>
+        <div id="searchBar"></div>
+    </div>
+</div>
+<div id="container">
+    <div id="leftColumn">
+        <div id="sideMenu"></div>
+    </div>
+    <div id="main">
+<div class="main-content" data-page-type="classlike" id="content" pageids="kmath-stat::space.kscience.kmath.series/MonotonicSeriesAlgebra///PointingToDeclaration//-443365019">
+  <div class="breadcrumbs"><a href="../../index.html">kmath-stat</a><span class="delimiter">/</span><a href="../index.html">space.kscience.kmath.series</a><span class="delimiter">/</span><span class="current">MonotonicSeriesAlgebra</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span>Monotonic</span><wbr><span>Series</span><wbr><span><span>Algebra</span></span></h1>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="index.html">MonotonicSeriesAlgebra</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="index.html">T</a><span class="token punctuation">, </span><span class="token keyword">out </span><a href="index.html">A</a><span class="token operator"> : </span><a href="../../../kmath-core/space.kscience.kmath.operations/-ring/index.html">Ring</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="index.html">T</a><span class="token operator">&gt;</span><span class="token punctuation">, </span><span class="token keyword">out </span><a href="index.html">BA</a><span class="token operator"> : </span><a href="../../../kmath-core/space.kscience.kmath.operations/-buffer-algebra/index.html">BufferAlgebra</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="index.html">T</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="index.html">A</a><span class="token operator">&gt;</span><span class="token punctuation">, </span><span class="token keyword"></span><a href="index.html">L</a><span class="token operator"> : </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-comparable/index.html">Comparable</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="index.html">L</a><span class="token operator">&gt;</span><span class="token operator">&gt;</span><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">bufferAlgebra<span class="token operator">: </span><a href="index.html">BA</a><span class="token punctuation">, </span></span><span class="parameter ">offsetToLabel<span class="token operator">: </span><span class="token punctuation">(</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><span class="token keyword"></span><a href="index.html">L</a><span class="token punctuation">, </span></span><span class="parameter ">labelToOffset<span class="token operator">: </span><span class="token punctuation">(</span><span class="token keyword"></span><a href="index.html">L</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a></span></span><span class="token punctuation">)</span> : <a href="../-series-algebra/index.html">SeriesAlgebra</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="index.html">T</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="index.html">A</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="index.html">BA</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="index.html">L</a><span class="token operator">&gt; </span><span class="clearfix"><span class="floating-right">(<a href="https://github.com/SciProgCentre/kmath/tree/master/kmath-stat/src/commonMain/kotlin/space/kscience/kmath/series/MonotonicSeriesAlgebra.kt#L19">source</a>)</span></span></div><p class="paragraph">A <a href="../-series-algebra/index.html">SeriesAlgebra</a> with reverse label to index transformation.</p><h4 class="">Parameters</h4><div class="table"><div class="table-row" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span>label</span><wbr><span>To</span><wbr><span><span>Offset</span></span></u></div></span></div><div><div class="title"><p class="paragraph">returns floating point number that is used for index resolution.</p></div></div></div></div></div></div></div>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,FUNCTION,PROPERTY">Members</button><button class="section-tab" data-togglable="CONSTRUCTOR,TYPE,FUNCTION,PROPERTY,EXTENSION_PROPERTY,EXTENSION_FUNCTION">Members &amp; Extensions</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="CONSTRUCTOR">
+        <h2 class="">Constructors</h2>
+        <div class="table"><a data-name="1947771580%2FConstructors%2F-443365019" anchor-label="MonotonicSeriesAlgebra" id="1947771580%2FConstructors%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-togglable="CONSTRUCTOR" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-monotonic-series-algebra.html"><span>Monotonic</span><wbr><span>Series</span><wbr><span><span>Algebra</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1947771580%2FConstructors%2F-443365019"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">bufferAlgebra<span class="token operator">: </span><a href="index.html">BA</a><span class="token punctuation">, </span></span><span class="parameter ">offsetToLabel<span class="token operator">: </span><span class="token punctuation">(</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><span class="token keyword"></span><a href="index.html">L</a><span class="token punctuation">, </span></span><span class="parameter ">labelToOffset<span class="token operator">: </span><span class="token punctuation">(</span><span class="token keyword"></span><a href="index.html">L</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="FUNCTION">
+        <h2 class="">Functions</h2>
+        <div class="table"><a data-name="1657174840%2FFunctions%2F-443365019" anchor-label="acos" id="1657174840%2FFunctions%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../acos.html"><span><span>acos</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1657174840%2FFunctions%2F-443365019"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../acos.html">T</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="../acos.html">BA</a><span class="token operator"> : </span><a href="../../../kmath-core/space.kscience.kmath.operations/-buffer-algebra/index.html">BufferAlgebra</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../acos.html">T</a><span class="token punctuation">, </span><span class="token operator">*</span><span class="token operator">&gt;</span>, <a href="../../../kmath-core/space.kscience.kmath.operations/-trigonometric-operations/index.html">TrigonometricOperations</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../acos.html">T</a><span class="token operator">&gt;</span><span class="token operator">&gt;</span><span class="token operator">&gt; </span><a href="../-series-algebra/index.html">SeriesAlgebra</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../acos.html">T</a><span class="token punctuation">, </span><span class="token operator">*</span><span class="token punctuation">, </span><span class="token keyword"></span><a href="../acos.html">BA</a><span class="token punctuation">, </span><span class="token operator">*</span><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="../acos.html"><span class="token function">acos</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">arg<span class="token operator">: </span><a href="../../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../acos.html">T</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-series/index.html">Series</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../acos.html">T</a><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1122925017%2FFunctions%2F-443365019" anchor-label="acosh" id="1122925017%2FFunctions%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../acosh.html"><span><span>acosh</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1122925017%2FFunctions%2F-443365019"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../acosh.html">T</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="../acosh.html">BA</a><span class="token operator"> : </span><a href="../../../kmath-core/space.kscience.kmath.operations/-buffer-algebra/index.html">BufferAlgebra</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../acosh.html">T</a><span class="token punctuation">, </span><span class="token operator">*</span><span class="token operator">&gt;</span>, <a href="../../../kmath-core/space.kscience.kmath.operations/-exponential-operations/index.html">ExponentialOperations</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../acosh.html">T</a><span class="token operator">&gt;</span><span class="token operator">&gt;</span><span class="token operator">&gt; </span><a href="../-series-algebra/index.html">SeriesAlgebra</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../acosh.html">T</a><span class="token punctuation">, </span><span class="token operator">*</span><span class="token punctuation">, </span><span class="token keyword"></span><a href="../acosh.html">BA</a><span class="token punctuation">, </span><span class="token operator">*</span><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="../acosh.html"><span class="token function">acosh</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">arg<span class="token operator">: </span><a href="../../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../acosh.html">T</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-series/index.html">Series</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../acosh.html">T</a><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1648676065%2FFunctions%2F-443365019" anchor-label="add" id="-1648676065%2FFunctions%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-series-algebra/add.html"><span><span>add</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1648676065%2FFunctions%2F-443365019"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="../-series-algebra/add.html"><span class="token function">add</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">left<span class="token operator">: </span><a href="../../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="index.html">T</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">right<span class="token operator">: </span><a href="../../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="index.html">T</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-series/index.html">Series</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="index.html">T</a><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-710058873%2FFunctions%2F-443365019" anchor-label="asin" id="-710058873%2FFunctions%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../asin.html"><span><span>asin</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-710058873%2FFunctions%2F-443365019"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../asin.html">T</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="../asin.html">BA</a><span class="token operator"> : </span><a href="../../../kmath-core/space.kscience.kmath.operations/-buffer-algebra/index.html">BufferAlgebra</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../asin.html">T</a><span class="token punctuation">, </span><span class="token operator">*</span><span class="token operator">&gt;</span>, <a href="../../../kmath-core/space.kscience.kmath.operations/-trigonometric-operations/index.html">TrigonometricOperations</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../asin.html">T</a><span class="token operator">&gt;</span><span class="token operator">&gt;</span><span class="token operator">&gt; </span><a href="../-series-algebra/index.html">SeriesAlgebra</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../asin.html">T</a><span class="token punctuation">, </span><span class="token operator">*</span><span class="token punctuation">, </span><span class="token keyword"></span><a href="../asin.html">BA</a><span class="token punctuation">, </span><span class="token operator">*</span><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="../asin.html"><span class="token function">asin</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">arg<span class="token operator">: </span><a href="../../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../asin.html">T</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-series/index.html">Series</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../asin.html">T</a><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-200363350%2FFunctions%2F-443365019" anchor-label="asinh" id="-200363350%2FFunctions%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../asinh.html"><span><span>asinh</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-200363350%2FFunctions%2F-443365019"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../asinh.html">T</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="../asinh.html">BA</a><span class="token operator"> : </span><a href="../../../kmath-core/space.kscience.kmath.operations/-buffer-algebra/index.html">BufferAlgebra</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../asinh.html">T</a><span class="token punctuation">, </span><span class="token operator">*</span><span class="token operator">&gt;</span>, <a href="../../../kmath-core/space.kscience.kmath.operations/-exponential-operations/index.html">ExponentialOperations</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../asinh.html">T</a><span class="token operator">&gt;</span><span class="token operator">&gt;</span><span class="token operator">&gt; </span><a href="../-series-algebra/index.html">SeriesAlgebra</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../asinh.html">T</a><span class="token punctuation">, </span><span class="token operator">*</span><span class="token punctuation">, </span><span class="token keyword"></span><a href="../asinh.html">BA</a><span class="token punctuation">, </span><span class="token operator">*</span><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="../asinh.html"><span class="token function">asinh</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">arg<span class="token operator">: </span><a href="../../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../asinh.html">T</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-series/index.html">Series</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../asinh.html">T</a><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1148506462%2FFunctions%2F-443365019" anchor-label="atan" id="1148506462%2FFunctions%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../atan.html"><span><span>atan</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1148506462%2FFunctions%2F-443365019"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../atan.html">T</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="../atan.html">BA</a><span class="token operator"> : </span><a href="../../../kmath-core/space.kscience.kmath.operations/-buffer-algebra/index.html">BufferAlgebra</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../atan.html">T</a><span class="token punctuation">, </span><span class="token operator">*</span><span class="token operator">&gt;</span>, <a href="../../../kmath-core/space.kscience.kmath.operations/-trigonometric-operations/index.html">TrigonometricOperations</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../atan.html">T</a><span class="token operator">&gt;</span><span class="token operator">&gt;</span><span class="token operator">&gt; </span><a href="../-series-algebra/index.html">SeriesAlgebra</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../atan.html">T</a><span class="token punctuation">, </span><span class="token operator">*</span><span class="token punctuation">, </span><span class="token keyword"></span><a href="../atan.html">BA</a><span class="token punctuation">, </span><span class="token operator">*</span><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="../atan.html"><span class="token function">atan</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">arg<span class="token operator">: </span><a href="../../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../atan.html">T</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-series/index.html">Series</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../atan.html">T</a><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="413779699%2FFunctions%2F-443365019" anchor-label="atanh" id="413779699%2FFunctions%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../atanh.html"><span><span>atanh</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="413779699%2FFunctions%2F-443365019"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../atanh.html">T</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="../atanh.html">BA</a><span class="token operator"> : </span><a href="../../../kmath-core/space.kscience.kmath.operations/-buffer-algebra/index.html">BufferAlgebra</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../atanh.html">T</a><span class="token punctuation">, </span><span class="token operator">*</span><span class="token operator">&gt;</span>, <a href="../../../kmath-core/space.kscience.kmath.operations/-exponential-operations/index.html">ExponentialOperations</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../atanh.html">T</a><span class="token operator">&gt;</span><span class="token operator">&gt;</span><span class="token operator">&gt; </span><a href="../-series-algebra/index.html">SeriesAlgebra</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../atanh.html">T</a><span class="token punctuation">, </span><span class="token operator">*</span><span class="token punctuation">, </span><span class="token keyword"></span><a href="../atanh.html">BA</a><span class="token punctuation">, </span><span class="token operator">*</span><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="../atanh.html"><span class="token function">atanh</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">arg<span class="token operator">: </span><a href="../../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../atanh.html">T</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-series/index.html">Series</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../atanh.html">T</a><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1970092085%2FFunctions%2F-443365019" anchor-label="binaryOperation" id="1970092085%2FFunctions%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-series-algebra/index.html#1970092085%2FFunctions%2F-443365019"><span>binary</span><wbr><span><span>Operation</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1970092085%2FFunctions%2F-443365019"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword"></span><span class="token keyword">fun </span><a href="../-series-algebra/index.html#1970092085%2FFunctions%2F-443365019"><span class="token function">binaryOperation</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">operation<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">left<span class="token operator">: </span><a href="../../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="index.html">T</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">right<span class="token operator">: </span><a href="../../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="index.html">T</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="index.html">T</a><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-484568323%2FFunctions%2F-443365019" anchor-label="binaryOperationFunction" id="-484568323%2FFunctions%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-series-algebra/index.html#-484568323%2FFunctions%2F-443365019"><span>binary</span><wbr><span>Operation</span><wbr><span><span>Function</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-484568323%2FFunctions%2F-443365019"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="../-series-algebra/index.html#-484568323%2FFunctions%2F-443365019"><span class="token function">binaryOperationFunction</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">operation<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span class="token punctuation">(</span><span class="token keyword"></span>left<span class="token operator">: </span><a href="../../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="index.html">T</a><span class="token operator">&gt;</span><span class="token punctuation">, </span><span class="token keyword"></span>right<span class="token operator">: </span><a href="../../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="index.html">T</a><span class="token operator">&gt;</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><span class="token keyword"></span><a href="../../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="index.html">T</a><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1727912674%2FFunctions%2F-443365019" anchor-label="bindSymbol" id="-1727912674%2FFunctions%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-series-algebra/index.html#-1727912674%2FFunctions%2F-443365019"><span>bind</span><wbr><span><span>Symbol</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1727912674%2FFunctions%2F-443365019"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword"></span><span class="token keyword">fun </span><a href="../-series-algebra/index.html#-1727912674%2FFunctions%2F-443365019"><span class="token function">bindSymbol</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">value<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="index.html">T</a><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="915741320%2FFunctions%2F-443365019" anchor-label="bindSymbolOrNull" id="915741320%2FFunctions%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-series-algebra/index.html#915741320%2FFunctions%2F-443365019"><span>bind</span><wbr><span>Symbol</span><wbr><span>Or</span><wbr><span><span>Null</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="915741320%2FFunctions%2F-443365019"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword"></span><span class="token keyword">fun </span><a href="../-series-algebra/index.html#915741320%2FFunctions%2F-443365019"><span class="token function">bindSymbolOrNull</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">value<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="index.html">T</a><span class="token operator">&gt;</span><span class="token operator">?</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1638250234%2FFunctions%2F-443365019" anchor-label="ceilOffset" id="-1638250234%2FFunctions%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="ceil-offset.html"><span>ceil</span><wbr><span><span>Offset</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1638250234%2FFunctions%2F-443365019"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="ceil-offset.html"><span class="token function">ceilOffset</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">label<span class="token operator">: </span><a href="index.html">L</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a></div><div class="brief "><p class="paragraph">An offset of the given <a href="ceil-offset.html">label</a> rounded up</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="668538997%2FFunctions%2F-443365019" anchor-label="cos" id="668538997%2FFunctions%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../cos.html"><span><span>cos</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="668538997%2FFunctions%2F-443365019"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../cos.html">T</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="../cos.html">BA</a><span class="token operator"> : </span><a href="../../../kmath-core/space.kscience.kmath.operations/-buffer-algebra/index.html">BufferAlgebra</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../cos.html">T</a><span class="token punctuation">, </span><span class="token operator">*</span><span class="token operator">&gt;</span>, <a href="../../../kmath-core/space.kscience.kmath.operations/-trigonometric-operations/index.html">TrigonometricOperations</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../cos.html">T</a><span class="token operator">&gt;</span><span class="token operator">&gt;</span><span class="token operator">&gt; </span><a href="../-series-algebra/index.html">SeriesAlgebra</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../cos.html">T</a><span class="token punctuation">, </span><span class="token operator">*</span><span class="token punctuation">, </span><span class="token keyword"></span><a href="../cos.html">BA</a><span class="token punctuation">, </span><span class="token operator">*</span><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="../cos.html"><span class="token function">cos</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">arg<span class="token operator">: </span><a href="../../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../cos.html">T</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-series/index.html">Series</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../cos.html">T</a><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1264271108%2FFunctions%2F-443365019" anchor-label="cosh" id="-1264271108%2FFunctions%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../cosh.html"><span><span>cosh</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1264271108%2FFunctions%2F-443365019"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../cosh.html">T</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="../cosh.html">BA</a><span class="token operator"> : </span><a href="../../../kmath-core/space.kscience.kmath.operations/-buffer-algebra/index.html">BufferAlgebra</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../cosh.html">T</a><span class="token punctuation">, </span><span class="token operator">*</span><span class="token operator">&gt;</span>, <a href="../../../kmath-core/space.kscience.kmath.operations/-exponential-operations/index.html">ExponentialOperations</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../cosh.html">T</a><span class="token operator">&gt;</span><span class="token operator">&gt;</span><span class="token operator">&gt; </span><a href="../-series-algebra/index.html">SeriesAlgebra</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../cosh.html">T</a><span class="token punctuation">, </span><span class="token operator">*</span><span class="token punctuation">, </span><span class="token keyword"></span><a href="../cosh.html">BA</a><span class="token punctuation">, </span><span class="token operator">*</span><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="../cosh.html"><span class="token function">cosh</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">arg<span class="token operator">: </span><a href="../../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../cosh.html">T</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-series/index.html">Series</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../cosh.html">T</a><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="701606046%2FFunctions%2F-443365019" anchor-label="ecdf" id="701606046%2FFunctions%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../space.kscience.kmath.stat/ecdf.html"><span><span>ecdf</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="701606046%2FFunctions%2F-443365019"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../../space.kscience.kmath.stat/ecdf.html">T</a><span class="token operator"> : </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-comparable/index.html">Comparable</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../../space.kscience.kmath.stat/ecdf.html">T</a><span class="token operator">&gt;</span><span class="token operator">&gt; </span><a href="../../space.kscience.kmath.stat/-statistical-algebra/index.html">StatisticalAlgebra</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../../space.kscience.kmath.stat/ecdf.html">T</a><span class="token punctuation">, </span><span class="token operator">*</span><span class="token punctuation">, </span><span class="token operator">*</span><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="../../space.kscience.kmath.stat/ecdf.html"><span class="token function">ecdf</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">buffer<span class="token operator">: </span><a href="../../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../../space.kscience.kmath.stat/ecdf.html">T</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span class="token punctuation">(</span><span class="token keyword"></span><a href="../../space.kscience.kmath.stat/ecdf.html">T</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a></div><div class="brief "><p class="paragraph">Compute <a href="https://en.wikipedia.org/wiki/Empirical_distribution_function">empirical CDF function</a></p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1621976258%2FFunctions%2F-443365019" anchor-label="exp" id="-1621976258%2FFunctions%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../exp.html"><span><span>exp</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1621976258%2FFunctions%2F-443365019"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../exp.html">T</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="../exp.html">BA</a><span class="token operator"> : </span><a href="../../../kmath-core/space.kscience.kmath.operations/-buffer-algebra/index.html">BufferAlgebra</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../exp.html">T</a><span class="token punctuation">, </span><span class="token operator">*</span><span class="token operator">&gt;</span>, <a href="../../../kmath-core/space.kscience.kmath.operations/-exponential-operations/index.html">ExponentialOperations</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../exp.html">T</a><span class="token operator">&gt;</span><span class="token operator">&gt;</span><span class="token operator">&gt; </span><a href="../-series-algebra/index.html">SeriesAlgebra</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../exp.html">T</a><span class="token punctuation">, </span><span class="token operator">*</span><span class="token punctuation">, </span><span class="token keyword"></span><a href="../exp.html">BA</a><span class="token punctuation">, </span><span class="token operator">*</span><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="../exp.html"><span class="token function">exp</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">arg<span class="token operator">: </span><a href="../../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../exp.html">T</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-series/index.html">Series</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../exp.html">T</a><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1263128941%2FFunctions%2F-443365019" anchor-label="export" id="1263128941%2FFunctions%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-series-algebra/index.html#1263128941%2FFunctions%2F-443365019"><span><span>export</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1263128941%2FFunctions%2F-443365019"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword"></span><span class="token keyword">fun </span><a href="../-series-algebra/index.html#1263128941%2FFunctions%2F-443365019"><span class="token function">export</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">arg<span class="token operator">: </span><a href="../../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="index.html">T</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="index.html">T</a><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-400025393%2FFunctions%2F-443365019" anchor-label="floorOffset" id="-400025393%2FFunctions%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="floor-offset.html"><span>floor</span><wbr><span><span>Offset</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-400025393%2FFunctions%2F-443365019"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="floor-offset.html"><span class="token function">floorOffset</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">label<span class="token operator">: </span><a href="index.html">L</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a></div><div class="brief "><p class="paragraph">An offset of the given <a href="floor-offset.html">label</a> rounded down</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-2101665999%2FFunctions%2F-443365019" anchor-label="fold" id="-2101665999%2FFunctions%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-series-algebra/fold.html"><span><span>fold</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2101665999%2FFunctions%2F-443365019"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">inline </span><span class="token keyword">fun </span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../-series-algebra/fold.html">R</a><span class="token operator">&gt; </span><a href="../../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="index.html">T</a><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="../-series-algebra/fold.html"><span class="token function">fold</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">initial<span class="token operator">: </span><a href="../-series-algebra/fold.html">R</a><span class="token punctuation">, </span></span><span class="parameter ">operation<span class="token operator">: </span><span class="token keyword"></span><a href="index.html">A</a><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token keyword"></span>acc<span class="token operator">: </span><a href="../-series-algebra/fold.html">R</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="index.html">T</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><span class="token keyword"></span><a href="../-series-algebra/fold.html">R</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-series-algebra/fold.html">R</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1853577865%2FFunctions%2F-443365019" anchor-label="foldWithLabel" id="1853577865%2FFunctions%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#1853577865%2FExtensions%2F-443365019"><span>fold</span><wbr><span>With</span><wbr><span><span>Label</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1853577865%2FFunctions%2F-443365019"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">inline </span><span class="token keyword">fun </span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="index.html#1853577865%2FExtensions%2F-443365019">R</a><span class="token operator">&gt; </span><a href="../../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="index.html">T</a><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="index.html#1853577865%2FExtensions%2F-443365019"><span class="token function">foldWithLabel</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">initial<span class="token operator">: </span><a href="index.html#1853577865%2FExtensions%2F-443365019">R</a><span class="token punctuation">, </span></span><span class="parameter ">operation<span class="token operator">: </span><span class="token keyword"></span><a href="index.html">A</a><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token keyword"></span>acc<span class="token operator">: </span><a href="index.html#1853577865%2FExtensions%2F-443365019">R</a><span class="token punctuation">, </span><span class="token keyword"></span>arg<span class="token operator">: </span><a href="index.html">T</a><span class="token punctuation">, </span><span class="token keyword"></span>label<span class="token operator">: </span><a href="index.html">L</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><span class="token keyword"></span><a href="index.html#1853577865%2FExtensions%2F-443365019">R</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html#1853577865%2FExtensions%2F-443365019">R</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="761567899%2FFunctions%2F-443365019" anchor-label="getByLabel" id="761567899%2FFunctions%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#761567899%2FExtensions%2F-443365019"><span>get</span><wbr><span>By</span><wbr><span><span>Label</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="761567899%2FFunctions%2F-443365019"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword"></span><span class="token keyword">fun </span><a href="../../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="index.html">T</a><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="index.html#761567899%2FExtensions%2F-443365019"><span class="token function">getByLabel</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">label<span class="token operator">: </span><a href="index.html">L</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">T</a></div><div class="brief "><p class="paragraph">Get value by label (rounded down) or throw <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-index-out-of-bounds-exception/index.html">IndexOutOfBoundsException</a> if the value is outside series boundaries.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-346274257%2FFunctions%2F-443365019" anchor-label="getByLabelOrNull" id="-346274257%2FFunctions%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="get-by-label-or-null.html"><span>get</span><wbr><span>By</span><wbr><span>Label</span><wbr><span>Or</span><wbr><span><span>Null</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-346274257%2FFunctions%2F-443365019"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="../../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="index.html">T</a><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="get-by-label-or-null.html"><span class="token function">getByLabelOrNull</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">label<span class="token operator">: </span><a href="index.html">L</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">T</a><span class="token operator">?</span></div><div class="brief "><p class="paragraph">Get value by label (rounded down) or return null if the value is outside series boundaries.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1662163549%2FFunctions%2F-443365019" anchor-label="getByOffset" id="1662163549%2FFunctions%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-series-algebra/get-by-offset.html"><span>get</span><wbr><span>By</span><wbr><span><span>Offset</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1662163549%2FFunctions%2F-443365019"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="../../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="index.html">T</a><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="../-series-algebra/get-by-offset.html"><span class="token function">getByOffset</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">index<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">T</a></div><div class="brief "><p class="paragraph">Get the value by absolute index in the series algebra or throw <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-index-out-of-bounds-exception/index.html">IndexOutOfBoundsException</a> if index is out of range</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1492089479%2FFunctions%2F-443365019" anchor-label="getByOffsetOrNull" id="1492089479%2FFunctions%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-series-algebra/get-by-offset-or-null.html"><span>get</span><wbr><span>By</span><wbr><span>Offset</span><wbr><span>Or</span><wbr><span><span>Null</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1492089479%2FFunctions%2F-443365019"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="../../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="index.html">T</a><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="../-series-algebra/get-by-offset-or-null.html"><span class="token function">getByOffsetOrNull</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">index<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">T</a><span class="token operator">?</span></div><div class="brief "><p class="paragraph">Get the value by absolute offset in the series algebra or return null if index is out of range</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1284344282%2FFunctions%2F-443365019" anchor-label="import" id="-1284344282%2FFunctions%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../import.html"><span><span>import</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1284344282%2FFunctions%2F-443365019"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../import.html">T</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="../import.html">A</a><span class="token operator"> : </span><a href="../../../kmath-core/space.kscience.kmath.operations/-ring/index.html">Ring</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../import.html">T</a><span class="token operator">&gt;</span><span class="token punctuation">, </span><span class="token keyword"></span><a href="../import.html">BA</a><span class="token operator"> : </span><a href="../../../kmath-core/space.kscience.kmath.operations/-buffer-algebra/index.html">BufferAlgebra</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../import.html">T</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="../import.html">A</a><span class="token operator">&gt;</span><span class="token punctuation">, </span><span class="token keyword"></span><a href="../import.html">L</a><span class="token operator"> : </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-comparable/index.html">Comparable</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../import.html">L</a><span class="token operator">&gt;</span><span class="token operator">&gt; </span><a href="index.html">MonotonicSeriesAlgebra</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../import.html">T</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="../import.html">A</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="../import.html">BA</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="../import.html">L</a><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="../import.html"><span class="token function">import</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">data<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-pair/index.html">Pair</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../import.html">L</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="../import.html">T</a><span class="token operator">&gt;</span><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-series/index.html">Series</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../import.html">T</a><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-657131894%2FFunctions%2F-443365019" anchor-label="ksComparisonStatistic" id="-657131894%2FFunctions%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../space.kscience.kmath.stat/ks-comparison-statistic.html"><span>ks</span><wbr><span>Comparison</span><wbr><span><span>Statistic</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-657131894%2FFunctions%2F-443365019"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="../../../kmath-memory/space.kscience.kmath/-unstable-k-math-a-p-i/index.html"><span class="token annotation builtin">UnstableKMathAPI</span></a></div></div><span class="token keyword"></span><span class="token keyword">fun </span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../../space.kscience.kmath.stat/ks-comparison-statistic.html">T</a><span class="token operator"> : </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-comparable/index.html">Comparable</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../../space.kscience.kmath.stat/ks-comparison-statistic.html">T</a><span class="token operator">&gt;</span><span class="token punctuation">, </span><span class="token keyword"></span><a href="../../space.kscience.kmath.stat/ks-comparison-statistic.html">A</a><span class="token operator"> : </span><a href="../../../kmath-core/space.kscience.kmath.operations/-group/index.html">Group</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../../space.kscience.kmath.stat/ks-comparison-statistic.html">T</a><span class="token operator">&gt;</span>, <a href="../../../kmath-core/space.kscience.kmath.operations/-numeric-algebra/index.html">NumericAlgebra</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../../space.kscience.kmath.stat/ks-comparison-statistic.html">T</a><span class="token operator">&gt;</span><span class="token punctuation">, </span><span class="token keyword"></span><a href="../../space.kscience.kmath.stat/ks-comparison-statistic.html">BA</a><span class="token operator"> : </span><a href="../../../kmath-core/space.kscience.kmath.operations/-buffer-algebra/index.html">BufferAlgebra</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../../space.kscience.kmath.stat/ks-comparison-statistic.html">T</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="../../space.kscience.kmath.stat/ks-comparison-statistic.html">A</a><span class="token operator">&gt;</span><span class="token operator">&gt; </span><a href="../../space.kscience.kmath.stat/-statistical-algebra/index.html">StatisticalAlgebra</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../../space.kscience.kmath.stat/ks-comparison-statistic.html">T</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="../../space.kscience.kmath.stat/ks-comparison-statistic.html">A</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="../../space.kscience.kmath.stat/ks-comparison-statistic.html">BA</a><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="../../space.kscience.kmath.stat/ks-comparison-statistic.html"><span class="token function">ksComparisonStatistic</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">x<span class="token operator">: </span><a href="../../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../../space.kscience.kmath.stat/ks-comparison-statistic.html">T</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">y<span class="token operator">: </span><a href="../../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../../space.kscience.kmath.stat/ks-comparison-statistic.html">T</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../space.kscience.kmath.stat/-k-m-comparison-result/index.html">KMComparisonResult</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../../space.kscience.kmath.stat/ks-comparison-statistic.html">T</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Kolmogorov-Smirnov sample comparison test Implementation copied from https://commons.apache.org/proper/commons-math/javadocs/api-3.6.1/index.html?org/apache/commons/math3/stat/inference/KolmogorovSmirnovTest.html</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-2119215653%2FFunctions%2F-443365019" anchor-label="ln" id="-2119215653%2FFunctions%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../ln.html"><span><span>ln</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2119215653%2FFunctions%2F-443365019"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../ln.html">T</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="../ln.html">BA</a><span class="token operator"> : </span><a href="../../../kmath-core/space.kscience.kmath.operations/-buffer-algebra/index.html">BufferAlgebra</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../ln.html">T</a><span class="token punctuation">, </span><span class="token operator">*</span><span class="token operator">&gt;</span>, <a href="../../../kmath-core/space.kscience.kmath.operations/-exponential-operations/index.html">ExponentialOperations</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../ln.html">T</a><span class="token operator">&gt;</span><span class="token operator">&gt;</span><span class="token operator">&gt; </span><a href="../-series-algebra/index.html">SeriesAlgebra</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../ln.html">T</a><span class="token punctuation">, </span><span class="token operator">*</span><span class="token punctuation">, </span><span class="token keyword"></span><a href="../ln.html">BA</a><span class="token punctuation">, </span><span class="token operator">*</span><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="../ln.html"><span class="token function">ln</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">arg<span class="token operator">: </span><a href="../../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../ln.html">T</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-series/index.html">Series</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../ln.html">T</a><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1927599770%2FFunctions%2F-443365019" anchor-label="map" id="1927599770%2FFunctions%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-series-algebra/map.html"><span><span>map</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1927599770%2FFunctions%2F-443365019"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">inline </span><span class="token keyword">fun </span><a href="../../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="index.html">T</a><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="../-series-algebra/map.html"><span class="token function">map</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">crossinline </span>transform<span class="token operator">: </span><span class="token keyword"></span><a href="index.html">A</a><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token keyword"></span><a href="index.html">T</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><span class="token keyword"></span><a href="index.html">T</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-series/index.html">Series</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="index.html">T</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Map a series to another series of the same size</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1698592418%2FFunctions%2F-443365019" anchor-label="mapWithLabel" id="1698592418%2FFunctions%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#1698592418%2FExtensions%2F-443365019"><span>map</span><wbr><span>With</span><wbr><span><span>Label</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1698592418%2FFunctions%2F-443365019"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">inline </span><span class="token keyword">fun </span><a href="../../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="index.html">T</a><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="index.html#1698592418%2FExtensions%2F-443365019"><span class="token function">mapWithLabel</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">crossinline </span>transform<span class="token operator">: </span><span class="token keyword"></span><a href="index.html">A</a><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token keyword"></span>arg<span class="token operator">: </span><a href="index.html">T</a><span class="token punctuation">, </span><span class="token keyword"></span>label<span class="token operator">: </span><a href="index.html">L</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><span class="token keyword"></span><a href="index.html">T</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-series/index.html">Series</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="index.html">T</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Map series to another series of the same size with label</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1059983384%2FFunctions%2F-443365019" anchor-label="minus" id="1059983384%2FFunctions%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-series-algebra/index.html#1059983384%2FExtensions%2F-443365019"><span><span>minus</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1059983384%2FFunctions%2F-443365019"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">operator </span><span class="token keyword">fun </span><a href="../../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="index.html">T</a><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="../-series-algebra/index.html#1059983384%2FExtensions%2F-443365019"><span class="token function">minus</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">arg<span class="token operator">: </span><a href="../../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="index.html">T</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="index.html">T</a><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1048379967%2FFunctions%2F-443365019" anchor-label="moveBy" id="-1048379967%2FFunctions%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-series-algebra/move-by.html"><span>move</span><wbr><span><span>By</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1048379967%2FFunctions%2F-443365019"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="../../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="index.html">T</a><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="../-series-algebra/move-by.html"><span class="token function">moveBy</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">offset<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-series/index.html">Series</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="index.html">T</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Zero-copy move <a href="../../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a> or <a href="../-series/index.html">Series</a> by given <a href="../-series-algebra/move-by.html">offset</a>. If it is <a href="../-series/index.html">Series</a>, sum intrinsic series position and the <a href="../-series-algebra/move-by.html">offset</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="492368613%2FFunctions%2F-443365019" anchor-label="moveTo" id="492368613%2FFunctions%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-series-algebra/move-to.html"><span>move</span><wbr><span><span>To</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="492368613%2FFunctions%2F-443365019"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="../../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="index.html">T</a><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="../-series-algebra/move-to.html"><span class="token function">moveTo</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">position<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-series/index.html">Series</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="index.html">T</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Zero-copy move <a href="../../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a> or <a href="../-series/index.html">Series</a> to given <a href="../-series-algebra/move-to.html">position</a> ignoring series offset if it is present.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1027618370%2FFunctions%2F-443365019" anchor-label="multiply" id="-1027618370%2FFunctions%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-series-algebra/multiply.html"><span><span>multiply</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1027618370%2FFunctions%2F-443365019"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="../-series-algebra/multiply.html"><span class="token function">multiply</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">left<span class="token operator">: </span><a href="../../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="index.html">T</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">right<span class="token operator">: </span><a href="../../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="index.html">T</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="index.html">T</a><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-687753588%2FFunctions%2F-443365019" anchor-label="plus" id="-687753588%2FFunctions%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-series-algebra/index.html#-687753588%2FExtensions%2F-443365019"><span><span>plus</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-687753588%2FFunctions%2F-443365019"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">operator </span><span class="token keyword">fun </span><a href="../../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="index.html">T</a><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="../-series-algebra/index.html#-687753588%2FExtensions%2F-443365019"><span class="token function">plus</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">arg<span class="token operator">: </span><a href="../../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="index.html">T</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="index.html">T</a><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1116151933%2FFunctions%2F-443365019" anchor-label="power" id="-1116151933%2FFunctions%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../power.html"><span><span>power</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1116151933%2FFunctions%2F-443365019"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../power.html">T</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="../power.html">BA</a><span class="token operator"> : </span><a href="../../../kmath-core/space.kscience.kmath.operations/-buffer-algebra/index.html">BufferAlgebra</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../power.html">T</a><span class="token punctuation">, </span><span class="token operator">*</span><span class="token operator">&gt;</span>, <a href="../../../kmath-core/space.kscience.kmath.operations/-power-operations/index.html">PowerOperations</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../power.html">T</a><span class="token operator">&gt;</span><span class="token operator">&gt;</span><span class="token operator">&gt; </span><a href="../-series-algebra/index.html">SeriesAlgebra</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../power.html">T</a><span class="token punctuation">, </span><span class="token operator">*</span><span class="token punctuation">, </span><span class="token keyword"></span><a href="../power.html">BA</a><span class="token punctuation">, </span><span class="token operator">*</span><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="../power.html"><span class="token function">power</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">arg<span class="token operator">: </span><a href="../../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../power.html">T</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">pow<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-number/index.html">Number</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-series/index.html">Series</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../power.html">T</a><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1395027258%2FFunctions%2F-443365019" anchor-label="series" id="-1395027258%2FFunctions%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#-1395027258%2FFunctions%2F-443365019"><span><span>series</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1395027258%2FFunctions%2F-443365019"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">inline </span><span class="token keyword">fun </span><a href="index.html#-1395027258%2FFunctions%2F-443365019"><span class="token function">series</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">size<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter ">startOffset<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token operator"> = </span><span class="token constant">0</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">crossinline </span>block<span class="token operator">: </span><span class="token keyword"></span><a href="index.html">A</a><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token keyword"></span>label<span class="token operator">: </span><a href="index.html">L</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><span class="token keyword"></span><a href="index.html">T</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-series/index.html">Series</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="index.html">T</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Build a new series by label positioned at <a href="index.html#-1395027258%2FFunctions%2F-443365019">startOffset</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1142334537%2FFunctions%2F-443365019" anchor-label="seriesByOffset" id="-1142334537%2FFunctions%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-series-algebra/series-by-offset.html"><span>series</span><wbr><span>By</span><wbr><span><span>Offset</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1142334537%2FFunctions%2F-443365019"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">inline </span><span class="token keyword">fun </span><a href="../-series-algebra/series-by-offset.html"><span class="token function">seriesByOffset</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">size<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter ">startOffset<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token operator"> = </span><span class="token constant">0</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">crossinline </span>block<span class="token operator">: </span><span class="token keyword"></span><a href="index.html">A</a><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token keyword"></span>offset<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><span class="token keyword"></span><a href="index.html">T</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-series/index.html">Series</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="index.html">T</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Build a new series by offset positioned at <a href="../-series-algebra/series-by-offset.html">startOffset</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1698694716%2FFunctions%2F-443365019" anchor-label="sin" id="-1698694716%2FFunctions%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../sin.html"><span><span>sin</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1698694716%2FFunctions%2F-443365019"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../sin.html">T</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="../sin.html">BA</a><span class="token operator"> : </span><a href="../../../kmath-core/space.kscience.kmath.operations/-buffer-algebra/index.html">BufferAlgebra</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../sin.html">T</a><span class="token punctuation">, </span><span class="token operator">*</span><span class="token operator">&gt;</span>, <a href="../../../kmath-core/space.kscience.kmath.operations/-trigonometric-operations/index.html">TrigonometricOperations</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../sin.html">T</a><span class="token operator">&gt;</span><span class="token operator">&gt;</span><span class="token operator">&gt; </span><a href="../-series-algebra/index.html">SeriesAlgebra</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../sin.html">T</a><span class="token punctuation">, </span><span class="token operator">*</span><span class="token punctuation">, </span><span class="token keyword"></span><a href="../sin.html">BA</a><span class="token punctuation">, </span><span class="token operator">*</span><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="../sin.html"><span class="token function">sin</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">arg<span class="token operator">: </span><a href="../../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../sin.html">T</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-series/index.html">Series</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../sin.html">T</a><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1707407821%2FFunctions%2F-443365019" anchor-label="sinh" id="1707407821%2FFunctions%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../sinh.html"><span><span>sinh</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1707407821%2FFunctions%2F-443365019"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../sinh.html">T</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="../sinh.html">BA</a><span class="token operator"> : </span><a href="../../../kmath-core/space.kscience.kmath.operations/-buffer-algebra/index.html">BufferAlgebra</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../sinh.html">T</a><span class="token punctuation">, </span><span class="token operator">*</span><span class="token operator">&gt;</span>, <a href="../../../kmath-core/space.kscience.kmath.operations/-exponential-operations/index.html">ExponentialOperations</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../sinh.html">T</a><span class="token operator">&gt;</span><span class="token operator">&gt;</span><span class="token operator">&gt; </span><a href="../-series-algebra/index.html">SeriesAlgebra</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../sinh.html">T</a><span class="token punctuation">, </span><span class="token operator">*</span><span class="token punctuation">, </span><span class="token keyword"></span><a href="../sinh.html">BA</a><span class="token punctuation">, </span><span class="token operator">*</span><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="../sinh.html"><span class="token function">sinh</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">arg<span class="token operator">: </span><a href="../../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../sinh.html">T</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-series/index.html">Series</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../sinh.html">T</a><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1127678525%2FFunctions%2F-443365019" anchor-label="sqrt" id="1127678525%2FFunctions%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../sqrt.html"><span><span>sqrt</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1127678525%2FFunctions%2F-443365019"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../sqrt.html">T</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="../sqrt.html">BA</a><span class="token operator"> : </span><a href="../../../kmath-core/space.kscience.kmath.operations/-buffer-algebra/index.html">BufferAlgebra</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../sqrt.html">T</a><span class="token punctuation">, </span><span class="token operator">*</span><span class="token operator">&gt;</span>, <a href="../../../kmath-core/space.kscience.kmath.operations/-power-operations/index.html">PowerOperations</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../sqrt.html">T</a><span class="token operator">&gt;</span><span class="token operator">&gt;</span><span class="token operator">&gt; </span><a href="../-series-algebra/index.html">SeriesAlgebra</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../sqrt.html">T</a><span class="token punctuation">, </span><span class="token operator">*</span><span class="token punctuation">, </span><span class="token keyword"></span><a href="../sqrt.html">BA</a><span class="token punctuation">, </span><span class="token operator">*</span><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="../sqrt.html"><span class="token function">sqrt</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">arg<span class="token operator">: </span><a href="../../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../sqrt.html">T</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-series/index.html">Series</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../sqrt.html">T</a><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="159870619%2FFunctions%2F-443365019" anchor-label="tan" id="159870619%2FFunctions%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../tan.html"><span><span>tan</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="159870619%2FFunctions%2F-443365019"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../tan.html">T</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="../tan.html">BA</a><span class="token operator"> : </span><a href="../../../kmath-core/space.kscience.kmath.operations/-buffer-algebra/index.html">BufferAlgebra</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../tan.html">T</a><span class="token punctuation">, </span><span class="token operator">*</span><span class="token operator">&gt;</span>, <a href="../../../kmath-core/space.kscience.kmath.operations/-trigonometric-operations/index.html">TrigonometricOperations</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../tan.html">T</a><span class="token operator">&gt;</span><span class="token operator">&gt;</span><span class="token operator">&gt; </span><a href="../-series-algebra/index.html">SeriesAlgebra</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../tan.html">T</a><span class="token punctuation">, </span><span class="token operator">*</span><span class="token punctuation">, </span><span class="token keyword"></span><a href="../tan.html">BA</a><span class="token punctuation">, </span><span class="token operator">*</span><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="../tan.html"><span class="token function">tan</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">arg<span class="token operator">: </span><a href="../../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../tan.html">T</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-series/index.html">Series</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../tan.html">T</a><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1973416426%2FFunctions%2F-443365019" anchor-label="tanh" id="-1973416426%2FFunctions%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../tanh.html"><span><span>tanh</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1973416426%2FFunctions%2F-443365019"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../tanh.html">T</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="../tanh.html">BA</a><span class="token operator"> : </span><a href="../../../kmath-core/space.kscience.kmath.operations/-buffer-algebra/index.html">BufferAlgebra</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../tanh.html">T</a><span class="token punctuation">, </span><span class="token operator">*</span><span class="token operator">&gt;</span>, <a href="../../../kmath-core/space.kscience.kmath.operations/-exponential-operations/index.html">ExponentialOperations</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../tanh.html">T</a><span class="token operator">&gt;</span><span class="token operator">&gt;</span><span class="token operator">&gt; </span><a href="../-series-algebra/index.html">SeriesAlgebra</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../tanh.html">T</a><span class="token punctuation">, </span><span class="token operator">*</span><span class="token punctuation">, </span><span class="token keyword"></span><a href="../tanh.html">BA</a><span class="token punctuation">, </span><span class="token operator">*</span><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="../tanh.html"><span class="token function">tanh</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">arg<span class="token operator">: </span><a href="../../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../tanh.html">T</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-series/index.html">Series</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../tanh.html">T</a><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-681091511%2FFunctions%2F-443365019" anchor-label="times" id="-681091511%2FFunctions%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-series-algebra/index.html#-681091511%2FExtensions%2F-443365019"><span><span>times</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-681091511%2FFunctions%2F-443365019"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">operator </span><span class="token keyword">fun </span><a href="../../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="index.html">T</a><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="../-series-algebra/index.html#-681091511%2FExtensions%2F-443365019"><span class="token function">times</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">arg<span class="token operator">: </span><a href="../../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="index.html">T</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="index.html">T</a><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="580821340%2FFunctions%2F-443365019" anchor-label="unaryMinus" id="580821340%2FFunctions%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-series-algebra/unary-minus.html"><span>unary</span><wbr><span><span>Minus</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="580821340%2FFunctions%2F-443365019"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">operator override </span><span class="token keyword">fun </span><a href="../../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="index.html">T</a><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="../-series-algebra/unary-minus.html"><span class="token function">unaryMinus</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="index.html">T</a><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="561960854%2FFunctions%2F-443365019" anchor-label="unaryOperation" id="561960854%2FFunctions%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-series-algebra/index.html#561960854%2FFunctions%2F-443365019"><span>unary</span><wbr><span><span>Operation</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="561960854%2FFunctions%2F-443365019"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword"></span><span class="token keyword">fun </span><a href="../-series-algebra/index.html#561960854%2FFunctions%2F-443365019"><span class="token function">unaryOperation</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">operation<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">arg<span class="token operator">: </span><a href="../../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="index.html">T</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="index.html">T</a><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="313021912%2FFunctions%2F-443365019" anchor-label="unaryOperationFunction" id="313021912%2FFunctions%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-series-algebra/index.html#313021912%2FFunctions%2F-443365019"><span>unary</span><wbr><span>Operation</span><wbr><span><span>Function</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="313021912%2FFunctions%2F-443365019"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="../-series-algebra/index.html#313021912%2FFunctions%2F-443365019"><span class="token function">unaryOperationFunction</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">operation<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span class="token punctuation">(</span><span class="token keyword"></span>arg<span class="token operator">: </span><a href="../../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="index.html">T</a><span class="token operator">&gt;</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><span class="token keyword"></span><a href="../../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="index.html">T</a><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1581647563%2FFunctions%2F-443365019" anchor-label="unaryPlus" id="-1581647563%2FFunctions%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-series-algebra/index.html#-1581647563%2FExtensions%2F-443365019"><span>unary</span><wbr><span><span>Plus</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1581647563%2FFunctions%2F-443365019"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">operator </span><span class="token keyword">fun </span><a href="../../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="index.html">T</a><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="../-series-algebra/index.html#-1581647563%2FExtensions%2F-443365019"><span class="token function">unaryPlus</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="index.html">T</a><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="777067267%2FFunctions%2F-443365019" anchor-label="zip" id="777067267%2FFunctions%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-series-algebra/zip.html"><span><span>zip</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="777067267%2FFunctions%2F-443365019"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">inline </span><span class="token keyword">fun </span><a href="../../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="index.html">T</a><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="../-series-algebra/zip.html"><span class="token function">zip</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">other<span class="token operator">: </span><a href="../../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="index.html">T</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">crossinline </span>operation<span class="token operator">: </span><span class="token keyword"></span><a href="index.html">A</a><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token keyword"></span>left<span class="token operator">: </span><a href="index.html">T</a><span class="token punctuation">, </span><span class="token keyword"></span>right<span class="token operator">: </span><a href="index.html">T</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><span class="token keyword"></span><a href="index.html">T</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-series/index.html">Series</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="index.html">T</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Zip two buffers in the range whe they overlap</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="PROPERTY">
+        <h2 class="">Properties</h2>
+        <div class="table"><a data-name="-662517469%2FProperties%2F-443365019" anchor-label="bufferAlgebra" id="-662517469%2FProperties%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-series-algebra/buffer-algebra.html"><span>buffer</span><wbr><span><span>Algebra</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-662517469%2FProperties%2F-443365019"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="../-series-algebra/buffer-algebra.html">bufferAlgebra</a><span class="token operator">: </span><a href="index.html">BA</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1107976939%2FProperties%2F-443365019" anchor-label="bufferFactory" id="-1107976939%2FProperties%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-series-algebra/index.html#-1107976939%2FProperties%2F-443365019"><span>buffer</span><wbr><span><span>Factory</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1107976939%2FProperties%2F-443365019"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword"></span><span class="token keyword">val </span><a href="../-series-algebra/index.html#-1107976939%2FProperties%2F-443365019">bufferFactory</a><span class="token operator">: </span><a href="../../../kmath-core/space.kscience.kmath.structures/-mutable-buffer-factory/index.html">MutableBufferFactory</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="index.html">T</a><span class="token operator">&gt;</span><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-599768606%2FProperties%2F-443365019" anchor-label="elementAlgebra" id="-599768606%2FProperties%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../space.kscience.kmath.stat/-statistical-algebra/element-algebra.html"><span>element</span><wbr><span><span>Algebra</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-599768606%2FProperties%2F-443365019"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword"></span><span class="token keyword">val </span><a href="../../space.kscience.kmath.stat/-statistical-algebra/element-algebra.html">elementAlgebra</a><span class="token operator">: </span><a href="index.html">A</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1508165586%2FProperties%2F-443365019" anchor-label="labelRange" id="-1508165586%2FProperties%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_PROPERTY" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="label-range.html"><span>label</span><wbr><span><span>Range</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1508165586%2FProperties%2F-443365019"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="../../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="index.html">T</a><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="label-range.html">labelRange</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.ranges/-closed-range/index.html">ClosedRange</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="index.html">L</a><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="851852250%2FProperties%2F-443365019" anchor-label="labels" id="851852250%2FProperties%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_PROPERTY" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-series-algebra/labels.html"><span><span>labels</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="851852250%2FProperties%2F-443365019"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="../../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="index.html">T</a><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="../-series-algebra/labels.html">labels</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="index.html">L</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Get a label buffer for given buffer.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1372574381%2FProperties%2F-443365019" anchor-label="offsetIndices" id="-1372574381%2FProperties%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_PROPERTY" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-series-algebra/offset-indices.html"><span>offset</span><wbr><span><span>Indices</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1372574381%2FProperties%2F-443365019"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="../../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="index.html">T</a><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="../-series-algebra/offset-indices.html">offsetIndices</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.ranges/-int-range/index.html">IntRange</a></div><div class="brief "><p class="paragraph">A range of valid offset indices. In general, does not start with zero.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1516064635%2FProperties%2F-443365019" anchor-label="offsetToLabel" id="-1516064635%2FProperties%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-series-algebra/offset-to-label.html"><span>offset</span><wbr><span>To</span><wbr><span><span>Label</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1516064635%2FProperties%2F-443365019"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="../-series-algebra/offset-to-label.html">offsetToLabel</a><span class="token operator">: </span><span class="token punctuation">(</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><span class="token keyword"></span><a href="index.html">L</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="603531405%2FProperties%2F-443365019" anchor-label="startLabel" id="603531405%2FProperties%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_PROPERTY" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-series-algebra/start-label.html"><span>start</span><wbr><span><span>Label</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="603531405%2FProperties%2F-443365019"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="../../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="index.html">T</a><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="../-series-algebra/start-label.html">startLabel</a><span class="token operator">: </span><a href="index.html">L</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="99810772%2FProperties%2F-443365019" anchor-label="startOffset" id="99810772%2FProperties%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_PROPERTY" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-series-algebra/start-offset.html"><span>start</span><wbr><span><span>Offset</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="99810772%2FProperties%2F-443365019"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="../../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="index.html">T</a><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="../-series-algebra/start-offset.html">startOffset</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a></div><div class="brief "><p class="paragraph">An offset of the buffer start relative to <a href="../-series-algebra/index.html">SeriesAlgebra</a> zero offset</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      <div class="footer">
+        <span class="go-to-top-icon"><a href="#content" id="go-to-top-link"></a></span><span>© 2023 Copyright</span><span class="pull-right"><span>Generated by </span><a href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span>
+      </div>
+    </div>
+</div>
+</body>
+</html>
+

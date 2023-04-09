@@ -1,6 +1,8 @@
 $dokka.format:html-v1
 $dokka.linkExtension:html
-
+$dokka.location:////PointingToDeclaration/kmath-geometry/[root]/index.html
+$dokka.location://length/space.kscience.kmath.geometry.LineSegment[TypeParam(bounds=[space.kscience.kmath.geometry.Vector])]#/PointingToDeclaration/kmath-geometry/[root]/length.html
+$dokka.location://line/space.kscience.kmath.geometry.LineSegment[TypeParam(bounds=[space.kscience.kmath.geometry.Vector])]#/PointingToDeclaration/kmath-geometry/[root]/line.html
 module:kmath-ast
 space.kscience.kmath.asm
 space.kscience.kmath.ast
@@ -51,6 +53,7 @@ space.kscience.kmath.jupyter
 module:kmath-kotlingrad
 space.kscience.kmath.kotlingrad
 module:kmath-memory
+space.kscience.kmath
 space.kscience.kmath.memory
 module:kmath-multik
 space.kscience.kmath.multik
@@ -60,7 +63,9 @@ module:kmath-optimization
 space.kscience.kmath.optimization
 module:kmath-stat
 space.kscience.kmath.distributions
+space.kscience.kmath.random
 space.kscience.kmath.samplers
+space.kscience.kmath.series
 space.kscience.kmath.stat
 module:kmath-symja
 space.kscience.kmath.symja
@@ -69,5 +74,8 @@ space.kscience.kmath.tensorflow
 module:kmath-tensors
 space.kscience.kmath.tensors.api
 space.kscience.kmath.tensors.core
+space.kscience.kmath.tensors.core.internal
 module:kmath-viktor
 space.kscience.kmath.viktor
+module:test-utils
+space.kscience.kmath.testutils

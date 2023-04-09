@@ -1,336 +1,379 @@
+<!DOCTYPE html>
 <html>
-  <head>
+<head>
     <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
     <title>All modules</title>
-<link href="images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "";</script>    <script>const storage = localStorage.getItem("dokka-dark-mode")
-const savedDarkMode = storage ? JSON.parse(storage) : false
-if(savedDarkMode === true){
-    document.getElementsByTagName("html")[0].classList.add("theme-dark")
-}</script>
-<script type="text/javascript" src="scripts/sourceset_dependencies.js" async="async"></script><link href="styles/style.css" rel="Stylesheet"><link href="styles/jetbrains-mono.css" rel="Stylesheet"><link href="styles/main.css" rel="Stylesheet"><link href="styles/prism.css" rel="Stylesheet"><link href="styles/logo-styles.css" rel="Stylesheet"><script type="text/javascript" src="scripts/clipboard.js" async="async"></script><script type="text/javascript" src="scripts/navigation-loader.js" async="async"></script><script type="text/javascript" src="scripts/platform-content-handler.js" async="async"></script><script type="text/javascript" src="scripts/main.js" defer="defer"></script><script type="text/javascript" src="scripts/prism.js" async="async"></script>  </head>
-  <body>
-    <div class="navigation-wrapper" id="navigation-wrapper">
-      <div id="leftToggler"><span class="icon-toggler"></span></div>
-      <div class="library-name"><a href="index.html">kmath</a></div>
-      <div></div>
-      <div class="pull-right d-flex"><button id="theme-toggle-button"><span id="theme-toggle"></span></button>
+    <link href="images/logo-icon.svg" rel="icon" type="image/svg">
+    <script>var pathToRoot = "";</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+    if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    } else {
+        const savedDarkMode = JSON.parse(storage)
+        if(savedDarkMode === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    }
+    </script>
+<script type="text/javascript" src="scripts/sourceset_dependencies.js" async="async"></script>
+<link href="styles/style.css" rel="Stylesheet">
+<link href="styles/jetbrains-mono.css" rel="Stylesheet">
+<link href="styles/main.css" rel="Stylesheet">
+<link href="styles/prism.css" rel="Stylesheet">
+<link href="styles/logo-styles.css" rel="Stylesheet">
+<script type="text/javascript" src="scripts/clipboard.js" async="async"></script>
+<script type="text/javascript" src="scripts/navigation-loader.js" async="async"></script>
+<script type="text/javascript" src="scripts/platform-content-handler.js" async="async"></script>
+<script type="text/javascript" src="scripts/main.js" defer="defer"></script>
+<script type="text/javascript" src="scripts/prism.js" async="async"></script>
+<script type="text/javascript" src="scripts/symbol-parameters-wrapper_deferred.js" defer="defer"></script>
+</head>
+<body>
+<div class="navigation-wrapper" id="navigation-wrapper">
+    <div id="leftToggler"><span class="icon-toggler"></span></div>
+    <div class="library-name">
+            <a href="index.html">
+                    <span>kmath</span>
+            </a>
+    </div>
+    <div>
+0.3.1-dev-RC    </div>
+    <div class="pull-right d-flex">
+        <button id="theme-toggle-button"><span id="theme-toggle"></span></button>
         <div id="searchBar"></div>
-      </div>
     </div>
-    <div id="container">
-      <div id="leftColumn">
+</div>
+<div id="container">
+    <div id="leftColumn">
         <div id="sideMenu"></div>
-      </div>
-      <div id="main">
-        <div class="main-content" id="content" pageIds="kmath::.ext/allModules///PointingToDeclaration//0">
-          <div class="breadcrumbs"></div>
-          <div class="cover ">
-            <h2 class="">All modules:</h2>
-            <div class="table"><a data-name="234375141%2FMain%2F0" anchor-label="kmath-ast" id="234375141%2FMain%2F0" data-filterable-set=""></a>
-              <div class="table-row">
-                <div class="main-subrow ">
-                  <div class="w-100"><span class="inline-flex">
-                      <div><a href="kmath-ast/index.html">kmath-ast</a></div>
+    </div>
+    <div id="main">
+<div class="main-content" id="content" pageIds="kmath::.ext/allModules///PointingToDeclaration//0">
+  <div class="breadcrumbs"></div>
+  <div class="cover ">
+    <h2 class="">All modules:</h2>
+    <div class="table"><a data-name="234375141%2FMain%2F0" anchor-label="kmath-ast" id="234375141%2FMain%2F0" data-filterable-set=""></a>
+      <div class="table-row">
+        <div class="main-subrow ">
+          <div class="w-100"><span class="inline-flex">
+              <div><a href="kmath-ast/index.html">kmath-ast</a></div>
 <span class="anchor-wrapper"><span class="anchor-icon" pointing-to="234375141%2FMain%2F0"></span>
-                        <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                      </span></span></div>
-                  <div><span class="brief-comment">
-                      <p class="paragraph">Extensions to MST API: transformations, dynamic compilation and visualization.</p>
-                    </span></div>
-                </div>
-              </div>
-<a data-name="-1130298817%2FMain%2F0" anchor-label="kmath-commons" id="-1130298817%2FMain%2F0" data-filterable-set=""></a>
-              <div class="table-row">
-                <div class="main-subrow ">
-                  <div class="w-100"><span class="inline-flex">
-                      <div><a href="kmath-commons/index.html">kmath-commons</a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1130298817%2FMain%2F0"></span>
-                        <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                      </span></span></div>
-                  <div><span class="brief-comment">
-                      <p class="paragraph">Commons math binding for kmath</p>
-                    </span></div>
-                </div>
-              </div>
-<a data-name="1803723383%2FMain%2F0" anchor-label="kmath-complex" id="1803723383%2FMain%2F0" data-filterable-set=""></a>
-              <div class="table-row">
-                <div class="main-subrow ">
-                  <div class="w-100"><span class="inline-flex">
-                      <div><a href="kmath-complex/index.html">kmath-complex</a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1803723383%2FMain%2F0"></span>
-                        <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                      </span></span></div>
-                  <div><span class="brief-comment">
-                      <p class="paragraph">Complex and hypercomplex number systems in KMath.</p>
-                    </span></div>
-                </div>
-              </div>
-<a data-name="-1357778884%2FMain%2F0" anchor-label="kmath-core" id="-1357778884%2FMain%2F0" data-filterable-set=""></a>
-              <div class="table-row">
-                <div class="main-subrow ">
-                  <div class="w-100"><span class="inline-flex">
-                      <div><a href="kmath-core/index.html">kmath-core</a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1357778884%2FMain%2F0"></span>
-                        <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                      </span></span></div>
-                  <div><span class="brief-comment">
-                      <p class="paragraph">The core interfaces of KMath.</p>
-                    </span></div>
-                </div>
-              </div>
-<a data-name="-955212992%2FMain%2F0" anchor-label="kmath-coroutines" id="-955212992%2FMain%2F0" data-filterable-set=""></a>
-              <div class="table-row">
-                <div class="main-subrow ">
-                  <div class="w-100"><span class="inline-flex">
-                      <div><a href="kmath-coroutines/index.html">kmath-coroutines</a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-955212992%2FMain%2F0"></span>
-                        <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                      </span></span></div>
-                  <div><span class="brief-comment">
-                      <p class="paragraph">The Maven coordinates of this project are <code class="lang-kotlin">space.kscience:kmath-coroutines:0.3.0</code>.</p>
-                    </span></div>
-                </div>
-              </div>
-<a data-name="1504841806%2FMain%2F0" anchor-label="kmath-dimensions" id="1504841806%2FMain%2F0" data-filterable-set=""></a>
-              <div class="table-row">
-                <div class="main-subrow ">
-                  <div class="w-100"><span class="inline-flex">
-                      <div><a href="kmath-dimensions/index.html">kmath-dimensions</a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1504841806%2FMain%2F0"></span>
-                        <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                      </span></span></div>
-                  <div><span class="brief-comment">
-                      <p class="paragraph">A proof of concept module for adding type-safe dimensions to structures</p>
-                    </span></div>
-                </div>
-              </div>
-<a data-name="1006143095%2FMain%2F0" anchor-label="kmath-ejml" id="1006143095%2FMain%2F0" data-filterable-set=""></a>
-              <div class="table-row">
-                <div class="main-subrow ">
-                  <div class="w-100"><span class="inline-flex">
-                      <div><a href="kmath-ejml/index.html">kmath-ejml</a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1006143095%2FMain%2F0"></span>
-                        <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                      </span></span></div>
-                  <div><span class="brief-comment">
-                      <p class="paragraph">EJML based linear algebra implementation.</p>
-                    </span></div>
-                </div>
-              </div>
-<a data-name="2038673433%2FMain%2F0" anchor-label="kmath-for-real" id="2038673433%2FMain%2F0" data-filterable-set=""></a>
-              <div class="table-row">
-                <div class="main-subrow ">
-                  <div class="w-100"><span class="inline-flex">
-                      <div><a href="kmath-for-real/index.html">kmath-for-real</a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2038673433%2FMain%2F0"></span>
-                        <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                      </span></span></div>
-                  <div><span class="brief-comment">
-                      <p class="paragraph">Specialization of KMath APIs for Double numbers.</p>
-                    </span></div>
-                </div>
-              </div>
-<a data-name="841853036%2FMain%2F0" anchor-label="kmath-functions" id="841853036%2FMain%2F0" data-filterable-set=""></a>
-              <div class="table-row">
-                <div class="main-subrow ">
-                  <div class="w-100"><span class="inline-flex">
-                      <div><a href="kmath-functions/index.html">kmath-functions</a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="841853036%2FMain%2F0"></span>
-                        <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                      </span></span></div>
-                  <div><span class="brief-comment">
-                      <p class="paragraph">Functions and interpolations.</p>
-                    </span></div>
-                </div>
-              </div>
-<a data-name="2072356297%2FMain%2F0" anchor-label="kmath-geometry" id="2072356297%2FMain%2F0" data-filterable-set=""></a>
-              <div class="table-row">
-                <div class="main-subrow ">
-                  <div class="w-100"><span class="inline-flex">
-                      <div><a href="kmath-geometry/index.html">kmath-geometry</a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2072356297%2FMain%2F0"></span>
-                        <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                      </span></span></div>
-                  <div><span class="brief-comment">
-                      <p class="paragraph">The Maven coordinates of this project are <code class="lang-kotlin">space.kscience:kmath-geometry:0.3.0</code>.</p>
-                    </span></div>
-                </div>
-              </div>
-<a data-name="-19430708%2FMain%2F0" anchor-label="kmath-histograms" id="-19430708%2FMain%2F0" data-filterable-set=""></a>
-              <div class="table-row">
-                <div class="main-subrow ">
-                  <div class="w-100"><span class="inline-flex">
-                      <div><a href="kmath-histograms/index.html">kmath-histograms</a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-19430708%2FMain%2F0"></span>
-                        <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                      </span></span></div>
-                  <div><span class="brief-comment">
-                      <p class="paragraph">The Maven coordinates of this project are <code class="lang-kotlin">space.kscience:kmath-histograms:0.3.0</code>.</p>
-                    </span></div>
-                </div>
-              </div>
-<a data-name="-195461643%2FMain%2F0" anchor-label="kmath-jafama" id="-195461643%2FMain%2F0" data-filterable-set=""></a>
-              <div class="table-row">
-                <div class="main-subrow ">
-                  <div class="w-100"><span class="inline-flex">
-                      <div><a href="kmath-jafama/index.html">kmath-jafama</a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-195461643%2FMain%2F0"></span>
-                        <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                      </span></span></div>
-                  <div><span class="brief-comment">
-                      <p class="paragraph">Integration with <a href="https://github.com/jeffhain/jafama">Jafama</a>.</p>
-                    </span></div>
-                </div>
-              </div>
-<a data-name="-1819384134%2FMain%2F0" anchor-label="kmath-jupyter" id="-1819384134%2FMain%2F0" data-filterable-set=""></a>
-              <div class="table-row">
-                <div class="main-subrow ">
-                  <div class="w-100"><span class="inline-flex">
-                      <div><a href="kmath-jupyter/index.html">kmath-jupyter</a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1819384134%2FMain%2F0"></span>
-                        <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                      </span></span></div>
-                  <div><span class="brief-comment">
-                      <p class="paragraph">The Maven coordinates of this project are <code class="lang-kotlin">space.kscience:kmath-jupyter:0.3.0</code>.</p>
-                    </span></div>
-                </div>
-              </div>
-<a data-name="-777774196%2FMain%2F0" anchor-label="kmath-kotlingrad" id="-777774196%2FMain%2F0" data-filterable-set=""></a>
-              <div class="table-row">
-                <div class="main-subrow ">
-                  <div class="w-100"><span class="inline-flex">
-                      <div><a href="kmath-kotlingrad/index.html">kmath-kotlingrad</a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-777774196%2FMain%2F0"></span>
-                        <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                      </span></span></div>
-                  <div><span class="brief-comment">
-                      <p class="paragraph"><a href="https://github.com/breandan/kotlingrad">Kotlin∇</a> integration module.</p>
-                    </span></div>
-                </div>
-              </div>
-<a data-name="-849786214%2FMain%2F0" anchor-label="kmath-memory" id="-849786214%2FMain%2F0" data-filterable-set=""></a>
-              <div class="table-row">
-                <div class="main-subrow ">
-                  <div class="w-100"><span class="inline-flex">
-                      <div><a href="kmath-memory/index.html">kmath-memory</a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-849786214%2FMain%2F0"></span>
-                        <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                      </span></span></div>
-                  <div><span class="brief-comment">
-                      <p class="paragraph">The Maven coordinates of this project are <code class="lang-kotlin">space.kscience:kmath-memory:0.3.0</code>.</p>
-                    </span></div>
-                </div>
-              </div>
-<a data-name="1160585833%2FMain%2F0" anchor-label="kmath-multik" id="1160585833%2FMain%2F0" data-filterable-set=""></a>
-              <div class="table-row">
-                <div class="main-subrow ">
-                  <div class="w-100"><span class="inline-flex">
-                      <div><a href="kmath-multik/index.html">kmath-multik</a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1160585833%2FMain%2F0"></span>
-                        <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                      </span></span></div>
-                  <div><span class="brief-comment">
-                      <p class="paragraph">JetBrains Multik connector</p>
-                    </span></div>
-                </div>
-              </div>
-<a data-name="1143079311%2FMain%2F0" anchor-label="kmath-nd4j" id="1143079311%2FMain%2F0" data-filterable-set=""></a>
-              <div class="table-row">
-                <div class="main-subrow ">
-                  <div class="w-100"><span class="inline-flex">
-                      <div><a href="kmath-nd4j/index.html">kmath-nd4j</a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1143079311%2FMain%2F0"></span>
-                        <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                      </span></span></div>
-                  <div><span class="brief-comment">
-                      <p class="paragraph">ND4J based implementations of KMath abstractions.</p>
-                    </span></div>
-                </div>
-              </div>
-<a data-name="277850158%2FMain%2F0" anchor-label="kmath-optimization" id="277850158%2FMain%2F0" data-filterable-set=""></a>
-              <div class="table-row">
-                <div class="main-subrow ">
-                  <div class="w-100"><span class="inline-flex">
-                      <div><a href="kmath-optimization/index.html">kmath-optimization</a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="277850158%2FMain%2F0"></span>
-                        <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                      </span></span></div>
-                  <div><span class="brief-comment">
-                      <p class="paragraph">The Maven coordinates of this project are <code class="lang-kotlin">space.kscience:kmath-optimization:0.3.0</code>.</p>
-                    </span></div>
-                </div>
-              </div>
-<a data-name="1165958951%2FMain%2F0" anchor-label="kmath-stat" id="1165958951%2FMain%2F0" data-filterable-set=""></a>
-              <div class="table-row">
-                <div class="main-subrow ">
-                  <div class="w-100"><span class="inline-flex">
-                      <div><a href="kmath-stat/index.html">kmath-stat</a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1165958951%2FMain%2F0"></span>
-                        <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                      </span></span></div>
-                  <div><span class="brief-comment">
-                      <p class="paragraph">The Maven coordinates of this project are <code class="lang-kotlin">space.kscience:kmath-stat:0.3.0</code>.</p>
-                    </span></div>
-                </div>
-              </div>
-<a data-name="527979049%2FMain%2F0" anchor-label="kmath-symja" id="527979049%2FMain%2F0" data-filterable-set=""></a>
-              <div class="table-row">
-                <div class="main-subrow ">
-                  <div class="w-100"><span class="inline-flex">
-                      <div><a href="kmath-symja/index.html">kmath-symja</a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="527979049%2FMain%2F0"></span>
-                        <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                      </span></span></div>
-                  <div><span class="brief-comment">
-                      <p class="paragraph">Symja integration module</p>
-                    </span></div>
-                </div>
-              </div>
-<a data-name="-909513644%2FMain%2F0" anchor-label="kmath-tensorflow" id="-909513644%2FMain%2F0" data-filterable-set=""></a>
-              <div class="table-row">
-                <div class="main-subrow ">
-                  <div class="w-100"><span class="inline-flex">
-                      <div><a href="kmath-tensorflow/index.html">kmath-tensorflow</a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-909513644%2FMain%2F0"></span>
-                        <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                      </span></span></div>
-                  <div><span class="brief-comment">
-                      <p class="paragraph">Google tensorflow connector</p>
-                    </span></div>
-                </div>
-              </div>
-<a data-name="-728910035%2FMain%2F0" anchor-label="kmath-tensors" id="-728910035%2FMain%2F0" data-filterable-set=""></a>
-              <div class="table-row">
-                <div class="main-subrow ">
-                  <div class="w-100"><span class="inline-flex">
-                      <div><a href="kmath-tensors/index.html">kmath-tensors</a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-728910035%2FMain%2F0"></span>
-                        <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                      </span></span></div>
-                  <div><span class="brief-comment">
-                      <p class="paragraph">Common linear algebra operations on tensors.</p>
-                    </span></div>
-                </div>
-              </div>
-<a data-name="885778204%2FMain%2F0" anchor-label="kmath-viktor" id="885778204%2FMain%2F0" data-filterable-set=""></a>
-              <div class="table-row">
-                <div class="main-subrow ">
-                  <div class="w-100"><span class="inline-flex">
-                      <div><a href="kmath-viktor/index.html">kmath-viktor</a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="885778204%2FMain%2F0"></span>
-                        <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                      </span></span></div>
-                  <div><span class="brief-comment">
-                      <p class="paragraph">Binding for https://github.com/JetBrains-Research/viktor</p>
-                    </span></div>
-                </div>
-              </div>
-            </div>
-          </div>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div><span class="brief-comment">
+              <p class="paragraph">Extensions to MST API: transformations, dynamic compilation and visualization.</p>
+            </span></div>
         </div>
-        <div class="footer"><span class="go-to-top-icon"><a href="#content" id="go-to-top-link"></a></span><span>© 2022 Copyright</span><span class="pull-right"><span>Generated by </span><a href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span></div>
+      </div>
+<a data-name="-1130298817%2FMain%2F0" anchor-label="kmath-commons" id="-1130298817%2FMain%2F0" data-filterable-set=""></a>
+      <div class="table-row">
+        <div class="main-subrow ">
+          <div class="w-100"><span class="inline-flex">
+              <div><a href="kmath-commons/index.html">kmath-commons</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1130298817%2FMain%2F0"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div><span class="brief-comment">
+              <p class="paragraph">Commons math binding for kmath</p>
+            </span></div>
+        </div>
+      </div>
+<a data-name="1803723383%2FMain%2F0" anchor-label="kmath-complex" id="1803723383%2FMain%2F0" data-filterable-set=""></a>
+      <div class="table-row">
+        <div class="main-subrow ">
+          <div class="w-100"><span class="inline-flex">
+              <div><a href="kmath-complex/index.html">kmath-complex</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1803723383%2FMain%2F0"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div><span class="brief-comment">
+              <p class="paragraph">Complex and hypercomplex number systems in KMath.</p>
+            </span></div>
+        </div>
+      </div>
+<a data-name="-1357778884%2FMain%2F0" anchor-label="kmath-core" id="-1357778884%2FMain%2F0" data-filterable-set=""></a>
+      <div class="table-row">
+        <div class="main-subrow ">
+          <div class="w-100"><span class="inline-flex">
+              <div><a href="kmath-core/index.html">kmath-core</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1357778884%2FMain%2F0"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div><span class="brief-comment">
+              <p class="paragraph">The core interfaces of KMath.</p>
+            </span></div>
+        </div>
+      </div>
+<a data-name="-955212992%2FMain%2F0" anchor-label="kmath-coroutines" id="-955212992%2FMain%2F0" data-filterable-set=""></a>
+      <div class="table-row">
+        <div class="main-subrow ">
+          <div class="w-100"><span class="inline-flex">
+              <div><a href="kmath-coroutines/index.html">kmath-coroutines</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-955212992%2FMain%2F0"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div><span class="brief-comment">
+              <p class="paragraph">The Maven coordinates of this project are <code class="lang-kotlin">space.kscience:kmath-coroutines:0.3.1-dev-RC</code>.</p>
+            </span></div>
+        </div>
+      </div>
+<a data-name="1504841806%2FMain%2F0" anchor-label="kmath-dimensions" id="1504841806%2FMain%2F0" data-filterable-set=""></a>
+      <div class="table-row">
+        <div class="main-subrow ">
+          <div class="w-100"><span class="inline-flex">
+              <div><a href="kmath-dimensions/index.html">kmath-dimensions</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1504841806%2FMain%2F0"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div><span class="brief-comment">
+              <p class="paragraph">A proof of concept module for adding type-safe dimensions to structures</p>
+            </span></div>
+        </div>
+      </div>
+<a data-name="1006143095%2FMain%2F0" anchor-label="kmath-ejml" id="1006143095%2FMain%2F0" data-filterable-set=""></a>
+      <div class="table-row">
+        <div class="main-subrow ">
+          <div class="w-100"><span class="inline-flex">
+              <div><a href="kmath-ejml/index.html">kmath-ejml</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1006143095%2FMain%2F0"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div><span class="brief-comment">
+              <p class="paragraph">EJML based linear algebra implementation.</p>
+            </span></div>
+        </div>
+      </div>
+<a data-name="2038673433%2FMain%2F0" anchor-label="kmath-for-real" id="2038673433%2FMain%2F0" data-filterable-set=""></a>
+      <div class="table-row">
+        <div class="main-subrow ">
+          <div class="w-100"><span class="inline-flex">
+              <div><a href="kmath-for-real/index.html">kmath-for-real</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2038673433%2FMain%2F0"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div><span class="brief-comment">
+              <p class="paragraph">Specialization of KMath APIs for Double numbers.</p>
+            </span></div>
+        </div>
+      </div>
+<a data-name="841853036%2FMain%2F0" anchor-label="kmath-functions" id="841853036%2FMain%2F0" data-filterable-set=""></a>
+      <div class="table-row">
+        <div class="main-subrow ">
+          <div class="w-100"><span class="inline-flex">
+              <div><a href="kmath-functions/index.html">kmath-functions</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="841853036%2FMain%2F0"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div><span class="brief-comment">
+              <p class="paragraph">Functions and interpolations.</p>
+            </span></div>
+        </div>
+      </div>
+<a data-name="2072356297%2FMain%2F0" anchor-label="kmath-geometry" id="2072356297%2FMain%2F0" data-filterable-set=""></a>
+      <div class="table-row">
+        <div class="main-subrow ">
+          <div class="w-100"><span class="inline-flex">
+              <div><a href="kmath-geometry/index.html">kmath-geometry</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2072356297%2FMain%2F0"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div><span class="brief-comment">
+              <p class="paragraph">The Maven coordinates of this project are <code class="lang-kotlin">space.kscience:kmath-geometry:0.3.1-dev-RC</code>.</p>
+            </span></div>
+        </div>
+      </div>
+<a data-name="-19430708%2FMain%2F0" anchor-label="kmath-histograms" id="-19430708%2FMain%2F0" data-filterable-set=""></a>
+      <div class="table-row">
+        <div class="main-subrow ">
+          <div class="w-100"><span class="inline-flex">
+              <div><a href="kmath-histograms/index.html">kmath-histograms</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-19430708%2FMain%2F0"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div><span class="brief-comment">
+              <p class="paragraph">The Maven coordinates of this project are <code class="lang-kotlin">space.kscience:kmath-histograms:0.3.1-dev-RC</code>.</p>
+            </span></div>
+        </div>
+      </div>
+<a data-name="-195461643%2FMain%2F0" anchor-label="kmath-jafama" id="-195461643%2FMain%2F0" data-filterable-set=""></a>
+      <div class="table-row">
+        <div class="main-subrow ">
+          <div class="w-100"><span class="inline-flex">
+              <div><a href="kmath-jafama/index.html">kmath-jafama</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-195461643%2FMain%2F0"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div><span class="brief-comment">
+              <p class="paragraph">Integration with <a href="https://github.com/jeffhain/jafama">Jafama</a>.</p>
+            </span></div>
+        </div>
+      </div>
+<a data-name="-1819384134%2FMain%2F0" anchor-label="kmath-jupyter" id="-1819384134%2FMain%2F0" data-filterable-set=""></a>
+      <div class="table-row">
+        <div class="main-subrow ">
+          <div class="w-100"><span class="inline-flex">
+              <div><a href="kmath-jupyter/index.html">kmath-jupyter</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1819384134%2FMain%2F0"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div><span class="brief-comment">
+              <p class="paragraph">The Maven coordinates of this project are <code class="lang-kotlin">space.kscience:kmath-jupyter:0.3.1-dev-RC</code>.</p>
+            </span></div>
+        </div>
+      </div>
+<a data-name="-777774196%2FMain%2F0" anchor-label="kmath-kotlingrad" id="-777774196%2FMain%2F0" data-filterable-set=""></a>
+      <div class="table-row">
+        <div class="main-subrow ">
+          <div class="w-100"><span class="inline-flex">
+              <div><a href="kmath-kotlingrad/index.html">kmath-kotlingrad</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-777774196%2FMain%2F0"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div><span class="brief-comment">
+              <p class="paragraph"><a href="https://github.com/breandan/kotlingrad">Kotlin∇</a> integration module.</p>
+            </span></div>
+        </div>
+      </div>
+<a data-name="-849786214%2FMain%2F0" anchor-label="kmath-memory" id="-849786214%2FMain%2F0" data-filterable-set=""></a>
+      <div class="table-row">
+        <div class="main-subrow ">
+          <div class="w-100"><span class="inline-flex">
+              <div><a href="kmath-memory/index.html">kmath-memory</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-849786214%2FMain%2F0"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div><span class="brief-comment">
+              <p class="paragraph">The Maven coordinates of this project are <code class="lang-kotlin">space.kscience:kmath-memory:0.3.1-dev-RC</code>.</p>
+            </span></div>
+        </div>
+      </div>
+<a data-name="1160585833%2FMain%2F0" anchor-label="kmath-multik" id="1160585833%2FMain%2F0" data-filterable-set=""></a>
+      <div class="table-row">
+        <div class="main-subrow ">
+          <div class="w-100"><span class="inline-flex">
+              <div><a href="kmath-multik/index.html">kmath-multik</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1160585833%2FMain%2F0"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div><span class="brief-comment">
+              <p class="paragraph">JetBrains Multik connector</p>
+            </span></div>
+        </div>
+      </div>
+<a data-name="1143079311%2FMain%2F0" anchor-label="kmath-nd4j" id="1143079311%2FMain%2F0" data-filterable-set=""></a>
+      <div class="table-row">
+        <div class="main-subrow ">
+          <div class="w-100"><span class="inline-flex">
+              <div><a href="kmath-nd4j/index.html">kmath-nd4j</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1143079311%2FMain%2F0"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div><span class="brief-comment">
+              <p class="paragraph">ND4J based implementations of KMath abstractions.</p>
+            </span></div>
+        </div>
+      </div>
+<a data-name="277850158%2FMain%2F0" anchor-label="kmath-optimization" id="277850158%2FMain%2F0" data-filterable-set=""></a>
+      <div class="table-row">
+        <div class="main-subrow ">
+          <div class="w-100"><span class="inline-flex">
+              <div><a href="kmath-optimization/index.html">kmath-optimization</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="277850158%2FMain%2F0"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div><span class="brief-comment">
+              <p class="paragraph">The Maven coordinates of this project are <code class="lang-kotlin">space.kscience:kmath-optimization:0.3.1-dev-RC</code>.</p>
+            </span></div>
+        </div>
+      </div>
+<a data-name="1165958951%2FMain%2F0" anchor-label="kmath-stat" id="1165958951%2FMain%2F0" data-filterable-set=""></a>
+      <div class="table-row">
+        <div class="main-subrow ">
+          <div class="w-100"><span class="inline-flex">
+              <div><a href="kmath-stat/index.html">kmath-stat</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1165958951%2FMain%2F0"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div><span class="brief-comment">
+              <p class="paragraph">The Maven coordinates of this project are <code class="lang-kotlin">space.kscience:kmath-stat:0.3.1-dev-RC</code>.</p>
+            </span></div>
+        </div>
+      </div>
+<a data-name="527979049%2FMain%2F0" anchor-label="kmath-symja" id="527979049%2FMain%2F0" data-filterable-set=""></a>
+      <div class="table-row">
+        <div class="main-subrow ">
+          <div class="w-100"><span class="inline-flex">
+              <div><a href="kmath-symja/index.html">kmath-symja</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="527979049%2FMain%2F0"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div><span class="brief-comment">
+              <p class="paragraph">Symja integration module</p>
+            </span></div>
+        </div>
+      </div>
+<a data-name="-909513644%2FMain%2F0" anchor-label="kmath-tensorflow" id="-909513644%2FMain%2F0" data-filterable-set=""></a>
+      <div class="table-row">
+        <div class="main-subrow ">
+          <div class="w-100"><span class="inline-flex">
+              <div><a href="kmath-tensorflow/index.html">kmath-tensorflow</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-909513644%2FMain%2F0"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div><span class="brief-comment">
+              <p class="paragraph">Google tensorflow connector</p>
+            </span></div>
+        </div>
+      </div>
+<a data-name="-728910035%2FMain%2F0" anchor-label="kmath-tensors" id="-728910035%2FMain%2F0" data-filterable-set=""></a>
+      <div class="table-row">
+        <div class="main-subrow ">
+          <div class="w-100"><span class="inline-flex">
+              <div><a href="kmath-tensors/index.html">kmath-tensors</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-728910035%2FMain%2F0"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div><span class="brief-comment">
+              <p class="paragraph">Common linear algebra operations on tensors.</p>
+            </span></div>
+        </div>
+      </div>
+<a data-name="885778204%2FMain%2F0" anchor-label="kmath-viktor" id="885778204%2FMain%2F0" data-filterable-set=""></a>
+      <div class="table-row">
+        <div class="main-subrow ">
+          <div class="w-100"><span class="inline-flex">
+              <div><a href="kmath-viktor/index.html">kmath-viktor</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="885778204%2FMain%2F0"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div><span class="brief-comment">
+              <p class="paragraph">Binding for https://github.com/JetBrains-Research/viktor</p>
+            </span></div>
+        </div>
+      </div>
+<a data-name="1999374943%2FMain%2F0" anchor-label="test-utils" id="1999374943%2FMain%2F0" data-filterable-set=""></a>
+      <div class="table-row">
+        <div class="main-subrow ">
+          <div class="w-100"><span class="inline-flex">
+              <div><a href="test-utils/index.html">test-utils</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1999374943%2FMain%2F0"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div><span class="brief-comment"></span></div>
+        </div>
       </div>
     </div>
-  </body>
+  </div>
+</div>
+      <div class="footer">
+        <span class="go-to-top-icon"><a href="#content" id="go-to-top-link"></a></span><span>© 2023 Copyright</span><span
+                class="pull-right"><span>Generated by </span><a
+                href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span>
+      </div>
+    </div>
+</div>
+</body>
 </html>
-

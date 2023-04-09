@@ -1,203 +1,221 @@
+<!doctype html>
 <html>
-  <head>
+<head>
     <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
     <title>RandomGeneratorProvider</title>
-</head><body><link href="../../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../../";</script>
-    <script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async></script><link href="../../../styles/style.css" rel="Stylesheet"><link href="../../../styles/jetbrains-mono.css" rel="Stylesheet"><link href="../../../styles/main.css" rel="Stylesheet"><link href="../../../styles/prism.css" rel="Stylesheet"><link href="../../../styles/logo-styles.css" rel="Stylesheet"><script type="text/javascript" src="../../../scripts/clipboard.js" async></script><script type="text/javascript" src="../../../scripts/navigation-loader.js" async></script><script type="text/javascript" src="../../../scripts/platform-content-handler.js" async></script><script type="text/javascript" src="../../../scripts/main.js" defer></script><script type="text/javascript" src="../../../scripts/prism.js" async></script><script>const storage = localStorage.getItem("dokka-dark-mode")
-const savedDarkMode = storage ? JSON.parse(storage) : false
-if(savedDarkMode === true){
-    document.getElementsByTagName("html")[0].classList.add("theme-dark")
-}</script>
-
-  
-    <div class="navigation-wrapper" id="navigation-wrapper">
-      <div id="leftToggler"><span class="icon-toggler"></span></div>
-      <div class="library-name"><a href="../../../index.html"><span>kmath</span></a></div>
-      <div></div>
-      <div class="pull-right d-flex">
-        <div class="filter-section" id="filter-section"><button class="platform-tag platform-selector jvm-like" data-active="" data-filter=":kmath-stat:dokkaHtmlPartial/jvmMain">jvm</button></div>
-<button id="theme-toggle-button"><span id="theme-toggle"></span></button>
-        <div id="searchBar"></div>
-      </div>
+<link href="../../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../../";</script>    <script>const storage = localStorage.getItem("dokka-dark-mode")
+    if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    } else {
+        const savedDarkMode = JSON.parse(storage)
+        if(savedDarkMode === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    }
+    </script>
+<script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async></script>
+<link href="../../../styles/style.css" rel="Stylesheet">
+<link href="../../../styles/jetbrains-mono.css" rel="Stylesheet">
+<link href="../../../styles/main.css" rel="Stylesheet">
+<link href="../../../styles/prism.css" rel="Stylesheet">
+<link href="../../../styles/logo-styles.css" rel="Stylesheet">
+<script type="text/javascript" src="../../../scripts/clipboard.js" async></script>
+<script type="text/javascript" src="../../../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../../../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../../../scripts/main.js" defer></script>
+<script type="text/javascript" src="../../../scripts/prism.js" async></script>
+<script type="text/javascript" src="../../../scripts/symbol-parameters-wrapper_deferred.js" defer></script></head>
+<body>
+<div class="navigation-wrapper" id="navigation-wrapper">
+    <div id="leftToggler"><span class="icon-toggler"></span></div>
+    <div class="library-name">
+<a href="../../../index.html">
+<span>kmath</span>            </a>    </div>
+    <div>0.3.1-dev-RC
     </div>
-    <div id="container">
-      <div id="leftColumn">
+    <div class="pull-right d-flex">
+        <div class="filter-section" id="filter-section">
+                <button class="platform-tag platform-selector jvm-like" data-active="" data-filter=":kmath-stat:dokkaHtmlPartial/jvmMain">jvm</button>
+        </div>
+        <button id="theme-toggle-button"><span id="theme-toggle"></span></button>
+        <div id="searchBar"></div>
+    </div>
+</div>
+<div id="container">
+    <div id="leftColumn">
         <div id="sideMenu"></div>
-      </div>
-      <div id="main">
-        <div class="main-content" id="content" pageids="kmath-stat::space.kscience.kmath.stat/RandomGeneratorProvider///PointingToDeclaration//-541099023">
-          <div class="breadcrumbs"><a href="../../index.html">kmath-stat</a>/<a href="../index.html">space.kscience.kmath.stat</a>/<a href="index.html">RandomGeneratorProvider</a></div>
-          <div class="cover ">
-            <h1 class="cover"><span>Random</span><wbr><span>Generator</span><wbr><span><span>Provider</span></span></h1>
-            <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
-              <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark jvm-like" data-filterable-current=":kmath-stat:dokkaHtmlPartial/jvmMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/jvmMain" data-active="" data-toggle=":kmath-stat:dokkaHtmlPartial/jvmMain">jvm</button></div>
-<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/jvmMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="index.html">RandomGeneratorProvider</a><span class="token punctuation">(</span>generator<span class="token operator">: </span><a href="../-random-generator/index.html#368348596%2FExtensions%2F-541099023">RandomGenerator</a><span class="token punctuation">)</span> : <span data-unresolved-link="org.apache.commons.rng/UniformRandomProvider///PointingToDeclaration/">UniformRandomProvider</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><p class="paragraph">Implements <span data-unresolved-link="org.apache.commons.rng/UniformRandomProvider///PointingToDeclaration/">UniformRandomProvider</span> by delegating all operations to <a href="../-random-generator/index.html#368348596%2FExtensions%2F-541099023">RandomGenerator</a>.</p></div>            </div>
-          </div>
-          <div class="tabbedcontent">
-            <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="Constructors">Constructors</button><button class="section-tab" data-togglable="Functions">Functions</button><button class="section-tab" data-togglable="Properties">Properties</button><button class="section-tab" data-togglable="Sources">Sources</button></div>
-            <div class="tabs-section-body">
-              <h2 class="tabbedcontent">Constructors</h2>
-              <div class="table" data-togglable="Constructors"><a data-name="314974023%2FConstructors%2F-541099023" anchor-label="RandomGeneratorProvider" id="314974023%2FConstructors%2F-541099023" data-filterable-set=":kmath-stat:dokkaHtmlPartial/jvmMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-stat:dokkaHtmlPartial/jvmMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/jvmMain">
-                  <div class="main-subrow keyValue TabbedContent">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="-random-generator-provider.html"><span>Random</span><wbr><span>Generator</span><wbr><span><span>Provider</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="314974023%2FConstructors%2F-541099023"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
-                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark jvm-like" data-filterable-current=":kmath-stat:dokkaHtmlPartial/jvmMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/jvmMain" data-active="" data-toggle=":kmath-stat:dokkaHtmlPartial/jvmMain">jvm</button></div>
-<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/jvmMain"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="-random-generator-provider.html"><span class="token function">RandomGeneratorProvider</span></a><span class="token punctuation">(</span>generator<span class="token operator">: </span><a href="../-random-generator/index.html#368348596%2FExtensions%2F-541099023">RandomGenerator</a><span class="token punctuation">)</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div>                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <h2 class="">Functions</h2>
-              <div class="table" data-togglable="Functions"><a data-name="-1348198167%2FFunctions%2F-541099023" anchor-label="nextBoolean" id="-1348198167%2FFunctions%2F-541099023" data-filterable-set=":kmath-stat:dokkaHtmlPartial/jvmMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-stat:dokkaHtmlPartial/jvmMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/jvmMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="next-boolean.html"><span>next</span><wbr><span><span>Boolean</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1348198167%2FFunctions%2F-541099023"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
-                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark jvm-like" data-filterable-current=":kmath-stat:dokkaHtmlPartial/jvmMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/jvmMain" data-active="" data-toggle=":kmath-stat:dokkaHtmlPartial/jvmMain">jvm</button></div>
-<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/jvmMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="next-boolean.html"><span class="token function">nextBoolean</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Generates a <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a> value.</p></div></div>                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="1503325848%2FFunctions%2F-541099023" anchor-label="nextBytes" id="1503325848%2FFunctions%2F-541099023" data-filterable-set=":kmath-stat:dokkaHtmlPartial/jvmMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-stat:dokkaHtmlPartial/jvmMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/jvmMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="next-bytes.html"><span>next</span><wbr><span><span>Bytes</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1503325848%2FFunctions%2F-541099023"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
-                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark jvm-like" data-filterable-current=":kmath-stat:dokkaHtmlPartial/jvmMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/jvmMain" data-active="" data-toggle=":kmath-stat:dokkaHtmlPartial/jvmMain">jvm</button></div>
-<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/jvmMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="next-bytes.html"><span class="token function">nextBytes</span></a><span class="token punctuation">(</span>bytes<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte-array/index.html">ByteArray</a><span class="token punctuation">)</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="next-bytes.html"><span class="token function">nextBytes</span></a><span class="token punctuation">(</span>bytes<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte-array/index.html">ByteArray</a><span class="token punctuation">, </span>start<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span>len<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">)</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Generates <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte/index.html">Byte</a> values and places them into a user-supplied array.</p></div></div>                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="1150492216%2FFunctions%2F-541099023" anchor-label="nextDouble" id="1150492216%2FFunctions%2F-541099023" data-filterable-set=":kmath-stat:dokkaHtmlPartial/jvmMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-stat:dokkaHtmlPartial/jvmMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/jvmMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="next-double.html"><span>next</span><wbr><span><span>Double</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1150492216%2FFunctions%2F-541099023"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
-                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark jvm-like" data-filterable-current=":kmath-stat:dokkaHtmlPartial/jvmMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/jvmMain" data-active="" data-toggle=":kmath-stat:dokkaHtmlPartial/jvmMain">jvm</button></div>
-<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/jvmMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="next-double.html"><span class="token function">nextDouble</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Generates a <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a> value between 0 and 1.</p></div></div>                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="-1379659211%2FFunctions%2F-541099023" anchor-label="nextFloat" id="-1379659211%2FFunctions%2F-541099023" data-filterable-set=":kmath-stat:dokkaHtmlPartial/jvmMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-stat:dokkaHtmlPartial/jvmMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/jvmMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="next-float.html"><span>next</span><wbr><span><span>Float</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1379659211%2FFunctions%2F-541099023"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
-                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark jvm-like" data-filterable-current=":kmath-stat:dokkaHtmlPartial/jvmMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/jvmMain" data-active="" data-toggle=":kmath-stat:dokkaHtmlPartial/jvmMain">jvm</button></div>
-<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/jvmMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="next-float.html"><span class="token function">nextFloat</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-float/index.html">Float</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Generates a <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-float/index.html">Float</a> value between 0 and 1.</p></div></div>                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="-327825130%2FFunctions%2F-541099023" anchor-label="nextInt" id="-327825130%2FFunctions%2F-541099023" data-filterable-set=":kmath-stat:dokkaHtmlPartial/jvmMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-stat:dokkaHtmlPartial/jvmMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/jvmMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="next-int.html"><span>next</span><wbr><span><span>Int</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-327825130%2FFunctions%2F-541099023"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
-                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark jvm-like" data-filterable-current=":kmath-stat:dokkaHtmlPartial/jvmMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/jvmMain" data-active="" data-toggle=":kmath-stat:dokkaHtmlPartial/jvmMain">jvm</button></div>
-<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/jvmMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="next-int.html"><span class="token function">nextInt</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Generates an <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a> value.</p></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="next-int.html"><span class="token function">nextInt</span></a><span class="token punctuation">(</span>n<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Generates an <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a> value between 0 (inclusive) and the specified value (exclusive).</p></div></div>                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="306346893%2FFunctions%2F-541099023" anchor-label="nextLong" id="306346893%2FFunctions%2F-541099023" data-filterable-set=":kmath-stat:dokkaHtmlPartial/jvmMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-stat:dokkaHtmlPartial/jvmMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/jvmMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="next-long.html"><span>next</span><wbr><span><span>Long</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="306346893%2FFunctions%2F-541099023"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
-                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark jvm-like" data-filterable-current=":kmath-stat:dokkaHtmlPartial/jvmMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/jvmMain" data-active="" data-toggle=":kmath-stat:dokkaHtmlPartial/jvmMain">jvm</button></div>
-<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/jvmMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="next-long.html"><span class="token function">nextLong</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html">Long</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Generates a <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html">Long</a> value.</p></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="next-long.html"><span class="token function">nextLong</span></a><span class="token punctuation">(</span>n<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html">Long</a><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html">Long</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Generates a <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html">Long</a> value between 0 (inclusive) and the specified value (exclusive).</p></div></div>                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <h2 class="">Properties</h2>
-              <div class="table" data-togglable="Properties"><a data-name="-1603300917%2FProperties%2F-541099023" anchor-label="generator" id="-1603300917%2FProperties%2F-541099023" data-filterable-set=":kmath-stat:dokkaHtmlPartial/jvmMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-stat:dokkaHtmlPartial/jvmMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/jvmMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="generator.html">generator</a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1603300917%2FProperties%2F-541099023"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted" data-togglable="Properties">
-                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark jvm-like" data-filterable-current=":kmath-stat:dokkaHtmlPartial/jvmMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/jvmMain" data-active="" data-toggle=":kmath-stat:dokkaHtmlPartial/jvmMain">jvm</button></div>
-<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/jvmMain"><a data-name="-1603300917%2FProperties%2F-541099023" anchor-label="generator" id="-1603300917%2FProperties%2F-541099023" data-filterable-set=":kmath-stat:dokkaHtmlPartial/jvmMain"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="generator.html">generator</a><span class="token operator">: </span><a href="../-random-generator/index.html#368348596%2FExtensions%2F-541099023">RandomGenerator</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><a data-name="-1603300917%2FProperties%2F-541099023" anchor-label="generator" id="-1603300917%2FProperties%2F-541099023" data-filterable-set=":kmath-stat:dokkaHtmlPartial/jvmMain"></a><p class="paragraph">the underlying <a href="../-random-generator/index.html#368348596%2FExtensions%2F-541099023">RandomGenerator</a> object.</p></div></div>                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <h2 class="">Sources</h2>
-              <div class="table" data-togglable="Sources"><a data-name="-882002493%2FSource%2F-541099023" anchor-label="https://github.com/mipt-npm/kmath/tree/master/kmath-stat/src/jvmMain/kotlin/space/kscience/kmath/stat/RandomSourceGenerator.kt#L35" id="-882002493%2FSource%2F-541099023" data-filterable-set=":kmath-stat:dokkaHtmlPartial/jvmMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-stat:dokkaHtmlPartial/jvmMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/jvmMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="https://github.com/mipt-npm/kmath/tree/master/kmath-stat/src/jvmMain/kotlin/space/kscience/kmath/stat/RandomSourceGenerator.kt#L35">jvm source</a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-882002493%2FSource%2F-541099023"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div></div>
-                  </div>
+    </div>
+    <div id="main">
+<div class="main-content" data-page-type="classlike" id="content" pageids="kmath-stat::space.kscience.kmath.stat/RandomGeneratorProvider///PointingToDeclaration//-541099023">
+  <div class="breadcrumbs"><a href="../../index.html">kmath-stat</a><span class="delimiter">/</span><a href="../index.html">space.kscience.kmath.stat</a><span class="delimiter">/</span><span class="current">RandomGeneratorProvider</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span>Random</span><wbr><span>Generator</span><wbr><span><span>Provider</span></span></h1>
+    <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+      <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":kmath-stat:dokkaHtmlPartial/jvmMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/jvmMain" data-active="" data-toggle=":kmath-stat:dokkaHtmlPartial/jvmMain">jvm</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/jvmMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="index.html">RandomGeneratorProvider</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>generator<span class="token operator">: </span><a href="../../space.kscience.kmath.random/-random-generator/index.html#-384466395%2FMain%2F-541099023">RandomGenerator</a></span></span><span class="token punctuation">)</span> : <span data-unresolved-link="org.apache.commons.rng/UniformRandomProvider///PointingToDeclaration/">UniformRandomProvider</span><span class="clearfix"><span class="floating-right">(<a href="https://github.com/SciProgCentre/kmath/tree/master/kmath-stat/src/jvmMain/kotlin/space/kscience/kmath/stat/RandomSourceGenerator.kt#L44">source</a>)</span></span></div><p class="paragraph">Implements <span data-unresolved-link="org.apache.commons.rng/UniformRandomProvider///PointingToDeclaration/">UniformRandomProvider</span> by delegating all operations to <a href="../../space.kscience.kmath.random/-random-generator/index.html#-384466395%2FMain%2F-541099023">RandomGenerator</a>.</p></div>    </div>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,FUNCTION,PROPERTY">Members</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="CONSTRUCTOR">
+        <h2 class="">Constructors</h2>
+        <div class="table"><a data-name="-1973698824%2FConstructors%2F-541099023" anchor-label="RandomGeneratorProvider" id="-1973698824%2FConstructors%2F-541099023" data-filterable-set=":kmath-stat:dokkaHtmlPartial/jvmMain"></a>
+          <div class="table-row" data-togglable="CONSTRUCTOR" data-filterable-current=":kmath-stat:dokkaHtmlPartial/jvmMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/jvmMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-random-generator-provider.html"><span>Random</span><wbr><span>Generator</span><wbr><span><span>Provider</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1973698824%2FConstructors%2F-541099023"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":kmath-stat:dokkaHtmlPartial/jvmMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/jvmMain" data-active="" data-toggle=":kmath-stat:dokkaHtmlPartial/jvmMain">jvm</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/jvmMain"><div class="symbol monospace"><span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">generator<span class="token operator">: </span><a href="../../space.kscience.kmath.random/-random-generator/index.html#-384466395%2FMain%2F-541099023">RandomGenerator</a></span></span><span class="token punctuation">)</span></div></div>                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <div class="footer"><span class="go-to-top-icon"><a href="#content" id="go-to-top-link"></a></span><span>© 2022 Copyright</span><span class="pull-right"><span>Generated by </span><a href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span></div>
+      </div>
+      <div data-togglable="FUNCTION">
+        <h2 class="">Functions</h2>
+        <div class="table"><a data-name="-1348198167%2FFunctions%2F-541099023" anchor-label="nextBoolean" id="-1348198167%2FFunctions%2F-541099023" data-filterable-set=":kmath-stat:dokkaHtmlPartial/jvmMain"></a>
+          <div class="table-row" data-filterable-current=":kmath-stat:dokkaHtmlPartial/jvmMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/jvmMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="next-boolean.html"><span>next</span><wbr><span><span>Boolean</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1348198167%2FFunctions%2F-541099023"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":kmath-stat:dokkaHtmlPartial/jvmMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/jvmMain" data-active="" data-toggle=":kmath-stat:dokkaHtmlPartial/jvmMain">jvm</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/jvmMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="next-boolean.html"><span class="token function">nextBoolean</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a></div><div class="brief "><p class="paragraph">Generates a <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a> value.</p></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1503325848%2FFunctions%2F-541099023" anchor-label="nextBytes" id="1503325848%2FFunctions%2F-541099023" data-filterable-set=":kmath-stat:dokkaHtmlPartial/jvmMain"></a>
+          <div class="table-row" data-filterable-current=":kmath-stat:dokkaHtmlPartial/jvmMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/jvmMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="next-bytes.html"><span>next</span><wbr><span><span>Bytes</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1503325848%2FFunctions%2F-541099023"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":kmath-stat:dokkaHtmlPartial/jvmMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/jvmMain" data-active="" data-toggle=":kmath-stat:dokkaHtmlPartial/jvmMain">jvm</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/jvmMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="next-bytes.html"><span class="token function">nextBytes</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">bytes<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte-array/index.html">ByteArray</a></span></span><span class="token punctuation">)</span></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="next-bytes.html"><span class="token function">nextBytes</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">bytes<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte-array/index.html">ByteArray</a><span class="token punctuation">, </span></span><span class="parameter ">start<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter ">len<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Generates <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte/index.html">Byte</a> values and places them into a user-supplied array.</p></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1150492216%2FFunctions%2F-541099023" anchor-label="nextDouble" id="1150492216%2FFunctions%2F-541099023" data-filterable-set=":kmath-stat:dokkaHtmlPartial/jvmMain"></a>
+          <div class="table-row" data-filterable-current=":kmath-stat:dokkaHtmlPartial/jvmMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/jvmMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="next-double.html"><span>next</span><wbr><span><span>Double</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1150492216%2FFunctions%2F-541099023"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":kmath-stat:dokkaHtmlPartial/jvmMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/jvmMain" data-active="" data-toggle=":kmath-stat:dokkaHtmlPartial/jvmMain">jvm</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/jvmMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="next-double.html"><span class="token function">nextDouble</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a></div><div class="brief "><p class="paragraph">Generates a <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a> value between 0 and 1.</p></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1379659211%2FFunctions%2F-541099023" anchor-label="nextFloat" id="-1379659211%2FFunctions%2F-541099023" data-filterable-set=":kmath-stat:dokkaHtmlPartial/jvmMain"></a>
+          <div class="table-row" data-filterable-current=":kmath-stat:dokkaHtmlPartial/jvmMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/jvmMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="next-float.html"><span>next</span><wbr><span><span>Float</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1379659211%2FFunctions%2F-541099023"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":kmath-stat:dokkaHtmlPartial/jvmMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/jvmMain" data-active="" data-toggle=":kmath-stat:dokkaHtmlPartial/jvmMain">jvm</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/jvmMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="next-float.html"><span class="token function">nextFloat</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-float/index.html">Float</a></div><div class="brief "><p class="paragraph">Generates a <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-float/index.html">Float</a> value between 0 and 1.</p></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-327825130%2FFunctions%2F-541099023" anchor-label="nextInt" id="-327825130%2FFunctions%2F-541099023" data-filterable-set=":kmath-stat:dokkaHtmlPartial/jvmMain"></a>
+          <div class="table-row" data-filterable-current=":kmath-stat:dokkaHtmlPartial/jvmMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/jvmMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="next-int.html"><span>next</span><wbr><span><span>Int</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-327825130%2FFunctions%2F-541099023"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":kmath-stat:dokkaHtmlPartial/jvmMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/jvmMain" data-active="" data-toggle=":kmath-stat:dokkaHtmlPartial/jvmMain">jvm</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/jvmMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="next-int.html"><span class="token function">nextInt</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a></div><div class="brief "><p class="paragraph">Generates an <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a> value.</p></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="next-int.html"><span class="token function">nextInt</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">n<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a></div><div class="brief "><p class="paragraph">Generates an <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a> value between 0 (inclusive) and the specified value (exclusive).</p></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="306346893%2FFunctions%2F-541099023" anchor-label="nextLong" id="306346893%2FFunctions%2F-541099023" data-filterable-set=":kmath-stat:dokkaHtmlPartial/jvmMain"></a>
+          <div class="table-row" data-filterable-current=":kmath-stat:dokkaHtmlPartial/jvmMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/jvmMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="next-long.html"><span>next</span><wbr><span><span>Long</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="306346893%2FFunctions%2F-541099023"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":kmath-stat:dokkaHtmlPartial/jvmMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/jvmMain" data-active="" data-toggle=":kmath-stat:dokkaHtmlPartial/jvmMain">jvm</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/jvmMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="next-long.html"><span class="token function">nextLong</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html">Long</a></div><div class="brief "><p class="paragraph">Generates a <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html">Long</a> value.</p></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="next-long.html"><span class="token function">nextLong</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">n<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html">Long</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html">Long</a></div><div class="brief "><p class="paragraph">Generates a <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html">Long</a> value between 0 (inclusive) and the specified value (exclusive).</p></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="PROPERTY">
+        <h2 class="">Properties</h2>
+        <div class="table"><a data-name="-1603300917%2FProperties%2F-541099023" anchor-label="generator" id="-1603300917%2FProperties%2F-541099023" data-filterable-set=":kmath-stat:dokkaHtmlPartial/jvmMain"></a>
+          <div class="table-row" data-filterable-current=":kmath-stat:dokkaHtmlPartial/jvmMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/jvmMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="generator.html"><span><span>generator</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1603300917%2FProperties%2F-541099023"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":kmath-stat:dokkaHtmlPartial/jvmMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/jvmMain" data-active="" data-toggle=":kmath-stat:dokkaHtmlPartial/jvmMain">jvm</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/jvmMain"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="generator.html">generator</a><span class="token operator">: </span><a href="../../space.kscience.kmath.random/-random-generator/index.html#-384466395%2FMain%2F-541099023">RandomGenerator</a></div><div class="brief "><p class="paragraph">the underlying <a href="../../space.kscience.kmath.random/-random-generator/index.html#-384466395%2FMain%2F-541099023">RandomGenerator</a> object.</p></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-  
-</body></html>
-
+  </div>
+</div>
+      <div class="footer">
+        <span class="go-to-top-icon"><a href="#content" id="go-to-top-link"></a></span><span>© 2023 Copyright</span><span class="pull-right"><span>Generated by </span><a href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span>
+      </div>
+    </div>
+</div>
+</body>
+</html>
 

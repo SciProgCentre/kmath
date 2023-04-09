@@ -1,227 +1,258 @@
+<!doctype html>
 <html>
-  <head>
+<head>
     <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
     <title>space.kscience.kmath.commons.linear</title>
-</head><body><link href="../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../";</script>
-    <script type="text/javascript" src="../../scripts/sourceset_dependencies.js" async></script><link href="../../styles/style.css" rel="Stylesheet"><link href="../../styles/jetbrains-mono.css" rel="Stylesheet"><link href="../../styles/main.css" rel="Stylesheet"><link href="../../styles/prism.css" rel="Stylesheet"><link href="../../styles/logo-styles.css" rel="Stylesheet"><script type="text/javascript" src="../../scripts/clipboard.js" async></script><script type="text/javascript" src="../../scripts/navigation-loader.js" async></script><script type="text/javascript" src="../../scripts/platform-content-handler.js" async></script><script type="text/javascript" src="../../scripts/main.js" defer></script><script type="text/javascript" src="../../scripts/prism.js" async></script><script>const storage = localStorage.getItem("dokka-dark-mode")
-const savedDarkMode = storage ? JSON.parse(storage) : false
-if(savedDarkMode === true){
-    document.getElementsByTagName("html")[0].classList.add("theme-dark")
-}</script>
-
-  
-    <div class="navigation-wrapper" id="navigation-wrapper">
-      <div id="leftToggler"><span class="icon-toggler"></span></div>
-      <div class="library-name"><a href="../../index.html"><span>kmath</span></a></div>
-      <div></div>
-      <div class="pull-right d-flex"><button id="theme-toggle-button"><span id="theme-toggle"></span></button>
-        <div id="searchBar"></div>
-      </div>
+<link href="../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../";</script>    <script>const storage = localStorage.getItem("dokka-dark-mode")
+    if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    } else {
+        const savedDarkMode = JSON.parse(storage)
+        if(savedDarkMode === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    }
+    </script>
+<script type="text/javascript" src="../../scripts/sourceset_dependencies.js" async></script>
+<link href="../../styles/style.css" rel="Stylesheet">
+<link href="../../styles/jetbrains-mono.css" rel="Stylesheet">
+<link href="../../styles/main.css" rel="Stylesheet">
+<link href="../../styles/prism.css" rel="Stylesheet">
+<link href="../../styles/logo-styles.css" rel="Stylesheet">
+<script type="text/javascript" src="../../scripts/clipboard.js" async></script>
+<script type="text/javascript" src="../../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../../scripts/main.js" defer></script>
+<script type="text/javascript" src="../../scripts/prism.js" async></script>
+<script type="text/javascript" src="../../scripts/symbol-parameters-wrapper_deferred.js" defer></script></head>
+<body>
+<div class="navigation-wrapper" id="navigation-wrapper">
+    <div id="leftToggler"><span class="icon-toggler"></span></div>
+    <div class="library-name">
+<a href="../../index.html">
+<span>kmath</span>            </a>    </div>
+    <div>0.3.1-dev-RC
     </div>
-    <div id="container">
-      <div id="leftColumn">
+    <div class="pull-right d-flex">
+        <div class="filter-section" id="filter-section">
+                <button class="platform-tag platform-selector jvm-like" data-active="" data-filter=":kmath-commons:dokkaHtmlPartial/main">jvm</button>
+        </div>
+        <button id="theme-toggle-button"><span id="theme-toggle"></span></button>
+        <div id="searchBar"></div>
+    </div>
+</div>
+<div id="container">
+    <div id="leftColumn">
         <div id="sideMenu"></div>
-      </div>
-      <div id="main">
-        <div class="main-content" id="content" pageids="kmath-commons::space.kscience.kmath.commons.linear////PointingToDeclaration//-755866740">
-          <div class="breadcrumbs"><a href="../index.html">kmath-commons</a>/<a href="index.html">space.kscience.kmath.commons.linear</a></div>
-          <div class="cover ">
-            <h1 class="cover"><span><span>Package</span></span> <span>space.</span><wbr><span>kscience.</span><wbr><span>kmath.</span><wbr><span>commons.</span><wbr><span>linear</span></h1>
-          </div>
-          <div class="tabbedcontent">
-            <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="Types">Types</button><button class="section-tab" data-togglable="Functions">Functions</button></div>
-            <div class="tabs-section-body">
-              <h2 class="">Types</h2>
-              <div class="table" data-togglable="Types"><a data-name="666538446%2FClasslikes%2F-755866740" anchor-label="CMDecomposition" id="666538446%2FClasslikes%2F-755866740" data-filterable-set=":kmath-commons:dokkaHtmlPartial/main"></a>
-                <div class="table-row" data-filterable-current=":kmath-commons:dokkaHtmlPartial/main" data-filterable-set=":kmath-commons:dokkaHtmlPartial/main">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="-c-m-decomposition/index.html"><span><span>CMDecomposition</span></span></a></div>
+    </div>
+    <div id="main">
+<div class="main-content" data-page-type="package" id="content" pageids="kmath-commons::space.kscience.kmath.commons.linear////PointingToDeclaration//-755866740">
+  <div class="breadcrumbs"><a href="../index.html">kmath-commons</a><span class="delimiter">/</span><span class="current">space.kscience.kmath.commons.linear</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span><span>Package-level</span></span> <span><span>declarations</span></span></h1>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="TYPE">Types</button><button class="section-tab" data-togglable="FUNCTION,EXTENSION_FUNCTION">Functions</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="TYPE">
+        <h2 class="">Types</h2>
+        <div class="table"><a data-name="666538446%2FClasslikes%2F-755866740" anchor-label="CMDecomposition" id="666538446%2FClasslikes%2F-755866740" data-filterable-set=":kmath-commons:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":kmath-commons:dokkaHtmlPartial/main" data-filterable-set=":kmath-commons:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-c-m-decomposition/index.html"><span><span>CMDecomposition</span></span></a></div>
 <span class="anchor-wrapper"><span class="anchor-icon" pointing-to="666538446%2FClasslikes%2F-755866740"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-commons:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">enum </span><a href="-c-m-decomposition/index.html">CMDecomposition</a> : <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-enum/index.html">Enum</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="-c-m-decomposition/index.html">CMDecomposition</a><span class="token operator">&gt; </span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="-923049994%2FClasslikes%2F-755866740" anchor-label="CMLinearSpace" id="-923049994%2FClasslikes%2F-755866740" data-filterable-set=":kmath-commons:dokkaHtmlPartial/main"></a>
-                <div class="table-row" data-filterable-current=":kmath-commons:dokkaHtmlPartial/main" data-filterable-set=":kmath-commons:dokkaHtmlPartial/main">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="-c-m-linear-space/index.html"><span>CMLinear</span><wbr><span><span>Space</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-923049994%2FClasslikes%2F-755866740"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-commons:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">object </span><a href="-c-m-linear-space/index.html">CMLinearSpace</a> : <a href="../../kmath-core/space.kscience.kmath.linear/-linear-space/index.html">LinearSpace</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="../../kmath-core/space.kscience.kmath.operations/-double-field/index.html">DoubleField</a><span class="token operator">&gt; </span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="-1115712950%2FClasslikes%2F-755866740" anchor-label="CMMatrix" id="-1115712950%2FClasslikes%2F-755866740" data-filterable-set=":kmath-commons:dokkaHtmlPartial/main"></a>
-                <div class="table-row" data-filterable-current=":kmath-commons:dokkaHtmlPartial/main" data-filterable-set=":kmath-commons:dokkaHtmlPartial/main">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="-c-m-matrix/index.html"><span><span>CMMatrix</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1115712950%2FClasslikes%2F-755866740"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-commons:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-c-m-matrix/index.html">CMMatrix</a><span class="token punctuation">(</span>origin<span class="token operator">: </span><a href="https://commons.apache.org/proper/commons-math/javadocs/api-3.6.1/org/apache/commons/math3/linear/RealMatrix.html">RealMatrix</a><span class="token punctuation">)</span> : <a href="../../kmath-core/space.kscience.kmath.nd/-structure2-d/index.html">Structure2D</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token operator">&gt; </span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="-326918392%2FClasslikes%2F-755866740" anchor-label="CMVector" id="-326918392%2FClasslikes%2F-755866740" data-filterable-set=":kmath-commons:dokkaHtmlPartial/main"></a>
-                <div class="table-row" data-filterable-current=":kmath-commons:dokkaHtmlPartial/main" data-filterable-set=":kmath-commons:dokkaHtmlPartial/main">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="-c-m-vector/index.html"><span><span>CMVector</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-326918392%2FClasslikes%2F-755866740"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-commons:dokkaHtmlPartial/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation">@</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.jvm/-jvm-inline/index.html"><span class="token annotation">JvmInline</span></a></div></div><span class="token keyword">value </span><span class="token keyword">class </span><a href="-c-m-vector/index.html">CMVector</a><span class="token punctuation">(</span>origin<span class="token operator">: </span><a href="https://commons.apache.org/proper/commons-math/javadocs/api-3.6.1/org/apache/commons/math3/linear/RealVector.html">RealVector</a><span class="token punctuation">)</span> : <a href="../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token operator">&gt; </span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-                      </div>
-                    </div>
-                  </div>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-commons:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">enum </span><a href="-c-m-decomposition/index.html">CMDecomposition</a> : <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-enum/index.html">Enum</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="-c-m-decomposition/index.html">CMDecomposition</a><span class="token operator">&gt; </span></div></div></div>
                 </div>
               </div>
-              <h2 class="">Functions</h2>
-              <div class="table" data-togglable="Functions"><a data-name="388776583%2FFunctions%2F-755866740" anchor-label="dot" id="388776583%2FFunctions%2F-755866740" data-filterable-set=":kmath-commons:dokkaHtmlPartial/main"></a>
-                <div class="table-row" data-filterable-current=":kmath-commons:dokkaHtmlPartial/main" data-filterable-set=":kmath-commons:dokkaHtmlPartial/main">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="dot.html"><span><span>dot</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="388776583%2FFunctions%2F-755866740"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-commons:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">infix </span><span class="token keyword">fun </span><a href="-c-m-matrix/index.html">CMMatrix</a><span class="token punctuation">.</span><a href="dot.html"><span class="token function">dot</span></a><span class="token punctuation">(</span>other<span class="token operator">: </span><a href="-c-m-matrix/index.html">CMMatrix</a><span class="token punctuation">)</span><span class="token operator">: </span><a href="-c-m-matrix/index.html">CMMatrix</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-                      </div>
-                    </div>
-                  </div>
+            </div>
+          </div>
+<a data-name="-923049994%2FClasslikes%2F-755866740" anchor-label="CMLinearSpace" id="-923049994%2FClasslikes%2F-755866740" data-filterable-set=":kmath-commons:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":kmath-commons:dokkaHtmlPartial/main" data-filterable-set=":kmath-commons:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-c-m-linear-space/index.html"><span>CMLinear</span><wbr><span><span>Space</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-923049994%2FClasslikes%2F-755866740"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-commons:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">object </span><a href="-c-m-linear-space/index.html">CMLinearSpace</a> : <a href="../../kmath-core/space.kscience.kmath.linear/-linear-space/index.html">LinearSpace</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="../../kmath-core/space.kscience.kmath.operations/-double-field/index.html">DoubleField</a><span class="token operator">&gt; </span></div></div></div>
                 </div>
-<a data-name="-1165923854%2FFunctions%2F-755866740" anchor-label="inverse" id="-1165923854%2FFunctions%2F-755866740" data-filterable-set=":kmath-commons:dokkaHtmlPartial/main"></a>
-                <div class="table-row" data-filterable-current=":kmath-commons:dokkaHtmlPartial/main" data-filterable-set=":kmath-commons:dokkaHtmlPartial/main">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="inverse.html"><span><span>inverse</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1165923854%2FFunctions%2F-755866740"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-commons:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="-c-m-linear-space/index.html">CMLinearSpace</a><span class="token punctuation">.</span><a href="inverse.html"><span class="token function">inverse</span></a><span class="token punctuation">(</span>a<span class="token operator">: </span><a href="../../kmath-core/space.kscience.kmath.linear/-matrix/index.html">Matrix</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token operator">&gt;</span><span class="token punctuation">, </span>decomposition<span class="token operator">: </span><a href="-c-m-decomposition/index.html">CMDecomposition</a><span class="token operator"> = </span>CMDecomposition.LUP<span class="token punctuation">)</span><span class="token operator">: </span><a href="-c-m-matrix/index.html">CMMatrix</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-                      </div>
-                    </div>
-                  </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1115712950%2FClasslikes%2F-755866740" anchor-label="CMMatrix" id="-1115712950%2FClasslikes%2F-755866740" data-filterable-set=":kmath-commons:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":kmath-commons:dokkaHtmlPartial/main" data-filterable-set=":kmath-commons:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-c-m-matrix/index.html"><span><span>CMMatrix</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1115712950%2FClasslikes%2F-755866740"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-commons:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-c-m-matrix/index.html">CMMatrix</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>origin<span class="token operator">: </span><a href="https://commons.apache.org/proper/commons-math/javadocs/api-3.6.1/org/apache/commons/math3/linear/RealMatrix.html">RealMatrix</a></span></span><span class="token punctuation">)</span> : <a href="../../kmath-core/space.kscience.kmath.nd/-structure2-d/index.html">Structure2D</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token operator">&gt; </span></div></div></div>
                 </div>
-<a data-name="1671028514%2FFunctions%2F-755866740" anchor-label="lupSolver" id="1671028514%2FFunctions%2F-755866740" data-filterable-set=":kmath-commons:dokkaHtmlPartial/main"></a>
-                <div class="table-row" data-filterable-current=":kmath-commons:dokkaHtmlPartial/main" data-filterable-set=":kmath-commons:dokkaHtmlPartial/main">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="lup-solver.html"><span>lup</span><wbr><span><span>Solver</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1671028514%2FFunctions%2F-755866740"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-commons:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="-c-m-linear-space/index.html">CMLinearSpace</a><span class="token punctuation">.</span><a href="lup-solver.html"><span class="token function">lupSolver</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../kmath-core/space.kscience.kmath.linear/-linear-solver/index.html">LinearSolver</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token operator">&gt;</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="-101268096%2FFunctions%2F-755866740" anchor-label="minus" id="-101268096%2FFunctions%2F-755866740" data-filterable-set=":kmath-commons:dokkaHtmlPartial/main"></a>
-                <div class="table-row" data-filterable-current=":kmath-commons:dokkaHtmlPartial/main" data-filterable-set=":kmath-commons:dokkaHtmlPartial/main">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="minus.html"><span><span>minus</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-101268096%2FFunctions%2F-755866740"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-commons:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">operator </span><span class="token keyword">fun </span><a href="-c-m-matrix/index.html">CMMatrix</a><span class="token punctuation">.</span><a href="minus.html"><span class="token function">minus</span></a><span class="token punctuation">(</span>other<span class="token operator">: </span><a href="-c-m-matrix/index.html">CMMatrix</a><span class="token punctuation">)</span><span class="token operator">: </span><a href="-c-m-matrix/index.html">CMMatrix</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="1241858640%2FFunctions%2F-755866740" anchor-label="plus" id="1241858640%2FFunctions%2F-755866740" data-filterable-set=":kmath-commons:dokkaHtmlPartial/main"></a>
-                <div class="table-row" data-filterable-current=":kmath-commons:dokkaHtmlPartial/main" data-filterable-set=":kmath-commons:dokkaHtmlPartial/main">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="plus.html"><span><span>plus</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1241858640%2FFunctions%2F-755866740"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-commons:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">operator </span><span class="token keyword">fun </span><a href="-c-m-matrix/index.html">CMMatrix</a><span class="token punctuation">.</span><a href="plus.html"><span class="token function">plus</span></a><span class="token punctuation">(</span>other<span class="token operator">: </span><a href="-c-m-matrix/index.html">CMMatrix</a><span class="token punctuation">)</span><span class="token operator">: </span><a href="-c-m-matrix/index.html">CMMatrix</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="-1539561221%2FFunctions%2F-755866740" anchor-label="solve" id="-1539561221%2FFunctions%2F-755866740" data-filterable-set=":kmath-commons:dokkaHtmlPartial/main"></a>
-                <div class="table-row" data-filterable-current=":kmath-commons:dokkaHtmlPartial/main" data-filterable-set=":kmath-commons:dokkaHtmlPartial/main">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="solve.html"><span><span>solve</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1539561221%2FFunctions%2F-755866740"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-commons:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="-c-m-linear-space/index.html">CMLinearSpace</a><span class="token punctuation">.</span><a href="solve.html"><span class="token function">solve</span></a><span class="token punctuation">(</span>a<span class="token operator">: </span><a href="../../kmath-core/space.kscience.kmath.linear/-matrix/index.html">Matrix</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token operator">&gt;</span><span class="token punctuation">, </span>b<span class="token operator">: </span><a href="../../kmath-core/space.kscience.kmath.linear/-matrix/index.html">Matrix</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token operator">&gt;</span><span class="token punctuation">, </span>decomposition<span class="token operator">: </span><a href="-c-m-decomposition/index.html">CMDecomposition</a><span class="token operator"> = </span>CMDecomposition.LUP<span class="token punctuation">)</span><span class="token operator">: </span><a href="-c-m-matrix/index.html">CMMatrix</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="-c-m-linear-space/index.html">CMLinearSpace</a><span class="token punctuation">.</span><a href="solve.html"><span class="token function">solve</span></a><span class="token punctuation">(</span>a<span class="token operator">: </span><a href="../../kmath-core/space.kscience.kmath.linear/-matrix/index.html">Matrix</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token operator">&gt;</span><span class="token punctuation">, </span>b<span class="token operator">: </span><a href="../../kmath-core/space.kscience.kmath.linear/-point/index.html">Point</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token operator">&gt;</span><span class="token punctuation">, </span>decomposition<span class="token operator">: </span><a href="-c-m-decomposition/index.html">CMDecomposition</a><span class="token operator"> = </span>CMDecomposition.LUP<span class="token punctuation">)</span><span class="token operator">: </span><a href="-c-m-vector/index.html">CMVector</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="438671997%2FFunctions%2F-755866740" anchor-label="solver" id="438671997%2FFunctions%2F-755866740" data-filterable-set=":kmath-commons:dokkaHtmlPartial/main"></a>
-                <div class="table-row" data-filterable-current=":kmath-commons:dokkaHtmlPartial/main" data-filterable-set=":kmath-commons:dokkaHtmlPartial/main">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="solver.html"><span><span>solver</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="438671997%2FFunctions%2F-755866740"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-commons:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="-c-m-linear-space/index.html">CMLinearSpace</a><span class="token punctuation">.</span><a href="solver.html"><span class="token function">solver</span></a><span class="token punctuation">(</span>decomposition<span class="token operator">: </span><a href="-c-m-decomposition/index.html">CMDecomposition</a><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../kmath-core/space.kscience.kmath.linear/-linear-solver/index.html">LinearSolver</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token operator">&gt;</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="1599539878%2FFunctions%2F-755866740" anchor-label="toPoint" id="1599539878%2FFunctions%2F-755866740" data-filterable-set=":kmath-commons:dokkaHtmlPartial/main"></a>
-                <div class="table-row" data-filterable-current=":kmath-commons:dokkaHtmlPartial/main" data-filterable-set=":kmath-commons:dokkaHtmlPartial/main">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="to-point.html"><span>to</span><wbr><span><span>Point</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1599539878%2FFunctions%2F-755866740"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-commons:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="https://commons.apache.org/proper/commons-math/javadocs/api-3.6.1/org/apache/commons/math3/linear/RealVector.html">RealVector</a><span class="token punctuation">.</span><a href="to-point.html"><span class="token function">toPoint</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-c-m-vector/index.html">CMVector</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-                      </div>
-                    </div>
-                  </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-326918392%2FClasslikes%2F-755866740" anchor-label="CMVector" id="-326918392%2FClasslikes%2F-755866740" data-filterable-set=":kmath-commons:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":kmath-commons:dokkaHtmlPartial/main" data-filterable-set=":kmath-commons:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-c-m-vector/index.html"><span><span>CMVector</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-326918392%2FClasslikes%2F-755866740"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-commons:dokkaHtmlPartial/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.jvm/-jvm-inline/index.html"><span class="token annotation builtin">JvmInline</span></a></div></div><span class="token keyword">value </span><span class="token keyword">class </span><a href="-c-m-vector/index.html">CMVector</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>origin<span class="token operator">: </span><a href="https://commons.apache.org/proper/commons-math/javadocs/api-3.6.1/org/apache/commons/math3/linear/RealVector.html">RealVector</a></span></span><span class="token punctuation">)</span> : <a href="../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token operator">&gt; </span></div></div></div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <div class="footer"><span class="go-to-top-icon"><a href="#content" id="go-to-top-link"></a></span><span>© 2022 Copyright</span><span class="pull-right"><span>Generated by </span><a href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span></div>
+      </div>
+      <div data-togglable="EXTENSION_FUNCTION">
+        <h2 class="">Functions</h2>
+        <div class="table"><a data-name="388776583%2FFunctions%2F-755866740" anchor-label="dot" id="388776583%2FFunctions%2F-755866740" data-filterable-set=":kmath-commons:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-commons:dokkaHtmlPartial/main" data-filterable-set=":kmath-commons:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="dot.html"><span><span>dot</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="388776583%2FFunctions%2F-755866740"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-commons:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">infix </span><span class="token keyword">fun </span><a href="-c-m-matrix/index.html">CMMatrix</a><span class="token punctuation">.</span><a href="dot.html"><span class="token function">dot</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">other<span class="token operator">: </span><a href="-c-m-matrix/index.html">CMMatrix</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-c-m-matrix/index.html">CMMatrix</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1165923854%2FFunctions%2F-755866740" anchor-label="inverse" id="-1165923854%2FFunctions%2F-755866740" data-filterable-set=":kmath-commons:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-commons:dokkaHtmlPartial/main" data-filterable-set=":kmath-commons:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="inverse.html"><span><span>inverse</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1165923854%2FFunctions%2F-755866740"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-commons:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="-c-m-linear-space/index.html">CMLinearSpace</a><span class="token punctuation">.</span><a href="inverse.html"><span class="token function">inverse</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">a<span class="token operator">: </span><a href="../../kmath-core/space.kscience.kmath.linear/-matrix/index.html">Matrix</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">decomposition<span class="token operator">: </span><a href="-c-m-decomposition/index.html">CMDecomposition</a><span class="token operator"> = </span>CMDecomposition.LUP</span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-c-m-matrix/index.html">CMMatrix</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1671028514%2FFunctions%2F-755866740" anchor-label="lupSolver" id="1671028514%2FFunctions%2F-755866740" data-filterable-set=":kmath-commons:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-commons:dokkaHtmlPartial/main" data-filterable-set=":kmath-commons:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="lup-solver.html"><span>lup</span><wbr><span><span>Solver</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1671028514%2FFunctions%2F-755866740"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-commons:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="-c-m-linear-space/index.html">CMLinearSpace</a><span class="token punctuation">.</span><a href="lup-solver.html"><span class="token function">lupSolver</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../kmath-core/space.kscience.kmath.linear/-linear-solver/index.html">LinearSolver</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-101268096%2FFunctions%2F-755866740" anchor-label="minus" id="-101268096%2FFunctions%2F-755866740" data-filterable-set=":kmath-commons:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-commons:dokkaHtmlPartial/main" data-filterable-set=":kmath-commons:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="minus.html"><span><span>minus</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-101268096%2FFunctions%2F-755866740"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-commons:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">operator </span><span class="token keyword">fun </span><a href="-c-m-matrix/index.html">CMMatrix</a><span class="token punctuation">.</span><a href="minus.html"><span class="token function">minus</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">other<span class="token operator">: </span><a href="-c-m-matrix/index.html">CMMatrix</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-c-m-matrix/index.html">CMMatrix</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1241858640%2FFunctions%2F-755866740" anchor-label="plus" id="1241858640%2FFunctions%2F-755866740" data-filterable-set=":kmath-commons:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-commons:dokkaHtmlPartial/main" data-filterable-set=":kmath-commons:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="plus.html"><span><span>plus</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1241858640%2FFunctions%2F-755866740"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-commons:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">operator </span><span class="token keyword">fun </span><a href="-c-m-matrix/index.html">CMMatrix</a><span class="token punctuation">.</span><a href="plus.html"><span class="token function">plus</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">other<span class="token operator">: </span><a href="-c-m-matrix/index.html">CMMatrix</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-c-m-matrix/index.html">CMMatrix</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1539561221%2FFunctions%2F-755866740" anchor-label="solve" id="-1539561221%2FFunctions%2F-755866740" data-filterable-set=":kmath-commons:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-commons:dokkaHtmlPartial/main" data-filterable-set=":kmath-commons:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="solve.html"><span><span>solve</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1539561221%2FFunctions%2F-755866740"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-commons:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="-c-m-linear-space/index.html">CMLinearSpace</a><span class="token punctuation">.</span><a href="solve.html"><span class="token function">solve</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">a<span class="token operator">: </span><a href="../../kmath-core/space.kscience.kmath.linear/-matrix/index.html">Matrix</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">b<span class="token operator">: </span><a href="../../kmath-core/space.kscience.kmath.linear/-matrix/index.html">Matrix</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">decomposition<span class="token operator">: </span><a href="-c-m-decomposition/index.html">CMDecomposition</a><span class="token operator"> = </span>CMDecomposition.LUP</span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-c-m-matrix/index.html">CMMatrix</a></div><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="-c-m-linear-space/index.html">CMLinearSpace</a><span class="token punctuation">.</span><a href="solve.html"><span class="token function">solve</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">a<span class="token operator">: </span><a href="../../kmath-core/space.kscience.kmath.linear/-matrix/index.html">Matrix</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">b<span class="token operator">: </span><a href="../../kmath-core/space.kscience.kmath.linear/-point/index.html">Point</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">decomposition<span class="token operator">: </span><a href="-c-m-decomposition/index.html">CMDecomposition</a><span class="token operator"> = </span>CMDecomposition.LUP</span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-c-m-vector/index.html">CMVector</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="438671997%2FFunctions%2F-755866740" anchor-label="solver" id="438671997%2FFunctions%2F-755866740" data-filterable-set=":kmath-commons:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-commons:dokkaHtmlPartial/main" data-filterable-set=":kmath-commons:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="solver.html"><span><span>solver</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="438671997%2FFunctions%2F-755866740"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-commons:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="-c-m-linear-space/index.html">CMLinearSpace</a><span class="token punctuation">.</span><a href="solver.html"><span class="token function">solver</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">decomposition<span class="token operator">: </span><a href="-c-m-decomposition/index.html">CMDecomposition</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../kmath-core/space.kscience.kmath.linear/-linear-solver/index.html">LinearSolver</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1599539878%2FFunctions%2F-755866740" anchor-label="toPoint" id="1599539878%2FFunctions%2F-755866740" data-filterable-set=":kmath-commons:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-commons:dokkaHtmlPartial/main" data-filterable-set=":kmath-commons:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="to-point.html"><span>to</span><wbr><span><span>Point</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1599539878%2FFunctions%2F-755866740"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-commons:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="https://commons.apache.org/proper/commons-math/javadocs/api-3.6.1/org/apache/commons/math3/linear/RealVector.html">RealVector</a><span class="token punctuation">.</span><a href="to-point.html"><span class="token function">toPoint</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-c-m-vector/index.html">CMVector</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-  
-</body></html>
-
+  </div>
+</div>
+      <div class="footer">
+        <span class="go-to-top-icon"><a href="#content" id="go-to-top-link"></a></span><span>© 2023 Copyright</span><span class="pull-right"><span>Generated by </span><a href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span>
+      </div>
+    </div>
+</div>
+</body>
+</html>
 

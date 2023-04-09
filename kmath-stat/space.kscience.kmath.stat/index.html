@@ -1,646 +1,468 @@
+<!doctype html>
 <html>
-  <head>
+<head>
     <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
     <title>space.kscience.kmath.stat</title>
-</head><body><link href="../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../";</script>
-    <script type="text/javascript" src="../../scripts/sourceset_dependencies.js" async></script><link href="../../styles/style.css" rel="Stylesheet"><link href="../../styles/jetbrains-mono.css" rel="Stylesheet"><link href="../../styles/main.css" rel="Stylesheet"><link href="../../styles/prism.css" rel="Stylesheet"><link href="../../styles/logo-styles.css" rel="Stylesheet"><script type="text/javascript" src="../../scripts/clipboard.js" async></script><script type="text/javascript" src="../../scripts/navigation-loader.js" async></script><script type="text/javascript" src="../../scripts/platform-content-handler.js" async></script><script type="text/javascript" src="../../scripts/main.js" defer></script><script type="text/javascript" src="../../scripts/prism.js" async></script><script>const storage = localStorage.getItem("dokka-dark-mode")
-const savedDarkMode = storage ? JSON.parse(storage) : false
-if(savedDarkMode === true){
-    document.getElementsByTagName("html")[0].classList.add("theme-dark")
-}</script>
-
-  
-    <div class="navigation-wrapper" id="navigation-wrapper">
-      <div id="leftToggler"><span class="icon-toggler"></span></div>
-      <div class="library-name"><a href="../../index.html"><span>kmath</span></a></div>
-      <div></div>
-      <div class="pull-right d-flex">
-        <div class="filter-section" id="filter-section"><button class="platform-tag platform-selector common-like" data-active="" data-filter=":kmath-stat:dokkaHtmlPartial/commonMain">common</button><button class="platform-tag platform-selector jvm-like" data-active="" data-filter=":kmath-stat:dokkaHtmlPartial/jvmMain">jvm</button></div>
-<button id="theme-toggle-button"><span id="theme-toggle"></span></button>
-        <div id="searchBar"></div>
-      </div>
+<link href="../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../";</script>    <script>const storage = localStorage.getItem("dokka-dark-mode")
+    if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    } else {
+        const savedDarkMode = JSON.parse(storage)
+        if(savedDarkMode === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    }
+    </script>
+<script type="text/javascript" src="../../scripts/sourceset_dependencies.js" async></script>
+<link href="../../styles/style.css" rel="Stylesheet">
+<link href="../../styles/jetbrains-mono.css" rel="Stylesheet">
+<link href="../../styles/main.css" rel="Stylesheet">
+<link href="../../styles/prism.css" rel="Stylesheet">
+<link href="../../styles/logo-styles.css" rel="Stylesheet">
+<script type="text/javascript" src="../../scripts/clipboard.js" async></script>
+<script type="text/javascript" src="../../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../../scripts/main.js" defer></script>
+<script type="text/javascript" src="../../scripts/prism.js" async></script>
+<script type="text/javascript" src="../../scripts/symbol-parameters-wrapper_deferred.js" defer></script></head>
+<body>
+<div class="navigation-wrapper" id="navigation-wrapper">
+    <div id="leftToggler"><span class="icon-toggler"></span></div>
+    <div class="library-name">
+<a href="../../index.html">
+<span>kmath</span>            </a>    </div>
+    <div>0.3.1-dev-RC
     </div>
-    <div id="container">
-      <div id="leftColumn">
+    <div class="pull-right d-flex">
+        <div class="filter-section" id="filter-section">
+                <button class="platform-tag platform-selector common-like" data-active="" data-filter=":kmath-stat:dokkaHtmlPartial/commonMain">common</button>
+                <button class="platform-tag platform-selector jvm-like" data-active="" data-filter=":kmath-stat:dokkaHtmlPartial/jvmMain">jvm</button>
+        </div>
+        <button id="theme-toggle-button"><span id="theme-toggle"></span></button>
+        <div id="searchBar"></div>
+    </div>
+</div>
+<div id="container">
+    <div id="leftColumn">
         <div id="sideMenu"></div>
-      </div>
-      <div id="main">
-        <div class="main-content" id="content" pageids="kmath-stat::space.kscience.kmath.stat////PointingToDeclaration//-1564890614">
-          <div class="breadcrumbs"><a href="../index.html">kmath-stat</a>/<a href="index.html">space.kscience.kmath.stat</a></div>
-          <div class="cover ">
-            <h1 class="cover"><span><span>Package</span></span> <span>space.</span><wbr><span>kscience.</span><wbr><span>kmath.</span><wbr><span>stat</span></h1>
-          </div>
-          <div class="tabbedcontent">
-            <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="Types">Types</button><button class="section-tab" data-togglable="Functions">Functions</button><button class="section-tab" data-togglable="Properties">Properties</button></div>
-            <div class="tabs-section-body">
-              <h2 class="">Types</h2>
-              <div class="table" data-togglable="Types"><a data-name="-2082645628%2FClasslikes%2F-443365019" anchor-label="BasicSampler" id="-2082645628%2FClasslikes%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="-basic-sampler/index.html"><span>Basic</span><wbr><span><span>Sampler</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2082645628%2FClasslikes%2F-443365019"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
-                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":kmath-stat:dokkaHtmlPartial/commonMain">common</button></div>
-<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-basic-sampler/index.html">BasicSampler</a><span class="token operator">&lt;</span><span class="token keyword">out </span><a href="-basic-sampler/index.html">T</a><span class="token operator"> : </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a><span class="token operator">&gt;</span><span class="token punctuation">(</span>chainBuilder<span class="token operator">: </span><span class="token punctuation">(</span><span class="token keyword"></span><a href="-random-generator/index.html">RandomGenerator</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><span class="token keyword"></span><a href="../../kmath-coroutines/space.kscience.kmath.chains/-chain/index.html">Chain</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="-basic-sampler/index.html">T</a><span class="token operator">&gt;</span><span class="token punctuation">)</span> : <a href="-sampler/index.html">Sampler</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="-basic-sampler/index.html">T</a><span class="token operator">&gt; </span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Implements <a href="-sampler/index.html">Sampler</a> by delegating sampling to value of <a href="-basic-sampler/chain-builder.html">chainBuilder</a>.</p></div></div>                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="913819657%2FClasslikes%2F-443365019" anchor-label="BlockingStatistic" id="913819657%2FClasslikes%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="-blocking-statistic/index.html"><span>Blocking</span><wbr><span><span>Statistic</span></span></a></div>
+    </div>
+    <div id="main">
+<div class="main-content" data-page-type="package" id="content" pageids="kmath-stat::space.kscience.kmath.stat////PointingToDeclaration//-1564890614">
+  <div class="breadcrumbs"><a href="../index.html">kmath-stat</a><span class="delimiter">/</span><span class="current">space.kscience.kmath.stat</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span><span>Package-level</span></span> <span><span>declarations</span></span></h1>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="TYPE">Types</button><button class="section-tab" data-togglable="FUNCTION,EXTENSION_FUNCTION">Functions</button><button class="section-tab" data-togglable="PROPERTY,EXTENSION_PROPERTY">Properties</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="TYPE">
+        <h2 class="">Types</h2>
+        <div class="table"><a data-name="913819657%2FClasslikes%2F-443365019" anchor-label="BlockingStatistic" id="913819657%2FClasslikes%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-blocking-statistic/index.html"><span>Blocking</span><wbr><span><span>Statistic</span></span></a></div>
 <span class="anchor-wrapper"><span class="anchor-icon" pointing-to="913819657%2FClasslikes%2F-443365019"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
-                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":kmath-stat:dokkaHtmlPartial/commonMain">common</button></div>
-<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><span class="token keyword">interface </span><a href="-blocking-statistic/index.html">BlockingStatistic</a><span class="token operator">&lt;</span><span class="token keyword">in </span><a href="-blocking-statistic/index.html">T</a><span class="token punctuation">, </span><span class="token keyword">out </span><a href="-blocking-statistic/index.html">R</a><span class="token operator">&gt;</span> : <a href="-statistic/index.html">Statistic</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="-blocking-statistic/index.html">T</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="-blocking-statistic/index.html">R</a><span class="token operator">&gt; </span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">A statistic that is computed in a synchronous blocking mode</p></div></div>                        </div>
-                      </div>
-                    </div>
-                  </div>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><span class="token keyword">interface </span><a href="-blocking-statistic/index.html">BlockingStatistic</a><span class="token operator">&lt;</span><span class="token keyword">in </span><a href="-blocking-statistic/index.html">T</a><span class="token punctuation">, </span><span class="token keyword">out </span><a href="-blocking-statistic/index.html">R</a><span class="token operator">&gt;</span> : <a href="-statistic/index.html">Statistic</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="-blocking-statistic/index.html">T</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="-blocking-statistic/index.html">R</a><span class="token operator">&gt; </span></div><div class="brief "><p class="paragraph">A statistic that is computed in a synchronous blocking mode</p></div></div></div>
                 </div>
+              </div>
+            </div>
+          </div>
 <a data-name="1341580833%2FClasslikes%2F-443365019" anchor-label="ComposableStatistic" id="1341580833%2FClasslikes%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="-composable-statistic/index.html"><span>Composable</span><wbr><span><span>Statistic</span></span></a></div>
+          <div class="table-row" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-composable-statistic/index.html"><span>Composable</span><wbr><span><span>Statistic</span></span></a></div>
 <span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1341580833%2FClasslikes%2F-443365019"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
-                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":kmath-stat:dokkaHtmlPartial/commonMain">common</button></div>
-<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">interface </span><a href="-composable-statistic/index.html">ComposableStatistic</a><span class="token operator">&lt;</span><span class="token keyword">in </span><a href="-composable-statistic/index.html">T</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="-composable-statistic/index.html">I</a><span class="token punctuation">, </span><span class="token keyword">out </span><a href="-composable-statistic/index.html">R</a><span class="token operator">&gt;</span> : <a href="-statistic/index.html">Statistic</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="-composable-statistic/index.html">T</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="-composable-statistic/index.html">R</a><span class="token operator">&gt; </span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">A statistic tha could be computed separately on different blocks of data and then composed</p></div></div>                        </div>
-                      </div>
-                    </div>
-                  </div>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">interface </span><a href="-composable-statistic/index.html">ComposableStatistic</a><span class="token operator">&lt;</span><span class="token keyword">in </span><a href="-composable-statistic/index.html">T</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="-composable-statistic/index.html">I</a><span class="token punctuation">, </span><span class="token keyword">out </span><a href="-composable-statistic/index.html">R</a><span class="token operator">&gt;</span> : <a href="-statistic/index.html">Statistic</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="-composable-statistic/index.html">T</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="-composable-statistic/index.html">R</a><span class="token operator">&gt; </span></div><div class="brief "><p class="paragraph">A statistic tha could be computed separately on different blocks of data and then composed</p></div></div></div>
                 </div>
-<a data-name="914793920%2FClasslikes%2F-443365019" anchor-label="ConstantSampler" id="914793920%2FClasslikes%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="-constant-sampler/index.html"><span>Constant</span><wbr><span><span>Sampler</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="914793920%2FClasslikes%2F-443365019"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
-                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":kmath-stat:dokkaHtmlPartial/commonMain">common</button></div>
-<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-constant-sampler/index.html">ConstantSampler</a><span class="token operator">&lt;</span><span class="token keyword">out </span><a href="-constant-sampler/index.html">T</a><span class="token operator"> : </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a><span class="token operator">&gt;</span><span class="token punctuation">(</span>value<span class="token operator">: </span><a href="-constant-sampler/index.html">T</a><span class="token punctuation">)</span> : <a href="-sampler/index.html">Sampler</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="-constant-sampler/index.html">T</a><span class="token operator">&gt; </span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Implements <a href="-sampler/index.html">Sampler</a> by sampling only certain <a href="-constant-sampler/value.html">value</a>.</p></div></div>                        </div>
-                      </div>
-                    </div>
-                  </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1745630358%2FClasslikes%2F-443365019" anchor-label="KMComparisonResult" id="1745630358%2FClasslikes%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-k-m-comparison-result/index.html"><span>KMComparison</span><wbr><span><span>Result</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1745630358%2FClasslikes%2F-443365019"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="../../kmath-memory/space.kscience.kmath/-unstable-k-math-a-p-i/index.html"><span class="token annotation builtin">UnstableKMathAPI</span></a></div></div><span class="token keyword">data </span><span class="token keyword">class </span><a href="-k-m-comparison-result/index.html">KMComparisonResult</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="-k-m-comparison-result/index.html">T</a><span class="token operator"> : </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-comparable/index.html">Comparable</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="-k-m-comparison-result/index.html">T</a><span class="token operator">&gt;</span><span class="token operator">&gt;</span><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>n<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>m<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>value<span class="token operator">: </span><a href="-k-m-comparison-result/index.html">T</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Resulting value of kolmogorov-smirnov two-sample statistic</p></div></div></div>
                 </div>
-<a data-name="497695852%2FClasslikes%2F-443365019" anchor-label="DefaultGenerator" id="497695852%2FClasslikes%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="-default-generator/index.html"><span>Default</span><wbr><span><span>Generator</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="497695852%2FClasslikes%2F-443365019"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
-                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":kmath-stat:dokkaHtmlPartial/commonMain">common</button></div>
-<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-default-generator/index.html">DefaultGenerator</a><span class="token punctuation">(</span>random<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.random/-random/index.html">Random</a><span class="token punctuation">)</span> : <a href="-random-generator/index.html">RandomGenerator</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Implements <a href="-random-generator/index.html">RandomGenerator</a> by delegating all operations to <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.random/-random/index.html">Random</a>.</p></div></div>                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="-575903930%2FClasslikes%2F-443365019" anchor-label="MCScope" id="-575903930%2FClasslikes%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="-m-c-scope/index.html"><span><span>MCScope</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-575903930%2FClasslikes%2F-443365019"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
-                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":kmath-stat:dokkaHtmlPartial/commonMain">common</button></div>
-<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-m-c-scope/index.html">MCScope</a><span class="token punctuation">(</span>coroutineContext<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.coroutines/-coroutine-context/index.html">CoroutineContext</a><span class="token punctuation">, </span>random<span class="token operator">: </span><a href="-random-generator/index.html">RandomGenerator</a><span class="token punctuation">)</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">A scope for a Monte-Carlo computations or multi-coroutine random number generation. The scope preserves the order of random generator calls as long as all concurrency calls is done via <a href="launch.html">launch</a> and <a href="async.html">async</a> functions.</p></div></div>                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+              </div>
+            </div>
+          </div>
 <a data-name="2080768281%2FClasslikes%2F-443365019" anchor-label="Mean" id="2080768281%2FClasslikes%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="-mean/index.html"><span><span>Mean</span></span></a></div>
+          <div class="table-row" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-mean/index.html"><span><span>Mean</span></span></a></div>
 <span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2080768281%2FClasslikes%2F-443365019"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
-                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":kmath-stat:dokkaHtmlPartial/commonMain">common</button></div>
-<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-mean/index.html">Mean</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="-mean/index.html">T</a><span class="token operator">&gt;</span><span class="token punctuation">(</span>group<span class="token operator">: </span><a href="../../kmath-core/space.kscience.kmath.operations/-ring/index.html">Ring</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="-mean/index.html">T</a><span class="token operator">&gt;</span><span class="token punctuation">, </span>division<span class="token operator">: </span><span class="token punctuation">(</span><span class="token keyword"></span><a href="-mean/index.html">T</a><span class="token punctuation">, </span><span class="token keyword"></span>count<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><span class="token keyword"></span><a href="-mean/index.html">T</a><span class="token punctuation">)</span> : <a href="-composable-statistic/index.html">ComposableStatistic</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="-mean/index.html">T</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-pair/index.html">Pair</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="-mean/index.html">T</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token operator">&gt;</span><span class="token punctuation">, </span><span class="token keyword"></span><a href="-mean/index.html">T</a><span class="token operator">&gt; </span>, <a href="-blocking-statistic/index.html">BlockingStatistic</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="-mean/index.html">T</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="-mean/index.html">T</a><span class="token operator">&gt; </span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Arithmetic mean</p></div></div>                        </div>
-                      </div>
-                    </div>
-                  </div>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-mean/index.html">Mean</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="-mean/index.html">T</a><span class="token operator">&gt;</span><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">group<span class="token operator">: </span><a href="../../kmath-core/space.kscience.kmath.operations/-ring/index.html">Ring</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="-mean/index.html">T</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">division<span class="token operator">: </span><span class="token punctuation">(</span><span class="token keyword"></span>sum<span class="token operator">: </span><a href="-mean/index.html">T</a><span class="token punctuation">, </span><span class="token keyword"></span>count<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><span class="token keyword"></span><a href="-mean/index.html">T</a></span></span><span class="token punctuation">)</span> : <a href="-composable-statistic/index.html">ComposableStatistic</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="-mean/index.html">T</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-pair/index.html">Pair</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="-mean/index.html">T</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token operator">&gt;</span><span class="token punctuation">, </span><span class="token keyword"></span><a href="-mean/index.html">T</a><span class="token operator">&gt; </span>, <a href="-blocking-statistic/index.html">BlockingStatistic</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="-mean/index.html">T</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="-mean/index.html">T</a><span class="token operator">&gt; </span></div><div class="brief "><p class="paragraph">Arithmetic mean</p></div></div></div>
                 </div>
+              </div>
+            </div>
+          </div>
 <a data-name="-1363509196%2FClasslikes%2F-443365019" anchor-label="Median" id="-1363509196%2FClasslikes%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="-median/index.html"><span><span>Median</span></span></a></div>
+          <div class="table-row" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-median/index.html"><span><span>Median</span></span></a></div>
 <span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1363509196%2FClasslikes%2F-443365019"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
-                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":kmath-stat:dokkaHtmlPartial/commonMain">common</button></div>
-<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-median/index.html">Median</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="-median/index.html">T</a><span class="token operator">&gt;</span><span class="token punctuation">(</span>comparator<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-comparator/index.html">Comparator</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="-median/index.html">T</a><span class="token operator">&gt;</span><span class="token punctuation">)</span> : <a href="-blocking-statistic/index.html">BlockingStatistic</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="-median/index.html">T</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="-median/index.html">T</a><span class="token operator">&gt; </span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Non-composable median</p></div></div>                        </div>
-                      </div>
-                    </div>
-                  </div>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-median/index.html">Median</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="-median/index.html">T</a><span class="token operator">&gt;</span><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">comparator<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-comparator/index.html">Comparator</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="-median/index.html">T</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span> : <a href="-blocking-statistic/index.html">BlockingStatistic</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="-median/index.html">T</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="-median/index.html">T</a><span class="token operator">&gt; </span></div><div class="brief "><p class="paragraph">Non-composable median</p></div></div></div>
                 </div>
-<a data-name="1608049798%2FClasslikes%2F-443365019" anchor-label="RandomChain" id="1608049798%2FClasslikes%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="-random-chain/index.html"><span>Random</span><wbr><span><span>Chain</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1608049798%2FClasslikes%2F-443365019"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
-                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":kmath-stat:dokkaHtmlPartial/commonMain">common</button></div>
-<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-random-chain/index.html">RandomChain</a><span class="token operator">&lt;</span><span class="token keyword">out </span><a href="-random-chain/index.html">R</a><span class="token operator">&gt;</span><span class="token punctuation">(</span>generator<span class="token operator">: </span><a href="-random-generator/index.html">RandomGenerator</a><span class="token punctuation">, </span>gen<span class="token operator">: </span><span class="token keyword">suspend </span><span class="token keyword"></span><a href="-random-generator/index.html">RandomGenerator</a><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><span class="token keyword"></span><a href="-random-chain/index.html">R</a><span class="token punctuation">)</span> : <a href="../../kmath-coroutines/space.kscience.kmath.chains/-chain/index.html">Chain</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="-random-chain/index.html">R</a><span class="token operator">&gt; </span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">A possibly stateful chain producing random values.</p></div></div>                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="368348596%2FClasslikes%2F-443365019" anchor-label="RandomGenerator" id="368348596%2FClasslikes%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="-random-generator/index.html"><span>Random</span><wbr><span><span>Generator</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="368348596%2FClasslikes%2F-443365019"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
-                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":kmath-stat:dokkaHtmlPartial/commonMain">common</button></div>
-<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">interface </span><a href="-random-generator/index.html">RandomGenerator</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">An interface that is implemented by random number generator algorithms.</p></div></div>                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+              </div>
+            </div>
+          </div>
 <a data-name="-882002493%2FClasslikes%2F-541099023" anchor-label="RandomGeneratorProvider" id="-882002493%2FClasslikes%2F-541099023" data-filterable-set=":kmath-stat:dokkaHtmlPartial/jvmMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-stat:dokkaHtmlPartial/jvmMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/jvmMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="-random-generator-provider/index.html"><span>Random</span><wbr><span>Generator</span><wbr><span><span>Provider</span></span></a></div>
+          <div class="table-row" data-filterable-current=":kmath-stat:dokkaHtmlPartial/jvmMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/jvmMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-random-generator-provider/index.html"><span>Random</span><wbr><span>Generator</span><wbr><span><span>Provider</span></span></a></div>
 <span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-882002493%2FClasslikes%2F-541099023"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
-                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark jvm-like" data-filterable-current=":kmath-stat:dokkaHtmlPartial/jvmMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/jvmMain" data-active="" data-toggle=":kmath-stat:dokkaHtmlPartial/jvmMain">jvm</button></div>
-<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/jvmMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-random-generator-provider/index.html">RandomGeneratorProvider</a><span class="token punctuation">(</span>generator<span class="token operator">: </span><a href="-random-generator/index.html#368348596%2FExtensions%2F-541099023">RandomGenerator</a><span class="token punctuation">)</span> : <span data-unresolved-link="org.apache.commons.rng/UniformRandomProvider///PointingToDeclaration/">UniformRandomProvider</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Implements <span data-unresolved-link="org.apache.commons.rng/UniformRandomProvider///PointingToDeclaration/">UniformRandomProvider</span> by delegating all operations to <a href="-random-generator/index.html#368348596%2FExtensions%2F-541099023">RandomGenerator</a>.</p></div></div>                        </div>
-                      </div>
-                    </div>
-                  </div>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":kmath-stat:dokkaHtmlPartial/jvmMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/jvmMain" data-active="" data-toggle=":kmath-stat:dokkaHtmlPartial/jvmMain">jvm</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/jvmMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-random-generator-provider/index.html">RandomGeneratorProvider</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>generator<span class="token operator">: </span><a href="../space.kscience.kmath.random/-random-generator/index.html#-384466395%2FMain%2F-541099023">RandomGenerator</a></span></span><span class="token punctuation">)</span> : <span data-unresolved-link="org.apache.commons.rng/UniformRandomProvider///PointingToDeclaration/">UniformRandomProvider</span></div><div class="brief "><p class="paragraph">Implements <span data-unresolved-link="org.apache.commons.rng/UniformRandomProvider///PointingToDeclaration/">UniformRandomProvider</span> by delegating all operations to <a href="../space.kscience.kmath.random/-random-generator/index.html#-384466395%2FMain%2F-541099023">RandomGenerator</a>.</p></div></div>                  </div>
                 </div>
+              </div>
+            </div>
+          </div>
 <a data-name="-2000086353%2FClasslikes%2F-541099023" anchor-label="RandomSourceGenerator" id="-2000086353%2FClasslikes%2F-541099023" data-filterable-set=":kmath-stat:dokkaHtmlPartial/jvmMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-stat:dokkaHtmlPartial/jvmMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/jvmMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="-random-source-generator/index.html"><span>Random</span><wbr><span>Source</span><wbr><span><span>Generator</span></span></a></div>
+          <div class="table-row" data-filterable-current=":kmath-stat:dokkaHtmlPartial/jvmMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/jvmMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-random-source-generator/index.html"><span>Random</span><wbr><span>Source</span><wbr><span><span>Generator</span></span></a></div>
 <span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2000086353%2FClasslikes%2F-541099023"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
-                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark jvm-like" data-filterable-current=":kmath-stat:dokkaHtmlPartial/jvmMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/jvmMain" data-active="" data-toggle=":kmath-stat:dokkaHtmlPartial/jvmMain">jvm</button></div>
-<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/jvmMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-random-source-generator/index.html">RandomSourceGenerator</a> : <a href="-random-generator/index.html#368348596%2FExtensions%2F-541099023">RandomGenerator</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Implements <a href="-random-generator/index.html#368348596%2FExtensions%2F-541099023">RandomGenerator</a> by delegating all operations to <span data-unresolved-link="org.apache.commons.rng.simple/RandomSource///PointingToDeclaration/">RandomSource</span>.</p></div></div>                        </div>
-                      </div>
-                    </div>
-                  </div>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":kmath-stat:dokkaHtmlPartial/jvmMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/jvmMain" data-active="" data-toggle=":kmath-stat:dokkaHtmlPartial/jvmMain">jvm</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/jvmMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-random-source-generator/index.html">RandomSourceGenerator</a> : <a href="../space.kscience.kmath.random/-random-generator/index.html#-384466395%2FMain%2F-541099023">RandomGenerator</a></div><div class="brief "><p class="paragraph">Implements <a href="../space.kscience.kmath.random/-random-generator/index.html#-384466395%2FMain%2F-541099023">RandomGenerator</a> by delegating all operations to <span data-unresolved-link="org.apache.commons.rng.simple/RandomSource///PointingToDeclaration/">RandomSource</span>.</p></div></div>                  </div>
                 </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1793276562%2FClasslikes%2F-443365019" anchor-label="Rank" id="1793276562%2FClasslikes%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-rank/index.html"><span><span>Rank</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1793276562%2FClasslikes%2F-443365019"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-rank/index.html">Rank</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="-rank/index.html">T</a><span class="token operator"> : </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-comparable/index.html">Comparable</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="-rank/index.html">T</a><span class="token operator">&gt;</span><span class="token operator">&gt;</span> : <a href="-blocking-statistic/index.html">BlockingStatistic</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="-rank/index.html">T</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int-array/index.html">IntArray</a><span class="token operator">&gt; </span></div><div class="brief "><p class="paragraph">Rank statistics</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
 <a data-name="2076692732%2FClasslikes%2F-443365019" anchor-label="Sampler" id="2076692732%2FClasslikes%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="-sampler/index.html"><span><span>Sampler</span></span></a></div>
+          <div class="table-row" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-sampler/index.html"><span><span>Sampler</span></span></a></div>
 <span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2076692732%2FClasslikes%2F-443365019"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
-                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":kmath-stat:dokkaHtmlPartial/commonMain">common</button></div>
-<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><span class="token keyword">interface </span><a href="-sampler/index.html">Sampler</a><span class="token operator">&lt;</span><span class="token keyword">out </span><a href="-sampler/index.html">T</a><span class="token operator"> : </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a><span class="token operator">&gt;</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Sampler that generates chains of values of type <a href="-sampler/index.html">T</a>.</p></div></div>                        </div>
-                      </div>
-                    </div>
-                  </div>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><span class="token keyword">interface </span><a href="-sampler/index.html">Sampler</a><span class="token operator">&lt;</span><span class="token keyword">out </span><a href="-sampler/index.html">T</a><span class="token operator"> : </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Sampler that generates chains of values of type <a href="-sampler/index.html">T</a>.</p></div></div></div>
                 </div>
-<a data-name="-2096394208%2FClasslikes%2F-443365019" anchor-label="SamplerSpace" id="-2096394208%2FClasslikes%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="-sampler-space/index.html"><span>Sampler</span><wbr><span><span>Space</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2096394208%2FClasslikes%2F-443365019"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
-                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":kmath-stat:dokkaHtmlPartial/commonMain">common</button></div>
-<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-sampler-space/index.html">SamplerSpace</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="-sampler-space/index.html">T</a><span class="token operator"> : </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a><span class="token punctuation">, </span><span class="token keyword">out </span><a href="-sampler-space/index.html">S</a><span class="token operator"> : </span><a href="../../kmath-core/space.kscience.kmath.operations/-group/index.html">Group</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="-sampler-space/index.html">T</a><span class="token operator">&gt;</span>, <a href="../../kmath-core/space.kscience.kmath.operations/-scale-operations/index.html">ScaleOperations</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="-sampler-space/index.html">T</a><span class="token operator">&gt;</span><span class="token operator">&gt;</span><span class="token punctuation">(</span>algebra<span class="token operator">: </span><a href="-sampler-space/index.html">S</a><span class="token punctuation">)</span> : <a href="../../kmath-core/space.kscience.kmath.operations/-group/index.html">Group</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="-sampler/index.html">Sampler</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="-sampler-space/index.html">T</a><span class="token operator">&gt;</span><span class="token operator">&gt; </span>, <a href="../../kmath-core/space.kscience.kmath.operations/-scale-operations/index.html">ScaleOperations</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="-sampler/index.html">Sampler</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="-sampler-space/index.html">T</a><span class="token operator">&gt;</span><span class="token operator">&gt; </span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">A space of samplers. Allows performing simple operations on distributions.</p></div></div>                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+              </div>
+            </div>
+          </div>
 <a data-name="503115764%2FClasslikes%2F-443365019" anchor-label="Statistic" id="503115764%2FClasslikes%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="-statistic/index.html"><span><span>Statistic</span></span></a></div>
+          <div class="table-row" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-statistic/index.html"><span><span>Statistic</span></span></a></div>
 <span class="anchor-wrapper"><span class="anchor-icon" pointing-to="503115764%2FClasslikes%2F-443365019"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
-                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":kmath-stat:dokkaHtmlPartial/commonMain">common</button></div>
-<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><span class="token keyword">interface </span><a href="-statistic/index.html">Statistic</a><span class="token operator">&lt;</span><span class="token keyword">in </span><a href="-statistic/index.html">T</a><span class="token punctuation">, </span><span class="token keyword">out </span><a href="-statistic/index.html">R</a><span class="token operator">&gt;</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">A function, that transforms a buffer of random quantities to some resulting value</p></div></div>                        </div>
-                      </div>
-                    </div>
-                  </div>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><span class="token keyword">interface </span><a href="-statistic/index.html">Statistic</a><span class="token operator">&lt;</span><span class="token keyword">in </span><a href="-statistic/index.html">T</a><span class="token punctuation">, </span><span class="token keyword">out </span><a href="-statistic/index.html">R</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">A function, that transforms a buffer of random quantities to some resulting value</p></div></div></div>
                 </div>
-<a data-name="855971884%2FClasslikes%2F-443365019" anchor-label="UniformDistribution" id="855971884%2FClasslikes%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="-uniform-distribution/index.html"><span>Uniform</span><wbr><span><span>Distribution</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="855971884%2FClasslikes%2F-443365019"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
-                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":kmath-stat:dokkaHtmlPartial/commonMain">common</button></div>
-<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-uniform-distribution/index.html">UniformDistribution</a><span class="token punctuation">(</span>range<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.ranges/-closed-floating-point-range/index.html">ClosedFloatingPointRange</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token operator">&gt;</span><span class="token punctuation">)</span> : <a href="../space.kscience.kmath.distributions/-distribution1-d/index.html">Distribution1D</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token operator">&gt; </span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div>                        </div>
-                      </div>
-                    </div>
-                  </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1419466225%2FClasslikes%2F-443365019" anchor-label="StatisticalAlgebra" id="1419466225%2FClasslikes%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-statistical-algebra/index.html"><span>Statistical</span><wbr><span><span>Algebra</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1419466225%2FClasslikes%2F-443365019"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">interface </span><a href="-statistical-algebra/index.html">StatisticalAlgebra</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="-statistical-algebra/index.html">T</a><span class="token punctuation">, </span><span class="token keyword">out </span><a href="-statistical-algebra/index.html">A</a><span class="token operator"> : </span><a href="../../kmath-core/space.kscience.kmath.operations/-algebra/index.html">Algebra</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="-statistical-algebra/index.html">T</a><span class="token operator">&gt;</span><span class="token punctuation">, </span><span class="token keyword">out </span><a href="-statistical-algebra/index.html">BA</a><span class="token operator"> : </span><a href="../../kmath-core/space.kscience.kmath.operations/-buffer-algebra/index.html">BufferAlgebra</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="-statistical-algebra/index.html">T</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="-statistical-algebra/index.html">A</a><span class="token operator">&gt;</span><span class="token operator">&gt;</span> : <a href="../../kmath-core/space.kscience.kmath.operations/-algebra/index.html">Algebra</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="-statistical-algebra/index.html">T</a><span class="token operator">&gt;</span><span class="token operator">&gt; </span></div></div></div>
                 </div>
-<a data-name="353418978%2FClasslikes%2F-443365019" anchor-label="UniformDoubleChain" id="353418978%2FClasslikes%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="-uniform-double-chain/index.html"><span>Uniform</span><wbr><span>Double</span><wbr><span><span>Chain</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="353418978%2FClasslikes%2F-443365019"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
-                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":kmath-stat:dokkaHtmlPartial/commonMain">common</button></div>
-<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-uniform-double-chain/index.html">UniformDoubleChain</a><span class="token punctuation">(</span>generator<span class="token operator">: </span><a href="-random-generator/index.html">RandomGenerator</a><span class="token punctuation">)</span> : <a href="../../kmath-coroutines/space.kscience.kmath.chains/-blocking-double-chain/index.html">BlockingDoubleChain</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">A type-specific double chunk random chain</p></div></div>                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+              </div>
+            </div>
+          </div>
 <a data-name="1759684866%2FClasslikes%2F-443365019" anchor-label="ValueAndError" id="1759684866%2FClasslikes%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="-value-and-error/index.html"><span>Value</span><wbr><span>And</span><wbr><span><span>Error</span></span></a></div>
+          <div class="table-row" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-value-and-error/index.html"><span>Value</span><wbr><span>And</span><wbr><span><span>Error</span></span></a></div>
 <span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1759684866%2FClasslikes%2F-443365019"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
-                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":kmath-stat:dokkaHtmlPartial/commonMain">common</button></div>
-<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">class </span><a href="-value-and-error/index.html">ValueAndError</a><span class="token punctuation">(</span>value<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span>dispersion<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">)</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">A combination of a random <a href="-value-and-error/value.html">value</a> and its <a href="-value-and-error/dispersion.html">dispersion</a>.</p></div></div>                        </div>
-                      </div>
-                    </div>
-                  </div>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">class </span><a href="-value-and-error/index.html">ValueAndError</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>value<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>dispersion<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">A combination of a random <a href="-value-and-error/value.html">value</a> and its <a href="-value-and-error/dispersion.html">dispersion</a>.</p></div></div></div>
                 </div>
+              </div>
+            </div>
+          </div>
 <a data-name="-226150810%2FClasslikes%2F-443365019" anchor-label="ValueAndErrorField" id="-226150810%2FClasslikes%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="-value-and-error-field/index.html"><span>Value</span><wbr><span>And</span><wbr><span>Error</span><wbr><span><span>Field</span></span></a></div>
+          <div class="table-row" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-value-and-error-field/index.html"><span>Value</span><wbr><span>And</span><wbr><span>Error</span><wbr><span><span>Field</span></span></a></div>
 <span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-226150810%2FClasslikes%2F-443365019"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
-                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":kmath-stat:dokkaHtmlPartial/commonMain">common</button></div>
-<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">object </span><a href="-value-and-error-field/index.html">ValueAndErrorField</a> : <a href="../../kmath-core/space.kscience.kmath.operations/-field/index.html">Field</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="-value-and-error/index.html">ValueAndError</a><span class="token operator">&gt; </span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">An algebra for double value + its error combination. The multiplication assumes linear error propagation</p></div></div>                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <h2 class="">Functions</h2>
-              <div class="table" data-togglable="Functions"><a data-name="-1448670153%2FFunctions%2F-541099023" anchor-label="asUniformRandomProvider" id="-1448670153%2FFunctions%2F-541099023" data-filterable-set=":kmath-stat:dokkaHtmlPartial/jvmMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-stat:dokkaHtmlPartial/jvmMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/jvmMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="as-uniform-random-provider.html"><span>as</span><wbr><span>Uniform</span><wbr><span>Random</span><wbr><span><span>Provider</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1448670153%2FFunctions%2F-541099023"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
-                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark jvm-like" data-filterable-current=":kmath-stat:dokkaHtmlPartial/jvmMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/jvmMain" data-active="" data-toggle=":kmath-stat:dokkaHtmlPartial/jvmMain">jvm</button></div>
-<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/jvmMain"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="-random-generator/index.html#368348596%2FExtensions%2F-541099023">RandomGenerator</a><span class="token punctuation">.</span><a href="as-uniform-random-provider.html"><span class="token function">asUniformRandomProvider</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="org.apache.commons.rng/UniformRandomProvider///PointingToDeclaration/">UniformRandomProvider</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Represent this <a href="-random-generator/index.html#368348596%2FExtensions%2F-541099023">RandomGenerator</a> as commons-rng <span data-unresolved-link="org.apache.commons.rng/UniformRandomProvider///PointingToDeclaration/">UniformRandomProvider</span> preserving and mirroring its current state. Getting new value from one of those changes the state of another.</p></div></div>                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="-1871419683%2FFunctions%2F-443365019" anchor-label="async" id="-1871419683%2FFunctions%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="async.html"><span><span>async</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1871419683%2FFunctions%2F-443365019"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
-                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":kmath-stat:dokkaHtmlPartial/commonMain">common</button></div>
-<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">inline </span><span class="token keyword">fun </span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="async.html">T</a><span class="token operator">&gt; </span><a href="-m-c-scope/index.html">MCScope</a><span class="token punctuation">.</span><a href="async.html"><span class="token function">async</span></a><span class="token punctuation">(</span>context<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.coroutines/-coroutine-context/index.html">CoroutineContext</a><span class="token operator"> = </span>EmptyCoroutineContext<span class="token punctuation">, </span>start<span class="token operator">: </span><a href="https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx-coroutines-core/kotlinx.coroutines/-coroutine-start/index.html">CoroutineStart</a><span class="token operator"> = </span>CoroutineStart.DEFAULT<span class="token punctuation">, </span><span class="token keyword">crossinline </span>block<span class="token operator">: </span><span class="token keyword">suspend </span><span class="token keyword"></span><a href="-m-c-scope/index.html">MCScope</a><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><span class="token keyword"></span><a href="async.html">T</a><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx-coroutines-core/kotlinx.coroutines/-deferred/index.html">Deferred</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="async.html">T</a><span class="token operator">&gt;</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Specialized async for <a href="-m-c-scope/index.html">MCScope</a>. Behaves the same way as regular <a href="https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx-coroutines-core/kotlinx.coroutines/index.html">CoroutineScope.async</a>, but also stores the generator fork. The method itself is not thread safe.</p></div></div>                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="930334433%2FFunctions%2F-443365019" anchor-label="chain" id="930334433%2FFunctions%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="chain.html"><span><span>chain</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="930334433%2FFunctions%2F-443365019"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
-                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":kmath-stat:dokkaHtmlPartial/commonMain">common</button></div>
-<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="chain.html">R</a><span class="token operator">&gt; </span><a href="-random-generator/index.html">RandomGenerator</a><span class="token punctuation">.</span><a href="chain.html"><span class="token function">chain</span></a><span class="token punctuation">(</span>generator<span class="token operator">: </span><span class="token keyword">suspend </span><span class="token keyword"></span><a href="-random-generator/index.html">RandomGenerator</a><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><span class="token keyword"></span><a href="chain.html">R</a><span class="token punctuation">)</span><span class="token operator">: </span><a href="-random-chain/index.html">RandomChain</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="chain.html">R</a><span class="token operator">&gt;</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Create a generic random chain with provided <a href="chain.html">generator</a></p></div></div>                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="466500344%2FFunctions%2F-443365019" anchor-label="flow" id="466500344%2FFunctions%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="flow.html"><span><span>flow</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="466500344%2FFunctions%2F-443365019"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
-                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":kmath-stat:dokkaHtmlPartial/commonMain">common</button></div>
-<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="flow.html">T</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="flow.html">I</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="flow.html">R</a><span class="token operator">&gt; </span><a href="-composable-statistic/index.html">ComposableStatistic</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="flow.html">T</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="flow.html">I</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="flow.html">R</a><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="flow.html"><span class="token function">flow</span></a><span class="token punctuation">(</span>flow<span class="token operator">: </span><a href="https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx-coroutines-core/kotlinx.coroutines.flow/-flow/index.html">Flow</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="flow.html">T</a><span class="token operator">&gt;</span><span class="token operator">&gt;</span><span class="token punctuation">, </span>dispatcher<span class="token operator">: </span><a href="https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx-coroutines-core/kotlinx.coroutines/-coroutine-dispatcher/index.html">CoroutineDispatcher</a><span class="token operator"> = </span>Dispatchers.Default<span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx-coroutines-core/kotlinx.coroutines.flow/-flow/index.html">Flow</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="flow.html">R</a><span class="token operator">&gt;</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Perform a streaming statistical analysis on a chunked data. The computation of inner representation is done in parallel if <a href="flow.html">dispatcher</a> allows it.</p></div></div>                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="153665288%2FFunctions%2F-541099023" anchor-label="fromSource" id="153665288%2FFunctions%2F-541099023" data-filterable-set=":kmath-stat:dokkaHtmlPartial/jvmMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-stat:dokkaHtmlPartial/jvmMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/jvmMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="from-source.html"><span>from</span><wbr><span><span>Source</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="153665288%2FFunctions%2F-541099023"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
-                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark jvm-like" data-filterable-current=":kmath-stat:dokkaHtmlPartial/jvmMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/jvmMain" data-active="" data-toggle=":kmath-stat:dokkaHtmlPartial/jvmMain">jvm</button></div>
-<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/jvmMain"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="-random-generator/-companion/index.html#-15165130%2FExtensions%2F-541099023">RandomGenerator.Companion</a><span class="token punctuation">.</span><a href="from-source.html"><span class="token function">fromSource</span></a><span class="token punctuation">(</span>source<span class="token operator">: </span><span data-unresolved-link="org.apache.commons.rng.simple/RandomSource///PointingToDeclaration/">RandomSource</span><span class="token punctuation">, </span>seed<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html">Long</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">)</span><span class="token operator">: </span><a href="-random-source-generator/index.html">RandomSourceGenerator</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Returns <a href="-random-source-generator/index.html">RandomSourceGenerator</a> with given <span data-unresolved-link="org.apache.commons.rng.simple/RandomSource///PointingToDeclaration/">RandomSource</span> and <a href="from-source.html">seed</a>.</p></div></div>                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="140061633%2FFunctions%2F-443365019" anchor-label="invoke" id="140061633%2FFunctions%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="invoke.html"><span><span>invoke</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="140061633%2FFunctions%2F-443365019"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
-                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":kmath-stat:dokkaHtmlPartial/commonMain">common</button></div>
-<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">operator </span><span class="token keyword">fun </span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="invoke.html">T</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="invoke.html">R</a><span class="token operator">&gt; </span><a href="-blocking-statistic/index.html">BlockingStatistic</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="invoke.html">T</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="invoke.html">R</a><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="invoke.html"><span class="token function">invoke</span></a><span class="token punctuation">(</span>data<span class="token operator">: </span><a href="../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="invoke.html">T</a><span class="token operator">&gt;</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="invoke.html">R</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="symbol monospace"><span class="token keyword">suspend operator </span><span class="token keyword">fun </span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="invoke.html">T</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="invoke.html">R</a><span class="token operator">&gt; </span><a href="-statistic/index.html">Statistic</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="invoke.html">T</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="invoke.html">R</a><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="invoke.html"><span class="token function">invoke</span></a><span class="token punctuation">(</span>data<span class="token operator">: </span><a href="../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="invoke.html">T</a><span class="token operator">&gt;</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="invoke.html">R</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div>                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="-1966765703%2FFunctions%2F-443365019" anchor-label="launch" id="-1966765703%2FFunctions%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="launch.html"><span><span>launch</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1966765703%2FFunctions%2F-443365019"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
-                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":kmath-stat:dokkaHtmlPartial/commonMain">common</button></div>
-<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">inline </span><span class="token keyword">fun </span><a href="-m-c-scope/index.html">MCScope</a><span class="token punctuation">.</span><a href="launch.html"><span class="token function">launch</span></a><span class="token punctuation">(</span>context<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.coroutines/-coroutine-context/index.html">CoroutineContext</a><span class="token operator"> = </span>EmptyCoroutineContext<span class="token punctuation">, </span>start<span class="token operator">: </span><a href="https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx-coroutines-core/kotlinx.coroutines/-coroutine-start/index.html">CoroutineStart</a><span class="token operator"> = </span>CoroutineStart.DEFAULT<span class="token punctuation">, </span><span class="token keyword">crossinline </span>block<span class="token operator">: </span><span class="token keyword">suspend </span><span class="token keyword"></span><a href="-m-c-scope/index.html">MCScope</a><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html">Unit</a><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx-coroutines-core/kotlinx.coroutines/-job/index.html">Job</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Specialized launch for <a href="-m-c-scope/index.html">MCScope</a>. Behaves the same way as regular <a href="https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx-coroutines-core/kotlinx.coroutines/index.html">CoroutineScope.launch</a>, but also stores the generator fork. The method itself is not thread safe.</p></div></div>                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="-783150223%2FFunctions%2F-443365019" anchor-label="mcScope" id="-783150223%2FFunctions%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="mc-scope.html"><span>mc</span><wbr><span><span>Scope</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-783150223%2FFunctions%2F-443365019"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
-                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":kmath-stat:dokkaHtmlPartial/commonMain">common</button></div>
-<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">inline suspend </span><span class="token keyword">fun </span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="mc-scope.html">T</a><span class="token operator">&gt; </span><a href="mc-scope.html"><span class="token function">mcScope</span></a><span class="token punctuation">(</span>seed<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html">Long</a><span class="token punctuation">, </span>block<span class="token operator">: </span><span class="token keyword"></span><a href="-m-c-scope/index.html">MCScope</a><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><span class="token keyword"></span><a href="mc-scope.html">T</a><span class="token punctuation">)</span><span class="token operator">: </span><a href="mc-scope.html">T</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Launch mc scope with a given seed</p></div><div class="symbol monospace"><span class="token keyword">inline suspend </span><span class="token keyword">fun </span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="mc-scope.html">T</a><span class="token operator">&gt; </span><a href="mc-scope.html"><span class="token function">mcScope</span></a><span class="token punctuation">(</span>generator<span class="token operator">: </span><a href="-random-generator/index.html">RandomGenerator</a><span class="token punctuation">, </span>block<span class="token operator">: </span><span class="token keyword"></span><a href="-m-c-scope/index.html">MCScope</a><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><span class="token keyword"></span><a href="mc-scope.html">T</a><span class="token punctuation">)</span><span class="token operator">: </span><a href="mc-scope.html">T</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Launches a supervised Monte-Carlo scope</p></div></div>                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="1295073924%2FFunctions%2F-541099023" anchor-label="mersenneTwister" id="1295073924%2FFunctions%2F-541099023" data-filterable-set=":kmath-stat:dokkaHtmlPartial/jvmMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-stat:dokkaHtmlPartial/jvmMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/jvmMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="mersenne-twister.html"><span>mersenne</span><wbr><span><span>Twister</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1295073924%2FFunctions%2F-541099023"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
-                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark jvm-like" data-filterable-current=":kmath-stat:dokkaHtmlPartial/jvmMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/jvmMain" data-active="" data-toggle=":kmath-stat:dokkaHtmlPartial/jvmMain">jvm</button></div>
-<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/jvmMain"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="-random-generator/-companion/index.html#-15165130%2FExtensions%2F-541099023">RandomGenerator.Companion</a><span class="token punctuation">.</span><a href="mersenne-twister.html"><span class="token function">mersenneTwister</span></a><span class="token punctuation">(</span>seed<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html">Long</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">)</span><span class="token operator">: </span><a href="-random-source-generator/index.html">RandomSourceGenerator</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Returns <a href="-random-source-generator/index.html">RandomSourceGenerator</a> with <span data-unresolved-link="org.apache.commons.rng.simple/RandomSource.MT///PointingToDeclaration/{&quot;org.jetbrains.dokka.links.EnumEntryDRIExtra&quot;:{&quot;key&quot;:&quot;org.jetbrains.dokka.links.EnumEntryDRIExtra&quot;}}">RandomSource.MT</span> algorithm and given <a href="mersenne-twister.html">seed</a>.</p></div></div>                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="1652170129%2FFunctions%2F-443365019" anchor-label="next" id="1652170129%2FFunctions%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="next.html"><span><span>next</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1652170129%2FFunctions%2F-443365019"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
-                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":kmath-stat:dokkaHtmlPartial/commonMain">common</button></div>
-<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">suspend </span><span class="token keyword">fun </span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="next.html">T</a><span class="token operator"> : </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a><span class="token operator">&gt; </span><a href="-sampler/index.html">Sampler</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="next.html">T</a><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="next.html"><span class="token function">next</span></a><span class="token punctuation">(</span>generator<span class="token operator">: </span><a href="-random-generator/index.html">RandomGenerator</a><span class="token punctuation">)</span><span class="token operator">: </span><a href="next.html">T</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Samples one value from this <a href="-sampler/index.html">Sampler</a>.</p></div></div>                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="1442444939%2FFunctions%2F-443365019" anchor-label="nextBuffer" id="1442444939%2FFunctions%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="next-buffer.html"><span>next</span><wbr><span><span>Buffer</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1442444939%2FFunctions%2F-443365019"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
-                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":kmath-stat:dokkaHtmlPartial/commonMain">common</button></div>
-<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">suspend </span><span class="token keyword">fun </span><a href="-sampler/index.html">Sampler</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="next-buffer.html"><span class="token function">nextBuffer</span></a><span class="token punctuation">(</span>generator<span class="token operator">: </span><a href="-random-generator/index.html">RandomGenerator</a><span class="token punctuation">, </span>size<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token operator">&gt;</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Samples a <a href="../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a> of values from this <a href="-sampler/index.html">Sampler</a>.</p></div></div>                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="93786209%2FFunctions%2F-443365019" anchor-label="sampleBuffer" id="93786209%2FFunctions%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="sample-buffer.html"><span>sample</span><wbr><span><span>Buffer</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="93786209%2FFunctions%2F-443365019"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
-                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":kmath-stat:dokkaHtmlPartial/commonMain">common</button></div>
-<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation">@</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.jvm/-jvm-name/index.html"><span class="token annotation">JvmName</span></a><span class="token punctuation">(</span><span>name<span class="token operator"> = </span><span class="breakable-word"><span class="token string">"sampleRealBuffer"</span></span></span><wbr><span class="token punctuation">)</span></div></div><span class="token keyword"></span><span class="token keyword">fun </span><a href="-sampler/index.html">Sampler</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="sample-buffer.html"><span class="token function">sampleBuffer</span></a><span class="token punctuation">(</span>generator<span class="token operator">: </span><a href="-random-generator/index.html">RandomGenerator</a><span class="token punctuation">, </span>size<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../kmath-coroutines/space.kscience.kmath.chains/-chain/index.html">Chain</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token operator">&gt;</span><span class="token operator">&gt;</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Generates <a href="sample-buffer.html">size</a> real samples and chunks them into some buffers.</p></div><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation">@</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.jvm/-jvm-name/index.html"><span class="token annotation">JvmName</span></a><span class="token punctuation">(</span><span>name<span class="token operator"> = </span><span class="breakable-word"><span class="token string">"sampleIntBuffer"</span></span></span><wbr><span class="token punctuation">)</span></div></div><span class="token keyword"></span><span class="token keyword">fun </span><a href="-sampler/index.html">Sampler</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="sample-buffer.html"><span class="token function">sampleBuffer</span></a><span class="token punctuation">(</span>generator<span class="token operator">: </span><a href="-random-generator/index.html">RandomGenerator</a><span class="token punctuation">, </span>size<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../kmath-coroutines/space.kscience.kmath.chains/-chain/index.html">Chain</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token operator">&gt;</span><span class="token operator">&gt;</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Generates <a href="sample-buffer.html">size</a> integer samples and chunks them into some buffers.</p></div><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="sample-buffer.html">T</a><span class="token operator"> : </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a><span class="token operator">&gt; </span><a href="-sampler/index.html">Sampler</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="sample-buffer.html">T</a><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="sample-buffer.html"><span class="token function">sampleBuffer</span></a><span class="token punctuation">(</span>generator<span class="token operator">: </span><a href="-random-generator/index.html">RandomGenerator</a><span class="token punctuation">, </span>size<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span>bufferFactory<span class="token operator">: </span><a href="../../kmath-core/space.kscience.kmath.structures/-buffer-factory/index.html">BufferFactory</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="sample-buffer.html">T</a><span class="token operator">&gt;</span><span class="token operator"> = </span>Buffer.Companion::boxing<span class="token punctuation">)</span><span class="token operator">: </span><a href="../../kmath-coroutines/space.kscience.kmath.chains/-chain/index.html">Chain</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="sample-buffer.html">T</a><span class="token operator">&gt;</span><span class="token operator">&gt;</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Sample a bunch of values</p></div></div>                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="-562747310%2FFunctions%2F-443365019" anchor-label="uniform" id="-562747310%2FFunctions%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="uniform.html"><span><span>uniform</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-562747310%2FFunctions%2F-443365019"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
-                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":kmath-stat:dokkaHtmlPartial/commonMain">common</button></div>
-<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="../space.kscience.kmath.distributions/-distribution/-companion/index.html">Distribution.Companion</a><span class="token punctuation">.</span><a href="uniform.html"><span class="token function">uniform</span></a><span class="token punctuation">(</span>range<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.ranges/-closed-floating-point-range/index.html">ClosedFloatingPointRange</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token operator">&gt;</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-uniform-distribution/index.html">UniformDistribution</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div>                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <h2 class="">Properties</h2>
-              <div class="table" data-togglable="Properties"><a data-name="385434524%2FProperties%2F-443365019" anchor-label="mean" id="385434524%2FProperties%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="mean.html">mean</a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="385434524%2FProperties%2F-443365019"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted" data-togglable="Properties">
-                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":kmath-stat:dokkaHtmlPartial/commonMain">common</button></div>
-<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><a data-name="385434524%2FProperties%2F-443365019" anchor-label="mean" id="385434524%2FProperties%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double.Companion</a><span class="token punctuation">.</span><a href="mean.html">mean</a><span class="token operator">: </span><a href="-mean/index.html">Mean</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token operator">&gt;</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div>                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="-594029924%2FProperties%2F-443365019" anchor-label="mean" id="-594029924%2FProperties%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="mean.html">mean</a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-594029924%2FProperties%2F-443365019"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted" data-togglable="Properties">
-                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":kmath-stat:dokkaHtmlPartial/commonMain">common</button></div>
-<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><a data-name="-594029924%2FProperties%2F-443365019" anchor-label="mean" id="-594029924%2FProperties%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int.Companion</a><span class="token punctuation">.</span><a href="mean.html">mean</a><span class="token operator">: </span><a href="-mean/index.html">Mean</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token operator">&gt;</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div>                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="-27535545%2FProperties%2F-443365019" anchor-label="mean" id="-27535545%2FProperties%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="mean.html">mean</a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-27535545%2FProperties%2F-443365019"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted" data-togglable="Properties">
-                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":kmath-stat:dokkaHtmlPartial/commonMain">common</button></div>
-<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><a data-name="-27535545%2FProperties%2F-443365019" anchor-label="mean" id="-27535545%2FProperties%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html">Long.Companion</a><span class="token punctuation">.</span><a href="mean.html">mean</a><span class="token operator">: </span><a href="-mean/index.html">Mean</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html">Long</a><span class="token operator">&gt;</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div>                        </div>
-                      </div>
-                    </div>
-                  </div>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">object </span><a href="-value-and-error-field/index.html">ValueAndErrorField</a> : <a href="../../kmath-core/space.kscience.kmath.operations/-field/index.html">Field</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="-value-and-error/index.html">ValueAndError</a><span class="token operator">&gt; </span></div><div class="brief "><p class="paragraph">An algebra for double value + its error combination. The multiplication assumes linear error propagation</p></div></div></div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <div class="footer"><span class="go-to-top-icon"><a href="#content" id="go-to-top-link"></a></span><span>© 2022 Copyright</span><span class="pull-right"><span>Generated by </span><a href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span></div>
+      </div>
+      <div data-togglable="EXTENSION_FUNCTION">
+        <h2 class="">Functions</h2>
+        <div class="table"><a data-name="-1056778522%2FFunctions%2F-541099023" anchor-label="asUniformRandomProvider" id="-1056778522%2FFunctions%2F-541099023" data-filterable-set=":kmath-stat:dokkaHtmlPartial/jvmMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-stat:dokkaHtmlPartial/jvmMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/jvmMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="as-uniform-random-provider.html"><span>as</span><wbr><span>Uniform</span><wbr><span>Random</span><wbr><span><span>Provider</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1056778522%2FFunctions%2F-541099023"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":kmath-stat:dokkaHtmlPartial/jvmMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/jvmMain" data-active="" data-toggle=":kmath-stat:dokkaHtmlPartial/jvmMain">jvm</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/jvmMain"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="../space.kscience.kmath.random/-random-generator/index.html#-384466395%2FMain%2F-541099023">RandomGenerator</a><span class="token punctuation">.</span><a href="as-uniform-random-provider.html"><span class="token function">asUniformRandomProvider</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="org.apache.commons.rng/UniformRandomProvider///PointingToDeclaration/">UniformRandomProvider</span></div><div class="brief "><p class="paragraph">Represent this <a href="../space.kscience.kmath.random/-random-generator/index.html#-384466395%2FMain%2F-541099023">RandomGenerator</a> as commons-rng <span data-unresolved-link="org.apache.commons.rng/UniformRandomProvider///PointingToDeclaration/">UniformRandomProvider</span> preserving and mirroring its current state. Getting new value from one of those changes the state of another.</p></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-146563636%2FFunctions%2F-443365019" anchor-label="chiSquaredExpression" id="-146563636%2FFunctions%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="chi-squared-expression.html"><span>chi</span><wbr><span>Squared</span><wbr><span><span>Expression</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-146563636%2FFunctions%2F-443365019"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.jvm/-jvm-name/index.html"><span class="token annotation builtin">JvmName</span></a><span class="token punctuation">(</span><span>name<span class="token operator"> = </span><span class="breakable-word"><span class="token string">"genericChiSquaredExpression"</span></span></span><wbr><span class="token punctuation">)</span></div></div><span class="token keyword"></span><span class="token keyword">fun </span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="chi-squared-expression.html">T</a><span class="token operator"> : </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-comparable/index.html">Comparable</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="chi-squared-expression.html">T</a><span class="token operator">&gt;</span><span class="token punctuation">, </span><span class="token keyword"></span><a href="chi-squared-expression.html">I</a><span class="token operator"> : </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="chi-squared-expression.html">A</a><span class="token operator"> : </span><a href="../../kmath-core/space.kscience.kmath.operations/-extended-field/index.html">ExtendedField</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="chi-squared-expression.html">I</a><span class="token operator">&gt;</span>, <a href="../../kmath-core/space.kscience.kmath.expressions/-expression-algebra/index.html">ExpressionAlgebra</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="chi-squared-expression.html">T</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="chi-squared-expression.html">I</a><span class="token operator">&gt;</span><span class="token operator">&gt; </span><a href="../../kmath-core/space.kscience.kmath.expressions/-auto-diff-processor/index.html">AutoDiffProcessor</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="chi-squared-expression.html">T</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="chi-squared-expression.html">I</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="chi-squared-expression.html">A</a><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="chi-squared-expression.html"><span class="token function">chiSquaredExpression</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">x<span class="token operator">: </span><a href="../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="chi-squared-expression.html">T</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">y<span class="token operator">: </span><a href="../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="chi-squared-expression.html">T</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">yErr<span class="token operator">: </span><a href="../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="chi-squared-expression.html">T</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">model<span class="token operator">: </span><span class="token keyword"></span><a href="chi-squared-expression.html">A</a><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token keyword"></span><a href="chi-squared-expression.html">I</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><span class="token keyword"></span><a href="chi-squared-expression.html">I</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../kmath-core/space.kscience.kmath.expressions/-differentiable-expression/index.html">DifferentiableExpression</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="chi-squared-expression.html">T</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Generate a chi squared expression from given x-y-sigma data and inline model. Provides automatic differentiation.</p></div><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="chi-squared-expression.html">I</a><span class="token operator"> : </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="chi-squared-expression.html">A</a><span class="token operator"> : </span><a href="../../kmath-core/space.kscience.kmath.operations/-extended-field/index.html">ExtendedField</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="chi-squared-expression.html">I</a><span class="token operator">&gt;</span>, <a href="../../kmath-core/space.kscience.kmath.expressions/-expression-algebra/index.html">ExpressionAlgebra</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="chi-squared-expression.html">I</a><span class="token operator">&gt;</span><span class="token operator">&gt; </span><a href="../../kmath-core/space.kscience.kmath.expressions/-auto-diff-processor/index.html">AutoDiffProcessor</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="chi-squared-expression.html">I</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="chi-squared-expression.html">A</a><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="chi-squared-expression.html"><span class="token function">chiSquaredExpression</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">x<span class="token operator">: </span><a href="../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">y<span class="token operator">: </span><a href="../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">yErr<span class="token operator">: </span><a href="../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">model<span class="token operator">: </span><span class="token keyword"></span><a href="chi-squared-expression.html">A</a><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token keyword"></span><a href="chi-squared-expression.html">I</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><span class="token keyword"></span><a href="chi-squared-expression.html">I</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../kmath-core/space.kscience.kmath.expressions/-differentiable-expression/index.html">DifferentiableExpression</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="701606046%2FFunctions%2F-443365019" anchor-label="ecdf" id="701606046%2FFunctions%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="ecdf.html"><span><span>ecdf</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="701606046%2FFunctions%2F-443365019"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="ecdf.html">T</a><span class="token operator"> : </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-comparable/index.html">Comparable</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="ecdf.html">T</a><span class="token operator">&gt;</span><span class="token operator">&gt; </span><a href="-statistical-algebra/index.html">StatisticalAlgebra</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="ecdf.html">T</a><span class="token punctuation">, </span><span class="token operator">*</span><span class="token punctuation">, </span><span class="token operator">*</span><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="ecdf.html"><span class="token function">ecdf</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">buffer<span class="token operator">: </span><a href="../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="ecdf.html">T</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span class="token punctuation">(</span><span class="token keyword"></span><a href="ecdf.html">T</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a></div><div class="brief "><p class="paragraph">Compute <a href="https://en.wikipedia.org/wiki/Empirical_distribution_function">empirical CDF function</a></p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="466500344%2FFunctions%2F-443365019" anchor-label="flow" id="466500344%2FFunctions%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="flow.html"><span><span>flow</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="466500344%2FFunctions%2F-443365019"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="flow.html">T</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="flow.html">I</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="flow.html">R</a><span class="token operator">&gt; </span><a href="-composable-statistic/index.html">ComposableStatistic</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="flow.html">T</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="flow.html">I</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="flow.html">R</a><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="flow.html"><span class="token function">flow</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">flow<span class="token operator">: </span><a href="https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx-coroutines-core/kotlinx.coroutines.flow/-flow/index.html">Flow</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="flow.html">T</a><span class="token operator">&gt;</span><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">dispatcher<span class="token operator">: </span><a href="https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx-coroutines-core/kotlinx.coroutines/-coroutine-dispatcher/index.html">CoroutineDispatcher</a><span class="token operator"> = </span>Dispatchers.Default</span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx-coroutines-core/kotlinx.coroutines.flow/-flow/index.html">Flow</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="flow.html">R</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Perform a streaming statistical analysis on a chunked data. The computation of inner representation is done in parallel if <a href="flow.html">dispatcher</a> allows it.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1294745593%2FFunctions%2F-541099023" anchor-label="fromSource" id="1294745593%2FFunctions%2F-541099023" data-filterable-set=":kmath-stat:dokkaHtmlPartial/jvmMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-stat:dokkaHtmlPartial/jvmMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/jvmMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="from-source.html"><span>from</span><wbr><span><span>Source</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1294745593%2FFunctions%2F-541099023"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":kmath-stat:dokkaHtmlPartial/jvmMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/jvmMain" data-active="" data-toggle=":kmath-stat:dokkaHtmlPartial/jvmMain">jvm</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/jvmMain"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="../space.kscience.kmath.random/-random-generator/-companion/index.html#495678567%2FMain%2F-541099023">RandomGenerator.Companion</a><span class="token punctuation">.</span><a href="from-source.html"><span class="token function">fromSource</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">source<span class="token operator">: </span><span data-unresolved-link="org.apache.commons.rng.simple/RandomSource///PointingToDeclaration/">RandomSource</span><span class="token punctuation">, </span></span><span class="parameter ">seed<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html">Long</a><span class="token operator">?</span><span class="token operator"> = </span>null</span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-random-source-generator/index.html">RandomSourceGenerator</a></div><div class="brief "><p class="paragraph">Returns <a href="-random-source-generator/index.html">RandomSourceGenerator</a> with given <span data-unresolved-link="org.apache.commons.rng.simple/RandomSource///PointingToDeclaration/">RandomSource</span> and <a href="from-source.html">seed</a>.</p></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="140061633%2FFunctions%2F-443365019" anchor-label="invoke" id="140061633%2FFunctions%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="invoke.html"><span><span>invoke</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="140061633%2FFunctions%2F-443365019"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">operator </span><span class="token keyword">fun </span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="invoke.html">T</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="invoke.html">R</a><span class="token operator">&gt; </span><a href="-blocking-statistic/index.html">BlockingStatistic</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="invoke.html">T</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="invoke.html">R</a><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="invoke.html"><span class="token function">invoke</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">data<span class="token operator">: </span><a href="../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="invoke.html">T</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="invoke.html">R</a></div><div class="symbol monospace"><span class="token keyword">suspend operator </span><span class="token keyword">fun </span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="invoke.html">T</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="invoke.html">R</a><span class="token operator">&gt; </span><a href="-statistic/index.html">Statistic</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="invoke.html">T</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="invoke.html">R</a><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="invoke.html"><span class="token function">invoke</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">data<span class="token operator">: </span><a href="../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="invoke.html">T</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="invoke.html">R</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-657131894%2FFunctions%2F-443365019" anchor-label="ksComparisonStatistic" id="-657131894%2FFunctions%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="ks-comparison-statistic.html"><span>ks</span><wbr><span>Comparison</span><wbr><span><span>Statistic</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-657131894%2FFunctions%2F-443365019"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="../../kmath-memory/space.kscience.kmath/-unstable-k-math-a-p-i/index.html"><span class="token annotation builtin">UnstableKMathAPI</span></a></div></div><span class="token keyword"></span><span class="token keyword">fun </span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="ks-comparison-statistic.html">T</a><span class="token operator"> : </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-comparable/index.html">Comparable</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="ks-comparison-statistic.html">T</a><span class="token operator">&gt;</span><span class="token punctuation">, </span><span class="token keyword"></span><a href="ks-comparison-statistic.html">A</a><span class="token operator"> : </span><a href="../../kmath-core/space.kscience.kmath.operations/-group/index.html">Group</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="ks-comparison-statistic.html">T</a><span class="token operator">&gt;</span>, <a href="../../kmath-core/space.kscience.kmath.operations/-numeric-algebra/index.html">NumericAlgebra</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="ks-comparison-statistic.html">T</a><span class="token operator">&gt;</span><span class="token punctuation">, </span><span class="token keyword"></span><a href="ks-comparison-statistic.html">BA</a><span class="token operator"> : </span><a href="../../kmath-core/space.kscience.kmath.operations/-buffer-algebra/index.html">BufferAlgebra</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="ks-comparison-statistic.html">T</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="ks-comparison-statistic.html">A</a><span class="token operator">&gt;</span><span class="token operator">&gt; </span><a href="-statistical-algebra/index.html">StatisticalAlgebra</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="ks-comparison-statistic.html">T</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="ks-comparison-statistic.html">A</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="ks-comparison-statistic.html">BA</a><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="ks-comparison-statistic.html"><span class="token function">ksComparisonStatistic</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">x<span class="token operator">: </span><a href="../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="ks-comparison-statistic.html">T</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">y<span class="token operator">: </span><a href="../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="ks-comparison-statistic.html">T</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-k-m-comparison-result/index.html">KMComparisonResult</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="ks-comparison-statistic.html">T</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Kolmogorov-Smirnov sample comparison test Implementation copied from https://commons.apache.org/proper/commons-math/javadocs/api-3.6.1/index.html?org/apache/commons/math3/stat/inference/KolmogorovSmirnovTest.html</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1492061517%2FFunctions%2F-541099023" anchor-label="mersenneTwister" id="-1492061517%2FFunctions%2F-541099023" data-filterable-set=":kmath-stat:dokkaHtmlPartial/jvmMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-stat:dokkaHtmlPartial/jvmMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/jvmMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="mersenne-twister.html"><span>mersenne</span><wbr><span><span>Twister</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1492061517%2FFunctions%2F-541099023"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":kmath-stat:dokkaHtmlPartial/jvmMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/jvmMain" data-active="" data-toggle=":kmath-stat:dokkaHtmlPartial/jvmMain">jvm</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/jvmMain"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="../space.kscience.kmath.random/-random-generator/-companion/index.html#495678567%2FMain%2F-541099023">RandomGenerator.Companion</a><span class="token punctuation">.</span><a href="mersenne-twister.html"><span class="token function">mersenneTwister</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">seed<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html">Long</a><span class="token operator">?</span><span class="token operator"> = </span>null</span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-random-source-generator/index.html">RandomSourceGenerator</a></div><div class="brief "><p class="paragraph">Returns <a href="-random-source-generator/index.html">RandomSourceGenerator</a> with <span data-unresolved-link="org.apache.commons.rng.simple/RandomSource.MT///PointingToDeclaration/{&quot;org.jetbrains.dokka.links.EnumEntryDRIExtra&quot;:{&quot;key&quot;:&quot;org.jetbrains.dokka.links.EnumEntryDRIExtra&quot;}}">RandomSource.MT</span> algorithm and given <a href="mersenne-twister.html">seed</a>.</p></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1123462462%2FFunctions%2F-443365019" anchor-label="next" id="-1123462462%2FFunctions%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="next.html"><span><span>next</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1123462462%2FFunctions%2F-443365019"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">suspend </span><span class="token keyword">fun </span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="next.html">T</a><span class="token operator"> : </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a><span class="token operator">&gt; </span><a href="-sampler/index.html">Sampler</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="next.html">T</a><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="next.html"><span class="token function">next</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">generator<span class="token operator">: </span><a href="../space.kscience.kmath.random/-random-generator/index.html">RandomGenerator</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="next.html">T</a></div><div class="brief "><p class="paragraph">Samples one value from this <a href="-sampler/index.html">Sampler</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="12250362%2FFunctions%2F-443365019" anchor-label="nextBuffer" id="12250362%2FFunctions%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="next-buffer.html"><span>next</span><wbr><span><span>Buffer</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="12250362%2FFunctions%2F-443365019"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">suspend </span><span class="token keyword">fun </span><a href="-sampler/index.html">Sampler</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="next-buffer.html"><span class="token function">nextBuffer</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">generator<span class="token operator">: </span><a href="../space.kscience.kmath.random/-random-generator/index.html">RandomGenerator</a><span class="token punctuation">, </span></span><span class="parameter ">size<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Samples a <a href="../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a> of values from this <a href="-sampler/index.html">Sampler</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-789832458%2FFunctions%2F-443365019" anchor-label="sampleBuffer" id="-789832458%2FFunctions%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="sample-buffer.html"><span>sample</span><wbr><span><span>Buffer</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-789832458%2FFunctions%2F-443365019"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.jvm/-jvm-name/index.html"><span class="token annotation builtin">JvmName</span></a><span class="token punctuation">(</span><span>name<span class="token operator"> = </span><span class="breakable-word"><span class="token string">"sampleRealBuffer"</span></span></span><wbr><span class="token punctuation">)</span></div></div><span class="token keyword"></span><span class="token keyword">fun </span><a href="-sampler/index.html">Sampler</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="sample-buffer.html"><span class="token function">sampleBuffer</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">generator<span class="token operator">: </span><a href="../space.kscience.kmath.random/-random-generator/index.html">RandomGenerator</a><span class="token punctuation">, </span></span><span class="parameter ">size<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../kmath-coroutines/space.kscience.kmath.chains/-chain/index.html">Chain</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token operator">&gt;</span><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Generates <a href="sample-buffer.html">size</a> real samples and chunks them into some buffers.</p></div><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.jvm/-jvm-name/index.html"><span class="token annotation builtin">JvmName</span></a><span class="token punctuation">(</span><span>name<span class="token operator"> = </span><span class="breakable-word"><span class="token string">"sampleIntBuffer"</span></span></span><wbr><span class="token punctuation">)</span></div></div><span class="token keyword"></span><span class="token keyword">fun </span><a href="-sampler/index.html">Sampler</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="sample-buffer.html"><span class="token function">sampleBuffer</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">generator<span class="token operator">: </span><a href="../space.kscience.kmath.random/-random-generator/index.html">RandomGenerator</a><span class="token punctuation">, </span></span><span class="parameter ">size<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../kmath-coroutines/space.kscience.kmath.chains/-chain/index.html">Chain</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token operator">&gt;</span><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Generates <a href="sample-buffer.html">size</a> integer samples and chunks them into some buffers.</p></div><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="sample-buffer.html">T</a><span class="token operator"> : </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a><span class="token operator">&gt; </span><a href="-sampler/index.html">Sampler</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="sample-buffer.html">T</a><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="sample-buffer.html"><span class="token function">sampleBuffer</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">generator<span class="token operator">: </span><a href="../space.kscience.kmath.random/-random-generator/index.html">RandomGenerator</a><span class="token punctuation">, </span></span><span class="parameter ">size<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter ">bufferFactory<span class="token operator">: </span><a href="../../kmath-core/space.kscience.kmath.structures/-buffer-factory/index.html">BufferFactory</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="sample-buffer.html">T</a><span class="token operator">&gt;</span><span class="token operator"> = </span>BufferFactory.boxing()</span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../kmath-coroutines/space.kscience.kmath.chains/-chain/index.html">Chain</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../../kmath-core/space.kscience.kmath.structures/-buffer/index.html">Buffer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="sample-buffer.html">T</a><span class="token operator">&gt;</span><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Sample a bunch of values</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="EXTENSION_PROPERTY">
+        <h2 class="">Properties</h2>
+        <div class="table"><a data-name="-1686083016%2FProperties%2F-443365019" anchor-label="mean" id="-1686083016%2FProperties%2F-443365019" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_PROPERTY" data-filterable-current=":kmath-stat:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-stat:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="mean.html"><span><span>mean</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1686083016%2FProperties%2F-443365019"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-stat:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="../../kmath-core/space.kscience.kmath.operations/-double-field/index.html">DoubleField</a><span class="token punctuation">.</span><a href="mean.html">mean</a><span class="token operator">: </span><a href="-mean/index.html">Mean</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token operator">&gt;</span></div><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="../../kmath-core/space.kscience.kmath.operations/-int-ring/index.html">IntRing</a><span class="token punctuation">.</span><a href="mean.html">mean</a><span class="token operator">: </span><a href="-mean/index.html">Mean</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token operator">&gt;</span></div><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="../../kmath-core/space.kscience.kmath.operations/-long-ring/index.html">LongRing</a><span class="token punctuation">.</span><a href="mean.html">mean</a><span class="token operator">: </span><a href="-mean/index.html">Mean</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html">Long</a><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-  
-</body></html>
-
+  </div>
+</div>
+      <div class="footer">
+        <span class="go-to-top-icon"><a href="#content" id="go-to-top-link"></a></span><span>© 2023 Copyright</span><span class="pull-right"><span>Generated by </span><a href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span>
+      </div>
+    </div>
+</div>
+</body>
+</html>
 

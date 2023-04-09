@@ -1,253 +1,270 @@
+<!doctype html>
 <html>
-  <head>
+<head>
     <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
     <title>space.kscience.kmath.memory</title>
-</head><body><link href="../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../";</script>
-    <script type="text/javascript" src="../../scripts/sourceset_dependencies.js" async></script><link href="../../styles/style.css" rel="Stylesheet"><link href="../../styles/jetbrains-mono.css" rel="Stylesheet"><link href="../../styles/main.css" rel="Stylesheet"><link href="../../styles/prism.css" rel="Stylesheet"><link href="../../styles/logo-styles.css" rel="Stylesheet"><script type="text/javascript" src="../../scripts/clipboard.js" async></script><script type="text/javascript" src="../../scripts/navigation-loader.js" async></script><script type="text/javascript" src="../../scripts/platform-content-handler.js" async></script><script type="text/javascript" src="../../scripts/main.js" defer></script><script type="text/javascript" src="../../scripts/prism.js" async></script><script>const storage = localStorage.getItem("dokka-dark-mode")
-const savedDarkMode = storage ? JSON.parse(storage) : false
-if(savedDarkMode === true){
-    document.getElementsByTagName("html")[0].classList.add("theme-dark")
-}</script>
-
-  
-    <div class="navigation-wrapper" id="navigation-wrapper">
-      <div id="leftToggler"><span class="icon-toggler"></span></div>
-      <div class="library-name"><a href="../../index.html"><span>kmath</span></a></div>
-      <div></div>
-      <div class="pull-right d-flex">
-        <div class="filter-section" id="filter-section"><button class="platform-tag platform-selector common-like" data-active="" data-filter=":kmath-memory:dokkaHtmlPartial/commonMain">common</button><button class="platform-tag platform-selector js-like" data-active="" data-filter=":kmath-memory:dokkaHtmlPartial/jsMain">js</button><button class="platform-tag platform-selector jvm-like" data-active="" data-filter=":kmath-memory:dokkaHtmlPartial/jvmMain">jvm</button><button class="platform-tag platform-selector native-like" data-active="" data-filter=":kmath-memory:dokkaHtmlPartial/nativeMain">native</button></div>
-<button id="theme-toggle-button"><span id="theme-toggle"></span></button>
-        <div id="searchBar"></div>
-      </div>
+<link href="../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../";</script>    <script>const storage = localStorage.getItem("dokka-dark-mode")
+    if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    } else {
+        const savedDarkMode = JSON.parse(storage)
+        if(savedDarkMode === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    }
+    </script>
+<script type="text/javascript" src="../../scripts/sourceset_dependencies.js" async></script>
+<link href="../../styles/style.css" rel="Stylesheet">
+<link href="../../styles/jetbrains-mono.css" rel="Stylesheet">
+<link href="../../styles/main.css" rel="Stylesheet">
+<link href="../../styles/prism.css" rel="Stylesheet">
+<link href="../../styles/logo-styles.css" rel="Stylesheet">
+<script type="text/javascript" src="../../scripts/clipboard.js" async></script>
+<script type="text/javascript" src="../../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../../scripts/main.js" defer></script>
+<script type="text/javascript" src="../../scripts/prism.js" async></script>
+<script type="text/javascript" src="../../scripts/symbol-parameters-wrapper_deferred.js" defer></script></head>
+<body>
+<div class="navigation-wrapper" id="navigation-wrapper">
+    <div id="leftToggler"><span class="icon-toggler"></span></div>
+    <div class="library-name">
+<a href="../../index.html">
+<span>kmath</span>            </a>    </div>
+    <div>0.3.1-dev-RC
     </div>
-    <div id="container">
-      <div id="leftColumn">
+    <div class="pull-right d-flex">
+        <div class="filter-section" id="filter-section">
+                <button class="platform-tag platform-selector common-like" data-active="" data-filter=":kmath-memory:dokkaHtmlPartial/commonMain">common</button>
+                <button class="platform-tag platform-selector js-like" data-active="" data-filter=":kmath-memory:dokkaHtmlPartial/jsMain">js</button>
+                <button class="platform-tag platform-selector jvm-like" data-active="" data-filter=":kmath-memory:dokkaHtmlPartial/jvmMain">jvm</button>
+                <button class="platform-tag platform-selector native-like" data-active="" data-filter=":kmath-memory:dokkaHtmlPartial/nativeMain">native</button>
+                <button class="platform-tag platform-selector wasm-like" data-active="" data-filter=":kmath-memory:dokkaHtmlPartial/wasmMain">wasm</button>
+        </div>
+        <button id="theme-toggle-button"><span id="theme-toggle"></span></button>
+        <div id="searchBar"></div>
+    </div>
+</div>
+<div id="container">
+    <div id="leftColumn">
         <div id="sideMenu"></div>
-      </div>
-      <div id="main">
-        <div class="main-content" id="content" pageids="kmath-memory::space.kscience.kmath.memory////PointingToDeclaration//1785411064">
-          <div class="breadcrumbs"><a href="../index.html">kmath-memory</a>/<a href="index.html">space.kscience.kmath.memory</a></div>
-          <div class="cover ">
-            <h1 class="cover"><span><span>Package</span></span> <span>space.</span><wbr><span>kscience.</span><wbr><span>kmath.</span><wbr><span>memory</span></h1>
-          </div>
-          <div class="tabbedcontent">
-            <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="Types">Types</button><button class="section-tab" data-togglable="Functions">Functions</button></div>
-            <div class="tabs-section-body">
-              <h2 class="">Types</h2>
-              <div class="table" data-togglable="Types"><a data-name="105503946%2FClasslikes%2F1114102424" anchor-label="Memory" id="105503946%2FClasslikes%2F1114102424" data-filterable-set=":kmath-memory:dokkaHtmlPartial/commonMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-memory:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-memory:dokkaHtmlPartial/commonMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="-memory/index.html"><span><span>Memory</span></span></a></div>
+    </div>
+    <div id="main">
+<div class="main-content" data-page-type="package" id="content" pageids="kmath-memory::space.kscience.kmath.memory////PointingToDeclaration//320667571">
+  <div class="breadcrumbs"><a href="../index.html">kmath-memory</a><span class="delimiter">/</span><span class="current">space.kscience.kmath.memory</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span><span>Package-level</span></span> <span><span>declarations</span></span></h1>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="TYPE">Types</button><button class="section-tab" data-togglable="FUNCTION,EXTENSION_FUNCTION">Functions</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="TYPE">
+        <h2 class="">Types</h2>
+        <div class="table"><a data-name="105503946%2FClasslikes%2F1114102424" anchor-label="Memory" id="105503946%2FClasslikes%2F1114102424" data-filterable-set=":kmath-memory:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-filterable-current=":kmath-memory:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-memory:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-memory/index.html"><span><span>Memory</span></span></a></div>
 <span class="anchor-wrapper"><span class="anchor-icon" pointing-to="105503946%2FClasslikes%2F1114102424"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
-                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":kmath-memory:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-memory:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":kmath-memory:dokkaHtmlPartial/commonMain">common</button></div>
-<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-memory:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">interface </span><a href="-memory/index.html">Memory</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Represents a display of certain memory structure.</p></div></div>                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="1124447879%2FClasslikes%2F1114102424" anchor-label="MemoryReader" id="1124447879%2FClasslikes%2F1114102424" data-filterable-set=":kmath-memory:dokkaHtmlPartial/commonMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-memory:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-memory:dokkaHtmlPartial/commonMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="-memory-reader/index.html"><span>Memory</span><wbr><span><span>Reader</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1124447879%2FClasslikes%2F1114102424"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
-                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":kmath-memory:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-memory:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":kmath-memory:dokkaHtmlPartial/commonMain">common</button></div>
-<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-memory:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">interface </span><a href="-memory-reader/index.html">MemoryReader</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">The interface to read primitive types in this memory.</p></div></div>                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="1004796111%2FClasslikes%2F1114102424" anchor-label="MemorySpec" id="1004796111%2FClasslikes%2F1114102424" data-filterable-set=":kmath-memory:dokkaHtmlPartial/commonMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-memory:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-memory:dokkaHtmlPartial/commonMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="-memory-spec/index.html"><span>Memory</span><wbr><span><span>Spec</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1004796111%2FClasslikes%2F1114102424"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
-                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":kmath-memory:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-memory:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":kmath-memory:dokkaHtmlPartial/commonMain">common</button></div>
-<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-memory:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">interface </span><a href="-memory-spec/index.html">MemorySpec</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="-memory-spec/index.html">T</a><span class="token operator"> : </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a><span class="token operator">&gt;</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">A specification to read or write custom objects with fixed size in bytes.</p></div></div>                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="199618775%2FClasslikes%2F1114102424" anchor-label="MemoryWriter" id="199618775%2FClasslikes%2F1114102424" data-filterable-set=":kmath-memory:dokkaHtmlPartial/commonMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-memory:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-memory:dokkaHtmlPartial/commonMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="-memory-writer/index.html"><span>Memory</span><wbr><span><span>Writer</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="199618775%2FClasslikes%2F1114102424"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
-                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":kmath-memory:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-memory:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":kmath-memory:dokkaHtmlPartial/commonMain">common</button></div>
-<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-memory:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">interface </span><a href="-memory-writer/index.html">MemoryWriter</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">The interface to write primitive types into this memory.</p></div></div>                        </div>
-                      </div>
-                    </div>
-                  </div>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-memory:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">interface </span><a href="-memory/index.html">Memory</a></div><div class="brief "><p class="paragraph">Represents a display of certain memory structure.</p></div></div></div>
                 </div>
               </div>
-              <h2 class="">Functions</h2>
-              <div class="table" data-togglable="Functions"><a data-name="-1811990695%2FFunctions%2F1785411064" anchor-label="allocate" id="-1811990695%2FFunctions%2F1785411064" data-filterable-set=":kmath-memory:dokkaHtmlPartial/commonMain :kmath-memory:dokkaHtmlPartial/jsMain :kmath-memory:dokkaHtmlPartial/jvmMain :kmath-memory:dokkaHtmlPartial/nativeMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-memory:dokkaHtmlPartial/commonMain :kmath-memory:dokkaHtmlPartial/jsMain :kmath-memory:dokkaHtmlPartial/jvmMain :kmath-memory:dokkaHtmlPartial/nativeMain" data-filterable-set=":kmath-memory:dokkaHtmlPartial/commonMain :kmath-memory:dokkaHtmlPartial/jsMain :kmath-memory:dokkaHtmlPartial/jvmMain :kmath-memory:dokkaHtmlPartial/nativeMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="allocate.html"><span><span>allocate</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1811990695%2FFunctions%2F1785411064"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
-                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":kmath-memory:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-memory:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":kmath-memory:dokkaHtmlPartial/commonMain">common</button><button class="platform-bookmark js-like" data-filterable-current=":kmath-memory:dokkaHtmlPartial/jsMain" data-filterable-set=":kmath-memory:dokkaHtmlPartial/jsMain" data-toggle=":kmath-memory:dokkaHtmlPartial/jsMain">js</button><button class="platform-bookmark jvm-like" data-filterable-current=":kmath-memory:dokkaHtmlPartial/jvmMain" data-filterable-set=":kmath-memory:dokkaHtmlPartial/jvmMain" data-toggle=":kmath-memory:dokkaHtmlPartial/jvmMain">jvm</button><button class="platform-bookmark native-like" data-filterable-current=":kmath-memory:dokkaHtmlPartial/nativeMain" data-filterable-set=":kmath-memory:dokkaHtmlPartial/nativeMain" data-toggle=":kmath-memory:dokkaHtmlPartial/nativeMain">native</button></div>
-<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-memory:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">expect </span><span class="token keyword"></span><span class="token keyword">fun </span><a href="-memory/-companion/index.html">Memory.Companion</a><span class="token punctuation">.</span><a href="allocate.html"><span class="token function">allocate</span></a><span class="token punctuation">(</span>length<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">)</span><span class="token operator">: </span><a href="-memory/index.html">Memory</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Allocates the most effective platform-specific memory.</p></div></div><div class="content sourceset-depenent-content" data-togglable=":kmath-memory:dokkaHtmlPartial/jsMain"><div class="symbol monospace"><span class="token keyword">actual </span><span class="token keyword"></span><span class="token keyword">fun </span><a href="-memory/-companion/index.html#-1476492084%2FExtensions%2F449431098">Memory.Companion</a><span class="token punctuation">.</span><a href="allocate.html"><span class="token function">allocate</span></a><span class="token punctuation">(</span>length<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../kmath-memory/space.kscience.kmath.memory/-memory/index.html">Memory</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Allocates memory based on a <a href="https://kotlinlang.org/api/latest/jvm/stdlib/org.khronos.webgl/-data-view/index.html">DataView</a>.</p></div></div><div class="content sourceset-depenent-content" data-togglable=":kmath-memory:dokkaHtmlPartial/jvmMain"><div class="symbol monospace"><span class="token keyword">actual </span><span class="token keyword"></span><span class="token keyword">fun </span><a href="-memory/-companion/index.html#-1476492084%2FExtensions%2F341816670">Memory.Companion</a><span class="token punctuation">.</span><a href="allocate.html"><span class="token function">allocate</span></a><span class="token punctuation">(</span>length<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../kmath-memory/space.kscience.kmath.memory/-memory/index.html">Memory</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Allocates memory based on a <a href="https://docs.oracle.com/javase/8/docs/api/java/nio/ByteBuffer.html">ByteBuffer</a>.</p></div></div><div class="content sourceset-depenent-content" data-togglable=":kmath-memory:dokkaHtmlPartial/nativeMain"><div class="symbol monospace"><span class="token keyword">actual </span><span class="token keyword"></span><span class="token keyword">fun </span><a href="-memory/-companion/index.html#-1476492084%2FExtensions%2F-853052820">Memory.Companion</a><span class="token punctuation">.</span><a href="allocate.html"><span class="token function">allocate</span></a><span class="token punctuation">(</span>length<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../kmath-memory/space.kscience.kmath.memory/-memory/index.html">Memory</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Allocates the most effective platform-specific memory.</p></div></div>                        </div>
-                      </div>
-                    </div>
-                  </div>
+            </div>
+          </div>
+<a data-name="1124447879%2FClasslikes%2F1114102424" anchor-label="MemoryReader" id="1124447879%2FClasslikes%2F1114102424" data-filterable-set=":kmath-memory:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-filterable-current=":kmath-memory:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-memory:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-memory-reader/index.html"><span>Memory</span><wbr><span><span>Reader</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1124447879%2FClasslikes%2F1114102424"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-memory:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">interface </span><a href="-memory-reader/index.html">MemoryReader</a> : <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-auto-closeable/index.html">AutoCloseable</a></div><div class="brief "><p class="paragraph">The interface to read primitive types in this memory.</p></div></div></div>
                 </div>
-<a data-name="-1576713834%2FFunctions%2F341816670" anchor-label="asMemory" id="-1576713834%2FFunctions%2F341816670" data-filterable-set=":kmath-memory:dokkaHtmlPartial/jvmMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-memory:dokkaHtmlPartial/jvmMain" data-filterable-set=":kmath-memory:dokkaHtmlPartial/jvmMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="as-memory.html"><span>as</span><wbr><span><span>Memory</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1576713834%2FFunctions%2F341816670"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
-                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark jvm-like" data-filterable-current=":kmath-memory:dokkaHtmlPartial/jvmMain" data-filterable-set=":kmath-memory:dokkaHtmlPartial/jvmMain" data-active="" data-toggle=":kmath-memory:dokkaHtmlPartial/jvmMain">jvm</button></div>
-<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-memory:dokkaHtmlPartial/jvmMain"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="https://docs.oracle.com/javase/8/docs/api/java/nio/ByteBuffer.html">ByteBuffer</a><span class="token punctuation">.</span><a href="as-memory.html"><span class="token function">asMemory</span></a><span class="token punctuation">(</span>startOffset<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token operator"> = </span><span class="token constant">0</span><span class="token punctuation">, </span>size<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token operator"> = </span>limit()<span class="token punctuation">)</span><span class="token operator">: </span><a href="../../kmath-memory/space.kscience.kmath.memory/-memory/index.html">Memory</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Wraps this <a href="https://docs.oracle.com/javase/8/docs/api/java/nio/ByteBuffer.html">ByteBuffer</a> to <a href="../../kmath-memory/space.kscience.kmath.memory/-memory/index.html">Memory</a> object.</p></div></div>                        </div>
-                      </div>
-                    </div>
-                  </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1004796111%2FClasslikes%2F1114102424" anchor-label="MemorySpec" id="1004796111%2FClasslikes%2F1114102424" data-filterable-set=":kmath-memory:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-filterable-current=":kmath-memory:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-memory:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-memory-spec/index.html"><span>Memory</span><wbr><span><span>Spec</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1004796111%2FClasslikes%2F1114102424"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-memory:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">interface </span><a href="-memory-spec/index.html">MemorySpec</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="-memory-spec/index.html">T</a><span class="token operator"> : </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">A specification to read or write custom objects with fixed size in bytes.</p></div></div></div>
                 </div>
-<a data-name="-2036221093%2FFunctions%2F1114102424" anchor-label="read" id="-2036221093%2FFunctions%2F1114102424" data-filterable-set=":kmath-memory:dokkaHtmlPartial/commonMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-memory:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-memory:dokkaHtmlPartial/commonMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="read.html"><span><span>read</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2036221093%2FFunctions%2F1114102424"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
-                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":kmath-memory:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-memory:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":kmath-memory:dokkaHtmlPartial/commonMain">common</button></div>
-<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-memory:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">inline </span><span class="token keyword">fun </span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="read.html">R</a><span class="token operator">&gt; </span><a href="-memory/index.html">Memory</a><span class="token punctuation">.</span><a href="read.html"><span class="token function">read</span></a><span class="token punctuation">(</span>block<span class="token operator">: </span><span class="token keyword"></span><a href="-memory-reader/index.html">MemoryReader</a><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><span class="token keyword"></span><a href="read.html">R</a><span class="token punctuation">)</span><span class="token operator">: </span><a href="read.html">R</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Uses the memory for read then releases the reader.</p></div><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="read.html">T</a><span class="token operator"> : </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a><span class="token operator">&gt; </span><a href="-memory-reader/index.html">MemoryReader</a><span class="token punctuation">.</span><a href="read.html"><span class="token function">read</span></a><span class="token punctuation">(</span>spec<span class="token operator">: </span><a href="-memory-spec/index.html">MemorySpec</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="read.html">T</a><span class="token operator">&gt;</span><span class="token punctuation">, </span>offset<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">)</span><span class="token operator">: </span><a href="read.html">T</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Reads the object with <a href="read.html">spec</a> starting from <a href="read.html">offset</a>.</p></div></div>                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="-1842351012%2FFunctions%2F1114102424" anchor-label="readArray" id="-1842351012%2FFunctions%2F1114102424" data-filterable-set=":kmath-memory:dokkaHtmlPartial/commonMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-memory:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-memory:dokkaHtmlPartial/commonMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="read-array.html"><span>read</span><wbr><span><span>Array</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1842351012%2FFunctions%2F1114102424"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
-                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":kmath-memory:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-memory:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":kmath-memory:dokkaHtmlPartial/commonMain">common</button></div>
-<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-memory:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">inline </span><span class="token keyword">fun </span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="read-array.html">T</a><span class="token operator"> : </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a><span class="token operator">&gt; </span><a href="-memory-reader/index.html">MemoryReader</a><span class="token punctuation">.</span><a href="read-array.html"><span class="token function">readArray</span></a><span class="token punctuation">(</span>spec<span class="token operator">: </span><a href="-memory-spec/index.html">MemorySpec</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="read-array.html">T</a><span class="token operator">&gt;</span><span class="token punctuation">, </span>offset<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span>size<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-array/index.html">Array</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="read-array.html">T</a><span class="token operator">&gt;</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Reads array of <a href="read-array.html">size</a> objects mapped by <a href="read-array.html">spec</a> at certain <a href="read-array.html">offset</a>.</p></div></div>                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="675088056%2FFunctions%2F341816670" anchor-label="readAsMemory" id="675088056%2FFunctions%2F341816670" data-filterable-set=":kmath-memory:dokkaHtmlPartial/jvmMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-memory:dokkaHtmlPartial/jvmMain" data-filterable-set=":kmath-memory:dokkaHtmlPartial/jvmMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="read-as-memory.html"><span>read</span><wbr><span>As</span><wbr><span><span>Memory</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="675088056%2FFunctions%2F341816670"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
-                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark jvm-like" data-filterable-current=":kmath-memory:dokkaHtmlPartial/jvmMain" data-filterable-set=":kmath-memory:dokkaHtmlPartial/jvmMain" data-active="" data-toggle=":kmath-memory:dokkaHtmlPartial/jvmMain">jvm</button></div>
-<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-memory:dokkaHtmlPartial/jvmMain"><div class="symbol monospace"><span class="token keyword">inline </span><span class="token keyword">fun </span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="read-as-memory.html">R</a><span class="token operator">&gt; </span><a href="https://docs.oracle.com/javase/8/docs/api/java/nio/file/Path.html">Path</a><span class="token punctuation">.</span><a href="read-as-memory.html"><span class="token function">readAsMemory</span></a><span class="token punctuation">(</span>position<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html">Long</a><span class="token operator"> = </span><span class="token constant">0</span><span class="token punctuation">, </span>size<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html">Long</a><span class="token operator"> = </span>Files.size(this)<span class="token punctuation">, </span>block<span class="token operator">: </span><span class="token keyword"></span><a href="../../kmath-memory/space.kscience.kmath.memory/-memory/index.html">Memory</a><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><span class="token keyword"></span><a href="read-as-memory.html">R</a><span class="token punctuation">)</span><span class="token operator">: </span><a href="read-as-memory.html">R</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Uses direct memory-mapped buffer from file to read something and close it afterwards.</p></div></div>                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="-1888438742%2FFunctions%2F1785411064" anchor-label="wrap" id="-1888438742%2FFunctions%2F1785411064" data-filterable-set=":kmath-memory:dokkaHtmlPartial/commonMain :kmath-memory:dokkaHtmlPartial/jsMain :kmath-memory:dokkaHtmlPartial/jvmMain :kmath-memory:dokkaHtmlPartial/nativeMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-memory:dokkaHtmlPartial/commonMain :kmath-memory:dokkaHtmlPartial/jsMain :kmath-memory:dokkaHtmlPartial/jvmMain :kmath-memory:dokkaHtmlPartial/nativeMain" data-filterable-set=":kmath-memory:dokkaHtmlPartial/commonMain :kmath-memory:dokkaHtmlPartial/jsMain :kmath-memory:dokkaHtmlPartial/jvmMain :kmath-memory:dokkaHtmlPartial/nativeMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="wrap.html"><span><span>wrap</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1888438742%2FFunctions%2F1785411064"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
-                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":kmath-memory:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-memory:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":kmath-memory:dokkaHtmlPartial/commonMain">common</button><button class="platform-bookmark js-like" data-filterable-current=":kmath-memory:dokkaHtmlPartial/jsMain" data-filterable-set=":kmath-memory:dokkaHtmlPartial/jsMain" data-toggle=":kmath-memory:dokkaHtmlPartial/jsMain">js</button><button class="platform-bookmark jvm-like" data-filterable-current=":kmath-memory:dokkaHtmlPartial/jvmMain" data-filterable-set=":kmath-memory:dokkaHtmlPartial/jvmMain" data-toggle=":kmath-memory:dokkaHtmlPartial/jvmMain">jvm</button><button class="platform-bookmark native-like" data-filterable-current=":kmath-memory:dokkaHtmlPartial/nativeMain" data-filterable-set=":kmath-memory:dokkaHtmlPartial/nativeMain" data-toggle=":kmath-memory:dokkaHtmlPartial/nativeMain">native</button></div>
-<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-memory:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">expect </span><span class="token keyword"></span><span class="token keyword">fun </span><a href="-memory/-companion/index.html">Memory.Companion</a><span class="token punctuation">.</span><a href="wrap.html"><span class="token function">wrap</span></a><span class="token punctuation">(</span>array<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte-array/index.html">ByteArray</a><span class="token punctuation">)</span><span class="token operator">: </span><a href="-memory/index.html">Memory</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Wraps a <a href="-memory/index.html">Memory</a> around existing <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte-array/index.html">ByteArray</a>. This operation is unsafe since the array is not copied and could be mutated independently of the resulting <a href="-memory/index.html">Memory</a>.</p></div></div><div class="content sourceset-depenent-content" data-togglable=":kmath-memory:dokkaHtmlPartial/jsMain"><div class="symbol monospace"><span class="token keyword">actual </span><span class="token keyword"></span><span class="token keyword">fun </span><a href="-memory/-companion/index.html#-1476492084%2FExtensions%2F449431098">Memory.Companion</a><span class="token punctuation">.</span><a href="wrap.html"><span class="token function">wrap</span></a><span class="token punctuation">(</span>array<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte-array/index.html">ByteArray</a><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../kmath-memory/space.kscience.kmath.memory/-memory/index.html">Memory</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Wraps a <a href="../../kmath-memory/space.kscience.kmath.memory/-memory/index.html">Memory</a> around existing <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte-array/index.html">ByteArray</a>. This operation is unsafe since the array is not copied and could be mutated independently of the resulting <a href="../../kmath-memory/space.kscience.kmath.memory/-memory/index.html">Memory</a>.</p></div></div><div class="content sourceset-depenent-content" data-togglable=":kmath-memory:dokkaHtmlPartial/jvmMain"><div class="symbol monospace"><span class="token keyword">actual </span><span class="token keyword"></span><span class="token keyword">fun </span><a href="-memory/-companion/index.html#-1476492084%2FExtensions%2F341816670">Memory.Companion</a><span class="token punctuation">.</span><a href="wrap.html"><span class="token function">wrap</span></a><span class="token punctuation">(</span>array<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte-array/index.html">ByteArray</a><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../kmath-memory/space.kscience.kmath.memory/-memory/index.html">Memory</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Wraps a <a href="../../kmath-memory/space.kscience.kmath.memory/-memory/index.html">Memory</a> around existing <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte-array/index.html">ByteArray</a>. This operation is unsafe since the array is not copied and could be mutated independently of the resulting <a href="../../kmath-memory/space.kscience.kmath.memory/-memory/index.html">Memory</a>.</p></div></div><div class="content sourceset-depenent-content" data-togglable=":kmath-memory:dokkaHtmlPartial/nativeMain"><div class="symbol monospace"><span class="token keyword">actual </span><span class="token keyword"></span><span class="token keyword">fun </span><a href="-memory/-companion/index.html#-1476492084%2FExtensions%2F-853052820">Memory.Companion</a><span class="token punctuation">.</span><a href="wrap.html"><span class="token function">wrap</span></a><span class="token punctuation">(</span>array<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte-array/index.html">ByteArray</a><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../kmath-memory/space.kscience.kmath.memory/-memory/index.html">Memory</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Wraps a <a href="../../kmath-memory/space.kscience.kmath.memory/-memory/index.html">Memory</a> around existing <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte-array/index.html">ByteArray</a>. This operation is unsafe since the array is not copied and could be mutated independently of the resulting <a href="../../kmath-memory/space.kscience.kmath.memory/-memory/index.html">Memory</a>.</p></div></div>                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="-1091081522%2FFunctions%2F1114102424" anchor-label="write" id="-1091081522%2FFunctions%2F1114102424" data-filterable-set=":kmath-memory:dokkaHtmlPartial/commonMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-memory:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-memory:dokkaHtmlPartial/commonMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="write.html"><span><span>write</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1091081522%2FFunctions%2F1114102424"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
-                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":kmath-memory:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-memory:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":kmath-memory:dokkaHtmlPartial/commonMain">common</button></div>
-<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-memory:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">inline </span><span class="token keyword">fun </span><a href="-memory/index.html">Memory</a><span class="token punctuation">.</span><a href="write.html"><span class="token function">write</span></a><span class="token punctuation">(</span>block<span class="token operator">: </span><span class="token keyword"></span><a href="-memory-writer/index.html">MemoryWriter</a><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html">Unit</a><span class="token punctuation">)</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Uses the memory for write then releases the writer.</p></div><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="write.html">T</a><span class="token operator"> : </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a><span class="token operator">&gt; </span><a href="-memory-writer/index.html">MemoryWriter</a><span class="token punctuation">.</span><a href="write.html"><span class="token function">write</span></a><span class="token punctuation">(</span>spec<span class="token operator">: </span><a href="-memory-spec/index.html">MemorySpec</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="write.html">T</a><span class="token operator">&gt;</span><span class="token punctuation">, </span>offset<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span>value<span class="token operator">: </span><a href="write.html">T</a><span class="token punctuation">)</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Writes the object <a href="write.html">value</a> with <a href="write.html">spec</a> starting from <a href="write.html">offset</a>.</p></div></div>                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="-272858934%2FFunctions%2F1114102424" anchor-label="writeArray" id="-272858934%2FFunctions%2F1114102424" data-filterable-set=":kmath-memory:dokkaHtmlPartial/commonMain"></a>
-                <div class="table-row" data-filterable-current=":kmath-memory:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-memory:dokkaHtmlPartial/commonMain">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="write-array.html"><span>write</span><wbr><span><span>Array</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-272858934%2FFunctions%2F1114102424"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
-                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":kmath-memory:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-memory:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":kmath-memory:dokkaHtmlPartial/commonMain">common</button></div>
-<div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-memory:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="write-array.html">T</a><span class="token operator"> : </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a><span class="token operator">&gt; </span><a href="-memory-writer/index.html">MemoryWriter</a><span class="token punctuation">.</span><a href="write-array.html"><span class="token function">writeArray</span></a><span class="token punctuation">(</span>spec<span class="token operator">: </span><a href="-memory-spec/index.html">MemorySpec</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="write-array.html">T</a><span class="token operator">&gt;</span><span class="token punctuation">, </span>offset<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span>array<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-array/index.html">Array</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="write-array.html">T</a><span class="token operator">&gt;</span><span class="token punctuation">)</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Writes <a href="write-array.html">array</a> of objects mapped by <a href="write-array.html">spec</a> at certain <a href="write-array.html">offset</a>.</p></div></div>                        </div>
-                      </div>
-                    </div>
-                  </div>
+              </div>
+            </div>
+          </div>
+<a data-name="199618775%2FClasslikes%2F1114102424" anchor-label="MemoryWriter" id="199618775%2FClasslikes%2F1114102424" data-filterable-set=":kmath-memory:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-filterable-current=":kmath-memory:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-memory:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-memory-writer/index.html"><span>Memory</span><wbr><span><span>Writer</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="199618775%2FClasslikes%2F1114102424"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-memory:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">interface </span><a href="-memory-writer/index.html">MemoryWriter</a> : <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-auto-closeable/index.html">AutoCloseable</a></div><div class="brief "><p class="paragraph">The interface to write primitive types into this memory.</p></div></div></div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <div class="footer"><span class="go-to-top-icon"><a href="#content" id="go-to-top-link"></a></span><span>© 2022 Copyright</span><span class="pull-right"><span>Generated by </span><a href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span></div>
+      </div>
+      <div data-togglable="EXTENSION_FUNCTION">
+        <h2 class="">Functions</h2>
+        <div class="table"><a data-name="-1811990695%2FFunctions%2F320667571" anchor-label="allocate" id="-1811990695%2FFunctions%2F320667571" data-filterable-set=":kmath-memory:dokkaHtmlPartial/commonMain :kmath-memory:dokkaHtmlPartial/jsMain :kmath-memory:dokkaHtmlPartial/jvmMain :kmath-memory:dokkaHtmlPartial/nativeMain :kmath-memory:dokkaHtmlPartial/wasmMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-memory:dokkaHtmlPartial/commonMain :kmath-memory:dokkaHtmlPartial/jsMain :kmath-memory:dokkaHtmlPartial/jvmMain :kmath-memory:dokkaHtmlPartial/nativeMain :kmath-memory:dokkaHtmlPartial/wasmMain" data-filterable-set=":kmath-memory:dokkaHtmlPartial/commonMain :kmath-memory:dokkaHtmlPartial/jsMain :kmath-memory:dokkaHtmlPartial/jvmMain :kmath-memory:dokkaHtmlPartial/nativeMain :kmath-memory:dokkaHtmlPartial/wasmMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="allocate.html"><span><span>allocate</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1811990695%2FFunctions%2F320667571"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":kmath-memory:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-memory:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":kmath-memory:dokkaHtmlPartial/commonMain">common</button><button class="platform-bookmark" data-filterable-current=":kmath-memory:dokkaHtmlPartial/jsMain" data-filterable-set=":kmath-memory:dokkaHtmlPartial/jsMain" data-toggle=":kmath-memory:dokkaHtmlPartial/jsMain">js</button><button class="platform-bookmark" data-filterable-current=":kmath-memory:dokkaHtmlPartial/jvmMain" data-filterable-set=":kmath-memory:dokkaHtmlPartial/jvmMain" data-toggle=":kmath-memory:dokkaHtmlPartial/jvmMain">jvm</button><button class="platform-bookmark" data-filterable-current=":kmath-memory:dokkaHtmlPartial/nativeMain" data-filterable-set=":kmath-memory:dokkaHtmlPartial/nativeMain" data-toggle=":kmath-memory:dokkaHtmlPartial/nativeMain">native</button><button class="platform-bookmark" data-filterable-current=":kmath-memory:dokkaHtmlPartial/wasmMain" data-filterable-set=":kmath-memory:dokkaHtmlPartial/wasmMain" data-toggle=":kmath-memory:dokkaHtmlPartial/wasmMain">wasm</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-memory:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">expect </span><span class="token keyword"></span><span class="token keyword">fun </span><a href="-memory/-companion/index.html">Memory.Companion</a><span class="token punctuation">.</span><a href="allocate.html"><span class="token function">allocate</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">length<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-memory/index.html">Memory</a></div><div class="brief "><p class="paragraph">Allocates the most effective platform-specific memory.</p></div></div><div class="content sourceset-dependent-content" data-togglable=":kmath-memory:dokkaHtmlPartial/jsMain"><div class="symbol monospace"><span class="token keyword">actual </span><span class="token keyword"></span><span class="token keyword">fun </span><a href="-memory/-companion/index.html#-1476492084%2FMain%2F449431098">Memory.Companion</a><span class="token punctuation">.</span><a href="allocate.html"><span class="token function">allocate</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">length<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../kmath-memory/space.kscience.kmath.memory/-memory/index.html">Memory</a></div><div class="brief "><p class="paragraph">Allocates memory based on a <a href="https://kotlinlang.org/api/latest/jvm/stdlib/org.khronos.webgl/-data-view/index.html">DataView</a>.</p></div></div><div class="content sourceset-dependent-content" data-togglable=":kmath-memory:dokkaHtmlPartial/jvmMain"><div class="symbol monospace"><span class="token keyword">actual </span><span class="token keyword"></span><span class="token keyword">fun </span><a href="-memory/-companion/index.html#-1476492084%2FMain%2F341816670">Memory.Companion</a><span class="token punctuation">.</span><a href="allocate.html"><span class="token function">allocate</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">length<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../kmath-memory/space.kscience.kmath.memory/-memory/index.html">Memory</a></div><div class="brief "><p class="paragraph">Allocates memory based on a <a href="https://docs.oracle.com/javase/8/docs/api/java/nio/ByteBuffer.html">ByteBuffer</a>.</p></div></div><div class="content sourceset-dependent-content" data-togglable=":kmath-memory:dokkaHtmlPartial/nativeMain"><div class="symbol monospace"><span class="token keyword">actual </span><span class="token keyword"></span><span class="token keyword">fun </span><a href="-memory/-companion/index.html#-1476492084%2FMain%2F-853052820">Memory.Companion</a><span class="token punctuation">.</span><a href="allocate.html"><span class="token function">allocate</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">length<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../kmath-memory/space.kscience.kmath.memory/-memory/index.html">Memory</a></div><div class="brief "><p class="paragraph">Allocates the most effective platform-specific memory.</p></div></div><div class="content sourceset-dependent-content" data-togglable=":kmath-memory:dokkaHtmlPartial/wasmMain"><div class="symbol monospace"><span class="token keyword">actual </span><span class="token keyword"></span><span class="token keyword">fun </span><a href="-memory/-companion/index.html#-1476492084%2FMain%2F653537183">Memory.Companion</a><span class="token punctuation">.</span><a href="allocate.html"><span class="token function">allocate</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">length<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../kmath-memory/space.kscience.kmath.memory/-memory/index.html">Memory</a></div><div class="brief "><p class="paragraph">Allocates memory based on a <a href="https://kotlinlang.org/api/latest/jvm/stdlib/org.khronos.webgl/-data-view/index.html">DataView</a>.</p></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1576713834%2FFunctions%2F341816670" anchor-label="asMemory" id="-1576713834%2FFunctions%2F341816670" data-filterable-set=":kmath-memory:dokkaHtmlPartial/jvmMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-memory:dokkaHtmlPartial/jvmMain" data-filterable-set=":kmath-memory:dokkaHtmlPartial/jvmMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="as-memory.html"><span>as</span><wbr><span><span>Memory</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1576713834%2FFunctions%2F341816670"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":kmath-memory:dokkaHtmlPartial/jvmMain" data-filterable-set=":kmath-memory:dokkaHtmlPartial/jvmMain" data-active="" data-toggle=":kmath-memory:dokkaHtmlPartial/jvmMain">jvm</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-memory:dokkaHtmlPartial/jvmMain"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="https://docs.oracle.com/javase/8/docs/api/java/nio/ByteBuffer.html">ByteBuffer</a><span class="token punctuation">.</span><a href="as-memory.html"><span class="token function">asMemory</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">startOffset<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token operator"> = </span><span class="token constant">0</span><span class="token punctuation">, </span></span><span class="parameter ">size<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token operator"> = </span>limit()</span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../kmath-memory/space.kscience.kmath.memory/-memory/index.html">Memory</a></div><div class="brief "><p class="paragraph">Wraps this <a href="https://docs.oracle.com/javase/8/docs/api/java/nio/ByteBuffer.html">ByteBuffer</a> to <a href="../../kmath-memory/space.kscience.kmath.memory/-memory/index.html">Memory</a> object.</p></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-2036221093%2FFunctions%2F1114102424" anchor-label="read" id="-2036221093%2FFunctions%2F1114102424" data-filterable-set=":kmath-memory:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-memory:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-memory:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="read.html"><span><span>read</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2036221093%2FFunctions%2F1114102424"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-memory:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">inline </span><span class="token keyword">fun </span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="read.html">R</a><span class="token operator">&gt; </span><a href="-memory/index.html">Memory</a><span class="token punctuation">.</span><a href="read.html"><span class="token function">read</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">block<span class="token operator">: </span><span class="token keyword"></span><a href="-memory-reader/index.html">MemoryReader</a><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><span class="token keyword"></span><a href="read.html">R</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="read.html">R</a></div><div class="brief "><p class="paragraph">Uses the memory for read then releases the reader.</p></div><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="read.html">T</a><span class="token operator"> : </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a><span class="token operator">&gt; </span><a href="-memory-reader/index.html">MemoryReader</a><span class="token punctuation">.</span><a href="read.html"><span class="token function">read</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">spec<span class="token operator">: </span><a href="-memory-spec/index.html">MemorySpec</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="read.html">T</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">offset<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="read.html">T</a></div><div class="brief "><p class="paragraph">Reads the object with <a href="read.html">spec</a> starting from <a href="read.html">offset</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1842351012%2FFunctions%2F1114102424" anchor-label="readArray" id="-1842351012%2FFunctions%2F1114102424" data-filterable-set=":kmath-memory:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-memory:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-memory:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="read-array.html"><span>read</span><wbr><span><span>Array</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1842351012%2FFunctions%2F1114102424"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-memory:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">inline </span><span class="token keyword">fun </span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="read-array.html">T</a><span class="token operator"> : </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a><span class="token operator">&gt; </span><a href="-memory-reader/index.html">MemoryReader</a><span class="token punctuation">.</span><a href="read-array.html"><span class="token function">readArray</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">spec<span class="token operator">: </span><a href="-memory-spec/index.html">MemorySpec</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="read-array.html">T</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">offset<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter ">size<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-array/index.html">Array</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="read-array.html">T</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Reads array of <a href="read-array.html">size</a> objects mapped by <a href="read-array.html">spec</a> at certain <a href="read-array.html">offset</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="675088056%2FFunctions%2F341816670" anchor-label="readAsMemory" id="675088056%2FFunctions%2F341816670" data-filterable-set=":kmath-memory:dokkaHtmlPartial/jvmMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-memory:dokkaHtmlPartial/jvmMain" data-filterable-set=":kmath-memory:dokkaHtmlPartial/jvmMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="read-as-memory.html"><span>read</span><wbr><span>As</span><wbr><span><span>Memory</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="675088056%2FFunctions%2F341816670"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":kmath-memory:dokkaHtmlPartial/jvmMain" data-filterable-set=":kmath-memory:dokkaHtmlPartial/jvmMain" data-active="" data-toggle=":kmath-memory:dokkaHtmlPartial/jvmMain">jvm</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-memory:dokkaHtmlPartial/jvmMain"><div class="symbol monospace"><span class="token keyword">inline </span><span class="token keyword">fun </span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="read-as-memory.html">R</a><span class="token operator">&gt; </span><a href="https://docs.oracle.com/javase/8/docs/api/java/nio/file/Path.html">Path</a><span class="token punctuation">.</span><a href="read-as-memory.html"><span class="token function">readAsMemory</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">position<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html">Long</a><span class="token operator"> = </span><span class="token constant">0</span><span class="token punctuation">, </span></span><span class="parameter ">size<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html">Long</a><span class="token operator"> = </span>Files.size(this)<span class="token punctuation">, </span></span><span class="parameter ">block<span class="token operator">: </span><span class="token keyword"></span><a href="../../kmath-memory/space.kscience.kmath.memory/-memory/index.html">Memory</a><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><span class="token keyword"></span><a href="read-as-memory.html">R</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="read-as-memory.html">R</a></div><div class="brief "><p class="paragraph">Uses direct memory-mapped buffer from file to read something and close it afterward.</p></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1888438742%2FFunctions%2F320667571" anchor-label="wrap" id="-1888438742%2FFunctions%2F320667571" data-filterable-set=":kmath-memory:dokkaHtmlPartial/commonMain :kmath-memory:dokkaHtmlPartial/jsMain :kmath-memory:dokkaHtmlPartial/jvmMain :kmath-memory:dokkaHtmlPartial/nativeMain :kmath-memory:dokkaHtmlPartial/wasmMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-memory:dokkaHtmlPartial/commonMain :kmath-memory:dokkaHtmlPartial/jsMain :kmath-memory:dokkaHtmlPartial/jvmMain :kmath-memory:dokkaHtmlPartial/nativeMain :kmath-memory:dokkaHtmlPartial/wasmMain" data-filterable-set=":kmath-memory:dokkaHtmlPartial/commonMain :kmath-memory:dokkaHtmlPartial/jsMain :kmath-memory:dokkaHtmlPartial/jvmMain :kmath-memory:dokkaHtmlPartial/nativeMain :kmath-memory:dokkaHtmlPartial/wasmMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="wrap.html"><span><span>wrap</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1888438742%2FFunctions%2F320667571"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":kmath-memory:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-memory:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":kmath-memory:dokkaHtmlPartial/commonMain">common</button><button class="platform-bookmark" data-filterable-current=":kmath-memory:dokkaHtmlPartial/jsMain" data-filterable-set=":kmath-memory:dokkaHtmlPartial/jsMain" data-toggle=":kmath-memory:dokkaHtmlPartial/jsMain">js</button><button class="platform-bookmark" data-filterable-current=":kmath-memory:dokkaHtmlPartial/jvmMain" data-filterable-set=":kmath-memory:dokkaHtmlPartial/jvmMain" data-toggle=":kmath-memory:dokkaHtmlPartial/jvmMain">jvm</button><button class="platform-bookmark" data-filterable-current=":kmath-memory:dokkaHtmlPartial/nativeMain" data-filterable-set=":kmath-memory:dokkaHtmlPartial/nativeMain" data-toggle=":kmath-memory:dokkaHtmlPartial/nativeMain">native</button><button class="platform-bookmark" data-filterable-current=":kmath-memory:dokkaHtmlPartial/wasmMain" data-filterable-set=":kmath-memory:dokkaHtmlPartial/wasmMain" data-toggle=":kmath-memory:dokkaHtmlPartial/wasmMain">wasm</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-memory:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">expect </span><span class="token keyword"></span><span class="token keyword">fun </span><a href="-memory/-companion/index.html">Memory.Companion</a><span class="token punctuation">.</span><a href="wrap.html"><span class="token function">wrap</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">array<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte-array/index.html">ByteArray</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-memory/index.html">Memory</a></div><div class="brief "><p class="paragraph">Wraps a <a href="-memory/index.html">Memory</a> around existing <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte-array/index.html">ByteArray</a>. This operation is unsafe since the array is not copied and could be mutated independently of the resulting <a href="-memory/index.html">Memory</a>.</p></div></div><div class="content sourceset-dependent-content" data-togglable=":kmath-memory:dokkaHtmlPartial/jsMain"><div class="symbol monospace"><span class="token keyword">actual </span><span class="token keyword"></span><span class="token keyword">fun </span><a href="-memory/-companion/index.html#-1476492084%2FMain%2F449431098">Memory.Companion</a><span class="token punctuation">.</span><a href="wrap.html"><span class="token function">wrap</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">array<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte-array/index.html">ByteArray</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../kmath-memory/space.kscience.kmath.memory/-memory/index.html">Memory</a></div><div class="brief "><p class="paragraph">Wraps a <a href="../../kmath-memory/space.kscience.kmath.memory/-memory/index.html">Memory</a> around existing <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte-array/index.html">ByteArray</a>. This operation is unsafe since the array is not copied and could be mutated independently of the resulting <a href="../../kmath-memory/space.kscience.kmath.memory/-memory/index.html">Memory</a>.</p></div></div><div class="content sourceset-dependent-content" data-togglable=":kmath-memory:dokkaHtmlPartial/jvmMain"><div class="symbol monospace"><span class="token keyword">actual </span><span class="token keyword"></span><span class="token keyword">fun </span><a href="-memory/-companion/index.html#-1476492084%2FMain%2F341816670">Memory.Companion</a><span class="token punctuation">.</span><a href="wrap.html"><span class="token function">wrap</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">array<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte-array/index.html">ByteArray</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../kmath-memory/space.kscience.kmath.memory/-memory/index.html">Memory</a></div><div class="brief "><p class="paragraph">Wraps a <a href="../../kmath-memory/space.kscience.kmath.memory/-memory/index.html">Memory</a> around existing <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte-array/index.html">ByteArray</a>. This operation is unsafe since the array is not copied and could be mutated independently of the resulting <a href="../../kmath-memory/space.kscience.kmath.memory/-memory/index.html">Memory</a>.</p></div></div><div class="content sourceset-dependent-content" data-togglable=":kmath-memory:dokkaHtmlPartial/nativeMain"><div class="symbol monospace"><span class="token keyword">actual </span><span class="token keyword"></span><span class="token keyword">fun </span><a href="-memory/-companion/index.html#-1476492084%2FMain%2F-853052820">Memory.Companion</a><span class="token punctuation">.</span><a href="wrap.html"><span class="token function">wrap</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">array<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte-array/index.html">ByteArray</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../kmath-memory/space.kscience.kmath.memory/-memory/index.html">Memory</a></div><div class="brief "><p class="paragraph">Wraps a <a href="../../kmath-memory/space.kscience.kmath.memory/-memory/index.html">Memory</a> around existing <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte-array/index.html">ByteArray</a>. This operation is unsafe since the array is not copied and could be mutated independently of the resulting <a href="../../kmath-memory/space.kscience.kmath.memory/-memory/index.html">Memory</a>.</p></div></div><div class="content sourceset-dependent-content" data-togglable=":kmath-memory:dokkaHtmlPartial/wasmMain"><div class="symbol monospace"><span class="token keyword">actual </span><span class="token keyword"></span><span class="token keyword">fun </span><a href="-memory/-companion/index.html#-1476492084%2FMain%2F653537183">Memory.Companion</a><span class="token punctuation">.</span><a href="wrap.html"><span class="token function">wrap</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">array<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte-array/index.html">ByteArray</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../kmath-memory/space.kscience.kmath.memory/-memory/index.html">Memory</a></div><div class="brief "><p class="paragraph">Wraps a <a href="../../kmath-memory/space.kscience.kmath.memory/-memory/index.html">Memory</a> around existing <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte-array/index.html">ByteArray</a>. This operation is unsafe since the array is not copied and could be mutated independently of the resulting <a href="../../kmath-memory/space.kscience.kmath.memory/-memory/index.html">Memory</a>.</p></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1091081522%2FFunctions%2F1114102424" anchor-label="write" id="-1091081522%2FFunctions%2F1114102424" data-filterable-set=":kmath-memory:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-memory:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-memory:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="write.html"><span><span>write</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1091081522%2FFunctions%2F1114102424"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-memory:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">inline </span><span class="token keyword">fun </span><a href="-memory/index.html">Memory</a><span class="token punctuation">.</span><a href="write.html"><span class="token function">write</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">block<span class="token operator">: </span><span class="token keyword"></span><a href="-memory-writer/index.html">MemoryWriter</a><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Uses the memory for write then releases the writer.</p></div><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="write.html">T</a><span class="token operator"> : </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a><span class="token operator">&gt; </span><a href="-memory-writer/index.html">MemoryWriter</a><span class="token punctuation">.</span><a href="write.html"><span class="token function">write</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">spec<span class="token operator">: </span><a href="-memory-spec/index.html">MemorySpec</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="write.html">T</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">offset<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter ">value<span class="token operator">: </span><a href="write.html">T</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Writes the object <a href="write.html">value</a> with <a href="write.html">spec</a> starting from <a href="write.html">offset</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-272858934%2FFunctions%2F1114102424" anchor-label="writeArray" id="-272858934%2FFunctions%2F1114102424" data-filterable-set=":kmath-memory:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-memory:dokkaHtmlPartial/commonMain" data-filterable-set=":kmath-memory:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="write-array.html"><span>write</span><wbr><span><span>Array</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-272858934%2FFunctions%2F1114102424"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-memory:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="write-array.html">T</a><span class="token operator"> : </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a><span class="token operator">&gt; </span><a href="-memory-writer/index.html">MemoryWriter</a><span class="token punctuation">.</span><a href="write-array.html"><span class="token function">writeArray</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">spec<span class="token operator">: </span><a href="-memory-spec/index.html">MemorySpec</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="write-array.html">T</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">offset<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter ">array<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-array/index.html">Array</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="write-array.html">T</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Writes <a href="write-array.html">array</a> of objects mapped by <a href="write-array.html">spec</a> at certain <a href="write-array.html">offset</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-  
-</body></html>
-
+  </div>
+</div>
+      <div class="footer">
+        <span class="go-to-top-icon"><a href="#content" id="go-to-top-link"></a></span><span>© 2023 Copyright</span><span class="pull-right"><span>Generated by </span><a href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span>
+      </div>
+    </div>
+</div>
+</body>
+</html>
 

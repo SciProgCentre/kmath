@@ -1,227 +1,258 @@
+<!doctype html>
 <html>
-  <head>
+<head>
     <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
     <title>space.kscience.kmath.tensorflow</title>
-</head><body><link href="../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../";</script>
-    <script type="text/javascript" src="../../scripts/sourceset_dependencies.js" async></script><link href="../../styles/style.css" rel="Stylesheet"><link href="../../styles/jetbrains-mono.css" rel="Stylesheet"><link href="../../styles/main.css" rel="Stylesheet"><link href="../../styles/prism.css" rel="Stylesheet"><link href="../../styles/logo-styles.css" rel="Stylesheet"><script type="text/javascript" src="../../scripts/clipboard.js" async></script><script type="text/javascript" src="../../scripts/navigation-loader.js" async></script><script type="text/javascript" src="../../scripts/platform-content-handler.js" async></script><script type="text/javascript" src="../../scripts/main.js" defer></script><script type="text/javascript" src="../../scripts/prism.js" async></script><script>const storage = localStorage.getItem("dokka-dark-mode")
-const savedDarkMode = storage ? JSON.parse(storage) : false
-if(savedDarkMode === true){
-    document.getElementsByTagName("html")[0].classList.add("theme-dark")
-}</script>
-
-  
-    <div class="navigation-wrapper" id="navigation-wrapper">
-      <div id="leftToggler"><span class="icon-toggler"></span></div>
-      <div class="library-name"><a href="../../index.html"><span>kmath</span></a></div>
-      <div></div>
-      <div class="pull-right d-flex"><button id="theme-toggle-button"><span id="theme-toggle"></span></button>
-        <div id="searchBar"></div>
-      </div>
+<link href="../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../";</script>    <script>const storage = localStorage.getItem("dokka-dark-mode")
+    if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    } else {
+        const savedDarkMode = JSON.parse(storage)
+        if(savedDarkMode === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    }
+    </script>
+<script type="text/javascript" src="../../scripts/sourceset_dependencies.js" async></script>
+<link href="../../styles/style.css" rel="Stylesheet">
+<link href="../../styles/jetbrains-mono.css" rel="Stylesheet">
+<link href="../../styles/main.css" rel="Stylesheet">
+<link href="../../styles/prism.css" rel="Stylesheet">
+<link href="../../styles/logo-styles.css" rel="Stylesheet">
+<script type="text/javascript" src="../../scripts/clipboard.js" async></script>
+<script type="text/javascript" src="../../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../../scripts/main.js" defer></script>
+<script type="text/javascript" src="../../scripts/prism.js" async></script>
+<script type="text/javascript" src="../../scripts/symbol-parameters-wrapper_deferred.js" defer></script></head>
+<body>
+<div class="navigation-wrapper" id="navigation-wrapper">
+    <div id="leftToggler"><span class="icon-toggler"></span></div>
+    <div class="library-name">
+<a href="../../index.html">
+<span>kmath</span>            </a>    </div>
+    <div>0.3.1-dev-RC
     </div>
-    <div id="container">
-      <div id="leftColumn">
+    <div class="pull-right d-flex">
+        <div class="filter-section" id="filter-section">
+                <button class="platform-tag platform-selector jvm-like" data-active="" data-filter=":kmath-tensorflow:dokkaHtmlPartial/main">jvm</button>
+        </div>
+        <button id="theme-toggle-button"><span id="theme-toggle"></span></button>
+        <div id="searchBar"></div>
+    </div>
+</div>
+<div id="container">
+    <div id="leftColumn">
         <div id="sideMenu"></div>
-      </div>
-      <div id="main">
-        <div class="main-content" id="content" pageids="kmath-tensorflow::space.kscience.kmath.tensorflow////PointingToDeclaration//-1827669625">
-          <div class="breadcrumbs"><a href="../index.html">kmath-tensorflow</a>/<a href="index.html">space.kscience.kmath.tensorflow</a></div>
-          <div class="cover ">
-            <h1 class="cover"><span><span>Package</span></span> <span>space.</span><wbr><span>kscience.</span><wbr><span>kmath.</span><wbr><span>tensorflow</span></h1>
-          </div>
-          <div class="tabbedcontent">
-            <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="Types">Types</button><button class="section-tab" data-togglable="Functions">Functions</button></div>
-            <div class="tabs-section-body">
-              <h2 class="">Types</h2>
-              <div class="table" data-togglable="Types"><a data-name="-684734591%2FClasslikes%2F-1827669625" anchor-label="DoubleTensorFlowAlgebra" id="-684734591%2FClasslikes%2F-1827669625" data-filterable-set=":kmath-tensorflow:dokkaHtmlPartial/main"></a>
-                <div class="table-row" data-filterable-current=":kmath-tensorflow:dokkaHtmlPartial/main" data-filterable-set=":kmath-tensorflow:dokkaHtmlPartial/main">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="-double-tensor-flow-algebra/index.html"><span>Double</span><wbr><span>Tensor</span><wbr><span>Flow</span><wbr><span><span>Algebra</span></span></a></div>
+    </div>
+    <div id="main">
+<div class="main-content" data-page-type="package" id="content" pageids="kmath-tensorflow::space.kscience.kmath.tensorflow////PointingToDeclaration//-1827669625">
+  <div class="breadcrumbs"><a href="../index.html">kmath-tensorflow</a><span class="delimiter">/</span><span class="current">space.kscience.kmath.tensorflow</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span><span>Package-level</span></span> <span><span>declarations</span></span></h1>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="TYPE">Types</button><button class="section-tab" data-togglable="FUNCTION,EXTENSION_FUNCTION">Functions</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="TYPE">
+        <h2 class="">Types</h2>
+        <div class="table"><a data-name="-684734591%2FClasslikes%2F-1827669625" anchor-label="DoubleTensorFlowAlgebra" id="-684734591%2FClasslikes%2F-1827669625" data-filterable-set=":kmath-tensorflow:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":kmath-tensorflow:dokkaHtmlPartial/main" data-filterable-set=":kmath-tensorflow:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-double-tensor-flow-algebra/index.html"><span>Double</span><wbr><span>Tensor</span><wbr><span>Flow</span><wbr><span><span>Algebra</span></span></a></div>
 <span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-684734591%2FClasslikes%2F-1827669625"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-tensorflow:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-double-tensor-flow-algebra/index.html">DoubleTensorFlowAlgebra</a> : <a href="-tensor-flow-algebra/index.html">TensorFlowAlgebra</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span><span class="token keyword"></span><span data-unresolved-link="org.tensorflow.types/TFloat64///PointingToDeclaration/">TFloat64</span><span class="token punctuation">, </span><span class="token keyword"></span><a href="../../kmath-core/space.kscience.kmath.operations/-double-field/index.html">DoubleField</a><span class="token operator">&gt; </span>, <a href="../../kmath-core/space.kscience.kmath.operations/-power-operations/index.html">PowerOperations</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../../kmath-core/space.kscience.kmath.nd/-structure-n-d/index.html">StructureND</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token operator">&gt;</span><span class="token operator">&gt; </span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="734665176%2FClasslikes%2F-1827669625" anchor-label="DoubleTensorFlowOutput" id="734665176%2FClasslikes%2F-1827669625" data-filterable-set=":kmath-tensorflow:dokkaHtmlPartial/main"></a>
-                <div class="table-row" data-filterable-current=":kmath-tensorflow:dokkaHtmlPartial/main" data-filterable-set=":kmath-tensorflow:dokkaHtmlPartial/main">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="-double-tensor-flow-output/index.html"><span>Double</span><wbr><span>Tensor</span><wbr><span>Flow</span><wbr><span><span>Output</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="734665176%2FClasslikes%2F-1827669625"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-tensorflow:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-double-tensor-flow-output/index.html">DoubleTensorFlowOutput</a><span class="token punctuation">(</span>graph<span class="token operator">: </span><span data-unresolved-link="org.tensorflow/Graph///PointingToDeclaration/">Graph</span><span class="token punctuation">, </span>output<span class="token operator">: </span><span data-unresolved-link="org.tensorflow/Output///PointingToDeclaration/">Output</span><span class="token operator">&lt;</span><span class="token keyword"></span><span data-unresolved-link="org.tensorflow.types/TFloat64///PointingToDeclaration/">TFloat64</span><span class="token operator">&gt;</span><span class="token punctuation">)</span> : <a href="-tensor-flow-output/index.html">TensorFlowOutput</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span><span class="token keyword"></span><span data-unresolved-link="org.tensorflow.types/TFloat64///PointingToDeclaration/">TFloat64</span><span class="token operator">&gt; </span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="-2071394694%2FClasslikes%2F-1827669625" anchor-label="IntTensorFlowOutput" id="-2071394694%2FClasslikes%2F-1827669625" data-filterable-set=":kmath-tensorflow:dokkaHtmlPartial/main"></a>
-                <div class="table-row" data-filterable-current=":kmath-tensorflow:dokkaHtmlPartial/main" data-filterable-set=":kmath-tensorflow:dokkaHtmlPartial/main">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="-int-tensor-flow-output/index.html"><span>Int</span><wbr><span>Tensor</span><wbr><span>Flow</span><wbr><span><span>Output</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2071394694%2FClasslikes%2F-1827669625"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-tensorflow:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-int-tensor-flow-output/index.html">IntTensorFlowOutput</a><span class="token punctuation">(</span>graph<span class="token operator">: </span><span data-unresolved-link="org.tensorflow/Graph///PointingToDeclaration/">Graph</span><span class="token punctuation">, </span>output<span class="token operator">: </span><span data-unresolved-link="org.tensorflow/Output///PointingToDeclaration/">Output</span><span class="token operator">&lt;</span><span class="token keyword"></span><span data-unresolved-link="org.tensorflow.types/TInt32///PointingToDeclaration/">TInt32</span><span class="token operator">&gt;</span><span class="token punctuation">)</span> : <a href="-tensor-flow-output/index.html">TensorFlowOutput</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span><span class="token keyword"></span><span data-unresolved-link="org.tensorflow.types/TInt32///PointingToDeclaration/">TInt32</span><span class="token operator">&gt; </span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="683322253%2FClasslikes%2F-1827669625" anchor-label="LongTensorFlowOutput" id="683322253%2FClasslikes%2F-1827669625" data-filterable-set=":kmath-tensorflow:dokkaHtmlPartial/main"></a>
-                <div class="table-row" data-filterable-current=":kmath-tensorflow:dokkaHtmlPartial/main" data-filterable-set=":kmath-tensorflow:dokkaHtmlPartial/main">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="-long-tensor-flow-output/index.html"><span>Long</span><wbr><span>Tensor</span><wbr><span>Flow</span><wbr><span><span>Output</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="683322253%2FClasslikes%2F-1827669625"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-tensorflow:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-long-tensor-flow-output/index.html">LongTensorFlowOutput</a><span class="token punctuation">(</span>graph<span class="token operator">: </span><span data-unresolved-link="org.tensorflow/Graph///PointingToDeclaration/">Graph</span><span class="token punctuation">, </span>output<span class="token operator">: </span><span data-unresolved-link="org.tensorflow/Output///PointingToDeclaration/">Output</span><span class="token operator">&lt;</span><span class="token keyword"></span><span data-unresolved-link="org.tensorflow.types/TInt64///PointingToDeclaration/">TInt64</span><span class="token operator">&gt;</span><span class="token punctuation">)</span> : <a href="-tensor-flow-output/index.html">TensorFlowOutput</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html">Long</a><span class="token punctuation">, </span><span class="token keyword"></span><span data-unresolved-link="org.tensorflow.types/TInt64///PointingToDeclaration/">TInt64</span><span class="token operator">&gt; </span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="498001104%2FClasslikes%2F-1827669625" anchor-label="TensorFlowAlgebra" id="498001104%2FClasslikes%2F-1827669625" data-filterable-set=":kmath-tensorflow:dokkaHtmlPartial/main"></a>
-                <div class="table-row" data-filterable-current=":kmath-tensorflow:dokkaHtmlPartial/main" data-filterable-set=":kmath-tensorflow:dokkaHtmlPartial/main">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="-tensor-flow-algebra/index.html"><span>Tensor</span><wbr><span>Flow</span><wbr><span><span>Algebra</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="498001104%2FClasslikes%2F-1827669625"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-tensorflow:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">class </span><a href="-tensor-flow-algebra/index.html">TensorFlowAlgebra</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="-tensor-flow-algebra/index.html">T</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="-tensor-flow-algebra/index.html">TT</a><span class="token operator"> : </span><span data-unresolved-link="org.tensorflow.types.family/TNumber///PointingToDeclaration/">TNumber</span><span class="token punctuation">, </span><span class="token keyword"></span><a href="-tensor-flow-algebra/index.html">A</a><span class="token operator"> : </span><a href="../../kmath-core/space.kscience.kmath.operations/-ring/index.html">Ring</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="-tensor-flow-algebra/index.html">T</a><span class="token operator">&gt;</span><span class="token operator">&gt;</span> : <a href="../../kmath-tensors/space.kscience.kmath.tensors.api/-tensor-algebra/index.html">TensorAlgebra</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="-tensor-flow-algebra/index.html">T</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="-tensor-flow-algebra/index.html">A</a><span class="token operator">&gt; </span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="-462195585%2FClasslikes%2F-1827669625" anchor-label="TensorFlowArray" id="-462195585%2FClasslikes%2F-1827669625" data-filterable-set=":kmath-tensorflow:dokkaHtmlPartial/main"></a>
-                <div class="table-row" data-filterable-current=":kmath-tensorflow:dokkaHtmlPartial/main" data-filterable-set=":kmath-tensorflow:dokkaHtmlPartial/main">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="-tensor-flow-array/index.html"><span>Tensor</span><wbr><span>Flow</span><wbr><span><span>Array</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-462195585%2FClasslikes%2F-1827669625"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-tensorflow:dokkaHtmlPartial/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation">@</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.jvm/-jvm-inline/index.html"><span class="token annotation">JvmInline</span></a></div></div><span class="token keyword">value </span><span class="token keyword">class </span><a href="-tensor-flow-array/index.html">TensorFlowArray</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="-tensor-flow-array/index.html">T</a><span class="token operator">&gt;</span><span class="token punctuation">(</span>tensor<span class="token operator">: </span><span data-unresolved-link="org.tensorflow.ndarray/NdArray///PointingToDeclaration/">NdArray</span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="-tensor-flow-array/index.html">T</a><span class="token operator">&gt;</span><span class="token punctuation">)</span> : <a href="../../kmath-core/space.kscience.kmath.nd/-mutable-structure-n-d/index.html">MutableStructureND</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="-tensor-flow-array/index.html">T</a><span class="token operator">&gt; </span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Static (eager) in-memory TensorFlow tensor</p></div></div></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="1465554601%2FClasslikes%2F-1827669625" anchor-label="TensorFlowOutput" id="1465554601%2FClasslikes%2F-1827669625" data-filterable-set=":kmath-tensorflow:dokkaHtmlPartial/main"></a>
-                <div class="table-row" data-filterable-current=":kmath-tensorflow:dokkaHtmlPartial/main" data-filterable-set=":kmath-tensorflow:dokkaHtmlPartial/main">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="-tensor-flow-output/index.html"><span>Tensor</span><wbr><span>Flow</span><wbr><span><span>Output</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1465554601%2FClasslikes%2F-1827669625"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-tensorflow:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">class </span><a href="-tensor-flow-output/index.html">TensorFlowOutput</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="-tensor-flow-output/index.html">T</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="-tensor-flow-output/index.html">TT</a><span class="token operator"> : </span><span data-unresolved-link="org.tensorflow.types.family/TType///PointingToDeclaration/">TType</span><span class="token operator">&gt;</span><span class="token punctuation">(</span>graph<span class="token operator">: </span><span data-unresolved-link="org.tensorflow/Graph///PointingToDeclaration/">Graph</span><span class="token punctuation">, </span>output<span class="token operator">: </span><span data-unresolved-link="org.tensorflow/Output///PointingToDeclaration/">Output</span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="-tensor-flow-output/index.html">TT</a><span class="token operator">&gt;</span><span class="token punctuation">)</span> : <a href="-tensor-flow-tensor/index.html">TensorFlowTensor</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="-tensor-flow-output/index.html">T</a><span class="token operator">&gt; </span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Lazy graph-based TensorFlow tensor. The tensor is actualized on call.</p></div></div></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="873887313%2FClasslikes%2F-1827669625" anchor-label="TensorFlowTensor" id="873887313%2FClasslikes%2F-1827669625" data-filterable-set=":kmath-tensorflow:dokkaHtmlPartial/main"></a>
-                <div class="table-row" data-filterable-current=":kmath-tensorflow:dokkaHtmlPartial/main" data-filterable-set=":kmath-tensorflow:dokkaHtmlPartial/main">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="-tensor-flow-tensor/index.html"><span>Tensor</span><wbr><span>Flow</span><wbr><span><span>Tensor</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="873887313%2FClasslikes%2F-1827669625"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-tensorflow:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">interface </span><a href="-tensor-flow-tensor/index.html">TensorFlowTensor</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="-tensor-flow-tensor/index.html">T</a><span class="token operator">&gt;</span> : <a href="../../kmath-core/space.kscience.kmath.nd/-mutable-structure-n-d/index.html">MutableStructureND</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="-tensor-flow-tensor/index.html">T</a><span class="token operator">&gt; </span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-                      </div>
-                    </div>
-                  </div>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-tensorflow:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-double-tensor-flow-algebra/index.html">DoubleTensorFlowAlgebra</a> : <a href="-tensor-flow-algebra/index.html">TensorFlowAlgebra</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span><span class="token keyword"></span><span data-unresolved-link="org.tensorflow.types/TFloat64///PointingToDeclaration/">TFloat64</span><span class="token punctuation">, </span><span class="token keyword"></span><a href="../../kmath-core/space.kscience.kmath.operations/-double-field/index.html">DoubleField</a><span class="token operator">&gt; </span>, <a href="../../kmath-core/space.kscience.kmath.operations/-power-operations/index.html">PowerOperations</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../../kmath-core/space.kscience.kmath.nd/-structure-n-d/index.html">StructureND</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token operator">&gt;</span><span class="token operator">&gt; </span></div></div></div>
                 </div>
               </div>
-              <h2 class="">Functions</h2>
-              <div class="table" data-togglable="Functions"><a data-name="668724399%2FFunctions%2F-1827669625" anchor-label="cos" id="668724399%2FFunctions%2F-1827669625" data-filterable-set=":kmath-tensorflow:dokkaHtmlPartial/main"></a>
-                <div class="table-row" data-filterable-current=":kmath-tensorflow:dokkaHtmlPartial/main" data-filterable-set=":kmath-tensorflow:dokkaHtmlPartial/main">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="cos.html"><span><span>cos</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="668724399%2FFunctions%2F-1827669625"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-tensorflow:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="cos.html">T</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="cos.html">TT</a><span class="token operator"> : </span><span data-unresolved-link="org.tensorflow.types.family/TNumber///PointingToDeclaration/">TNumber</span><span class="token punctuation">, </span><span class="token keyword"></span><a href="cos.html">A</a><span class="token operator"> : </span><a href="../../kmath-core/space.kscience.kmath.operations/-trigonometric-operations/index.html">TrigonometricOperations</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="cos.html">T</a><span class="token operator">&gt;</span>, <a href="../../kmath-core/space.kscience.kmath.operations/-ring/index.html">Ring</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="cos.html">T</a><span class="token operator">&gt;</span><span class="token operator">&gt; </span><a href="-tensor-flow-algebra/index.html">TensorFlowAlgebra</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="cos.html">T</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="cos.html">TT</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="cos.html">A</a><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="cos.html"><span class="token function">cos</span></a><span class="token punctuation">(</span>arg<span class="token operator">: </span><a href="../../kmath-core/space.kscience.kmath.nd/-structure-n-d/index.html">StructureND</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="cos.html">T</a><span class="token operator">&gt;</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-tensor-flow-output/index.html">TensorFlowOutput</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="cos.html">T</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="cos.html">TT</a><span class="token operator">&gt;</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-                      </div>
-                    </div>
-                  </div>
+            </div>
+          </div>
+<a data-name="734665176%2FClasslikes%2F-1827669625" anchor-label="DoubleTensorFlowOutput" id="734665176%2FClasslikes%2F-1827669625" data-filterable-set=":kmath-tensorflow:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":kmath-tensorflow:dokkaHtmlPartial/main" data-filterable-set=":kmath-tensorflow:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-double-tensor-flow-output/index.html"><span>Double</span><wbr><span>Tensor</span><wbr><span>Flow</span><wbr><span><span>Output</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="734665176%2FClasslikes%2F-1827669625"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-tensorflow:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-double-tensor-flow-output/index.html">DoubleTensorFlowOutput</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">graph<span class="token operator">: </span><span data-unresolved-link="org.tensorflow/Graph///PointingToDeclaration/">Graph</span><span class="token punctuation">, </span></span><span class="parameter ">output<span class="token operator">: </span><span data-unresolved-link="org.tensorflow/Output///PointingToDeclaration/">Output</span><span class="token operator">&lt;</span><span class="token keyword"></span><span data-unresolved-link="org.tensorflow.types/TFloat64///PointingToDeclaration/">TFloat64</span><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span> : <a href="-tensor-flow-output/index.html">TensorFlowOutput</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span><span class="token keyword"></span><span data-unresolved-link="org.tensorflow.types/TFloat64///PointingToDeclaration/">TFloat64</span><span class="token operator">&gt; </span></div></div></div>
                 </div>
-<a data-name="-1422441604%2FFunctions%2F-1827669625" anchor-label="produceMapWithTF" id="-1422441604%2FFunctions%2F-1827669625" data-filterable-set=":kmath-tensorflow:dokkaHtmlPartial/main"></a>
-                <div class="table-row" data-filterable-current=":kmath-tensorflow:dokkaHtmlPartial/main" data-filterable-set=":kmath-tensorflow:dokkaHtmlPartial/main">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="produce-map-with-t-f.html"><span>produce</span><wbr><span>Map</span><wbr><span>With</span><wbr><span><span>TF</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1422441604%2FFunctions%2F-1827669625"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-tensorflow:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="../../kmath-core/space.kscience.kmath.operations/-double-field/index.html">DoubleField</a><span class="token punctuation">.</span><a href="produce-map-with-t-f.html"><span class="token function">produceMapWithTF</span></a><span class="token punctuation">(</span>block<span class="token operator">: </span><span class="token keyword"></span><a href="-double-tensor-flow-algebra/index.html">DoubleTensorFlowAlgebra</a><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-map/index.html">Map</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../../kmath-core/space.kscience.kmath.expressions/-symbol/index.html">Symbol</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="../../kmath-core/space.kscience.kmath.nd/-structure-n-d/index.html">StructureND</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token operator">&gt;</span><span class="token operator">&gt;</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-map/index.html">Map</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../../kmath-core/space.kscience.kmath.expressions/-symbol/index.html">Symbol</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="../../kmath-core/space.kscience.kmath.nd/-structure-n-d/index.html">StructureND</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token operator">&gt;</span><span class="token operator">&gt;</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Compute several outputs with TensorFlow in a single run.</p></div></div></div>
-                      </div>
-                    </div>
-                  </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-2071394694%2FClasslikes%2F-1827669625" anchor-label="IntTensorFlowOutput" id="-2071394694%2FClasslikes%2F-1827669625" data-filterable-set=":kmath-tensorflow:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":kmath-tensorflow:dokkaHtmlPartial/main" data-filterable-set=":kmath-tensorflow:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-int-tensor-flow-output/index.html"><span>Int</span><wbr><span>Tensor</span><wbr><span>Flow</span><wbr><span><span>Output</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2071394694%2FClasslikes%2F-1827669625"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-tensorflow:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-int-tensor-flow-output/index.html">IntTensorFlowOutput</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">graph<span class="token operator">: </span><span data-unresolved-link="org.tensorflow/Graph///PointingToDeclaration/">Graph</span><span class="token punctuation">, </span></span><span class="parameter ">output<span class="token operator">: </span><span data-unresolved-link="org.tensorflow/Output///PointingToDeclaration/">Output</span><span class="token operator">&lt;</span><span class="token keyword"></span><span data-unresolved-link="org.tensorflow.types/TInt32///PointingToDeclaration/">TInt32</span><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span> : <a href="-tensor-flow-output/index.html">TensorFlowOutput</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span><span class="token keyword"></span><span data-unresolved-link="org.tensorflow.types/TInt32///PointingToDeclaration/">TInt32</span><span class="token operator">&gt; </span></div></div></div>
                 </div>
-<a data-name="-1822872283%2FFunctions%2F-1827669625" anchor-label="produceWithTF" id="-1822872283%2FFunctions%2F-1827669625" data-filterable-set=":kmath-tensorflow:dokkaHtmlPartial/main"></a>
-                <div class="table-row" data-filterable-current=":kmath-tensorflow:dokkaHtmlPartial/main" data-filterable-set=":kmath-tensorflow:dokkaHtmlPartial/main">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="produce-with-t-f.html"><span>produce</span><wbr><span>With</span><wbr><span><span>TF</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1822872283%2FFunctions%2F-1827669625"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-tensorflow:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="../../kmath-core/space.kscience.kmath.operations/-double-field/index.html">DoubleField</a><span class="token punctuation">.</span><a href="produce-with-t-f.html"><span class="token function">produceWithTF</span></a><span class="token punctuation">(</span>block<span class="token operator">: </span><span class="token keyword"></span><a href="-double-tensor-flow-algebra/index.html">DoubleTensorFlowAlgebra</a><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><span class="token keyword"></span><a href="../../kmath-core/space.kscience.kmath.nd/-structure-n-d/index.html">StructureND</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token operator">&gt;</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../kmath-core/space.kscience.kmath.nd/-structure-n-d/index.html">StructureND</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token operator">&gt;</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Compute a tensor with TensorFlow in a single run.</p></div></div></div>
-                      </div>
-                    </div>
-                  </div>
+              </div>
+            </div>
+          </div>
+<a data-name="683322253%2FClasslikes%2F-1827669625" anchor-label="LongTensorFlowOutput" id="683322253%2FClasslikes%2F-1827669625" data-filterable-set=":kmath-tensorflow:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":kmath-tensorflow:dokkaHtmlPartial/main" data-filterable-set=":kmath-tensorflow:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-long-tensor-flow-output/index.html"><span>Long</span><wbr><span>Tensor</span><wbr><span>Flow</span><wbr><span><span>Output</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="683322253%2FClasslikes%2F-1827669625"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-tensorflow:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-long-tensor-flow-output/index.html">LongTensorFlowOutput</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">graph<span class="token operator">: </span><span data-unresolved-link="org.tensorflow/Graph///PointingToDeclaration/">Graph</span><span class="token punctuation">, </span></span><span class="parameter ">output<span class="token operator">: </span><span data-unresolved-link="org.tensorflow/Output///PointingToDeclaration/">Output</span><span class="token operator">&lt;</span><span class="token keyword"></span><span data-unresolved-link="org.tensorflow.types/TInt64///PointingToDeclaration/">TInt64</span><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span> : <a href="-tensor-flow-output/index.html">TensorFlowOutput</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html">Long</a><span class="token punctuation">, </span><span class="token keyword"></span><span data-unresolved-link="org.tensorflow.types/TInt64///PointingToDeclaration/">TInt64</span><span class="token operator">&gt; </span></div></div></div>
                 </div>
-<a data-name="56776382%2FFunctions%2F-1827669625" anchor-label="sin" id="56776382%2FFunctions%2F-1827669625" data-filterable-set=":kmath-tensorflow:dokkaHtmlPartial/main"></a>
-                <div class="table-row" data-filterable-current=":kmath-tensorflow:dokkaHtmlPartial/main" data-filterable-set=":kmath-tensorflow:dokkaHtmlPartial/main">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex">
-                        <div><a href="sin.html"><span><span>sin</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="56776382%2FFunctions%2F-1827669625"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":kmath-tensorflow:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="sin.html">T</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="sin.html">TT</a><span class="token operator"> : </span><span data-unresolved-link="org.tensorflow.types.family/TNumber///PointingToDeclaration/">TNumber</span><span class="token punctuation">, </span><span class="token keyword"></span><a href="sin.html">A</a><span class="token operator"> : </span><a href="../../kmath-core/space.kscience.kmath.operations/-trigonometric-operations/index.html">TrigonometricOperations</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="sin.html">T</a><span class="token operator">&gt;</span>, <a href="../../kmath-core/space.kscience.kmath.operations/-ring/index.html">Ring</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="sin.html">T</a><span class="token operator">&gt;</span><span class="token operator">&gt; </span><a href="-tensor-flow-algebra/index.html">TensorFlowAlgebra</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="sin.html">T</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="sin.html">TT</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="sin.html">A</a><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="sin.html"><span class="token function">sin</span></a><span class="token punctuation">(</span>arg<span class="token operator">: </span><a href="../../kmath-core/space.kscience.kmath.nd/-structure-n-d/index.html">StructureND</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="sin.html">T</a><span class="token operator">&gt;</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-tensor-flow-output/index.html">TensorFlowOutput</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="sin.html">T</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="sin.html">TT</a><span class="token operator">&gt;</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-                      </div>
-                    </div>
-                  </div>
+              </div>
+            </div>
+          </div>
+<a data-name="498001104%2FClasslikes%2F-1827669625" anchor-label="TensorFlowAlgebra" id="498001104%2FClasslikes%2F-1827669625" data-filterable-set=":kmath-tensorflow:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":kmath-tensorflow:dokkaHtmlPartial/main" data-filterable-set=":kmath-tensorflow:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-tensor-flow-algebra/index.html"><span>Tensor</span><wbr><span>Flow</span><wbr><span><span>Algebra</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="498001104%2FClasslikes%2F-1827669625"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-tensorflow:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">class </span><a href="-tensor-flow-algebra/index.html">TensorFlowAlgebra</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="-tensor-flow-algebra/index.html">T</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="-tensor-flow-algebra/index.html">TT</a><span class="token operator"> : </span><span data-unresolved-link="org.tensorflow.types.family/TNumber///PointingToDeclaration/">TNumber</span><span class="token punctuation">, </span><span class="token keyword"></span><a href="-tensor-flow-algebra/index.html">A</a><span class="token operator"> : </span><a href="../../kmath-core/space.kscience.kmath.operations/-ring/index.html">Ring</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="-tensor-flow-algebra/index.html">T</a><span class="token operator">&gt;</span><span class="token operator">&gt;</span> : <a href="../../kmath-tensors/space.kscience.kmath.tensors.api/-tensor-algebra/index.html">TensorAlgebra</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="-tensor-flow-algebra/index.html">T</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="-tensor-flow-algebra/index.html">A</a><span class="token operator">&gt; </span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-462195585%2FClasslikes%2F-1827669625" anchor-label="TensorFlowArray" id="-462195585%2FClasslikes%2F-1827669625" data-filterable-set=":kmath-tensorflow:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":kmath-tensorflow:dokkaHtmlPartial/main" data-filterable-set=":kmath-tensorflow:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-tensor-flow-array/index.html"><span>Tensor</span><wbr><span>Flow</span><wbr><span><span>Array</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-462195585%2FClasslikes%2F-1827669625"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-tensorflow:dokkaHtmlPartial/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.jvm/-jvm-inline/index.html"><span class="token annotation builtin">JvmInline</span></a></div></div><span class="token keyword">value </span><span class="token keyword">class </span><a href="-tensor-flow-array/index.html">TensorFlowArray</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="-tensor-flow-array/index.html">T</a><span class="token operator">&gt;</span><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>tensor<span class="token operator">: </span><span data-unresolved-link="org.tensorflow.ndarray/NdArray///PointingToDeclaration/">NdArray</span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="-tensor-flow-array/index.html">T</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span> : <a href="../../kmath-core/space.kscience.kmath.nd/-mutable-structure-n-d/index.html">MutableStructureND</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="-tensor-flow-array/index.html">T</a><span class="token operator">&gt; </span></div><div class="brief "><p class="paragraph">Static (eager) in-memory TensorFlow tensor</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1465554601%2FClasslikes%2F-1827669625" anchor-label="TensorFlowOutput" id="1465554601%2FClasslikes%2F-1827669625" data-filterable-set=":kmath-tensorflow:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":kmath-tensorflow:dokkaHtmlPartial/main" data-filterable-set=":kmath-tensorflow:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-tensor-flow-output/index.html"><span>Tensor</span><wbr><span>Flow</span><wbr><span><span>Output</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1465554601%2FClasslikes%2F-1827669625"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-tensorflow:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">class </span><a href="-tensor-flow-output/index.html">TensorFlowOutput</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="-tensor-flow-output/index.html">T</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="-tensor-flow-output/index.html">TT</a><span class="token operator"> : </span><span data-unresolved-link="org.tensorflow.types.family/TType///PointingToDeclaration/">TType</span><span class="token operator">&gt;</span><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">graph<span class="token operator">: </span><span data-unresolved-link="org.tensorflow/Graph///PointingToDeclaration/">Graph</span><span class="token punctuation">, </span></span><span class="parameter ">output<span class="token operator">: </span><span data-unresolved-link="org.tensorflow/Output///PointingToDeclaration/">Output</span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="-tensor-flow-output/index.html">TT</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span> : <a href="-tensor-flow-tensor/index.html">TensorFlowTensor</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="-tensor-flow-output/index.html">T</a><span class="token operator">&gt; </span></div><div class="brief "><p class="paragraph">Lazy graph-based TensorFlow tensor. The tensor is actualized on call.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="873887313%2FClasslikes%2F-1827669625" anchor-label="TensorFlowTensor" id="873887313%2FClasslikes%2F-1827669625" data-filterable-set=":kmath-tensorflow:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":kmath-tensorflow:dokkaHtmlPartial/main" data-filterable-set=":kmath-tensorflow:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-tensor-flow-tensor/index.html"><span>Tensor</span><wbr><span>Flow</span><wbr><span><span>Tensor</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="873887313%2FClasslikes%2F-1827669625"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-tensorflow:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">interface </span><a href="-tensor-flow-tensor/index.html">TensorFlowTensor</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="-tensor-flow-tensor/index.html">T</a><span class="token operator">&gt;</span> : <a href="../../kmath-core/space.kscience.kmath.nd/-mutable-structure-n-d/index.html">MutableStructureND</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="-tensor-flow-tensor/index.html">T</a><span class="token operator">&gt; </span></div></div></div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <div class="footer"><span class="go-to-top-icon"><a href="#content" id="go-to-top-link"></a></span><span>© 2022 Copyright</span><span class="pull-right"><span>Generated by </span><a href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span></div>
+      </div>
+      <div data-togglable="EXTENSION_FUNCTION">
+        <h2 class="">Functions</h2>
+        <div class="table"><a data-name="668724399%2FFunctions%2F-1827669625" anchor-label="cos" id="668724399%2FFunctions%2F-1827669625" data-filterable-set=":kmath-tensorflow:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-tensorflow:dokkaHtmlPartial/main" data-filterable-set=":kmath-tensorflow:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="cos.html"><span><span>cos</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="668724399%2FFunctions%2F-1827669625"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-tensorflow:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="cos.html">T</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="cos.html">TT</a><span class="token operator"> : </span><span data-unresolved-link="org.tensorflow.types.family/TNumber///PointingToDeclaration/">TNumber</span><span class="token punctuation">, </span><span class="token keyword"></span><a href="cos.html">A</a><span class="token operator"> : </span><a href="../../kmath-core/space.kscience.kmath.operations/-trigonometric-operations/index.html">TrigonometricOperations</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="cos.html">T</a><span class="token operator">&gt;</span>, <a href="../../kmath-core/space.kscience.kmath.operations/-ring/index.html">Ring</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="cos.html">T</a><span class="token operator">&gt;</span><span class="token operator">&gt; </span><a href="-tensor-flow-algebra/index.html">TensorFlowAlgebra</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="cos.html">T</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="cos.html">TT</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="cos.html">A</a><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="cos.html"><span class="token function">cos</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">arg<span class="token operator">: </span><a href="../../kmath-core/space.kscience.kmath.nd/-structure-n-d/index.html">StructureND</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="cos.html">T</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-tensor-flow-output/index.html">TensorFlowOutput</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="cos.html">T</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="cos.html">TT</a><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1422441604%2FFunctions%2F-1827669625" anchor-label="produceMapWithTF" id="-1422441604%2FFunctions%2F-1827669625" data-filterable-set=":kmath-tensorflow:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-tensorflow:dokkaHtmlPartial/main" data-filterable-set=":kmath-tensorflow:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="produce-map-with-t-f.html"><span>produce</span><wbr><span>Map</span><wbr><span>With</span><wbr><span><span>TF</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1422441604%2FFunctions%2F-1827669625"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-tensorflow:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="../../kmath-core/space.kscience.kmath.operations/-double-field/index.html">DoubleField</a><span class="token punctuation">.</span><a href="produce-map-with-t-f.html"><span class="token function">produceMapWithTF</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">block<span class="token operator">: </span><span class="token keyword"></span><a href="-double-tensor-flow-algebra/index.html">DoubleTensorFlowAlgebra</a><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-map/index.html">Map</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../../kmath-core/space.kscience.kmath.expressions/-symbol/index.html">Symbol</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="../../kmath-core/space.kscience.kmath.nd/-structure-n-d/index.html">StructureND</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token operator">&gt;</span><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-map/index.html">Map</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../../kmath-core/space.kscience.kmath.expressions/-symbol/index.html">Symbol</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="../../kmath-core/space.kscience.kmath.nd/-structure-n-d/index.html">StructureND</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token operator">&gt;</span><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Compute several outputs with TensorFlow in a single run.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1822872283%2FFunctions%2F-1827669625" anchor-label="produceWithTF" id="-1822872283%2FFunctions%2F-1827669625" data-filterable-set=":kmath-tensorflow:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-tensorflow:dokkaHtmlPartial/main" data-filterable-set=":kmath-tensorflow:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="produce-with-t-f.html"><span>produce</span><wbr><span>With</span><wbr><span><span>TF</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1822872283%2FFunctions%2F-1827669625"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-tensorflow:dokkaHtmlPartial/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="../../kmath-memory/space.kscience.kmath/-unstable-k-math-a-p-i/index.html"><span class="token annotation builtin">UnstableKMathAPI</span></a></div></div><span class="token keyword"></span><span class="token keyword">fun </span><a href="../../kmath-core/space.kscience.kmath.operations/-double-field/index.html">DoubleField</a><span class="token punctuation">.</span><a href="produce-with-t-f.html"><span class="token function">produceWithTF</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">block<span class="token operator">: </span><span class="token keyword"></span><a href="-double-tensor-flow-algebra/index.html">DoubleTensorFlowAlgebra</a><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><span class="token keyword"></span><a href="../../kmath-core/space.kscience.kmath.nd/-structure-n-d/index.html">StructureND</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../kmath-core/space.kscience.kmath.nd/-structure-n-d/index.html">StructureND</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Compute a tensor with TensorFlow in a single run.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="56776382%2FFunctions%2F-1827669625" anchor-label="sin" id="56776382%2FFunctions%2F-1827669625" data-filterable-set=":kmath-tensorflow:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":kmath-tensorflow:dokkaHtmlPartial/main" data-filterable-set=":kmath-tensorflow:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="sin.html"><span><span>sin</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="56776382%2FFunctions%2F-1827669625"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":kmath-tensorflow:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="sin.html">T</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="sin.html">TT</a><span class="token operator"> : </span><span data-unresolved-link="org.tensorflow.types.family/TNumber///PointingToDeclaration/">TNumber</span><span class="token punctuation">, </span><span class="token keyword"></span><a href="sin.html">A</a><span class="token operator"> : </span><a href="../../kmath-core/space.kscience.kmath.operations/-trigonometric-operations/index.html">TrigonometricOperations</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="sin.html">T</a><span class="token operator">&gt;</span>, <a href="../../kmath-core/space.kscience.kmath.operations/-ring/index.html">Ring</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="sin.html">T</a><span class="token operator">&gt;</span><span class="token operator">&gt; </span><a href="-tensor-flow-algebra/index.html">TensorFlowAlgebra</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="sin.html">T</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="sin.html">TT</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="sin.html">A</a><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="sin.html"><span class="token function">sin</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">arg<span class="token operator">: </span><a href="../../kmath-core/space.kscience.kmath.nd/-structure-n-d/index.html">StructureND</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="sin.html">T</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-tensor-flow-output/index.html">TensorFlowOutput</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="sin.html">T</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="sin.html">TT</a><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-  
-</body></html>
-
+  </div>
+</div>
+      <div class="footer">
+        <span class="go-to-top-icon"><a href="#content" id="go-to-top-link"></a></span><span>© 2023 Copyright</span><span class="pull-right"><span>Generated by </span><a href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span>
+      </div>
+    </div>
+</div>
+</body>
+</html>
 
