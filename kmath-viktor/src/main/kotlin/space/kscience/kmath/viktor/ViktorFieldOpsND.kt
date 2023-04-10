@@ -8,9 +8,9 @@
 package space.kscience.kmath.viktor
 
 import org.jetbrains.bio.viktor.F64Array
-import space.kscience.kmath.misc.PerformancePitfall
-import space.kscience.kmath.misc.UnsafeKMathAPI
-import space.kscience.kmath.misc.UnstableKMathAPI
+import space.kscience.kmath.PerformancePitfall
+import space.kscience.kmath.UnsafeKMathAPI
+import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.nd.*
 import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.operations.ExtendedFieldOps

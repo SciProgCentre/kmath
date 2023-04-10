@@ -5,7 +5,7 @@
 
 package space.kscience.kmath.tensors.core
 
-import space.kscience.kmath.misc.PerformancePitfall
+import space.kscience.kmath.PerformancePitfall
 import space.kscience.kmath.nd.MutableStructure1D
 import space.kscience.kmath.nd.ShapeND
 import space.kscience.kmath.structures.MutableBuffer

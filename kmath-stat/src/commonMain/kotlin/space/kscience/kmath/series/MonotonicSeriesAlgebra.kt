@@ -37,11 +37,5 @@ public class MonotonicSeriesAlgebra<T, out A : Ring<T>, out BA : BufferAlgebra<T
     /**
      * Get value by label (rounded down) or return null if the value is outside series boundaries.
      */
-    public fun Buffer<T>.getByLabelOrNull(label: L): T? = getByOffsetOrNull(floorOffset(label))
-
-    /**
-     * Get value by label (rounded down) or throw [IndexOutOfBoundsException] if the value is outside series boundaries.
-     */
-    public fun Buffer<T>.getByLabel(label: L): T = getByLabelOrNull(label)
-        ?: throw IndexOutOfBoundsException("Label $label is not in $labelRange")
+    override fun Buffer<T>.getByLabelOrNull(label: L): T? = getByOffsetOrNull(floorOffset(label))
 }

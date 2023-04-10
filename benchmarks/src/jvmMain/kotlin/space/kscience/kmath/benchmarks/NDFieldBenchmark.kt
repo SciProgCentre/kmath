@@ -13,7 +13,7 @@ import org.jetbrains.kotlinx.multik.api.Multik
 import org.jetbrains.kotlinx.multik.api.ones
 import org.jetbrains.kotlinx.multik.ndarray.data.DN
 import org.jetbrains.kotlinx.multik.ndarray.data.DataType
-import space.kscience.kmath.misc.UnsafeKMathAPI
+import space.kscience.kmath.UnsafeKMathAPI
 import space.kscience.kmath.nd.*
 import space.kscience.kmath.nd4j.nd4j
 import space.kscience.kmath.operations.DoubleField

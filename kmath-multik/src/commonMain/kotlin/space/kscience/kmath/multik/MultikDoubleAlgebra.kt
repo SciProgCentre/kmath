@@ -9,7 +9,7 @@ import org.jetbrains.kotlinx.multik.api.Engine
 import org.jetbrains.kotlinx.multik.api.Multik
 import org.jetbrains.kotlinx.multik.api.ndarrayOf
 import org.jetbrains.kotlinx.multik.ndarray.data.DataType
-import space.kscience.kmath.misc.PerformancePitfall
+import space.kscience.kmath.PerformancePitfall
 import space.kscience.kmath.nd.StructureND
 import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.operations.ExponentialOperations

@@ -5,10 +5,10 @@
 
 package space.kscience.kmath.complex
 
+import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.memory.MemoryReader
 import space.kscience.kmath.memory.MemorySpec
 import space.kscience.kmath.memory.MemoryWriter
-import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.operations.*
 import space.kscience.kmath.structures.*
 import kotlin.math.*

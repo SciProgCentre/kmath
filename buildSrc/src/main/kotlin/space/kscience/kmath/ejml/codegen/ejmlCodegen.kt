@@ -385,7 +385,7 @@ import org.ejml.sparse.csc.factory.LinearSolverFactory_DSCC
 import org.ejml.sparse.csc.factory.LinearSolverFactory_FSCC
 import space.kscience.kmath.linear.*
 import space.kscience.kmath.linear.Matrix
-import space.kscience.kmath.misc.UnstableKMathAPI
+import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.nd.StructureFeature
 import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.operations.FloatField

@@ -10,9 +10,9 @@ import org.tensorflow.Output
 import org.tensorflow.ndarray.NdArray
 import org.tensorflow.op.core.Constant
 import org.tensorflow.types.TFloat64
+import space.kscience.kmath.PerformancePitfall
+import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.expressions.Symbol
-import space.kscience.kmath.misc.PerformancePitfall
-import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.nd.ColumnStrides
 import space.kscience.kmath.nd.ShapeND
 import space.kscience.kmath.nd.StructureND

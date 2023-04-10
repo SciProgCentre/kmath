@@ -5,8 +5,8 @@
 
 package space.kscience.kmath.nd
 
-import space.kscience.kmath.misc.PerformancePitfall
-import space.kscience.kmath.misc.UnstableKMathAPI
+import space.kscience.kmath.PerformancePitfall
+import space.kscience.kmath.UnstableKMathAPI
 
 public open class VirtualStructureND<T>(
     override val shape: ShapeND,

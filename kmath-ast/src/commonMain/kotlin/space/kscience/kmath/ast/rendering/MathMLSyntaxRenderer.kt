@@ -5,8 +5,6 @@
 
 package space.kscience.kmath.ast.rendering
 
-import space.kscience.kmath.misc.UnstableKMathAPI
-
 /**
  * [SyntaxRenderer] implementation for MathML.
  *
@@ -14,7 +12,6 @@ import space.kscience.kmath.misc.UnstableKMathAPI
  *
  * @author Iaroslav Postovalov
  */
-@UnstableKMathAPI
 public object MathMLSyntaxRenderer : SyntaxRenderer {
     override fun render(node: MathSyntax, output: Appendable) {
         output.append("<math xmlns=\"https://www.w3.org/1998/Math/MathML\"><mrow>")

@@ -5,8 +5,8 @@
 
 package space.kscience.kmath.operations
 
+import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.expressions.Symbol
-import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.operations.Ring.Companion.optimizedPower
 import space.kscience.kmath.structures.MutableBufferFactory
 

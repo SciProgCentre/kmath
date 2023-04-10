@@ -11,9 +11,9 @@ import org.ejml.data.DMatrixRMaj
 import org.ejml.dense.row.CommonOps_DDRM
 import org.ejml.dense.row.RandomMatrices_DDRM
 import org.ejml.dense.row.factory.DecompositionFactory_DDRM
+import space.kscience.kmath.PerformancePitfall
+import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.linear.*
-import space.kscience.kmath.misc.PerformancePitfall
-import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.nd.StructureND
 import space.kscience.kmath.nd.toArray
 import space.kscience.kmath.operations.algebra

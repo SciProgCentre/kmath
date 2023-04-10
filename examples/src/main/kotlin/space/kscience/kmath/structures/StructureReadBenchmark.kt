@@ -5,7 +5,7 @@
 
 package space.kscience.kmath.structures
 
-import space.kscience.kmath.misc.PerformancePitfall
+import space.kscience.kmath.PerformancePitfall
 import space.kscience.kmath.nd.BufferND
 import space.kscience.kmath.nd.ColumnStrides
 import space.kscience.kmath.nd.ShapeND

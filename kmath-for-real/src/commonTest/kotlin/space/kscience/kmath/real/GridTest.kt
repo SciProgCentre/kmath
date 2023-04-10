@@ -5,11 +5,7 @@
 
 package space.kscience.kmath.real
 
-import space.kscience.kmath.misc.UnstableKMathAPI
-import space.kscience.kmath.real.DoubleVector
-import space.kscience.kmath.real.minus
-import space.kscience.kmath.real.norm
-import space.kscience.kmath.real.step
+import space.kscience.kmath.UnstableKMathAPI
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue

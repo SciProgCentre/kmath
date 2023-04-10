@@ -12,6 +12,11 @@ kscience{
     dependencies{
         api(projects.kmath.kmathComplex)
     }
+
+    testDependencies {
+        implementation(projects.testUtils)
+    }
+
 }
 
 readme {
