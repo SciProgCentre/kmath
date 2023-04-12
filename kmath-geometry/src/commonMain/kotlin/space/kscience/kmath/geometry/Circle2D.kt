@@ -6,8 +6,10 @@
 package space.kscience.kmath.geometry
 
 import kotlinx.serialization.Serializable
-import space.kscience.kmath.geometry.Euclidean2DSpace.distanceTo
-import kotlin.math.*
+import kotlin.math.PI
+
+interface Circle<T>
+
 
 /**
  * A circle in 2D space

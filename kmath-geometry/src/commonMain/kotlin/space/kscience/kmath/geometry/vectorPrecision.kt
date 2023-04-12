@@ -5,27 +5,14 @@
 
 package space.kscience.kmath.geometry
 
-import space.kscience.kmath.geometry.GeometrySpace.Companion.DEFAULT_PRECISION
-
-/**
- * Float equality within given [precision]
- */
-public fun Double.equalsFloat(other: Double, precision: Double = DEFAULT_PRECISION): Boolean =
-    kotlin.math.abs(this - other) < precision
-
-/**
- * Float equality within given [precision]
- */
-public fun Double.equalsFloat(other: Float, precision: Double = DEFAULT_PRECISION): Boolean =
-    kotlin.math.abs(this - other) < precision
 
 /**
  * Vector equality within given [precision] (using [GeometrySpace.norm] provided by the space
  */
-public fun <V : Vector> V.equalsVector(
-    space: GeometrySpace<V>,
+public fun <V : Any, D : Comparable<D>> V.equalsVector(
+    space: GeometrySpace<V, D>,
     other: V,
-    precision: Double = DEFAULT_PRECISION,
+    precision: D = space.defaultPrecision,
 ): Boolean = with(space) {
     norm(this@equalsVector - other) < precision
 }
@@ -35,22 +22,22 @@ public fun <V : Vector> V.equalsVector(
  */
 public fun Float64Vector2D.equalsVector(
     other: Float64Vector2D,
-    precision: Double = DEFAULT_PRECISION,
+    precision: Double = Euclidean3DSpace.defaultPrecision,
 ): Boolean = equalsVector(Euclidean2DSpace, other, precision)
 
 /**
- * Vector equality using Euclidian L2 norm and given [precision]
+ * Vector equality using Euclidean L2 norm and given [precision]
  */
 public fun Float64Vector3D.equalsVector(
     other: Float64Vector3D,
-    precision: Double = DEFAULT_PRECISION,
+    precision: Double = Euclidean3DSpace.defaultPrecision,
 ): Boolean = equalsVector(Euclidean3DSpace, other, precision)
 
 /**
  * Line equality using [GeometrySpace.norm] provided by the [space] and given [precision]
  */
-public fun <V : Vector> LineSegment<V>.equalsLine(
-    space: GeometrySpace<V>,
+public fun <V : Any, D : Comparable<D>> LineSegment<V>.equalsLine(
+    space: GeometrySpace<V, D>,
     other: LineSegment<V>,
-    precision: Double = DEFAULT_PRECISION,
+    precision: D = space.defaultPrecision,
 ): Boolean = begin.equalsVector(space, other.begin, precision) && end.equalsVector(space, other.end, precision)

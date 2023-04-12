@@ -36,13 +36,13 @@ fun assertVectorEquals(expected: DoubleVector3D, actual: DoubleVector3D, absolut
     assertEquals(expected.z, actual.z, absoluteTolerance)
 }
 
-fun <V : Vector> GeometrySpace<V>.isCollinear(a: V, b: V, absoluteTolerance: Double = 1e-6): Boolean {
+fun <V : Any, D: Comparable<D>> GeometrySpace<V, D>.isCollinear(a: V, b: V, absoluteTolerance: D = defaultPrecision): Boolean {
     val aDist = a.distanceTo(zero)
     val bDist = b.distanceTo(zero)
-    return abs(aDist) < absoluteTolerance || abs(bDist) < absoluteTolerance || abs(abs((a dot b) / (aDist * bDist)) - 1) < absoluteTolerance
+    return aDist < absoluteTolerance || bDist < absoluteTolerance || abs(abs((a dot b) / (aDist * bDist)) - 1) < absoluteTolerance
 }
 
-fun <V : Vector> GeometrySpace<V>.isOrthogonal(a: V, b: V, absoluteTolerance: Double = 1e-6): Boolean =
+fun <V : Any> GeometrySpace<V,*>.isOrthogonal(a: V, b: V, absoluteTolerance: Double = 1e-6): Boolean =
     abs(a dot b) < absoluteTolerance
 
 fun Double.equalFloat(other: Double, maxFloatDelta: Double = 0.000001):

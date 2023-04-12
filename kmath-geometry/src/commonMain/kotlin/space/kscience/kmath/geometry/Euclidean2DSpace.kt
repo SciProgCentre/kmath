@@ -17,7 +17,7 @@ import space.kscience.kmath.operations.ScaleOperations
 import kotlin.math.pow
 import kotlin.math.sqrt
 
-public interface Vector2D<T> : Point<T>, Vector {
+public interface Vector2D<T> : Point<T> {
     public val x: T
     public val y: T
     override val size: Int get() = 2
@@ -47,7 +47,8 @@ public val Vector2D<Double>.r: Double get() = Euclidean2DSpace.norm(this)
 /**
  * 2D Euclidean space
  */
-public object Euclidean2DSpace : GeometrySpace<DoubleVector2D>,
+public object Euclidean2DSpace :
+    GeometrySpace<DoubleVector2D, Double>,
     ScaleOperations<DoubleVector2D>,
     Norm<DoubleVector2D, Double> {
 
@@ -87,4 +88,6 @@ public object Euclidean2DSpace : GeometrySpace<DoubleVector2D>,
 
     public val xAxis: DoubleVector2D = vector(1.0, 0.0)
     public val yAxis: DoubleVector2D = vector(0.0, 1.0)
+
+    override val defaultPrecision: Double = 1e-6
 }

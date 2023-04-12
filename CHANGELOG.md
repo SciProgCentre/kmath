@@ -26,6 +26,7 @@
 - Algebra now has an obligatory `bufferFactory` (#477).
 
 ### Changed
+- Removed marker `Vector` type for geometry
 - Geometry uses type-safe angles
 - Tensor operations switched to prefix notation
 - Row-wise and column-wise ND shapes in the core

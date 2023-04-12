@@ -15,7 +15,7 @@ allprojects {
     }
 
     group = "space.kscience"
-    version = "0.3.1-dev-RC"
+    version = "0.3.2-dev-"
 }
 
 subprojects {
@@ -66,10 +66,10 @@ ksciencePublish {
     }
     github("kmath", "SciProgCentre")
     space(
-        if (isInDevelopment) {
-            "https://maven.pkg.jetbrains.space/spc/p/sci/dev"
-        } else {
+        if (findProperty("production") == "true" || !isInDevelopment) {
             "https://maven.pkg.jetbrains.space/spc/p/sci/maven"
+        } else {
+            "https://maven.pkg.jetbrains.space/spc/p/sci/dev"
         }
     )
     sonatype()

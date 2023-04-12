@@ -18,7 +18,7 @@ import space.kscience.kmath.structures.Buffer
 import kotlin.math.pow
 import kotlin.math.sqrt
 
-public interface Vector3D<T> : Point<T>, Vector {
+public interface Vector3D<T> : Point<T> {
     public val x: T
     public val y: T
     public val z: T
@@ -55,7 +55,7 @@ public typealias Float64Vector3D = Vector3D<Double>
 
 public val DoubleVector3D.r: Double get() = Euclidean3DSpace.norm(this)
 
-public object Euclidean3DSpace : GeometrySpace<DoubleVector3D>, ScaleOperations<DoubleVector3D>,
+public object Euclidean3DSpace : GeometrySpace<DoubleVector3D, Double>, ScaleOperations<DoubleVector3D>,
     Norm<DoubleVector3D, Double> {
 
     @Serializable
@@ -146,4 +146,6 @@ public object Euclidean3DSpace : GeometrySpace<DoubleVector3D>, ScaleOperations<
     public val xAxis: DoubleVector3D = vector(1.0, 0.0, 0.0)
     public val yAxis: DoubleVector3D = vector(0.0, 1.0, 0.0)
     public val zAxis: DoubleVector3D = vector(0.0, 0.0, 1.0)
+
+    override val defaultPrecision: Double = 1e-6
 }

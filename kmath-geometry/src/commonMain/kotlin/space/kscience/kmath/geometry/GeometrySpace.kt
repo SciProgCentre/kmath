@@ -9,23 +9,26 @@ import space.kscience.kmath.operations.Group
 import space.kscience.kmath.operations.Norm
 import space.kscience.kmath.operations.ScaleOperations
 
-public interface Vector
-
-public interface GeometrySpace<V : Vector> : Group<V>, ScaleOperations<V>, Norm<V, Double> {
+/**
+ * A geometry vector space
+ * @param V the type of vector object
+ * @param D the type of distance
+ */
+public interface GeometrySpace<V : Any, D: Comparable<D>> : Group<V>, ScaleOperations<V>, Norm<V, D> {
     /**
      * L2 distance
      */
-    public fun V.distanceTo(other: V): Double
+    public fun V.distanceTo(other: V): D
 
     /**
      * Scalar product
      */
     public infix fun V.dot(other: V): Double
 
-    public companion object{
-        /**
-         * Default precision for geometry objects comparison
-         */
-        internal const val DEFAULT_PRECISION = 1e-6
-    }
+    /**
+     * Default precision for geometry objects comparison
+     */
+    public val defaultPrecision: D
+
+    public companion object
 }
