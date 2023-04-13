@@ -5,7 +5,6 @@
 
 package space.kscience.kmath.series
 
-import space.kscience.kmath.distributions.NormalDistribution
 import space.kscience.kmath.operations.DoubleBufferOps.Companion.map
 import space.kscience.kmath.operations.DoubleField.pow
 import space.kscience.kmath.operations.algebra
@@ -17,6 +16,12 @@ import space.kscience.kmath.operations.fold
 public data class VarianceRatioTestResult(val varianceRatio: Double, val zScore: Double)
 
 public fun varianceRatioTest(series: Series<Double>, shift: Int, homoscedastic: Boolean): VarianceRatioTestResult {
+
+    /**
+     * Calculate the Z statistic and the p-value for the Lo and MacKinlay's Variance Ratio test (1987)
+     * under Homoscedastic or Heteroscedstic assumptions
+     * 	https://ssrn.com/abstract=346975
+     * **/
 
     val sum = { x: Double, y: Double -> x + y }
 
