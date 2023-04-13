@@ -24,10 +24,10 @@ public fun varianceRatioTest(series: Series<Double>, shift: Int, homoscedastic: 
      * **/
 
     val sum = { x: Double, y: Double -> x + y }
-
+    //TODO: catch if shift is too large
     val mean = series.fold(0.0, sum) / series.size
     val demeanedSquares = series.map { power(it - mean, 2) }
-    val variance = demeanedSquares.fold(0.0, sum)
+    val variance = demeanedSquares.fold(0.0, sum) // TODO: catch if variance is zero
 
     with(Double.algebra.bufferAlgebra.seriesAlgebra()) {
         for (i in -1..-shift + 1) { series.shiftOp(i) { v1, v2 -> v1 + v2 } }
