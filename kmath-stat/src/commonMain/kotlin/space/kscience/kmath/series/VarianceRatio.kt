@@ -5,26 +5,48 @@
 
 package space.kscience.kmath.series
 
+import space.kscience.kmath.distributions.NormalDistribution
 import space.kscience.kmath.operations.DoubleBufferOps.Companion.map
+import space.kscience.kmath.operations.DoubleField.pow
 import space.kscience.kmath.operations.algebra
 import space.kscience.kmath.operations.bufferAlgebra
 import space.kscience.kmath.operations.fold
 
 
-fun varianceRatio(series: Series<Double>, shift: Int): Double {
-    val mean = series.fold(0.0) {acc, value -> acc + value} / series.size
+// TODO: add p-value
+public data class VarianceRatioTestResult(val varianceRatio: Double, val zScore: Double)
+
+public fun varianceRatioTest(series: Series<Double>, shift: Int, homoscedastic: Boolean): VarianceRatioTestResult {
+
+    val sum = { x: Double, y: Double -> x + y }
+
+    val mean = series.fold(0.0, sum) / series.size
     val demeanedSquares = series.map { power(it - mean, 2) }
-    val variance = demeanedSquares.fold(0.0) {acc, value -> acc + value}
+    val variance = demeanedSquares.fold(0.0, sum)
 
     with(Double.algebra.bufferAlgebra.seriesAlgebra()) {
-        val seriesAgg = series
-        for (i in -1..-shift + 1) {
-            seriesAgg.shiftOp(i) { v1, v2 -> v1 + v2 }
+        for (i in -1..-shift + 1) { series.shiftOp(i) { v1, v2 -> v1 + v2 } }
+        val demeanedSquaresAgg = series.map { power(it - shift * mean, 2) }
+        val varianceAgg = demeanedSquaresAgg.fold(0.0, sum)
+
+        val varianceRatio =
+            varianceAgg * (series.size - 1) / variance / (series.size - shift + 1) / (1 - shift / series.size)
+
+
+        // calculating asymptotic variance
+        var phi: Double
+        if (homoscedastic) {  // under homoscedastic null hypothesis
+            phi = 2 * (2 * shift - 1.0) * (shift - 1.0) / (3 * shift * series.size)
+        } else { // under homoscedastic null hypothesis
+            phi = 0.0
+            for (j in 1..<shift) {
+                val shiftedProd = demeanedSquares.shiftOp(j) { v1, v2 -> v1 * v2 }
+                val delta = series.size * shiftedProd.fold(0.0, sum) / variance.pow(2)
+                phi += delta * 4 * (shift - j) * (shift - j) / shift / shift // TODO: refactor with square
+            }
         }
 
-        val demeanedSquaresAgg = seriesAgg.map { power(it - shift * mean, 2) }
-        val varianceAgg = demeanedSquaresAgg.fold(0.0) { acc, value -> acc + value }
-
-        return varianceAgg * (series.size - 1) / variance / (series.size - shift + 1) / (1 - shift / series.size)
+        val zScore = (varianceRatio - 1) / phi.pow(0.5)
+        return VarianceRatioTestResult(varianceRatio, zScore)
     }
 }
