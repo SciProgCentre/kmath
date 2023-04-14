@@ -191,7 +191,7 @@ public open class SeriesAlgebra<T, out A : Ring<T>, out BA : BufferAlgebra<T, A>
         crossinline operation: A.(left: T, right: T) -> T,
     ): Series<T> {
         val newRange = offsetIndices.intersect(other.offsetIndices)
-        return seriesByOffset(startOffset = newRange.first, size = newRange.last - newRange.first) { offset ->
+        return seriesByOffset(startOffset = newRange.first, size = newRange.last + 1 - newRange.first) { offset ->
             elementAlgebra.operation(
                 getByOffset(offset),
                 other.getByOffset(offset)

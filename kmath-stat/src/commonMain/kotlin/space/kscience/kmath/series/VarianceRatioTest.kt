@@ -25,17 +25,22 @@ public fun varianceRatioTest(series: Series<Double>, shift: Int, homoscedastic: 
 
     val sum = { x: Double, y: Double -> x + y }
     //TODO: catch if shift is too large
-    val mean = series.fold(0.0, sum) / series.size
-    val demeanedSquares = series.map { power(it - mean, 2) }
-    val variance = demeanedSquares.fold(0.0, sum) // TODO: catch if variance is zero
-
     with(Double.algebra.bufferAlgebra.seriesAlgebra()) {
-        for (i in -1..-shift + 1) { series.shiftOp(i) { v1, v2 -> v1 + v2 } }
-        val demeanedSquaresAgg = series.map { power(it - shift * mean, 2) }
+        val mean = series.fold(0.0, sum) / series.size
+        val demeanedSquares = series.map { power(it - mean, 2) }
+        val variance = demeanedSquares.fold(0.0, sum) // TODO: catch if variance is zero
+
+
+        var seriesAgg = series
+        for (i in 1..<shift) {
+            seriesAgg = seriesAgg.zip(series.moveTo(i)) { v1, v2 -> v1 + v2 }
+        }
+
+        val demeanedSquaresAgg = seriesAgg.map { power(it - shift * mean, 2) }
         val varianceAgg = demeanedSquaresAgg.fold(0.0, sum)
 
         val varianceRatio =
-            varianceAgg * (series.size - 1) / variance / (series.size - shift + 1) / (1 - shift / series.size)
+            varianceAgg * (series.size.toDouble() - 1) / variance / (series.size.toDouble() - shift.toDouble() + 1) / (1 - shift.toDouble()/series.size.toDouble()) / shift.toDouble()
 
 
         // calculating asymptotic variance
@@ -44,8 +49,9 @@ public fun varianceRatioTest(series: Series<Double>, shift: Int, homoscedastic: 
             phi = 2 * (2 * shift - 1.0) * (shift - 1.0) / (3 * shift * series.size)
         } else { // under homoscedastic null hypothesis
             phi = 0.0
+            var shiftedProd = demeanedSquares
             for (j in 1..<shift) {
-                val shiftedProd = demeanedSquares.shiftOp(j) { v1, v2 -> v1 * v2 }
+                shiftedProd = shiftedProd.zip(demeanedSquares.moveTo(j)) { v1, v2 -> v1 * v2 }
                 val delta = series.size * shiftedProd.fold(0.0, sum) / variance.pow(2)
                 phi += delta * 4 * (shift - j) * (shift - j) / shift / shift // TODO: refactor with square
             }
