@@ -202,11 +202,11 @@ public open class SeriesAlgebra<T, out A : Ring<T>, out BA : BufferAlgebra<T, A>
     /**
      * Zip buffer with itself, but shifted
      * */
-    public inline fun Buffer<T>.shiftOp(
+    public inline fun Buffer<T>.zipWithShift(
         shift: Int = 1,
         crossinline operation: A.(left: T, right: T) -> T
     ): Buffer<T> {
-        val shifted = this.moveTo(this.startOffset+shift)
+        val shifted = this.moveBy(shift)
         return zip(shifted, operation)
     }
 
@@ -216,7 +216,7 @@ public open class SeriesAlgebra<T, out A : Ring<T>, out BA : BufferAlgebra<T, A>
 
     override fun multiply(left: Buffer<T>, right: Buffer<T>): Buffer<T> = left.zip(right) { l, r -> l * r }
 
-    public inline fun Buffer<T>.diff(): Buffer<T> = this.shiftOp {l, r -> r - l}
+    public fun Buffer<T>.diff(shift: Int=1): Buffer<T> = this.zipWithShift(shift) {l, r -> r - l}
 
     public companion object
 }

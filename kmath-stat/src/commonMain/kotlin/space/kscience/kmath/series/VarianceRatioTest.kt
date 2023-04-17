@@ -12,10 +12,14 @@ import space.kscience.kmath.operations.bufferAlgebra
 import space.kscience.kmath.operations.fold
 
 
-// TODO: add p-value
+// TODO: add p-value with formula: 2*(1 - cdf(|zScore|))
 public data class VarianceRatioTestResult(val varianceRatio: Double, val zScore: Double)
+    /**
+     * Container class for Variance Ratio Test result:
+     * ratio itself, corresponding Z-score, also it's p-value
+     * **/
 
-public fun varianceRatioTest(series: Series<Double>, shift: Int, homoscedastic: Boolean): VarianceRatioTestResult {
+public fun varianceRatioTest(series: Series<Double>, shift: Int, homoscedastic: Boolean=true): VarianceRatioTestResult {
 
     /**
      * Calculate the Z statistic and the p-value for the Lo and MacKinlay's Variance Ratio test (1987)
@@ -44,17 +48,17 @@ public fun varianceRatioTest(series: Series<Double>, shift: Int, homoscedastic: 
 
 
         // calculating asymptotic variance
-        var phi: Double
-        if (homoscedastic) {  // under homoscedastic null hypothesis
-            phi = 2 * (2 * shift - 1.0) * (shift - 1.0) / (3 * shift * series.size)
+        val phi = if (homoscedastic) {  // under homoscedastic null hypothesis
+            2 * (2 * shift - 1.0) * (shift - 1.0) / (3 * shift * series.size)
         } else { // under homoscedastic null hypothesis
-            phi = 0.0
+            var accumulator = 0.0
             var shiftedProd = demeanedSquares
             for (j in 1..<shift) {
                 shiftedProd = shiftedProd.zip(demeanedSquares.moveTo(j)) { v1, v2 -> v1 * v2 }
                 val delta = series.size * shiftedProd.fold(0.0, sum) / variance.pow(2)
-                phi += delta * 4 * (shift - j) * (shift - j) / shift / shift // TODO: refactor with square
+                accumulator += delta * 4 * (shift - j) * (shift - j) / shift / shift // TODO: refactor with square
             }
+            accumulator
         }
 
         val zScore = (varianceRatio - 1) / phi.pow(0.5)
