@@ -7,11 +7,11 @@
 
 package space.kscience.kmath.interpolation
 
+import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.data.XYColumnarData
 import space.kscience.kmath.functions.PiecewisePolynomial
 import space.kscience.kmath.functions.asFunction
 import space.kscience.kmath.functions.value
-import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.operations.Ring
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.asBuffer

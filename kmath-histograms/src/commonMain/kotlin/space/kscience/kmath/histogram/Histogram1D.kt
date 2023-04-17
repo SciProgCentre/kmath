@@ -5,10 +5,10 @@
 
 package space.kscience.kmath.histogram
 
+import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.domains.Domain1D
 import space.kscience.kmath.domains.center
 import space.kscience.kmath.linear.Point
-import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.operations.asSequence
 import space.kscience.kmath.structures.Buffer
 

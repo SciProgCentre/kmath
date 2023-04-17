@@ -5,7 +5,7 @@
 
 package space.kscience.kmath.operations
 
-import space.kscience.kmath.misc.PerformancePitfall
+import space.kscience.kmath.PerformancePitfall
 import space.kscience.kmath.structures.Buffer
 
 /**

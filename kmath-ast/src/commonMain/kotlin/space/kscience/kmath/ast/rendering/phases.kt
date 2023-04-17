@@ -6,7 +6,6 @@
 package space.kscience.kmath.ast.rendering
 
 import space.kscience.kmath.ast.rendering.FeaturedMathRendererWithPostProcess.PostProcessPhase
-import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.operations.FieldOps
 import space.kscience.kmath.operations.GroupOps
 import space.kscience.kmath.operations.PowerOperations
@@ -17,7 +16,6 @@ import space.kscience.kmath.operations.RingOps
  *
  * @author Iaroslav Postovalov
  */
-@UnstableKMathAPI
 public val BetterMultiplication: PostProcessPhase = PostProcessPhase { node ->
     fun perform(node: MathSyntax): Unit = when (node) {
         is NumberSyntax -> Unit
@@ -91,7 +89,6 @@ public val BetterMultiplication: PostProcessPhase = PostProcessPhase { node ->
  *
  * @author Iaroslav Postovalov
  */
-@UnstableKMathAPI
 public val BetterFraction: PostProcessPhase = PostProcessPhase { node ->
     fun perform(node: MathSyntax, infix: Boolean = false): Unit = when (node) {
         is NumberSyntax -> Unit
@@ -162,7 +159,6 @@ public val BetterFraction: PostProcessPhase = PostProcessPhase { node ->
  *
  * @author Iaroslav Postovalov
  */
-@UnstableKMathAPI
 public val BetterExponent: PostProcessPhase = PostProcessPhase { node ->
     fun perform(node: MathSyntax): Boolean {
         return when (node) {
@@ -202,7 +198,6 @@ public val BetterExponent: PostProcessPhase = PostProcessPhase { node ->
  * @property precedenceFunction Returns the precedence number for syntax node. Higher number is lower priority.
  * @author Iaroslav Postovalov
  */
-@UnstableKMathAPI
 public class SimplifyParentheses(public val precedenceFunction: (MathSyntax) -> Int) :
     PostProcessPhase {
     override fun perform(node: MathSyntax): Unit = when (node) {

@@ -5,9 +5,9 @@
 
 package space.kscience.kmath.histogram
 
+import space.kscience.kmath.PerformancePitfall
 import space.kscience.kmath.domains.Domain
 import space.kscience.kmath.linear.Point
-import space.kscience.kmath.misc.PerformancePitfall
 import space.kscience.kmath.nd.ColumnStrides
 import space.kscience.kmath.nd.FieldOpsND
 import space.kscience.kmath.nd.ShapeND

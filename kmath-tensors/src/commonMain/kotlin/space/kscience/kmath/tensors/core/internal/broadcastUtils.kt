@@ -5,7 +5,7 @@
 
 package space.kscience.kmath.tensors.core.internal
 
-import space.kscience.kmath.misc.UnsafeKMathAPI
+import space.kscience.kmath.UnsafeKMathAPI
 import space.kscience.kmath.nd.*
 import space.kscience.kmath.structures.asBuffer
 import space.kscience.kmath.tensors.core.DoubleTensor

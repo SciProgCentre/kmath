@@ -5,7 +5,7 @@
 
 package space.kscience.kmath.operations
 
-import space.kscience.kmath.misc.UnstableKMathAPI
+import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.testutils.RingVerifier
 import kotlin.math.pow
 import kotlin.test.Test

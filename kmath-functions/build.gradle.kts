@@ -6,17 +6,31 @@ kscience{
     jvm()
     js()
     native()
+
+    wasm{
+        browser {
+            testTask {
+                useKarma {
+                    this.webpackConfig.experiments.add("topLevelAwait")
+                    useChromeHeadless()
+                    useConfigDirectory(project.projectDir.resolve("karma.config.d").resolve("wasm"))
+                }
+            }
+        }
+    }
+
+    wasmTest{
+        dependencies {
+            implementation(kotlin("test"))
+        }
+    }
+
+    dependencies {
+        api(projects.kmathCore)
+    }
 }
 
 description = "Functions, integration and interpolation"
-
-kotlin.sourceSets {
-    commonMain {
-        dependencies {
-            api(project(":kmath-core"))
-        }
-    }
-}
 
 dependencies {
     dokkaPlugin("org.jetbrains.dokka:mathjax-plugin:${spclibs.versions.dokka.get()}")

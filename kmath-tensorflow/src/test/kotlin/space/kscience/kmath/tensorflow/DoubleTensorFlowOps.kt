@@ -6,7 +6,7 @@
 package space.kscience.kmath.tensorflow
 
 import org.junit.jupiter.api.Test
-import space.kscience.kmath.misc.UnstableKMathAPI
+import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.nd.ShapeND
 import space.kscience.kmath.nd.get
 import space.kscience.kmath.nd.structureND

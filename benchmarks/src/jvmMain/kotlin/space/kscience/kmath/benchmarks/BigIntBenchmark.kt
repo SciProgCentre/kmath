@@ -10,7 +10,7 @@ import kotlinx.benchmark.Blackhole
 import org.openjdk.jmh.annotations.Benchmark
 import org.openjdk.jmh.annotations.Scope
 import org.openjdk.jmh.annotations.State
-import space.kscience.kmath.misc.UnstableKMathAPI
+import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.operations.BigIntField
 import space.kscience.kmath.operations.JBigIntegerField
 import space.kscience.kmath.operations.invoke

@@ -5,10 +5,10 @@
 
 package space.kscience.kmath.real
 
+import space.kscience.kmath.PerformancePitfall
+import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.linear.linearSpace
 import space.kscience.kmath.linear.matrix
-import space.kscience.kmath.misc.PerformancePitfall
-import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.nd.StructureND
 import space.kscience.kmath.operations.algebra
 import space.kscience.kmath.testutils.contentEquals

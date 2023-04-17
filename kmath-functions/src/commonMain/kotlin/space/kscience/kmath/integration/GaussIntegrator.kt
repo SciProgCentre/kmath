@@ -4,7 +4,7 @@
  */
 package space.kscience.kmath.integration
 
-import space.kscience.kmath.misc.UnstableKMathAPI
+import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.operations.Field
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.asBuffer

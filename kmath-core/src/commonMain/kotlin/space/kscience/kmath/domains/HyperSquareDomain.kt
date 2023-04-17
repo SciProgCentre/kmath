@@ -4,8 +4,8 @@
  */
 package space.kscience.kmath.domains
 
+import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.linear.Point
-import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.DoubleBuffer
 import space.kscience.kmath.structures.indices

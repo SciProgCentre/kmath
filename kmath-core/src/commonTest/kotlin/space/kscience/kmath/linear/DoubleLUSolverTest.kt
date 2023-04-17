@@ -5,8 +5,8 @@
 
 package space.kscience.kmath.linear
 
-import space.kscience.kmath.misc.PerformancePitfall
-import space.kscience.kmath.misc.UnstableKMathAPI
+import space.kscience.kmath.PerformancePitfall
+import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.nd.StructureND
 import space.kscience.kmath.operations.algebra
 import kotlin.test.Test

@@ -8,7 +8,7 @@
 
 package space.kscience.kmath.tensors.core
 
-import space.kscience.kmath.misc.PerformancePitfall
+import space.kscience.kmath.PerformancePitfall
 import space.kscience.kmath.nd.*
 import space.kscience.kmath.operations.IntRing
 import space.kscience.kmath.structures.*

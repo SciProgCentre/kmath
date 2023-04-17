@@ -7,8 +7,8 @@
 
 package space.kscience.kmath.histogram
 
-import space.kscience.kmath.misc.PerformancePitfall
-import space.kscience.kmath.misc.UnstableKMathAPI
+import space.kscience.kmath.PerformancePitfall
+import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.nd.ColumnStrides
 import space.kscience.kmath.operations.invoke
 import space.kscience.kmath.real.DoubleVector

@@ -5,7 +5,7 @@
 
 package space.kscience.kmath.nd
 
-import space.kscience.kmath.misc.PerformancePitfall
+import space.kscience.kmath.PerformancePitfall
 
 @OptIn(PerformancePitfall::class)
 public fun <T> StructureND<T>.roll(axis: Int, step: Int = 1): StructureND<T> {
