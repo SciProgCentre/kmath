@@ -9,11 +9,10 @@ import space.kscience.kmath.operations.DoubleField.pow
 import space.kscience.kmath.operations.algebra
 import space.kscience.kmath.operations.bufferAlgebra
 import space.kscience.kmath.operations.fold
-import space.kscience.kmath.structures.slice
 
 
 // TODO: add p-value with formula: 2*(1 - cdf(|zScore|))
-public data class VarianceRatioTestResult(val varianceRatio: Double, val zScore: Double)
+public data class VarianceRatioTestResult(val varianceRatio: Double=1.0, val zScore: Double=0.0)
     /**
      * Container class for Variance Ratio Test result:
      * ratio itself, corresponding Z-score, also it's p-value
@@ -27,12 +26,15 @@ public fun varianceRatioTest(series: Series<Double>, shift: Int, homoscedastic: 
      * 	https://ssrn.com/abstract=346975
      * **/
 
+    require(shift > 1) {"Shift must be greater than one"}
+    require(shift < series.size) {"Shift must be smaller than sample size"}
     val sum = { x: Double, y: Double -> x + y }
-    //TODO: catch if shift is too large
+
     with(Double.algebra.bufferAlgebra.seriesAlgebra()) {
         val mean = series.fold(0.0, sum) / series.size
         val demeanedSquares = series.map { power(it - mean, 2) }
-        val variance = demeanedSquares.fold(0.0, sum) // TODO: catch if variance is zero
+        val variance = demeanedSquares.fold(0.0, sum)
+        if (variance == 0.0) return VarianceRatioTestResult()
 
 
         var seriesAgg = series
@@ -53,7 +55,7 @@ public fun varianceRatioTest(series: Series<Double>, shift: Int, homoscedastic: 
         } else { // under heteroscedastic null hypothesis
             var accumulator = 0.0
             for (j in 1..<shift) {
-                var temp = demeanedSquares
+                val temp = demeanedSquares
                 val delta = series.size * temp.zipWithShift(j) { v1, v2 -> v1 * v2 }.fold(0.0, sum) / variance.pow(2)
                 accumulator += delta * 4 * (shift - j).toDouble().pow(2) / shift.toDouble().pow(2)
             }
