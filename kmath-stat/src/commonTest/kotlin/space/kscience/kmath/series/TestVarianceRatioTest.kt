@@ -13,7 +13,6 @@ import kotlin.test.assertEquals
 
 class TestVarianceRatioTest {
 
-    // TODO: refactor Heteroscedastic zScore
     @Test
     fun monotonicData() {
         with(Double.algebra.bufferAlgebra.seriesAlgebra()) {
@@ -22,9 +21,9 @@ class TestVarianceRatioTest {
             assertEquals(1.818181, resultHomo.varianceRatio, 1e-6)
             // homoscedastic zScore
             assertEquals(2.587318, resultHomo.zScore, 1e-6)
-//            val resultHetero = varianceRatioTest(monotonicData, 2, homoscedastic = false)
-//            // heteroscedastic zScore
-//            assertEquals(3.253248, resultHetero.zScore, 1e-6)
+            val resultHetero = varianceRatioTest(monotonicData, 2, homoscedastic = false)
+            // heteroscedastic zScore
+            assertEquals(0.819424, resultHetero.zScore, 1e-6)
         }
     }
 
@@ -36,9 +35,9 @@ class TestVarianceRatioTest {
             assertEquals(0.0, resultHomo.varianceRatio, 1e-6)
             // homoscedastic zScore
             assertEquals(-3.162277, resultHomo.zScore, 1e-6)
-//            val resultHetero = varianceRatioTest(volatileData, 2, homoscedastic = false)
-//            // heteroscedastic zScore
-//            assertEquals(-3.535533, resultHetero.zScore, 1e-6)
+            val resultHetero = varianceRatioTest(volatileData, 2, homoscedastic = false)
+            // heteroscedastic zScore
+            assertEquals(-1.0540925, resultHetero.zScore, 1e-6)
         }
     }
 
@@ -50,9 +49,9 @@ class TestVarianceRatioTest {
             assertEquals(1.240031, resultHomo.varianceRatio, 1e-6)
             // homoscedastic zScore
             assertEquals(0.509183, resultHomo.zScore, 1e-6)
-//            val resultHetero = varianceRatioTest(negativeData, 3, homoscedastic = false)
-//            // heteroscedastic zScore
-//            assertEquals(0.661798, resultHetero.zScore, 1e-6)
+            val resultHetero = varianceRatioTest(negativeData, 3, homoscedastic = false)
+            // heteroscedastic zScore
+            assertEquals(0.209202, resultHetero.zScore, 1e-6)
         }
     }
 
