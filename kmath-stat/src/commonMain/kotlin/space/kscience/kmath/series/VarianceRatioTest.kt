@@ -9,10 +9,11 @@ import space.kscience.kmath.operations.DoubleField.pow
 import space.kscience.kmath.operations.algebra
 import space.kscience.kmath.operations.bufferAlgebra
 import space.kscience.kmath.operations.fold
+import kotlin.math.absoluteValue
 
 
 // TODO: add p-value with formula: 2*(1 - cdf(|zScore|))
-public data class VarianceRatioTestResult(val varianceRatio: Double=1.0, val zScore: Double=0.0)
+public data class VarianceRatioTestResult(val varianceRatio: Double=1.0, val zScore: Double=0.0, val pValue: Double=0.5)
     /**
      * Container class for Variance Ratio Test result:
      * ratio itself, corresponding Z-score, also it's p-value
@@ -23,6 +24,7 @@ public fun varianceRatioTest(series: Series<Double>, shift: Int, homoscedastic: 
     /**
      * Calculates the Z-statistic and the p-value for the Lo and MacKinlay's Variance Ratio test (1987)
      * under Homoscedastic or Heteroscedstic assumptions
+     * with two-sided p-value test
      * 	https://ssrn.com/abstract=346975
      * **/
 
@@ -63,6 +65,11 @@ public fun varianceRatioTest(series: Series<Double>, shift: Int, homoscedastic: 
         }
 
         val zScore = (varianceRatio - 1) / phi.pow(0.5)
-        return VarianceRatioTestResult(varianceRatio, zScore)
+        val pValue = 2*(1 - zSNormalCDF(zScore.absoluteValue))
+        return VarianceRatioTestResult(varianceRatio, zScore, pValue)
     }
 }
+
+
+
+

@@ -21,9 +21,11 @@ class TestVarianceRatioTest {
             assertEquals(1.818181, resultHomo.varianceRatio, 1e-6)
             // homoscedastic zScore
             assertEquals(2.587318, resultHomo.zScore, 1e-6)
+            assertEquals(.0096, resultHomo.pValue, 1e-4)
             val resultHetero = varianceRatioTest(monotonicData, 2, homoscedastic = false)
             // heteroscedastic zScore
             assertEquals(0.819424, resultHetero.zScore, 1e-6)
+            assertEquals(.4125, resultHetero.pValue, 1e-4)
         }
     }
 
@@ -35,9 +37,11 @@ class TestVarianceRatioTest {
             assertEquals(0.0, resultHomo.varianceRatio, 1e-6)
             // homoscedastic zScore
             assertEquals(-3.162277, resultHomo.zScore, 1e-6)
+            assertEquals(.0015, resultHomo.pValue, 1e-4)
             val resultHetero = varianceRatioTest(volatileData, 2, homoscedastic = false)
             // heteroscedastic zScore
             assertEquals(-1.0540925, resultHetero.zScore, 1e-6)
+            assertEquals(.2918, resultHetero.pValue, 1e-4)
         }
     }
 
@@ -62,6 +66,7 @@ class TestVarianceRatioTest {
             val result = varianceRatioTest(zeroVolData, 4)
             assertEquals(1.0, result.varianceRatio, 1e-6)
             assertEquals(0.0, result.zScore, 1e-6)
+            assertEquals(0.5, result.pValue, 1e-4)
         }
     }
 }
