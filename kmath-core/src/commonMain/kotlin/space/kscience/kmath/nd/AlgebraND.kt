@@ -16,16 +16,22 @@ import kotlin.reflect.KClass
  * @param T the type of ND-structure element.
  * @param C the type of the element context.
  */
-public interface AlgebraND<T, out C : Algebra<T>>: Algebra<StructureND<T>> {
+public interface AlgebraND<T, out C : Algebra<T>> : Algebra<StructureND<T>> {
     /**
      * The algebra over elements of ND structure.
      */
     public val elementAlgebra: C
 
     /**
+     * Produces a new [MutableStructureND] using given initializer function.
+     */
+    public fun mutableStructureND(shape: ShapeND, initializer: C.(IntArray) -> T): MutableStructureND<T>
+
+    /**
      * Produces a new [StructureND] using given initializer function.
      */
-    public fun structureND(shape: ShapeND, initializer: C.(IntArray) -> T): StructureND<T>
+    public fun structureND(shape: ShapeND, initializer: C.(IntArray) -> T): StructureND<T> =
+        mutableStructureND(shape, initializer)
 
     /**
      * Maps elements from one structure to another one by applying [transform] to them.

@@ -33,7 +33,7 @@ public abstract class MultikTensorAlgebra<T, A : Ring<T>>(
     protected val multikStat: Statistics = multikEngine.getStatistics()
 
     @OptIn(UnsafeKMathAPI::class)
-    override fun structureND(shape: ShapeND, initializer: A.(IntArray) -> T): MultikTensor<T> {
+    override fun mutableStructureND(shape: ShapeND, initializer: A.(IntArray) -> T): MultikTensor<T> {
         val strides = ColumnStrides(shape)
         val memoryView = initMemoryView<T>(strides.linearSize, type)
         strides.asSequence().forEachIndexed { linearIndex, tensorIndex ->
@@ -49,7 +49,7 @@ public abstract class MultikTensorAlgebra<T, A : Ring<T>>(
         for (el in array) data[count++] = elementAlgebra.transform(el)
         NDArray(data, shape = shape.asArray(), dim = array.dim).wrap()
     } else {
-        structureND(shape) { index ->
+        mutableStructureND(shape) { index ->
             transform(get(index))
         }
     }
@@ -70,7 +70,7 @@ public abstract class MultikTensorAlgebra<T, A : Ring<T>>(
             }
             NDArray(data, shape = array.shape, dim = array.dim).wrap()
         } else {
-            structureND(shape) { index ->
+            mutableStructureND(shape) { index ->
                 transform(index, get(index))
             }
         }

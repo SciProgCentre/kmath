@@ -74,7 +74,7 @@ public sealed class DoubleFieldOpsND : BufferedFieldOpsND<Double, DoubleField>(D
         transform: DoubleField.(Double, Double) -> Double,
     ): BufferND<Double> = zipInline(left.toBufferND(), right.toBufferND()) { l, r -> DoubleField.transform(l, r) }
 
-    override fun structureND(shape: ShapeND, initializer: DoubleField.(IntArray) -> Double): DoubleBufferND {
+    override fun mutableStructureND(shape: ShapeND, initializer: DoubleField.(IntArray) -> Double): DoubleBufferND {
         val indexer = indexerBuilder(shape)
         return DoubleBufferND(
             indexer,
@@ -225,7 +225,7 @@ public class DoubleFieldND(override val shape: ShapeND) :
 
     override fun number(value: Number): DoubleBufferND {
         val d = value.toDouble() // minimize conversions
-        return structureND(shape) { d }
+        return mutableStructureND(shape) { d }
     }
 }
 

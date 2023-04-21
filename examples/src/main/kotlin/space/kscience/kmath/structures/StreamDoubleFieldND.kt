@@ -52,6 +52,15 @@ class StreamDoubleFieldND(override val shape: ShapeND) : FieldND<Double, DoubleF
         return BufferND(strides, array.asBuffer())
     }
 
+    override fun mutableStructureND(shape: ShapeND, initializer: DoubleField.(IntArray) -> Double): MutableBufferND<Double> {
+        val array = IntStream.range(0, strides.linearSize).parallel().mapToDouble { offset ->
+            val index = strides.index(offset)
+            DoubleField.initializer(index)
+        }.toArray()
+
+        return MutableBufferND(strides, array.asBuffer())
+    }
+
     @OptIn(PerformancePitfall::class)
     override fun StructureND<Double>.map(
         transform: DoubleField.(Double) -> Double,

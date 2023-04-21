@@ -37,20 +37,20 @@ public sealed interface Nd4jTensorAlgebra<T : Number, A : Field<T>> : AnalyticTe
      */
     public val StructureND<T>.ndArray: INDArray
 
-    override fun structureND(shape: ShapeND, initializer: A.(IntArray) -> T): Nd4jArrayStructure<T>
+    override fun mutableStructureND(shape: ShapeND, initializer: A.(IntArray) -> T): Nd4jArrayStructure<T>
 
     @OptIn(PerformancePitfall::class)
     override fun StructureND<T>.map(transform: A.(T) -> T): Nd4jArrayStructure<T> =
-        structureND(shape) { index -> elementAlgebra.transform(get(index)) }
+        mutableStructureND(shape) { index -> elementAlgebra.transform(get(index)) }
 
     @OptIn(PerformancePitfall::class)
     override fun StructureND<T>.mapIndexed(transform: A.(index: IntArray, T) -> T): Nd4jArrayStructure<T> =
-        structureND(shape) { index -> elementAlgebra.transform(index, get(index)) }
+        mutableStructureND(shape) { index -> elementAlgebra.transform(index, get(index)) }
 
     @OptIn(PerformancePitfall::class)
     override fun zip(left: StructureND<T>, right: StructureND<T>, transform: A.(T, T) -> T): Nd4jArrayStructure<T> {
         require(left.shape.contentEquals(right.shape))
-        return structureND(left.shape) { index -> elementAlgebra.transform(left[index], right[index]) }
+        return mutableStructureND(left.shape) { index -> elementAlgebra.transform(left[index], right[index]) }
     }
 
     override fun T.plus(arg: StructureND<T>): Nd4jArrayStructure<T> = arg.ndArray.add(this).wrap()
@@ -178,7 +178,7 @@ public object DoubleNd4jTensorAlgebra : Nd4jTensorAlgebra<Double, DoubleField> {
     override fun INDArray.wrap(): Nd4jArrayStructure<Double> = asDoubleStructure()
 
     @OptIn(UnsafeKMathAPI::class)
-    override fun structureND(shape: ShapeND, initializer: DoubleField.(IntArray) -> Double): Nd4jArrayStructure<Double> {
+    override fun mutableStructureND(shape: ShapeND, initializer: DoubleField.(IntArray) -> Double): Nd4jArrayStructure<Double> {
         val array: INDArray = Nd4j.zeros(*shape.asArray())
         val indices = ColumnStrides(shape)
         indices.asSequence().forEach { index ->

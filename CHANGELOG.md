@@ -3,6 +3,7 @@
 ## Unreleased
 
 ### Added
+- Explicit `mutableStructureND` builders for mutable stucures
 
 ### Changed
 

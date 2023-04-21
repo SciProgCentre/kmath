@@ -17,8 +17,7 @@ import space.kscience.kmath.operations.ExtendedFieldOps
 import space.kscience.kmath.operations.NumbersAddOps
 import space.kscience.kmath.operations.PowerOperations
 
-@OptIn(UnstableKMathAPI::class, PerformancePitfall::class)
-@Suppress("OVERRIDE_BY_INLINE", "NOTHING_TO_INLINE")
+@OptIn(PerformancePitfall::class)
 public open class ViktorFieldOpsND :
     FieldOpsND<Double, DoubleField>,
     ExtendedFieldOps<StructureND<Double>>,
@@ -27,13 +26,13 @@ public open class ViktorFieldOpsND :
     public val StructureND<Double>.f64Buffer: F64Array
         get() = when (this) {
             is ViktorStructureND -> this.f64Buffer
-            else -> structureND(shape) { this@f64Buffer[it] }.f64Buffer
+            else -> mutableStructureND(shape) { this@f64Buffer[it] }.f64Buffer
         }
 
     override val elementAlgebra: DoubleField get() = DoubleField
 
     @OptIn(UnsafeKMathAPI::class)
-    override fun structureND(shape: ShapeND, initializer: DoubleField.(IntArray) -> Double): ViktorStructureND =
+    override fun mutableStructureND(shape: ShapeND, initializer: DoubleField.(IntArray) -> Double): ViktorStructureND =
         F64Array(*shape.asArray()).apply {
             ColumnStrides(shape).asSequence().forEach { index ->
                 set(value = DoubleField.initializer(index), indices = index)

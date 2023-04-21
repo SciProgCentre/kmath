@@ -16,15 +16,19 @@ public interface BufferAlgebraND<T, out A : Algebra<T>> : AlgebraND<T, A> {
     public val bufferAlgebra: BufferAlgebra<T, A>
     override val elementAlgebra: A get() = bufferAlgebra.elementAlgebra
 
-    override fun structureND(shape: ShapeND, initializer: A.(IntArray) -> T): BufferND<T> {
+    //TODO change AlgebraND contract to include this
+    override fun mutableStructureND(shape: ShapeND, initializer: A.(IntArray) -> T): MutableBufferND<T> {
         val indexer = indexerBuilder(shape)
-        return BufferND(
+        return MutableBufferND(
             indexer,
             bufferAlgebra.buffer(indexer.linearSize) { offset ->
                 elementAlgebra.initializer(indexer.index(offset))
             }
         )
     }
+
+    override fun structureND(shape: ShapeND, initializer: A.(IntArray) -> T): BufferND<T> =
+        mutableStructureND(shape, initializer)
 
     @OptIn(PerformancePitfall::class)
     public fun StructureND<T>.toBufferND(): BufferND<T> = when (this) {
@@ -132,6 +136,11 @@ public fun <T, A : Algebra<T>> BufferAlgebraND<T, A>.structureND(
     vararg shape: Int,
     initializer: A.(IntArray) -> T,
 ): BufferND<T> = structureND(ShapeND(shape), initializer)
+
+public fun <T, A : Algebra<T>> BufferAlgebraND<T, A>.mutableStructureND(
+    vararg shape: Int,
+    initializer: A.(IntArray) -> T,
+): MutableBufferND<T> = mutableStructureND(ShapeND(shape), initializer)
 
 public fun <T, EA : Algebra<T>, A> A.structureND(
     initializer: EA.(IntArray) -> T,

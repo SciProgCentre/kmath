@@ -13,7 +13,10 @@ import space.kscience.kmath.structures.slice
 import space.kscience.plotly.*
 import kotlin.math.PI
 
-fun main() = with(Double.algebra.bufferAlgebra.seriesAlgebra()) {
+fun Double.Companion.seriesAlgebra() = Double.algebra.bufferAlgebra.seriesAlgebra()
+
+
+fun main() = with(Double.seriesAlgebra()) {
 
 
     fun Plot.plotSeries(name: String, buffer: Buffer<Double>) {

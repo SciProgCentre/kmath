@@ -14,6 +14,7 @@ import space.kscience.kmath.PerformancePitfall
 import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.expressions.Symbol
 import space.kscience.kmath.nd.ColumnStrides
+import space.kscience.kmath.nd.MutableStructureND
 import space.kscience.kmath.nd.ShapeND
 import space.kscience.kmath.nd.StructureND
 import space.kscience.kmath.operations.DoubleField
@@ -36,10 +37,10 @@ public class DoubleTensorFlowAlgebra internal constructor(
 
     override val elementAlgebra: DoubleField get() = DoubleField
 
-    override fun structureND(
+    override fun mutableStructureND(
         shape: ShapeND,
         initializer: DoubleField.(IntArray) -> Double,
-    ): StructureND<Double> {
+    ): MutableStructureND<Double> {
         val res = TFloat64.tensorOf(org.tensorflow.ndarray.Shape.of(*shape.toLongArray())) { array ->
             ColumnStrides(shape).forEach { index ->
                 array.setDouble(elementAlgebra.initializer(index), *index.toLongArray())

@@ -6,7 +6,8 @@
 package space.kscience.kmath.operations
 
 import space.kscience.kmath.structures.Buffer
-import space.kscience.kmath.structures.BufferFactory
+import space.kscience.kmath.structures.MutableBuffer
+import space.kscience.kmath.structures.MutableBufferFactory
 
 public interface WithSize {
     public val size: Int
@@ -17,7 +18,7 @@ public interface WithSize {
  */
 public interface BufferAlgebra<T, out A : Algebra<T>> : Algebra<Buffer<T>> {
     public val elementAlgebra: A
-    public val elementBufferFactory: BufferFactory<T> get() = elementAlgebra.bufferFactory
+    public val elementBufferFactory: MutableBufferFactory<T> get() = elementAlgebra.bufferFactory
 
     public fun buffer(size: Int, vararg elements: T): Buffer<T> {
         require(elements.size == size) { "Expected $size elements but found ${elements.size}" }
@@ -73,11 +74,11 @@ private inline fun <T, A : Algebra<T>> BufferAlgebra<T, A>.zipInline(
     return elementBufferFactory(l.size) { elementAlgebra.block(l[it], r[it]) }
 }
 
-public fun <T> BufferAlgebra<T, *>.buffer(size: Int, initializer: (Int) -> T): Buffer<T> {
+public fun <T> BufferAlgebra<T, *>.buffer(size: Int, initializer: (Int) -> T): MutableBuffer<T> {
     return elementBufferFactory(size, initializer)
 }
 
-public fun <T, A> A.buffer(initializer: (Int) -> T): Buffer<T> where A : BufferAlgebra<T, *>, A : WithSize {
+public fun <T, A> A.buffer(initializer: (Int) -> T): MutableBuffer<T> where A : BufferAlgebra<T, *>, A : WithSize {
     return elementBufferFactory(size, initializer)
 }
 

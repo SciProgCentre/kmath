@@ -15,12 +15,12 @@ kscience{
 
 kotlin.sourceSets {
     all {
-        languageSettings.optIn("space.kscience.kmath.misc.UnstableKMathAPI")
+        languageSettings.optIn("space.kscience.kmath.UnstableKMathAPI")
     }
 
     filter { it.name.contains("test", true) }
         .map(org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet::languageSettings)
-        .forEach { it.optIn("space.kscience.kmath.misc.PerformancePitfall") }
+        .forEach { it.optIn("space.kscience.kmath.PerformancePitfall") }
 
     commonMain {
         dependencies {

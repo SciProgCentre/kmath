@@ -17,6 +17,12 @@ public fun <T, A : Algebra<T>> AlgebraND<T, A>.structureND(
     initializer: A.(IntArray) -> T
 ): StructureND<T> = structureND(ShapeND(shapeFirst, *shapeRest), initializer)
 
+public fun <T, A : Algebra<T>> AlgebraND<T, A>.mutableStructureND(
+    shapeFirst: Int,
+    vararg shapeRest: Int,
+    initializer: A.(IntArray) -> T
+): MutableStructureND<T> = mutableStructureND(ShapeND(shapeFirst, *shapeRest), initializer)
+
 public fun <T, A : Group<T>> AlgebraND<T, A>.zero(shape: ShapeND): StructureND<T> = structureND(shape) { zero }
 
 @JvmName("zeroVarArg")
