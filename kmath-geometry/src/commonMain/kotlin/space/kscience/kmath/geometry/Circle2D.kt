@@ -8,7 +8,7 @@ package space.kscience.kmath.geometry
 import kotlinx.serialization.Serializable
 import kotlin.math.PI
 
-interface Circle<T>
+public interface Circle<T>
 
 
 /**

@@ -46,7 +46,7 @@ kotlin {
     sourceSets {
         filter { it.name.contains("test", true) }
             .map(org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet::languageSettings)
-            .forEach { it.optIn("space.kscience.kmath.misc.UnstableKMathAPI") }
+            .forEach { it.optIn("space.kscience.kmath.UnstableKMathAPI") }
     }
 }
 

@@ -36,7 +36,7 @@ fun assertVectorEquals(expected: DoubleVector3D, actual: DoubleVector3D, absolut
     assertEquals(expected.z, actual.z, absoluteTolerance)
 }
 
-fun <V : Any, D: Comparable<D>> GeometrySpace<V, D>.isCollinear(a: V, b: V, absoluteTolerance: D = defaultPrecision): Boolean {
+fun <V : Any> GeometrySpace<V, Double>.isCollinear(a: V, b: V, absoluteTolerance: Double = defaultPrecision): Boolean {
     val aDist = a.distanceTo(zero)
     val bDist = b.distanceTo(zero)
     return aDist < absoluteTolerance || bDist < absoluteTolerance || abs(abs((a dot b) / (aDist * bDist)) - 1) < absoluteTolerance

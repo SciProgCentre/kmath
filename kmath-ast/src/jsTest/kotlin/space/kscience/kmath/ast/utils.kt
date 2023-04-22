@@ -5,6 +5,7 @@
 
 package space.kscience.kmath.ast
 
+import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.expressions.Expression
 import space.kscience.kmath.expressions.MST
 import space.kscience.kmath.expressions.Symbol
@@ -17,6 +18,7 @@ import space.kscience.kmath.estree.compileToExpression as estreeCompileToExpress
 import space.kscience.kmath.wasm.compile as wasmCompile
 import space.kscience.kmath.wasm.compileToExpression as wasmCompileToExpression
 
+@OptIn(UnstableKMathAPI::class)
 private object WasmCompilerTestContext : CompilerTestContext {
     override fun MST.compileToExpression(algebra: IntRing): Expression<Int> = wasmCompileToExpression(algebra)
     override fun MST.compile(algebra: IntRing, arguments: Map<Symbol, Int>): Int = wasmCompile(algebra, arguments)
