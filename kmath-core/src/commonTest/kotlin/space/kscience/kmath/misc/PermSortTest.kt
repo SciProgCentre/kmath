@@ -5,6 +5,7 @@
 
 package space.kscience.kmath.misc
 
+import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.misc.PermSortTest.Platform.*
 import space.kscience.kmath.structures.IntBuffer
 import space.kscience.kmath.structures.asBuffer
@@ -14,6 +15,7 @@ import kotlin.test.assertContentEquals
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
+@OptIn(UnstableKMathAPI::class)
 class PermSortTest {
 
     private enum class Platform {

@@ -5,7 +5,7 @@
 
 package space.kscience.kmath.real
 
-import space.kscience.kmath.misc.UnstableKMathAPI
+import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.DoubleBuffer
 import kotlin.math.floor

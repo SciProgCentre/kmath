@@ -6,7 +6,7 @@
 package space.kscience.kmath.multik
 
 import org.jetbrains.kotlinx.multik.default.DefaultEngine
-import space.kscience.kmath.misc.PerformancePitfall
+import space.kscience.kmath.PerformancePitfall
 import space.kscience.kmath.nd.ShapeND
 import space.kscience.kmath.nd.StructureND
 import space.kscience.kmath.nd.one

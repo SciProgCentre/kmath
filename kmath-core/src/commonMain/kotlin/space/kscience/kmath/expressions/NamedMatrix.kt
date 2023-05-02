@@ -7,9 +7,9 @@
 
 package space.kscience.kmath.expressions
 
+import space.kscience.kmath.PerformancePitfall
+import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.linear.Matrix
-import space.kscience.kmath.misc.PerformancePitfall
-import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.structures.getOrNull
 
 public class NamedMatrix<T>(public val values: Matrix<T>, public val indexer: SymbolIndexer) : Matrix<T> by values {

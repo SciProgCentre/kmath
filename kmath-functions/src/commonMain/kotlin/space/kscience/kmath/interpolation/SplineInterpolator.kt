@@ -5,10 +5,10 @@
 
 package space.kscience.kmath.interpolation
 
+import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.data.XYColumnarData
 import space.kscience.kmath.functions.PiecewisePolynomial
 import space.kscience.kmath.functions.Polynomial
-import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.operations.Field
 import space.kscience.kmath.operations.invoke

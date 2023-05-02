@@ -17,9 +17,7 @@ import space.kscience.kmath.memory.*
 public open class MemoryBuffer<T : Any>(protected val memory: Memory, protected val spec: MemorySpec<T>) : Buffer<T> {
     override val size: Int get() = memory.size / spec.objectSize
 
-    private val reader: MemoryReader = memory.reader()
-
-    override operator fun get(index: Int): T = reader.read(spec, spec.objectSize * index)
+    override operator fun get(index: Int): T = memory.read { read(spec, spec.objectSize * index) }
     override operator fun iterator(): Iterator<T> = (0 until size).asSequence().map { get(it) }.iterator()
 
     override fun toString(): String = Buffer.toString(this)

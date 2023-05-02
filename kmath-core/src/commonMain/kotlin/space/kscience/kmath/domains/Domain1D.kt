@@ -5,8 +5,8 @@
 
 package space.kscience.kmath.domains
 
+import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.linear.Point
-import space.kscience.kmath.misc.UnstableKMathAPI
 
 @UnstableKMathAPI
 public abstract class Domain1D<T : Comparable<T>>(public val range: ClosedRange<T>) : Domain<T> {

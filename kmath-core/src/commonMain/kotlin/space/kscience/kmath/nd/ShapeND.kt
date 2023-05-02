@@ -5,7 +5,7 @@
 
 package space.kscience.kmath.nd
 
-import space.kscience.kmath.misc.UnsafeKMathAPI
+import space.kscience.kmath.UnsafeKMathAPI
 import kotlin.jvm.JvmInline
 
 /**

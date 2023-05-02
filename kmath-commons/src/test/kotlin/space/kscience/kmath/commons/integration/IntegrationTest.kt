@@ -6,9 +6,9 @@
 package space.kscience.kmath.commons.integration
 
 import org.junit.jupiter.api.Test
+import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.integration.integrate
 import space.kscience.kmath.integration.value
-import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.operations.DoubleField.sin
 import kotlin.math.PI
 import kotlin.math.abs

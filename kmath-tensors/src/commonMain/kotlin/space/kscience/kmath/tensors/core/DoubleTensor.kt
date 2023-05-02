@@ -5,9 +5,10 @@
 
 package space.kscience.kmath.tensors.core
 
-import space.kscience.kmath.misc.PerformancePitfall
-import space.kscience.kmath.misc.UnstableKMathAPI
-import space.kscience.kmath.nd.*
+import space.kscience.kmath.PerformancePitfall
+import space.kscience.kmath.UnstableKMathAPI
+import space.kscience.kmath.nd.MutableStructureNDOfDouble
+import space.kscience.kmath.nd.ShapeND
 import space.kscience.kmath.structures.*
 import space.kscience.kmath.tensors.core.internal.toPrettyString
 

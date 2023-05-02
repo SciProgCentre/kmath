@@ -6,6 +6,7 @@ kscience {
     jvm()
     js()
     native()
+
     dependencies {
         api(project(":kmath-core"))
         api(project(":kmath-complex"))
