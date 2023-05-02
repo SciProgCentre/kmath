@@ -214,28 +214,6 @@ One can still use generic algebras though.
 >
 > **Maturity**: EXPERIMENTAL
 
-### [kmath-polynomial](kmath-polynomial)
-> 
->
-> **Maturity**: PROTOTYPE
->
-> **Features:**
-> - [polynomial abstraction](kmath-polynomial/src/commonMain/kotlin/space/kscience/kmath/functions/Polynomial.kt) : Abstraction for polynomial spaces.
-> - [rational function abstraction](kmath-polynomial/src/commonMain/kotlin/space/kscience/kmath/functions/RationalFunction.kt) : Abstraction for rational functions spaces.
-> - ["list" polynomials](kmath-polynomial/src/commonMain/kotlin/space/kscience/kmath/functions/ListRationalFunction.kt) : List implementation of univariate polynomials.
-> - ["list" rational functions](kmath-polynomial/src/commonMain/kotlin/space/kscience/kmath/functions/ListPolynomial.kt) : List implementation of univariate rational functions.
-> - ["list" polynomials and rational functions constructors](kmath-polynomial/src/commonMain/kotlin/space/kscience/kmath/functions/listConstructors.kt) : Constructors for list polynomials and rational functions.
-> - ["list" polynomials and rational functions utilities](kmath-polynomial/src/commonMain/kotlin/space/kscience/kmath/functions/listUtil.kt) : Utilities for list polynomials and rational functions.
-> - ["numbered" polynomials](kmath-polynomial/src/commonMain/kotlin/space/kscience/kmath/functions/NumberedRationalFunction.kt) : Numbered implementation of multivariate polynomials.
-> - ["numbered" rational functions](kmath-polynomial/src/commonMain/kotlin/space/kscience/kmath/functions/NumberedPolynomial.kt) : Numbered implementation of multivariate rational functions.
-> - ["numbered" polynomials and rational functions constructors](kmath-polynomial/src/commonMain/kotlin/space/kscience/kmath/functions/numberedConstructors.kt) : Constructors for numbered polynomials and rational functions.
-> - ["numbered" polynomials and rational functions utilities](kmath-polynomial/src/commonMain/kotlin/space/kscience/kmath/functions/numberedUtil.kt) : Utilities for numbered polynomials and rational functions.
-> - ["labeled" polynomials](kmath-polynomial/src/commonMain/kotlin/space/kscience/kmath/functions/LabeledRationalFunction.kt) : Labeled implementation of multivariate polynomials.
-> - ["labeled" rational functions](kmath-polynomial/src/commonMain/kotlin/space/kscience/kmath/functions/LabeledPolynomial.kt) : Labeled implementation of multivariate rational functions.
-> - ["labeled" polynomials and rational functions constructors](kmath-polynomial/src/commonMain/kotlin/space/kscience/kmath/functions/labeledConstructors.kt) : Constructors for labeled polynomials and rational functions.
-> - ["labeled" polynomials and rational functions utilities](kmath-polynomial/src/commonMain/kotlin/space/kscience/kmath/functions/labeledUtil.kt) : Utilities for labeled polynomials and rational functions.
-
-
 ### [kmath-stat](kmath-stat)
 > 
 >
@@ -261,11 +239,6 @@ One can still use generic algebras though.
 > - [tensor algebra with broadcasting](kmath-tensors/src/commonMain/kotlin/space/kscience/kmath/tensors/core/BroadcastDoubleTensorAlgebra.kt) : Basic linear algebra operations implemented with broadcasting.
 > - [linear algebra operations](kmath-tensors/src/commonMain/kotlin/space/kscience/kmath/tensors/api/LinearOpsTensorAlgebra.kt) : Advanced linear algebra operations like LU decomposition, SVD, etc.
 
-
-### [kmath-trajectory](kmath-trajectory)
-> Path and trajectory optimization
->
-> **Maturity**: PROTOTYPE
 
 ### [kmath-viktor](kmath-viktor)
 > 
@@ -325,4 +298,4 @@ Gradle `6.0+` is required for multiplatform artifacts.
 The project requires a lot of additional work. The most important thing we need is a feedback about what features are
 required the most. Feel free to create feature requests. We are also welcome to code contributions, especially in issues
 marked with
-[waiting for a hero](https://github.com/SciProgCentre/kmath/labels/waiting%20for%20a%20hero) label.
+[waiting for a hero](https://github.com/mipt-npm/kmath/labels/waiting%20for%20a%20hero) label.

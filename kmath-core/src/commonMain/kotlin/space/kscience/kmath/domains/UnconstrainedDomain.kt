@@ -4,8 +4,8 @@
  */
 package space.kscience.kmath.domains
 
+import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.linear.Point
-import space.kscience.kmath.misc.UnstableKMathAPI
 
 @UnstableKMathAPI
 public class UnconstrainedDomain(override val dimension: Int) : DoubleDomain {

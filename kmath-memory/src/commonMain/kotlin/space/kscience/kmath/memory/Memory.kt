@@ -43,7 +43,7 @@ public interface Memory {
 /**
  * The interface to read primitive types in this memory.
  */
-public interface MemoryReader {
+public interface MemoryReader: AutoCloseable {
     /**
      * The underlying memory.
      */
@@ -82,7 +82,7 @@ public interface MemoryReader {
     /**
      * Disposes this reader if needed.
      */
-    public fun release()
+    override fun close()
 }
 
 /**
@@ -90,16 +90,13 @@ public interface MemoryReader {
  */
 public inline fun <R> Memory.read(block: MemoryReader.() -> R): R {
     contract { callsInPlace(block, InvocationKind.EXACTLY_ONCE) }
-    val reader = reader()
-    val result = reader.block()
-    reader.release()
-    return result
+    return reader().use(block)
 }
 
 /**
  * The interface to write primitive types into this memory.
  */
-public interface MemoryWriter {
+public interface MemoryWriter: AutoCloseable {
     /**
      * The underlying memory.
      */
@@ -138,7 +135,7 @@ public interface MemoryWriter {
     /**
      * Disposes this writer if needed.
      */
-    public fun release()
+    override fun close()
 }
 
 /**
@@ -146,7 +143,7 @@ public interface MemoryWriter {
  */
 public inline fun Memory.write(block: MemoryWriter.() -> Unit) {
     contract { callsInPlace(block, InvocationKind.EXACTLY_ONCE) }
-    writer().apply(block).release()
+    writer().use(block)
 }
 
 /**

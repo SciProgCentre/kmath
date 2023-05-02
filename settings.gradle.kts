@@ -13,7 +13,7 @@ dependencyResolutionManagement {
     }
 
     versionCatalogs {
-        create("npmlibs") {
+        create("spclibs") {
             from("space.kscience:version-catalog:$toolsVersion")
         }
     }
@@ -44,7 +44,6 @@ include(
     ":kmath-jupyter",
     ":kmath-symja",
     ":kmath-jafama",
-    ":kmath-trajectory",
     ":examples",
     ":benchmarks",
 )

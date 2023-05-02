@@ -7,10 +7,9 @@ package space.kscience.kmath.fit
 
 import kotlinx.html.br
 import kotlinx.html.h3
-import space.kscience.kmath.commons.expressions.DSProcessor
 import space.kscience.kmath.commons.optimization.CMOptimizer
 import space.kscience.kmath.distributions.NormalDistribution
-import space.kscience.kmath.expressions.chiSquaredExpression
+import space.kscience.kmath.expressions.autodiff
 import space.kscience.kmath.expressions.symbol
 import space.kscience.kmath.operations.asIterable
 import space.kscience.kmath.operations.toList
@@ -22,6 +21,7 @@ import space.kscience.kmath.random.RandomGenerator
 import space.kscience.kmath.real.DoubleVector
 import space.kscience.kmath.real.map
 import space.kscience.kmath.real.step
+import space.kscience.kmath.stat.chiSquaredExpression
 import space.kscience.plotly.*
 import space.kscience.plotly.models.ScatterMode
 import space.kscience.plotly.models.TraceValues
@@ -67,7 +67,7 @@ suspend fun main() {
     val yErr = y.map { sqrt(it) }//RealVector.same(x.size, sigma)
 
     // compute differentiable chi^2 sum for given model ax^2 + bx + c
-    val chi2 = DSProcessor.chiSquaredExpression(x, y, yErr) { arg ->
+    val chi2 = Double.autodiff.chiSquaredExpression(x, y, yErr) { arg ->
         //bind variables to autodiff context
         val a = bindSymbol(a)
         val b = bindSymbol(b)

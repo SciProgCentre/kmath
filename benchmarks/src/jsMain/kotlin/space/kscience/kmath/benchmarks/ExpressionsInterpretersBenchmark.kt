@@ -9,8 +9,8 @@ import kotlinx.benchmark.Benchmark
 import kotlinx.benchmark.Blackhole
 import kotlinx.benchmark.Scope
 import kotlinx.benchmark.State
+import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.expressions.*
-import space.kscience.kmath.operations.Algebra
 import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.operations.bindSymbol
 import space.kscience.kmath.operations.invoke
@@ -94,6 +94,7 @@ class ExpressionsInterpretersBenchmark {
         }
 
         private val mst = node.toExpression(DoubleField)
+        @OptIn(UnstableKMathAPI::class)
         private val wasm = node.wasmCompileToExpression(DoubleField)
         private val estree = node.estreeCompileToExpression(DoubleField)
 

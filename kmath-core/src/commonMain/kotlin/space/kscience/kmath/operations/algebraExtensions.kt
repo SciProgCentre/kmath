@@ -5,7 +5,7 @@
 
 package space.kscience.kmath.operations
 
-import space.kscience.kmath.misc.PerformancePitfall
+import space.kscience.kmath.PerformancePitfall
 import space.kscience.kmath.structures.Buffer
 
 /**
@@ -91,6 +91,17 @@ public fun <T : Comparable<T>> Group<T>.abs(value: T): T = if (value > zero) val
  * @return the sum.
  */
 public fun <T> Iterable<T>.sumWith(group: Group<T>): T = group.sum(this)
+
+/**
+ * Sum extracted elements of [Iterable] with given [group]
+ *
+ * @receiver the collection to sum up.
+ * @param group tha algebra that provides addition
+ * @param extractor the (inline) lambda function to extract value
+ */
+public inline fun <T, R> Iterable<T>.sumWithGroupOf(group: Group<R>, extractor: (T) -> R): R = this.fold(group.zero) { left: R, right: T ->
+    group.add(left, extractor(right))
+}
 
 /**
  * Returns the sum of all elements in the sequence in provided space.

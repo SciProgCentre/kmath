@@ -5,17 +5,15 @@
 
 package space.kscience.kmath.optimization
 
-import space.kscience.kmath.expressions.DifferentiableExpression
-import space.kscience.kmath.expressions.Symbol
-import space.kscience.kmath.expressions.SymbolIndexer
-import space.kscience.kmath.expressions.derivative
+import space.kscience.kmath.UnstableKMathAPI
+import space.kscience.kmath.expressions.*
 import space.kscience.kmath.linear.*
-import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.misc.log
 import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.operations.DoubleL2Norm
 import space.kscience.kmath.operations.algebra
 import space.kscience.kmath.structures.DoubleBuffer
+import kotlin.math.abs
 
 
 public class QowRuns(public val runs: Int) : OptimizationFeature {
@@ -40,18 +38,24 @@ public object QowOptimizer : Optimizer<Double, XYFit> {
     @OptIn(UnstableKMathAPI::class)
     private class QoWeight(
         val problem: XYFit,
-        val parameters: Map<Symbol, Double>,
-    ) : Map<Symbol, Double> by parameters, SymbolIndexer {
-        override val symbols: List<Symbol> = parameters.keys.toList()
+        val freeParameters: Map<Symbol, Double>,
+    ) : SymbolIndexer {
+        val size get() = freeParameters.size
+
+        override val symbols: List<Symbol> = freeParameters.keys.toList()
 
         val data get() = problem.data
+
+        val allParameters by lazy {
+            problem.startPoint + freeParameters
+        }
 
         /**
          * Derivatives of the spectrum over parameters. First index in the point number, second one - index of parameter
          */
         val derivs: Matrix<Double> by lazy {
             linearSpace.buildMatrix(problem.data.size, symbols.size) { d, s ->
-                problem.distance(d).derivative(symbols[s])(parameters)
+                problem.distance(d).derivative(symbols[s]).invoke(allParameters)
             }
         }
 
@@ -60,29 +64,31 @@ public object QowOptimizer : Optimizer<Double, XYFit> {
          */
         val dispersion: Point<Double> by lazy {
             DoubleBuffer(problem.data.size) { d ->
-                1.0/problem.weight(d).invoke(parameters)
+                1.0 / problem.weight(d).invoke(allParameters)
             }
         }
 
-        val prior: DifferentiableExpression<Double>? get() = problem.getFeature<OptimizationPrior<Double>>()
+        val prior: DifferentiableExpression<Double>?
+            get() = problem.getFeature<OptimizationPrior<Double>>()?.withDefaultArgs(allParameters)
 
-        override fun toString(): String = parameters.toString()
+        override fun toString(): String = freeParameters.toString()
     }
 
     /**
      * The signed distance from the model to the [d]-th point of data.
      */
-    private fun QoWeight.distance(d: Int, parameters: Map<Symbol, Double>): Double = problem.distance(d)(parameters)
+    private fun QoWeight.distance(d: Int, parameters: Map<Symbol, Double>): Double =
+        problem.distance(d)(allParameters + parameters)
 
 
     /**
      * The derivative of [distance]
      */
     private fun QoWeight.distanceDerivative(symbol: Symbol, d: Int, parameters: Map<Symbol, Double>): Double =
-        problem.distance(d).derivative(symbol)(parameters)
+        problem.distance(d).derivative(symbol).invoke(allParameters + parameters)
 
     /**
-     * Теоретическая ковариация весовых функций.
+     * Theoretical covariance of weight functions
      *
      * D(\phi)=E(\phi_k(\theta_0) \phi_l(\theta_0))= disDeriv_k * disDeriv_l /sigma^2
      */
@@ -92,7 +98,7 @@ public object QowOptimizer : Optimizer<Double, XYFit> {
         }
 
     /**
-     * Экспериментальная ковариация весов. Формула (22) из
+     * Experimental covariance Eq (22) from
      * http://arxiv.org/abs/physics/0604127
      */
     private fun QoWeight.covarFExp(theta: Map<Symbol, Double>): Matrix<Double> =
@@ -115,10 +121,9 @@ public object QowOptimizer : Optimizer<Double, XYFit> {
      * Equation derivatives for Newton run
      */
     private fun QoWeight.getEqDerivValues(
-        theta: Map<Symbol, Double> = parameters,
+        theta: Map<Symbol, Double> = freeParameters,
     ): Matrix<Double> = with(linearSpace) {
-        //Возвращает производную k-того Eq по l-тому параметру
-        //val res = Array(fitDim) { DoubleArray(fitDim) }
+        //Derivative of k Eq over l parameter
         val sderiv = buildMatrix(data.size, size) { d, s ->
             distanceDerivative(symbols[s], d, theta)
         }
@@ -140,16 +145,15 @@ public object QowOptimizer : Optimizer<Double, XYFit> {
 
 
     /**
-     * Значения уравнений метода квазиоптимальных весов
+     * Quasi optimal weights equations values
      */
-    private fun QoWeight.getEqValues(theta: Map<Symbol, Double> = this): Point<Double> {
+    private fun QoWeight.getEqValues(theta: Map<Symbol, Double>): Point<Double> {
         val distances = DoubleBuffer(data.size) { d -> distance(d, theta) }
-
         return DoubleBuffer(size) { s ->
             val base = (0 until data.size).sumOf { d -> distances[d] * derivs[d, s] / dispersion[d] }
-            //Поправка на априорную вероятность
+            //Prior probability correction
             prior?.let { prior ->
-                base - prior.derivative(symbols[s])(theta) / prior(theta)
+                base - prior.derivative(symbols[s]).invoke(theta) / prior(theta)
             } ?: base
         }
     }
@@ -157,15 +161,13 @@ public object QowOptimizer : Optimizer<Double, XYFit> {
 
     private fun QoWeight.newtonianStep(
         theta: Map<Symbol, Double>,
-        eqvalues: Point<Double>,
+        eqValues: Point<Double>,
     ): QoWeight = linearSpace {
-        with(this@newtonianStep) {
-            val start = theta.toPoint()
-            val invJacob = solver.inverse(this@newtonianStep.getEqDerivValues(theta))
+        val start = theta.toPoint()
+        val invJacob = solver.inverse(getEqDerivValues(theta))
 
-            val step = invJacob.dot(eqvalues)
-            return QoWeight(problem, theta + (start - step).toMap())
-        }
+        val step = invJacob.dot(eqValues)
+        return QoWeight(problem, theta + (start - step).toMap())
     }
 
     private fun QoWeight.newtonianRun(
@@ -177,10 +179,10 @@ public object QowOptimizer : Optimizer<Double, XYFit> {
         val logger = problem.getFeature<OptimizationLog>()
 
         var dis: Double //discrepancy value
-        // Working with the full set of parameters
-        var par = problem.startPoint
 
-        logger?.log { "Starting newtonian iteration from: \n\t$par" }
+        var par = freeParameters
+
+        logger?.log { "Starting newtonian iteration from: \n\t$allParameters" }
 
         var eqvalues = getEqValues(par) //Values of the weight functions
 
@@ -193,48 +195,48 @@ public object QowOptimizer : Optimizer<Double, XYFit> {
             logger?.log { "Starting step number $i" }
 
             val currentSolution = if (fast) {
-                //Берет значения матрицы в той точке, где считается вес
-                newtonianStep(this, eqvalues)
+                //Matrix values in the point of weight computation
+                newtonianStep(freeParameters, eqvalues)
             } else {
-                //Берет значения матрицы в точке par
+                //Matrix values in a current point
                 newtonianStep(par, eqvalues)
             }
             // здесь должен стоять учет границ параметров
             logger?.log { "Parameter values after step are: \n\t$currentSolution" }
 
-            eqvalues = getEqValues(currentSolution)
-            val currentDis = DoubleL2Norm.norm(eqvalues)// невязка после шага
+            eqvalues = getEqValues(currentSolution.freeParameters)
+            val currentDis = DoubleL2Norm.norm(eqvalues)// discrepancy after the step
 
             logger?.log { "The discrepancy after step is: $currentDis." }
 
             if (currentDis >= dis && i > 1) {
-                //дополнительно проверяем, чтобы был сделан хотя бы один шаг
+                //Check if one step is made
                 flag = true
                 logger?.log { "The discrepancy does not decrease. Stopping iteration." }
+            } else if (abs(dis - currentDis) <= tolerance) {
+                flag = true
+                par = currentSolution.freeParameters
+                logger?.log { "Relative discrepancy tolerance threshold is reached. Stopping iteration." }
             } else {
-                par = currentSolution
+                par = currentSolution.freeParameters
                 dis = currentDis
             }
             if (i >= maxSteps) {
                 flag = true
                 logger?.log { "Maximum number of iterations reached. Stopping iteration." }
             }
-            if (dis <= tolerance) {
-                flag = true
-                logger?.log { "Tolerance threshold is reached. Stopping iteration." }
-            }
         }
 
         return QoWeight(problem, par)
     }
 
-    private fun QoWeight.covariance(): Matrix<Double> {
+    private fun QoWeight.covariance(): NamedMatrix<Double> {
         val logger = problem.getFeature<OptimizationLog>()
 
         logger?.log {
             """
-            Starting errors estimation using quasioptimal weights method. The starting weight is:
-                ${problem.startPoint}
+            Starting errors estimation using quasi-optimal weights method. The starting weight is:
+                $allParameters
              """.trimIndent()
         }
 
@@ -248,19 +250,27 @@ public object QowOptimizer : Optimizer<Double, XYFit> {
 //                valid = false
 //            }
 //        }
-        return covar
+        logger?.log {
+            "Covariance matrix:" + "\n" + NamedMatrix.toStringWithSymbols(covar, this)
+        }
+        return covar.named(symbols)
     }
 
     override suspend fun optimize(problem: XYFit): XYFit {
         val qowRuns = problem.getFeature<QowRuns>()?.runs ?: 2
+        val iterations = problem.getFeature<OptimizationIterations>()?.maxIterations ?: 50
 
+        val freeParameters: Map<Symbol, Double> = problem.getFeature<OptimizationParameters>()?.let { op ->
+            problem.startPoint.filterKeys { it in op.symbols }
+        } ?: problem.startPoint
 
-        var qow = QoWeight(problem, problem.startPoint)
-        var res = qow.newtonianRun()
+        var qow = QoWeight(problem, freeParameters)
+        var res = qow.newtonianRun(maxSteps = iterations)
         repeat(qowRuns - 1) {
-            qow = QoWeight(problem, res.parameters)
-            res = qow.newtonianRun()
+            qow = QoWeight(problem, res.freeParameters)
+            res = qow.newtonianRun(maxSteps = iterations)
         }
-        return res.problem.withFeature(OptimizationResult(res.parameters))
+        val covariance = res.covariance()
+        return res.problem.withFeature(OptimizationResult(res.freeParameters), OptimizationCovariance(covariance))
     }
 }

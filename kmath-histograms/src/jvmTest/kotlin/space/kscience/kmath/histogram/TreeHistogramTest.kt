@@ -6,7 +6,7 @@
 package space.kscience.kmath.histogram
 
 import org.junit.jupiter.api.Test
-import space.kscience.kmath.misc.UnstableKMathAPI
+import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.real.step
 import kotlin.random.Random

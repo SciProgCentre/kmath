@@ -5,9 +5,11 @@
 
 package space.kscience.kmath.nd
 
-import space.kscience.kmath.misc.PerformancePitfall
+import space.kscience.kmath.PerformancePitfall
 import space.kscience.kmath.structures.Buffer
+import space.kscience.kmath.structures.BufferFactory
 import space.kscience.kmath.structures.MutableBuffer
+import space.kscience.kmath.structures.MutableBufferFactory
 
 /**
  * Represents [StructureND] over [Buffer].
@@ -27,6 +29,18 @@ public open class BufferND<out T>(
     override val shape: ShapeND get() = indices.shape
 
     override fun toString(): String = StructureND.toString(this)
+}
+
+/**
+ * Create a generic [BufferND] using provided [initializer]
+ */
+public fun <T> BufferND(
+    shape: ShapeND,
+    bufferFactory: BufferFactory<T> = BufferFactory.boxing(),
+    initializer: (IntArray) -> T,
+): BufferND<T> {
+    val strides = Strides(shape)
+    return BufferND(strides, bufferFactory(strides.linearSize) { initializer(strides.index(it)) })
 }
 
 ///**
@@ -65,6 +79,18 @@ public open class MutableBufferND<T>(
     override fun set(index: IntArray, value: T) {
         buffer[indices.offset(index)] = value
     }
+}
+
+/**
+ * Create a generic [BufferND] using provided [initializer]
+ */
+public fun <T> MutableBufferND(
+    shape: ShapeND,
+    bufferFactory: MutableBufferFactory<T> = MutableBufferFactory.boxing(),
+    initializer: (IntArray) -> T,
+): MutableBufferND<T> {
+    val strides = Strides(shape)
+    return MutableBufferND(strides, bufferFactory(strides.linearSize) { initializer(strides.index(it)) })
 }
 
 ///**

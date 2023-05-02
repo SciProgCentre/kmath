@@ -44,3 +44,6 @@ fun <V : Vector> GeometrySpace<V>.isCollinear(a: V, b: V, absoluteTolerance: Dou
 
 fun <V : Vector> GeometrySpace<V>.isOrthogonal(a: V, b: V, absoluteTolerance: Double = 1e-6): Boolean =
     abs(a dot b) < absoluteTolerance
+
+fun Double.equalFloat(other: Double, maxFloatDelta: Double = 0.000001):
+        Boolean = kotlin.math.abs(this - other) < maxFloatDelta

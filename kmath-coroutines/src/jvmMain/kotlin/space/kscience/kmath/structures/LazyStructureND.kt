@@ -6,8 +6,8 @@
 package space.kscience.kmath.structures
 
 import kotlinx.coroutines.*
+import space.kscience.kmath.PerformancePitfall
 import space.kscience.kmath.coroutines.Math
-import space.kscience.kmath.misc.PerformancePitfall
 import space.kscience.kmath.nd.ColumnStrides
 import space.kscience.kmath.nd.ShapeND
 import space.kscience.kmath.nd.StructureND

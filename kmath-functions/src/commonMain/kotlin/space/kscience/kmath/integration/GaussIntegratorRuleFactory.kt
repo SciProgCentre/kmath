@@ -9,7 +9,6 @@ import space.kscience.kmath.operations.mapToBuffer
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.DoubleBuffer
 import space.kscience.kmath.structures.asBuffer
-import kotlin.jvm.Synchronized
 import kotlin.math.ulp
 import kotlin.native.concurrent.ThreadLocal
 
@@ -57,7 +56,6 @@ public object GaussLegendreRuleFactory : GaussIntegratorRuleFactory {
 
     private val cache = HashMap<Int, Pair<Buffer<Double>, Buffer<Double>>>()
 
-    @Synchronized
     private fun getOrBuildRule(numPoints: Int): Pair<Buffer<Double>, Buffer<Double>> =
         cache.getOrPut(numPoints) { buildRule(numPoints) }
 

@@ -5,7 +5,7 @@
 
 package space.kscience.kmath.expressions
 
-import space.kscience.kmath.misc.UnstableKMathAPI
+import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.operations.*
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.MutableBuffer
@@ -80,7 +80,6 @@ public abstract class DSAlgebra<T, A : Ring<T>>(
     public val algebra: A,
     public val order: Int,
     bindings: Map<Symbol, T>,
-    public val valueBufferFactory: MutableBufferFactory<T> = algebra.bufferFactory,
 ) : ExpressionAlgebra<T, DS<T, A>>, SymbolIndexer {
 
     /**
@@ -116,7 +115,6 @@ public abstract class DSAlgebra<T, A : Ring<T>>(
 
                     newCache[p][o] = DSCompiler(
                         algebra,
-                        valueBufferFactory,
                         p,
                         o,
                         valueCompiler,
@@ -141,7 +139,7 @@ public abstract class DSAlgebra<T, A : Ring<T>>(
     override val symbols: List<Symbol> = bindings.map { it.key }
 
     private fun bufferForVariable(index: Int, value: T): Buffer<T> {
-        val buffer = valueBufferFactory(compiler.size) { algebra.zero }
+        val buffer = algebra.bufferFactory(compiler.size) { algebra.zero }
         buffer[0] = value
         if (compiler.order > 0) {
             // the derivative of the variable with respect to itself is 1.
@@ -207,7 +205,7 @@ public abstract class DSAlgebra<T, A : Ring<T>>(
     }
 
     public override fun const(value: T): DS<T, A> {
-        val buffer = valueBufferFactory(compiler.size) { algebra.zero }
+        val buffer = algebra.bufferFactory(compiler.size) { algebra.zero }
         buffer[0] = value
 
         return DS(buffer)
@@ -245,11 +243,14 @@ public open class DSRing<T, A>(
     algebra: A,
     order: Int,
     bindings: Map<Symbol, T>,
-    valueBufferFactory: MutableBufferFactory<T>,
-) : DSAlgebra<T, A>(algebra, order, bindings, valueBufferFactory),
-    Ring<DS<T, A>>, ScaleOperations<DS<T, A>>,
+) : DSAlgebra<T, A>(algebra, order, bindings),
+    Ring<DS<T, A>>,
+    ScaleOperations<DS<T, A>>,
     NumericAlgebra<DS<T, A>>,
-    NumbersAddOps<DS<T, A>> where A : Ring<T>, A : NumericAlgebra<T>, A : ScaleOperations<T> {
+    NumbersAddOps<DS<T, A>>
+        where A : Ring<T>, A : NumericAlgebra<T>, A : ScaleOperations<T> {
+
+    public val elementBufferFactory: MutableBufferFactory<T> = algebra.bufferFactory
 
     override fun bindSymbolOrNull(value: String): DSSymbol? =
         super<DSAlgebra>.bindSymbolOrNull(value)
@@ -261,14 +262,14 @@ public open class DSRing<T, A>(
      */
     protected inline fun DS<T, A>.transformDataBuffer(block: A.(MutableBuffer<T>) -> Unit): DS<T, A> {
         require(derivativeAlgebra == this@DSRing) { "All derivative operations should be done in the same algebra" }
-        val newData = valueBufferFactory(compiler.size) { data[it] }
+        val newData = elementBufferFactory(compiler.size) { data[it] }
         algebra.block(newData)
         return DS(newData)
     }
 
     protected fun DS<T, A>.mapData(block: A.(T) -> T): DS<T, A> {
         require(derivativeAlgebra == this@DSRing) { "All derivative operations should be done in the same algebra" }
-        val newData: Buffer<T> = data.mapToBuffer(valueBufferFactory) {
+        val newData: Buffer<T> = data.mapToBuffer(elementBufferFactory) {
             algebra.block(it)
         }
         return DS(newData)
@@ -276,7 +277,7 @@ public open class DSRing<T, A>(
 
     protected fun DS<T, A>.mapDataIndexed(block: (Int, T) -> T): DS<T, A> {
         require(derivativeAlgebra == this@DSRing) { "All derivative operations should be done in the same algebra" }
-        val newData: Buffer<T> = data.mapIndexedToBuffer(valueBufferFactory, block)
+        val newData: Buffer<T> = data.mapIndexedToBuffer(elementBufferFactory, block)
         return DS(newData)
     }
 
@@ -329,22 +330,21 @@ public class DerivativeStructureRingExpression<T, A>(
     public val function: DSRing<T, A>.() -> DS<T, A>,
 ) : DifferentiableExpression<T> where A : Ring<T>, A : ScaleOperations<T>, A : NumericAlgebra<T> {
     override operator fun invoke(arguments: Map<Symbol, T>): T =
-        DSRing(algebra, 0, arguments, elementBufferFactory).function().value
+        DSRing(algebra, 0, arguments).function().value
 
     override fun derivativeOrNull(symbols: List<Symbol>): Expression<T> = Expression { arguments ->
         with(
             DSRing(
                 algebra,
                 symbols.size,
-                arguments,
-                elementBufferFactory
+                arguments
             )
         ) { function().derivative(symbols) }
     }
 }
 
 /**
- * A field over commons-math [DerivativeStructure].
+ * A field over [DS].
  *
  * @property order The derivation order.
  * @param bindings The map of bindings values. All bindings are considered free parameters.
@@ -354,8 +354,7 @@ public class DSField<T, A : ExtendedField<T>>(
     algebra: A,
     order: Int,
     bindings: Map<Symbol, T>,
-    valueBufferFactory: MutableBufferFactory<T>,
-) : DSRing<T, A>(algebra, order, bindings, valueBufferFactory), ExtendedField<DS<T, A>> {
+) : DSRing<T, A>(algebra, order, bindings), ExtendedField<DS<T, A>> {
     override fun number(value: Number): DS<T, A> = const(algebra.number(value))
 
     override fun divide(left: DS<T, A>, right: DS<T, A>): DS<T, A> = left.transformDataBuffer { result ->
@@ -414,6 +413,7 @@ public class DSField<T, A : ExtendedField<T>>(
         is Int -> arg.transformDataBuffer { result ->
             compiler.pow(arg.data, 0, pow, result, 0)
         }
+
         else -> arg.transformDataBuffer { result ->
             compiler.pow(arg.data, 0, pow.toDouble(), result, 0)
         }
@@ -439,18 +439,29 @@ public class DSField<T, A : ExtendedField<T>>(
 @UnstableKMathAPI
 public class DSFieldExpression<T, A : ExtendedField<T>>(
     public val algebra: A,
-    private val valueBufferFactory: MutableBufferFactory<T> = algebra.bufferFactory,
     public val function: DSField<T, A>.() -> DS<T, A>,
 ) : DifferentiableExpression<T> {
     override operator fun invoke(arguments: Map<Symbol, T>): T =
-        DSField(algebra, 0, arguments, valueBufferFactory).function().value
+        DSField(algebra, 0, arguments).function().value
 
     override fun derivativeOrNull(symbols: List<Symbol>): Expression<T> = Expression { arguments ->
         DSField(
             algebra,
             symbols.size,
             arguments,
-            valueBufferFactory,
         ).run { function().derivative(symbols) }
     }
 }
+
+
+@UnstableKMathAPI
+public class DSFieldProcessor<T, A : ExtendedField<T>>(
+    public val algebra: A,
+) : AutoDiffProcessor<T, DS<T, A>, DSField<T, A>> {
+    override fun differentiate(
+        function: DSField<T, A>.() -> DS<T, A>,
+    ): DifferentiableExpression<T> = DSFieldExpression(algebra, function)
+}
+
+@UnstableKMathAPI
+public val Double.Companion.autodiff: DSFieldProcessor<Double, DoubleField> get() = DSFieldProcessor(DoubleField)

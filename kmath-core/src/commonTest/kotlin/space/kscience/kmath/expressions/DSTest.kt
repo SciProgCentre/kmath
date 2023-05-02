@@ -7,9 +7,8 @@
 
 package space.kscience.kmath.expressions
 
-import space.kscience.kmath.misc.UnstableKMathAPI
+import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.operations.DoubleField
-import space.kscience.kmath.structures.DoubleBuffer
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
 import kotlin.test.Test
@@ -22,7 +21,7 @@ internal inline fun diff(
     block: DSField<Double, DoubleField>.() -> Unit,
 ) {
     contract { callsInPlace(block, InvocationKind.EXACTLY_ONCE) }
-    DSField(DoubleField, order, mapOf(*parameters), ::DoubleBuffer).block()
+    DSField(DoubleField, order, mapOf(*parameters)).block()
 }
 
 internal class DSTest {
@@ -45,7 +44,7 @@ internal class DSTest {
 
     @Test
     fun dsExpressionTest() {
-        val f = DSFieldExpression(DoubleField, ::DoubleBuffer) {
+        val f = DSFieldExpression(DoubleField) {
             val x by binding
             val y by binding
             x.pow(2) + 2 * x * y + y.pow(2) + 1

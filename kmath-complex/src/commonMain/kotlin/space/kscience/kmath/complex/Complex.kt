@@ -5,10 +5,10 @@
 
 package space.kscience.kmath.complex
 
+import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.memory.MemoryReader
 import space.kscience.kmath.memory.MemorySpec
 import space.kscience.kmath.memory.MemoryWriter
-import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.operations.*
 import space.kscience.kmath.structures.*
 import kotlin.math.*
@@ -79,6 +79,8 @@ public object ComplexField :
 
     override fun add(left: Complex, right: Complex): Complex = Complex(left.re + right.re, left.im + right.im)
 //    override fun multiply(a: Complex, k: Number): Complex = Complex(a.re * k.toDouble(), a.im * k.toDouble())
+
+//    override fun Complex.minus(arg: Complex): Complex = Complex(re - arg.re, im - arg.im)
 
     override fun multiply(left: Complex, right: Complex): Complex =
         Complex(left.re * right.re - left.im * right.im, left.re * right.im + left.im * right.re)

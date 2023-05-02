@@ -5,8 +5,8 @@
 
 package space.kscience.kmath.linear
 
+import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.misc.FeatureSet
-import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.nd.StructureFeature
 import space.kscience.kmath.operations.Ring
 import kotlin.reflect.KClass

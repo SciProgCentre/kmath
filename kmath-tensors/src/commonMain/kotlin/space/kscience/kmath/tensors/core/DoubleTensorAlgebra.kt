@@ -8,8 +8,7 @@
 
 package space.kscience.kmath.tensors.core
 
-import space.kscience.kmath.misc.PerformancePitfall
-import space.kscience.kmath.misc.UnstableKMathAPI
+import space.kscience.kmath.PerformancePitfall
 import space.kscience.kmath.nd.*
 import space.kscience.kmath.operations.DoubleBufferOps
 import space.kscience.kmath.operations.DoubleField
@@ -18,7 +17,10 @@ import space.kscience.kmath.tensors.api.AnalyticTensorAlgebra
 import space.kscience.kmath.tensors.api.LinearOpsTensorAlgebra
 import space.kscience.kmath.tensors.api.Tensor
 import space.kscience.kmath.tensors.core.internal.*
-import kotlin.math.*
+import kotlin.math.abs
+import kotlin.math.ceil
+import kotlin.math.floor
+import kotlin.math.sqrt
 
 /**
  * Implementation of basic operations over double tensors and basic algebra operations on them.
@@ -349,7 +351,6 @@ public open class DoubleTensorAlgebra :
      * @param other tensor to be multiplied.
      * @return a mathematical product of two tensors.
      */
-    @UnstableKMathAPI
     public infix fun StructureND<Double>.matmul(other: StructureND<Double>): DoubleTensor {
         if (shape.size == 1 && other.shape.size == 1) {
             return DoubleTensor(ShapeND(1), DoubleBuffer(times(other).sum()))
@@ -411,7 +412,7 @@ public open class DoubleTensorAlgebra :
     }
 
     override fun StructureND<Double>.dot(other: StructureND<Double>): DoubleTensor {
-        return if (dimension in 0..2 && other.dimension in 0..2) matmul(other)
+        return if (dimension in 0..2 && other.dimension in 0..2) this.matmul(other)
         else error("Only vectors and matrices are allowed in non-broadcasting dot operation")
     }
 

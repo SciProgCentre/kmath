@@ -5,14 +5,18 @@
 
 package space.kscience.kmath.geometry
 
-import kotlin.math.PI
+import kotlinx.serialization.Serializable
+import space.kscience.kmath.geometry.Euclidean2DSpace.distanceTo
+import kotlin.math.*
 
 /**
  * A circle in 2D space
  */
+@Serializable
 public data class Circle2D(
-    public val center: DoubleVector2D,
+    @Serializable(Euclidean2DSpace.VectorSerializer::class) public val center: DoubleVector2D,
     public val radius: Double
 )
+
 
 public val Circle2D.circumference: Double get() = radius * 2 * PI

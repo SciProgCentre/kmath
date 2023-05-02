@@ -15,7 +15,7 @@ allprojects {
     }
 
     group = "space.kscience"
-    version = "0.3.1-dev-7"
+    version = "0.3.1-dev-RC"
 }
 
 subprojects {
@@ -52,18 +52,6 @@ subprojects {
                     "https://breandan.net/kotlingrad/kotlingrad/",
                     "https://breandan.net/kotlingrad/kotlingrad/kotlingrad/package-list",
                 )
-            }
-        }
-    }
-
-    plugins.withId("org.jetbrains.kotlin.multiplatform") {
-        configure<org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension> {
-            sourceSets {
-                val commonTest by getting {
-                    dependencies {
-                        implementation(projects.testUtils)
-                    }
-                }
             }
         }
     }

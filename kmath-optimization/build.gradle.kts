@@ -3,6 +3,8 @@ plugins {
 }
 
 kscience{
+    jvm()
+    js()
     native()
 }
 
@@ -14,7 +16,7 @@ kotlin.sourceSets {
     commonMain {
         dependencies {
             api(project(":kmath-coroutines"))
-            api(npmlibs.atomicfu)
+            api(spclibs.atomicfu)
         }
     }
 }

@@ -5,7 +5,7 @@
 
 package space.kscience.kmath.integration
 
-import space.kscience.kmath.misc.UnstableKMathAPI
+import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.operations.Field
 import space.kscience.kmath.operations.invoke

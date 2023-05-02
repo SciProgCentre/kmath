@@ -6,7 +6,7 @@
 package space.kscience.kmath.viktor
 
 import org.jetbrains.bio.viktor.F64Array
-import space.kscience.kmath.misc.PerformancePitfall
+import space.kscience.kmath.PerformancePitfall
 import space.kscience.kmath.nd.ColumnStrides
 import space.kscience.kmath.nd.MutableStructureND
 import space.kscience.kmath.nd.ShapeND

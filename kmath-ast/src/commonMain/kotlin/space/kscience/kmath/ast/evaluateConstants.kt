@@ -7,7 +7,6 @@ package space.kscience.kmath.ast
 
 import space.kscience.kmath.expressions.MST
 import space.kscience.kmath.expressions.Symbol
-import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.operations.Algebra
 import space.kscience.kmath.operations.NumericAlgebra
 import space.kscience.kmath.operations.bindSymbolOrNull
@@ -15,7 +14,6 @@ import space.kscience.kmath.operations.bindSymbolOrNull
 /**
  * Evaluates constants in given [MST] for given [algebra] at the same time with converting to [TypedMst].
  */
-@UnstableKMathAPI
 public fun <T> MST.evaluateConstants(algebra: Algebra<T>): TypedMst<T> = when (this) {
     is MST.Numeric -> TypedMst.Constant(
         (algebra as? NumericAlgebra<T>)?.number(value) ?: error("Numeric nodes are not supported by $algebra"),

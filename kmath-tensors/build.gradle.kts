@@ -3,7 +3,10 @@ plugins {
 }
 
 kscience{
+    jvm()
+    js()
     native()
+
     dependencies {
         api(projects.kmathCore)
         api(projects.kmathStat)

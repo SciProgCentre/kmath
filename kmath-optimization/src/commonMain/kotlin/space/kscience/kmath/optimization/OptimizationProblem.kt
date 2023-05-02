@@ -6,8 +6,8 @@
 package space.kscience.kmath.optimization
 
 import space.kscience.kmath.expressions.DifferentiableExpression
+import space.kscience.kmath.expressions.NamedMatrix
 import space.kscience.kmath.expressions.Symbol
-import space.kscience.kmath.linear.Matrix
 import space.kscience.kmath.misc.*
 import kotlin.reflect.KClass
 
@@ -32,7 +32,10 @@ public interface OptimizationPrior<T> : OptimizationFeature, DifferentiableExpre
     override val key: FeatureKey<OptimizationFeature> get() = OptimizationPrior::class
 }
 
-public class OptimizationCovariance<T>(public val covariance: Matrix<T>) : OptimizationFeature {
+/**
+ * Covariance matrix for
+ */
+public class OptimizationCovariance<T>(public val covariance: NamedMatrix<T>) : OptimizationFeature {
     override fun toString(): String = "Covariance($covariance)"
 }
 
@@ -57,10 +60,20 @@ public class OptimizationLog(private val loggable: Loggable) : Loggable by logga
     override fun toString(): String = "Log($loggable)"
 }
 
+/**
+ * Free parameters of the optimization
+ */
 public class OptimizationParameters(public val symbols: List<Symbol>) : OptimizationFeature {
     public constructor(vararg symbols: Symbol) : this(listOf(*symbols))
 
     override fun toString(): String = "Parameters($symbols)"
+}
+
+/**
+ * Maximum allowed number of iterations
+ */
+public class OptimizationIterations(public val maxIterations: Int) : OptimizationFeature {
+    override fun toString(): String = "Iterations($maxIterations)"
 }
 
 

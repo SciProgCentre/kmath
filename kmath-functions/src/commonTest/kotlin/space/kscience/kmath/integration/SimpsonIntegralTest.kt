@@ -5,7 +5,7 @@
 
 package space.kscience.kmath.integration
 
-import space.kscience.kmath.misc.UnstableKMathAPI
+import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.operations.DoubleField
 import kotlin.math.PI
 import kotlin.math.sin

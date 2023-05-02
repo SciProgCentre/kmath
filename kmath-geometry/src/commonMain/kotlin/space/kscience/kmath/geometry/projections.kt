@@ -13,7 +13,7 @@ package space.kscience.kmath.geometry
  * @param line line to which vector should be projected
  */
 public fun <V : Vector> GeometrySpace<V>.projectToLine(vector: V, line: Line<V>): V = with(line) {
-    base + (direction dot (vector - base)) / (direction dot direction) * direction
+    start + (direction dot (vector - start)) / (direction dot direction) * direction
 }
 
 /**

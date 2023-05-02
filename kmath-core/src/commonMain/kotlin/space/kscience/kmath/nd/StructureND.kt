@@ -5,10 +5,10 @@
 
 package space.kscience.kmath.nd
 
+import space.kscience.kmath.PerformancePitfall
 import space.kscience.kmath.linear.LinearSpace
 import space.kscience.kmath.misc.Feature
 import space.kscience.kmath.misc.Featured
-import space.kscience.kmath.misc.PerformancePitfall
 import space.kscience.kmath.operations.Ring
 import space.kscience.kmath.operations.invoke
 import space.kscience.kmath.structures.Buffer

@@ -2,25 +2,15 @@ plugins {
     id("space.kscience.gradle.mpp")
 }
 
-kscience{
+kscience {
+    jvm()
+    js()
     native()
-}
 
-kotlin.sourceSets {
-    all {
-        with(languageSettings) {
-            optIn("kotlinx.coroutines.InternalCoroutinesApi")
-            optIn("kotlinx.coroutines.ExperimentalCoroutinesApi")
-            optIn("kotlinx.coroutines.FlowPreview")
-        }
-    }
-
-    commonMain {
-        dependencies {
-            api(project(":kmath-core"))
-            api(project(":kmath-complex"))
-            api("org.jetbrains.kotlinx:kotlinx-coroutines-core:${space.kscience.gradle.KScienceVersions.coroutinesVersion}")
-        }
+    dependencies {
+        api(project(":kmath-core"))
+        api(project(":kmath-complex"))
+        api(spclibs.kotlinx.coroutines.core)
     }
 }
 

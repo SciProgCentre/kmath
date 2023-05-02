@@ -36,7 +36,7 @@ private suspend fun runKMathChained(): Duration {
     return Duration.between(startTime, Instant.now())
 }
 
-private fun runApacheDirect(): Duration {
+private fun runCMDirect(): Duration {
     val rng = RandomSource.create(RandomSource.MT, 123L)
 
     val sampler = CMGaussianSampler.of(
@@ -65,7 +65,7 @@ private fun runApacheDirect(): Duration {
  * Comparing chain sampling performance with direct sampling performance
  */
 fun main(): Unit = runBlocking(Dispatchers.Default) {
-    val directJob = async { runApacheDirect() }
+    val directJob = async { runCMDirect() }
     val chainJob = async { runKMathChained() }
     println("KMath Chained: ${chainJob.await()}")
     println("Apache Direct: ${directJob.await()}")

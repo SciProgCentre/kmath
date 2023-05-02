@@ -6,8 +6,8 @@
 package space.kscience.kmath.commons.linear
 
 import org.apache.commons.math3.linear.*
+import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.linear.*
-import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.nd.StructureFeature
 import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.structures.Buffer
