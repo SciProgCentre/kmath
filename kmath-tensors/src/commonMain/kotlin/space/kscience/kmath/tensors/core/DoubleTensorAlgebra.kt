@@ -706,7 +706,7 @@ public open class DoubleTensorAlgebra :
     override fun svd(
         structureND: StructureND<Double>,
     ): Triple<StructureND<Double>, StructureND<Double>, StructureND<Double>> =
-        svd(structureND = structureND, epsilon = 1e-10)
+        svdGolubKahan(structureND = structureND, epsilon = 1e-10)
 
     override fun symEig(structureND: StructureND<Double>): Pair<DoubleTensor, DoubleTensor> =
         symEigJacobi(structureND = structureND, maxIteration = 50, epsilon = 1e-15)
