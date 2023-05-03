@@ -711,6 +711,12 @@ public open class DoubleTensorAlgebra :
     override fun symEig(structureND: StructureND<Double>): Pair<DoubleTensor, DoubleTensor> =
         symEigJacobi(structureND = structureND, maxIteration = 50, epsilon = 1e-15)
 
+    override fun solve(a: MutableStructure2D<Double>, b: MutableStructure2D<Double>): MutableStructure2D<Double> {
+        val aSvd = DoubleTensorAlgebra.svd(a)
+        val s = BroadcastDoubleTensorAlgebra.diagonalEmbedding(aSvd.second.map {1.0 / it})
+        val aInverse = aSvd.third.dot(s).dot(aSvd.first.transposed())
+        return aInverse.dot(b).as2D()
+    }
 }
 
 public val Double.Companion.tensorAlgebra: DoubleTensorAlgebra get() = DoubleTensorAlgebra
