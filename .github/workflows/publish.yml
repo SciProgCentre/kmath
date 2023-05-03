@@ -28,7 +28,7 @@ jobs:
             ${{ runner.os }}-gradle-
       - name: Publish Windows Artifacts
         if: matrix.os == 'windows-latest'
-        uses: gradle/gradle-build-action@v2.4.0
+        uses: gradle/gradle-build-action@v2.4.2
         with:
           arguments: |
             publishAllPublicationsToSpaceRepository
@@ -37,7 +37,7 @@ jobs:
             -Ppublishing.space.token=${{ secrets.SPACE_APP_SECRET }}
       - name: Publish Mac Artifacts
         if: matrix.os == 'macOS-latest'
-        uses: gradle/gradle-build-action@v2.4.0
+        uses: gradle/gradle-build-action@v2.4.2
         with:
           arguments: |
             publishMacosX64PublicationToSpaceRepository

@@ -19,6 +19,6 @@ jobs:
       - name: Gradle Wrapper Validation
         uses: gradle/wrapper-validation-action@v1.0.4
       - name: Gradle Build
-        uses: gradle/gradle-build-action@v2.3.2
+        uses: gradle/gradle-build-action@v2.4.2
         with:
           arguments: test jvmTest
