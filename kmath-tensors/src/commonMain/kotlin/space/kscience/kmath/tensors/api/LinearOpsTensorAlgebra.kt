@@ -14,6 +14,8 @@ import space.kscience.kmath.tensors.core.BroadcastDoubleTensorAlgebra.dot
 import space.kscience.kmath.tensors.core.BroadcastDoubleTensorAlgebra.map
 import space.kscience.kmath.tensors.core.BroadcastDoubleTensorAlgebra.transposed
 import space.kscience.kmath.tensors.core.DoubleTensorAlgebra
+import space.kscience.kmath.tensors.core.internal.LMSettings
+import kotlin.reflect.KFunction3
 
 /**
  * Common linear algebra operations. Operates on [Tensor].
@@ -117,4 +119,10 @@ public interface LinearOpsTensorAlgebra<T, A : Field<T>> : TensorPartialDivision
      * @return the square matrix x which is the solution of the equation.
      */
     public fun solve(a: MutableStructure2D<Double>, b: MutableStructure2D<Double>): MutableStructure2D<Double>
+
+    public fun lm(
+        func: KFunction3<MutableStructure2D<Double>, MutableStructure2D<Double>, LMSettings, MutableStructure2D<Double>>,
+        p_input: MutableStructure2D<Double>, t_input: MutableStructure2D<Double>, y_dat_input: MutableStructure2D<Double>,
+        weight_input: MutableStructure2D<Double>, dp_input: MutableStructure2D<Double>, p_min_input: MutableStructure2D<Double>, p_max_input: MutableStructure2D<Double>,
+        c_input: MutableStructure2D<Double>, opts_input: DoubleArray, nargin: Int, example_number: Int): Double
 }
