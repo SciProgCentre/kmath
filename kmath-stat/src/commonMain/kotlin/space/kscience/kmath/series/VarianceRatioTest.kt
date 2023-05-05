@@ -7,8 +7,6 @@ package space.kscience.kmath.series
 
 import space.kscience.kmath.distributions.zSNormalCDF
 import space.kscience.kmath.operations.DoubleField.pow
-import space.kscience.kmath.operations.algebra
-import space.kscience.kmath.operations.bufferAlgebra
 import space.kscience.kmath.operations.fold
 import kotlin.math.absoluteValue
 
