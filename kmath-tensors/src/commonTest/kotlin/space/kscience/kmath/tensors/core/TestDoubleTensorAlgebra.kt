@@ -11,6 +11,7 @@ import space.kscience.kmath.operations.invoke
 import space.kscience.kmath.tensors.core.internal.LMSettings
 import space.kscience.kmath.testutils.assertBufferEquals
 import kotlin.math.roundToInt
+import kotlin.math.roundToLong
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -283,7 +284,11 @@ internal class TestDoubleTensorAlgebra {
 
         val opts = doubleArrayOf(3.0, 100.0, 1e-3, 1e-3, 1e-1, 1e-1, 1e-2, 11.0, 9.0, 1.0)
 
-        val chi_sq = lm(::lm_func, p_init, t, y_dat, weight, dp, p_min, p_max, consts, opts, 10, example_number)
-        assertEquals(0.9131, (chi_sq * 10000).roundToInt() / 10000.0)
+        val result = lm(::lm_func, p_init, t, y_dat, weight, dp, p_min, p_max, consts, opts, 10, example_number)
+        assertEquals(13, result.iterations)
+        assertEquals(31, result.func_calls)
+        assertEquals(1, result.example_number)
+        assertEquals(0.9131368192633, (result.result_chi_sq * 1e13).roundToLong() / 1e13)
+        assertEquals(3.7790980 * 1e-7, (result.result_lambda * 1e13).roundToLong() / 1e13)
     }
 }

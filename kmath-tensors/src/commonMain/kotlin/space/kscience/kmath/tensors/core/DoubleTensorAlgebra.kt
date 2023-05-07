@@ -721,9 +721,9 @@ public open class DoubleTensorAlgebra :
         func: KFunction3<MutableStructure2D<Double>, MutableStructure2D<Double>, LMSettings, MutableStructure2D<Double>>,
         p_input: MutableStructure2D<Double>, t_input: MutableStructure2D<Double>, y_dat_input: MutableStructure2D<Double>,
         weight_input: MutableStructure2D<Double>, dp_input: MutableStructure2D<Double>, p_min_input: MutableStructure2D<Double>, p_max_input: MutableStructure2D<Double>,
-        c_input: MutableStructure2D<Double>, opts_input: DoubleArray, nargin: Int, example_number: Int): Double {
+        c_input: MutableStructure2D<Double>, opts_input: DoubleArray, nargin: Int, example_number: Int): LinearOpsTensorAlgebra.LMResultInfo {
 
-        var result_chi_sq = 0.0
+        var resultInfo = LinearOpsTensorAlgebra.LMResultInfo(0, 0, example_number, 0.0, 0.0, p_input)
 
         val tensor_parameter = 0
         val eps:Double = 2.2204e-16
@@ -742,7 +742,7 @@ public open class DoubleTensorAlgebra :
         var X2 = 1e-3 / eps                                       // a really big initial Chi-sq value
         var X2_old = 1e-3 / eps                                   // a really big initial Chi-sq value
         var J = zeros(ShapeND(intArrayOf(Npnt, Npar))).as2D()     // Jacobian matrix
-        val DoF = Npnt - Npar + 1                                 // statistical degrees of freedom
+        val DoF = Npnt - Npar                                     // statistical degrees of freedom
 
         var corr_p = 0
         var sigma_p = 0
@@ -811,10 +811,8 @@ public open class DoubleTensorAlgebra :
         val lambda_UP_fac = opts[7]                // factor for increasing lambda
         val lambda_DN_fac = opts[8]                // factor for decreasing lambda
         val Update_Type   = opts[9].toInt()        // 1: Levenberg-Marquardt lambda update
-        // 2: Quadratic update
-        // 3: Nielsen's lambda update equations
-
-        val plotcmd = "figure(102); plot(t(:,1),y_init,''-k'',t(:,1),y_hat,''-b'',t(:,1),y_dat,''o'',''color'',[0,0.6,0],''MarkerSize'',4); title(sprintf(''\\chi^2_\\nu = %f'',X2/DoF)); drawnow"
+                                                   // 2: Quadratic update
+                                                   // 3: Nielsen's lambda update equations
 
         p_min = make_column(p_min)
         p_max = make_column(p_max)
@@ -829,7 +827,7 @@ public open class DoubleTensorAlgebra :
         val y_init = feval(func, t, p, settings)       // residual error using p_try
 
         if (weight.shape.component1() == 1 || variance(weight) == 0.0) { // identical weights vector
-            weight = ones(ShapeND(intArrayOf(Npnt, 1))).div(1 / kotlin.math.abs(weight[0, 0])).as2D() // !!! need to check
+            weight = ones(ShapeND(intArrayOf(Npnt, 1))).div(1 / abs(weight[0, 0])).as2D() // !!! need to check
             println("using uniform weights for error analysis")
         }
         else {
@@ -864,7 +862,7 @@ public open class DoubleTensorAlgebra :
         X2_old = X2 // previous value of X2
         var cvg_hst = ones(ShapeND(intArrayOf(MaxIter, Npar + 3)))         // initialize convergence history
 
-        var h = JtWJ.copyToTensor()
+        var h: DoubleTensor
         var dX2 = X2
         while (!stop && settings.iteration <= MaxIter) {                   //--- Start Main Loop
             settings.iteration += 1
@@ -881,10 +879,6 @@ public open class DoubleTensorAlgebra :
                     solve.asDoubleTensor()
                 }
             }
-
-            // big = max(abs(h./p)) > 2;                      % this is a big step
-
-            // --- Are parameters [p+h] much better than [p] ?
 
             var p_try = (p + h).as2D()  // update the [idx] elements
             p_try = smallest_element_comparison(largest_element_comparison(p_min, p_try.as2D()), p_max)  // apply constraints
@@ -961,10 +955,6 @@ public open class DoubleTensorAlgebra :
                         lambda * max( 1.0 / 3, 1 - (2 * rho - 1).pow(3) )
                     }
                 }
-
-                // if (prnt > 2) {
-                //    eval(plotcmd)
-                // }
             }
             else { // it IS NOT better
                 X2 = X2_old // do not accept p_try
@@ -994,7 +984,7 @@ public open class DoubleTensorAlgebra :
 
             if (prnt > 1) {
                 val chi_sq = X2 / DoF
-                println("Iteration $settings.iteration, func_calls $settings.func_calls | chi_sq=$chi_sq | lambda=$lambda")
+                println("Iteration $settings | chi_sq=$chi_sq | lambda=$lambda")
                 print("param: ")
                 for (pn in 0 until Npar) {
                     print(p[pn, 0].toString() + " ")
@@ -1003,7 +993,11 @@ public open class DoubleTensorAlgebra :
                 for (pn in 0 until Npar) {
                     print((h.as2D()[pn, 0] / p[pn, 0]).toString() + " ")
                 }
-                result_chi_sq = chi_sq
+                resultInfo.iterations = settings.iteration
+                resultInfo.func_calls = settings.func_calls
+                resultInfo.result_chi_sq = chi_sq
+                resultInfo.result_lambda = lambda
+                resultInfo.result_parameters = p
             }
 
             // update convergence history ... save _reduced_ Chi-square
@@ -1076,11 +1070,9 @@ public open class DoubleTensorAlgebra :
 //        cvg_hst = cvg_hst(1:iteration,:);
 //    }
 
-        return result_chi_sq
+        return resultInfo
     }
 }
 
 public val Double.Companion.tensorAlgebra: DoubleTensorAlgebra get() = DoubleTensorAlgebra
 public val DoubleField.tensorAlgebra: DoubleTensorAlgebra get() = DoubleTensorAlgebra
-
-

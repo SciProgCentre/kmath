@@ -120,9 +120,18 @@ public interface LinearOpsTensorAlgebra<T, A : Field<T>> : TensorPartialDivision
      */
     public fun solve(a: MutableStructure2D<Double>, b: MutableStructure2D<Double>): MutableStructure2D<Double>
 
+    data class LMResultInfo (
+        var iterations:Int,
+        var func_calls: Int,
+        var example_number: Int,
+        var result_chi_sq: Double,
+        var result_lambda: Double,
+        var result_parameters: MutableStructure2D<Double>
+    )
+
     public fun lm(
         func: KFunction3<MutableStructure2D<Double>, MutableStructure2D<Double>, LMSettings, MutableStructure2D<Double>>,
         p_input: MutableStructure2D<Double>, t_input: MutableStructure2D<Double>, y_dat_input: MutableStructure2D<Double>,
         weight_input: MutableStructure2D<Double>, dp_input: MutableStructure2D<Double>, p_min_input: MutableStructure2D<Double>, p_max_input: MutableStructure2D<Double>,
-        c_input: MutableStructure2D<Double>, opts_input: DoubleArray, nargin: Int, example_number: Int): Double
+        c_input: MutableStructure2D<Double>, opts_input: DoubleArray, nargin: Int, example_number: Int): LMResultInfo
 }
