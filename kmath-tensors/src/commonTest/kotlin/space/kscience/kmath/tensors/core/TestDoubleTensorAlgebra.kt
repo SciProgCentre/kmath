@@ -8,6 +8,7 @@ package space.kscience.kmath.tensors.core
 
 import space.kscience.kmath.nd.*
 import space.kscience.kmath.operations.invoke
+import space.kscience.kmath.tensors.api.LinearOpsTensorAlgebra
 import space.kscience.kmath.tensors.core.internal.LMSettings
 import space.kscience.kmath.testutils.assertBufferEquals
 import kotlin.math.roundToInt
@@ -290,5 +291,6 @@ internal class TestDoubleTensorAlgebra {
         assertEquals(1, result.example_number)
         assertEquals(0.9131368192633, (result.result_chi_sq * 1e13).roundToLong() / 1e13)
         assertEquals(3.7790980 * 1e-7, (result.result_lambda * 1e13).roundToLong() / 1e13)
+        assertEquals(result.typeOfConvergence, LinearOpsTensorAlgebra.TypeOfConvergence.inParameters)
     }
 }

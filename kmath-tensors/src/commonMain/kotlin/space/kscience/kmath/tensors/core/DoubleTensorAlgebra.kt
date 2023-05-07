@@ -723,9 +723,9 @@ public open class DoubleTensorAlgebra :
         weight_input: MutableStructure2D<Double>, dp_input: MutableStructure2D<Double>, p_min_input: MutableStructure2D<Double>, p_max_input: MutableStructure2D<Double>,
         c_input: MutableStructure2D<Double>, opts_input: DoubleArray, nargin: Int, example_number: Int): LinearOpsTensorAlgebra.LMResultInfo {
 
-        var resultInfo = LinearOpsTensorAlgebra.LMResultInfo(0, 0, example_number, 0.0, 0.0, p_input)
+        var resultInfo = LinearOpsTensorAlgebra.LMResultInfo(0, 0, example_number, 0.0,
+            0.0, p_input, LinearOpsTensorAlgebra.TypeOfConvergence.noConvergence, 0.0)
 
-        val tensor_parameter = 0
         val eps:Double = 2.2204e-16
 
         var settings = LMSettings(0, 0, example_number)
@@ -751,7 +751,7 @@ public open class DoubleTensorAlgebra :
         var cvg_hist = 0
 
         if (length(t) != length(y_dat)) {
-            println("lm.m error: the length of t must equal the length of y_dat")
+            // println("lm.m error: the length of t must equal the length of y_dat")
             val length_t = length(t)
             val length_y_dat = length(y_dat)
             X2 = 0.0
@@ -761,10 +761,6 @@ public open class DoubleTensorAlgebra :
             sigma_y = 0
             R_sq = 0
             cvg_hist = 0
-
-//            if (tensor_parameter != 0) { // Зачем эта проверка?
-//                return
-//            }
         }
 
         var weight = weight_input
@@ -827,8 +823,8 @@ public open class DoubleTensorAlgebra :
         val y_init = feval(func, t, p, settings)       // residual error using p_try
 
         if (weight.shape.component1() == 1 || variance(weight) == 0.0) { // identical weights vector
-            weight = ones(ShapeND(intArrayOf(Npnt, 1))).div(1 / abs(weight[0, 0])).as2D() // !!! need to check
-            println("using uniform weights for error analysis")
+            weight = ones(ShapeND(intArrayOf(Npnt, 1))).div(1 / abs(weight[0, 0])).as2D()
+            // println("using uniform weights for error analysis")
         }
         else {
             weight = make_column(weight)
@@ -844,8 +840,8 @@ public open class DoubleTensorAlgebra :
         J = lm_matx_ans[4]
 
         if ( abs(JtWdy).max()!! < epsilon_1 ) {
-            println(" *** Your Initial Guess is Extremely Close to Optimal ***\n")
-            println(" *** epsilon_1 = %e\n$epsilon_1")
+//            println(" *** Your Initial Guess is Extremely Close to Optimal ***\n")
+//            println(" *** epsilon_1 = %e\n$epsilon_1")
             stop = true
         }
 
@@ -885,11 +881,14 @@ public open class DoubleTensorAlgebra :
 
             var delta_y = y_dat.minus(feval(func, t, p_try, settings))   // residual error using p_try
 
-            // TODO
-            //if ~all(isfinite(delta_y))                     // floating point error; break
-            //    stop = 1;
-            //    break
-            //end
+            for (i in 0 until delta_y.shape.component1()) {  // floating point error; break
+                for (j in 0 until delta_y.shape.component2()) {
+                    if (delta_y[i, j] == Double.POSITIVE_INFINITY || delta_y[i, j] == Double.NEGATIVE_INFINITY) {
+                        stop = true
+                        break
+                    }
+                }
+            }
 
             settings.func_calls += 1
 
@@ -900,17 +899,16 @@ public open class DoubleTensorAlgebra :
             if (Update_Type == 2) { // Quadratic
                 // One step of quadratic line update in the h direction for minimum X2
 
-//            TODO
-//            val alpha =  JtWdy.transpose().dot(h)  / ((X2_try.minus(X2)).div(2.0).plus(2 * JtWdy.transpose().dot(h)))
-//            alpha =  JtWdy'*h / ( (X2_try - X2)/2 + 2*JtWdy'*h ) ;
-//            h = alpha * h;
-//
-//            p_try = p + h(idx);                          % update only [idx] elements
-//            p_try = min(max(p_min,p_try),p_max);         % apply constraints
-//
-//            delta_y = y_dat - feval(func,t,p_try,c);     % residual error using p_try
-//            func_calls = func_calls + 1;
-//            тX2_try = delta_y' * ( delta_y .* weight );   % Chi-squared error criteria
+                val alpha = JtWdy.transpose().dot(h) / ( (X2_try.minus(X2)).div(2.0).plus(2 * JtWdy.transpose().dot(h)) )
+                h = h.dot(alpha)
+                p_try = p.plus(h).as2D() // update only [idx] elements
+                p_try = smallest_element_comparison(largest_element_comparison(p_min, p_try), p_max) // apply constraints
+
+                var delta_y = y_dat.minus(feval(func, t, p_try, settings))   // residual error using p_try
+                settings.func_calls += 1
+
+                val tmp = delta_y.times(weight)
+                X2_try = delta_y.as2D().transpose().dot(tmp)     // Chi-squared error criteria
             }
 
             val rho = when (Update_Type) { // Nielsen
@@ -923,9 +921,6 @@ public open class DoubleTensorAlgebra :
                     X2.minus(X2_try).as2D()[0, 0] / abs(tmp.as2D()).as2D()[0, 0]
                 }
             }
-
-            println()
-            println("rho = " + rho)
 
             if (rho > epsilon_4) { // it IS significantly better
                 val dX2 = X2.minus(X2_old)
@@ -984,15 +979,15 @@ public open class DoubleTensorAlgebra :
 
             if (prnt > 1) {
                 val chi_sq = X2 / DoF
-                println("Iteration $settings | chi_sq=$chi_sq | lambda=$lambda")
-                print("param: ")
-                for (pn in 0 until Npar) {
-                    print(p[pn, 0].toString() + " ")
-                }
-                print("\ndp/p: ")
-                for (pn in 0 until Npar) {
-                    print((h.as2D()[pn, 0] / p[pn, 0]).toString() + " ")
-                }
+//                println("Iteration $settings | chi_sq=$chi_sq | lambda=$lambda")
+//                print("param: ")
+//                for (pn in 0 until Npar) {
+//                    print(p[pn, 0].toString() + " ")
+//                }
+//                print("\ndp/p: ")
+//                for (pn in 0 until Npar) {
+//                    print((h.as2D()[pn, 0] / p[pn, 0]).toString() + " ")
+//                }
                 resultInfo.iterations = settings.iteration
                 resultInfo.func_calls = settings.func_calls
                 resultInfo.result_chi_sq = chi_sq
@@ -1004,22 +999,30 @@ public open class DoubleTensorAlgebra :
             // cvg_hst(iteration,:) = [ func_calls  p'  X2/DoF lambda ];
 
             if (abs(JtWdy).max()!! < epsilon_1 && settings.iteration > 2) {
-                println(" **** Convergence in r.h.s. (\"JtWdy\")  ****")
-                println(" **** epsilon_1 = $epsilon_1")
+//                println(" **** Convergence in r.h.s. (\"JtWdy\")  ****")
+//                println(" **** epsilon_1 = $epsilon_1")
+                resultInfo.typeOfConvergence = LinearOpsTensorAlgebra.TypeOfConvergence.inRHS_JtWdy
+                resultInfo.epsilon = epsilon_1
                 stop = true
             }
             if ((abs(h.as2D()).div(abs(p) + 1e-12)).max() < epsilon_2  &&  settings.iteration > 2) {
-                println(" **** Convergence in Parameters ****")
-                println(" **** epsilon_2 = $epsilon_2")
+//                println(" **** Convergence in Parameters ****")
+//                println(" **** epsilon_2 = $epsilon_2")
+                resultInfo.typeOfConvergence = LinearOpsTensorAlgebra.TypeOfConvergence.inParameters
+                resultInfo.epsilon = epsilon_2
                 stop = true
             }
             if (X2 / DoF < epsilon_3 && settings.iteration > 2) {
-                println(" **** Convergence in reduced Chi-square  **** ")
-                println(" **** epsilon_3 = $epsilon_3")
+//                println(" **** Convergence in reduced Chi-square  **** ")
+//                println(" **** epsilon_3 = $epsilon_3")
+                resultInfo.typeOfConvergence = LinearOpsTensorAlgebra.TypeOfConvergence.inReducedChi_square
+                resultInfo.epsilon = epsilon_3
                 stop = true
             }
             if (settings.iteration == MaxIter) {
-                println(" !! Maximum Number of Iterations Reached Without Convergence !!")
+//                println(" !! Maximum Number of Iterations Reached Without Convergence !!")
+                resultInfo.typeOfConvergence = LinearOpsTensorAlgebra.TypeOfConvergence.noConvergence
+                resultInfo.epsilon = 0.0
                 stop = true
             }
         }  // --- End of Main Loop
