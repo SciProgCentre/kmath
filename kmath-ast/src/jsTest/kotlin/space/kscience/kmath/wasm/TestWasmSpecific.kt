@@ -5,6 +5,7 @@
 
 package space.kscience.kmath.wasm
 
+import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.expressions.MstExtendedField
 import space.kscience.kmath.expressions.MstRing
 import space.kscience.kmath.expressions.invoke
@@ -15,6 +16,7 @@ import space.kscience.kmath.operations.invoke
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
+@OptIn(UnstableKMathAPI::class)
 internal class TestWasmSpecific {
     @Test
     fun int() {
