@@ -1,3 +1,3 @@
-job("Build") {
-    gradlew("openjdk:11", "build")
+job("Build and run tests") {
+    gradlew("amazoncorretto:17-alpine", "build")
 }

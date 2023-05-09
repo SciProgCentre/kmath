@@ -5,7 +5,7 @@
 
 package space.kscience.kmath.series
 
-import space.kscience.kmath.distributions.zSNormalCDF
+import space.kscience.kmath.distributions.NormalDistribution
 import space.kscience.kmath.operations.DoubleField.pow
 import space.kscience.kmath.operations.fold
 import kotlin.math.absoluteValue
@@ -14,8 +14,12 @@ import kotlin.math.absoluteValue
 /**
  * Container class for Variance Ratio Test result:
  * ratio itself, corresponding Z-score, also it's p-value
- * **/
-public data class VarianceRatioTestResult(val varianceRatio: Double=1.0, val zScore: Double=0.0, val pValue: Double=0.5)
+ */
+public data class VarianceRatioTestResult(
+    val varianceRatio: Double = 1.0,
+    val zScore: Double = 0.0,
+    val pValue: Double = 0.5,
+)
 
 
 /**
@@ -23,11 +27,17 @@ public data class VarianceRatioTestResult(val varianceRatio: Double=1.0, val zSc
  * under Homoscedastic or Heteroscedstic assumptions
  * with two-sided p-value test
  * 	https://ssrn.com/abstract=346975
- * **/
-public fun SeriesAlgebra<Double, *, *, *>.varianceRatioTest(series: Series<Double>, shift: Int, homoscedastic: Boolean=true): VarianceRatioTestResult {
+ *
+ * 	@author https://github.com/mrFendel
+ */
+public fun SeriesAlgebra<Double, *, *, *>.varianceRatioTest(
+    series: Series<Double>,
+    shift: Int,
+    homoscedastic: Boolean = true,
+): VarianceRatioTestResult {
 
-    require(shift > 1) {"Shift must be greater than one"}
-    require(shift < series.size) {"Shift must be smaller than sample size"}
+    require(shift > 1) { "Shift must be greater than one" }
+    require(shift < series.size) { "Shift must be smaller than sample size" }
     val sum = { x: Double, y: Double -> x + y }
 
 
@@ -46,7 +56,7 @@ public fun SeriesAlgebra<Double, *, *, *>.varianceRatioTest(series: Series<Doubl
     val varianceAgg = demeanedSquaresAgg.fold(0.0, sum)
 
     val varianceRatio =
-        varianceAgg * (series.size.toDouble() - 1) / variance / (series.size.toDouble() - shift.toDouble() + 1) / (1 - shift.toDouble()/series.size.toDouble()) / shift.toDouble()
+        varianceAgg * (series.size.toDouble() - 1) / variance / (series.size.toDouble() - shift.toDouble() + 1) / (1 - shift.toDouble() / series.size.toDouble()) / shift.toDouble()
 
 
     // calculating asymptotic variance
@@ -63,7 +73,7 @@ public fun SeriesAlgebra<Double, *, *, *>.varianceRatioTest(series: Series<Doubl
     }
 
     val zScore = (varianceRatio - 1) / phi.pow(0.5)
-    val pValue = 2*(1 - zSNormalCDF(zScore.absoluteValue))
+    val pValue = 2 * (1 - NormalDistribution.zSNormalCDF(zScore.absoluteValue))
     return VarianceRatioTestResult(varianceRatio, zScore, pValue)
 }
 
