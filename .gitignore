@@ -4,6 +4,7 @@ out/
 
 .idea/
 .vscode/
+.fleet/
 
 
 # Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)
