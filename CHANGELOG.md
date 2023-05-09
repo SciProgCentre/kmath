@@ -14,7 +14,7 @@
 
 ### Security
 
-## 0.3.1-dev-RC - 2023-04-09
+## 0.3.1 - 2023-04-09
 
 ### Added
 - Wasm support for `memory`, `core`, `complex` and `functions` modules.
