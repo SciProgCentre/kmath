@@ -191,7 +191,7 @@ public open class SeriesAlgebra<T, out A : Ring<T>, out BA : BufferAlgebra<T, A>
         crossinline operation: A.(left: T, right: T) -> T,
     ): Series<T> {
         val newRange = offsetIndices.intersect(other.offsetIndices)
-        return seriesByOffset(startOffset = newRange.first, size = newRange.last - newRange.first) { offset ->
+        return seriesByOffset(startOffset = newRange.first, size = newRange.last + 1 - newRange.first) { offset ->
             elementAlgebra.operation(
                 getByOffset(offset),
                 other.getByOffset(offset)
@@ -199,11 +199,24 @@ public open class SeriesAlgebra<T, out A : Ring<T>, out BA : BufferAlgebra<T, A>
         }
     }
 
+    /**
+     * Zip buffer with itself, but shifted
+     * */
+    public inline fun Buffer<T>.zipWithShift(
+        shift: Int = 1,
+        crossinline operation: A.(left: T, right: T) -> T
+    ): Buffer<T> {
+        val shifted = this.moveBy(shift)
+        return zip(shifted, operation)
+    }
+
     override fun Buffer<T>.unaryMinus(): Buffer<T> = map { -it }
 
     override fun add(left: Buffer<T>, right: Buffer<T>): Series<T> = left.zip(right) { l, r -> l + r }
 
     override fun multiply(left: Buffer<T>, right: Buffer<T>): Buffer<T> = left.zip(right) { l, r -> l * r }
+
+    public fun Buffer<T>.difference(shift: Int=1): Buffer<T> = this.zipWithShift(shift) {l, r -> r - l}
 
     public companion object
 }
