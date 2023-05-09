@@ -29,7 +29,7 @@ public class space/kscience/kmath/viktor/ViktorFieldND : space/kscience/kmath/vi
 	public synthetic fun getOne ()Ljava/lang/Object;
 	public synthetic fun getOne ()Lspace/kscience/kmath/nd/StructureND;
 	public fun getOne ()Lspace/kscience/kmath/viktor/ViktorStructureND;
-	public fun getShape ()[I
+	public fun getShape-IIYLAfE ()[I
 	public synthetic fun getZero ()Ljava/lang/Object;
 	public synthetic fun getZero ()Lspace/kscience/kmath/nd/StructureND;
 	public fun getZero ()Lspace/kscience/kmath/viktor/ViktorStructureND;
@@ -85,8 +85,8 @@ public class space/kscience/kmath/viktor/ViktorFieldOpsND : space/kscience/kmath
 	public fun sin (Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/viktor/ViktorStructureND;
 	public synthetic fun sinh (Ljava/lang/Object;)Ljava/lang/Object;
 	public fun sinh (Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/viktor/ViktorStructureND;
-	public synthetic fun structureND ([ILkotlin/jvm/functions/Function2;)Lspace/kscience/kmath/nd/StructureND;
-	public fun structureND ([ILkotlin/jvm/functions/Function2;)Lspace/kscience/kmath/viktor/ViktorStructureND;
+	public synthetic fun structureND-qL90JFI ([ILkotlin/jvm/functions/Function2;)Lspace/kscience/kmath/nd/StructureND;
+	public fun structureND-qL90JFI ([ILkotlin/jvm/functions/Function2;)Lspace/kscience/kmath/viktor/ViktorStructureND;
 	public synthetic fun tan (Ljava/lang/Object;)Ljava/lang/Object;
 	public fun tan (Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/viktor/ViktorStructureND;
 	public synthetic fun times (Ljava/lang/Object;Ljava/lang/Number;)Ljava/lang/Object;
@@ -112,7 +112,7 @@ public final class space/kscience/kmath/viktor/ViktorStructureND : space/kscienc
 	public fun get ([I)Ljava/lang/Double;
 	public synthetic fun get ([I)Ljava/lang/Object;
 	public final fun getF64Buffer ()Lorg/jetbrains/bio/viktor/F64Array;
-	public fun getShape ()[I
+	public fun getShape-IIYLAfE ()[I
 	public fun set ([ID)V
 	public synthetic fun set ([ILjava/lang/Object;)V
 }
