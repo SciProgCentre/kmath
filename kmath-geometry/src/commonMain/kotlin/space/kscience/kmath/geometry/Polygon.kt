@@ -9,6 +9,6 @@ package space.kscience.kmath.geometry
 /**
  * A closed polygon in 2D space
  */
-public interface Polygon<T> {
-    public val points: List<Vector2D<T>>
+public interface Polygon<V: Any> {
+    public val points: List<V>
 }
