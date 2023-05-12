@@ -5,14 +5,11 @@
 
 package space.kscience.kmath.ast.rendering
 
-import space.kscience.kmath.misc.UnstableKMathAPI
-
 /**
  * Syntax node for mathematical typography.
  *
  * @author Iaroslav Postovalov
  */
-@UnstableKMathAPI
 public sealed class MathSyntax {
     /**
      * The parent node of this syntax node.
@@ -25,7 +22,6 @@ public sealed class MathSyntax {
  *
  * @author Iaroslav Postovalov
  */
-@UnstableKMathAPI
 public sealed class TerminalSyntax : MathSyntax()
 
 /**
@@ -33,7 +29,6 @@ public sealed class TerminalSyntax : MathSyntax()
  *
  * @author Iaroslav Postovalov
  */
-@UnstableKMathAPI
 public sealed class OperationSyntax : MathSyntax() {
     /**
      * The operation token.
@@ -46,7 +41,6 @@ public sealed class OperationSyntax : MathSyntax() {
  *
  * @author Iaroslav Postovalov
  */
-@UnstableKMathAPI
 public sealed class UnarySyntax : OperationSyntax() {
     /**
      * The operand of this node.
@@ -59,7 +53,6 @@ public sealed class UnarySyntax : OperationSyntax() {
  *
  * @author Iaroslav Postovalov
  */
-@UnstableKMathAPI
 public sealed class BinarySyntax : OperationSyntax() {
     /**
      * The left-hand side operand.
@@ -78,7 +71,6 @@ public sealed class BinarySyntax : OperationSyntax() {
  * @property string The digits of number.
  * @author Iaroslav Postovalov
  */
-@UnstableKMathAPI
 public data class NumberSyntax(public var string: String) : TerminalSyntax()
 
 /**
@@ -87,7 +79,6 @@ public data class NumberSyntax(public var string: String) : TerminalSyntax()
  * @property string The symbol.
  * @author Iaroslav Postovalov
  */
-@UnstableKMathAPI
 public data class SymbolSyntax(public var string: String) : TerminalSyntax()
 
 /**
@@ -98,7 +89,6 @@ public data class SymbolSyntax(public var string: String) : TerminalSyntax()
  * @see UnaryOperatorSyntax
  * @author Iaroslav Postovalov
  */
-@UnstableKMathAPI
 public data class OperatorNameSyntax(public var name: String) : TerminalSyntax()
 
 /**
@@ -107,7 +97,6 @@ public data class OperatorNameSyntax(public var name: String) : TerminalSyntax()
  * @property kind The kind of symbol.
  * @author Iaroslav Postovalov
  */
-@UnstableKMathAPI
 public data class SpecialSymbolSyntax(public var kind: Kind) : TerminalSyntax() {
     /**
      * The kind of symbol.
@@ -132,7 +121,6 @@ public data class SpecialSymbolSyntax(public var kind: Kind) : TerminalSyntax() 
  * @property parentheses Whether the operand should be wrapped with parentheses.
  * @author Iaroslav Postovalov
  */
-@UnstableKMathAPI
 public data class OperandSyntax(
     public val operand: MathSyntax,
     public var parentheses: Boolean,
@@ -148,7 +136,6 @@ public data class OperandSyntax(
  * @property prefix The prefix.
  * @author Iaroslav Postovalov
  */
-@UnstableKMathAPI
 public data class UnaryOperatorSyntax(
     override val operation: String,
     public var prefix: MathSyntax,
@@ -164,7 +151,6 @@ public data class UnaryOperatorSyntax(
  *
  * @author Iaroslav Postovalov
  */
-@UnstableKMathAPI
 public data class UnaryPlusSyntax(
     override val operation: String,
     override val operand: OperandSyntax,
@@ -179,7 +165,6 @@ public data class UnaryPlusSyntax(
  *
  * @author Iaroslav Postovalov
  */
-@UnstableKMathAPI
 public data class UnaryMinusSyntax(
     override val operation: String,
     override val operand: OperandSyntax,
@@ -195,7 +180,6 @@ public data class UnaryMinusSyntax(
  * @property operand The radicand.
  * @author Iaroslav Postovalov
  */
-@UnstableKMathAPI
 public data class RadicalSyntax(
     override val operation: String,
     override val operand: MathSyntax,
@@ -213,7 +197,6 @@ public data class RadicalSyntax(
  * (*e<sup>x</sup>*).
  * @author Iaroslav Postovalov
  */
-@UnstableKMathAPI
 public data class ExponentSyntax(
     override val operation: String,
     override val operand: OperandSyntax,
@@ -231,7 +214,6 @@ public data class ExponentSyntax(
  * @property right The superscript.
  * @author Iaroslav Postovalov
  */
-@UnstableKMathAPI
 public data class SuperscriptSyntax(
     override val operation: String,
     override val left: MathSyntax,
@@ -250,7 +232,6 @@ public data class SuperscriptSyntax(
  * @property right The subscript.
  * @author Iaroslav Postovalov
  */
-@UnstableKMathAPI
 public data class SubscriptSyntax(
     override val operation: String,
     override val left: MathSyntax,
@@ -268,7 +249,6 @@ public data class SubscriptSyntax(
  * @property prefix The prefix.
  * @author Iaroslav Postovalov
  */
-@UnstableKMathAPI
 public data class BinaryOperatorSyntax(
     override val operation: String,
     public var prefix: MathSyntax,
@@ -288,7 +268,6 @@ public data class BinaryOperatorSyntax(
  * @param right The addend.
  * @author Iaroslav Postovalov
  */
-@UnstableKMathAPI
 public data class BinaryPlusSyntax(
     override val operation: String,
     override val left: OperandSyntax,
@@ -307,7 +286,6 @@ public data class BinaryPlusSyntax(
  * @param right The subtrahend.
  * @author Iaroslav Postovalov
  */
-@UnstableKMathAPI
 public data class BinaryMinusSyntax(
     override val operation: String,
     override val left: OperandSyntax,
@@ -327,7 +305,6 @@ public data class BinaryMinusSyntax(
  * @property infix Whether infix (*1 / 2*) or normal (*&frac12;*) fraction should be made.
  * @author Iaroslav Postovalov
  */
-@UnstableKMathAPI
 public data class FractionSyntax(
     override val operation: String,
     override val left: OperandSyntax,
@@ -347,7 +324,6 @@ public data class FractionSyntax(
  * @property right The radicand.
  * @author Iaroslav Postovalov
  */
-@UnstableKMathAPI
 public data class RadicalWithIndexSyntax(
     override val operation: String,
     override val left: MathSyntax,
@@ -367,7 +343,6 @@ public data class RadicalWithIndexSyntax(
  * @property times Whether the times (&times;) symbol should be used.
  * @author Iaroslav Postovalov
  */
-@UnstableKMathAPI
 public data class MultiplicationSyntax(
     override val operation: String,
     override val left: OperandSyntax,

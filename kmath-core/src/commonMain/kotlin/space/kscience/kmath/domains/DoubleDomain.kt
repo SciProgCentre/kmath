@@ -4,7 +4,7 @@
  */
 package space.kscience.kmath.domains
 
-import space.kscience.kmath.misc.UnstableKMathAPI
+import space.kscience.kmath.UnstableKMathAPI
 
 /**
  * n-dimensional volume

@@ -1,11 +1,10 @@
 package space.kscience.kmath.structures
 
-import space.kscience.kmath.misc.UnstableKMathAPI
+import space.kscience.kmath.UnstableKMathAPI
 
 /**
  * Non-boxing access to primitive [Double]
  */
-
 @UnstableKMathAPI
 public fun Buffer<Double>.getDouble(index: Int): Double = if (this is BufferView) {
     val originIndex = originIndex(index)

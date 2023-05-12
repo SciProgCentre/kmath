@@ -3,8 +3,11 @@
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
+@file:OptIn(UnstableKMathAPI::class)
+
 package space.kscience.kmath.ast
 
+import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.expressions.Expression
 import space.kscience.kmath.expressions.MST
 import space.kscience.kmath.expressions.Symbol

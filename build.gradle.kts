@@ -15,7 +15,7 @@ allprojects {
     }
 
     group = "space.kscience"
-    version = "0.3.1-dev-11"
+    version = "0.3.1"
 }
 
 subprojects {
@@ -55,18 +55,6 @@ subprojects {
             }
         }
     }
-
-    plugins.withId("org.jetbrains.kotlin.multiplatform") {
-        configure<org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension> {
-            sourceSets {
-                val commonTest by getting {
-                    dependencies {
-                        implementation(projects.testUtils)
-                    }
-                }
-            }
-        }
-    }
 }
 
 readme.readmeTemplate = file("docs/templates/README-TEMPLATE.md")
@@ -87,6 +75,6 @@ ksciencePublish {
     sonatype()
 }
 
-apiValidation.nonPublicMarkers.add("space.kscience.kmath.misc.UnstableKMathAPI")
+apiValidation.nonPublicMarkers.add("space.kscience.kmath.UnstableKMathAPI")
 
 val multikVersion by extra("0.2.0")

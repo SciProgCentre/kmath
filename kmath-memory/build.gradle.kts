@@ -6,6 +6,22 @@ kscience {
     jvm()
     js()
     native()
+    wasm{
+        browser {
+            testTask {
+                useKarma {
+                    webpackConfig.experiments.add("topLevelAwait")
+                    useChromeHeadless()
+                }
+            }
+        }
+    }
+
+    wasmTest{
+        dependencies {
+            implementation(kotlin("test"))
+        }
+    }
 }
 
 readme {

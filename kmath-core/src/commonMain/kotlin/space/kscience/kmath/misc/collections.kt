@@ -9,7 +9,7 @@ package space.kscience.kmath.misc
  * The same as [zipWithNext], but includes link between last and first element
  */
 public inline fun <T, R> List<T>.zipWithNextCircular(transform: (a: T, b: T) -> R): List<R> {
-    if (isEmpty()) return emptyList()
+    if (size < 2) return emptyList()
     return indices.map { i ->
         if (i == size - 1) {
             transform(last(), first())
@@ -19,4 +19,4 @@ public inline fun <T, R> List<T>.zipWithNextCircular(transform: (a: T, b: T) -> 
     }
 }
 
-public inline fun <T> List<T>.zipWithNextCircular(): List<Pair<T,T>> = zipWithNextCircular { l, r -> l to r  }
+public fun <T> List<T>.zipWithNextCircular(): List<Pair<T, T>> = zipWithNextCircular { l, r -> l to r }

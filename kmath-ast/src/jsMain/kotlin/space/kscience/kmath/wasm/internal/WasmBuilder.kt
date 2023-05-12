@@ -5,11 +5,11 @@
 
 package space.kscience.kmath.wasm.internal
 
+import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.ast.TypedMst
 import space.kscience.kmath.expressions.*
 import space.kscience.kmath.internal.binaryen.*
 import space.kscience.kmath.internal.webassembly.Instance
-import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.operations.*
 import space.kscience.kmath.internal.binaryen.Module as BinaryenModule
 import space.kscience.kmath.internal.webassembly.Module as WasmModule

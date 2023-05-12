@@ -41,7 +41,7 @@ internal class NativeMemory(
 
         override fun readLong(offset: Int) = array.getLongAt(position(offset))
 
-        override fun release() {
+        override fun close() {
             // does nothing on JVM
         }
     }
@@ -75,7 +75,7 @@ internal class NativeMemory(
             array.setLongAt(position(offset), value)
         }
 
-        override fun release() {
+        override fun close() {
             // does nothing on JVM
         }
     }

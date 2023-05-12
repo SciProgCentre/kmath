@@ -5,8 +5,8 @@
 
 package space.kscience.kmath.expressions
 
+import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.linear.Point
-import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.nd.Structure2D
 import space.kscience.kmath.structures.BufferFactory
 import space.kscience.kmath.structures.DoubleBuffer

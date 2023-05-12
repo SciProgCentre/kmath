@@ -5,8 +5,8 @@
 
 package space.kscience.kmath.histogram
 
+import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.domains.DoubleDomain1D
-import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.operations.Group
 import space.kscience.kmath.operations.Ring
 import space.kscience.kmath.operations.ScaleOperations

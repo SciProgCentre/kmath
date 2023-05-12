@@ -6,19 +6,30 @@ kscience{
     jvm()
     js()
     native()
+    wasm{
+        browser {
+            testTask {
+                useKarma {
+                    webpackConfig.experiments.add("topLevelAwait")
+                    useChromeHeadless()
+                }
+            }
+        }
+    }
+
+    wasmTest{
+        dependencies {
+            implementation(kotlin("test"))
+        }
+    }
 
     dependencies {
         api(projects.kmathMemory)
     }
-}
 
-kotlin.sourceSets {
-    filter { it.name.contains("test", true) }
-        .map(org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet::languageSettings)
-        .forEach {
-            it.optIn("space.kscience.kmath.misc.PerformancePitfall")
-            it.optIn("space.kscience.kmath.misc.UnstableKMathAPI")
-        }
+    testDependencies {
+        implementation(projects.testUtils)
+    }
 }
 
 readme {

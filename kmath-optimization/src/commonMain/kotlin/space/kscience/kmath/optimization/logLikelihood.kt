@@ -5,13 +5,13 @@
 
 package space.kscience.kmath.optimization
 
+import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.data.XYColumnarData
 import space.kscience.kmath.data.indices
 import space.kscience.kmath.expressions.DifferentiableExpression
 import space.kscience.kmath.expressions.Expression
 import space.kscience.kmath.expressions.Symbol
 import space.kscience.kmath.expressions.derivative
-import space.kscience.kmath.misc.UnstableKMathAPI
 import kotlin.math.PI
 import kotlin.math.ln
 import kotlin.math.pow

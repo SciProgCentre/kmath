@@ -7,8 +7,8 @@ package space.kscience.kmath.histogram
 
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
+import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.distributions.NormalDistribution
-import space.kscience.kmath.misc.UnstableKMathAPI
 import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.random.RandomGenerator
 import space.kscience.kmath.stat.nextBuffer

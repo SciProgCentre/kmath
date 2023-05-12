@@ -7,7 +7,7 @@
 
 package space.kscience.kmath.functions.testUtils
 
-import space.kscience.kmath.misc.UnstableKMathAPI
+import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.operations.Field
 import space.kscience.kmath.operations.NumbersAddOps
 

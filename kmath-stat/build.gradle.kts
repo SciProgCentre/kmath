@@ -11,8 +11,8 @@ kscience{
 kotlin.sourceSets {
     commonMain {
         dependencies {
-            api(project(":kmath-coroutines"))
-            implementation(spclibs.atomicfu)
+            api(projects.kmathCoroutines)
+            //implementation(spclibs.atomicfu)
         }
     }
 

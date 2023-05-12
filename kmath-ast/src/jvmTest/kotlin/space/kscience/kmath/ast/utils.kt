@@ -5,6 +5,7 @@
 
 package space.kscience.kmath.ast
 
+import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.expressions.Expression
 import space.kscience.kmath.expressions.MST
 import space.kscience.kmath.expressions.Symbol
@@ -30,6 +31,7 @@ private object GenericAsmCompilerTestContext : CompilerTestContext {
         asmCompile(algebra as Algebra<Double>, arguments)
 }
 
+@OptIn(UnstableKMathAPI::class)
 private object PrimitiveAsmCompilerTestContext : CompilerTestContext {
     override fun MST.compileToExpression(algebra: IntRing): Expression<Int> = asmCompileToExpression(algebra)
     override fun MST.compile(algebra: IntRing, arguments: Map<Symbol, Int>): Int = asmCompile(algebra, arguments)

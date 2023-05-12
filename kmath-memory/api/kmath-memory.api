@@ -1,3 +1,14 @@
+public abstract interface annotation class space/kscience/kmath/PerformancePitfall : java/lang/annotation/Annotation {
+	public abstract fun message ()Ljava/lang/String;
+}
+
+public abstract interface annotation class space/kscience/kmath/UnsafeKMathAPI : java/lang/annotation/Annotation {
+	public abstract fun message ()Ljava/lang/String;
+}
+
+public abstract interface annotation class space/kscience/kmath/UnstableKMathAPI : java/lang/annotation/Annotation {
+}
+
 public final class space/kscience/kmath/memory/ByteBufferMemory : space/kscience/kmath/memory/Memory {
 	public fun <init> (Ljava/nio/ByteBuffer;II)V
 	public synthetic fun <init> (Ljava/nio/ByteBuffer;IIILkotlin/jvm/internal/DefaultConstructorMarker;)V
@@ -36,7 +47,8 @@ public final class space/kscience/kmath/memory/MemoryKt {
 	public static final fun write (Lspace/kscience/kmath/memory/Memory;Lkotlin/jvm/functions/Function1;)V
 }
 
-public abstract interface class space/kscience/kmath/memory/MemoryReader {
+public abstract interface class space/kscience/kmath/memory/MemoryReader : java/lang/AutoCloseable {
+	public abstract fun close ()V
 	public abstract fun getMemory ()Lspace/kscience/kmath/memory/Memory;
 	public abstract fun readByte (I)B
 	public abstract fun readDouble (I)D
@@ -44,7 +56,6 @@ public abstract interface class space/kscience/kmath/memory/MemoryReader {
 	public abstract fun readInt (I)I
 	public abstract fun readLong (I)J
 	public abstract fun readShort (I)S
-	public abstract fun release ()V
 }
 
 public abstract interface class space/kscience/kmath/memory/MemorySpec {
@@ -59,9 +70,9 @@ public final class space/kscience/kmath/memory/MemorySpecKt {
 	public static final fun writeArray (Lspace/kscience/kmath/memory/MemoryWriter;Lspace/kscience/kmath/memory/MemorySpec;I[Ljava/lang/Object;)V
 }
 
-public abstract interface class space/kscience/kmath/memory/MemoryWriter {
+public abstract interface class space/kscience/kmath/memory/MemoryWriter : java/lang/AutoCloseable {
+	public abstract fun close ()V
 	public abstract fun getMemory ()Lspace/kscience/kmath/memory/Memory;
-	public abstract fun release ()V
 	public abstract fun writeByte (IB)V
 	public abstract fun writeDouble (ID)V
 	public abstract fun writeFloat (IF)V

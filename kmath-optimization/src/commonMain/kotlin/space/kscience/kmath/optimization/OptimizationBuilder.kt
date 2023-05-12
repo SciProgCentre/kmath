@@ -5,6 +5,7 @@
 
 package space.kscience.kmath.optimization
 
+import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.data.XYColumnarData
 import space.kscience.kmath.expressions.DifferentiableExpression
 import space.kscience.kmath.expressions.Symbol
@@ -69,6 +70,7 @@ public suspend fun <T> DifferentiableExpression<T>.optimizeWith(
 }
 
 
+@OptIn(UnstableKMathAPI::class)
 public class XYOptimizationBuilder(
     public val data: XYColumnarData<Double, Double, Double>,
     public val model: DifferentiableExpression<Double>,
@@ -86,6 +88,7 @@ public class XYOptimizationBuilder(
     )
 }
 
+@OptIn(UnstableKMathAPI::class)
 public fun XYOptimization(
     data: XYColumnarData<Double, Double, Double>,
     model: DifferentiableExpression<Double>,

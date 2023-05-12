@@ -5,12 +5,15 @@
 
 package space.kscience.kmath.geometry
 
+import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.complex.Quaternion
 import space.kscience.kmath.complex.QuaternionField
 import space.kscience.kmath.complex.normalized
 import space.kscience.kmath.complex.reciprocal
-import space.kscience.kmath.linear.*
-import space.kscience.kmath.misc.UnstableKMathAPI
+import space.kscience.kmath.linear.LinearSpace
+import space.kscience.kmath.linear.Matrix
+import space.kscience.kmath.linear.linearSpace
+import space.kscience.kmath.linear.matrix
 import space.kscience.kmath.operations.DoubleField
 import kotlin.math.pow
 import kotlin.math.sqrt

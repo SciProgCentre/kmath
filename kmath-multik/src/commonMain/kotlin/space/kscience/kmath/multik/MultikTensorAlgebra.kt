@@ -13,10 +13,11 @@ import org.jetbrains.kotlinx.multik.api.math.Math
 import org.jetbrains.kotlinx.multik.api.stat.Statistics
 import org.jetbrains.kotlinx.multik.ndarray.data.*
 import org.jetbrains.kotlinx.multik.ndarray.operations.*
-import space.kscience.kmath.misc.PerformancePitfall
-import space.kscience.kmath.misc.UnsafeKMathAPI
+import space.kscience.kmath.PerformancePitfall
+import space.kscience.kmath.UnsafeKMathAPI
 import space.kscience.kmath.nd.*
-import space.kscience.kmath.operations.*
+import space.kscience.kmath.operations.Field
+import space.kscience.kmath.operations.Ring
 import space.kscience.kmath.tensors.api.Tensor
 import space.kscience.kmath.tensors.api.TensorAlgebra
 import space.kscience.kmath.tensors.api.TensorPartialDivisionAlgebra

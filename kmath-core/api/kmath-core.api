@@ -1,12 +1,10 @@
 public final class space/kscience/kmath/data/ColumnarDataKt {
-	public static final fun getIndices (Lspace/kscience/kmath/data/ColumnarData;)Lkotlin/ranges/IntRange;
 }
 
 public final class space/kscience/kmath/data/XYColumnarData$Companion {
 }
 
 public final class space/kscience/kmath/data/XYColumnarDataKt {
-	public static synthetic fun asXYData$default (Lspace/kscience/kmath/nd/Structure2D;IIILjava/lang/Object;)Lspace/kscience/kmath/data/XYColumnarData;
 }
 
 public final class space/kscience/kmath/data/XYErrorColumnarData$Companion {
@@ -19,7 +17,6 @@ public abstract interface class space/kscience/kmath/domains/Domain {
 }
 
 public final class space/kscience/kmath/domains/Domain1DKt {
-	public static final fun getCenter (Lspace/kscience/kmath/domains/Domain1D;)D
 }
 
 public abstract interface class space/kscience/kmath/expressions/AutoDiffProcessor {
@@ -31,12 +28,31 @@ public class space/kscience/kmath/expressions/AutoDiffValue {
 	public final fun getValue ()Ljava/lang/Object;
 }
 
+public final class space/kscience/kmath/expressions/DSAlgebraKt {
+}
+
+public final class space/kscience/kmath/expressions/DSCompiler {
+	public final fun getAlgebra ()Lspace/kscience/kmath/operations/Algebra;
+	public final fun getFreeParameters ()I
+	public final fun getOrder ()I
+	public final fun getPartialDerivativeIndex ([I)I
+	public final fun getPartialDerivativeOrders (I)[I
+	public final fun getSize ()I
+	public final fun getSizes ()[[I
+}
+
 public final class space/kscience/kmath/expressions/DerivationResult {
 	public fun <init> (Ljava/lang/Object;Ljava/util/Map;Lspace/kscience/kmath/operations/Field;)V
 	public final fun derivative (Lspace/kscience/kmath/expressions/Symbol;)Ljava/lang/Object;
 	public final fun div ()Ljava/lang/Object;
 	public final fun getContext ()Lspace/kscience/kmath/operations/Field;
 	public final fun getValue ()Ljava/lang/Object;
+}
+
+public final class space/kscience/kmath/expressions/DiffExpressionWithDefault : space/kscience/kmath/expressions/DifferentiableExpression {
+	public fun <init> (Lspace/kscience/kmath/expressions/DifferentiableExpression;Ljava/util/Map;)V
+	public fun derivativeOrNull (Ljava/util/List;)Lspace/kscience/kmath/expressions/Expression;
+	public fun invoke (Ljava/util/Map;)Ljava/lang/Object;
 }
 
 public abstract interface class space/kscience/kmath/expressions/DifferentiableExpression : space/kscience/kmath/expressions/Expression {
@@ -52,6 +68,9 @@ public final class space/kscience/kmath/expressions/DifferentiableExpressionKt {
 	public static final fun derivative (Lspace/kscience/kmath/expressions/SpecialDifferentiableExpression;[Lspace/kscience/kmath/expressions/Symbol;)Lspace/kscience/kmath/expressions/Expression;
 }
 
+public final class space/kscience/kmath/expressions/DoubleExpression$Companion {
+}
+
 public abstract interface class space/kscience/kmath/expressions/Expression {
 	public abstract fun invoke (Ljava/util/Map;)Ljava/lang/Object;
 }
@@ -65,6 +84,16 @@ public final class space/kscience/kmath/expressions/ExpressionKt {
 	public static final fun callBySymbol (Lspace/kscience/kmath/expressions/Expression;[Lkotlin/Pair;)Ljava/lang/Object;
 	public static final fun getBinding (Lspace/kscience/kmath/expressions/ExpressionAlgebra;)Lkotlin/properties/ReadOnlyProperty;
 	public static final fun invoke (Lspace/kscience/kmath/expressions/Expression;)Ljava/lang/Object;
+}
+
+public final class space/kscience/kmath/expressions/ExpressionWithDefault : space/kscience/kmath/expressions/Expression {
+	public fun <init> (Lspace/kscience/kmath/expressions/Expression;Ljava/util/Map;)V
+	public fun invoke (Ljava/util/Map;)Ljava/lang/Object;
+}
+
+public final class space/kscience/kmath/expressions/ExpressionWithDefaultKt {
+	public static final fun withDefaultArgs (Lspace/kscience/kmath/expressions/DifferentiableExpression;Ljava/util/Map;)Lspace/kscience/kmath/expressions/DiffExpressionWithDefault;
+	public static final fun withDefaultArgs (Lspace/kscience/kmath/expressions/Expression;Ljava/util/Map;)Lspace/kscience/kmath/expressions/ExpressionWithDefault;
 }
 
 public abstract class space/kscience/kmath/expressions/FirstDerivativeExpression : space/kscience/kmath/expressions/DifferentiableExpression {
@@ -158,6 +187,12 @@ public class space/kscience/kmath/expressions/FunctionalExpressionRing : space/k
 	public final fun times (Ljava/lang/Object;Lspace/kscience/kmath/expressions/Expression;)Lspace/kscience/kmath/expressions/Expression;
 	public final fun times (Lspace/kscience/kmath/expressions/Expression;Ljava/lang/Object;)Lspace/kscience/kmath/expressions/Expression;
 	public fun unaryOperationFunction (Ljava/lang/String;)Lkotlin/jvm/functions/Function1;
+}
+
+public final class space/kscience/kmath/expressions/IntExpression$Companion {
+}
+
+public final class space/kscience/kmath/expressions/LongExpression$Companion {
 }
 
 public abstract interface class space/kscience/kmath/expressions/MST {
@@ -356,6 +391,35 @@ public final class space/kscience/kmath/expressions/MstRing : space/kscience/kma
 	public fun unaryPlus (Lspace/kscience/kmath/expressions/MST;)Lspace/kscience/kmath/expressions/MST$Unary;
 }
 
+public final class space/kscience/kmath/expressions/NamedMatrix : space/kscience/kmath/nd/Structure2D {
+	public static final field Companion Lspace/kscience/kmath/expressions/NamedMatrix$Companion;
+	public fun <init> (Lspace/kscience/kmath/nd/Structure2D;Lspace/kscience/kmath/expressions/SymbolIndexer;)V
+	public fun elements ()Lkotlin/sequences/Sequence;
+	public fun get (II)Ljava/lang/Object;
+	public final fun get (Lspace/kscience/kmath/expressions/Symbol;Lspace/kscience/kmath/expressions/Symbol;)Ljava/lang/Object;
+	public fun get ([I)Ljava/lang/Object;
+	public fun getColNum ()I
+	public fun getColumns ()Ljava/util/List;
+	public fun getDimension ()I
+	public synthetic fun getFeature (Lkotlin/reflect/KClass;)Ljava/lang/Object;
+	public fun getFeature (Lkotlin/reflect/KClass;)Lspace/kscience/kmath/nd/StructureFeature;
+	public final fun getIndexer ()Lspace/kscience/kmath/expressions/SymbolIndexer;
+	public fun getIndices ()Lspace/kscience/kmath/nd/ShapeIndexer;
+	public fun getRowNum ()I
+	public fun getRows ()Ljava/util/List;
+	public fun getShape-IIYLAfE ()[I
+	public final fun getValues ()Lspace/kscience/kmath/nd/Structure2D;
+}
+
+public final class space/kscience/kmath/expressions/NamedMatrix$Companion {
+	public final fun toStringWithSymbols (Lspace/kscience/kmath/nd/Structure2D;Lspace/kscience/kmath/expressions/SymbolIndexer;)Ljava/lang/String;
+}
+
+public final class space/kscience/kmath/expressions/NamedMatrixKt {
+	public static final fun named (Lspace/kscience/kmath/nd/Structure2D;Ljava/util/List;)Lspace/kscience/kmath/expressions/NamedMatrix;
+	public static final fun named (Lspace/kscience/kmath/nd/Structure2D;Lspace/kscience/kmath/expressions/SymbolIndexer;)Lspace/kscience/kmath/expressions/NamedMatrix;
+}
+
 public final class space/kscience/kmath/expressions/SimpleAutoDiffExpression : space/kscience/kmath/expressions/FirstDerivativeExpression {
 	public fun <init> (Lspace/kscience/kmath/operations/Field;Lkotlin/jvm/functions/Function1;)V
 	public fun derivativeOrNull (Lspace/kscience/kmath/expressions/Symbol;)Lspace/kscience/kmath/expressions/Expression;
@@ -465,11 +529,6 @@ public abstract interface class space/kscience/kmath/expressions/SpecialDifferen
 	public abstract fun derivativeOrNull (Ljava/util/List;)Lspace/kscience/kmath/expressions/Expression;
 }
 
-public final class space/kscience/kmath/expressions/SpecialExpressionsKt {
-	public static final fun chiSquaredExpression (Lspace/kscience/kmath/expressions/AutoDiffProcessor;Lspace/kscience/kmath/structures/Buffer;Lspace/kscience/kmath/structures/Buffer;Lspace/kscience/kmath/structures/Buffer;Lkotlin/jvm/functions/Function2;)Lspace/kscience/kmath/expressions/DifferentiableExpression;
-	public static final fun genericChiSquaredExpression (Lspace/kscience/kmath/expressions/AutoDiffProcessor;Lspace/kscience/kmath/structures/Buffer;Lspace/kscience/kmath/structures/Buffer;Lspace/kscience/kmath/structures/Buffer;Lkotlin/jvm/functions/Function2;)Lspace/kscience/kmath/expressions/DifferentiableExpression;
-}
-
 public abstract interface class space/kscience/kmath/expressions/Symbol : space/kscience/kmath/expressions/MST {
 	public static final field Companion Lspace/kscience/kmath/expressions/Symbol$Companion;
 	public abstract fun getIdentity ()Ljava/lang/String;
@@ -510,7 +569,7 @@ public final class space/kscience/kmath/linear/BufferedLinearSpace : space/kscie
 }
 
 public final class space/kscience/kmath/linear/BufferedLinearSpaceKt {
-	public static final fun linearSpace (Lspace/kscience/kmath/operations/Ring;Lkotlin/jvm/functions/Function2;)Lspace/kscience/kmath/linear/BufferedLinearSpace;
+	public static final fun getLinearSpace (Lspace/kscience/kmath/operations/Ring;)Lspace/kscience/kmath/linear/BufferedLinearSpace;
 }
 
 public abstract interface class space/kscience/kmath/linear/CholeskyDecompositionFeature : space/kscience/kmath/linear/MatrixFeature {
@@ -597,9 +656,7 @@ public abstract interface class space/kscience/kmath/linear/LinearSpace {
 }
 
 public final class space/kscience/kmath/linear/LinearSpace$Companion {
-	public final fun buffered (Lspace/kscience/kmath/operations/Ring;Lkotlin/jvm/functions/Function2;)Lspace/kscience/kmath/linear/LinearSpace;
-	public static synthetic fun buffered$default (Lspace/kscience/kmath/linear/LinearSpace$Companion;Lspace/kscience/kmath/operations/Ring;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lspace/kscience/kmath/linear/LinearSpace;
-	public final fun getDouble ()Lspace/kscience/kmath/linear/LinearSpace;
+	public final fun buffered (Lspace/kscience/kmath/operations/Ring;)Lspace/kscience/kmath/linear/LinearSpace;
 }
 
 public final class space/kscience/kmath/linear/LinearSpaceKt {
@@ -628,11 +685,11 @@ public abstract interface class space/kscience/kmath/linear/LupDecompositionFeat
 
 public final class space/kscience/kmath/linear/LupDecompositionKt {
 	public static final fun abs (Lspace/kscience/kmath/linear/LinearSpace;Ljava/lang/Comparable;)Ljava/lang/Comparable;
-	public static final fun lup (Lspace/kscience/kmath/linear/LinearSpace;Lkotlin/jvm/functions/Function2;Lspace/kscience/kmath/nd/Structure2D;Lkotlin/jvm/functions/Function1;)Lspace/kscience/kmath/linear/LupDecomposition;
 	public static final fun lup (Lspace/kscience/kmath/linear/LinearSpace;Lspace/kscience/kmath/nd/Structure2D;D)Lspace/kscience/kmath/linear/LupDecomposition;
+	public static final fun lup (Lspace/kscience/kmath/linear/LinearSpace;Lspace/kscience/kmath/structures/MutableBufferFactory;Lspace/kscience/kmath/nd/Structure2D;Lkotlin/jvm/functions/Function1;)Lspace/kscience/kmath/linear/LupDecomposition;
 	public static synthetic fun lup$default (Lspace/kscience/kmath/linear/LinearSpace;Lspace/kscience/kmath/nd/Structure2D;DILjava/lang/Object;)Lspace/kscience/kmath/linear/LupDecomposition;
 	public static final fun lupSolver (Lspace/kscience/kmath/linear/LinearSpace;D)Lspace/kscience/kmath/linear/LinearSolver;
-	public static final fun lupSolver (Lspace/kscience/kmath/linear/LinearSpace;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function1;)Lspace/kscience/kmath/linear/LinearSolver;
+	public static final fun lupSolver (Lspace/kscience/kmath/linear/LinearSpace;Lspace/kscience/kmath/structures/MutableBufferFactory;Lkotlin/jvm/functions/Function1;)Lspace/kscience/kmath/linear/LinearSolver;
 	public static synthetic fun lupSolver$default (Lspace/kscience/kmath/linear/LinearSpace;DILjava/lang/Object;)Lspace/kscience/kmath/linear/LinearSolver;
 }
 
@@ -673,12 +730,11 @@ public final class space/kscience/kmath/linear/MatrixWrapper : space/kscience/km
 	public final fun getOrigin ()Lspace/kscience/kmath/nd/Structure2D;
 	public fun getRowNum ()I
 	public fun getRows ()Ljava/util/List;
-	public fun getShape ()[I
+	public fun getShape-IIYLAfE ()[I
 	public fun toString ()Ljava/lang/String;
 }
 
 public final class space/kscience/kmath/linear/MatrixWrapperKt {
-	public static final fun getOrigin (Lspace/kscience/kmath/nd/Structure2D;)Lspace/kscience/kmath/nd/Structure2D;
 	public static final fun one (Lspace/kscience/kmath/linear/LinearSpace;II)Lspace/kscience/kmath/nd/Structure2D;
 	public static final fun plus (Lspace/kscience/kmath/nd/Structure2D;Lspace/kscience/kmath/linear/MatrixFeature;)Lspace/kscience/kmath/linear/MatrixWrapper;
 	public static final fun transpose (Lspace/kscience/kmath/nd/Structure2D;)Lspace/kscience/kmath/nd/Structure2D;
@@ -726,7 +782,7 @@ public final class space/kscience/kmath/linear/VirtualMatrix : space/kscience/km
 	public fun getColNum ()I
 	public final fun getGenerator ()Lkotlin/jvm/functions/Function2;
 	public fun getRowNum ()I
-	public fun getShape ()[I
+	public fun getShape-IIYLAfE ()[I
 }
 
 public final class space/kscience/kmath/linear/VirtualMatrixKt {
@@ -737,6 +793,11 @@ public final class space/kscience/kmath/linear/ZeroFeature : space/kscience/kmat
 	public static final field INSTANCE Lspace/kscience/kmath/linear/ZeroFeature;
 }
 
+public final class space/kscience/kmath/misc/CollectionsKt {
+	public static final fun zipWithNextCircular (Ljava/util/List;)Ljava/util/List;
+	public static final fun zipWithNextCircular (Ljava/util/List;Lkotlin/jvm/functions/Function2;)Ljava/util/List;
+}
+
 public final class space/kscience/kmath/misc/CumulativeKt {
 	public static final fun cumulative (Ljava/lang/Iterable;Ljava/lang/Object;Lkotlin/jvm/functions/Function2;)Ljava/lang/Iterable;
 	public static final fun cumulative (Ljava/util/Iterator;Ljava/lang/Object;Lkotlin/jvm/functions/Function2;)Ljava/util/Iterator;
@@ -745,6 +806,7 @@ public final class space/kscience/kmath/misc/CumulativeKt {
 	public static final fun cumulativeSum (Ljava/lang/Iterable;Lspace/kscience/kmath/operations/Ring;)Ljava/lang/Iterable;
 	public static final fun cumulativeSum (Ljava/util/List;Lspace/kscience/kmath/operations/Ring;)Ljava/util/List;
 	public static final fun cumulativeSum (Lkotlin/sequences/Sequence;Lspace/kscience/kmath/operations/Ring;)Lkotlin/sequences/Sequence;
+	public static final fun cumulativeSum (Lspace/kscience/kmath/structures/Buffer;Lspace/kscience/kmath/operations/Ring;)Lspace/kscience/kmath/structures/Buffer;
 	public static final fun cumulativeSumOfDouble (Ljava/lang/Iterable;)Ljava/lang/Iterable;
 	public static final fun cumulativeSumOfDouble (Ljava/util/List;)Ljava/util/List;
 	public static final fun cumulativeSumOfDouble (Lkotlin/sequences/Sequence;)Lkotlin/sequences/Sequence;
@@ -811,10 +873,6 @@ public final class space/kscience/kmath/misc/NumbersJVMKt {
 	public static final fun toIntExact (J)I
 }
 
-public abstract interface annotation class space/kscience/kmath/misc/PerformancePitfall : java/lang/annotation/Annotation {
-	public abstract fun message ()Ljava/lang/String;
-}
-
 public final class space/kscience/kmath/misc/SortingKt {
 	public static final fun requireSorted (Lspace/kscience/kmath/structures/Buffer;)V
 	public static final fun sorted (Lspace/kscience/kmath/structures/Buffer;)Lspace/kscience/kmath/structures/Buffer;
@@ -823,16 +881,13 @@ public final class space/kscience/kmath/misc/SortingKt {
 	public static final fun sortedDescending (Lspace/kscience/kmath/structures/Buffer;)Lspace/kscience/kmath/structures/Buffer;
 }
 
-public abstract interface annotation class space/kscience/kmath/misc/UnstableKMathAPI : java/lang/annotation/Annotation {
-}
-
 public abstract interface class space/kscience/kmath/nd/AlgebraND : space/kscience/kmath/operations/Algebra {
 	public static final field Companion Lspace/kscience/kmath/nd/AlgebraND$Companion;
 	public abstract fun getElementAlgebra ()Lspace/kscience/kmath/operations/Algebra;
 	public fun invoke (Lkotlin/jvm/functions/Function1;Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd/StructureND;
 	public fun map (Lspace/kscience/kmath/nd/StructureND;Lkotlin/jvm/functions/Function2;)Lspace/kscience/kmath/nd/StructureND;
 	public fun mapIndexed (Lspace/kscience/kmath/nd/StructureND;Lkotlin/jvm/functions/Function3;)Lspace/kscience/kmath/nd/StructureND;
-	public abstract fun structureND ([ILkotlin/jvm/functions/Function2;)Lspace/kscience/kmath/nd/StructureND;
+	public abstract fun structureND-qL90JFI ([ILkotlin/jvm/functions/Function2;)Lspace/kscience/kmath/nd/StructureND;
 	public fun zip (Lspace/kscience/kmath/nd/StructureND;Lspace/kscience/kmath/nd/StructureND;Lkotlin/jvm/functions/Function3;)Lspace/kscience/kmath/nd/StructureND;
 }
 
@@ -840,15 +895,11 @@ public final class space/kscience/kmath/nd/AlgebraND$Companion {
 }
 
 public final class space/kscience/kmath/nd/AlgebraNDExtentionsKt {
-	public static final fun one (Lspace/kscience/kmath/nd/AlgebraND;[I)Lspace/kscience/kmath/nd/StructureND;
+	public static final fun one-waz_sdI (Lspace/kscience/kmath/nd/AlgebraND;[I)Lspace/kscience/kmath/nd/StructureND;
 	public static final fun oneVarArg (Lspace/kscience/kmath/nd/AlgebraND;I[I)Lspace/kscience/kmath/nd/StructureND;
 	public static final fun structureND (Lspace/kscience/kmath/nd/AlgebraND;I[ILkotlin/jvm/functions/Function2;)Lspace/kscience/kmath/nd/StructureND;
-	public static final fun zero (Lspace/kscience/kmath/nd/AlgebraND;[I)Lspace/kscience/kmath/nd/StructureND;
+	public static final fun zero-waz_sdI (Lspace/kscience/kmath/nd/AlgebraND;[I)Lspace/kscience/kmath/nd/StructureND;
 	public static final fun zeroVarArg (Lspace/kscience/kmath/nd/AlgebraND;I[I)Lspace/kscience/kmath/nd/StructureND;
-}
-
-public final class space/kscience/kmath/nd/AlgebraNDKt {
-	public static final fun Shape (I[I)[I
 }
 
 public abstract interface class space/kscience/kmath/nd/BufferAlgebraND : space/kscience/kmath/nd/AlgebraND {
@@ -860,8 +911,8 @@ public abstract interface class space/kscience/kmath/nd/BufferAlgebraND : space/
 	public synthetic fun map (Lspace/kscience/kmath/nd/StructureND;Lkotlin/jvm/functions/Function2;)Lspace/kscience/kmath/nd/StructureND;
 	public fun mapIndexed (Lspace/kscience/kmath/nd/StructureND;Lkotlin/jvm/functions/Function3;)Lspace/kscience/kmath/nd/BufferND;
 	public synthetic fun mapIndexed (Lspace/kscience/kmath/nd/StructureND;Lkotlin/jvm/functions/Function3;)Lspace/kscience/kmath/nd/StructureND;
-	public fun structureND ([ILkotlin/jvm/functions/Function2;)Lspace/kscience/kmath/nd/BufferND;
-	public synthetic fun structureND ([ILkotlin/jvm/functions/Function2;)Lspace/kscience/kmath/nd/StructureND;
+	public fun structureND-qL90JFI ([ILkotlin/jvm/functions/Function2;)Lspace/kscience/kmath/nd/BufferND;
+	public synthetic fun structureND-qL90JFI ([ILkotlin/jvm/functions/Function2;)Lspace/kscience/kmath/nd/StructureND;
 	public fun toBufferND (Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd/BufferND;
 	public fun zip (Lspace/kscience/kmath/nd/StructureND;Lspace/kscience/kmath/nd/StructureND;Lkotlin/jvm/functions/Function3;)Lspace/kscience/kmath/nd/BufferND;
 	public synthetic fun zip (Lspace/kscience/kmath/nd/StructureND;Lspace/kscience/kmath/nd/StructureND;Lkotlin/jvm/functions/Function3;)Lspace/kscience/kmath/nd/StructureND;
@@ -885,19 +936,22 @@ public class space/kscience/kmath/nd/BufferND : space/kscience/kmath/nd/Structur
 	public fun get ([I)Ljava/lang/Object;
 	public fun getBuffer ()Lspace/kscience/kmath/structures/Buffer;
 	public fun getIndices ()Lspace/kscience/kmath/nd/ShapeIndexer;
-	public fun getShape ()[I
+	public fun getShape-IIYLAfE ()[I
 	public fun toString ()Ljava/lang/String;
 }
 
 public final class space/kscience/kmath/nd/BufferNDKt {
-	public static final fun mapToBuffer (Lspace/kscience/kmath/nd/StructureND;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function1;)Lspace/kscience/kmath/nd/BufferND;
+	public static final fun BufferND-bYNkpeI ([ILspace/kscience/kmath/structures/BufferFactory;Lkotlin/jvm/functions/Function1;)Lspace/kscience/kmath/nd/BufferND;
+	public static synthetic fun BufferND-bYNkpeI$default ([ILspace/kscience/kmath/structures/BufferFactory;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lspace/kscience/kmath/nd/BufferND;
+	public static final fun MutableBufferND-bYNkpeI ([ILspace/kscience/kmath/structures/MutableBufferFactory;Lkotlin/jvm/functions/Function1;)Lspace/kscience/kmath/nd/MutableBufferND;
+	public static synthetic fun MutableBufferND-bYNkpeI$default ([ILspace/kscience/kmath/structures/MutableBufferFactory;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lspace/kscience/kmath/nd/MutableBufferND;
 }
 
 public class space/kscience/kmath/nd/BufferedFieldOpsND : space/kscience/kmath/nd/BufferedRingOpsND, space/kscience/kmath/nd/FieldOpsND {
 	public fun <init> (Lspace/kscience/kmath/operations/BufferAlgebra;Lkotlin/jvm/functions/Function1;)V
 	public synthetic fun <init> (Lspace/kscience/kmath/operations/BufferAlgebra;Lkotlin/jvm/functions/Function1;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public fun <init> (Lspace/kscience/kmath/operations/Field;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function1;)V
-	public synthetic fun <init> (Lspace/kscience/kmath/operations/Field;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function1;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun <init> (Lspace/kscience/kmath/operations/Field;Lkotlin/jvm/functions/Function1;)V
+	public synthetic fun <init> (Lspace/kscience/kmath/operations/Field;Lkotlin/jvm/functions/Function1;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public synthetic fun scale (Ljava/lang/Object;D)Ljava/lang/Object;
 	public fun scale (Lspace/kscience/kmath/nd/StructureND;D)Lspace/kscience/kmath/nd/StructureND;
 }
@@ -916,29 +970,30 @@ public class space/kscience/kmath/nd/BufferedRingOpsND : space/kscience/kmath/nd
 	public synthetic fun <init> (Lspace/kscience/kmath/operations/BufferAlgebra;Lkotlin/jvm/functions/Function1;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 }
 
-public final class space/kscience/kmath/nd/DefaultStrides : space/kscience/kmath/nd/Strides {
-	public static final field Companion Lspace/kscience/kmath/nd/DefaultStrides$Companion;
+public final class space/kscience/kmath/nd/ColumnStrides : space/kscience/kmath/nd/Strides {
+	public static final field Companion Lspace/kscience/kmath/nd/ColumnStrides$Companion;
 	public synthetic fun <init> ([ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public fun equals (Ljava/lang/Object;)Z
 	public fun getLinearSize ()I
-	public fun getShape ()[I
-	public fun getStrides ()[I
+	public fun getShape-IIYLAfE ()[I
 	public fun hashCode ()I
 	public fun index (I)[I
 }
 
-public final class space/kscience/kmath/nd/DefaultStrides$Companion {
-	public final fun invoke ([I)Lspace/kscience/kmath/nd/Strides;
+public final class space/kscience/kmath/nd/ColumnStrides$Companion {
 }
 
-public final class space/kscience/kmath/nd/DoubleBufferND : space/kscience/kmath/nd/BufferND {
+public final class space/kscience/kmath/nd/DoubleBufferND : space/kscience/kmath/nd/MutableBufferND, space/kscience/kmath/nd/MutableStructureNDOfDouble {
 	public synthetic fun <init> (Lspace/kscience/kmath/nd/ShapeIndexer;[DLkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public synthetic fun getBuffer ()Lspace/kscience/kmath/structures/Buffer;
+	public synthetic fun getBuffer ()Lspace/kscience/kmath/structures/MutableBuffer;
 	public fun getBuffer-Dv3HvWU ()[D
+	public fun getDouble ([I)D
+	public fun setDouble ([ID)V
 }
 
 public final class space/kscience/kmath/nd/DoubleFieldND : space/kscience/kmath/nd/DoubleFieldOpsND, space/kscience/kmath/nd/FieldND, space/kscience/kmath/operations/ExtendedField, space/kscience/kmath/operations/NumbersAddOps {
-	public fun <init> ([I)V
+	public synthetic fun <init> ([ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public synthetic fun acosh (Ljava/lang/Object;)Ljava/lang/Object;
 	public fun acosh (Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd/DoubleBufferND;
 	public synthetic fun asinh (Ljava/lang/Object;)Ljava/lang/Object;
@@ -947,13 +1002,14 @@ public final class space/kscience/kmath/nd/DoubleFieldND : space/kscience/kmath/
 	public fun atanh (Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd/DoubleBufferND;
 	public synthetic fun cosh (Ljava/lang/Object;)Ljava/lang/Object;
 	public fun cosh (Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd/DoubleBufferND;
-	public fun getShape ()[I
+	public fun getShape-IIYLAfE ()[I
 	public synthetic fun number (Ljava/lang/Number;)Ljava/lang/Object;
 	public fun number (Ljava/lang/Number;)Lspace/kscience/kmath/nd/DoubleBufferND;
 	public synthetic fun power (Ljava/lang/Object;I)Ljava/lang/Object;
 	public synthetic fun power (Ljava/lang/Object;Ljava/lang/Number;)Ljava/lang/Object;
 	public fun power (Lspace/kscience/kmath/nd/StructureND;I)Lspace/kscience/kmath/nd/DoubleBufferND;
 	public fun power (Lspace/kscience/kmath/nd/StructureND;Ljava/lang/Number;)Lspace/kscience/kmath/nd/DoubleBufferND;
+	public synthetic fun power (Lspace/kscience/kmath/nd/StructureND;Ljava/lang/Number;)Lspace/kscience/kmath/nd/StructureND;
 	public synthetic fun power-Qn1smSk (Ljava/lang/Object;I)Ljava/lang/Object;
 	public fun power-Qn1smSk (Lspace/kscience/kmath/nd/StructureND;I)Lspace/kscience/kmath/nd/DoubleBufferND;
 	public synthetic fun sinh (Ljava/lang/Object;)Ljava/lang/Object;
@@ -965,6 +1021,7 @@ public final class space/kscience/kmath/nd/DoubleFieldND : space/kscience/kmath/
 public final class space/kscience/kmath/nd/DoubleFieldNDKt {
 	public static final fun getNdAlgebra (Lspace/kscience/kmath/operations/DoubleField;)Lspace/kscience/kmath/nd/DoubleFieldOpsND;
 	public static final fun ndAlgebra (Lspace/kscience/kmath/operations/DoubleField;[I)Lspace/kscience/kmath/nd/DoubleFieldND;
+	public static final fun ndAlgebra-waz_sdI (Lspace/kscience/kmath/operations/DoubleField;[I)Lspace/kscience/kmath/nd/DoubleFieldND;
 }
 
 public abstract class space/kscience/kmath/nd/DoubleFieldOpsND : space/kscience/kmath/nd/BufferedFieldOpsND, space/kscience/kmath/operations/ExtendedFieldOps, space/kscience/kmath/operations/ScaleOperations {
@@ -1021,6 +1078,8 @@ public abstract class space/kscience/kmath/nd/DoubleFieldOpsND : space/kscience/
 	public fun plus (Lspace/kscience/kmath/nd/StructureND;D)Lspace/kscience/kmath/nd/DoubleBufferND;
 	public synthetic fun plus (Lspace/kscience/kmath/nd/StructureND;Ljava/lang/Object;)Lspace/kscience/kmath/nd/StructureND;
 	public fun plus (Lspace/kscience/kmath/nd/StructureND;Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd/DoubleBufferND;
+	public synthetic fun power (Ljava/lang/Object;Ljava/lang/Number;)Ljava/lang/Object;
+	public fun power (Lspace/kscience/kmath/nd/StructureND;Ljava/lang/Number;)Lspace/kscience/kmath/nd/StructureND;
 	public synthetic fun scale (Ljava/lang/Object;D)Ljava/lang/Object;
 	public fun scale (Lspace/kscience/kmath/nd/StructureND;D)Lspace/kscience/kmath/nd/DoubleBufferND;
 	public synthetic fun scale (Lspace/kscience/kmath/nd/StructureND;D)Lspace/kscience/kmath/nd/StructureND;
@@ -1028,9 +1087,9 @@ public abstract class space/kscience/kmath/nd/DoubleFieldOpsND : space/kscience/
 	public fun sin (Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd/DoubleBufferND;
 	public synthetic fun sinh (Ljava/lang/Object;)Ljava/lang/Object;
 	public fun sinh (Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd/DoubleBufferND;
-	public synthetic fun structureND ([ILkotlin/jvm/functions/Function2;)Lspace/kscience/kmath/nd/BufferND;
-	public fun structureND ([ILkotlin/jvm/functions/Function2;)Lspace/kscience/kmath/nd/DoubleBufferND;
-	public synthetic fun structureND ([ILkotlin/jvm/functions/Function2;)Lspace/kscience/kmath/nd/StructureND;
+	public synthetic fun structureND-qL90JFI ([ILkotlin/jvm/functions/Function2;)Lspace/kscience/kmath/nd/BufferND;
+	public fun structureND-qL90JFI ([ILkotlin/jvm/functions/Function2;)Lspace/kscience/kmath/nd/DoubleBufferND;
+	public synthetic fun structureND-qL90JFI ([ILkotlin/jvm/functions/Function2;)Lspace/kscience/kmath/nd/StructureND;
 	public synthetic fun tan (Ljava/lang/Object;)Ljava/lang/Object;
 	public fun tan (Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd/DoubleBufferND;
 	public synthetic fun tanh (Ljava/lang/Object;)Ljava/lang/Object;
@@ -1087,7 +1146,41 @@ public abstract interface class space/kscience/kmath/nd/GroupOpsND : space/kscie
 public final class space/kscience/kmath/nd/GroupOpsND$Companion {
 }
 
-public final class space/kscience/kmath/nd/MutableBufferND : space/kscience/kmath/nd/BufferND, space/kscience/kmath/nd/MutableStructureND {
+public final class space/kscience/kmath/nd/IndexOutOfShapeException : java/lang/RuntimeException {
+	public synthetic fun <init> ([I[ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getIndex ()[I
+	public final fun getShape-IIYLAfE ()[I
+}
+
+public final class space/kscience/kmath/nd/IntBufferND : space/kscience/kmath/nd/MutableBufferND {
+	public synthetic fun <init> (Lspace/kscience/kmath/nd/ShapeIndexer;[ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun getBuffer ()Lspace/kscience/kmath/structures/Buffer;
+	public synthetic fun getBuffer ()Lspace/kscience/kmath/structures/MutableBuffer;
+	public fun getBuffer-ir4F4A8 ()[I
+}
+
+public final class space/kscience/kmath/nd/IntRingND : space/kscience/kmath/nd/IntRingOpsND, space/kscience/kmath/nd/RingND, space/kscience/kmath/operations/NumbersAddOps {
+	public synthetic fun <init> ([ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun getShape-IIYLAfE ()[I
+	public synthetic fun number (Ljava/lang/Number;)Ljava/lang/Object;
+	public fun number (Ljava/lang/Number;)Lspace/kscience/kmath/nd/BufferND;
+}
+
+public final class space/kscience/kmath/nd/IntRingNDKt {
+	public static final fun withNdAlgebra (Lspace/kscience/kmath/operations/IntRing;[ILkotlin/jvm/functions/Function1;)Ljava/lang/Object;
+}
+
+public abstract class space/kscience/kmath/nd/IntRingOpsND : space/kscience/kmath/nd/BufferedRingOpsND {
+	public static final field Companion Lspace/kscience/kmath/nd/IntRingOpsND$Companion;
+	public synthetic fun structureND-qL90JFI ([ILkotlin/jvm/functions/Function2;)Lspace/kscience/kmath/nd/BufferND;
+	public fun structureND-qL90JFI ([ILkotlin/jvm/functions/Function2;)Lspace/kscience/kmath/nd/IntBufferND;
+	public synthetic fun structureND-qL90JFI ([ILkotlin/jvm/functions/Function2;)Lspace/kscience/kmath/nd/StructureND;
+}
+
+public final class space/kscience/kmath/nd/IntRingOpsND$Companion : space/kscience/kmath/nd/IntRingOpsND {
+}
+
+public class space/kscience/kmath/nd/MutableBufferND : space/kscience/kmath/nd/BufferND, space/kscience/kmath/nd/MutableStructureND {
 	public fun <init> (Lspace/kscience/kmath/nd/ShapeIndexer;Lspace/kscience/kmath/structures/MutableBuffer;)V
 	public synthetic fun getBuffer ()Lspace/kscience/kmath/structures/Buffer;
 	public fun getBuffer ()Lspace/kscience/kmath/structures/MutableBuffer;
@@ -1108,6 +1201,46 @@ public abstract interface class space/kscience/kmath/nd/MutableStructureND : spa
 	public abstract fun set ([ILjava/lang/Object;)V
 }
 
+public abstract interface class space/kscience/kmath/nd/MutableStructureNDOfDouble : space/kscience/kmath/nd/MutableStructureND, space/kscience/kmath/nd/StructureNDOfDouble {
+	public abstract fun setDouble ([ID)V
+}
+
+public final class space/kscience/kmath/nd/OperationsNDKt {
+	public static final fun roll (Lspace/kscience/kmath/nd/StructureND;II)Lspace/kscience/kmath/nd/StructureND;
+	public static final fun roll (Lspace/kscience/kmath/nd/StructureND;Lkotlin/Pair;[Lkotlin/Pair;)Lspace/kscience/kmath/nd/StructureND;
+	public static synthetic fun roll$default (Lspace/kscience/kmath/nd/StructureND;IIILjava/lang/Object;)Lspace/kscience/kmath/nd/StructureND;
+}
+
+public final class space/kscience/kmath/nd/PermutedMutableStructureND : space/kscience/kmath/nd/MutableStructureND {
+	public synthetic fun <init> (Lspace/kscience/kmath/nd/MutableStructureND;[ILkotlin/jvm/functions/Function1;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (Lspace/kscience/kmath/nd/MutableStructureND;[ILkotlin/jvm/functions/Function1;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun get ([I)Ljava/lang/Object;
+	public final fun getOrigin ()Lspace/kscience/kmath/nd/MutableStructureND;
+	public final fun getPermutation ()Lkotlin/jvm/functions/Function1;
+	public fun getShape-IIYLAfE ()[I
+	public fun set ([ILjava/lang/Object;)V
+}
+
+public final class space/kscience/kmath/nd/PermutedStructureND : space/kscience/kmath/nd/StructureND {
+	public fun <init> (Lspace/kscience/kmath/nd/StructureND;Lkotlin/jvm/functions/Function1;)V
+	public fun get ([I)Ljava/lang/Object;
+	public final fun getOrigin ()Lspace/kscience/kmath/nd/StructureND;
+	public final fun getPermutation ()Lkotlin/jvm/functions/Function1;
+	public fun getShape-IIYLAfE ()[I
+}
+
+public final class space/kscience/kmath/nd/PermutedStructureNDKt {
+	public static final fun permute (Lspace/kscience/kmath/nd/StructureND;Lkotlin/jvm/functions/Function1;)Lspace/kscience/kmath/nd/PermutedStructureND;
+	public static final fun permute-_A0By-k (Lspace/kscience/kmath/nd/MutableStructureND;[ILkotlin/jvm/functions/Function1;)Lspace/kscience/kmath/nd/PermutedMutableStructureND;
+	public static synthetic fun permute-_A0By-k$default (Lspace/kscience/kmath/nd/MutableStructureND;[ILkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lspace/kscience/kmath/nd/PermutedMutableStructureND;
+}
+
+public final class space/kscience/kmath/nd/PrimitiveStructureNDKt {
+	public static final fun getDouble (Lspace/kscience/kmath/nd/MutableStructureND;[I)D
+	public static final fun getDouble (Lspace/kscience/kmath/nd/StructureND;[I)D
+	public static final fun getInt (Lspace/kscience/kmath/nd/StructureND;[I)I
+}
+
 public abstract interface class space/kscience/kmath/nd/RingND : space/kscience/kmath/nd/GroupND, space/kscience/kmath/nd/RingOpsND, space/kscience/kmath/nd/WithShape, space/kscience/kmath/operations/Ring {
 	public synthetic fun getOne ()Ljava/lang/Object;
 	public fun getOne ()Lspace/kscience/kmath/nd/StructureND;
@@ -1124,26 +1257,84 @@ public abstract interface class space/kscience/kmath/nd/RingOpsND : space/kscien
 public final class space/kscience/kmath/nd/RingOpsND$Companion {
 }
 
+public final class space/kscience/kmath/nd/RowStrides : space/kscience/kmath/nd/Strides {
+	public static final field Companion Lspace/kscience/kmath/nd/RowStrides$Companion;
+	public synthetic fun <init> ([ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getLinearSize ()I
+	public fun getShape-IIYLAfE ()[I
+	public fun hashCode ()I
+	public fun index (I)[I
+}
+
+public final class space/kscience/kmath/nd/RowStrides$Companion {
+}
+
 public abstract interface class space/kscience/kmath/nd/ShapeIndexer : java/lang/Iterable, kotlin/jvm/internal/markers/KMappedMarker {
 	public abstract fun asSequence ()Lkotlin/sequences/Sequence;
 	public abstract fun equals (Ljava/lang/Object;)Z
 	public abstract fun getLinearSize ()I
-	public abstract fun getShape ()[I
+	public abstract fun getShape-IIYLAfE ()[I
 	public abstract fun hashCode ()I
 	public abstract fun index (I)[I
 	public fun iterator ()Ljava/util/Iterator;
 	public abstract fun offset ([I)I
 }
 
+public final class space/kscience/kmath/nd/ShapeIndicesKt {
+	public static final fun Strides-dNlrn20 ([I)Lspace/kscience/kmath/nd/Strides;
+}
+
 public final class space/kscience/kmath/nd/ShapeMismatchException : java/lang/RuntimeException {
-	public fun <init> ([I[I)V
-	public final fun getActual ()[I
-	public final fun getExpected ()[I
+	public synthetic fun <init> ([I[ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getActual-IIYLAfE ()[I
+	public final fun getExpected-IIYLAfE ()[I
+}
+
+public final class space/kscience/kmath/nd/ShapeND {
+	public static final synthetic fun box-impl ([I)Lspace/kscience/kmath/nd/ShapeND;
+	public static fun constructor-impl ([I)[I
+	public fun equals (Ljava/lang/Object;)Z
+	public static fun equals-impl ([ILjava/lang/Object;)Z
+	public static final fun equals-impl0 ([I[I)Z
+	public static final fun get-impl ([II)I
+	public static final fun getSize-impl ([I)I
+	public fun hashCode ()I
+	public static fun hashCode-impl ([I)I
+	public fun toString ()Ljava/lang/String;
+	public static fun toString-impl ([I)Ljava/lang/String;
+	public final synthetic fun unbox-impl ()[I
+}
+
+public final class space/kscience/kmath/nd/ShapeNDKt {
+	public static final fun ShapeND (I[I)[I
+	public static final fun asArray-dNlrn20 ([I)[I
+	public static final fun asList-dNlrn20 ([I)Ljava/util/List;
+	public static final fun component1-dNlrn20 ([I)I
+	public static final fun component2-dNlrn20 ([I)I
+	public static final fun component3-dNlrn20 ([I)I
+	public static final fun contentEquals-9Nqdy04 ([I[I)Z
+	public static final fun contentHashCode-dNlrn20 ([I)I
+	public static final fun first-dNlrn20 ([I)I
+	public static final fun first-qL90JFI ([II)[I
+	public static final fun forEach-qL90JFI ([ILkotlin/jvm/functions/Function1;)V
+	public static final fun forEachIndexed-qL90JFI ([ILkotlin/jvm/functions/Function2;)V
+	public static final fun getIndices-dNlrn20 ([I)Lkotlin/ranges/IntRange;
+	public static final fun getLinearSize-dNlrn20 ([I)I
+	public static final fun isEmpty-dNlrn20 ([I)Z
+	public static final fun isNotEmpty-dNlrn20 ([I)Z
+	public static final fun last-dNlrn20 ([I)I
+	public static final fun last-qL90JFI ([II)[I
+	public static final fun plus-9Nqdy04 ([I[I)[I
+	public static final fun plus-qL90JFI ([I[I)[I
+	public static final fun slice-qL90JFI ([ILkotlin/ranges/IntRange;)[I
+	public static final fun toArray-dNlrn20 ([I)[I
+	public static final fun transposed-bYNkpeI ([III)[I
 }
 
 public final class space/kscience/kmath/nd/ShortRingND : space/kscience/kmath/nd/ShortRingOpsND, space/kscience/kmath/nd/RingND, space/kscience/kmath/operations/NumbersAddOps {
-	public fun <init> ([I)V
-	public fun getShape ()[I
+	public synthetic fun <init> ([ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun getShape-IIYLAfE ()[I
 	public synthetic fun number (Ljava/lang/Number;)Ljava/lang/Object;
 	public fun number (Ljava/lang/Number;)Lspace/kscience/kmath/nd/BufferND;
 }
@@ -1162,7 +1353,6 @@ public final class space/kscience/kmath/nd/ShortRingOpsND$Companion : space/ksci
 public abstract class space/kscience/kmath/nd/Strides : space/kscience/kmath/nd/ShapeIndexer {
 	public fun <init> ()V
 	public fun asSequence ()Lkotlin/sequences/Sequence;
-	public abstract fun getStrides ()[I
 	public fun offset ([I)I
 }
 
@@ -1191,7 +1381,7 @@ public abstract interface class space/kscience/kmath/nd/Structure2D : space/ksci
 	public fun getColumns ()Ljava/util/List;
 	public abstract fun getRowNum ()I
 	public fun getRows ()Ljava/util/List;
-	public fun getShape ()[I
+	public fun getShape-IIYLAfE ()[I
 }
 
 public final class space/kscience/kmath/nd/Structure2D$Companion {
@@ -1212,16 +1402,16 @@ public abstract interface class space/kscience/kmath/nd/StructureND : space/ksci
 	public fun getDimension ()I
 	public synthetic fun getFeature (Lkotlin/reflect/KClass;)Ljava/lang/Object;
 	public fun getFeature (Lkotlin/reflect/KClass;)Lspace/kscience/kmath/nd/StructureFeature;
-	public abstract fun getShape ()[I
+	public abstract fun getShape-IIYLAfE ()[I
 }
 
 public final class space/kscience/kmath/nd/StructureND$Companion {
 	public final fun auto (Lkotlin/reflect/KClass;Lspace/kscience/kmath/nd/Strides;Lkotlin/jvm/functions/Function1;)Lspace/kscience/kmath/nd/BufferND;
 	public final fun auto (Lkotlin/reflect/KClass;[ILkotlin/jvm/functions/Function1;)Lspace/kscience/kmath/nd/BufferND;
-	public final fun buffered (Lspace/kscience/kmath/nd/Strides;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function1;)Lspace/kscience/kmath/nd/BufferND;
-	public final fun buffered ([ILkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function1;)Lspace/kscience/kmath/nd/BufferND;
-	public static synthetic fun buffered$default (Lspace/kscience/kmath/nd/StructureND$Companion;Lspace/kscience/kmath/nd/Strides;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lspace/kscience/kmath/nd/BufferND;
-	public static synthetic fun buffered$default (Lspace/kscience/kmath/nd/StructureND$Companion;[ILkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lspace/kscience/kmath/nd/BufferND;
+	public final fun buffered (Lspace/kscience/kmath/nd/Strides;Lspace/kscience/kmath/structures/BufferFactory;Lkotlin/jvm/functions/Function1;)Lspace/kscience/kmath/nd/BufferND;
+	public static synthetic fun buffered$default (Lspace/kscience/kmath/nd/StructureND$Companion;Lspace/kscience/kmath/nd/Strides;Lspace/kscience/kmath/structures/BufferFactory;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lspace/kscience/kmath/nd/BufferND;
+	public final fun buffered-bYNkpeI ([ILspace/kscience/kmath/structures/BufferFactory;Lkotlin/jvm/functions/Function1;)Lspace/kscience/kmath/nd/BufferND;
+	public static synthetic fun buffered-bYNkpeI$default (Lspace/kscience/kmath/nd/StructureND$Companion;[ILspace/kscience/kmath/structures/BufferFactory;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lspace/kscience/kmath/nd/BufferND;
 	public final fun contentEquals (Lspace/kscience/kmath/nd/StructureND;Lspace/kscience/kmath/nd/StructureND;)Z
 	public final fun contentEquals (Lspace/kscience/kmath/nd/StructureND;Lspace/kscience/kmath/nd/StructureND;D)Z
 	public static synthetic fun contentEquals$default (Lspace/kscience/kmath/nd/StructureND$Companion;Lspace/kscience/kmath/nd/StructureND;Lspace/kscience/kmath/nd/StructureND;DILjava/lang/Object;)Z
@@ -1233,13 +1423,30 @@ public final class space/kscience/kmath/nd/StructureNDKt {
 	public static final fun contentEquals (Lspace/kscience/kmath/linear/LinearSpace;Lspace/kscience/kmath/nd/StructureND;Lspace/kscience/kmath/nd/StructureND;Ljava/lang/Comparable;)Z
 	public static final fun contentEquals (Lspace/kscience/kmath/nd/AlgebraND;Lspace/kscience/kmath/nd/StructureND;Lspace/kscience/kmath/nd/StructureND;)Z
 	public static final fun contentEquals (Lspace/kscience/kmath/nd/GroupOpsND;Lspace/kscience/kmath/nd/StructureND;Lspace/kscience/kmath/nd/StructureND;Ljava/lang/Comparable;)Z
+	public static final fun get (Lspace/kscience/kmath/nd/StructureND;[I)D
+	public static final fun get (Lspace/kscience/kmath/nd/StructureND;[I)I
 	public static final fun get (Lspace/kscience/kmath/nd/StructureND;[I)Ljava/lang/Object;
-	public static final fun mapInPlace (Lspace/kscience/kmath/nd/MutableStructureND;Lkotlin/jvm/functions/Function2;)V
+	public static final fun set (Lspace/kscience/kmath/nd/MutableStructureND;[ILjava/lang/Object;)V
+}
+
+public abstract interface class space/kscience/kmath/nd/StructureNDOfDouble : space/kscience/kmath/nd/StructureND {
+	public abstract fun getDouble ([I)D
+}
+
+public abstract interface class space/kscience/kmath/nd/StructureNDOfInt : space/kscience/kmath/nd/StructureND {
+	public abstract fun getInt ([I)I
+}
+
+public class space/kscience/kmath/nd/VirtualStructureND : space/kscience/kmath/nd/StructureND {
+	public synthetic fun <init> ([ILkotlin/jvm/functions/Function1;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun get ([I)Ljava/lang/Object;
+	public final fun getProducer ()Lkotlin/jvm/functions/Function1;
+	public fun getShape-IIYLAfE ()[I
 }
 
 public abstract interface class space/kscience/kmath/nd/WithShape {
 	public fun getIndices ()Lspace/kscience/kmath/nd/ShapeIndexer;
-	public abstract fun getShape ()[I
+	public abstract fun getShape-IIYLAfE ()[I
 }
 
 public abstract interface class space/kscience/kmath/operations/Algebra {
@@ -1247,6 +1454,7 @@ public abstract interface class space/kscience/kmath/operations/Algebra {
 	public fun binaryOperationFunction (Ljava/lang/String;)Lkotlin/jvm/functions/Function2;
 	public fun bindSymbol (Ljava/lang/String;)Ljava/lang/Object;
 	public fun bindSymbolOrNull (Ljava/lang/String;)Ljava/lang/Object;
+	public fun getBufferFactory ()Lspace/kscience/kmath/structures/MutableBufferFactory;
 	public fun unaryOperation (Ljava/lang/String;Ljava/lang/Object;)Ljava/lang/Object;
 	public fun unaryOperationFunction (Ljava/lang/String;)Lkotlin/jvm/functions/Function1;
 }
@@ -1255,12 +1463,15 @@ public final class space/kscience/kmath/operations/AlgebraExtensionsKt {
 	public static final fun abs (Lspace/kscience/kmath/operations/Group;Ljava/lang/Comparable;)Ljava/lang/Comparable;
 	public static final fun average (Lspace/kscience/kmath/operations/Group;Ljava/lang/Iterable;)Ljava/lang/Object;
 	public static final fun average (Lspace/kscience/kmath/operations/Group;Lkotlin/sequences/Sequence;)Ljava/lang/Object;
+	public static final fun average (Lspace/kscience/kmath/operations/Group;Lspace/kscience/kmath/structures/Buffer;)Ljava/lang/Object;
 	public static final fun averageWith (Ljava/lang/Iterable;Lspace/kscience/kmath/operations/Group;)Ljava/lang/Object;
 	public static final fun averageWith (Lkotlin/sequences/Sequence;Lspace/kscience/kmath/operations/Group;)Ljava/lang/Object;
 	public static final fun sum (Lspace/kscience/kmath/operations/Group;Ljava/lang/Iterable;)Ljava/lang/Object;
 	public static final fun sum (Lspace/kscience/kmath/operations/Group;Lkotlin/sequences/Sequence;)Ljava/lang/Object;
+	public static final fun sum (Lspace/kscience/kmath/operations/Group;Lspace/kscience/kmath/structures/Buffer;)Ljava/lang/Object;
 	public static final fun sumWith (Ljava/lang/Iterable;Lspace/kscience/kmath/operations/Group;)Ljava/lang/Object;
 	public static final fun sumWith (Lkotlin/sequences/Sequence;Lspace/kscience/kmath/operations/Group;)Ljava/lang/Object;
+	public static final fun sumWithGroupOf (Ljava/lang/Iterable;Lspace/kscience/kmath/operations/Group;Lkotlin/jvm/functions/Function1;)Ljava/lang/Object;
 }
 
 public final class space/kscience/kmath/operations/AlgebraKt {
@@ -1327,12 +1538,10 @@ public final class space/kscience/kmath/operations/BigIntField : space/kscience/
 
 public final class space/kscience/kmath/operations/BigIntKt {
 	public static final fun abs (Lspace/kscience/kmath/operations/BigInt;)Lspace/kscience/kmath/operations/BigInt;
-	public static final fun bigInt (Lspace/kscience/kmath/structures/Buffer$Companion;ILkotlin/jvm/functions/Function1;)Lspace/kscience/kmath/structures/Buffer;
-	public static final fun bigInt (Lspace/kscience/kmath/structures/MutableBuffer$Companion;ILkotlin/jvm/functions/Function1;)Lspace/kscience/kmath/structures/MutableBuffer;
 	public static final fun buffer (Lspace/kscience/kmath/operations/BigInt$Companion;ILkotlin/jvm/functions/Function1;)Lspace/kscience/kmath/structures/Buffer;
 	public static final fun getAlgebra (Lspace/kscience/kmath/operations/BigInt;)Lspace/kscience/kmath/operations/BigIntField;
 	public static final fun getNd (Lspace/kscience/kmath/operations/BigIntField;)Lspace/kscience/kmath/nd/BufferedRingOpsND;
-	public static final fun mutableBuffer (Lspace/kscience/kmath/operations/BigInt;ILkotlin/jvm/functions/Function1;)Lspace/kscience/kmath/structures/Buffer;
+	public static final fun mutableBuffer (Lspace/kscience/kmath/operations/BigInt$Companion;ILkotlin/jvm/functions/Function1;)Lspace/kscience/kmath/structures/Buffer;
 	public static final fun parseBigInteger (Ljava/lang/String;)Lspace/kscience/kmath/operations/BigInt;
 	public static final fun toBigInt (I)Lspace/kscience/kmath/operations/BigInt;
 	public static final fun toBigInt (J)Lspace/kscience/kmath/operations/BigInt;
@@ -1344,8 +1553,8 @@ public final class space/kscience/kmath/operations/BigIntKt {
 public abstract interface class space/kscience/kmath/operations/BufferAlgebra : space/kscience/kmath/operations/Algebra {
 	public fun binaryOperationFunction (Ljava/lang/String;)Lkotlin/jvm/functions/Function2;
 	public fun buffer (I[Ljava/lang/Object;)Lspace/kscience/kmath/structures/Buffer;
-	public abstract fun getBufferFactory ()Lkotlin/jvm/functions/Function2;
 	public abstract fun getElementAlgebra ()Lspace/kscience/kmath/operations/Algebra;
+	public fun getElementBufferFactory ()Lspace/kscience/kmath/structures/BufferFactory;
 	public fun map (Lspace/kscience/kmath/structures/Buffer;Lkotlin/jvm/functions/Function2;)Lspace/kscience/kmath/structures/Buffer;
 	public fun mapIndexed (Lspace/kscience/kmath/structures/Buffer;Lkotlin/jvm/functions/Function3;)Lspace/kscience/kmath/structures/Buffer;
 	public fun unaryOperationFunction (Ljava/lang/String;)Lkotlin/jvm/functions/Function1;
@@ -1362,11 +1571,11 @@ public final class space/kscience/kmath/operations/BufferAlgebraKt {
 	public static final fun buffer (Lspace/kscience/kmath/operations/BufferAlgebra;ILkotlin/jvm/functions/Function1;)Lspace/kscience/kmath/structures/Buffer;
 	public static final fun buffer (Lspace/kscience/kmath/operations/BufferAlgebra;Lkotlin/jvm/functions/Function1;)Lspace/kscience/kmath/structures/Buffer;
 	public static final fun buffer (Lspace/kscience/kmath/operations/BufferField;[Ljava/lang/Number;)Lspace/kscience/kmath/structures/Buffer;
-	public static final fun bufferAlgebra (Lspace/kscience/kmath/operations/Field;Lkotlin/jvm/functions/Function2;)Lspace/kscience/kmath/operations/BufferFieldOps;
 	public static final fun cos (Lspace/kscience/kmath/operations/BufferAlgebra;Lspace/kscience/kmath/structures/Buffer;)Lspace/kscience/kmath/structures/Buffer;
 	public static final fun cosh (Lspace/kscience/kmath/operations/BufferAlgebra;Lspace/kscience/kmath/structures/Buffer;)Lspace/kscience/kmath/structures/Buffer;
 	public static final fun exp (Lspace/kscience/kmath/operations/BufferAlgebra;Lspace/kscience/kmath/structures/Buffer;)Lspace/kscience/kmath/structures/Buffer;
-	public static final fun getBufferAlgebra (Lspace/kscience/kmath/operations/DoubleField;)Lspace/kscience/kmath/operations/BufferFieldOps;
+	public static final fun getBufferAlgebra (Lspace/kscience/kmath/operations/Field;)Lspace/kscience/kmath/operations/BufferFieldOps;
+	public static final fun getBufferAlgebra (Lspace/kscience/kmath/operations/IntRing;)Lspace/kscience/kmath/operations/BufferRingOps;
 	public static final fun getBufferAlgebra (Lspace/kscience/kmath/operations/ShortRing;)Lspace/kscience/kmath/operations/BufferRingOps;
 	public static final fun ln (Lspace/kscience/kmath/operations/BufferAlgebra;Lspace/kscience/kmath/structures/Buffer;)Lspace/kscience/kmath/structures/Buffer;
 	public static final fun pow (Lspace/kscience/kmath/operations/BufferAlgebra;Lspace/kscience/kmath/structures/Buffer;Ljava/lang/Number;)Lspace/kscience/kmath/structures/Buffer;
@@ -1377,8 +1586,19 @@ public final class space/kscience/kmath/operations/BufferAlgebraKt {
 	public static final fun withSize (Lspace/kscience/kmath/operations/BufferFieldOps;I)Lspace/kscience/kmath/operations/BufferField;
 }
 
+public final class space/kscience/kmath/operations/BufferExtensionsKt {
+	public static final fun asIterable (Lspace/kscience/kmath/structures/Buffer;)Ljava/lang/Iterable;
+	public static final fun asSequence (Lspace/kscience/kmath/structures/Buffer;)Lkotlin/sequences/Sequence;
+	public static final fun fold (Lspace/kscience/kmath/structures/Buffer;Ljava/lang/Object;Lkotlin/jvm/functions/Function2;)Ljava/lang/Object;
+	public static final fun foldIndexed (Lspace/kscience/kmath/structures/Buffer;Ljava/lang/Object;Lkotlin/jvm/functions/Function3;)Ljava/lang/Object;
+	public static final fun mapIndexedToBuffer (Lspace/kscience/kmath/structures/Buffer;Lspace/kscience/kmath/structures/BufferFactory;Lkotlin/jvm/functions/Function2;)Lspace/kscience/kmath/structures/Buffer;
+	public static final fun mapToBuffer (Lspace/kscience/kmath/structures/Buffer;Lspace/kscience/kmath/structures/BufferFactory;Lkotlin/jvm/functions/Function1;)Lspace/kscience/kmath/structures/Buffer;
+	public static final fun reduce (Lspace/kscience/kmath/structures/Buffer;Lkotlin/jvm/functions/Function2;)Ljava/lang/Object;
+	public static final fun toList (Lspace/kscience/kmath/structures/Buffer;)Ljava/util/List;
+}
+
 public final class space/kscience/kmath/operations/BufferField : space/kscience/kmath/operations/BufferFieldOps, space/kscience/kmath/operations/Field, space/kscience/kmath/operations/WithSize {
-	public fun <init> (Lspace/kscience/kmath/operations/Field;Lkotlin/jvm/functions/Function2;I)V
+	public fun <init> (Lspace/kscience/kmath/operations/Field;I)V
 	public synthetic fun getOne ()Ljava/lang/Object;
 	public fun getOne ()Lspace/kscience/kmath/structures/Buffer;
 	public fun getSize ()I
@@ -1387,7 +1607,7 @@ public final class space/kscience/kmath/operations/BufferField : space/kscience/
 }
 
 public class space/kscience/kmath/operations/BufferFieldOps : space/kscience/kmath/operations/BufferRingOps, space/kscience/kmath/operations/BufferAlgebra, space/kscience/kmath/operations/FieldOps, space/kscience/kmath/operations/ScaleOperations {
-	public fun <init> (Lspace/kscience/kmath/operations/Field;Lkotlin/jvm/functions/Function2;)V
+	public fun <init> (Lspace/kscience/kmath/operations/Field;)V
 	public fun binaryOperationFunction (Ljava/lang/String;)Lkotlin/jvm/functions/Function2;
 	public synthetic fun divide (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 	public fun divide (Lspace/kscience/kmath/structures/Buffer;Lspace/kscience/kmath/structures/Buffer;)Lspace/kscience/kmath/structures/Buffer;
@@ -1397,20 +1617,11 @@ public class space/kscience/kmath/operations/BufferFieldOps : space/kscience/kma
 	public fun unaryMinus (Lspace/kscience/kmath/structures/Buffer;)Lspace/kscience/kmath/structures/Buffer;
 }
 
-public final class space/kscience/kmath/operations/BufferOperationKt {
-	public static final fun asIterable (Lspace/kscience/kmath/structures/Buffer;)Ljava/lang/Iterable;
-	public static final fun asSequence (Lspace/kscience/kmath/structures/Buffer;)Lkotlin/sequences/Sequence;
-	public static final fun fold (Lspace/kscience/kmath/structures/Buffer;Ljava/lang/Object;Lkotlin/jvm/functions/Function2;)Ljava/lang/Object;
-	public static final fun map (Lspace/kscience/kmath/structures/Buffer;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function1;)Lspace/kscience/kmath/structures/Buffer;
-	public static final fun toList (Lspace/kscience/kmath/structures/Buffer;)Ljava/util/List;
-}
-
 public class space/kscience/kmath/operations/BufferRingOps : space/kscience/kmath/operations/BufferAlgebra, space/kscience/kmath/operations/RingOps {
-	public fun <init> (Lspace/kscience/kmath/operations/Ring;Lkotlin/jvm/functions/Function2;)V
+	public fun <init> (Lspace/kscience/kmath/operations/Ring;)V
 	public synthetic fun add (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 	public fun add (Lspace/kscience/kmath/structures/Buffer;Lspace/kscience/kmath/structures/Buffer;)Lspace/kscience/kmath/structures/Buffer;
 	public fun binaryOperationFunction (Ljava/lang/String;)Lkotlin/jvm/functions/Function2;
-	public fun getBufferFactory ()Lkotlin/jvm/functions/Function2;
 	public synthetic fun getElementAlgebra ()Lspace/kscience/kmath/operations/Algebra;
 	public fun getElementAlgebra ()Lspace/kscience/kmath/operations/Ring;
 	public synthetic fun multiply (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
@@ -1420,10 +1631,15 @@ public class space/kscience/kmath/operations/BufferRingOps : space/kscience/kmat
 	public fun unaryOperationFunction (Ljava/lang/String;)Lkotlin/jvm/functions/Function1;
 }
 
+public abstract interface class space/kscience/kmath/operations/BufferTransform {
+	public abstract fun transform (Lspace/kscience/kmath/structures/Buffer;)Lspace/kscience/kmath/structures/Buffer;
+}
+
 public final class space/kscience/kmath/operations/ByteRing : space/kscience/kmath/operations/Norm, space/kscience/kmath/operations/NumericAlgebra, space/kscience/kmath/operations/Ring {
 	public static final field INSTANCE Lspace/kscience/kmath/operations/ByteRing;
 	public fun add (BB)Ljava/lang/Byte;
 	public synthetic fun add (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+	public fun getBufferFactory ()Lspace/kscience/kmath/structures/MutableBufferFactory;
 	public fun getOne ()Ljava/lang/Byte;
 	public synthetic fun getOne ()Ljava/lang/Object;
 	public fun getZero ()Ljava/lang/Byte;
@@ -1460,6 +1676,7 @@ public final class space/kscience/kmath/operations/DoubleBufferField : space/ksc
 	public synthetic fun getZero ()Ljava/lang/Object;
 	public fun getZero ()Lspace/kscience/kmath/structures/Buffer;
 	public synthetic fun power (Ljava/lang/Object;Ljava/lang/Number;)Ljava/lang/Object;
+	public synthetic fun power (Lspace/kscience/kmath/structures/Buffer;Ljava/lang/Number;)Lspace/kscience/kmath/structures/Buffer;
 	public fun power-CZ9oacQ (Lspace/kscience/kmath/structures/Buffer;Ljava/lang/Number;)[D
 	public synthetic fun sinh (Ljava/lang/Object;)Ljava/lang/Object;
 	public fun sinh-Udx-57Q (Lspace/kscience/kmath/structures/Buffer;)[D
@@ -1494,21 +1711,25 @@ public abstract class space/kscience/kmath/operations/DoubleBufferOps : space/ks
 	public fun divide-CZ9oacQ (Lspace/kscience/kmath/structures/Buffer;Lspace/kscience/kmath/structures/Buffer;)[D
 	public synthetic fun exp (Ljava/lang/Object;)Ljava/lang/Object;
 	public fun exp-Udx-57Q (Lspace/kscience/kmath/structures/Buffer;)[D
-	public fun getBufferFactory ()Lkotlin/jvm/functions/Function2;
 	public synthetic fun getElementAlgebra ()Lspace/kscience/kmath/operations/Algebra;
 	public fun getElementAlgebra ()Lspace/kscience/kmath/operations/DoubleField;
+	public synthetic fun getElementBufferFactory ()Lspace/kscience/kmath/structures/BufferFactory;
+	public fun getElementBufferFactory ()Lspace/kscience/kmath/structures/MutableBufferFactory;
 	public synthetic fun ln (Ljava/lang/Object;)Ljava/lang/Object;
 	public fun ln-Udx-57Q (Lspace/kscience/kmath/structures/Buffer;)[D
 	public synthetic fun map (Lspace/kscience/kmath/structures/Buffer;Lkotlin/jvm/functions/Function2;)Lspace/kscience/kmath/structures/Buffer;
-	public fun map-CZ9oacQ (Lspace/kscience/kmath/structures/Buffer;Lkotlin/jvm/functions/Function2;)[D
+	public final fun map-CZ9oacQ (Lspace/kscience/kmath/structures/Buffer;Lkotlin/jvm/functions/Function2;)[D
+	public synthetic fun mapIndexed (Lspace/kscience/kmath/structures/Buffer;Lkotlin/jvm/functions/Function3;)Lspace/kscience/kmath/structures/Buffer;
+	public final fun mapIndexed-CZ9oacQ (Lspace/kscience/kmath/structures/Buffer;Lkotlin/jvm/functions/Function3;)[D
 	public synthetic fun minus (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 	public fun minus-CZ9oacQ (Lspace/kscience/kmath/structures/Buffer;Lspace/kscience/kmath/structures/Buffer;)[D
 	public synthetic fun multiply (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
-	public fun multiply-CZ9oacQ (Lspace/kscience/kmath/structures/Buffer;Lspace/kscience/kmath/structures/Buffer;)[D
 	public synthetic fun norm (Ljava/lang/Object;)Ljava/lang/Object;
 	public fun norm (Lspace/kscience/kmath/structures/Buffer;)Ljava/lang/Double;
 	public synthetic fun plus (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 	public fun plus-CZ9oacQ (Lspace/kscience/kmath/structures/Buffer;Lspace/kscience/kmath/structures/Buffer;)[D
+	public synthetic fun power (Ljava/lang/Object;Ljava/lang/Number;)Ljava/lang/Object;
+	public fun power (Lspace/kscience/kmath/structures/Buffer;Ljava/lang/Number;)Lspace/kscience/kmath/structures/Buffer;
 	public synthetic fun scale (Ljava/lang/Object;D)Ljava/lang/Object;
 	public fun scale-CZ9oacQ (Lspace/kscience/kmath/structures/Buffer;D)[D
 	public synthetic fun sin (Ljava/lang/Object;)Ljava/lang/Object;
@@ -1522,10 +1743,21 @@ public abstract class space/kscience/kmath/operations/DoubleBufferOps : space/ks
 	public synthetic fun unaryMinus (Ljava/lang/Object;)Ljava/lang/Object;
 	public fun unaryMinus-Udx-57Q (Lspace/kscience/kmath/structures/Buffer;)[D
 	public fun unaryOperationFunction (Ljava/lang/String;)Lkotlin/jvm/functions/Function1;
+	public synthetic fun zip (Lspace/kscience/kmath/structures/Buffer;Lspace/kscience/kmath/structures/Buffer;Lkotlin/jvm/functions/Function3;)Lspace/kscience/kmath/structures/Buffer;
+	public final fun zip-XquIszc (Lspace/kscience/kmath/structures/Buffer;Lspace/kscience/kmath/structures/Buffer;Lkotlin/jvm/functions/Function3;)[D
 }
 
 public final class space/kscience/kmath/operations/DoubleBufferOps$Companion : space/kscience/kmath/operations/DoubleBufferOps {
-	public final fun mapInline-CZ9oacQ (Lspace/kscience/kmath/structures/Buffer;Lkotlin/jvm/functions/Function1;)[D
+}
+
+public final class space/kscience/kmath/operations/DoubleBufferOpsKt {
+	public static final fun average (Lspace/kscience/kmath/operations/DoubleBufferOps;Lspace/kscience/kmath/structures/Buffer;)D
+	public static final fun averageOf (Lspace/kscience/kmath/operations/DoubleBufferOps;Lspace/kscience/kmath/structures/Buffer;Lkotlin/jvm/functions/Function1;)D
+	public static final fun covariance (Lspace/kscience/kmath/operations/DoubleBufferOps;Lspace/kscience/kmath/structures/Buffer;Lspace/kscience/kmath/structures/Buffer;)D
+	public static final fun dispersion (Lspace/kscience/kmath/operations/DoubleBufferOps;Lspace/kscience/kmath/structures/Buffer;)D
+	public static final fun std (Lspace/kscience/kmath/operations/DoubleBufferOps;Lspace/kscience/kmath/structures/Buffer;)D
+	public static final fun sum (Lspace/kscience/kmath/operations/DoubleBufferOps;Lspace/kscience/kmath/structures/Buffer;)D
+	public static final fun sumOf (Lspace/kscience/kmath/operations/DoubleBufferOps;Lspace/kscience/kmath/structures/Buffer;Lkotlin/jvm/functions/Function1;)D
 }
 
 public final class space/kscience/kmath/operations/DoubleField : space/kscience/kmath/operations/ExtendedField, space/kscience/kmath/operations/Norm, space/kscience/kmath/operations/ScaleOperations {
@@ -1555,6 +1787,7 @@ public final class space/kscience/kmath/operations/DoubleField : space/kscience/
 	public synthetic fun divide (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 	public fun exp (D)Ljava/lang/Double;
 	public synthetic fun exp (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun getBufferFactory ()Lspace/kscience/kmath/structures/MutableBufferFactory;
 	public fun getOne ()Ljava/lang/Double;
 	public synthetic fun getOne ()Ljava/lang/Object;
 	public fun getZero ()Ljava/lang/Double;
@@ -1628,7 +1861,7 @@ public final class space/kscience/kmath/operations/ExponentialOperations$Compani
 	public static final field TANH_OPERATION Ljava/lang/String;
 }
 
-public abstract interface class space/kscience/kmath/operations/ExtendedField : space/kscience/kmath/operations/ExtendedFieldOps, space/kscience/kmath/operations/Field, space/kscience/kmath/operations/NumericAlgebra, space/kscience/kmath/operations/PowerOperations {
+public abstract interface class space/kscience/kmath/operations/ExtendedField : space/kscience/kmath/operations/ExtendedFieldOps, space/kscience/kmath/operations/Field, space/kscience/kmath/operations/NumericAlgebra {
 	public fun acosh (Ljava/lang/Object;)Ljava/lang/Object;
 	public fun asinh (Ljava/lang/Object;)Ljava/lang/Object;
 	public fun atanh (Ljava/lang/Object;)Ljava/lang/Object;
@@ -1639,7 +1872,7 @@ public abstract interface class space/kscience/kmath/operations/ExtendedField : 
 	public fun unaryOperationFunction (Ljava/lang/String;)Lkotlin/jvm/functions/Function1;
 }
 
-public abstract interface class space/kscience/kmath/operations/ExtendedFieldOps : space/kscience/kmath/operations/ExponentialOperations, space/kscience/kmath/operations/FieldOps, space/kscience/kmath/operations/ScaleOperations, space/kscience/kmath/operations/TrigonometricOperations {
+public abstract interface class space/kscience/kmath/operations/ExtendedFieldOps : space/kscience/kmath/operations/ExponentialOperations, space/kscience/kmath/operations/FieldOps, space/kscience/kmath/operations/PowerOperations, space/kscience/kmath/operations/ScaleOperations, space/kscience/kmath/operations/TrigonometricOperations {
 	public fun tan (Ljava/lang/Object;)Ljava/lang/Object;
 	public fun tanh (Ljava/lang/Object;)Ljava/lang/Object;
 	public fun unaryOperationFunction (Ljava/lang/String;)Lkotlin/jvm/functions/Function1;
@@ -1693,6 +1926,7 @@ public final class space/kscience/kmath/operations/FloatField : space/kscience/k
 	public synthetic fun divide (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 	public fun exp (F)Ljava/lang/Float;
 	public synthetic fun exp (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun getBufferFactory ()Lspace/kscience/kmath/structures/MutableBufferFactory;
 	public fun getOne ()Ljava/lang/Float;
 	public synthetic fun getOne ()Ljava/lang/Object;
 	public fun getZero ()Ljava/lang/Float;
@@ -1755,6 +1989,7 @@ public final class space/kscience/kmath/operations/IntRing : space/kscience/kmat
 	public static final field INSTANCE Lspace/kscience/kmath/operations/IntRing;
 	public fun add (II)Ljava/lang/Integer;
 	public synthetic fun add (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+	public fun getBufferFactory ()Lspace/kscience/kmath/structures/MutableBufferFactory;
 	public fun getOne ()Ljava/lang/Integer;
 	public synthetic fun getOne ()Ljava/lang/Object;
 	public fun getZero ()Ljava/lang/Integer;
@@ -1833,9 +2068,6 @@ public final class space/kscience/kmath/operations/JBigIntegerField : space/ksci
 	public fun unaryMinus (Ljava/math/BigInteger;)Ljava/math/BigInteger;
 }
 
-public abstract interface annotation class space/kscience/kmath/operations/KMathContext : java/lang/annotation/Annotation {
-}
-
 public final class space/kscience/kmath/operations/LogicAlgebra$Companion {
 	public final fun getFALSE ()Lspace/kscience/kmath/expressions/Symbol;
 	public final fun getTRUE ()Lspace/kscience/kmath/expressions/Symbol;
@@ -1845,6 +2077,7 @@ public final class space/kscience/kmath/operations/LongRing : space/kscience/kma
 	public static final field INSTANCE Lspace/kscience/kmath/operations/LongRing;
 	public fun add (JJ)Ljava/lang/Long;
 	public synthetic fun add (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+	public fun getBufferFactory ()Lspace/kscience/kmath/structures/MutableBufferFactory;
 	public fun getOne ()Ljava/lang/Long;
 	public synthetic fun getOne ()Ljava/lang/Object;
 	public fun getZero ()Ljava/lang/Long;
@@ -1938,6 +2171,7 @@ public final class space/kscience/kmath/operations/ShortRing : space/kscience/km
 	public static final field INSTANCE Lspace/kscience/kmath/operations/ShortRing;
 	public synthetic fun add (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 	public fun add (SS)Ljava/lang/Short;
+	public fun getBufferFactory ()Lspace/kscience/kmath/structures/MutableBufferFactory;
 	public synthetic fun getOne ()Ljava/lang/Object;
 	public fun getOne ()Ljava/lang/Short;
 	public synthetic fun getZero ()Ljava/lang/Object;
@@ -2001,11 +2235,11 @@ public final class space/kscience/kmath/structures/ArrayBufferKt {
 	public static final fun asBuffer ([Ljava/lang/Object;)Lspace/kscience/kmath/structures/ArrayBuffer;
 }
 
-public abstract interface class space/kscience/kmath/structures/Buffer {
+public abstract interface class space/kscience/kmath/structures/Buffer : space/kscience/kmath/operations/WithSize {
 	public static final field Companion Lspace/kscience/kmath/structures/Buffer$Companion;
 	public abstract fun get (I)Ljava/lang/Object;
 	public abstract fun getSize ()I
-	public abstract fun iterator ()Ljava/util/Iterator;
+	public fun iterator ()Ljava/util/Iterator;
 	public abstract fun toString ()Ljava/lang/String;
 }
 
@@ -2016,14 +2250,95 @@ public final class space/kscience/kmath/structures/Buffer$Companion {
 	public final fun toString (Lspace/kscience/kmath/structures/Buffer;)Ljava/lang/String;
 }
 
+public final class space/kscience/kmath/structures/BufferExpanded : space/kscience/kmath/structures/BufferView {
+	public fun <init> (Lspace/kscience/kmath/structures/Buffer;Ljava/lang/Object;II)V
+	public synthetic fun <init> (Lspace/kscience/kmath/structures/Buffer;Ljava/lang/Object;IIILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun get (I)Ljava/lang/Object;
+	public final fun getOffset ()I
+	public fun getOrigin ()Lspace/kscience/kmath/structures/Buffer;
+	public fun getSize ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract interface class space/kscience/kmath/structures/BufferFactory {
+	public static final field Companion Lspace/kscience/kmath/structures/BufferFactory$Companion;
+	public abstract fun invoke (ILkotlin/jvm/functions/Function1;)Lspace/kscience/kmath/structures/Buffer;
+}
+
+public final class space/kscience/kmath/structures/BufferFactory$Companion {
+	public final fun boxing ()Lspace/kscience/kmath/structures/BufferFactory;
+}
+
 public final class space/kscience/kmath/structures/BufferKt {
 	public static final fun asReadOnly (Lspace/kscience/kmath/structures/Buffer;)Lspace/kscience/kmath/structures/Buffer;
 	public static final fun first (Lspace/kscience/kmath/structures/Buffer;)Ljava/lang/Object;
+	public static final fun get-Qn1smSk (Lspace/kscience/kmath/structures/Buffer;I)Ljava/lang/Object;
 	public static final fun getIndices (Lspace/kscience/kmath/structures/Buffer;)Lkotlin/ranges/IntRange;
+	public static final fun getOrNull (Lspace/kscience/kmath/structures/Buffer;I)Ljava/lang/Object;
 	public static final fun last (Lspace/kscience/kmath/structures/Buffer;)Ljava/lang/Object;
 }
 
-public final class space/kscience/kmath/structures/DoubleBuffer : space/kscience/kmath/structures/MutableBuffer {
+public final class space/kscience/kmath/structures/BufferPrimitiveAccessKt {
+}
+
+public final class space/kscience/kmath/structures/BufferSlice : space/kscience/kmath/structures/BufferView {
+	public fun <init> (Lspace/kscience/kmath/structures/Buffer;II)V
+	public synthetic fun <init> (Lspace/kscience/kmath/structures/Buffer;IIILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun get (I)Ljava/lang/Object;
+	public final fun getOffset ()I
+	public fun getOrigin ()Lspace/kscience/kmath/structures/Buffer;
+	public fun getSize ()I
+	public fun iterator ()Ljava/util/Iterator;
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract interface class space/kscience/kmath/structures/BufferView : space/kscience/kmath/structures/Buffer {
+	public fun get (I)Ljava/lang/Object;
+	public abstract fun getOrigin ()Lspace/kscience/kmath/structures/Buffer;
+}
+
+public final class space/kscience/kmath/structures/BufferViewKt {
+	public static final fun expand (Lspace/kscience/kmath/structures/Buffer;Lkotlin/ranges/IntRange;Ljava/lang/Object;)Lspace/kscience/kmath/structures/BufferView;
+	public static final fun permute (Lspace/kscience/kmath/structures/Buffer;[I)Lspace/kscience/kmath/structures/PermutedBuffer;
+	public static final fun permute (Lspace/kscience/kmath/structures/MutableBuffer;[I)Lspace/kscience/kmath/structures/PermutedMutableBuffer;
+	public static final fun slice (Lspace/kscience/kmath/structures/Buffer;Lkotlin/ranges/IntRange;)Lspace/kscience/kmath/structures/BufferView;
+}
+
+public final class space/kscience/kmath/structures/ByteBuffer : space/kscience/kmath/structures/MutableBuffer {
+	public static final synthetic fun box-impl ([B)Lspace/kscience/kmath/structures/ByteBuffer;
+	public static fun constructor-impl ([B)[B
+	public fun copy ()Lspace/kscience/kmath/structures/MutableBuffer;
+	public static fun copy-impl ([B)Lspace/kscience/kmath/structures/MutableBuffer;
+	public fun equals (Ljava/lang/Object;)Z
+	public static fun equals-impl ([BLjava/lang/Object;)Z
+	public static final fun equals-impl0 ([B[B)Z
+	public fun get (I)Ljava/lang/Byte;
+	public synthetic fun get (I)Ljava/lang/Object;
+	public static fun get-impl ([BI)Ljava/lang/Byte;
+	public final fun getArray ()[B
+	public fun getSize ()I
+	public static fun getSize-impl ([B)I
+	public fun hashCode ()I
+	public static fun hashCode-impl ([B)I
+	public synthetic fun iterator ()Ljava/util/Iterator;
+	public fun iterator ()Lkotlin/collections/ByteIterator;
+	public static fun iterator-impl ([B)Lkotlin/collections/ByteIterator;
+	public fun set (IB)V
+	public synthetic fun set (ILjava/lang/Object;)V
+	public static fun set-impl ([BIB)V
+	public fun toString ()Ljava/lang/String;
+	public static fun toString-impl ([B)Ljava/lang/String;
+	public final synthetic fun unbox-impl ()[B
+}
+
+public final class space/kscience/kmath/structures/ByteBufferKt {
+	public static final fun ByteBuffer (ILkotlin/jvm/functions/Function1;)[B
+	public static final fun ByteBuffer ([B)[B
+	public static final fun asBuffer ([B)[B
+	public static final fun toByteArray (Lspace/kscience/kmath/structures/Buffer;)[B
+}
+
+public final class space/kscience/kmath/structures/DoubleBuffer : space/kscience/kmath/structures/PrimitiveBuffer {
 	public static final field Companion Lspace/kscience/kmath/structures/DoubleBuffer$Companion;
 	public static final synthetic fun box-impl ([D)Lspace/kscience/kmath/structures/DoubleBuffer;
 	public static fun constructor-impl ([D)[D
@@ -2060,8 +2375,14 @@ public final class space/kscience/kmath/structures/DoubleBufferKt {
 	public static final fun DoubleBuffer (ILkotlin/jvm/functions/Function1;)[D
 	public static final fun DoubleBuffer ([D)[D
 	public static final fun asBuffer ([D)[D
-	public static final fun contentEquals-2c9zdjM ([D[D)Z
 	public static final fun toDoubleArray (Lspace/kscience/kmath/structures/Buffer;)[D
+	public static final fun toDoubleBuffer (Lspace/kscience/kmath/structures/Buffer;)[D
+}
+
+public abstract interface class space/kscience/kmath/structures/DoubleBufferTransform : space/kscience/kmath/operations/BufferTransform {
+	public synthetic fun transform (Lspace/kscience/kmath/structures/Buffer;)Lspace/kscience/kmath/structures/Buffer;
+	public abstract fun transform-7Zdoou4 ([D)[D
+	public fun transform-Udx-57Q (Lspace/kscience/kmath/structures/Buffer;)[D
 }
 
 public abstract interface class space/kscience/kmath/structures/FlaggedBuffer : space/kscience/kmath/structures/Buffer {
@@ -2087,7 +2408,7 @@ public final class space/kscience/kmath/structures/FlaggedDoubleBuffer : space/k
 	public fun toString ()Ljava/lang/String;
 }
 
-public final class space/kscience/kmath/structures/FloatBuffer : space/kscience/kmath/structures/MutableBuffer {
+public final class space/kscience/kmath/structures/FloatBuffer : space/kscience/kmath/structures/PrimitiveBuffer {
 	public static final synthetic fun box-impl ([F)Lspace/kscience/kmath/structures/FloatBuffer;
 	public static fun constructor-impl ([F)[F
 	public fun copy ()Lspace/kscience/kmath/structures/MutableBuffer;
@@ -2121,11 +2442,12 @@ public final class space/kscience/kmath/structures/FloatBufferKt {
 	public static final fun toFloatArray (Lspace/kscience/kmath/structures/Buffer;)[F
 }
 
-public final class space/kscience/kmath/structures/IntBuffer : space/kscience/kmath/structures/MutableBuffer {
+public final class space/kscience/kmath/structures/IntBuffer : space/kscience/kmath/structures/PrimitiveBuffer {
 	public static final synthetic fun box-impl ([I)Lspace/kscience/kmath/structures/IntBuffer;
 	public static fun constructor-impl ([I)[I
-	public fun copy ()Lspace/kscience/kmath/structures/MutableBuffer;
-	public static fun copy-impl ([I)Lspace/kscience/kmath/structures/MutableBuffer;
+	public synthetic fun copy ()Lspace/kscience/kmath/structures/MutableBuffer;
+	public fun copy-ir4F4A8 ()[I
+	public static fun copy-ir4F4A8 ([I)[I
 	public fun equals (Ljava/lang/Object;)Z
 	public static fun equals-impl ([ILjava/lang/Object;)Z
 	public static final fun equals-impl0 ([I[I)Z
@@ -2170,7 +2492,7 @@ public final class space/kscience/kmath/structures/ListBufferKt {
 	public static final fun asMutableBuffer (Ljava/util/List;)Ljava/util/List;
 }
 
-public final class space/kscience/kmath/structures/LongBuffer : space/kscience/kmath/structures/MutableBuffer {
+public final class space/kscience/kmath/structures/LongBuffer : space/kscience/kmath/structures/PrimitiveBuffer {
 	public static final synthetic fun box-impl ([J)Lspace/kscience/kmath/structures/LongBuffer;
 	public static fun constructor-impl ([J)[J
 	public fun copy ()Lspace/kscience/kmath/structures/MutableBuffer;
@@ -2236,6 +2558,15 @@ public final class space/kscience/kmath/structures/MutableBuffer$Companion {
 	public final fun short-1yRgbGw (ILkotlin/jvm/functions/Function1;)[S
 }
 
+public abstract interface class space/kscience/kmath/structures/MutableBufferFactory : space/kscience/kmath/structures/BufferFactory {
+	public static final field Companion Lspace/kscience/kmath/structures/MutableBufferFactory$Companion;
+	public abstract fun invoke (ILkotlin/jvm/functions/Function1;)Lspace/kscience/kmath/structures/MutableBuffer;
+}
+
+public final class space/kscience/kmath/structures/MutableBufferFactory$Companion {
+	public final fun boxing ()Lspace/kscience/kmath/structures/MutableBufferFactory;
+}
+
 public final class space/kscience/kmath/structures/MutableListBuffer : space/kscience/kmath/structures/MutableBuffer {
 	public static final synthetic fun box-impl (Ljava/util/List;)Lspace/kscience/kmath/structures/MutableListBuffer;
 	public static fun constructor-impl (ILkotlin/jvm/functions/Function1;)Ljava/util/List;
@@ -2271,6 +2602,30 @@ public final class space/kscience/kmath/structures/MutableMemoryBuffer : space/k
 public final class space/kscience/kmath/structures/MutableMemoryBuffer$Companion {
 	public final fun create (Lspace/kscience/kmath/memory/MemorySpec;I)Lspace/kscience/kmath/structures/MutableMemoryBuffer;
 	public final fun create (Lspace/kscience/kmath/memory/MemorySpec;ILkotlin/jvm/functions/Function1;)Lspace/kscience/kmath/structures/MutableMemoryBuffer;
+}
+
+public final class space/kscience/kmath/structures/PermutedBuffer : space/kscience/kmath/structures/BufferView {
+	public fun <init> (Lspace/kscience/kmath/structures/Buffer;[I)V
+	public fun get (I)Ljava/lang/Object;
+	public fun getOrigin ()Lspace/kscience/kmath/structures/Buffer;
+	public fun getSize ()I
+	public fun iterator ()Ljava/util/Iterator;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class space/kscience/kmath/structures/PermutedMutableBuffer : space/kscience/kmath/structures/BufferView, space/kscience/kmath/structures/MutableBuffer {
+	public fun <init> (Lspace/kscience/kmath/structures/MutableBuffer;[I)V
+	public fun copy ()Lspace/kscience/kmath/structures/MutableBuffer;
+	public fun get (I)Ljava/lang/Object;
+	public synthetic fun getOrigin ()Lspace/kscience/kmath/structures/Buffer;
+	public fun getOrigin ()Lspace/kscience/kmath/structures/MutableBuffer;
+	public fun getSize ()I
+	public fun iterator ()Ljava/util/Iterator;
+	public fun set (ILjava/lang/Object;)V
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract interface class space/kscience/kmath/structures/PrimitiveBuffer : space/kscience/kmath/structures/MutableBuffer {
 }
 
 public final class space/kscience/kmath/structures/ReadOnlyBuffer : space/kscience/kmath/structures/Buffer {

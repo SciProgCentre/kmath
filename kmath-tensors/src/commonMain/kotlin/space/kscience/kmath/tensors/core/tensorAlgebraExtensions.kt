@@ -7,7 +7,7 @@
 
 package space.kscience.kmath.tensors.core
 
-import space.kscience.kmath.misc.PerformancePitfall
+import space.kscience.kmath.PerformancePitfall
 import space.kscience.kmath.nd.ShapeND
 import kotlin.jvm.JvmName
 

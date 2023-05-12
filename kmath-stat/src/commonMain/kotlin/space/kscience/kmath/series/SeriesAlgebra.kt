@@ -112,14 +112,21 @@ public open class SeriesAlgebra<T, out A : Ring<T>, out BA : BufferAlgebra<T, A>
     public val Buffer<T>.startLabel: L get() = offsetToLabel(startOffset)
 
     /**
-     * Build a new series positioned at [startOffset].
+     * Build a new series by offset positioned at [startOffset].
      */
-    public fun series(size: Int, startOffset: Int = 0, block: A.(label: L) -> T): Series<T> {
-        return elementAlgebra.bufferFactory(size) {
-            val index = it + startOffset
-            elementAlgebra.block(offsetToLabel(index))
-        }.moveTo(startOffset)
-    }
+    public inline fun seriesByOffset(
+        size: Int,
+        startOffset: Int = 0,
+        crossinline block: A.(offset: Int) -> T,
+    ): Series<T> = elementAlgebra.bufferFactory(size) {
+        elementAlgebra.block(it + startOffset)
+    }.moveTo(startOffset)
+
+    /**
+     * Build a new series by label positioned at [startOffset].
+     */
+    public inline fun series(size: Int, startOffset: Int = 0, crossinline block: A.(label: L) -> T): Series<T> =
+        seriesByOffset(size, startOffset) { offset -> block(offsetToLabel(offset)) }
 
     /**
      * Get a label buffer for given buffer.
@@ -129,18 +136,24 @@ public open class SeriesAlgebra<T, out A : Ring<T>, out BA : BufferAlgebra<T, A>
     /**
      * Try to resolve element by label and return null if element with a given label is not found
      */
-    public operator fun Buffer<T>.get(label: L): T? {
+    public open fun Buffer<T>.getByLabelOrNull(label: L): T? {
         val index = labels.indexOf(label)
         if (index == -1) return null
         return getByOffset(index + startOffset)
     }
 
     /**
+     * Get value by label (rounded down) or throw [IndexOutOfBoundsException] if the value is outside series boundaries.
+     */
+    public open fun Buffer<T>.getByLabel(label: L): T = getByLabelOrNull(label)
+        ?: throw IndexOutOfBoundsException("Label $label is not in ${labels.first()}..${labels.last()}")
+
+    /**
      * Map a series to another series of the same size
      */
     public inline fun Buffer<T>.map(crossinline transform: A.(T) -> T): Series<T> {
         val buf = elementAlgebra.bufferFactory(size) {
-            elementAlgebra.transform(getByOffset(it))
+            elementAlgebra.transform(get(it))
         }
         return buf.moveTo(offsetIndices.first)
     }
@@ -178,12 +191,23 @@ public open class SeriesAlgebra<T, out A : Ring<T>, out BA : BufferAlgebra<T, A>
         crossinline operation: A.(left: T, right: T) -> T,
     ): Series<T> {
         val newRange = offsetIndices.intersect(other.offsetIndices)
-        return elementAlgebra.bufferFactory(newRange.size) {
+        return seriesByOffset(startOffset = newRange.first, size = newRange.last + 1 - newRange.first) { offset ->
             elementAlgebra.operation(
-                getByOffset(it),
-                other.getByOffset(it)
+                getByOffset(offset),
+                other.getByOffset(offset)
             )
-        }.moveTo(newRange.first)
+        }
+    }
+
+    /**
+     * Zip buffer with itself, but shifted
+     * */
+    public inline fun Buffer<T>.zipWithShift(
+        shift: Int = 1,
+        crossinline operation: A.(left: T, right: T) -> T
+    ): Buffer<T> {
+        val shifted = this.moveBy(shift)
+        return zip(shifted, operation)
     }
 
     override fun Buffer<T>.unaryMinus(): Buffer<T> = map { -it }
@@ -191,6 +215,8 @@ public open class SeriesAlgebra<T, out A : Ring<T>, out BA : BufferAlgebra<T, A>
     override fun add(left: Buffer<T>, right: Buffer<T>): Series<T> = left.zip(right) { l, r -> l + r }
 
     override fun multiply(left: Buffer<T>, right: Buffer<T>): Buffer<T> = left.zip(right) { l, r -> l * r }
+
+    public fun Buffer<T>.difference(shift: Int=1): Buffer<T> = this.zipWithShift(shift) {l, r -> r - l}
 
     public companion object
 }
