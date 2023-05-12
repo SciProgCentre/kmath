@@ -10,9 +10,8 @@ kscience{
         browser {
             testTask {
                 useKarma {
-                    this.webpackConfig.experiments.add("topLevelAwait")
+                    webpackConfig.experiments.add("topLevelAwait")
                     useChromeHeadless()
-                    useConfigDirectory(project.projectDir.resolve("karma.config.d").resolve("wasm"))
                 }
             }
         }
@@ -31,15 +30,6 @@ kscience{
     testDependencies {
         implementation(projects.testUtils)
     }
-}
-
-kotlin.sourceSets {
-    filter { it.name.contains("test", true) }
-        .map(org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet::languageSettings)
-        .forEach {
-            it.optIn("space.kscience.kmath.misc.PerformancePitfall")
-            it.optIn("space.kscience.kmath.misc.UnstableKMathAPI")
-        }
 }
 
 readme {

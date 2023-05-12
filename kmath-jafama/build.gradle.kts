@@ -21,7 +21,3 @@ readme {
         "Double ExtendedField implementations based on Jafama"
     }
 }
-
-kotlin.sourceSets.all {
-    languageSettings.optIn("space.kscience.kmath.misc.UnstableKMathAPI")
-}
