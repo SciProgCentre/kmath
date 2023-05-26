@@ -63,9 +63,9 @@ fun generateNewParameters(p: MutableStructure2D<Double>, delta: Double): Mutable
 suspend fun main(){
     val startData = getStartDataForFunc1()
     // Создание потока:
-    val numberFlow = streamLm(::func1ForLm, startData, 1000)
+    val lmFlow = streamLm(::func1ForLm, startData, 1000)
     // Запуск потока
-    numberFlow.collect { parameters ->
+    lmFlow.collect { parameters ->
         for (i in 0 until parameters.shape.component1()) {
             val x = (parameters[i, 0] * 10000).roundToInt() / 10000.0
             print("$x ")
