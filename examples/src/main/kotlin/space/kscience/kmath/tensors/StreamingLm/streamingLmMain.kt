@@ -21,7 +21,7 @@ fun streamLm(lm_func: KFunction3<MutableStructure2D<Double>, MutableStructure2D<
     var example_number = startData.example_number
     var p_init = startData.p_init
     var t = startData.t
-    val y_dat = startData.y_dat
+    var y_dat = startData.y_dat
     val weight = startData.weight
     val dp = startData.dp
     val p_min = startData.p_min
@@ -46,18 +46,19 @@ fun streamLm(lm_func: KFunction3<MutableStructure2D<Double>, MutableStructure2D<
         )
         emit(result.result_parameters)
         delay(launchFrequencyInMs)
-        p_init = generateNewParameters(p_init, 0.1)
+        p_init = result.result_parameters
+        y_dat = generateNewYDat(y_dat, 0.1)
     }
 }
 
-fun generateNewParameters(p: MutableStructure2D<Double>, delta: Double): MutableStructure2D<Double>{
-    val n = p.shape.component1()
-    val p_new = zeros(ShapeND(intArrayOf(n, 1))).as2D()
+fun generateNewYDat(y_dat: MutableStructure2D<Double>, delta: Double): MutableStructure2D<Double>{
+    val n = y_dat.shape.component1()
+    val y_dat_new = zeros(ShapeND(intArrayOf(n, 1))).as2D()
     for (i in 0 until n) {
         val randomEps = Random.nextDouble(delta + delta) - delta
-        p_new[i, 0] = p[i, 0] + randomEps
+        y_dat_new[i, 0] = y_dat[i, 0] + randomEps
     }
-    return p_new
+    return y_dat_new
 }
 
 suspend fun main(){
