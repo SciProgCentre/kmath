@@ -3,20 +3,20 @@
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
-package space.kscience.kmath.tensors.StreamingLm
+package space.kscience.kmath.tensors.LevenbergMarquardt.StreamingLm
 
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import space.kscience.kmath.nd.*
+import space.kscience.kmath.tensors.LevenbergMarquardt.StartDataLm
 import space.kscience.kmath.tensors.core.BroadcastDoubleTensorAlgebra.zeros
 import space.kscience.kmath.tensors.core.DoubleTensorAlgebra
 import space.kscience.kmath.tensors.core.internal.LMSettings
-import kotlin.math.roundToInt
 import kotlin.random.Random
 import kotlin.reflect.KFunction3
 
 fun streamLm(lm_func: KFunction3<MutableStructure2D<Double>, MutableStructure2D<Double>, LMSettings, MutableStructure2D<Double>>,
-             startData: StartDataLm, launchFrequencyInMs: Long): Flow<MutableStructure2D<Double>> = flow{
+             startData: StartDataLm, launchFrequencyInMs: Long, numberOfLaunches: Int): Flow<MutableStructure2D<Double>> = flow{
 
     var example_number = startData.example_number
     var p_init = startData.p_init
@@ -29,7 +29,10 @@ fun streamLm(lm_func: KFunction3<MutableStructure2D<Double>, MutableStructure2D<
     val consts = startData.consts
     val opts = startData.opts
 
-    while (true) {
+    var steps = numberOfLaunches
+    val isEndless = (steps <= 0)
+
+    while (isEndless || steps > 0) {
         val result = DoubleTensorAlgebra.lm(
             lm_func,
             p_init,
@@ -48,6 +51,7 @@ fun streamLm(lm_func: KFunction3<MutableStructure2D<Double>, MutableStructure2D<
         delay(launchFrequencyInMs)
         p_init = result.result_parameters
         y_dat = generateNewYDat(y_dat, 0.1)
+        if (!isEndless) steps -= 1
     }
 }
 
@@ -59,18 +63,4 @@ fun generateNewYDat(y_dat: MutableStructure2D<Double>, delta: Double): MutableSt
         y_dat_new[i, 0] = y_dat[i, 0] + randomEps
     }
     return y_dat_new
-}
-
-suspend fun main(){
-    val startData = getStartDataForFunc1()
-    // Создание потока:
-    val lmFlow = streamLm(::func1ForLm, startData, 1000)
-    // Запуск потока
-    lmFlow.collect { parameters ->
-        for (i in 0 until parameters.shape.component1()) {
-            val x = (parameters[i, 0] * 10000).roundToInt() / 10000.0
-            print("$x ")
-            if (i == parameters.shape.component1() - 1) println()
-        }
-    }
 }

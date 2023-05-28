@@ -3,7 +3,7 @@
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
-package space.kscience.kmath.tensors.StreamingLm
+package space.kscience.kmath.tensors.LevenbergMarquardt
 
 import space.kscience.kmath.nd.MutableStructure2D
 import space.kscience.kmath.nd.ShapeND
@@ -15,6 +15,7 @@ import space.kscience.kmath.tensors.core.DoubleTensorAlgebra.Companion.max
 import space.kscience.kmath.tensors.core.DoubleTensorAlgebra.Companion.plus
 import space.kscience.kmath.tensors.core.DoubleTensorAlgebra.Companion.pow
 import space.kscience.kmath.tensors.core.DoubleTensorAlgebra.Companion.times
+import space.kscience.kmath.tensors.core.asDoubleTensor
 import space.kscience.kmath.tensors.core.internal.LMSettings
 
 public data class StartDataLm (
@@ -31,7 +32,39 @@ public data class StartDataLm (
     var opts: DoubleArray
 )
 
-fun func1ForLm(t: MutableStructure2D<Double>, p: MutableStructure2D<Double>, settings: LMSettings): MutableStructure2D<Double> {
+fun funcDifficultForLm(t: MutableStructure2D<Double>, p: MutableStructure2D<Double>, settings: LMSettings): MutableStructure2D<Double> {
+    val m = t.shape.component1()
+    var y_hat = DoubleTensorAlgebra.zeros(ShapeND(intArrayOf (m, 1)))
+
+    val mt = t.max()
+    for(i in 0 until p.shape.component1()){
+        y_hat = y_hat.plus( (t.times(1.0 / mt)).times(p[i, 0]) )
+    }
+
+    for(i in 0 until 4){
+        y_hat = funcEasyForLm((y_hat.as2D() + t).as2D(), p, settings).asDoubleTensor()
+    }
+
+    return y_hat.as2D()
+}
+
+fun funcMiddleForLm(t: MutableStructure2D<Double>, p: MutableStructure2D<Double>, settings: LMSettings): MutableStructure2D<Double> {
+    val m = t.shape.component1()
+    var y_hat = DoubleTensorAlgebra.zeros(ShapeND(intArrayOf (m, 1)))
+
+    val mt = t.max()
+    for(i in 0 until p.shape.component1()){
+        y_hat += (t.times(1.0 / mt)).times(p[i, 0])
+    }
+
+    for(i in 0 until 5){
+        y_hat = funcEasyForLm(y_hat.as2D(), p, settings).asDoubleTensor()
+    }
+
+    return y_hat.as2D()
+}
+
+fun funcEasyForLm(t: MutableStructure2D<Double>, p: MutableStructure2D<Double>, settings: LMSettings): MutableStructure2D<Double> {
     val m = t.shape.component1()
     var y_hat = DoubleTensorAlgebra.zeros(ShapeND(intArrayOf (m, 1)))
 
@@ -55,7 +88,7 @@ fun func1ForLm(t: MutableStructure2D<Double>, p: MutableStructure2D<Double>, set
     return y_hat.as2D()
 }
 
-fun getStartDataForFunc1(): StartDataLm {
+fun getStartDataForFuncEasy(): StartDataLm {
     val lm_matx_y_dat = doubleArrayOf(
         19.6594, 18.6096, 17.6792, 17.2747, 16.3065, 17.1458, 16.0467, 16.7023, 15.7809, 15.9807,
         14.7620, 15.1128, 16.0973, 15.1934, 15.8636, 15.4763, 15.6860, 15.1895, 15.3495, 16.6054,
