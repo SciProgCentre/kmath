@@ -4,7 +4,13 @@ plugins {
 
 kscience{
     jvm()
-    js()
+    js {
+        browser {
+            testTask {
+                useMocha().timeout = "100000"
+            }
+        }
+    }
     native()
 
     dependencies {
