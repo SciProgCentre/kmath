@@ -765,12 +765,12 @@ public open class DoubleTensorAlgebra :
 
         var weight = weight_input
         if (nargin <  5) {
-            weight = fromArray(ShapeND(intArrayOf(1, 1)), doubleArrayOf((y_dat.transpose().dot(y_dat)).as1D()[0])).as2D()
+            fromArray(ShapeND(intArrayOf(1, 1)), doubleArrayOf(1.0)).as2D()
         }
 
         var dp = dp_input
         if (nargin < 6) {
-            dp = fromArray(ShapeND(intArrayOf(1, 1)), doubleArrayOf(0.001)).as2D()
+            dp = fromArray(ShapeND(intArrayOf(1, 1)), doubleArrayOf(-0.001)).as2D()
         }
 
         var p_min = p_min_input
@@ -1023,6 +1023,8 @@ public open class DoubleTensorAlgebra :
 //                println(" !! Maximum Number of Iterations Reached Without Convergence !!")
                 resultInfo.typeOfConvergence = LinearOpsTensorAlgebra.TypeOfConvergence.noConvergence
                 resultInfo.epsilon = 0.0
+                print("noConvergence, MaxIter = ")
+                println(MaxIter)
                 stop = true
             }
         }  // --- End of Main Loop
