@@ -3,8 +3,6 @@ plugins {
     `version-catalog`
 }
 
-java.targetCompatibility = JavaVersion.VERSION_11
-
 repositories {
     mavenLocal()
     maven("https://repo.kotlin.link")
@@ -26,6 +24,11 @@ dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.14.+")
 }
 
-kotlin.sourceSets.all {
-    languageSettings.optIn("kotlin.OptIn")
+kotlin{
+    jvmToolchain{
+        languageVersion.set(JavaLanguageVersion.of(11))
+    }
+    sourceSets.all {
+        languageSettings.optIn("kotlin.OptIn")
+    }
 }

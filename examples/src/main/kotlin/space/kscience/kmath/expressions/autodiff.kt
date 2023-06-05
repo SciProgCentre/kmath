@@ -26,7 +26,7 @@ fun main() {
     }
 
     // Then we can evaluate it at any point ((-1, -1) in the case):
-    println(someExpression(mapOf(x to -1.0, y to -1.0)))
+    println(someExpression(x to -1.0, y to -1.0))
     // >>> -2.0
 
     // We can also construct its partial derivatives:
@@ -35,23 +35,23 @@ fun main() {
     val dxdxExpression = someExpression.derivative(x, x) // ∂^2/∂x^2. Must be `0`
 
     // We can evaluate them as well
-    println(dxExpression(mapOf(x to 57.0, y to 6.0)))
+    println(dxExpression(x to 57.0, y to 6.0))
     // >>> 7.0
-    println(dyExpression(mapOf(x to -1.0, y to 179.0)))
+    println(dyExpression(x to -1.0, y to 179.0))
     // >>> 0.0
-    println(dxdxExpression(mapOf(x to 239.0, y to 30.0)))
+    println(dxdxExpression(x to 239.0, y to 30.0))
     // >>> 0.0
 
     // You can also provide extra arguments that obviously won't affect the result:
-    println(dxExpression(mapOf(x to 57.0, y to 6.0, z to 42.0)))
+    println(dxExpression(x to 57.0, y to 6.0, z to 42.0))
     // >>> 7.0
-    println(dyExpression(mapOf(x to -1.0, y to 179.0, z to 0.0)))
+    println(dyExpression(x to -1.0, y to 179.0, z to 0.0))
     // >>> 0.0
-    println(dxdxExpression(mapOf(x to 239.0, y to 30.0, z to 100_000.0)))
+    println(dxdxExpression(x to 239.0, y to 30.0, z to 100_000.0))
     // >>> 0.0
 
     // But in case you forgot to specify bound symbol's value, exception is thrown:
-    println( runCatching { someExpression(mapOf(z to 4.0)) } )
+    println( runCatching { someExpression(z to 4.0) } )
     // >>> Failure(java.lang.IllegalStateException: Symbol 'x' is not supported in ...)
 
     // The reason is that the expression is evaluated lazily,
@@ -63,7 +63,7 @@ fun main() {
         x pow 2
     }
     // When you evaluate it via
-    simpleExpression(mapOf(x to 1.0, y to 57.0, z to 179.0))
+    simpleExpression(x to 1.0, y to 57.0, z to 179.0)
     // lambda above has the context of map `{x: 1.0, y: 57.0, z: 179.0}`.
     // When x is bound, you can think of it as substitution `x -> 1.0`.
     // Other values are unused which does not make any problem to us.

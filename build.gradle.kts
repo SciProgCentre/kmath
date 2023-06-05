@@ -72,9 +72,9 @@ ksciencePublish {
             "https://maven.pkg.jetbrains.space/spc/p/sci/maven"
         }
     )
-    sonatype()
+    sonatype("https://oss.sonatype.org")
 }
 
-apiValidation.nonPublicMarkers.add("space.kscience.kmath.misc.UnstableKMathAPI")
+apiValidation.nonPublicMarkers.add("space.kscience.kmath.UnstableKMathAPI")
 
 val multikVersion by extra("0.2.0")
