@@ -52,8 +52,8 @@ fun main() {
     val consts = BroadcastDoubleTensorAlgebra.fromArray(
         ShapeND(intArrayOf(1, 1)), doubleArrayOf(0.0)
     ).as2D()
-    val opts = doubleArrayOf(3.0, 10000.0, 1e-2, 0.015, 1e-2, 1e-2, 1e-2, 11.0, 9.0, 1.0)
-//    val opts = doubleArrayOf(3.0, 10000.0, 1e-5, 1e-5, 1e-5, 1e-5, 1e-3, 11.0, 9.0, 1.0)
+    val opts = doubleArrayOf(3.0, 10000.0, 1e-6, 1e-6, 1e-6, 1e-6, 1e-2, 11.0, 9.0, 1.0)
+//    val opts = doubleArrayOf(3.0, 10000.0, 1e-6, 1e-6, 1e-6, 1e-6, 1e-3, 11.0, 9.0, 1.0)
 
     val result = DoubleTensorAlgebra.lm(
         ::funcDifficultForLm,

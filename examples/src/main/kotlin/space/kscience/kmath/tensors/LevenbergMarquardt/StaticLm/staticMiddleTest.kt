@@ -12,6 +12,7 @@ import space.kscience.kmath.tensors.LevenbergMarquardt.funcMiddleForLm
 import space.kscience.kmath.tensors.core.BroadcastDoubleTensorAlgebra
 import space.kscience.kmath.tensors.core.BroadcastDoubleTensorAlgebra.div
 import space.kscience.kmath.tensors.core.DoubleTensorAlgebra
+import space.kscience.kmath.tensors.core.DoubleTensorAlgebra.Companion.times
 import space.kscience.kmath.tensors.core.internal.LMSettings
 import kotlin.math.roundToInt
 fun main() {
@@ -52,7 +53,7 @@ fun main() {
     val consts = BroadcastDoubleTensorAlgebra.fromArray(
         ShapeND(intArrayOf(1, 1)), doubleArrayOf(0.0)
     ).as2D()
-    val opts = doubleArrayOf(3.0, 10000.0, 1e-5, 1e-5, 1e-5, 1e-5, 1e-5, 11.0, 9.0, 1.0)
+    val opts = doubleArrayOf(3.0, 10000.0, 1e-3, 1e-3, 1e-3, 1e-3, 1e-15, 11.0, 9.0, 1.0)
 
     val result = DoubleTensorAlgebra.lm(
         ::funcMiddleForLm,
@@ -76,7 +77,7 @@ fun main() {
     }
     println()
 
-    println("Y true and y received:")
+
     var y_hat_after =  funcMiddleForLm(t_example, result.result_parameters, settings)
     for (i in 0 until y_hat.shape.component1()) {
         val x = (y_hat[i, 0] * 10000).roundToInt() / 10000.0
