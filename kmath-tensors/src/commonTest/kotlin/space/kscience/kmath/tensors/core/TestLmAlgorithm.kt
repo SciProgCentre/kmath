@@ -245,7 +245,7 @@ class TestLmAlgorithm {
         val consts = BroadcastDoubleTensorAlgebra.fromArray(
             ShapeND(intArrayOf(1, 1)), doubleArrayOf(0.0)
         ).as2D()
-        val opts = doubleArrayOf(3.0, 7000.0, 1e-2, 1e-1, 1e-2, 1e-2, 1e-2, 11.0, 9.0, 1.0)
+        val opts = doubleArrayOf(3.0, 7000.0, 1e-2, 1e-3, 1e-2, 1e-2, 1e-2, 11.0, 9.0, 1.0)
 
         val result = DoubleTensorAlgebra.lm(
             ::funcDifficultForLm,
@@ -261,7 +261,5 @@ class TestLmAlgorithm {
             10,
             1
         )
-
-//        assertEquals(1.15, (result.result_chi_sq * 1e2).roundToLong() / 1e2)
     }
 }
