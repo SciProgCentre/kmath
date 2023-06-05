@@ -15,7 +15,6 @@ import space.kscience.kmath.tensors.core.DoubleTensorAlgebra.Companion.max
 import space.kscience.kmath.tensors.core.DoubleTensorAlgebra.Companion.plus
 import space.kscience.kmath.tensors.core.DoubleTensorAlgebra.Companion.pow
 import space.kscience.kmath.tensors.core.DoubleTensorAlgebra.Companion.times
-import space.kscience.kmath.tensors.core.internal.LMSettings
 import kotlin.math.roundToLong
 import kotlin.test.Test
 import kotlin.test.assertEquals

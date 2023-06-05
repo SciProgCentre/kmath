@@ -7,15 +7,7 @@ package space.kscience.kmath.tensors.api
 
 import space.kscience.kmath.nd.MutableStructure2D
 import space.kscience.kmath.nd.StructureND
-import space.kscience.kmath.nd.as2D
 import space.kscience.kmath.operations.Field
-import space.kscience.kmath.tensors.core.BroadcastDoubleTensorAlgebra
-import space.kscience.kmath.tensors.core.BroadcastDoubleTensorAlgebra.dot
-import space.kscience.kmath.tensors.core.BroadcastDoubleTensorAlgebra.map
-import space.kscience.kmath.tensors.core.BroadcastDoubleTensorAlgebra.transposed
-import space.kscience.kmath.tensors.core.DoubleTensorAlgebra
-import space.kscience.kmath.tensors.core.internal.LMSettings
-import kotlin.reflect.KFunction3
 
 /**
  * Common linear algebra operations. Operates on [Tensor].
@@ -137,10 +129,4 @@ public interface LinearOpsTensorAlgebra<T, A : Field<T>> : TensorPartialDivision
         var typeOfConvergence: TypeOfConvergence,
         var epsilon: Double
     )
-
-    public fun lm(
-        func: KFunction3<MutableStructure2D<Double>, MutableStructure2D<Double>, LMSettings, MutableStructure2D<Double>>,
-        p_input: MutableStructure2D<Double>, t_input: MutableStructure2D<Double>, y_dat_input: MutableStructure2D<Double>,
-        weight_input: MutableStructure2D<Double>, dp_input: MutableStructure2D<Double>, p_min_input: MutableStructure2D<Double>, p_max_input: MutableStructure2D<Double>,
-        c_input: MutableStructure2D<Double>, opts_input: DoubleArray, nargin: Int, example_number: Int): LMResultInfo
 }
