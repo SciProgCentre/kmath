@@ -5,9 +5,9 @@
 
 package space.kscience.kmath.benchmarks
 
-import kotlinx.benchmark.gradle.BenchmarksExtension
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
+import kotlinx.benchmark.gradle.BenchmarksExtension
 import org.gradle.api.Project
 import space.kscience.gradle.KScienceReadmeExtension
 import java.time.LocalDateTime
@@ -16,6 +16,7 @@ import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeFormatterBuilder
 import java.time.format.SignStyle
 import java.time.temporal.ChronoField.*
+import java.util.*
 
 private val ISO_DATE_TIME: DateTimeFormatter = DateTimeFormatterBuilder().run {
     parseCaseInsensitive()
@@ -52,7 +53,7 @@ fun Project.addBenchmarkProperties() {
     rootProject.subprojects.forEach { p ->
         p.extensions.findByType(KScienceReadmeExtension::class.java)?.run {
             benchmarksProject.extensions.findByType(BenchmarksExtension::class.java)?.configurations?.forEach { cfg ->
-                property("benchmark${cfg.name.capitalize()}") {
+                property("benchmark${cfg.name.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }}") {
                     val launches = benchmarksProject.buildDir.resolve("reports/benchmarks/${cfg.name}")
 
                     val resDirectory = launches.listFiles()?.maxByOrNull {

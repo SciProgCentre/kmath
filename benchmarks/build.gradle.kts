@@ -29,6 +29,9 @@ kotlin {
         all {
             languageSettings {
                 progressiveMode = true
+                optIn("kotlin.contracts.ExperimentalContracts")
+                optIn("kotlin.ExperimentalUnsignedTypes")
+                optIn("space.kscience.kmath.UnstableKMathAPI")
             }
         }
 
@@ -153,7 +156,7 @@ kotlin.sourceSets.all {
     with(languageSettings) {
         optIn("kotlin.contracts.ExperimentalContracts")
         optIn("kotlin.ExperimentalUnsignedTypes")
-        optIn("space.kscience.kmath.misc.UnstableKMathAPI")
+        optIn("space.kscience.kmath.UnstableKMathAPI")
     }
 }
 

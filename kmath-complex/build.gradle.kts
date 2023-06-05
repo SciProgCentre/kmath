@@ -7,23 +7,7 @@ kscience {
     js()
     native()
 
-    wasm{
-        browser {
-            testTask {
-                useKarma {
-                    this.webpackConfig.experiments.add("topLevelAwait")
-                    useChromeHeadless()
-                    useConfigDirectory(project.projectDir.resolve("karma.config.d").resolve("wasm"))
-                }
-            }
-        }
-    }
-
-    wasmTest{
-        dependencies {
-            implementation(kotlin("test"))
-        }
-    }
+    wasm()
 
     dependencies {
         api(projects.kmathCore)
