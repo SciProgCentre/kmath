@@ -26,7 +26,6 @@ fun streamLm(lm_func: KFunction3<MutableStructure2D<Double>, MutableStructure2D<
     val dp = startData.dp
     val p_min = startData.p_min
     val p_max = startData.p_max
-    val consts = startData.consts
     val opts = startData.opts
 
     var steps = numberOfLaunches
@@ -42,7 +41,6 @@ fun streamLm(lm_func: KFunction3<MutableStructure2D<Double>, MutableStructure2D<
             dp,
             p_min,
             p_max,
-            consts,
             opts,
             10,
             example_number

@@ -121,13 +121,9 @@ class TestLmAlgorithm {
             ShapeND(intArrayOf(4, 1)), doubleArrayOf(50.0, 20.0, 2.0, 100.0)
         ).as2D()
 
-        val consts = BroadcastDoubleTensorAlgebra.fromArray(
-            ShapeND(intArrayOf(1, 1)), doubleArrayOf(0.0)
-        ).as2D()
-
         val opts = doubleArrayOf(3.0, 100.0, 1e-3, 1e-3, 1e-1, 1e-1, 1e-2, 11.0, 9.0, 1.0)
 
-        val result = lm(::funcEasyForLm, p_init, t, y_dat, weight, dp, p_min, p_max, consts, opts, 10, example_number)
+        val result = lm(::funcEasyForLm, p_init, t, y_dat, weight, dp, p_min, p_max, opts, 10, example_number)
         assertEquals(13, result.iterations)
         assertEquals(31, result.funcCalls)
         assertEquals(0.9131368192633, (result.resultChiSq * 1e13).roundToLong() / 1e13)
@@ -182,9 +178,6 @@ class TestLmAlgorithm {
         p_min = p_min.div(1.0 / -50.0)
         val p_max = DoubleTensorAlgebra.ones(ShapeND(intArrayOf(Nparams, 1)))
         p_min = p_min.div(1.0 / 50.0)
-        val consts = BroadcastDoubleTensorAlgebra.fromArray(
-            ShapeND(intArrayOf(1, 1)), doubleArrayOf(0.0)
-        ).as2D()
         val opts = doubleArrayOf(3.0, 7000.0, 1e-5, 1e-5, 1e-5, 1e-5, 1e-5, 11.0, 9.0, 1.0)
 
         val result = DoubleTensorAlgebra.lm(
@@ -196,7 +189,6 @@ class TestLmAlgorithm {
             dp,
             p_min.as2D(),
             p_max.as2D(),
-            consts,
             opts,
             10,
             1
@@ -238,9 +230,6 @@ class TestLmAlgorithm {
         p_min = p_min.div(1.0 / -50.0)
         val p_max = DoubleTensorAlgebra.ones(ShapeND(intArrayOf(Nparams, 1)))
         p_min = p_min.div(1.0 / 50.0)
-        val consts = BroadcastDoubleTensorAlgebra.fromArray(
-            ShapeND(intArrayOf(1, 1)), doubleArrayOf(0.0)
-        ).as2D()
         val opts = doubleArrayOf(3.0, 7000.0, 1e-2, 1e-3, 1e-2, 1e-2, 1e-2, 11.0, 9.0, 1.0)
 
         val result = DoubleTensorAlgebra.lm(
@@ -252,7 +241,6 @@ class TestLmAlgorithm {
             dp,
             p_min.as2D(),
             p_max.as2D(),
-            consts,
             opts,
             10,
             1

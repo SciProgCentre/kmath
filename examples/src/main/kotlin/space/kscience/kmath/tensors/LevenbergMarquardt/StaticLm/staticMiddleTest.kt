@@ -48,9 +48,6 @@ fun main() {
     p_min = p_min.div(1.0 / -50.0)
     val p_max = DoubleTensorAlgebra.ones(ShapeND(intArrayOf(Nparams, 1)))
     p_min = p_min.div(1.0 / 50.0)
-    val consts = BroadcastDoubleTensorAlgebra.fromArray(
-        ShapeND(intArrayOf(1, 1)), doubleArrayOf(0.0)
-    ).as2D()
     val opts = doubleArrayOf(3.0, 7000.0, 1e-5, 1e-5, 1e-5, 1e-5, 1e-5, 11.0, 9.0, 1.0)
 
     val result = DoubleTensorAlgebra.lm(
@@ -62,7 +59,6 @@ fun main() {
         dp,
         p_min.as2D(),
         p_max.as2D(),
-        consts,
         opts,
         10,
         1

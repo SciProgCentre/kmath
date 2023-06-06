@@ -27,7 +27,6 @@ fun main() {
         startedData.dp,
         startedData.p_min,
         startedData.p_max,
-        startedData.consts,
         startedData.opts,
         10,
         startedData.example_number
