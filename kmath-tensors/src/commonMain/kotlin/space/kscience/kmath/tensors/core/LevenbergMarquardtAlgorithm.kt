@@ -40,36 +40,39 @@ public enum class TypeOfConvergence{
     NoConvergence
 }
 
+/**
+ * Class for the data obtained as a result of the execution of the Levenberg-Marquardt algorithm
+ *
+ *  iterations: number of completed iterations
+ *  funcCalls: the number of evaluations of the input function during execution
+ *  resultChiSq: chi squared value on final parameters
+ *  resultLambda: final lambda parameter used to calculate the offset
+ *  resultParameters: final parameters
+ *  typeOfConvergence: type of convergence
+ */
 public data class LMResultInfo (
     var iterations:Int,
-    var func_calls: Int,
-    var example_number: Int,
-    var result_chi_sq: Double,
-    var result_lambda: Double,
-    var result_parameters: MutableStructure2D<Double>,
+    var funcCalls: Int,
+    var resultChiSq: Double,
+    var resultLambda: Double,
+    var resultParameters: MutableStructure2D<Double>,
     var typeOfConvergence: TypeOfConvergence,
-    var epsilon: Double
-)
-
-public data class LMSettings (
-    var iteration:Int,
-    var func_calls: Int,
-    var example_number:Int
 )
 
 public fun DoubleTensorAlgebra.lm(
-    func: KFunction3<MutableStructure2D<Double>, MutableStructure2D<Double>, LMSettings, MutableStructure2D<Double>>,
+    func: KFunction3<MutableStructure2D<Double>, MutableStructure2D<Double>, Int, MutableStructure2D<Double>>,
     p_input: MutableStructure2D<Double>, t_input: MutableStructure2D<Double>, y_dat_input: MutableStructure2D<Double>,
     weight_input: MutableStructure2D<Double>, dp_input: MutableStructure2D<Double>, p_min_input: MutableStructure2D<Double>, p_max_input: MutableStructure2D<Double>,
     c_input: MutableStructure2D<Double>, opts_input: DoubleArray, nargin: Int, example_number: Int): LMResultInfo {
 
-    val resultInfo = LMResultInfo(0, 0, example_number, 0.0,
-        0.0, p_input, TypeOfConvergence.NoConvergence, 0.0)
+
+    val resultInfo = LMResultInfo(0, 0, 0.0,
+        0.0, p_input, TypeOfConvergence.NoConvergence)
 
     val eps:Double = 2.2204e-16
 
     val settings = LMSettings(0, 0, example_number)
-    settings.func_calls = 0 // running count of function evaluations
+    settings.funcCalls = 0 // running count of function evaluations
 
     var p = p_input
     val y_dat = y_dat_input
@@ -160,7 +163,7 @@ public fun DoubleTensorAlgebra.lm(
     val idx = get_zero_indices(dp)                 // indices of the parameters to be fit
     val Nfit = idx?.shape?.component1()            // number of parameters to fit
     var stop = false                               // termination flag
-    val y_init = feval(func, t, p, settings)       // residual error using p_try
+    val y_init = feval(func, t, p, example_number)       // residual error using p_try
 
     if (weight.shape.component1() == 1 || variance(weight) == 0.0) { // identical weights vector
         weight = ones(ShapeND(intArrayOf(Npnt, 1))).div(1 / kotlin.math.abs(weight[0, 0])).as2D()
@@ -219,7 +222,7 @@ public fun DoubleTensorAlgebra.lm(
         var p_try = (p + h).as2D()  // update the [idx] elements
         p_try = smallest_element_comparison(largest_element_comparison(p_min, p_try.as2D()), p_max)  // apply constraints
 
-        var delta_y = y_dat.minus(feval(func, t, p_try, settings))   // residual error using p_try
+        var delta_y = y_dat.minus(feval(func, t, p_try, example_number))   // residual error using p_try
 
         for (i in 0 until delta_y.shape.component1()) {  // floating point error; break
             for (j in 0 until delta_y.shape.component2()) {
@@ -230,7 +233,7 @@ public fun DoubleTensorAlgebra.lm(
             }
         }
 
-        settings.func_calls += 1
+        settings.funcCalls += 1
 
         val tmp = delta_y.times(weight)
         var X2_try = delta_y.as2D().transpose().dot(tmp)     // Chi-squared error criteria
@@ -244,8 +247,8 @@ public fun DoubleTensorAlgebra.lm(
             p_try = p.plus(h).as2D() // update only [idx] elements
             p_try = smallest_element_comparison(largest_element_comparison(p_min, p_try), p_max) // apply constraints
 
-            var delta_y = y_dat.minus(feval(func, t, p_try, settings))   // residual error using p_try
-            settings.func_calls += 1
+            var delta_y = y_dat.minus(feval(func, t, p_try, example_number))   // residual error using p_try
+            settings.funcCalls += 1
 
             val tmp = delta_y.times(weight)
             X2_try = delta_y.as2D().transpose().dot(tmp)     // Chi-squared error criteria
@@ -320,10 +323,10 @@ public fun DoubleTensorAlgebra.lm(
         if (prnt > 1) {
             val chi_sq = X2 / DoF
             resultInfo.iterations = settings.iteration
-            resultInfo.func_calls = settings.func_calls
-            resultInfo.result_chi_sq = chi_sq
-            resultInfo.result_lambda = lambda
-            resultInfo.result_parameters = p
+            resultInfo.funcCalls = settings.funcCalls
+            resultInfo.resultChiSq = chi_sq
+            resultInfo.resultLambda = lambda
+            resultInfo.resultParameters = p
         }
 
         // update convergence history ... save _reduced_ Chi-square
@@ -331,30 +334,32 @@ public fun DoubleTensorAlgebra.lm(
 
         if (abs(JtWdy).max()!! < epsilon_1 && settings.iteration > 2) {
             resultInfo.typeOfConvergence = TypeOfConvergence.InGradient
-            resultInfo.epsilon = epsilon_1
             stop = true
         }
         if ((abs(h.as2D()).div(abs(p) + 1e-12)).max() < epsilon_2  &&  settings.iteration > 2) {
             resultInfo.typeOfConvergence = TypeOfConvergence.InParameters
-            resultInfo.epsilon = epsilon_2
             stop = true
         }
         if (X2 / DoF < epsilon_3 && settings.iteration > 2) {
             resultInfo.typeOfConvergence = TypeOfConvergence.InReducedChiSquare
-            resultInfo.epsilon = epsilon_3
             stop = true
         }
         if (settings.iteration == MaxIter) {
             resultInfo.typeOfConvergence = TypeOfConvergence.NoConvergence
-            resultInfo.epsilon = 0.0
             stop = true
         }
     }
     return resultInfo
 }
 
+private data class LMSettings (
+    var iteration:Int,
+    var funcCalls: Int,
+    var exampleNumber:Int
+)
+
 /* matrix -> column of all elemnets */
-public fun make_column(tensor: MutableStructure2D<Double>) : MutableStructure2D<Double> {
+private fun make_column(tensor: MutableStructure2D<Double>) : MutableStructure2D<Double> {
     val shape = intArrayOf(tensor.shape.component1() * tensor.shape.component2(), 1)
     val buffer = DoubleArray(tensor.shape.component1() * tensor.shape.component2())
     for (i in 0 until tensor.shape.component1()) {
@@ -367,11 +372,11 @@ public fun make_column(tensor: MutableStructure2D<Double>) : MutableStructure2D<
 }
 
 /* column length */
-public fun length(column: MutableStructure2D<Double>) : Int {
+private fun length(column: MutableStructure2D<Double>) : Int {
     return column.shape.component1()
 }
 
-public fun MutableStructure2D<Double>.abs() {
+private fun MutableStructure2D<Double>.abs() {
     for (i in 0 until this.shape.component1()) {
         for (j in 0 until this.shape.component2()) {
             this[i, j] = kotlin.math.abs(this[i, j])
@@ -379,7 +384,7 @@ public fun MutableStructure2D<Double>.abs() {
     }
 }
 
-public fun abs(input: MutableStructure2D<Double>): MutableStructure2D<Double> {
+private fun abs(input: MutableStructure2D<Double>): MutableStructure2D<Double> {
     val tensor = BroadcastDoubleTensorAlgebra.ones(
         ShapeND(
             intArrayOf(
@@ -396,7 +401,7 @@ public fun abs(input: MutableStructure2D<Double>): MutableStructure2D<Double> {
     return tensor
 }
 
-public fun diag(input: MutableStructure2D<Double>): MutableStructure2D<Double> {
+private fun diag(input: MutableStructure2D<Double>): MutableStructure2D<Double> {
     val tensor = BroadcastDoubleTensorAlgebra.ones(ShapeND(intArrayOf(input.shape.component1(), 1))).as2D()
     for (i in 0 until tensor.shape.component1()) {
         tensor[i, 0] = input[i, i]
@@ -404,7 +409,7 @@ public fun diag(input: MutableStructure2D<Double>): MutableStructure2D<Double> {
     return tensor
 }
 
-public fun make_matrx_with_diagonal(column: MutableStructure2D<Double>): MutableStructure2D<Double> {
+private fun make_matrx_with_diagonal(column: MutableStructure2D<Double>): MutableStructure2D<Double> {
     val size = column.shape.component1()
     val tensor = BroadcastDoubleTensorAlgebra.zeros(ShapeND(intArrayOf(size, size))).as2D()
     for (i in 0 until size) {
@@ -413,12 +418,12 @@ public fun make_matrx_with_diagonal(column: MutableStructure2D<Double>): Mutable
     return tensor
 }
 
-public fun lm_eye(size: Int): MutableStructure2D<Double> {
+private fun lm_eye(size: Int): MutableStructure2D<Double> {
     val column = BroadcastDoubleTensorAlgebra.ones(ShapeND(intArrayOf(size, 1))).as2D()
     return make_matrx_with_diagonal(column)
 }
 
-public fun largest_element_comparison(a: MutableStructure2D<Double>, b: MutableStructure2D<Double>): MutableStructure2D<Double> {
+private fun largest_element_comparison(a: MutableStructure2D<Double>, b: MutableStructure2D<Double>): MutableStructure2D<Double> {
     val a_sizeX = a.shape.component1()
     val a_sizeY = a.shape.component2()
     val b_sizeX = b.shape.component1()
@@ -440,7 +445,7 @@ public fun largest_element_comparison(a: MutableStructure2D<Double>, b: MutableS
     return tensor
 }
 
-public fun smallest_element_comparison(a: MutableStructure2D<Double>, b: MutableStructure2D<Double>): MutableStructure2D<Double> {
+private fun smallest_element_comparison(a: MutableStructure2D<Double>, b: MutableStructure2D<Double>): MutableStructure2D<Double> {
     val a_sizeX = a.shape.component1()
     val a_sizeY = a.shape.component2()
     val b_sizeX = b.shape.component1()
@@ -462,7 +467,7 @@ public fun smallest_element_comparison(a: MutableStructure2D<Double>, b: Mutable
     return tensor
 }
 
-public fun get_zero_indices(column: MutableStructure2D<Double>, epsilon: Double = 0.000001): MutableStructure2D<Double>? {
+private fun get_zero_indices(column: MutableStructure2D<Double>, epsilon: Double = 0.000001): MutableStructure2D<Double>? {
     var idx = emptyArray<Double>()
     for (i in 0 until column.shape.component1()) {
         if (kotlin.math.abs(column[i, 0]) > epsilon) {
@@ -475,14 +480,14 @@ public fun get_zero_indices(column: MutableStructure2D<Double>, epsilon: Double 
     return null
 }
 
-public fun feval(func: (MutableStructure2D<Double>, MutableStructure2D<Double>, LMSettings) ->  MutableStructure2D<Double>,
-                 t: MutableStructure2D<Double>, p: MutableStructure2D<Double>, settings: LMSettings)
+private fun feval(func: (MutableStructure2D<Double>, MutableStructure2D<Double>, Int) ->  MutableStructure2D<Double>,
+                 t: MutableStructure2D<Double>, p: MutableStructure2D<Double>, exampleNumber: Int)
         : MutableStructure2D<Double>
 {
-    return func(t, p, settings)
+    return func(t, p, exampleNumber)
 }
 
-public fun lm_matx(func: (MutableStructure2D<Double>, MutableStructure2D<Double>, LMSettings) -> MutableStructure2D<Double>,
+private fun lm_matx(func: (MutableStructure2D<Double>, MutableStructure2D<Double>, Int) -> MutableStructure2D<Double>,
                    t: MutableStructure2D<Double>, p_old: MutableStructure2D<Double>, y_old: MutableStructure2D<Double>,
                    dX2: Int, J_input: MutableStructure2D<Double>, p: MutableStructure2D<Double>,
                    y_dat: MutableStructure2D<Double>, weight: MutableStructure2D<Double>, dp:MutableStructure2D<Double>, settings:LMSettings) : Array<MutableStructure2D<Double>>
@@ -492,8 +497,8 @@ public fun lm_matx(func: (MutableStructure2D<Double>, MutableStructure2D<Double>
     val Npnt = length(y_dat)               // number of data points
     val Npar = length(p)                   // number of parameters
 
-    val y_hat = feval(func, t, p, settings)          // evaluate model using parameters 'p'
-    settings.func_calls += 1
+    val y_hat = feval(func, t, p, settings.exampleNumber)          // evaluate model using parameters 'p'
+    settings.funcCalls += 1
 
     var J = J_input
 
@@ -513,7 +518,7 @@ public fun lm_matx(func: (MutableStructure2D<Double>, MutableStructure2D<Double>
     return arrayOf(JtWJ,JtWdy,Chi_sq,y_hat,J)
 }
 
-public fun lm_Broyden_J(p_old: MutableStructure2D<Double>, y_old: MutableStructure2D<Double>, J_input: MutableStructure2D<Double>,
+private fun lm_Broyden_J(p_old: MutableStructure2D<Double>, y_old: MutableStructure2D<Double>, J_input: MutableStructure2D<Double>,
                         p: MutableStructure2D<Double>, y: MutableStructure2D<Double>): MutableStructure2D<Double> {
     var J = J_input.copyToTensor()
 
@@ -524,7 +529,7 @@ public fun lm_Broyden_J(p_old: MutableStructure2D<Double>, y_old: MutableStructu
     return J.as2D()
 }
 
-public fun lm_FD_J(func: (MutableStructure2D<Double>, MutableStructure2D<Double>, settings: LMSettings) -> MutableStructure2D<Double>,
+private fun lm_FD_J(func: (MutableStructure2D<Double>, MutableStructure2D<Double>, exampleNumber: Int) -> MutableStructure2D<Double>,
                    t: MutableStructure2D<Double>, p: MutableStructure2D<Double>, y: MutableStructure2D<Double>,
                    dp: MutableStructure2D<Double>, settings: LMSettings): MutableStructure2D<Double> {
     // default: dp = 0.001 * ones(1,n)
@@ -543,8 +548,8 @@ public fun lm_FD_J(func: (MutableStructure2D<Double>, MutableStructure2D<Double>
 
         val epsilon = 0.0000001
         if (kotlin.math.abs(del[j, 0]) > epsilon) {
-            val y1 = feval(func, t, p, settings)
-            settings.func_calls += 1
+            val y1 = feval(func, t, p, settings.exampleNumber)
+            settings.funcCalls += 1
 
             if (dp[j, 0] < 0) { // backwards difference
                 for (i in 0 until J.shape.component1()) {
@@ -556,9 +561,9 @@ public fun lm_FD_J(func: (MutableStructure2D<Double>, MutableStructure2D<Double>
                 println("Potential mistake")
                 p[j, 0] = ps[j, 0] - del[j, 0] // central difference, additional func call
                 for (i in 0 until J.shape.component1()) {
-                    J[i, j] = (y1.as2D().minus(feval(func, t, p, settings)).as2D())[i, 0] / (2 * del[j, 0])
+                    J[i, j] = (y1.as2D().minus(feval(func, t, p, settings.exampleNumber)).as2D())[i, 0] / (2 * del[j, 0])
                 }
-                settings.func_calls += 1
+                settings.funcCalls += 1
             }
         }
 

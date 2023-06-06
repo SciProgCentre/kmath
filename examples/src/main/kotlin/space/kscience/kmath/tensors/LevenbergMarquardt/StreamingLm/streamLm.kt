@@ -11,12 +11,11 @@ import space.kscience.kmath.nd.*
 import space.kscience.kmath.tensors.LevenbergMarquardt.StartDataLm
 import space.kscience.kmath.tensors.core.BroadcastDoubleTensorAlgebra.zeros
 import space.kscience.kmath.tensors.core.DoubleTensorAlgebra
-import space.kscience.kmath.tensors.core.LMSettings
 import space.kscience.kmath.tensors.core.lm
 import kotlin.random.Random
 import kotlin.reflect.KFunction3
 
-fun streamLm(lm_func: KFunction3<MutableStructure2D<Double>, MutableStructure2D<Double>, LMSettings, MutableStructure2D<Double>>,
+fun streamLm(lm_func: KFunction3<MutableStructure2D<Double>, MutableStructure2D<Double>, Int, MutableStructure2D<Double>>,
              startData: StartDataLm, launchFrequencyInMs: Long, numberOfLaunches: Int): Flow<MutableStructure2D<Double>> = flow{
 
     var example_number = startData.example_number
@@ -48,9 +47,9 @@ fun streamLm(lm_func: KFunction3<MutableStructure2D<Double>, MutableStructure2D<
             10,
             example_number
         )
-        emit(result.result_parameters)
+        emit(result.resultParameters)
         delay(launchFrequencyInMs)
-        p_init = result.result_parameters
+        p_init = result.resultParameters
         y_dat = generateNewYDat(y_dat, 0.1)
         if (!isEndless) steps -= 1
     }

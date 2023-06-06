@@ -12,8 +12,6 @@ import space.kscience.kmath.tensors.LevenbergMarquardt.funcMiddleForLm
 import space.kscience.kmath.tensors.core.BroadcastDoubleTensorAlgebra
 import space.kscience.kmath.tensors.core.BroadcastDoubleTensorAlgebra.div
 import space.kscience.kmath.tensors.core.DoubleTensorAlgebra
-import space.kscience.kmath.tensors.core.DoubleTensorAlgebra.Companion.times
-import space.kscience.kmath.tensors.core.LMSettings
 import space.kscience.kmath.tensors.core.lm
 import kotlin.math.roundToInt
 fun main() {
@@ -29,16 +27,15 @@ fun main() {
         p_example[i, 0] = p_example[i, 0] + i - 25
     }
 
-    val settings = LMSettings(0, 0, 1)
+    val exampleNumber = 1
 
-    var y_hat =  funcMiddleForLm(t_example, p_example, settings)
+    var y_hat =  funcMiddleForLm(t_example, p_example, exampleNumber)
 
     var p_init = DoubleTensorAlgebra.zeros(ShapeND(intArrayOf(Nparams, 1))).as2D()
     for (i in 0 until Nparams) {
         p_init[i, 0] = (p_example[i, 0] + 0.9)
     }
-//    val p_init = DoubleTensorAlgebra.ones(ShapeND(intArrayOf(Nparams, 1)))
-//    val p_init = p_example
+
     var t = t_example
     val y_dat = y_hat
     val weight = BroadcastDoubleTensorAlgebra.fromArray(
@@ -54,7 +51,7 @@ fun main() {
     val consts = BroadcastDoubleTensorAlgebra.fromArray(
         ShapeND(intArrayOf(1, 1)), doubleArrayOf(0.0)
     ).as2D()
-    val opts = doubleArrayOf(3.0, 10000.0, 1e-3, 1e-3, 1e-3, 1e-3, 1e-15, 11.0, 9.0, 1.0)
+    val opts = doubleArrayOf(3.0, 7000.0, 1e-5, 1e-5, 1e-5, 1e-5, 1e-5, 11.0, 9.0, 1.0)
 
     val result = DoubleTensorAlgebra.lm(
         ::funcMiddleForLm,
@@ -72,14 +69,14 @@ fun main() {
     )
 
     println("Parameters:")
-    for (i in 0 until result.result_parameters.shape.component1()) {
-        val x = (result.result_parameters[i, 0] * 10000).roundToInt() / 10000.0
+    for (i in 0 until result.resultParameters.shape.component1()) {
+        val x = (result.resultParameters[i, 0] * 10000).roundToInt() / 10000.0
         print("$x ")
     }
     println()
 
 
-    var y_hat_after =  funcMiddleForLm(t_example, result.result_parameters, settings)
+    var y_hat_after =  funcMiddleForLm(t_example, result.resultParameters, exampleNumber)
     for (i in 0 until y_hat.shape.component1()) {
         val x = (y_hat[i, 0] * 10000).roundToInt() / 10000.0
         val y = (y_hat_after[i, 0] * 10000).roundToInt() / 10000.0
@@ -87,7 +84,7 @@ fun main() {
     }
 
     println("Сhi_sq:")
-    println(result.result_chi_sq)
+    println(result.resultChiSq)
     println("Number of iterations:")
     println(result.iterations)
 }

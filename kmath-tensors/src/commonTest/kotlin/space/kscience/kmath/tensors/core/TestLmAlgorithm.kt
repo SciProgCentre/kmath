@@ -20,23 +20,23 @@ import kotlin.test.assertEquals
 
 class TestLmAlgorithm {
     companion object {
-        fun funcEasyForLm(t: MutableStructure2D<Double>, p: MutableStructure2D<Double>, settings: LMSettings): MutableStructure2D<Double> {
+        fun funcEasyForLm(t: MutableStructure2D<Double>, p: MutableStructure2D<Double>, exampleNumber: Int): MutableStructure2D<Double> {
             val m = t.shape.component1()
             var y_hat = DoubleTensorAlgebra.zeros(ShapeND(intArrayOf(m, 1)))
 
-            if (settings.example_number == 1) {
+            if (exampleNumber == 1) {
                 y_hat = DoubleTensorAlgebra.exp((t.times(-1.0 / p[1, 0]))).times(p[0, 0]) + t.times(p[2, 0]).times(
                     DoubleTensorAlgebra.exp((t.times(-1.0 / p[3, 0])))
                 )
             }
-            else if (settings.example_number == 2) {
+            else if (exampleNumber == 2) {
                 val mt = t.max()
                 y_hat = (t.times(1.0 / mt)).times(p[0, 0]) +
                         (t.times(1.0 / mt)).pow(2).times(p[1, 0]) +
                         (t.times(1.0 / mt)).pow(3).times(p[2, 0]) +
                         (t.times(1.0 / mt)).pow(4).times(p[3, 0])
             }
-            else if (settings.example_number == 3) {
+            else if (exampleNumber == 3) {
                 y_hat = DoubleTensorAlgebra.exp((t.times(-1.0 / p[1, 0])))
                     .times(p[0, 0]) + DoubleTensorAlgebra.sin((t.times(1.0 / p[3, 0]))).times(p[2, 0])
             }
@@ -44,7 +44,7 @@ class TestLmAlgorithm {
             return y_hat.as2D()
         }
 
-        fun funcMiddleForLm(t: MutableStructure2D<Double>, p: MutableStructure2D<Double>, settings: LMSettings): MutableStructure2D<Double> {
+        fun funcMiddleForLm(t: MutableStructure2D<Double>, p: MutableStructure2D<Double>, exampleNumber: Int): MutableStructure2D<Double> {
             val m = t.shape.component1()
             var y_hat = DoubleTensorAlgebra.zeros(ShapeND(intArrayOf (m, 1)))
 
@@ -54,13 +54,13 @@ class TestLmAlgorithm {
             }
 
             for(i in 0 until 5){
-                y_hat = funcEasyForLm(y_hat.as2D(), p, settings).asDoubleTensor()
+                y_hat = funcEasyForLm(y_hat.as2D(), p, exampleNumber).asDoubleTensor()
             }
 
             return y_hat.as2D()
         }
 
-        fun funcDifficultForLm(t: MutableStructure2D<Double>, p: MutableStructure2D<Double>, settings: LMSettings): MutableStructure2D<Double> {
+        fun funcDifficultForLm(t: MutableStructure2D<Double>, p: MutableStructure2D<Double>, exampleNumber: Int): MutableStructure2D<Double> {
             val m = t.shape.component1()
             var y_hat = DoubleTensorAlgebra.zeros(ShapeND(intArrayOf (m, 1)))
 
@@ -70,12 +70,11 @@ class TestLmAlgorithm {
             }
 
             for(i in 0 until 4){
-                y_hat = funcEasyForLm((y_hat.as2D() + t).as2D(), p, settings).asDoubleTensor()
+                y_hat = funcEasyForLm((y_hat.as2D() + t).as2D(), p, exampleNumber).asDoubleTensor()
             }
 
             return y_hat.as2D()
         }
-
     }
     @Test
     fun testLMEasy() = DoubleTensorAlgebra {
@@ -130,18 +129,17 @@ class TestLmAlgorithm {
 
         val result = lm(::funcEasyForLm, p_init, t, y_dat, weight, dp, p_min, p_max, consts, opts, 10, example_number)
         assertEquals(13, result.iterations)
-        assertEquals(31, result.func_calls)
-        assertEquals(1, result.example_number)
-        assertEquals(0.9131368192633, (result.result_chi_sq * 1e13).roundToLong() / 1e13)
-        assertEquals(3.7790980 * 1e-7, (result.result_lambda * 1e13).roundToLong() / 1e13)
+        assertEquals(31, result.funcCalls)
+        assertEquals(0.9131368192633, (result.resultChiSq * 1e13).roundToLong() / 1e13)
+        assertEquals(3.7790980 * 1e-7, (result.resultLambda * 1e13).roundToLong() / 1e13)
         assertEquals(result.typeOfConvergence, TypeOfConvergence.InParameters)
         val expectedParameters = BroadcastDoubleTensorAlgebra.fromArray(
             ShapeND(intArrayOf(4, 1)), doubleArrayOf(20.527230909086, 9.833627103230, 0.997571256572, 50.174445822506)
         ).as2D()
-        result.result_parameters = result.result_parameters.map { x -> (x * 1e12).toLong() / 1e12}.as2D()
+        result.resultParameters = result.resultParameters.map { x -> (x * 1e12).toLong() / 1e12}.as2D()
         val receivedParameters = BroadcastDoubleTensorAlgebra.fromArray(
-            ShapeND(intArrayOf(4, 1)), doubleArrayOf(result.result_parameters[0, 0], result.result_parameters[1, 0],
-                result.result_parameters[2, 0], result.result_parameters[3, 0])
+            ShapeND(intArrayOf(4, 1)), doubleArrayOf(result.resultParameters[0, 0], result.resultParameters[1, 0],
+                result.resultParameters[2, 0], result.resultParameters[3, 0])
         ).as2D()
         assertEquals(expectedParameters[0, 0], receivedParameters[0, 0])
         assertEquals(expectedParameters[1, 0], receivedParameters[1, 0])
@@ -163,9 +161,9 @@ class TestLmAlgorithm {
             p_example[i, 0] = p_example[i, 0] + i - 25
         }
 
-        val settings = LMSettings(0, 0, 1)
+        val exampleNumber = 1
 
-        var y_hat =  funcMiddleForLm(t_example, p_example, settings)
+        var y_hat =  funcMiddleForLm(t_example, p_example, exampleNumber)
 
         var p_init = DoubleTensorAlgebra.zeros(ShapeND(intArrayOf(Nparams, 1))).as2D()
         for (i in 0 until Nparams) {
@@ -219,9 +217,9 @@ class TestLmAlgorithm {
             p_example[i, 0] = p_example[i, 0] + i - 25
         }
 
-        val settings = LMSettings(0, 0, 1)
+        val exampleNumber = 1
 
-        var y_hat =  funcDifficultForLm(t_example, p_example, settings)
+        var y_hat =  funcDifficultForLm(t_example, p_example, exampleNumber)
 
         var p_init = DoubleTensorAlgebra.zeros(ShapeND(intArrayOf(Nparams, 1))).as2D()
         for (i in 0 until Nparams) {

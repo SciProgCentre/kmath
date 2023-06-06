@@ -12,7 +12,6 @@ import space.kscience.kmath.tensors.LevenbergMarquardt.funcDifficultForLm
 import space.kscience.kmath.tensors.LevenbergMarquardt.funcEasyForLm
 import space.kscience.kmath.tensors.LevenbergMarquardt.getStartDataForFuncEasy
 import space.kscience.kmath.tensors.core.DoubleTensorAlgebra
-import space.kscience.kmath.tensors.core.LMSettings
 import space.kscience.kmath.tensors.core.lm
 import kotlin.math.roundToInt
 
@@ -35,14 +34,14 @@ fun main() {
     )
 
     println("Parameters:")
-    for (i in 0 until result.result_parameters.shape.component1()) {
-        val x = (result.result_parameters[i, 0] * 10000).roundToInt() / 10000.0
+    for (i in 0 until result.resultParameters.shape.component1()) {
+        val x = (result.resultParameters[i, 0] * 10000).roundToInt() / 10000.0
         print("$x ")
     }
     println()
 
     println("Y true and y received:")
-    var y_hat_after =  funcDifficultForLm(startedData.t, result.result_parameters, LMSettings(0, 0, startedData.example_number))
+    var y_hat_after =  funcDifficultForLm(startedData.t, result.resultParameters, startedData.example_number)
     for (i in 0 until startedData.y_dat.shape.component1()) {
         val x = (startedData.y_dat[i, 0] * 10000).roundToInt() / 10000.0
         val y = (y_hat_after[i, 0] * 10000).roundToInt() / 10000.0
@@ -50,7 +49,7 @@ fun main() {
     }
 
     println("Сhi_sq:")
-    println(result.result_chi_sq)
+    println(result.resultChiSq)
     println("Number of iterations:")
     println(result.iterations)
 }
