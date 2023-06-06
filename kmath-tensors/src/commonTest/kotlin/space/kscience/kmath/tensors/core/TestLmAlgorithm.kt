@@ -10,7 +10,6 @@ import space.kscience.kmath.nd.ShapeND
 import space.kscience.kmath.nd.as2D
 import space.kscience.kmath.nd.component1
 import space.kscience.kmath.operations.invoke
-import space.kscience.kmath.tensors.api.LinearOpsTensorAlgebra
 import space.kscience.kmath.tensors.core.DoubleTensorAlgebra.Companion.max
 import space.kscience.kmath.tensors.core.DoubleTensorAlgebra.Companion.plus
 import space.kscience.kmath.tensors.core.DoubleTensorAlgebra.Companion.pow
@@ -135,7 +134,7 @@ class TestLmAlgorithm {
         assertEquals(1, result.example_number)
         assertEquals(0.9131368192633, (result.result_chi_sq * 1e13).roundToLong() / 1e13)
         assertEquals(3.7790980 * 1e-7, (result.result_lambda * 1e13).roundToLong() / 1e13)
-        assertEquals(result.typeOfConvergence, LinearOpsTensorAlgebra.TypeOfConvergence.inParameters)
+        assertEquals(result.typeOfConvergence, TypeOfConvergence.inParameters)
         val expectedParameters = BroadcastDoubleTensorAlgebra.fromArray(
             ShapeND(intArrayOf(4, 1)), doubleArrayOf(20.527230909086, 9.833627103230, 0.997571256572, 50.174445822506)
         ).as2D()
