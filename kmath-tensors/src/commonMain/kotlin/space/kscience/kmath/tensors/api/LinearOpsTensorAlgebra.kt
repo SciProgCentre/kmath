@@ -111,22 +111,4 @@ public interface LinearOpsTensorAlgebra<T, A : Field<T>> : TensorPartialDivision
      * @return the square matrix x which is the solution of the equation.
      */
     public fun solve(a: MutableStructure2D<Double>, b: MutableStructure2D<Double>): MutableStructure2D<Double>
-
-    public enum class TypeOfConvergence{
-        inRHS_JtWdy,
-        inParameters,
-        inReducedChi_square,
-        noConvergence
-    }
-
-    public data class LMResultInfo (
-        var iterations:Int,
-        var func_calls: Int,
-        var example_number: Int,
-        var result_chi_sq: Double,
-        var result_lambda: Double,
-        var result_parameters: MutableStructure2D<Double>,
-        var typeOfConvergence: TypeOfConvergence,
-        var epsilon: Double
-    )
 }

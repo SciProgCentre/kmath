@@ -19,14 +19,32 @@ import kotlin.math.min
 import kotlin.math.pow
 import kotlin.reflect.KFunction3
 
+public enum class TypeOfConvergence{
+    inRHS_JtWdy,
+    inParameters,
+    inReducedChi_square,
+    noConvergence
+}
+
+public data class LMResultInfo (
+    var iterations:Int,
+    var func_calls: Int,
+    var example_number: Int,
+    var result_chi_sq: Double,
+    var result_lambda: Double,
+    var result_parameters: MutableStructure2D<Double>,
+    var typeOfConvergence: TypeOfConvergence,
+    var epsilon: Double
+)
+
 public fun DoubleTensorAlgebra.lm(
     func: KFunction3<MutableStructure2D<Double>, MutableStructure2D<Double>, LMSettings, MutableStructure2D<Double>>,
     p_input: MutableStructure2D<Double>, t_input: MutableStructure2D<Double>, y_dat_input: MutableStructure2D<Double>,
     weight_input: MutableStructure2D<Double>, dp_input: MutableStructure2D<Double>, p_min_input: MutableStructure2D<Double>, p_max_input: MutableStructure2D<Double>,
-    c_input: MutableStructure2D<Double>, opts_input: DoubleArray, nargin: Int, example_number: Int): LinearOpsTensorAlgebra.LMResultInfo {
+    c_input: MutableStructure2D<Double>, opts_input: DoubleArray, nargin: Int, example_number: Int): LMResultInfo {
 
-    val resultInfo = LinearOpsTensorAlgebra.LMResultInfo(0, 0, example_number, 0.0,
-        0.0, p_input, LinearOpsTensorAlgebra.TypeOfConvergence.noConvergence, 0.0)
+    val resultInfo = LMResultInfo(0, 0, example_number, 0.0,
+        0.0, p_input, TypeOfConvergence.noConvergence, 0.0)
 
     val eps:Double = 2.2204e-16
 
@@ -303,27 +321,27 @@ public fun DoubleTensorAlgebra.lm(
         if (abs(JtWdy).max()!! < epsilon_1 && settings.iteration > 2) {
 //                println(" **** Convergence in r.h.s. (\"JtWdy\")  ****")
 //                println(" **** epsilon_1 = $epsilon_1")
-            resultInfo.typeOfConvergence = LinearOpsTensorAlgebra.TypeOfConvergence.inRHS_JtWdy
+            resultInfo.typeOfConvergence = TypeOfConvergence.inRHS_JtWdy
             resultInfo.epsilon = epsilon_1
             stop = true
         }
         if ((abs(h.as2D()).div(abs(p) + 1e-12)).max() < epsilon_2  &&  settings.iteration > 2) {
 //                println(" **** Convergence in Parameters ****")
 //                println(" **** epsilon_2 = $epsilon_2")
-            resultInfo.typeOfConvergence = LinearOpsTensorAlgebra.TypeOfConvergence.inParameters
+            resultInfo.typeOfConvergence = TypeOfConvergence.inParameters
             resultInfo.epsilon = epsilon_2
             stop = true
         }
         if (X2 / DoF < epsilon_3 && settings.iteration > 2) {
 //                println(" **** Convergence in reduced Chi-square  **** ")
 //                println(" **** epsilon_3 = $epsilon_3")
-            resultInfo.typeOfConvergence = LinearOpsTensorAlgebra.TypeOfConvergence.inReducedChi_square
+            resultInfo.typeOfConvergence = TypeOfConvergence.inReducedChi_square
             resultInfo.epsilon = epsilon_3
             stop = true
         }
         if (settings.iteration == MaxIter) {
 //                println(" !! Maximum Number of Iterations Reached Without Convergence !!")
-            resultInfo.typeOfConvergence = LinearOpsTensorAlgebra.TypeOfConvergence.noConvergence
+            resultInfo.typeOfConvergence = TypeOfConvergence.noConvergence
             resultInfo.epsilon = 0.0
             stop = true
         }
