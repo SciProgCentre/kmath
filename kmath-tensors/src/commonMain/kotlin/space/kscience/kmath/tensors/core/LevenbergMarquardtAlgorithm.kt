@@ -7,7 +7,6 @@ package space.kscience.kmath.tensors.core
 
 import space.kscience.kmath.linear.transpose
 import space.kscience.kmath.nd.*
-import space.kscience.kmath.tensors.api.LinearOpsTensorAlgebra
 import space.kscience.kmath.tensors.core.BroadcastDoubleTensorAlgebra.div
 import space.kscience.kmath.tensors.core.BroadcastDoubleTensorAlgebra.dot
 import space.kscience.kmath.tensors.core.BroadcastDoubleTensorAlgebra.minus
@@ -19,11 +18,26 @@ import kotlin.math.min
 import kotlin.math.pow
 import kotlin.reflect.KFunction3
 
+/**
+ * Type of convergence achieved as a result of executing the Levenberg-Marquardt algorithm
+ *
+ * InGradient: gradient convergence achieved
+ *            (max(J^T W dy) < epsilon1 = opts[2],
+ *            where J - Jacobi matrix (dy^/dp) for the current approximation y^,
+ *            W - weight matrix from input, dy = (y - y^(p)))
+ * InParameters: convergence in parameters achieved
+ *            (max(h_i / p_i) < epsilon2 = opts[3],
+ *            where h_i - offset for parameter p_i on the current iteration)
+ * InReducedChiSquare: chi-squared convergence achieved
+ *            (chi squared value divided by (m - n + 1) < epsilon2 = opts[4],
+ *            where n - number of parameters, m - amount of points
+ * NoConvergence: the maximum number of iterations has been reached without reaching convergence
+ */
 public enum class TypeOfConvergence{
-    inRHS_JtWdy,
-    inParameters,
-    inReducedChi_square,
-    noConvergence
+    InGradient,
+    InParameters,
+    InReducedChiSquare,
+    NoConvergence
 }
 
 public data class LMResultInfo (
@@ -37,6 +51,12 @@ public data class LMResultInfo (
     var epsilon: Double
 )
 
+public data class LMSettings (
+    var iteration:Int,
+    var func_calls: Int,
+    var example_number:Int
+)
+
 public fun DoubleTensorAlgebra.lm(
     func: KFunction3<MutableStructure2D<Double>, MutableStructure2D<Double>, LMSettings, MutableStructure2D<Double>>,
     p_input: MutableStructure2D<Double>, t_input: MutableStructure2D<Double>, y_dat_input: MutableStructure2D<Double>,
@@ -44,7 +64,7 @@ public fun DoubleTensorAlgebra.lm(
     c_input: MutableStructure2D<Double>, opts_input: DoubleArray, nargin: Int, example_number: Int): LMResultInfo {
 
     val resultInfo = LMResultInfo(0, 0, example_number, 0.0,
-        0.0, p_input, TypeOfConvergence.noConvergence, 0.0)
+        0.0, p_input, TypeOfConvergence.NoConvergence, 0.0)
 
     val eps:Double = 2.2204e-16
 
@@ -299,15 +319,6 @@ public fun DoubleTensorAlgebra.lm(
 
         if (prnt > 1) {
             val chi_sq = X2 / DoF
-//                println("Iteration $settings | chi_sq=$chi_sq | lambda=$lambda")
-//                print("param: ")
-//                for (pn in 0 until Npar) {
-//                    print(p[pn, 0].toString() + " ")
-//                }
-//                print("\ndp/p: ")
-//                for (pn in 0 until Npar) {
-//                    print((h.as2D()[pn, 0] / p[pn, 0]).toString() + " ")
-//                }
             resultInfo.iterations = settings.iteration
             resultInfo.func_calls = settings.func_calls
             resultInfo.result_chi_sq = chi_sq
@@ -319,41 +330,28 @@ public fun DoubleTensorAlgebra.lm(
         // cvg_hst(iteration,:) = [ func_calls  p'  X2/DoF lambda ];
 
         if (abs(JtWdy).max()!! < epsilon_1 && settings.iteration > 2) {
-//                println(" **** Convergence in r.h.s. (\"JtWdy\")  ****")
-//                println(" **** epsilon_1 = $epsilon_1")
-            resultInfo.typeOfConvergence = TypeOfConvergence.inRHS_JtWdy
+            resultInfo.typeOfConvergence = TypeOfConvergence.InGradient
             resultInfo.epsilon = epsilon_1
             stop = true
         }
         if ((abs(h.as2D()).div(abs(p) + 1e-12)).max() < epsilon_2  &&  settings.iteration > 2) {
-//                println(" **** Convergence in Parameters ****")
-//                println(" **** epsilon_2 = $epsilon_2")
-            resultInfo.typeOfConvergence = TypeOfConvergence.inParameters
+            resultInfo.typeOfConvergence = TypeOfConvergence.InParameters
             resultInfo.epsilon = epsilon_2
             stop = true
         }
         if (X2 / DoF < epsilon_3 && settings.iteration > 2) {
-//                println(" **** Convergence in reduced Chi-square  **** ")
-//                println(" **** epsilon_3 = $epsilon_3")
-            resultInfo.typeOfConvergence = TypeOfConvergence.inReducedChi_square
+            resultInfo.typeOfConvergence = TypeOfConvergence.InReducedChiSquare
             resultInfo.epsilon = epsilon_3
             stop = true
         }
         if (settings.iteration == MaxIter) {
-//                println(" !! Maximum Number of Iterations Reached Without Convergence !!")
-            resultInfo.typeOfConvergence = TypeOfConvergence.noConvergence
+            resultInfo.typeOfConvergence = TypeOfConvergence.NoConvergence
             resultInfo.epsilon = 0.0
             stop = true
         }
-    }  // --- End of Main Loop
+    }
     return resultInfo
 }
-
-public data class LMSettings (
-    var iteration:Int,
-    var func_calls: Int,
-    var example_number:Int
-)
 
 /* matrix -> column of all elemnets */
 public fun make_column(tensor: MutableStructure2D<Double>) : MutableStructure2D<Double> {
@@ -564,7 +562,7 @@ public fun lm_FD_J(func: (MutableStructure2D<Double>, MutableStructure2D<Double>
             }
         }
 
-        p[j, 0] = ps[j, 0] // restore p(j)
+        p[j, 0] = ps[j, 0]
     }
 
     return J.as2D()
