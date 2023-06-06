@@ -12,7 +12,8 @@ import space.kscience.kmath.tensors.LevenbergMarquardt.funcDifficultForLm
 import space.kscience.kmath.tensors.core.BroadcastDoubleTensorAlgebra
 import space.kscience.kmath.tensors.core.BroadcastDoubleTensorAlgebra.div
 import space.kscience.kmath.tensors.core.DoubleTensorAlgebra
-import space.kscience.kmath.tensors.core.internal.LMSettings
+import space.kscience.kmath.tensors.core.LMSettings
+import space.kscience.kmath.tensors.core.lm
 import kotlin.math.roundToInt
 
 fun main() {

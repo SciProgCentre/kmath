@@ -16,9 +16,8 @@ import space.kscience.kmath.tensors.core.DoubleTensorAlgebra.Companion.max
 import space.kscience.kmath.tensors.core.DoubleTensorAlgebra.Companion.plus
 import space.kscience.kmath.tensors.core.DoubleTensorAlgebra.Companion.pow
 import space.kscience.kmath.tensors.core.DoubleTensorAlgebra.Companion.times
+import space.kscience.kmath.tensors.core.LMSettings
 import space.kscience.kmath.tensors.core.asDoubleTensor
-import space.kscience.kmath.tensors.core.internal.LMSettings
-import kotlin.math.roundToInt
 
 public data class StartDataLm (
     var lm_matx_y_dat: MutableStructure2D<Double>,

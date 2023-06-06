@@ -11,7 +11,8 @@ import space.kscience.kmath.nd.*
 import space.kscience.kmath.tensors.LevenbergMarquardt.StartDataLm
 import space.kscience.kmath.tensors.core.BroadcastDoubleTensorAlgebra.zeros
 import space.kscience.kmath.tensors.core.DoubleTensorAlgebra
-import space.kscience.kmath.tensors.core.internal.LMSettings
+import space.kscience.kmath.tensors.core.LMSettings
+import space.kscience.kmath.tensors.core.lm
 import kotlin.random.Random
 import kotlin.reflect.KFunction3
 
