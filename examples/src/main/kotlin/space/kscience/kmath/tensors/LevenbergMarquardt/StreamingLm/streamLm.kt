@@ -16,7 +16,7 @@ import space.kscience.kmath.tensors.core.levenbergMarquardt
 import kotlin.random.Random
 import kotlin.reflect.KFunction3
 
-fun streamLm(lm_func: KFunction3<MutableStructure2D<Double>, MutableStructure2D<Double>, Int, MutableStructure2D<Double>>,
+fun streamLm(lm_func: (MutableStructure2D<Double>, MutableStructure2D<Double>, Int) -> (MutableStructure2D<Double>),
              startData: StartDataLm, launchFrequencyInMs: Long, numberOfLaunches: Int): Flow<MutableStructure2D<Double>> = flow{
 
     var example_number = startData.example_number

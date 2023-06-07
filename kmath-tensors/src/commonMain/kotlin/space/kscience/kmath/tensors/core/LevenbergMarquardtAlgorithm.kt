@@ -88,7 +88,7 @@ public data class LMResultInfo (
  *  exampleNumber: a parameter for a function with which you can choose its behavior.
  */
 public data class LMInput (
-    var func: KFunction3<MutableStructure2D<Double>, MutableStructure2D<Double>, Int, MutableStructure2D<Double>>,
+    var func: (MutableStructure2D<Double>, MutableStructure2D<Double>, Int) -> (MutableStructure2D<Double>),
     var startParameters: MutableStructure2D<Double>,
     var independentVariables: MutableStructure2D<Double>,
     var realValues: MutableStructure2D<Double>,
