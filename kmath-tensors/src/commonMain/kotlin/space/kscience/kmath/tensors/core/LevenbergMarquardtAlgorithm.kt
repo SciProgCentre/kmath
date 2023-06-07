@@ -104,6 +104,21 @@ public data class LMInput (
     var exampleNumber: Int
 )
 
+
+/**
+ * Levenberg-Marquardt optimization.
+ *
+ * An optimization method that iteratively searches for the optimal function parameters
+ * that best describe the dataset. The 'input' is the function being optimized, a set of real data
+ * (calculated with independent variables, but with an unknown set of parameters), a set of
+ * independent variables, and variables for adjusting the algorithm, described in the documentation for the LMInput class.
+ * The function returns number of completed iterations, the number of evaluations of the input function during execution,
+ * chi squared value on final parameters, final lambda parameter used to calculate the offset, final parameters
+ * and type of convergence in the 'output'.
+ *
+ * @receiver the `input`.
+ * @return the 'output'.
+ */
 public fun DoubleTensorAlgebra.levenbergMarquardt(inputData: LMInput): LMResultInfo {
     val resultInfo = LMResultInfo(0, 0, 0.0,
         0.0, inputData.startParameters, TypeOfConvergence.NoConvergence)
