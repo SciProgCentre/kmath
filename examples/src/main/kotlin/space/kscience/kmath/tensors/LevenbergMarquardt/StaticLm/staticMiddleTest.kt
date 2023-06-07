@@ -12,7 +12,8 @@ import space.kscience.kmath.tensors.LevenbergMarquardt.funcMiddleForLm
 import space.kscience.kmath.tensors.core.BroadcastDoubleTensorAlgebra
 import space.kscience.kmath.tensors.core.BroadcastDoubleTensorAlgebra.div
 import space.kscience.kmath.tensors.core.DoubleTensorAlgebra
-import space.kscience.kmath.tensors.core.lm
+import space.kscience.kmath.tensors.core.LMInput
+import space.kscience.kmath.tensors.core.levenbergMarquardt
 import kotlin.math.roundToInt
 fun main() {
     val NData = 100
@@ -38,9 +39,7 @@ fun main() {
 
     var t = t_example
     val y_dat = y_hat
-    val weight = BroadcastDoubleTensorAlgebra.fromArray(
-        ShapeND(intArrayOf(1, 1)), DoubleArray(1) { 1.0 }
-    ).as2D()
+    val weight = 1.0
     val dp = BroadcastDoubleTensorAlgebra.fromArray(
         ShapeND(intArrayOf(1, 1)), DoubleArray(1) { -0.01 }
     ).as2D()
@@ -50,8 +49,7 @@ fun main() {
     p_min = p_min.div(1.0 / 50.0)
     val opts = doubleArrayOf(3.0, 7000.0, 1e-5, 1e-5, 1e-5, 1e-5, 1e-5, 11.0, 9.0, 1.0)
 
-    val result = DoubleTensorAlgebra.lm(
-        ::funcMiddleForLm,
+    val inputData = LMInput(::funcMiddleForLm,
         p_init.as2D(),
         t,
         y_dat,
@@ -59,10 +57,14 @@ fun main() {
         dp,
         p_min.as2D(),
         p_max.as2D(),
-        opts,
+        opts[1].toInt(),
+        doubleArrayOf(opts[2], opts[3], opts[4], opts[5]),
+        doubleArrayOf(opts[6], opts[7], opts[8]),
+        opts[9].toInt(),
         10,
-        1
-    )
+        1)
+
+    val result = DoubleTensorAlgebra.levenbergMarquardt(inputData)
 
     println("Parameters:")
     for (i in 0 until result.resultParameters.shape.component1()) {

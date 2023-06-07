@@ -11,7 +11,8 @@ import space.kscience.kmath.nd.*
 import space.kscience.kmath.tensors.LevenbergMarquardt.StartDataLm
 import space.kscience.kmath.tensors.core.BroadcastDoubleTensorAlgebra.zeros
 import space.kscience.kmath.tensors.core.DoubleTensorAlgebra
-import space.kscience.kmath.tensors.core.lm
+import space.kscience.kmath.tensors.core.LMInput
+import space.kscience.kmath.tensors.core.levenbergMarquardt
 import kotlin.random.Random
 import kotlin.reflect.KFunction3
 
@@ -31,20 +32,23 @@ fun streamLm(lm_func: KFunction3<MutableStructure2D<Double>, MutableStructure2D<
     var steps = numberOfLaunches
     val isEndless = (steps <= 0)
 
+    val inputData = LMInput(lm_func,
+        p_init,
+        t,
+        y_dat,
+        weight,
+        dp,
+        p_min,
+        p_max,
+        opts[1].toInt(),
+        doubleArrayOf(opts[2], opts[3], opts[4], opts[5]),
+        doubleArrayOf(opts[6], opts[7], opts[8]),
+        opts[9].toInt(),
+        10,
+        example_number)
+
     while (isEndless || steps > 0) {
-        val result = DoubleTensorAlgebra.lm(
-            lm_func,
-            p_init,
-            t,
-            y_dat,
-            weight,
-            dp,
-            p_min,
-            p_max,
-            opts,
-            10,
-            example_number
-        )
+        val result = DoubleTensorAlgebra.levenbergMarquardt(inputData)
         emit(result.resultParameters)
         delay(launchFrequencyInMs)
         p_init = result.resultParameters

@@ -19,21 +19,21 @@ import kotlin.math.pow
 import kotlin.reflect.KFunction3
 
 /**
- * Type of convergence achieved as a result of executing the Levenberg-Marquardt algorithm
+ * Type of convergence achieved as a result of executing the Levenberg-Marquardt algorithm.
  *
  * InGradient: gradient convergence achieved
- *            (max(J^T W dy) < epsilon1 = opts[2],
+ *            (max(J^T W dy) < epsilon1,
  *            where J - Jacobi matrix (dy^/dp) for the current approximation y^,
- *            W - weight matrix from input, dy = (y - y^(p)))
+ *            W - weight matrix from input, dy = (y - y^(p))).
  * InParameters: convergence in parameters achieved
- *            (max(h_i / p_i) < epsilon2 = opts[3],
- *            where h_i - offset for parameter p_i on the current iteration)
+ *            (max(h_i / p_i) < epsilon2,
+ *            where h_i - offset for parameter p_i on the current iteration).
  * InReducedChiSquare: chi-squared convergence achieved
- *            (chi squared value divided by (m - n + 1) < epsilon2 = opts[4],
- *            where n - number of parameters, m - amount of points
- * NoConvergence: the maximum number of iterations has been reached without reaching any convergence
+ *            (chi squared value divided by (m - n + 1) < epsilon2,
+ *            where n - number of parameters, m - amount of points).
+ * NoConvergence: the maximum number of iterations has been reached without reaching any convergence.
  */
-public enum class TypeOfConvergence{
+public enum class TypeOfConvergence {
     InGradient,
     InParameters,
     InReducedChiSquare,
@@ -41,14 +41,14 @@ public enum class TypeOfConvergence{
 }
 
 /**
- * Class for the data obtained as a result of the execution of the Levenberg-Marquardt algorithm
+ * The data obtained as a result of the execution of the Levenberg-Marquardt algorithm.
  *
- *  iterations: number of completed iterations
- *  funcCalls: the number of evaluations of the input function during execution
- *  resultChiSq: chi squared value on final parameters
- *  resultLambda: final lambda parameter used to calculate the offset
- *  resultParameters: final parameters
- *  typeOfConvergence: type of convergence
+ *  iterations: number of completed iterations.
+ *  funcCalls: the number of evaluations of the input function during execution.
+ *  resultChiSq: chi squared value on final parameters.
+ *  resultLambda: final lambda parameter used to calculate the offset.
+ *  resultParameters: final parameters.
+ *  typeOfConvergence: type of convergence.
  */
 public data class LMResultInfo (
     var iterations:Int,
@@ -59,26 +59,65 @@ public data class LMResultInfo (
     var typeOfConvergence: TypeOfConvergence,
 )
 
-public fun DoubleTensorAlgebra.lm(
-    func: KFunction3<MutableStructure2D<Double>, MutableStructure2D<Double>, Int, MutableStructure2D<Double>>,
-    pInput: MutableStructure2D<Double>, tInput: MutableStructure2D<Double>, yDatInput: MutableStructure2D<Double>,
-    weightInput: MutableStructure2D<Double>, dpInput: MutableStructure2D<Double>, pMinInput: MutableStructure2D<Double>,
-    pMaxInput: MutableStructure2D<Double>, optsInput: DoubleArray, nargin: Int, exampleNumber: Int): LMResultInfo {
+/**
+ * Input data for the Levenberg-Marquardt function.
+ *
+ *  func: function of n independent variables x, m parameters an example number,
+ *        rotating a vector of n values y, in which each of the y_i is calculated at its x_i with the given parameters.
+ *  startParameters: starting parameters.
+ *  independentVariables: independent variables, for each of which the real value is known.
+ *  realValues: real values obtained with given independent variables but unknown parameters.
+ *  weight: measurement error for realValues (denominator in each term of sum of weighted squared errors).
+ *  pDelta: delta when calculating the derivative with respect to parameters.
+ *  minParameters: the lower bound of parameter values.
+ *  maxParameters: upper limit of parameter values.
+ *  maxIterations: maximum allowable number of iterations.
+ *  epsilons: epsilon1 - convergence tolerance for gradient,
+ *            epsilon2 - convergence tolerance for parameters,
+ *            epsilon3 - convergence tolerance for reduced chi-square,
+ *            epsilon4 - determines acceptance of a step.
+ *  lambdas: lambda0 - starting lambda value for parameter offset count,
+ *           lambdaUp - factor for increasing lambda,
+ *           lambdaDown - factor for decreasing lambda.
+ *  updateType: 1: Levenberg-Marquardt lambda update,
+ *              2: Quadratic update,
+ *              3: Nielsen's lambda update equations.
+ *  nargin: a value that determines which options to use by default
+ *         (<5 - use weight by default, <6 - use pDelta by default, <7 - use minParameters by default,
+ *          <8 - use maxParameters by default, <9 - use updateType by default).
+ *  exampleNumber: a parameter for a function with which you can choose its behavior.
+ */
+public data class LMInput (
+    var func: KFunction3<MutableStructure2D<Double>, MutableStructure2D<Double>, Int, MutableStructure2D<Double>>,
+    var startParameters: MutableStructure2D<Double>,
+    var independentVariables: MutableStructure2D<Double>,
+    var realValues: MutableStructure2D<Double>,
+    var weight: Double,
+    var pDelta: MutableStructure2D<Double>,
+    var minParameters: MutableStructure2D<Double>,
+    var maxParameters: MutableStructure2D<Double>,
+    var maxIterations: Int,
+    var epsilons: DoubleArray,
+    var lambdas: DoubleArray,
+    var updateType: Int,
+    var nargin: Int,
+    var exampleNumber: Int
+)
 
-
+public fun DoubleTensorAlgebra.levenbergMarquardt(inputData: LMInput): LMResultInfo {
     val resultInfo = LMResultInfo(0, 0, 0.0,
-        0.0, pInput, TypeOfConvergence.NoConvergence)
+        0.0, inputData.startParameters, TypeOfConvergence.NoConvergence)
 
     val eps = 2.2204e-16
 
-    val settings = LMSettings(0, 0, exampleNumber)
+    val settings = LMSettings(0, 0, inputData.exampleNumber)
     settings.funcCalls = 0 // running count of function evaluations
 
-    var p = pInput
-    val t = tInput
+    var p = inputData.startParameters
+    val t = inputData.independentVariables
 
     val Npar   = length(p)                                    // number of parameters
-    val Npnt   = length(yDatInput)                                // number of data points
+    val Npnt   = length(inputData.realValues)                                // number of data points
     var pOld = zeros(ShapeND(intArrayOf(Npar, 1))).as2D()    // previous set of parameters
     var yOld = zeros(ShapeND(intArrayOf(Npnt, 1))).as2D()    // previous model, y_old = y_hat(t;p_old)
     var X2 = 1e-3 / eps                                       // a really big initial Chi-sq value
@@ -86,50 +125,55 @@ public fun DoubleTensorAlgebra.lm(
     var J = zeros(ShapeND(intArrayOf(Npnt, Npar))).as2D()     // Jacobian matrix
     val DoF = Npnt - Npar                                     // statistical degrees of freedom
 
-    var weight = weightInput
-    if (nargin <  5) {
-        weight = fromArray(ShapeND(intArrayOf(1, 1)), doubleArrayOf((yDatInput.transpose().dot(yDatInput)).as1D()[0])).as2D()
+    var weight = fromArray(ShapeND(intArrayOf(1, 1)), doubleArrayOf(inputData.weight)).as2D()
+    if (inputData.nargin <  5) {
+        weight = fromArray(ShapeND(intArrayOf(1, 1)), doubleArrayOf((inputData.realValues.transpose().dot(inputData.realValues)).as1D()[0])).as2D()
     }
 
-    var dp = dpInput
-    if (nargin < 6) {
+    var dp = inputData.pDelta
+    if (inputData.nargin < 6) {
         dp = fromArray(ShapeND(intArrayOf(1, 1)), doubleArrayOf(0.001)).as2D()
     }
 
-    var pMin = pMinInput
-    if (nargin < 7) {
-        pMin = p
-        pMin.abs()
-        pMin = pMin.div(-100.0).as2D()
+    var minParameters = inputData.minParameters
+    if (inputData.nargin < 7) {
+        minParameters = p
+        minParameters.abs()
+        minParameters = minParameters.div(-100.0).as2D()
     }
 
-    var pMax = pMaxInput
-    if (nargin < 8) {
-        pMax = p
-        pMax.abs()
-        pMax = pMax.div(100.0).as2D()
+    var maxParameters = inputData.maxParameters
+    if (inputData.nargin < 8) {
+        maxParameters = p
+        maxParameters.abs()
+        maxParameters = maxParameters.div(100.0).as2D()
     }
 
-    var opts = optsInput
-    if (nargin < 10) {
-        opts = doubleArrayOf(3.0, 10.0 * Npar, 1e-3, 1e-3, 1e-1, 1e-1, 1e-2, 11.0, 9.0, 1.0)
+    var maxIterations = inputData.maxIterations
+    var epsilon1     = inputData.epsilons[0] // convergence tolerance for gradient
+    var epsilon2     = inputData.epsilons[1] // convergence tolerance for parameters
+    var epsilon3     = inputData.epsilons[2] // convergence tolerance for Chi-square
+    var epsilon4     = inputData.epsilons[3] // determines acceptance of a L-M step
+    var lambda0      = inputData.lambdas[0] // initial value of damping paramter, lambda
+    var lambdaUpFac  = inputData.lambdas[1] // factor for increasing lambda
+    var lambdaDnFac  = inputData.lambdas[2] // factor for decreasing lambda
+    var updateType   = inputData.updateType     // 1: Levenberg-Marquardt lambda update
+                                                // 2: Quadratic update
+                                                // 3: Nielsen's lambda update equations
+    if (inputData.nargin < 9) {
+        maxIterations = 10 * Npar
+        epsilon1 = 1e-3
+        epsilon2 = 1e-3
+        epsilon3 = 1e-1
+        epsilon4 = 1e-1
+        lambda0 = 1e-2
+        lambdaUpFac = 11.0
+        lambdaDnFac = 9.0
+        updateType = 1
     }
 
-    val prnt          = opts[0]                // >1 intermediate results; >2 plots
-    val maxIterations = opts[1].toInt()        // maximum number of iterations
-    val epsilon1     = opts[2]                // convergence tolerance for gradient
-    val epsilon2     = opts[3]                // convergence tolerance for parameters
-    val epsilon3     = opts[4]                // convergence tolerance for Chi-square
-    val epsilon4     = opts[5]                // determines acceptance of a L-M step
-    val lambda0      = opts[6]                // initial value of damping paramter, lambda
-    val lambdaUpFac  = opts[7]                // factor for increasing lambda
-    val lambdaDnFac  = opts[8]                // factor for decreasing lambda
-    val updateType   = opts[9].toInt()        // 1: Levenberg-Marquardt lambda update
-                                               // 2: Quadratic update
-                                               // 3: Nielsen's lambda update equations
-
-    pMin = makeColumn(pMin)
-    pMax = makeColumn(pMax)
+    minParameters = makeColumn(minParameters)
+    maxParameters = makeColumn(maxParameters)
 
     if (length(makeColumn(dp)) == 1) {
         dp = ones(ShapeND(intArrayOf(Npar, 1))).div(1 / dp[0, 0]).as2D()
@@ -146,7 +190,7 @@ public fun DoubleTensorAlgebra.lm(
     }
 
     // initialize Jacobian with finite difference calculation
-    var lmMatxAns = lmMatx(func, t, pOld, yOld, 1, J, p, yDatInput, weight, dp, settings)
+    var lmMatxAns = lmMatx(inputData.func, t, pOld, yOld, 1, J, p, inputData.realValues, weight, dp, settings)
     var JtWJ = lmMatxAns[0]
     var JtWdy = lmMatxAns[1]
     X2 = lmMatxAns[2][0, 0]
@@ -189,9 +233,9 @@ public fun DoubleTensorAlgebra.lm(
         }
 
         var pTry = (p + h).as2D()  // update the [idx] elements
-        pTry = smallestElementComparison(largestElementComparison(pMin, pTry.as2D()), pMax)  // apply constraints
+        pTry = smallestElementComparison(largestElementComparison(minParameters, pTry.as2D()), maxParameters)  // apply constraints
 
-        var deltaY = yDatInput.minus(evaluateFunction(func, t, pTry, exampleNumber))   // residual error using p_try
+        var deltaY = inputData.realValues.minus(evaluateFunction(inputData.func, t, pTry, inputData.exampleNumber))   // residual error using p_try
 
         for (i in 0 until deltaY.shape.component1()) {  // floating point error; break
             for (j in 0 until deltaY.shape.component2()) {
@@ -214,9 +258,9 @@ public fun DoubleTensorAlgebra.lm(
             val alpha = JtWdy.transpose().dot(h) / ((X2Try.minus(X2)).div(2.0).plus(2 * JtWdy.transpose().dot(h)))
             h = h.dot(alpha)
             pTry = p.plus(h).as2D() // update only [idx] elements
-            pTry = smallestElementComparison(largestElementComparison(pMin, pTry), pMax) // apply constraints
+            pTry = smallestElementComparison(largestElementComparison(minParameters, pTry), maxParameters) // apply constraints
 
-            deltaY = yDatInput.minus(evaluateFunction(func, t, pTry, exampleNumber))   // residual error using p_try
+            deltaY = inputData.realValues.minus(evaluateFunction(inputData.func, t, pTry, inputData.exampleNumber))   // residual error using p_try
             settings.funcCalls += 1
 
             X2Try = deltaY.as2D().transpose().dot(deltaY.times(weight))     // Chi-squared error criteria
@@ -242,7 +286,7 @@ public fun DoubleTensorAlgebra.lm(
             yOld = yHat.copyToTensor().as2D()
             p = makeColumn(pTry) // accept p_try
 
-            lmMatxAns = lmMatx(func, t, pOld, yOld, dX2.toInt(), J, p, yDatInput, weight, dp, settings)
+            lmMatxAns = lmMatx(inputData.func, t, pOld, yOld, dX2.toInt(), J, p, inputData.realValues, weight, dp, settings)
             // decrease lambda ==> Gauss-Newton method
 
             JtWJ = lmMatxAns[0]
@@ -268,7 +312,7 @@ public fun DoubleTensorAlgebra.lm(
         } else { // it IS NOT better
             X2 = X2Old // do not accept p_try
             if (settings.iteration % (2 * Npar) == 0) { // rank-1 update of Jacobian
-                lmMatxAns = lmMatx(func, t, pOld, yOld, -1, J, p, yDatInput, weight, dp, settings)
+                lmMatxAns = lmMatx(inputData.func, t, pOld, yOld, -1, J, p, inputData.realValues, weight, dp, settings)
                 JtWJ = lmMatxAns[0]
                 JtWdy = lmMatxAns[1]
                 yHat = lmMatxAns[3]
@@ -292,14 +336,13 @@ public fun DoubleTensorAlgebra.lm(
             }
         }
 
-        if (prnt > 1) {
-            val chiSq = X2 / DoF
-            resultInfo.iterations = settings.iteration
-            resultInfo.funcCalls = settings.funcCalls
-            resultInfo.resultChiSq = chiSq
-            resultInfo.resultLambda = lambda
-            resultInfo.resultParameters = p
-        }
+        val chiSq = X2 / DoF
+        resultInfo.iterations = settings.iteration
+        resultInfo.funcCalls = settings.funcCalls
+        resultInfo.resultChiSq = chiSq
+        resultInfo.resultLambda = lambda
+        resultInfo.resultParameters = p
+
 
         if (abs(JtWdy).max() < epsilon1 && settings.iteration > 2) {
             resultInfo.typeOfConvergence = TypeOfConvergence.InGradient

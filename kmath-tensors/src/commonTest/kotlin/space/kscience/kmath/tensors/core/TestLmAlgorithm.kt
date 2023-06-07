@@ -105,9 +105,7 @@ class TestLmAlgorithm {
             ShapeND(intArrayOf(100, 1)), lm_matx_y_dat
         ).as2D()
 
-        val weight = BroadcastDoubleTensorAlgebra.fromArray(
-            ShapeND(intArrayOf(1, 1)), DoubleArray(1) { 4.0 }
-        ).as2D()
+        val weight = 4.0
 
         val dp = BroadcastDoubleTensorAlgebra.fromArray(
             ShapeND(intArrayOf(1, 1)), DoubleArray(1) { -0.01 }
@@ -123,7 +121,12 @@ class TestLmAlgorithm {
 
         val opts = doubleArrayOf(3.0, 100.0, 1e-3, 1e-3, 1e-1, 1e-1, 1e-2, 11.0, 9.0, 1.0)
 
-        val result = lm(::funcEasyForLm, p_init, t, y_dat, weight, dp, p_min, p_max, opts, 10, example_number)
+        val inputData = LMInput(::funcEasyForLm, p_init, t, y_dat, weight, dp, p_min, p_max, opts[1].toInt(),
+            doubleArrayOf(opts[2], opts[3], opts[4], opts[5]),
+            doubleArrayOf(opts[6], opts[7], opts[8]),
+            opts[9].toInt(), 10, example_number)
+
+        val result = levenbergMarquardt(inputData)
         assertEquals(13, result.iterations)
         assertEquals(31, result.funcCalls)
         assertEquals(0.9131368192633, (result.resultChiSq * 1e13).roundToLong() / 1e13)
@@ -168,9 +171,7 @@ class TestLmAlgorithm {
 
         var t = t_example
         val y_dat = y_hat
-        val weight = BroadcastDoubleTensorAlgebra.fromArray(
-            ShapeND(intArrayOf(1, 1)), DoubleArray(1) { 1.0 }
-        ).as2D()
+        val weight = 1.0
         val dp = BroadcastDoubleTensorAlgebra.fromArray(
             ShapeND(intArrayOf(1, 1)), DoubleArray(1) { -0.01 }
         ).as2D()
@@ -180,8 +181,7 @@ class TestLmAlgorithm {
         p_min = p_min.div(1.0 / 50.0)
         val opts = doubleArrayOf(3.0, 7000.0, 1e-5, 1e-5, 1e-5, 1e-5, 1e-5, 11.0, 9.0, 1.0)
 
-        val result = DoubleTensorAlgebra.lm(
-            ::funcMiddleForLm,
+        val inputData = LMInput(::funcMiddleForLm,
             p_init.as2D(),
             t,
             y_dat,
@@ -189,10 +189,14 @@ class TestLmAlgorithm {
             dp,
             p_min.as2D(),
             p_max.as2D(),
-            opts,
+            opts[1].toInt(),
+            doubleArrayOf(opts[2], opts[3], opts[4], opts[5]),
+            doubleArrayOf(opts[6], opts[7], opts[8]),
+            opts[9].toInt(),
             10,
-            1
-        )
+            1)
+
+        val result = DoubleTensorAlgebra.levenbergMarquardt(inputData)
     }
 
     @Test
@@ -220,9 +224,7 @@ class TestLmAlgorithm {
 
         var t = t_example
         val y_dat = y_hat
-        val weight = BroadcastDoubleTensorAlgebra.fromArray(
-            ShapeND(intArrayOf(1, 1)), DoubleArray(1) { 1.0 / Nparams * 1.0 - 0.085 }
-        ).as2D()
+        val weight = 1.0 / Nparams * 1.0 - 0.085
         val dp = BroadcastDoubleTensorAlgebra.fromArray(
             ShapeND(intArrayOf(1, 1)), DoubleArray(1) { -0.01 }
         ).as2D()
@@ -232,8 +234,7 @@ class TestLmAlgorithm {
         p_min = p_min.div(1.0 / 50.0)
         val opts = doubleArrayOf(3.0, 7000.0, 1e-2, 1e-3, 1e-2, 1e-2, 1e-2, 11.0, 9.0, 1.0)
 
-        val result = DoubleTensorAlgebra.lm(
-            ::funcDifficultForLm,
+        val inputData = LMInput(::funcDifficultForLm,
             p_init.as2D(),
             t,
             y_dat,
@@ -241,9 +242,13 @@ class TestLmAlgorithm {
             dp,
             p_min.as2D(),
             p_max.as2D(),
-            opts,
+            opts[1].toInt(),
+            doubleArrayOf(opts[2], opts[3], opts[4], opts[5]),
+            doubleArrayOf(opts[6], opts[7], opts[8]),
+            opts[9].toInt(),
             10,
-            1
-        )
+            1)
+
+        val result = DoubleTensorAlgebra.levenbergMarquardt(inputData)
     }
 }

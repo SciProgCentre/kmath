@@ -24,7 +24,7 @@ public data class StartDataLm (
     var p_init: MutableStructure2D<Double>,
     var t: MutableStructure2D<Double>,
     var y_dat: MutableStructure2D<Double>,
-    var weight: MutableStructure2D<Double>,
+    var weight: Double,
     var dp: MutableStructure2D<Double>,
     var p_min: MutableStructure2D<Double>,
     var p_max: MutableStructure2D<Double>,
@@ -113,9 +113,7 @@ fun getStartDataForFuncDifficult(): StartDataLm  {
 
     var t = t_example
     val y_dat = y_hat
-    val weight = BroadcastDoubleTensorAlgebra.fromArray(
-        ShapeND(intArrayOf(1, 1)), DoubleArray(1) { 1.0 / Nparams * 1.0 - 0.085 }
-    ).as2D()
+    val weight = 1.0 / Nparams * 1.0 - 0.085
     val dp = BroadcastDoubleTensorAlgebra.fromArray(
         ShapeND(intArrayOf(1, 1)), DoubleArray(1) { -0.01 }
     ).as2D()
@@ -154,9 +152,7 @@ fun getStartDataForFuncMiddle(): StartDataLm  {
     }
     var t = t_example
     val y_dat = y_hat
-    val weight = BroadcastDoubleTensorAlgebra.fromArray(
-        ShapeND(intArrayOf(1, 1)), DoubleArray(1) { 1.0 }
-    ).as2D()
+    val weight = 1.0
     val dp = BroadcastDoubleTensorAlgebra.fromArray(
         ShapeND(intArrayOf(1, 1)), DoubleArray(1) { -0.01 }
     ).as2D()
@@ -202,9 +198,7 @@ fun getStartDataForFuncEasy(): StartDataLm {
         ShapeND(intArrayOf(100, 1)), lm_matx_y_dat
     ).as2D()
 
-    val weight = BroadcastDoubleTensorAlgebra.fromArray(
-        ShapeND(intArrayOf(1, 1)), DoubleArray(1) { 4.0 }
-    ).as2D()
+    val weight = 4.0
 
     val dp = BroadcastDoubleTensorAlgebra.fromArray(
         ShapeND(intArrayOf(1, 1)), DoubleArray(1) { -0.01 }

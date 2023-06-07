@@ -12,14 +12,13 @@ import space.kscience.kmath.tensors.LevenbergMarquardt.funcDifficultForLm
 import space.kscience.kmath.tensors.LevenbergMarquardt.funcEasyForLm
 import space.kscience.kmath.tensors.LevenbergMarquardt.getStartDataForFuncEasy
 import space.kscience.kmath.tensors.core.DoubleTensorAlgebra
-import space.kscience.kmath.tensors.core.lm
+import space.kscience.kmath.tensors.core.LMInput
+import space.kscience.kmath.tensors.core.levenbergMarquardt
 import kotlin.math.roundToInt
 
 fun main() {
     val startedData = getStartDataForFuncEasy()
-
-    val result = DoubleTensorAlgebra.lm(
-        ::funcEasyForLm,
+    val inputData = LMInput(::funcEasyForLm,
         DoubleTensorAlgebra.ones(ShapeND(intArrayOf(4, 1))).as2D(),
         startedData.t,
         startedData.y_dat,
@@ -27,10 +26,14 @@ fun main() {
         startedData.dp,
         startedData.p_min,
         startedData.p_max,
-        startedData.opts,
+        startedData.opts[1].toInt(),
+        doubleArrayOf(startedData.opts[2], startedData.opts[3], startedData.opts[4], startedData.opts[5]),
+        doubleArrayOf(startedData.opts[6], startedData.opts[7], startedData.opts[8]),
+        startedData.opts[9].toInt(),
         10,
-        startedData.example_number
-    )
+        startedData.example_number)
+
+    val result = DoubleTensorAlgebra.levenbergMarquardt(inputData)
 
     println("Parameters:")
     for (i in 0 until result.resultParameters.shape.component1()) {
