@@ -131,14 +131,14 @@ public fun DoubleTensorAlgebra.levenbergMarquardt(inputData: LMInput): LMResultI
     var p = inputData.startParameters
     val t = inputData.independentVariables
 
-    val Npar   = length(p)                                    // number of parameters
-    val Npnt   = length(inputData.realValues)                                // number of data points
-    var pOld = zeros(ShapeND(intArrayOf(Npar, 1))).as2D()    // previous set of parameters
-    var yOld = zeros(ShapeND(intArrayOf(Npnt, 1))).as2D()    // previous model, y_old = y_hat(t;p_old)
-    var X2 = 1e-3 / eps                                       // a really big initial Chi-sq value
-    var X2Old = 1e-3 / eps                                   // a really big initial Chi-sq value
-    var J = zeros(ShapeND(intArrayOf(Npnt, Npar))).as2D()     // Jacobian matrix
-    val DoF = Npnt - Npar                                     // statistical degrees of freedom
+    val Npar   = length(p) // number of parameters
+    val Npnt   = length(inputData.realValues) // number of data points
+    var pOld = zeros(ShapeND(intArrayOf(Npar, 1))).as2D() // previous set of parameters
+    var yOld = zeros(ShapeND(intArrayOf(Npnt, 1))).as2D() // previous model, y_old = y_hat(t;p_old)
+    var X2 = 1e-3 / eps  // a really big initial Chi-sq value
+    var X2Old = 1e-3 / eps // a really big initial Chi-sq value
+    var J = zeros(ShapeND(intArrayOf(Npnt, Npar))).as2D() // Jacobian matrix
+    val DoF = Npnt - Npar // statistical degrees of freedom
 
     var weight = fromArray(ShapeND(intArrayOf(1, 1)), doubleArrayOf(inputData.weight)).as2D()
     if (inputData.nargin <  5) {
@@ -165,16 +165,15 @@ public fun DoubleTensorAlgebra.levenbergMarquardt(inputData: LMInput): LMResultI
     }
 
     var maxIterations = inputData.maxIterations
-    var epsilon1     = inputData.epsilons[0] // convergence tolerance for gradient
-    var epsilon2     = inputData.epsilons[1] // convergence tolerance for parameters
-    var epsilon3     = inputData.epsilons[2] // convergence tolerance for Chi-square
-    var epsilon4     = inputData.epsilons[3] // determines acceptance of a L-M step
-    var lambda0      = inputData.lambdas[0] // initial value of damping paramter, lambda
-    var lambdaUpFac  = inputData.lambdas[1] // factor for increasing lambda
-    var lambdaDnFac  = inputData.lambdas[2] // factor for decreasing lambda
-    var updateType   = inputData.updateType     // 1: Levenberg-Marquardt lambda update
-                                                // 2: Quadratic update
-                                                // 3: Nielsen's lambda update equations
+    var epsilon1 = inputData.epsilons[0]
+    var epsilon2 = inputData.epsilons[1]
+    var epsilon3 = inputData.epsilons[2]
+    var epsilon4 = inputData.epsilons[3]
+    var lambda0  = inputData.lambdas[0]
+    var lambdaUpFac = inputData.lambdas[1]
+    var lambdaDnFac = inputData.lambdas[2]
+    var updateType = inputData.updateType
+
     if (inputData.nargin < 9) {
         maxIterations = 10 * Npar
         epsilon1 = 1e-3
@@ -194,7 +193,7 @@ public fun DoubleTensorAlgebra.levenbergMarquardt(inputData: LMInput): LMResultI
         dp = ones(ShapeND(intArrayOf(Npar, 1))).div(1 / dp[0, 0]).as2D()
     }
 
-    var stop = false                               // termination flag
+    var stop = false // termination flag
 
     if (weight.shape.component1() == 1 || variance(weight) == 0.0) { // identical weights vector
         weight = ones(ShapeND(intArrayOf(Npnt, 1))).div(1 / kotlin.math.abs(weight[0, 0])).as2D()
@@ -218,39 +217,35 @@ public fun DoubleTensorAlgebra.levenbergMarquardt(inputData: LMInput): LMResultI
 
     var lambda = 1.0
     var nu = 1
-    when (updateType) {
-        1 -> lambda  = lambda0                       // Marquardt: init'l lambda
-        else -> {                                     // Quadratic and Nielsen
-            lambda  = lambda0 * (makeColumnFromDiagonal(JtWJ)).max()!!
-            nu = 2
-        }
+
+    if (updateType == 1) {
+        lambda  = lambda0 // Marquardt: init'l lambda
+    }
+    else {
+        lambda  = lambda0 * (makeColumnFromDiagonal(JtWJ)).max()
+        nu = 2
     }
 
     X2Old = X2 // previous value of X2
 
     var h: DoubleTensor
 
-    while (!stop && settings.iteration <= maxIterations) {                   //--- Start Main Loop
+    while (!stop && settings.iteration <= maxIterations) {
         settings.iteration += 1
 
         // incremental change in parameters
-        h = when (updateType) {
-            1 -> {                // Marquardt
-                val solve =
-                    solve(JtWJ.plus(makeMatrixWithDiagonal(makeColumnFromDiagonal(JtWJ)).div(1 / lambda)).as2D(), JtWdy)
-                solve.asDoubleTensor()
-            }
-
-            else -> {             // Quadratic and Nielsen
-                val solve = solve(JtWJ.plus(lmEye(Npar).div(1 / lambda)).as2D(), JtWdy)
-                solve.asDoubleTensor()
-            }
+        h = if (updateType == 1) { // Marquardt
+            val solve = solve(JtWJ.plus(makeMatrixWithDiagonal(makeColumnFromDiagonal(JtWJ)).div(1 / lambda)).as2D(), JtWdy)
+            solve.asDoubleTensor()
+        } else { // Quadratic and Nielsen
+            val solve = solve(JtWJ.plus(lmEye(Npar).div(1 / lambda)).as2D(), JtWdy)
+            solve.asDoubleTensor()
         }
 
         var pTry = (p + h).as2D()  // update the [idx] elements
-        pTry = smallestElementComparison(largestElementComparison(minParameters, pTry.as2D()), maxParameters)  // apply constraints
+        pTry = smallestElementComparison(largestElementComparison(minParameters, pTry.as2D()), maxParameters) // apply constraints
 
-        var deltaY = inputData.realValues.minus(evaluateFunction(inputData.func, t, pTry, inputData.exampleNumber))   // residual error using p_try
+        var deltaY = inputData.realValues.minus(evaluateFunction(inputData.func, t, pTry, inputData.exampleNumber)) // residual error using p_try
 
         for (i in 0 until deltaY.shape.component1()) {  // floating point error; break
             for (j in 0 until deltaY.shape.component2()) {
@@ -264,21 +259,20 @@ public fun DoubleTensorAlgebra.levenbergMarquardt(inputData: LMInput): LMResultI
         settings.funcCalls += 1
 
         val tmp = deltaY.times(weight)
-        var X2Try = deltaY.as2D().transpose().dot(tmp)     // Chi-squared error criteria
+        var X2Try = deltaY.as2D().transpose().dot(tmp) // Chi-squared error criteria
 
         val alpha = 1.0
         if (updateType == 2) { // Quadratic
             // One step of quadratic line update in the h direction for minimum X2
-
             val alpha = JtWdy.transpose().dot(h) / ((X2Try.minus(X2)).div(2.0).plus(2 * JtWdy.transpose().dot(h)))
             h = h.dot(alpha)
             pTry = p.plus(h).as2D() // update only [idx] elements
             pTry = smallestElementComparison(largestElementComparison(minParameters, pTry), maxParameters) // apply constraints
 
-            deltaY = inputData.realValues.minus(evaluateFunction(inputData.func, t, pTry, inputData.exampleNumber))   // residual error using p_try
+            deltaY = inputData.realValues.minus(evaluateFunction(inputData.func, t, pTry, inputData.exampleNumber)) // residual error using p_try
             settings.funcCalls += 1
 
-            X2Try = deltaY.as2D().transpose().dot(deltaY.times(weight))     // Chi-squared error criteria
+            X2Try = deltaY.as2D().transpose().dot(deltaY.times(weight)) // Chi-squared error criteria
         }
 
         val rho = when (updateType) { // Nielsen
@@ -287,7 +281,6 @@ public fun DoubleTensorAlgebra.levenbergMarquardt(inputData: LMInput): LMResultI
                     .dot(makeMatrixWithDiagonal(makeColumnFromDiagonal(JtWJ)).div(1 / lambda).dot(h).plus(JtWdy))
                 X2.minus(X2Try).as2D()[0, 0] / abs(tmp.as2D()).as2D()[0, 0]
             }
-
             else -> {
                 val tmp = h.transposed().dot(h.div(1 / lambda).plus(JtWdy))
                 X2.minus(X2Try).as2D()[0, 0] / abs(tmp.as2D()).as2D()[0, 0]
@@ -303,7 +296,6 @@ public fun DoubleTensorAlgebra.levenbergMarquardt(inputData: LMInput): LMResultI
 
             lmMatxAns = lmMatx(inputData.func, t, pOld, yOld, dX2.toInt(), J, p, inputData.realValues, weight, dp, settings)
             // decrease lambda ==> Gauss-Newton method
-
             JtWJ = lmMatxAns[0]
             JtWdy = lmMatxAns[1]
             X2 = lmMatxAns[2][0, 0]
@@ -519,7 +511,7 @@ private fun lmMatx(func: (MutableStructure2D<Double>, MutableStructure2D<Double>
                    yDat: MutableStructure2D<Double>, weight: MutableStructure2D<Double>, dp:MutableStructure2D<Double>, settings:LMSettings) : Array<MutableStructure2D<Double>>
 {
     // default: dp = 0.001
-    val Npar = length(p)                   // number of parameters
+    val Npar = length(p) // number of parameters
 
     val yHat = evaluateFunction(func, t, p, settings.exampleNumber) // evaluate model using parameters 'p'
     settings.funcCalls += 1
@@ -558,8 +550,8 @@ private fun lmFdJ(func: (MutableStructure2D<Double>, MutableStructure2D<Double>,
                   dp: MutableStructure2D<Double>, settings: LMSettings): MutableStructure2D<Double> {
     // default: dp = 0.001 * ones(1,n)
 
-    val m = length(y)              // number of data points
-    val n = length(p)              // number of parameters
+    val m = length(y) // number of data points
+    val n = length(p) // number of parameters
 
     val ps = p.copyToTensor().as2D()
     val J = BroadcastDoubleTensorAlgebra.zeros(ShapeND(intArrayOf(m, n))).as2D()  // initialize Jacobian to Zero
@@ -568,7 +560,7 @@ private fun lmFdJ(func: (MutableStructure2D<Double>, MutableStructure2D<Double>,
     for (j in 0 until n) {
 
         del[j, 0] = dp[j, 0] * (1 + kotlin.math.abs(p[j, 0])) // parameter perturbation
-        p[j, 0] = ps[j, 0] + del[j, 0]            // perturb parameter p(j)
+        p[j, 0] = ps[j, 0] + del[j, 0] // perturb parameter p(j)
 
         val epsilon = 0.0000001
         if (kotlin.math.abs(del[j, 0]) > epsilon) {
