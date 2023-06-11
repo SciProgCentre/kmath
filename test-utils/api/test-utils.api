@@ -1,0 +1,32 @@
+public final class space/kscience/kmath/testutils/AssertsKt {
+	public static final fun assertBufferEquals (Lspace/kscience/kmath/structures/Buffer;Lspace/kscience/kmath/structures/Buffer;D)V
+	public static synthetic fun assertBufferEquals$default (Lspace/kscience/kmath/structures/Buffer;Lspace/kscience/kmath/structures/Buffer;DILjava/lang/Object;)V
+}
+
+public final class space/kscience/kmath/testutils/BufferEqualityKt {
+	public static final fun contentEquals-2c9zdjM ([D[D)Z
+	public static final fun contentEqualsArray ([D[D)Z
+	public static final fun contentEqualsBuffer ([D[D)Z
+}
+
+public final class space/kscience/kmath/testutils/FieldVerifier : space/kscience/kmath/testutils/RingVerifier {
+	public fun <init> (Lspace/kscience/kmath/operations/Field;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Number;)V
+	public fun verify ()V
+}
+
+public class space/kscience/kmath/testutils/RingVerifier : space/kscience/kmath/testutils/SpaceVerifier {
+	public fun <init> (Lspace/kscience/kmath/operations/Ring;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Number;)V
+	public fun verify ()V
+}
+
+public class space/kscience/kmath/testutils/SpaceVerifier : space/kscience/kmath/testutils/AlgebraicVerifier {
+	public fun <init> (Lspace/kscience/kmath/operations/Ring;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Number;)V
+	public final fun getA ()Ljava/lang/Object;
+	public synthetic fun getAlgebra ()Lspace/kscience/kmath/operations/Algebra;
+	public fun getAlgebra ()Lspace/kscience/kmath/operations/Ring;
+	public final fun getB ()Ljava/lang/Object;
+	public final fun getC ()Ljava/lang/Object;
+	public final fun getX ()Ljava/lang/Number;
+	public fun verify ()V
+}
+
