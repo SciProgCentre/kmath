@@ -58,10 +58,10 @@ dependencies {
 kotlin {
     jvmToolchain(11)
     sourceSets.all {
-        with(languageSettings) {
+        languageSettings {
             optIn("kotlin.contracts.ExperimentalContracts")
             optIn("kotlin.ExperimentalUnsignedTypes")
-            optIn("space.kscience.kmath.misc.UnstableKMathAPI")
+            optIn("space.kscience.kmath.UnstableKMathAPI")
         }
     }
 }
