@@ -51,8 +51,8 @@ fun streamLm(lm_func: (MutableStructure2D<Double>, MutableStructure2D<Double>, I
         val result = DoubleTensorAlgebra.levenbergMarquardt(inputData)
         emit(result.resultParameters)
         delay(launchFrequencyInMs)
-        p_init = result.resultParameters
-        y_dat = generateNewYDat(y_dat, 0.1)
+        inputData.realValues = generateNewYDat(y_dat, 0.1)
+        inputData.startParameters = result.resultParameters
         if (!isEndless) steps -= 1
     }
 }
