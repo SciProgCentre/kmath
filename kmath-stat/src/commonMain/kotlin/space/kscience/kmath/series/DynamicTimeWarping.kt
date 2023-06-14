@@ -61,7 +61,7 @@ public fun DoubleFieldOpsND.dynamicTimeWarping(series1 : DoubleBuffer, series2 :
     val costMatrix = structureND(ShapeND(series1.size, series2.size)) {
             (row, col) -> abs(series1[row] - series2[col])
     }
-    // Formula: costMatrix[i, j] = euqlidNorm(series1(i), series2(j)) +
+    // Formula: costMatrix[i, j] = euqlideanNorm(series1(i), series2(j)) +
     // min(costMatrix[i - 1, j], costMatrix[i, j - 1], costMatrix[i - 1, j - 1]).
     for ( (row, col) in costMatrix.indices) {
         costMatrix[row, col] += when {
