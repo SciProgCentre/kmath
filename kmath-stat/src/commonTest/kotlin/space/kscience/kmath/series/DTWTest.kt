@@ -20,8 +20,8 @@ class DTWTest {
             val firstSequence: DoubleArray = doubleArrayOf(0.0, 2.0, 3.0, 1.0, 3.0, 0.1, 0.0, 1.0)
             val secondSequence: DoubleArray = doubleArrayOf(1.0, 0.0, 3.0, 0.0, 0.0, 3.0, 2.0, 0.0, 2.0)
 
-            val seriesOne: Series<Double> = firstSequence.asBuffer().moveTo(0)
-            val seriesTwo: Series<Double> = secondSequence.asBuffer().moveTo(0)
+            val seriesOne = firstSequence.asBuffer()
+            val seriesTwo = secondSequence.asBuffer()
 
             val result = DoubleFieldOpsND.dynamicTimeWarping(seriesOne, seriesTwo)
             println("Total penalty coefficient: ${result.totalCost}")
