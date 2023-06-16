@@ -15,25 +15,21 @@ import kotlin.test.Test
 class DTWTest {
 
     @Test
-    fun someData() : Unit {
-        with(Double.algebra.bufferAlgebra.seriesAlgebra()) {
-            val firstSequence: DoubleArray = doubleArrayOf(0.0, 2.0, 3.0, 1.0, 3.0, 0.1, 0.0, 1.0)
-            val secondSequence: DoubleArray = doubleArrayOf(1.0, 0.0, 3.0, 0.0, 0.0, 3.0, 2.0, 0.0, 2.0)
+    fun someData() {
+        val firstSequence: DoubleArray = doubleArrayOf(0.0, 2.0, 3.0, 1.0, 3.0, 0.1, 0.0, 1.0)
+        val secondSequence: DoubleArray = doubleArrayOf(1.0, 0.0, 3.0, 0.0, 0.0, 3.0, 2.0, 0.0, 2.0)
 
-            val seriesOne = firstSequence.asBuffer()
-            val seriesTwo = secondSequence.asBuffer()
+        val seriesOne = firstSequence.asBuffer()
+        val seriesTwo = secondSequence.asBuffer()
 
-            val result = DoubleFieldOpsND.dynamicTimeWarping(seriesOne, seriesTwo)
-            println("Total penalty coefficient: ${result.totalCost}")
-            print("Alignment: ")
-            println(result.alignMatrix)
-            for ((i , j) in result.alignMatrix.indices) {
-                if (result.alignMatrix[i, j] > 0.0) {
-                    print("[$i, $j] ")
-                }
+        val result = DoubleFieldOpsND.dynamicTimeWarping(seriesOne, seriesTwo)
+        println("Total penalty coefficient: ${result.totalCost}")
+        print("Alignment: ")
+        println(result.alignMatrix)
+        for ((i , j) in result.alignMatrix.indices) {
+            if (result.alignMatrix[i, j] > 0.0) {
+                print("[$i, $j] ")
             }
         }
     }
 }
-
-
