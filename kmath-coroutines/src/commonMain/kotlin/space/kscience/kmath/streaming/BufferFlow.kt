@@ -7,6 +7,7 @@
 
 package space.kscience.kmath.streaming
 
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
@@ -25,6 +26,7 @@ public fun <T> Buffer<T>.asFlow(): Flow<T> = iterator().asFlow()
 /**
  * Flat map a [Flow] of [Buffer] into continuous [Flow] of elements
  */
+@OptIn(ExperimentalCoroutinesApi::class)
 public fun <T> Flow<Buffer<T>>.spread(): Flow<T> = flatMapConcat { it.asFlow() }
 
 /**
