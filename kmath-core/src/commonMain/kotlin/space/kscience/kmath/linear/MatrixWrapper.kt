@@ -5,11 +5,10 @@
 
 package space.kscience.kmath.linear
 
+import space.kscience.attributes.Attributes
 import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.misc.FeatureSet
-import space.kscience.kmath.nd.StructureFeature
 import space.kscience.kmath.operations.Ring
-import kotlin.reflect.KClass
 
 /**
  * A [Matrix] that holds [MatrixFeature] objects.
@@ -18,18 +17,10 @@ import kotlin.reflect.KClass
  */
 public class MatrixWrapper<out T : Any> internal constructor(
     public val origin: Matrix<T>,
-    public val features: FeatureSet<StructureFeature>,
+    public val attributes: Attributes,
 ) : Matrix<T> by origin {
 
-    /**
-     * Get the first feature matching given class. Does not guarantee that matrix has only one feature matching the
-     * criteria.
-     */
-    @Suppress("UNCHECKED_CAST")
-    override fun <F : StructureFeature> getFeature(type: KClass<out F>): F? =
-        features.getFeature(type) ?: origin.getFeature(type)
-
-    override fun toString(): String = "MatrixWrapper(matrix=$origin, features=$features)"
+    override fun toString(): String = "MatrixWrapper(matrix=$origin, features=$attributes)"
 }
 
 /**
@@ -44,7 +35,7 @@ public val <T : Any> Matrix<T>.origin: Matrix<T>
  * Add a single feature to a [Matrix]
  */
 public fun <T : Any> Matrix<T>.withFeature(newFeature: MatrixFeature): MatrixWrapper<T> = if (this is MatrixWrapper) {
-    MatrixWrapper(origin, features.with(newFeature))
+    MatrixWrapper(origin, attributes.with(newFeature))
 } else {
     MatrixWrapper(this, FeatureSet.of(newFeature))
 }
@@ -57,20 +48,20 @@ public operator fun <T : Any> Matrix<T>.plus(newFeature: MatrixFeature): MatrixW
  */
 public fun <T : Any> Matrix<T>.withFeatures(newFeatures: Iterable<MatrixFeature>): MatrixWrapper<T> =
     if (this is MatrixWrapper) {
-        MatrixWrapper(origin, features.with(newFeatures))
+        MatrixWrapper(origin, attributes.with(newFeatures))
     } else {
         MatrixWrapper(this, FeatureSet.of(newFeatures))
     }
 
 /**
- * Diagonal matrix of ones. The matrix is virtual no actual matrix is created.
+ * Diagonal matrix of ones. The matrix is virtual, no actual matrix is created.
  */
 public fun <T : Any> LinearSpace<T, Ring<T>>.one(
     rows: Int,
     columns: Int,
 ): Matrix<T> = VirtualMatrix(rows, columns) { i, j ->
     if (i == j) elementAlgebra.one else elementAlgebra.zero
-}.withFeature(UnitFeature)
+}.withFeature(IsUnit)
 
 
 /**
@@ -81,7 +72,7 @@ public fun <T : Any> LinearSpace<T, Ring<T>>.zero(
     columns: Int,
 ): Matrix<T> = VirtualMatrix(rows, columns) { _, _ ->
     elementAlgebra.zero
-}.withFeature(ZeroFeature)
+}.withFeature(IsZero)
 
 public class TransposedFeature<out T : Any>(public val original: Matrix<T>) : MatrixFeature
 

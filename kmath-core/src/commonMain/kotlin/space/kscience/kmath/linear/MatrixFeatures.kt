@@ -5,54 +5,49 @@
 
 package space.kscience.kmath.linear
 
-import space.kscience.kmath.nd.StructureFeature
+import space.kscience.attributes.Attribute
 
 /**
  * A marker interface representing some properties of matrices or additional transformations of them. Features are used
  * to optimize matrix operations performance in some cases or retrieve the APIs.
  */
-public interface MatrixFeature: StructureFeature
+public interface MatrixFeature<T> : Attribute<T>
 
 /**
- * Matrices with this feature are considered to have only diagonal non-null elements.
+ * Matrices with this feature are considered to have only diagonal non-zero elements.
  */
-public interface DiagonalFeature : MatrixFeature {
-    public companion object : DiagonalFeature
+public interface IsDiagonal : MatrixFeature<Unit> {
+    public companion object : IsDiagonal
 }
 
 /**
  * Matrices with this feature have all zero elements.
  */
-public object ZeroFeature : DiagonalFeature
+public object IsZero : IsDiagonal
 
 /**
  * Matrices with this feature have unit elements on diagonal and zero elements in all other places.
  */
-public object UnitFeature : DiagonalFeature
+public object IsUnit : IsDiagonal
 
 /**
  * Matrices with this feature can be inverted: *[inverse] = a<sup>&minus;1</sup>* where *a* is the owning matrix.
  *
  * @param T the type of matrices' items.
  */
-public interface InverseMatrixFeature<out T : Any> : MatrixFeature {
-    /**
-     * The inverse matrix of the matrix that owns this feature.
-     */
-    public val inverse: Matrix<T>
+public class Inverted<T> private constructor() : MatrixFeature<Matrix<T>> {
+    internal val instance: Inverted<Nothing> = Inverted()
 }
+
+@Suppress("UNCHECKED_CAST")
+public val <T> LinearSpace<T, *>.Inverted: Inverted<T> get() = Inverted.instance as Inverted<T>
 
 /**
  * Matrices with this feature can compute their determinant.
  *
  * @param T the type of matrices' items.
  */
-public interface DeterminantFeature<out T : Any> : MatrixFeature {
-    /**
-     * The determinant of the matrix that owns this feature.
-     */
-    public val determinant: T
-}
+public class DeterminantFeature<T : Any> : MatrixFeature<T>
 
 /**
  * Produces a [DeterminantFeature] where the [DeterminantFeature.determinant] is [determinant].
@@ -68,12 +63,12 @@ public fun <T : Any> DeterminantFeature(determinant: T): DeterminantFeature<T> =
 /**
  * Matrices with this feature are lower triangular ones.
  */
-public object LFeature : MatrixFeature
+public object LFeature : MatrixFeature<Unit>
 
 /**
  * Matrices with this feature are upper triangular ones.
  */
-public object UFeature : MatrixFeature
+public object UFeature : MatrixFeature<Unit>
 
 /**
  * Matrices with this feature support LU factorization: *a = [l] &middot; [u]* where *a* is the owning matrix.
@@ -117,7 +112,7 @@ public interface LupDecompositionFeature<out T : Any> : MatrixFeature {
 
 /**
  * Matrices with this feature are orthogonal ones: *a &middot; a<sup>T</sup> = u* where *a* is the owning matrix, *u*
- * is the unit matrix ([UnitFeature]).
+ * is the unit matrix ([IsUnit]).
  */
 public object OrthogonalFeature : MatrixFeature
 

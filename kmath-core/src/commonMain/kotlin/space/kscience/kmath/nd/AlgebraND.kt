@@ -114,7 +114,7 @@ public interface GroupOpsND<T, out A : GroupOps<T>> : GroupOps<StructureND<T>>, 
     override fun add(left: StructureND<T>, right: StructureND<T>): StructureND<T> =
         zip(left, right) { aValue, bValue -> add(aValue, bValue) }
 
-    // TODO move to extensions after KEEP-176
+    // TODO implement using context receivers
 
     /**
      * Adds an ND structure to an element of it.
@@ -181,8 +181,6 @@ public interface RingOpsND<T, out A : RingOps<T>> : RingOps<StructureND<T>>, Gro
     override fun multiply(left: StructureND<T>, right: StructureND<T>): StructureND<T> =
         zip(left, right) { aValue, bValue -> multiply(aValue, bValue) }
 
-    //TODO move to extensions with context receivers
-
     /**
      * Multiplies an ND structure by an element of it.
      *
@@ -232,7 +230,6 @@ public interface FieldOpsND<T, out A : Field<T>> :
     override fun divide(left: StructureND<T>, right: StructureND<T>): StructureND<T> =
         zip(left, right) { aValue, bValue -> divide(aValue, bValue) }
 
-    //TODO move to extensions after https://github.com/Kotlin/KEEP/blob/master/proposals/context-receivers.md
     /**
      * Divides an ND structure by an element of it.
      *

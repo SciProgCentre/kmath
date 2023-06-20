@@ -106,7 +106,7 @@ public object CMLinearSpace : LinearSpace<Double, DoubleField> {
         val origin = structure.toCM().origin
 
         return when (type) {
-            DiagonalFeature::class -> if (origin is DiagonalMatrix) DiagonalFeature else null
+            IsDiagonal::class -> if (origin is DiagonalMatrix) IsDiagonal else null
 
             DeterminantFeature::class, LupDecompositionFeature::class -> object :
                 DeterminantFeature<Double>,
