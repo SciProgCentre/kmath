@@ -62,10 +62,16 @@ public fun DoubleFieldOpsND.dynamicTimeWarping(series1 : DoubleBuffer, series2 :
     pathLength++
     while (index1 != 0 || index2 != 0) {
         when {
-            index1 == 0 || costMatrix[index1, index2] == costMatrix[index1, index2 - 1] + abs(series1[index1] - series2[index2]) -> {
+            index1 == 0 -> {
                 index2--
             }
-            index2 == 0 || costMatrix[index1, index2] == costMatrix[index1 - 1, index2] + abs(series1[index1] - series2[index2]) -> {
+            index2 == 0 -> {
+                index1--
+            }
+            costMatrix[index1, index2] == costMatrix[index1, index2 - 1] + abs(series1[index1] - series2[index2]) -> {
+                index2--
+            }
+            costMatrix[index1, index2] == costMatrix[index1 - 1, index2] + abs(series1[index1] - series2[index2]) -> {
                 index1--
             }
             costMatrix[index1, index2] == costMatrix[index1 - 1, index2 - 1] + abs(series1[index1] - series2[index2]) -> {
