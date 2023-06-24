@@ -5,6 +5,7 @@
 
 package space.kscience.kmath.tensors.api
 
+import space.kscience.kmath.nd.MutableStructure2D
 import space.kscience.kmath.nd.StructureND
 import space.kscience.kmath.operations.Field
 
@@ -103,4 +104,11 @@ public interface LinearOpsTensorAlgebra<T, A : Field<T>> : TensorPartialDivision
      */
     public fun symEig(structureND: StructureND<T>): Pair<StructureND<T>, StructureND<T>>
 
+    /** Returns the solution to the equation Ax = B for the square matrix A as `input1` and
+     * for the square matrix B as `input2`.
+     *
+     * @receiver the `input1` and the `input2`.
+     * @return the square matrix x which is the solution of the equation.
+     */
+    public fun solve(a: MutableStructure2D<Double>, b: MutableStructure2D<Double>): MutableStructure2D<Double>
 }
