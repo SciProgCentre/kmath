@@ -9,20 +9,31 @@ import kotlin.reflect.KType
 
 public interface Attribute<T>
 
+/**
+ * An attribute that could be either present or absent
+ */
+public interface FlagAttribute : Attribute<Unit>
 
+/**
+ * An attribute with a default value
+ */
 public interface AttributeWithDefault<T> : Attribute<T> {
     public val default: T
 }
 
+/**
+ * Attribute containing a set of values
+ */
 public interface SetAttribute<V> : Attribute<Set<V>>
 
 /**
  * An attribute that has a type parameter for value
+ * @param type parameter-type
  */
-public abstract class PolymorphicAttribute<T>(public val type: KType) : Attribute<T> {
-    override fun equals(other: Any?): Boolean = (other as? PolymorphicAttribute<*>)?.type == this.type
+public abstract class PolymorphicAttribute<T>(public val type: SafeType<T>) : Attribute<T> {
+    override fun equals(other: Any?): Boolean = other != null &&
+            (this::class == other::class) &&
+            (other as? PolymorphicAttribute<*>)?.type == this.type
 
-    override fun hashCode(): Int {
-        return type.hashCode()
-    }
+    override fun hashCode(): Int = this::class.hashCode() + type.hashCode()
 }

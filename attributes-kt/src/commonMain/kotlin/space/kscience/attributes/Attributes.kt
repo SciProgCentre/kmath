@@ -24,18 +24,45 @@ public value class Attributes internal constructor(public val content: Map<out A
 
 public fun Attributes.isEmpty(): Boolean = content.isEmpty()
 
+/**
+ * Get attribute value or default
+ */
 public fun <T> Attributes.getOrDefault(attribute: AttributeWithDefault<T>): T = get(attribute) ?: attribute.default
 
-public fun <T, A : Attribute<T>> Attributes.withAttribute(
+/**
+ * Check if there is an attribute that matches given key by type and adheres to [predicate].
+ */
+@Suppress("UNCHECKED_CAST")
+public inline fun <T, reified A : Attribute<T>> Attributes.any(predicate: (value: T) -> Boolean): Boolean =
+    content.any { (mapKey, mapValue) -> mapKey is A && predicate(mapValue as T) }
+
+/**
+ * Check if there is an attribute of given type (subtypes included)
+ */
+public inline fun <T, reified A : Attribute<T>> Attributes.any(): Boolean =
+    content.any { (mapKey, _) -> mapKey is A }
+
+/**
+ * Check if [Attributes] contains a flag. Multiple keys that are instances of a flag could be present
+ */
+public inline fun <reified A : FlagAttribute> Attributes.has(): Boolean =
+    content.keys.any { it is A }
+
+/**
+ * Create [Attributes] with an added or replaced attribute key.
+ */
+public fun <T : Any, A : Attribute<T>> Attributes.withAttribute(
     attribute: A,
-    attrValue: T?,
-): Attributes = Attributes(
-    if (attrValue == null) {
-        content - attribute
-    } else {
-        content + (attribute to attrValue)
-    }
-)
+    attrValue: T,
+): Attributes = Attributes(content + (attribute to attrValue))
+
+public fun <A : Attribute<Unit>> Attributes.withAttribute(attribute: A): Attributes =
+    withAttribute(attribute, Unit)
+
+/**
+ * Create new [Attributes] by removing [attribute] key
+ */
+public fun Attributes.withoutAttribute(attribute: Attribute<*>): Attributes = Attributes(content.minus(attribute))
 
 /**
  * Add an element to a [SetAttribute]
@@ -63,6 +90,9 @@ public fun <T, A : SetAttribute<T>> Attributes.withoutAttributeElement(
     )
 }
 
+/**
+ * Create [Attributes] with a single key
+ */
 public fun <T : Any, A : Attribute<T>> Attributes(
     attribute: A,
     attrValue: T,

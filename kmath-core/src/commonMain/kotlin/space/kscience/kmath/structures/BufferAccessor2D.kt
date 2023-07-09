@@ -27,12 +27,9 @@ internal class BufferAccessor2D<T>(
     fun create(mat: Structure2D<T>): MutableBuffer<T> = create { i, j -> mat[i, j] }
 
     //TODO optimize wrapper
-    fun MutableBuffer<T>.collect(): Structure2D<T> = StructureND.buffered(
-        ColumnStrides(ShapeND(rowNum, colNum)),
-        factory
-    ) { (i, j) ->
-        get(i, j)
-    }.as2D()
+    fun MutableBuffer<T>.toStructure2D(): Structure2D<T> = StructureND.buffered(
+        ColumnStrides(ShapeND(rowNum, colNum))
+    ) { (i, j) -> get(i, j) }.as2D()
 
     inner class Row(val buffer: MutableBuffer<T>, val rowIndex: Int) : MutableBuffer<T> {
         override val size: Int get() = colNum

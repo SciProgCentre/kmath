@@ -9,14 +9,14 @@ import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.expressions.Symbol
 import space.kscience.kmath.operations.Ring.Companion.optimizedPower
 import space.kscience.kmath.structures.MutableBufferFactory
+import kotlin.reflect.KType
 
 /**
  * Represents an algebraic structure.
  *
- * @param T the type of element of this structure.
+ * @param T the type of element which Algebra operates on.
  */
 public interface Algebra<T> {
-
     /**
      * Provide a factory for buffers, associated with this [Algebra]
      */
@@ -67,12 +67,12 @@ public interface Algebra<T> {
      *
      * @param operation the name of operation.
      * @param arg the argument of operation.
-     * @return a result of operation.
+     * @return the result of the operation.
      */
     public fun unaryOperation(operation: String, arg: T): T = unaryOperationFunction(operation)(arg)
 
     /**
-     * Dynamically dispatches a binary operation with the certain name.
+     * Dynamically dispatches a binary operation with a certain name.
      *
      * Implementations must fulfil the following requirements:
      *
@@ -87,7 +87,7 @@ public interface Algebra<T> {
         error("Binary operation '$operation' not defined in $this")
 
     /**
-     * Dynamically invokes a binary operation with the certain name.
+     * Dynamically invokes a binary operation with a certain name.
      *
      * Implementations must fulfil the following requirements:
      *

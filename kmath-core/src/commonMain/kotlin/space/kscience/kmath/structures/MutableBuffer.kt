@@ -5,7 +5,9 @@
 
 package space.kscience.kmath.structures
 
-import kotlin.reflect.KClass
+import space.kscience.attributes.SafeType
+import space.kscience.attributes.safeTypeOf
+import kotlin.reflect.typeOf
 
 /**
  * A generic mutable random-access structure for both primitives and objects.
@@ -74,13 +76,13 @@ public interface MutableBuffer<T> : Buffer<T> {
          * The [size] is specified, and each element is calculated by calling the specified [initializer] function.
          */
         @Suppress("UNCHECKED_CAST")
-        public inline fun <T : Any> auto(type: KClass<out T>, size: Int, initializer: (Int) -> T): MutableBuffer<T> =
-            when (type) {
-                Double::class -> double(size) { initializer(it) as Double } as MutableBuffer<T>
-                Short::class -> short(size) { initializer(it) as Short } as MutableBuffer<T>
-                Int::class -> int(size) { initializer(it) as Int } as MutableBuffer<T>
-                Float::class -> float(size) { initializer(it) as Float } as MutableBuffer<T>
-                Long::class -> long(size) { initializer(it) as Long } as MutableBuffer<T>
+        public inline fun <T> auto(type: SafeType<T>, size: Int, initializer: (Int) -> T): MutableBuffer<T> =
+            when (type.kType) {
+                typeOf<Double>() -> double(size) { initializer(it) as Double } as MutableBuffer<T>
+                typeOf<Short>() -> short(size) { initializer(it) as Short } as MutableBuffer<T>
+                typeOf<Int>() -> int(size) { initializer(it) as Int } as MutableBuffer<T>
+                typeOf<Float>() -> float(size) { initializer(it) as Float } as MutableBuffer<T>
+                typeOf<Long>() -> long(size) { initializer(it) as Long } as MutableBuffer<T>
                 else -> boxing(size, initializer)
             }
 
@@ -90,11 +92,10 @@ public interface MutableBuffer<T> : Buffer<T> {
          *
          * The [size] is specified, and each element is calculated by calling the specified [initializer] function.
          */
-        @Suppress("UNCHECKED_CAST")
-        public inline fun <reified T : Any> auto(size: Int, initializer: (Int) -> T): MutableBuffer<T> =
-            auto(T::class, size, initializer)
+        public inline fun <reified T> auto(size: Int, initializer: (Int) -> T): MutableBuffer<T> =
+            auto(safeTypeOf<T>(), size, initializer)
     }
 }
 
 
-public sealed interface PrimitiveBuffer<T>: MutableBuffer<T>
+public sealed interface PrimitiveBuffer<T> : MutableBuffer<T>

@@ -1,4 +1,4 @@
-enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+rootProject.name = "buildSrc"
 
 dependencyResolutionManagement {
     val projectProperties = java.util.Properties()
@@ -13,6 +13,7 @@ dependencyResolutionManagement {
 
     val toolsVersion: String = projectProperties["toolsVersion"].toString()
 
+    @Suppress("UnstableApiUsage")
     repositories {
         mavenLocal()
         maven("https://repo.kotlin.link")

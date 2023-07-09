@@ -5,16 +5,15 @@
 
 package space.kscience.kmath.linear
 
+import space.kscience.attributes.SafeType
 import space.kscience.kmath.UnstableKMathAPI
-import space.kscience.kmath.nd.MutableStructure2D
-import space.kscience.kmath.nd.Structure2D
-import space.kscience.kmath.nd.StructureFeature
-import space.kscience.kmath.nd.as1D
+import space.kscience.kmath.nd.*
 import space.kscience.kmath.operations.BufferRingOps
 import space.kscience.kmath.operations.Ring
 import space.kscience.kmath.operations.invoke
 import space.kscience.kmath.structures.Buffer
-import kotlin.reflect.KClass
+import kotlin.reflect.KType
+import kotlin.reflect.typeOf
 
 /**
  * Alias for [Structure2D] with more familiar name.
@@ -32,12 +31,18 @@ public typealias MutableMatrix<T> = MutableStructure2D<T>
 public typealias Point<T> = Buffer<T>
 
 /**
+ * A marker interface for algebras that operate on matrices
+ * @param T type of matrix element
+ */
+public interface MatrixOperations<T>
+
+/**
  * Basic operations on matrices and vectors.
  *
  * @param T the type of items in the matrices.
  * @param A the type of ring over [T].
  */
-public interface LinearSpace<T, out A : Ring<T>> {
+public interface LinearSpace<T, out A : Ring<T>> : MatrixOperations<T> {
     public val elementAlgebra: A
 
     /**
@@ -167,16 +172,16 @@ public interface LinearSpace<T, out A : Ring<T>> {
     public operator fun T.times(v: Point<T>): Point<T> = v * this
 
     /**
-     * Compute a feature of the structure in this scope. Structure features take precedence other context features.
+     * Get an attribute value for the structure in this scope. Structure features take precedence other context features.
      *
-     * @param F the type of feature.
+     * @param A the type of feature.
      * @param structure the structure.
-     * @param type the [KClass] instance of [F].
+     * @param attribute to be computed
      * @return a feature object or `null` if it isn't present.
      */
     @UnstableKMathAPI
-    public fun <F : StructureFeature> computeFeature(structure: Matrix<T>, type: KClass<out F>): F? =
-        structure.getFeature(type)
+    public fun <T, A : StructureAttribute<T>> attributeFor(structure: StructureND<*>, attribute: A): T? =
+        structure.attributes[attribute]
 
     public companion object {
 
@@ -184,22 +189,11 @@ public interface LinearSpace<T, out A : Ring<T>> {
          * A structured matrix with custom buffer
          */
         public fun <T : Any, A : Ring<T>> buffered(
-            algebra: A
+            algebra: A,
         ): LinearSpace<T, A> = BufferedLinearSpace(BufferRingOps(algebra))
 
     }
 }
-
-/**
- * Get a feature of the structure in this scope. Structure features take precedence other context features.
- *
- * @param T the type of items in the matrices.
- * @param F the type of feature.
- * @return a feature object or `null` if it isn't present.
- */
-@UnstableKMathAPI
-public inline fun <T : Any, reified F : StructureFeature> LinearSpace<T, *>.computeFeature(structure: Matrix<T>): F? =
-    computeFeature(structure, F::class)
 
 
 public inline operator fun <LS : LinearSpace<*, *>, R> LS.invoke(block: LS.() -> R): R = run(block)

@@ -5,10 +5,12 @@
 
 package space.kscience.kmath.structures
 
+import space.kscience.attributes.SafeType
+import space.kscience.attributes.safeTypeOf
 import space.kscience.kmath.operations.WithSize
 import space.kscience.kmath.operations.asSequence
 import kotlin.jvm.JvmInline
-import kotlin.reflect.KClass
+import kotlin.reflect.typeOf
 
 /**
  * Function that produces [Buffer] from its size and function that supplies values.
@@ -99,13 +101,13 @@ public interface Buffer<out T> : WithSize {
          * The [size] is specified, and each element is calculated by calling the specified [initializer] function.
          */
         @Suppress("UNCHECKED_CAST")
-        public inline fun <T : Any> auto(type: KClass<T>, size: Int, initializer: (Int) -> T): Buffer<T> =
-            when (type) {
-                Double::class -> MutableBuffer.double(size) { initializer(it) as Double } as Buffer<T>
-                Short::class -> MutableBuffer.short(size) { initializer(it) as Short } as Buffer<T>
-                Int::class -> MutableBuffer.int(size) { initializer(it) as Int } as Buffer<T>
-                Long::class -> MutableBuffer.long(size) { initializer(it) as Long } as Buffer<T>
-                Float::class -> MutableBuffer.float(size) { initializer(it) as Float } as Buffer<T>
+        public inline fun <T> auto(type: SafeType<T>, size: Int, initializer: (Int) -> T): Buffer<T> =
+            when (type.kType) {
+                typeOf<Double>() -> MutableBuffer.double(size) { initializer(it) as Double } as Buffer<T>
+                typeOf<Short>() -> MutableBuffer.short(size) { initializer(it) as Short } as Buffer<T>
+                typeOf<Int>() -> MutableBuffer.int(size) { initializer(it) as Int } as Buffer<T>
+                typeOf<Long>() -> MutableBuffer.long(size) { initializer(it) as Long } as Buffer<T>
+                typeOf<Float>() -> MutableBuffer.float(size) { initializer(it) as Float } as Buffer<T>
                 else -> boxing(size, initializer)
             }
 
@@ -115,8 +117,8 @@ public interface Buffer<out T> : WithSize {
          *
          * The [size] is specified, and each element is calculated by calling the specified [initializer] function.
          */
-        public inline fun <reified T : Any> auto(size: Int, initializer: (Int) -> T): Buffer<T> =
-            auto(T::class, size, initializer)
+        public inline fun <reified T> auto(size: Int, initializer: (Int) -> T): Buffer<T> =
+            auto(safeTypeOf<T>(), size, initializer)
     }
 }
 

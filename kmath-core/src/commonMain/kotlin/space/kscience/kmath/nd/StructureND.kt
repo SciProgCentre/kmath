@@ -7,6 +7,7 @@ package space.kscience.kmath.nd
 
 import space.kscience.attributes.Attribute
 import space.kscience.attributes.AttributeContainer
+import space.kscience.attributes.SafeType
 import space.kscience.kmath.PerformancePitfall
 import space.kscience.kmath.linear.LinearSpace
 import space.kscience.kmath.operations.Ring
@@ -15,9 +16,8 @@ import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.BufferFactory
 import kotlin.jvm.JvmName
 import kotlin.math.abs
-import kotlin.reflect.KClass
 
-public interface StructureFeature<T> : Attribute<T>
+public interface StructureAttribute<T> : Attribute<T>
 
 /**
  * Represents n-dimensional structure i.e., multidimensional container of items of the same type and size. The number
@@ -122,9 +122,14 @@ public interface StructureND<out T> : AttributeContainer, WithShape {
          */
         public fun <T> buffered(
             strides: Strides,
-            bufferFactory: BufferFactory<T> = BufferFactory.boxing(),
             initializer: (IntArray) -> T,
-        ): BufferND<T> = BufferND(strides, bufferFactory(strides.linearSize) { i -> initializer(strides.index(i)) })
+        ): BufferND<T> = BufferND(strides, Buffer.boxing(strides.linearSize) { i -> initializer(strides.index(i)) })
+
+
+        public fun <T> buffered(
+            shape: ShapeND,
+            initializer: (IntArray) -> T,
+        ): BufferND<T> = buffered(ColumnStrides(shape), initializer)
 
         /**
          * Inline create NDStructure with non-boxing buffer implementation if it is possible
@@ -135,16 +140,11 @@ public interface StructureND<out T> : AttributeContainer, WithShape {
         ): BufferND<T> = BufferND(strides, Buffer.auto(strides.linearSize) { i -> initializer(strides.index(i)) })
 
         public inline fun <T : Any> auto(
-            type: KClass<T>,
+            type: SafeType<T>,
             strides: Strides,
             crossinline initializer: (IntArray) -> T,
         ): BufferND<T> = BufferND(strides, Buffer.auto(type, strides.linearSize) { i -> initializer(strides.index(i)) })
 
-        public fun <T> buffered(
-            shape: ShapeND,
-            bufferFactory: BufferFactory<T> = BufferFactory.boxing(),
-            initializer: (IntArray) -> T,
-        ): BufferND<T> = buffered(ColumnStrides(shape), bufferFactory, initializer)
 
         public inline fun <reified T : Any> auto(
             shape: ShapeND,
@@ -159,7 +159,7 @@ public interface StructureND<out T> : AttributeContainer, WithShape {
             auto(ColumnStrides(ShapeND(shape)), initializer)
 
         public inline fun <T : Any> auto(
-            type: KClass<T>,
+            type: SafeType<T>,
             vararg shape: Int,
             crossinline initializer: (IntArray) -> T,
         ): BufferND<T> = auto(type, ColumnStrides(ShapeND(shape)), initializer)

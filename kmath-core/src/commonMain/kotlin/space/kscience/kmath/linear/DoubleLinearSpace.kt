@@ -12,6 +12,8 @@ import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.operations.invoke
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.DoubleBuffer
+import kotlin.reflect.KType
+import kotlin.reflect.typeOf
 
 public object DoubleLinearSpace : LinearSpace<Double, DoubleField> {
 
@@ -20,7 +22,7 @@ public object DoubleLinearSpace : LinearSpace<Double, DoubleField> {
     override fun buildMatrix(
         rows: Int,
         columns: Int,
-        initializer: DoubleField.(i: Int, j: Int) -> Double
+        initializer: DoubleField.(i: Int, j: Int) -> Double,
     ): Matrix<Double> = DoubleFieldOpsND.structureND(ShapeND(rows, columns)) { (i, j) ->
         DoubleField.initializer(i, j)
     }.as2D()

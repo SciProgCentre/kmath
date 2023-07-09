@@ -56,6 +56,8 @@ public object EjmlLinearSpace${ops} : EjmlLinearSpace<${type}, ${kmathAlgebra}, 
      */
     override val elementAlgebra: $kmathAlgebra get() = $kmathAlgebra
 
+    override val elementType: KType get() = typeOf<$type>()
+
     @Suppress("UNCHECKED_CAST")
     override fun Matrix<${type}>.toEjml(): Ejml${type}Matrix<${ejmlMatrixType}> = when {
         this is Ejml${type}Matrix<*> && origin is $ejmlMatrixType -> this as Ejml${type}Matrix<${ejmlMatrixType}>

@@ -5,6 +5,7 @@
 
 package space.kscience.kmath.linear
 
+import space.kscience.attributes.FlagAttribute
 import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.operations.Ring
 import space.kscience.kmath.structures.BufferAccessor2D
@@ -49,10 +50,10 @@ public inline fun <T : Any> LinearSpace<T, Ring<T>>.column(
 
 public fun <T : Any> LinearSpace<T, Ring<T>>.column(vararg values: T): Matrix<T> = column(values.size, values::get)
 
-public object SymmetricMatrixFeature : MatrixFeature
+public object Symmetric : MatrixAttribute<Unit>, FlagAttribute
 
 /**
- * Naive implementation of a symmetric matrix builder, that adds a [SymmetricMatrixFeature] tag. The resulting matrix contains
+ * Naive implementation of a symmetric matrix builder, that adds a [Symmetric] tag. The resulting matrix contains
  * full `size^2` number of elements, but caches elements during calls to save [builder] calls. [builder] is always called in the
  * upper triangle region meaning that `i <= j`
  */
@@ -72,6 +73,6 @@ public fun <T : Any, A : Ring<T>> MatrixBuilder<T, A>.symmetric(
             } else {
                 cached
             }
-        }.withFeature(SymmetricMatrixFeature)
+        }.withAttribute(Symmetric)
     }
 }

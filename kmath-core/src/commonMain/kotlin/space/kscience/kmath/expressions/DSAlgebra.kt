@@ -13,6 +13,8 @@ import space.kscience.kmath.structures.MutableBufferFactory
 import space.kscience.kmath.structures.asBuffer
 import kotlin.math.max
 import kotlin.math.min
+import kotlin.reflect.KType
+import kotlin.reflect.typeOf
 
 /**
  * Class representing both the value and the differentials of a function.

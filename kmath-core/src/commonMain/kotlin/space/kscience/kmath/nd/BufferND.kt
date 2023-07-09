@@ -34,9 +34,9 @@ public open class BufferND<out T>(
 /**
  * Create a generic [BufferND] using provided [initializer]
  */
-public fun <T> BufferND(
+public inline fun <reified T> BufferND(
     shape: ShapeND,
-    bufferFactory: BufferFactory<T> = BufferFactory.boxing(),
+    bufferFactory: BufferFactory<T> = BufferFactory.auto(),
     initializer: (IntArray) -> T,
 ): BufferND<T> {
     val strides = Strides(shape)

@@ -16,7 +16,6 @@ import kotlin.math.pow
 
 public typealias DoubleVector = Point<Double>
 
-@Suppress("FunctionName")
 public fun DoubleVector(vararg doubles: Double): DoubleVector = doubles.asBuffer()
 
 /**

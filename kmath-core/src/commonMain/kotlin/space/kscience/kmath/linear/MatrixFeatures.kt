@@ -3,20 +3,27 @@
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
+@file:OptIn(UnstableKMathAPI::class)
+@file:Suppress("UnusedReceiverParameter")
+
 package space.kscience.kmath.linear
 
-import space.kscience.attributes.Attribute
+import space.kscience.attributes.*
+import space.kscience.kmath.UnstableKMathAPI
+import space.kscience.kmath.nd.StructureAttribute
+import kotlin.reflect.KType
+import kotlin.reflect.typeOf
 
 /**
  * A marker interface representing some properties of matrices or additional transformations of them. Features are used
  * to optimize matrix operations performance in some cases or retrieve the APIs.
  */
-public interface MatrixFeature<T> : Attribute<T>
+public interface MatrixAttribute<T> : StructureAttribute<T>
 
 /**
  * Matrices with this feature are considered to have only diagonal non-zero elements.
  */
-public interface IsDiagonal : MatrixFeature<Unit> {
+public interface IsDiagonal : MatrixAttribute<Unit>, FlagAttribute {
     public companion object : IsDiagonal
 }
 
@@ -31,106 +38,92 @@ public object IsZero : IsDiagonal
 public object IsUnit : IsDiagonal
 
 /**
- * Matrices with this feature can be inverted: *[inverse] = a<sup>&minus;1</sup>* where *a* is the owning matrix.
+ * Matrices with this feature can be inverted.
  *
  * @param T the type of matrices' items.
  */
-public class Inverted<T> private constructor() : MatrixFeature<Matrix<T>> {
-    internal val instance: Inverted<Nothing> = Inverted()
-}
+public class Inverted<T>(type: SafeType<Matrix<T>>) :
+    PolymorphicAttribute<Matrix<T>>(type),
+    MatrixAttribute<Matrix<T>>
 
-@Suppress("UNCHECKED_CAST")
-public val <T> LinearSpace<T, *>.Inverted: Inverted<T> get() = Inverted.instance as Inverted<T>
+public val <T> MatrixOperations<T>.Inverted: Inverted<T> get() = Inverted(safeTypeOf())
 
 /**
  * Matrices with this feature can compute their determinant.
  *
  * @param T the type of matrices' items.
  */
-public class DeterminantFeature<T : Any> : MatrixFeature<T>
+public class Determinant<T>(type: SafeType<T>) :
+    PolymorphicAttribute<T>(type),
+    MatrixAttribute<T>
 
-/**
- * Produces a [DeterminantFeature] where the [DeterminantFeature.determinant] is [determinant].
- *
- * @param determinant the value of determinant.
- * @return a new [DeterminantFeature].
- */
-@Suppress("FunctionName")
-public fun <T : Any> DeterminantFeature(determinant: T): DeterminantFeature<T> = object : DeterminantFeature<T> {
-    override val determinant: T = determinant
-}
+public inline val <reified T> MatrixOperations<T>.Determinant: Determinant<T> get() = Determinant(safeTypeOf())
 
 /**
  * Matrices with this feature are lower triangular ones.
  */
-public object LFeature : MatrixFeature<Unit>
+public object LowerTriangular : MatrixAttribute<Unit>, FlagAttribute
 
 /**
  * Matrices with this feature are upper triangular ones.
  */
-public object UFeature : MatrixFeature<Unit>
+public object UpperTriangular : MatrixAttribute<Unit>, FlagAttribute
+
+/**
+ * Matrices with this feature support LU factorization: *a = [l] &middot; [u]* where *a* is the owning matrix.
+ * @param l The lower triangular matrix in this decomposition. It may have [LowerTriangular].
+ * @param u The upper triangular matrix in this decomposition. It may have [UpperTriangular].
+ */
+public data class LUDecomposition<T>(val l: Matrix<T>, val u: Matrix<T>)
 
 /**
  * Matrices with this feature support LU factorization: *a = [l] &middot; [u]* where *a* is the owning matrix.
  *
  * @param T the type of matrices' items.
  */
-public interface LUDecompositionFeature<out T : Any> : MatrixFeature {
-    /**
-     * The lower triangular matrix in this decomposition. It may have [LFeature].
-     */
-    public val l: Matrix<T>
+public class LuDecompositionAttribute<T>(type: SafeType<LUDecomposition<T>>) :
+    PolymorphicAttribute<LUDecomposition<T>>(type),
+    MatrixAttribute<LUDecomposition<T>>
 
-    /**
-     * The upper triangular matrix in this decomposition. It may have [UFeature].
-     */
-    public val u: Matrix<T>
-}
+public val <T> MatrixOperations<T>.LU: LuDecompositionAttribute<T> get() = LuDecompositionAttribute(safeTypeOf())
 
-/**
- * Matrices with this feature support LU factorization with partial pivoting: *[p] &middot; a = [l] &middot; [u]* where
- * *a* is the owning matrix.
- *
- * @param T the type of matrices' items.
- */
-public interface LupDecompositionFeature<out T : Any> : MatrixFeature {
-    /**
-     * The lower triangular matrix in this decomposition. It may have [LFeature].
-     */
-    public val l: Matrix<T>
-
-    /**
-     * The upper triangular matrix in this decomposition. It may have [UFeature].
-     */
-    public val u: Matrix<T>
-
-    /**
-     * The permutation matrix in this decomposition.
-     */
-    public val p: Matrix<T>
-}
 
 /**
  * Matrices with this feature are orthogonal ones: *a &middot; a<sup>T</sup> = u* where *a* is the owning matrix, *u*
  * is the unit matrix ([IsUnit]).
  */
-public object OrthogonalFeature : MatrixFeature
+public object OrthogonalAttribute : MatrixAttribute<Unit>, FlagAttribute
 
-/**
- * Matrices with this feature support QR factorization: *a = [q] &middot; [r]* where *a* is the owning matrix.
- *
- * @param T the type of matrices' items.
- */
-public interface QRDecompositionFeature<out T : Any> : MatrixFeature {
+
+public interface QRDecomposition<out T> {
     /**
-     * The orthogonal matrix in this decomposition. It may have [OrthogonalFeature].
+     * The orthogonal matrix in this decomposition. It may have [OrthogonalAttribute].
      */
     public val q: Matrix<T>
 
     /**
-     * The upper triangular matrix in this decomposition. It may have [UFeature].
+     * The upper triangular matrix in this decomposition. It may have [UpperTriangular].
      */
     public val r: Matrix<T>
+}
+
+/**
+ * Matrices with this feature support QR factorization: *a = [QR.q] &middot; [QR.r]* where *a* is the owning matrix.
+ *
+ * @param T the type of matrices' items.
+ */
+public class QRDecompositionAttribute<T>(type: SafeType<QRDecomposition<T>>) :
+    PolymorphicAttribute<QRDecomposition<T>>(type),
+    MatrixAttribute<QRDecomposition<T>>
+
+public val <T> MatrixOperations<T>.QR: QRDecompositionAttribute<T>
+    get() = QRDecompositionAttribute(safeTypeOf())
+
+public interface CholeskyDecomposition<T> {
+    /**
+     * The triangular matrix in this decomposition. It may have either [UpperTriangular] or [LowerTriangular].
+     */
+    public val l: Matrix<T>
 }
 
 /**
@@ -139,22 +132,16 @@ public interface QRDecompositionFeature<out T : Any> : MatrixFeature {
  *
  * @param T the type of matrices' items.
  */
-public interface CholeskyDecompositionFeature<out T : Any> : MatrixFeature {
-    /**
-     * The triangular matrix in this decomposition. It may have either [UFeature] or [LFeature].
-     */
-    public val l: Matrix<T>
-}
+public class CholeskyDecompositionAttribute<T>(type: SafeType<CholeskyDecomposition<T>>) :
+    PolymorphicAttribute<CholeskyDecomposition<T>>(type),
+    MatrixAttribute<CholeskyDecomposition<T>>
 
-/**
- * Matrices with this feature support SVD: *a = [u] &middot; [s] &middot; [v]<sup>H</sup>* where *a* is the owning
- * matrix.
- *
- * @param T the type of matrices' items.
- */
-public interface SingularValueDecompositionFeature<out T : Any> : MatrixFeature {
+public val <T> MatrixOperations<T>.Cholesky: CholeskyDecompositionAttribute<T>
+    get() = CholeskyDecompositionAttribute(safeTypeOf())
+
+public interface SingularValueDecomposition<T> {
     /**
-     * The matrix in this decomposition. It is unitary, and it consists from left singular vectors.
+     * The matrix in this decomposition. It is unitary, and it consists of left singular vectors.
      */
     public val u: Matrix<T>
 
@@ -164,14 +151,27 @@ public interface SingularValueDecompositionFeature<out T : Any> : MatrixFeature 
     public val s: Matrix<T>
 
     /**
-     * The matrix in this decomposition. It is unitary, and it consists from right singular vectors.
+     * The matrix in this decomposition. It is unitary, and it consists of right singular vectors.
      */
     public val v: Matrix<T>
 
     /**
-     * The buffer of singular values of this SVD.
+     * The buffer of singular values for this SVD.
      */
     public val singularValues: Point<T>
 }
+
+/**
+ * Matrices with this feature support SVD: *a = [u] &middot; [s] &middot; [v]<sup>H</sup>* where *a* is the owning
+ * matrix.
+ *
+ * @param T the type of matrices' items.
+ */
+public class SingularValueDecompositionAttribute<T>(type: SafeType<SingularValueDecomposition<T>>) :
+    PolymorphicAttribute<SingularValueDecomposition<T>>(type),
+    MatrixAttribute<SingularValueDecomposition<T>>
+
+public val <T> MatrixOperations<T>.SVD: SingularValueDecompositionAttribute<T>
+    get() = SingularValueDecompositionAttribute(safeTypeOf())
 
 //TODO add sparse matrix feature

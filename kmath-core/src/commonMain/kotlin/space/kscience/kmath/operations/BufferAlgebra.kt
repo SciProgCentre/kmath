@@ -8,6 +8,7 @@ package space.kscience.kmath.operations
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.MutableBuffer
 import space.kscience.kmath.structures.MutableBufferFactory
+import kotlin.reflect.KType
 
 public interface WithSize {
     public val size: Int
@@ -18,6 +19,9 @@ public interface WithSize {
  */
 public interface BufferAlgebra<T, out A : Algebra<T>> : Algebra<Buffer<T>> {
     public val elementAlgebra: A
+
+    public val elementType: KType
+
     public val elementBufferFactory: MutableBufferFactory<T> get() = elementAlgebra.bufferFactory
 
     public fun buffer(size: Int, vararg elements: T): Buffer<T> {

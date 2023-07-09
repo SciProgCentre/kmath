@@ -3,9 +3,11 @@
 ## Unreleased
 
 ### Added
-- Explicit `mutableStructureND` builders for mutable stucures
+- New Attributes-kt module that could be used as stand-alone. It declares type-safe attributes containers.
+- Explicit `mutableStructureND` builders for mutable structures
 
 ### Changed
+- Features replaced with Attributes.
 
 ### Deprecated
 

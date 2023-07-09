@@ -5,12 +5,15 @@
 
 package space.kscience.kmath.linear
 
+import space.kscience.attributes.SafeType
 import space.kscience.kmath.PerformancePitfall
 import space.kscience.kmath.nd.*
 import space.kscience.kmath.operations.*
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.VirtualBuffer
 import space.kscience.kmath.structures.indices
+import kotlin.reflect.KType
+import kotlin.reflect.typeOf
 
 
 public class BufferedLinearSpace<T, out A : Ring<T>>(
