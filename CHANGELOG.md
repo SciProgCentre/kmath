@@ -8,6 +8,7 @@
 
 ### Changed
 - Features replaced with Attributes.
+- Transposed refactored.
 
 ### Deprecated
 

@@ -79,7 +79,7 @@ public interface PointWeight : OptimizationFeature {
 public class XYFit(
     public val data: XYColumnarData<Double, Double, Double>,
     public val model: DifferentiableExpression<Double>,
-    override val features: FeatureSet<OptimizationFeature>,
+    override val attributes: FeatureSet<OptimizationFeature>,
     internal val pointToCurveDistance: PointToCurveDistance = PointToCurveDistance.byY,
     internal val pointWeight: PointWeight = PointWeight.byYSigma,
     public val xSymbol: Symbol = Symbol.x,
@@ -90,7 +90,7 @@ public class XYFit(
 }
 
 public fun XYFit.withFeature(vararg features: OptimizationFeature): XYFit {
-    return XYFit(data, model, this.features.with(*features), pointToCurveDistance, pointWeight)
+    return XYFit(data, model, this.attributes.with(*features), pointToCurveDistance, pointWeight)
 }
 
 public suspend fun XYColumnarData<Double, Double, Double>.fitWith(

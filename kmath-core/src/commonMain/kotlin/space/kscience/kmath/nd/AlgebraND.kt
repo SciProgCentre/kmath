@@ -71,30 +71,18 @@ public interface AlgebraND<T, out C : Algebra<T>> : Algebra<StructureND<T>> {
         structure.map { value -> this@invoke(value) }
 
     /**
-     * Get a feature of the structure in this scope. Structure features take precedence other context features.
+     * Get an attribute value for the structure in this scope. Structure features take precedence other context features.
      *
-     * @param F the type of feature.
      * @param structure the structure.
-     * @param type the [KClass] instance of [F].
+     * @param attribute to be computed.
      * @return a feature object or `null` if it isn't present.
      */
     @UnstableKMathAPI
-    public fun <F : StructureAttribute> getFeature(structure: StructureND<T>, type: KClass<out F>): F? =
-        structure.getFeature(type)
+    public fun <T, A : StructureAttribute<T>> attributeFor(structure: StructureND<*>, attribute: A): T? =
+        structure.attributes[attribute]
 
     public companion object
 }
-
-/**
- * Get a feature of the structure in this scope. Structure features take precedence other context features.
- *
- * @param T the type of items in the matrices.
- * @param F the type of feature.
- * @return a feature object or `null` if it isn't present.
- */
-@UnstableKMathAPI
-public inline fun <T : Any, reified F : StructureAttribute> AlgebraND<T, *>.getFeature(structure: StructureND<T>): F? =
-    getFeature(structure, F::class)
 
 /**
  * Space of [StructureND].

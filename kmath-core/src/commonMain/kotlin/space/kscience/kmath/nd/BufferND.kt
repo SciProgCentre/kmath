@@ -36,8 +36,8 @@ public open class BufferND<out T>(
  */
 public inline fun <reified T> BufferND(
     shape: ShapeND,
-    bufferFactory: BufferFactory<T> = BufferFactory.auto(),
-    initializer: (IntArray) -> T,
+    bufferFactory: BufferFactory<T> = BufferFactory.auto<T>(),
+    crossinline initializer: (IntArray) -> T,
 ): BufferND<T> {
     val strides = Strides(shape)
     return BufferND(strides, bufferFactory(strides.linearSize) { initializer(strides.index(it)) })

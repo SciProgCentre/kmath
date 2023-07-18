@@ -53,9 +53,9 @@ internal fun XYFit.logLikelihood(): DifferentiableExpression<Double> = object : 
  */
 @UnstableKMathAPI
 public suspend fun Optimizer<Double, FunctionOptimization<Double>>.maximumLogLikelihood(problem: XYFit): XYFit {
-    val functionOptimization = FunctionOptimization(problem.features, problem.logLikelihood())
+    val functionOptimization = FunctionOptimization(problem.attributes, problem.logLikelihood())
     val result = optimize(functionOptimization.withFeatures(FunctionOptimizationTarget.MAXIMIZE))
-    return XYFit(problem.data, problem.model, result.features)
+    return XYFit(problem.data, problem.model, result.attributes)
 }
 
 @UnstableKMathAPI

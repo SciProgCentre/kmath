@@ -5,21 +5,21 @@
 
 package space.kscience.kmath.optimization
 
+import space.kscience.attributes.*
 import space.kscience.kmath.expressions.DifferentiableExpression
 import space.kscience.kmath.expressions.Symbol
-import space.kscience.kmath.misc.FeatureSet
 
 public class OptimizationValue<T>(public val value: T) : OptimizationFeature {
     override fun toString(): String = "Value($value)"
 }
 
-public enum class FunctionOptimizationTarget : OptimizationFeature {
+public enum class FunctionOptimizationTarget {
     MAXIMIZE,
     MINIMIZE
 }
 
 public class FunctionOptimization<T>(
-    override val features: FeatureSet<OptimizationFeature>,
+    override val attributes: Attributes,
     public val expression: DifferentiableExpression<T>,
 ) : OptimizationProblem<T> {
 
@@ -30,25 +30,36 @@ public class FunctionOptimization<T>(
 
         other as FunctionOptimization<*>
 
-        if (features != other.features) return false
+        if (attributes != other.attributes) return false
         if (expression != other.expression) return false
 
         return true
     }
 
     override fun hashCode(): Int {
-        var result = features.hashCode()
+        var result = attributes.hashCode()
         result = 31 * result + expression.hashCode()
         return result
     }
 
-    override fun toString(): String = "FunctionOptimization(features=$features)"
+    override fun toString(): String = "FunctionOptimization(features=$attributes)"
+
+    public companion object
 }
+
+
+
+public class OptimizationPrior<T>(type: SafeType<T>):
+    PolymorphicAttribute<DifferentiableExpression<T>>(safeTypeOf()),
+    Attribute<DifferentiableExpression<T>>
+
+public val <T> FunctionOptimization.Companion.Optimization get() =
+
 
 public fun <T> FunctionOptimization<T>.withFeatures(
     vararg newFeature: OptimizationFeature,
 ): FunctionOptimization<T> = FunctionOptimization(
-    features.with(*newFeature),
+    attributes.with(*newFeature),
     expression,
 )
 

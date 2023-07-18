@@ -11,8 +11,6 @@ package space.kscience.kmath.linear
 import space.kscience.attributes.*
 import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.nd.StructureAttribute
-import kotlin.reflect.KType
-import kotlin.reflect.typeOf
 
 /**
  * A marker interface representing some properties of matrices or additional transformations of them. Features are used
@@ -53,11 +51,9 @@ public val <T> MatrixOperations<T>.Inverted: Inverted<T> get() = Inverted(safeTy
  *
  * @param T the type of matrices' items.
  */
-public class Determinant<T>(type: SafeType<T>) :
-    PolymorphicAttribute<T>(type),
-    MatrixAttribute<T>
+public class Determinant<T> : MatrixAttribute<T>
 
-public inline val <reified T> MatrixOperations<T>.Determinant: Determinant<T> get() = Determinant(safeTypeOf())
+public val <T> MatrixOperations<T>.Determinant: Determinant<T> get() = Determinant()
 
 /**
  * Matrices with this feature are lower triangular ones.
@@ -173,5 +169,6 @@ public class SingularValueDecompositionAttribute<T>(type: SafeType<SingularValue
 
 public val <T> MatrixOperations<T>.SVD: SingularValueDecompositionAttribute<T>
     get() = SingularValueDecompositionAttribute(safeTypeOf())
+
 
 //TODO add sparse matrix feature

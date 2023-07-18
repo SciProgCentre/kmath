@@ -68,9 +68,6 @@ public open class PolynomialSpace<C, A>(
     public val ring: A,
 ) : Ring<Polynomial<C>>, ScaleOperations<Polynomial<C>> where A : Ring<C>, A : ScaleOperations<C> {
 
-    @UnstableKMathAPI
-    override val elementType: KType get() = typeOf<Polynomial<C>>()
-
     /**
      * Instance of zero constant (zero of the underlying ring).
      */

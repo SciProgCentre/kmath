@@ -5,6 +5,7 @@
 
 package space.kscience.kmath.nd
 
+import space.kscience.attributes.Attributes
 import space.kscience.kmath.PerformancePitfall
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.MutableBuffer
@@ -110,7 +111,8 @@ private value class Structure2DWrapper<out T>(val structure: StructureND<T>) : S
     @PerformancePitfall
     override operator fun get(i: Int, j: Int): T = structure[i, j]
 
-    override fun <F : StructureAttribute> getFeature(type: KClass<out F>): F? = structure.getFeature(type)
+    override val attributes: Attributes
+        get() = structure.attributes
 
     @PerformancePitfall
     override fun elements(): Sequence<Pair<IntArray, T>> = structure.elements()

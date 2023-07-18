@@ -20,8 +20,6 @@ public interface WithSize {
 public interface BufferAlgebra<T, out A : Algebra<T>> : Algebra<Buffer<T>> {
     public val elementAlgebra: A
 
-    public val elementType: KType
-
     public val elementBufferFactory: MutableBufferFactory<T> get() = elementAlgebra.bufferFactory
 
     public fun buffer(size: Int, vararg elements: T): Buffer<T> {

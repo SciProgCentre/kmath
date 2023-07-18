@@ -7,13 +7,13 @@ package space.kscience.kmath.nd
 
 import space.kscience.attributes.Attribute
 import space.kscience.attributes.AttributeContainer
+import space.kscience.attributes.Attributes
 import space.kscience.attributes.SafeType
 import space.kscience.kmath.PerformancePitfall
 import space.kscience.kmath.linear.LinearSpace
 import space.kscience.kmath.operations.Ring
 import space.kscience.kmath.operations.invoke
 import space.kscience.kmath.structures.Buffer
-import space.kscience.kmath.structures.BufferFactory
 import kotlin.jvm.JvmName
 import kotlin.math.abs
 
@@ -56,6 +56,8 @@ public interface StructureND<out T> : AttributeContainer, WithShape {
      */
     @PerformancePitfall
     public fun elements(): Sequence<Pair<IntArray, T>> = indices.asSequence().map { it to get(it) }
+
+    override val attributes: Attributes get() = Attributes.EMPTY
 
     public companion object {
         /**

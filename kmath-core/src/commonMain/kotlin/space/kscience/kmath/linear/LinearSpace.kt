@@ -174,9 +174,8 @@ public interface LinearSpace<T, out A : Ring<T>> : MatrixOperations<T> {
     /**
      * Get an attribute value for the structure in this scope. Structure features take precedence other context features.
      *
-     * @param A the type of feature.
      * @param structure the structure.
-     * @param attribute to be computed
+     * @param attribute to be computed.
      * @return a feature object or `null` if it isn't present.
      */
     @UnstableKMathAPI

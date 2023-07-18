@@ -21,7 +21,7 @@ public fun interface BufferFactory<T> {
     public operator fun invoke(size: Int, builder: (Int) -> T): Buffer<T>
 
     public companion object{
-        public inline fun <reified T : Any> auto(): BufferFactory<T> =
+        public inline fun <reified T> auto(): BufferFactory<T> =
             BufferFactory(Buffer.Companion::auto)
 
         public fun <T> boxing(): BufferFactory<T> =

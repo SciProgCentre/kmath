@@ -29,5 +29,4 @@ public class VirtualMatrix<out T : Any>(
 public fun <T : Any> MatrixBuilder<T, *>.virtual(
     attributes: Attributes = Attributes.EMPTY,
     generator: (i: Int, j: Int) -> T,
-): VirtualMatrix<T> =
-    VirtualMatrix(rows, columns, attributes, generator)
+): VirtualMatrix<T> = VirtualMatrix(rows, columns, attributes, generator)

@@ -15,7 +15,7 @@ private fun DMatrixContext<Double, *>.simple() {
     val m2 = produce<D3, D2> { i, j -> (i + j).toDouble() }
 
     //Dimension-safe addition
-    m1.transpose() + m2
+    m1.transposed() + m2
 }
 
 private object D5 : Dimension {

@@ -125,7 +125,7 @@ public object CMOptimizer : Optimizer<Double, FunctionOptimization<Double>> {
 
             val logger = problem.getFeature<OptimizationLog>()
 
-            for (feature in problem.features) {
+            for (feature in problem.attributes) {
                 when (feature) {
                     is CMOptimizerData -> feature.data.forEach { dataBuilder ->
                         addOptimizationData(dataBuilder())

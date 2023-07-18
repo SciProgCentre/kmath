@@ -82,13 +82,3 @@ public fun <T : Any> LinearSpace<T, Ring<T>>.zero(
 ): MatrixWrapper<T> = VirtualMatrix(rows, columns) { _, _ ->
     elementAlgebra.zero
 }.withAttribute(IsZero)
-
-public class TransposedAttribute<out T : Any>(public val original: Matrix<T>) : MatrixAttribute
-
-/**
- * Create a virtual transposed matrix without copying anything. `A.transpose().transpose() === A`
- */
-@Suppress("UNCHECKED_CAST")
-@OptIn(UnstableKMathAPI::class)
-public fun <T : Any> Matrix<T>.transpose(): Matrix<T> = getFeature(TransposedAttribute::class)?.original as? Matrix<T>
-    ?: VirtualMatrix(colNum, rowNum) { i, j -> get(j, i) }.withAttribute(TransposedAttribute(this))

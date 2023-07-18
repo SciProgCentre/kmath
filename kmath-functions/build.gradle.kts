@@ -9,8 +9,6 @@ kscience{
 
     wasm()
 
-
-
     dependencies {
         api(projects.kmathCore)
     }

@@ -5,31 +5,21 @@
 
 package space.kscience.kmath.optimization
 
+import space.kscience.attributes.*
 import space.kscience.kmath.expressions.DifferentiableExpression
 import space.kscience.kmath.expressions.NamedMatrix
 import space.kscience.kmath.expressions.Symbol
 import space.kscience.kmath.misc.*
 import kotlin.reflect.KClass
 
-public interface OptimizationFeature : Feature<OptimizationFeature> {
-    // enforce toString override
-    override fun toString(): String
-}
+public interface OptimizationAttribute<T>: Attribute<T>
 
-public interface OptimizationProblem<T> : Featured<OptimizationFeature> {
-    public val features: FeatureSet<OptimizationFeature>
-    override fun <F : OptimizationFeature> getFeature(type: KClass<out F>): F? = features.getFeature(type)
-}
+public interface OptimizationProblem<T> : AttributeContainer
 
 public inline fun <reified F : OptimizationFeature> OptimizationProblem<*>.getFeature(): F? = getFeature(F::class)
 
 public open class OptimizationStartPoint<T>(public val point: Map<Symbol, T>) : OptimizationFeature {
     override fun toString(): String = "StartPoint($point)"
-}
-
-
-public interface OptimizationPrior<T> : OptimizationFeature, DifferentiableExpression<T> {
-    override val key: FeatureKey<OptimizationFeature> get() = OptimizationPrior::class
 }
 
 /**

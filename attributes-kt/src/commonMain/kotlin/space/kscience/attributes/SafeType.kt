@@ -5,6 +5,7 @@
 
 package space.kscience.attributes
 
+import kotlin.jvm.JvmInline
 import kotlin.reflect.KClass
 import kotlin.reflect.KType
 import kotlin.reflect.typeOf
@@ -14,7 +15,8 @@ import kotlin.reflect.typeOf
  *
  * @param kType raw [KType]
  */
-public class SafeType<T> @PublishedApi internal constructor(public val kType: KType)
+@JvmInline
+public value class SafeType<T> @PublishedApi internal constructor(public val kType: KType)
 
 public inline fun <reified T> safeTypeOf(): SafeType<T> = SafeType(typeOf<T>())
 

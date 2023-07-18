@@ -21,12 +21,11 @@ import space.kscience.kmath.structures.*
  * @param T the type of matrices' items.
  * @param l The lower triangular matrix in this decomposition. It may have [LowerTriangular].
  * @param u The upper triangular matrix in this decomposition. It may have [UpperTriangular].
- * @param p he permutation matrix in this decomposition. May have [Determinant] attribute
  */
 public data class LupDecomposition<T>(
     public val l: Matrix<T>,
     public val u: Matrix<T>,
-    public val p: Matrix<T>,
+    public val pivot: IntBuffer,
 )
 
 
@@ -180,12 +179,12 @@ public fun <T : Comparable<T>> LinearSpace<T, Field<T>>.lup(
             val u = VirtualMatrix(rowNum, colNum) { i, j ->
                 if (j >= i) lu[i, j] else zero
             }.withAttribute(UpperTriangular)
+//
+//            val p = VirtualMatrix(rowNum, colNum) { i, j ->
+//                if (j == pivot[i]) one else zero
+//            }.withAttribute(Determinant, if (even) one else -one)
 
-            val p = VirtualMatrix(rowNum, colNum) { i, j ->
-                if (j == pivot[i]) one else zero
-            }.withAttribute(Determinant, if (even) one else -one)
-
-            return LupDecomposition(l, u, p)
+            return LupDecomposition(l, u, pivot.asBuffer())
         }
     }
 }
@@ -209,7 +208,7 @@ internal fun <T : Any, A : Field<T>> LinearSpace<T, A>.solve(
 
             for (row in 0 until rowNum) {
                 val bpRow = bp.row(row)
-                val pRow = pivot[row]
+                val pRow = lup.pivot[row]
                 for (col in 0 until matrix.colNum) bpRow[col] = matrix[pRow, col]
             }
 
