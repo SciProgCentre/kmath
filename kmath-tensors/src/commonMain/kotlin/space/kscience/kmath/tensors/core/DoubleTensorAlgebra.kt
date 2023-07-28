@@ -17,10 +17,7 @@ import space.kscience.kmath.tensors.api.AnalyticTensorAlgebra
 import space.kscience.kmath.tensors.api.LinearOpsTensorAlgebra
 import space.kscience.kmath.tensors.api.Tensor
 import space.kscience.kmath.tensors.core.internal.*
-import kotlin.math.abs
-import kotlin.math.ceil
-import kotlin.math.floor
-import kotlin.math.sqrt
+import kotlin.math.*
 
 /**
  * Implementation of basic operations over double tensors and basic algebra operations on them.
@@ -706,14 +703,18 @@ public open class DoubleTensorAlgebra :
     override fun svd(
         structureND: StructureND<Double>,
     ): Triple<StructureND<Double>, StructureND<Double>, StructureND<Double>> =
-        svd(structureND = structureND, epsilon = 1e-10)
+        svdGolubKahan(structureND = structureND, epsilon = 1e-10)
 
     override fun symEig(structureND: StructureND<Double>): Pair<DoubleTensor, DoubleTensor> =
         symEigJacobi(structureND = structureND, maxIteration = 50, epsilon = 1e-15)
 
+    override fun solve(a: MutableStructure2D<Double>, b: MutableStructure2D<Double>): MutableStructure2D<Double> {
+        val aSvd = DoubleTensorAlgebra.svd(a)
+        val s = BroadcastDoubleTensorAlgebra.diagonalEmbedding(aSvd.second.map {1.0 / it})
+        val aInverse = aSvd.third.dot(s).dot(aSvd.first.transposed())
+        return aInverse.dot(b).as2D()
+    }
 }
 
 public val Double.Companion.tensorAlgebra: DoubleTensorAlgebra get() = DoubleTensorAlgebra
 public val DoubleField.tensorAlgebra: DoubleTensorAlgebra get() = DoubleTensorAlgebra
-
-

@@ -6,9 +6,7 @@
 package space.kscience.kmath.tensors.core
 
 
-import space.kscience.kmath.nd.ShapeND
-import space.kscience.kmath.nd.contentEquals
-import space.kscience.kmath.nd.get
+import space.kscience.kmath.nd.*
 import space.kscience.kmath.operations.invoke
 import space.kscience.kmath.testutils.assertBufferEquals
 import kotlin.test.Test
