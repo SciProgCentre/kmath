@@ -120,8 +120,6 @@ public fun DoubleTensorAlgebra.levenbergMarquardt(inputData: LMInput): LMResultI
         0.0, inputData.startParameters, TypeOfConvergence.NoConvergence
     )
 
-    val eps = 2.2204e-16
-
     val settings = LMSettings(0, 0, inputData.exampleNumber)
     settings.funcCalls = 0 // running count of function evaluations
 
@@ -214,7 +212,7 @@ public fun DoubleTensorAlgebra.levenbergMarquardt(inputData: LMInput): LMResultI
         stop = true
     }
 
-    var lambda = 1.0
+    var lambda: Double
     var nu = 1
 
     if (updateType == 1) {
@@ -273,8 +271,8 @@ public fun DoubleTensorAlgebra.levenbergMarquardt(inputData: LMInput): LMResultI
         val alpha = 1.0
         if (updateType == 2) { // Quadratic
             // One step of quadratic line update in the h direction for minimum X2
-            val alpha = (jtWdy.transpose() dot h) / ((X2Try - x2) / 2.0 + 2 * (jtWdy.transpose() dot h))
-            h = h dot alpha
+            val alphaTensor = (jtWdy.transpose() dot h) / ((X2Try - x2) / 2.0 + 2 * (jtWdy.transpose() dot h))
+            h = h dot alphaTensor
             pTry = (p + h).as2D() // update only [idx] elements
             pTry = smallestElementComparison(
                 largestElementComparison(minParameters, pTry),
@@ -388,7 +386,7 @@ public fun DoubleTensorAlgebra.levenbergMarquardt(inputData: LMInput): LMResultI
             resultInfo.typeOfConvergence = TypeOfConvergence.InGradient
             stop = true
         }
-        if ((abs(h.as2D()).div(abs(p) + 1e-12)).max() < epsilon2 && settings.iteration > 2) {
+        if ((abs(h.as2D()) / (abs(p) + 1e-12)).max() < epsilon2 && settings.iteration > 2) {
             resultInfo.typeOfConvergence = TypeOfConvergence.InParameters
             stop = true
         }
