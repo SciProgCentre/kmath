@@ -10,7 +10,7 @@ import kotlinx.coroutines.GlobalScope
 import org.nd4j.linalg.factory.Nd4j
 import space.kscience.kmath.nd.*
 import space.kscience.kmath.nd4j.nd4j
-import space.kscience.kmath.operations.DoubleField
+import space.kscience.kmath.operations.Float64Field
 import space.kscience.kmath.operations.invoke
 import space.kscience.kmath.viktor.ViktorFieldND
 import kotlin.contracts.InvocationKind
@@ -33,15 +33,15 @@ fun main() {
 
 
     // specialized nd-field for Double. It works as generic Double field as well.
-    val doubleField = DoubleField.ndAlgebra
+    val doubleField = Float64Field.ndAlgebra
     //A generic field. It should be used for objects, not primitives.
-    val genericField = BufferedFieldOpsND(DoubleField)
+    val genericField = BufferedFieldOpsND(Float64Field)
     // Nd4j specialized field.
-    val nd4jField = DoubleField.nd4j
+    val nd4jField = Float64Field.nd4j
     //viktor field
     val viktorField = ViktorFieldND(dim, dim)
     //parallel processing based on Java Streams
-    val parallelField = DoubleField.ndStreaming(dim, dim)
+    val parallelField = Float64Field.ndStreaming(dim, dim)
 
     measureAndPrint("Boxing addition") {
         genericField {

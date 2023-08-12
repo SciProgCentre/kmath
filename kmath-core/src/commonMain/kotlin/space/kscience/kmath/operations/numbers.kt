@@ -2,7 +2,6 @@
  * Copyright 2018-2022 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
-@file:Suppress("NOTHING_TO_INLINE")
 package space.kscience.kmath.operations
 
 import space.kscience.kmath.structures.*
@@ -67,7 +66,7 @@ public interface ExtendedField<T> : ExtendedFieldOps<T>, Field<T>, NumericAlgebr
  * A field for [Double] without boxing. Does not produce appropriate field element.
  */
 @Suppress("EXTENSION_SHADOWED_BY_MEMBER", "OVERRIDE_BY_INLINE")
-public object DoubleField : ExtendedField<Double>, Norm<Double, Double>, ScaleOperations<Double> {
+public object Float64Field : ExtendedField<Double>, Norm<Double, Double>, ScaleOperations<Double> {
     override val bufferFactory: MutableBufferFactory<Double> = MutableBufferFactory(::DoubleBuffer)
 
     override inline val zero: Double get() = 0.0
@@ -121,13 +120,15 @@ public object DoubleField : ExtendedField<Double>, Norm<Double, Double>, ScaleOp
     override inline fun Double.div(arg: Double): Double = this / arg
 }
 
-public val Double.Companion.algebra: DoubleField get() = DoubleField
+public typealias DoubleField = Float64Field
+
+public val Double.Companion.algebra: Float64Field get() = Float64Field
 
 /**
  * A field for [Float] without boxing. Does not produce appropriate field element.
  */
 @Suppress("EXTENSION_SHADOWED_BY_MEMBER", "OVERRIDE_BY_INLINE")
-public object FloatField : ExtendedField<Float>, Norm<Float, Float> {
+public object Float32Field : ExtendedField<Float>, Norm<Float, Float> {
     override val bufferFactory: MutableBufferFactory<Float> = MutableBufferFactory(::FloatBuffer)
 
     override inline val zero: Float get() = 0.0f
@@ -177,13 +178,15 @@ public object FloatField : ExtendedField<Float>, Norm<Float, Float> {
     override inline fun Float.div(arg: Float): Float = this / arg
 }
 
-public val Float.Companion.algebra: FloatField get() = FloatField
+public typealias FloatField = Float32Field
+
+public val Float.Companion.algebra: Float32Field get() = Float32Field
 
 /**
  * A field for [Int] without boxing. Does not produce corresponding ring element.
  */
 @Suppress("EXTENSION_SHADOWED_BY_MEMBER", "OVERRIDE_BY_INLINE")
-public object IntRing : Ring<Int>, Norm<Int, Int>, NumericAlgebra<Int> {
+public object Int32Ring : Ring<Int>, Norm<Int, Int>, NumericAlgebra<Int> {
     override val bufferFactory: MutableBufferFactory<Int> = MutableBufferFactory(::IntBuffer)
 
     override inline val zero: Int get() = 0
@@ -200,13 +203,15 @@ public object IntRing : Ring<Int>, Norm<Int, Int>, NumericAlgebra<Int> {
     override inline fun Int.times(arg: Int): Int = this * arg
 }
 
-public val Int.Companion.algebra: IntRing get() = IntRing
+public typealias IntRing = Int32Ring
+
+public val Int.Companion.algebra: Int32Ring get() = Int32Ring
 
 /**
  * A field for [Short] without boxing. Does not produce appropriate ring element.
  */
 @Suppress("EXTENSION_SHADOWED_BY_MEMBER", "OVERRIDE_BY_INLINE")
-public object ShortRing : Ring<Short>, Norm<Short, Short>, NumericAlgebra<Short> {
+public object Int16Ring : Ring<Short>, Norm<Short, Short>, NumericAlgebra<Short> {
     override val bufferFactory: MutableBufferFactory<Short> = MutableBufferFactory(::ShortBuffer)
 
     override inline val zero: Short get() = 0
@@ -223,7 +228,9 @@ public object ShortRing : Ring<Short>, Norm<Short, Short>, NumericAlgebra<Short>
     override inline fun Short.times(arg: Short): Short = (this * arg).toShort()
 }
 
-public val Short.Companion.algebra: ShortRing get() = ShortRing
+public typealias ShortRing = Int16Ring
+
+public val Short.Companion.algebra: Int16Ring get() = Int16Ring
 
 /**
  * A field for [Byte] without boxing. Does not produce appropriate ring element.
@@ -249,10 +256,10 @@ public object ByteRing : Ring<Byte>, Norm<Byte, Byte>, NumericAlgebra<Byte> {
 public val Byte.Companion.algebra: ByteRing get() = ByteRing
 
 /**
- * A field for [Double] without boxing. Does not produce appropriate ring element.
+ * A field for [Double] without boxing. Does not produce an appropriate ring element.
  */
 @Suppress("EXTENSION_SHADOWED_BY_MEMBER", "OVERRIDE_BY_INLINE")
-public object LongRing : Ring<Long>, Norm<Long, Long>, NumericAlgebra<Long> {
+public object Int64Ring : Ring<Long>, Norm<Long, Long>, NumericAlgebra<Long> {
     override val bufferFactory: MutableBufferFactory<Long> = MutableBufferFactory(::LongBuffer)
 
     override inline val zero: Long get() = 0L
@@ -269,4 +276,6 @@ public object LongRing : Ring<Long>, Norm<Long, Long>, NumericAlgebra<Long> {
     override inline fun Long.times(arg: Long): Long = (this * arg)
 }
 
-public val Long.Companion.algebra: LongRing get() = LongRing
+public typealias LongRing = Int64Ring
+
+public val Long.Companion.algebra: Int64Ring get() = Int64Ring

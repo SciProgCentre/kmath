@@ -8,25 +8,25 @@ package space.kscience.kmath.linear
 import space.kscience.kmath.PerformancePitfall
 import space.kscience.kmath.nd.*
 import space.kscience.kmath.operations.DoubleBufferOps
-import space.kscience.kmath.operations.DoubleField
+import space.kscience.kmath.operations.Float64Field
 import space.kscience.kmath.operations.invoke
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.DoubleBuffer
 
-public object DoubleLinearSpace : LinearSpace<Double, DoubleField> {
+public object DoubleLinearSpace : LinearSpace<Double, Float64Field> {
 
-    override val elementAlgebra: DoubleField get() = DoubleField
+    override val elementAlgebra: Float64Field get() = Float64Field
 
     override fun buildMatrix(
         rows: Int,
         columns: Int,
-        initializer: DoubleField.(i: Int, j: Int) -> Double
+        initializer: Float64Field.(i: Int, j: Int) -> Double
     ): Matrix<Double> = DoubleFieldOpsND.structureND(ShapeND(rows, columns)) { (i, j) ->
-        DoubleField.initializer(i, j)
+        Float64Field.initializer(i, j)
     }.as2D()
 
-    override fun buildVector(size: Int, initializer: DoubleField.(Int) -> Double): DoubleBuffer =
-        DoubleBuffer(size) { DoubleField.initializer(it) }
+    override fun buildVector(size: Int, initializer: Float64Field.(Int) -> Double): DoubleBuffer =
+        DoubleBuffer(size) { Float64Field.initializer(it) }
 
     override fun Matrix<Double>.unaryMinus(): Matrix<Double> = DoubleFieldOpsND {
         asND().map { -it }.as2D()
@@ -105,4 +105,4 @@ public object DoubleLinearSpace : LinearSpace<Double, DoubleField> {
 
 }
 
-public val DoubleField.linearSpace: DoubleLinearSpace get() = DoubleLinearSpace
+public val Float64Field.linearSpace: DoubleLinearSpace get() = DoubleLinearSpace

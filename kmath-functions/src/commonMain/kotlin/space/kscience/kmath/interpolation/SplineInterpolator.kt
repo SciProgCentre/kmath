@@ -9,8 +9,8 @@ import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.data.XYColumnarData
 import space.kscience.kmath.functions.PiecewisePolynomial
 import space.kscience.kmath.functions.Polynomial
-import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.operations.Field
+import space.kscience.kmath.operations.Float64Field
 import space.kscience.kmath.operations.invoke
 import space.kscience.kmath.structures.DoubleBuffer
 import space.kscience.kmath.structures.MutableBufferFactory
@@ -79,5 +79,5 @@ public fun <T : Comparable<T>> Field<T>.splineInterpolator(
     bufferFactory: MutableBufferFactory<T>,
 ): SplineInterpolator<T> = SplineInterpolator(this, bufferFactory)
 
-public val DoubleField.splineInterpolator: SplineInterpolator<Double>
+public val Float64Field.splineInterpolator: SplineInterpolator<Double>
     get() = SplineInterpolator(this, ::DoubleBuffer)

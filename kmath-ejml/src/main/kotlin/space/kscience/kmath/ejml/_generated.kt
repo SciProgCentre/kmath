@@ -19,12 +19,12 @@ import org.ejml.sparse.csc.factory.DecompositionFactory_DSCC
 import org.ejml.sparse.csc.factory.DecompositionFactory_FSCC
 import org.ejml.sparse.csc.factory.LinearSolverFactory_DSCC
 import org.ejml.sparse.csc.factory.LinearSolverFactory_FSCC
+import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.linear.*
 import space.kscience.kmath.linear.Matrix
-import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.nd.StructureFeature
-import space.kscience.kmath.operations.DoubleField
-import space.kscience.kmath.operations.FloatField
+import space.kscience.kmath.operations.Float32Field
+import space.kscience.kmath.operations.Float64Field
 import space.kscience.kmath.operations.invoke
 import space.kscience.kmath.structures.DoubleBuffer
 import space.kscience.kmath.structures.FloatBuffer
@@ -71,11 +71,11 @@ public class EjmlFloatMatrix<out M : FMatrix>(override val origin: M) : EjmlMatr
  * [EjmlLinearSpace] implementation based on [CommonOps_DDRM], [DecompositionFactory_DDRM] operations and
  * [DMatrixRMaj] matrices.
  */
-public object EjmlLinearSpaceDDRM : EjmlLinearSpace<Double, DoubleField, DMatrixRMaj>() {
+public object EjmlLinearSpaceDDRM : EjmlLinearSpace<Double, Float64Field, DMatrixRMaj>() {
     /**
-     * The [DoubleField] reference.
+     * The [Float64Field] reference.
      */
-    override val elementAlgebra: DoubleField get() = DoubleField
+    override val elementAlgebra: Float64Field get() = Float64Field
 
     @Suppress("UNCHECKED_CAST")
     override fun Matrix<Double>.toEjml(): EjmlDoubleMatrix<DMatrixRMaj> = when {
@@ -94,7 +94,7 @@ public object EjmlLinearSpaceDDRM : EjmlLinearSpace<Double, DoubleField, DMatrix
     override fun buildMatrix(
         rows: Int,
         columns: Int,
-        initializer: DoubleField.(i: Int, j: Int) -> Double,
+        initializer: Float64Field.(i: Int, j: Int) -> Double,
     ): EjmlDoubleMatrix<DMatrixRMaj> = DMatrixRMaj(rows, columns).also {
         (0 until rows).forEach { row ->
             (0 until columns).forEach { col -> it[row, col] = elementAlgebra.initializer(row, col) }
@@ -103,7 +103,7 @@ public object EjmlLinearSpaceDDRM : EjmlLinearSpace<Double, DoubleField, DMatrix
 
     override fun buildVector(
         size: Int,
-        initializer: DoubleField.(Int) -> Double,
+        initializer: Float64Field.(Int) -> Double,
     ): EjmlDoubleVector<DMatrixRMaj> = EjmlDoubleVector(DMatrixRMaj(size, 1).also {
         (0 until it.numRows).forEach { row -> it[row, 0] = elementAlgebra.initializer(row) }
     })
@@ -307,11 +307,11 @@ public object EjmlLinearSpaceDDRM : EjmlLinearSpace<Double, DoubleField, DMatrix
  * [EjmlLinearSpace] implementation based on [CommonOps_FDRM], [DecompositionFactory_FDRM] operations and
  * [FMatrixRMaj] matrices.
  */
-public object EjmlLinearSpaceFDRM : EjmlLinearSpace<Float, FloatField, FMatrixRMaj>() {
+public object EjmlLinearSpaceFDRM : EjmlLinearSpace<Float, Float32Field, FMatrixRMaj>() {
     /**
-     * The [FloatField] reference.
+     * The [Float32Field] reference.
      */
-    override val elementAlgebra: FloatField get() = FloatField
+    override val elementAlgebra: Float32Field get() = Float32Field
 
     @Suppress("UNCHECKED_CAST")
     override fun Matrix<Float>.toEjml(): EjmlFloatMatrix<FMatrixRMaj> = when {
@@ -330,7 +330,7 @@ public object EjmlLinearSpaceFDRM : EjmlLinearSpace<Float, FloatField, FMatrixRM
     override fun buildMatrix(
         rows: Int,
         columns: Int,
-        initializer: FloatField.(i: Int, j: Int) -> Float,
+        initializer: Float32Field.(i: Int, j: Int) -> Float,
     ): EjmlFloatMatrix<FMatrixRMaj> = FMatrixRMaj(rows, columns).also {
         (0 until rows).forEach { row ->
             (0 until columns).forEach { col -> it[row, col] = elementAlgebra.initializer(row, col) }
@@ -339,7 +339,7 @@ public object EjmlLinearSpaceFDRM : EjmlLinearSpace<Float, FloatField, FMatrixRM
 
     override fun buildVector(
         size: Int,
-        initializer: FloatField.(Int) -> Float,
+        initializer: Float32Field.(Int) -> Float,
     ): EjmlFloatVector<FMatrixRMaj> = EjmlFloatVector(FMatrixRMaj(size, 1).also {
         (0 until it.numRows).forEach { row -> it[row, 0] = elementAlgebra.initializer(row) }
     })
@@ -543,11 +543,11 @@ public object EjmlLinearSpaceFDRM : EjmlLinearSpace<Float, FloatField, FMatrixRM
  * [EjmlLinearSpace] implementation based on [CommonOps_DSCC], [DecompositionFactory_DSCC] operations and
  * [DMatrixSparseCSC] matrices.
  */
-public object EjmlLinearSpaceDSCC : EjmlLinearSpace<Double, DoubleField, DMatrixSparseCSC>() {
+public object EjmlLinearSpaceDSCC : EjmlLinearSpace<Double, Float64Field, DMatrixSparseCSC>() {
     /**
-     * The [DoubleField] reference.
+     * The [Float64Field] reference.
      */
-    override val elementAlgebra: DoubleField get() = DoubleField
+    override val elementAlgebra: Float64Field get() = Float64Field
 
     @Suppress("UNCHECKED_CAST")
     override fun Matrix<Double>.toEjml(): EjmlDoubleMatrix<DMatrixSparseCSC> = when {
@@ -566,7 +566,7 @@ public object EjmlLinearSpaceDSCC : EjmlLinearSpace<Double, DoubleField, DMatrix
     override fun buildMatrix(
         rows: Int,
         columns: Int,
-        initializer: DoubleField.(i: Int, j: Int) -> Double,
+        initializer: Float64Field.(i: Int, j: Int) -> Double,
     ): EjmlDoubleMatrix<DMatrixSparseCSC> = DMatrixSparseCSC(rows, columns).also {
         (0 until rows).forEach { row ->
             (0 until columns).forEach { col -> it[row, col] = elementAlgebra.initializer(row, col) }
@@ -575,7 +575,7 @@ public object EjmlLinearSpaceDSCC : EjmlLinearSpace<Double, DoubleField, DMatrix
 
     override fun buildVector(
         size: Int,
-        initializer: DoubleField.(Int) -> Double,
+        initializer: Float64Field.(Int) -> Double,
     ): EjmlDoubleVector<DMatrixSparseCSC> = EjmlDoubleVector(DMatrixSparseCSC(size, 1).also {
         (0 until it.numRows).forEach { row -> it[row, 0] = elementAlgebra.initializer(row) }
     })
@@ -774,11 +774,11 @@ public object EjmlLinearSpaceDSCC : EjmlLinearSpace<Double, DoubleField, DMatrix
  * [EjmlLinearSpace] implementation based on [CommonOps_FSCC], [DecompositionFactory_FSCC] operations and
  * [FMatrixSparseCSC] matrices.
  */
-public object EjmlLinearSpaceFSCC : EjmlLinearSpace<Float, FloatField, FMatrixSparseCSC>() {
+public object EjmlLinearSpaceFSCC : EjmlLinearSpace<Float, Float32Field, FMatrixSparseCSC>() {
     /**
-     * The [FloatField] reference.
+     * The [Float32Field] reference.
      */
-    override val elementAlgebra: FloatField get() = FloatField
+    override val elementAlgebra: Float32Field get() = Float32Field
 
     @Suppress("UNCHECKED_CAST")
     override fun Matrix<Float>.toEjml(): EjmlFloatMatrix<FMatrixSparseCSC> = when {
@@ -797,7 +797,7 @@ public object EjmlLinearSpaceFSCC : EjmlLinearSpace<Float, FloatField, FMatrixSp
     override fun buildMatrix(
         rows: Int,
         columns: Int,
-        initializer: FloatField.(i: Int, j: Int) -> Float,
+        initializer: Float32Field.(i: Int, j: Int) -> Float,
     ): EjmlFloatMatrix<FMatrixSparseCSC> = FMatrixSparseCSC(rows, columns).also {
         (0 until rows).forEach { row ->
             (0 until columns).forEach { col -> it[row, col] = elementAlgebra.initializer(row, col) }
@@ -806,7 +806,7 @@ public object EjmlLinearSpaceFSCC : EjmlLinearSpace<Float, FloatField, FMatrixSp
 
     override fun buildVector(
         size: Int,
-        initializer: FloatField.(Int) -> Float,
+        initializer: Float32Field.(Int) -> Float,
     ): EjmlFloatVector<FMatrixSparseCSC> = EjmlFloatVector(FMatrixSparseCSC(size, 1).also {
         (0 until it.numRows).forEach { row -> it[row, 0] = elementAlgebra.initializer(row) }
     })

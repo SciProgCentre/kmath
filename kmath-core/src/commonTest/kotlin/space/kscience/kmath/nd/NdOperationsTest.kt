@@ -5,14 +5,14 @@
 
 package space.kscience.kmath.nd
 
-import space.kscience.kmath.operations.DoubleField
+import space.kscience.kmath.operations.Float64Field
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class NdOperationsTest {
     @Test
     fun roll() {
-        val structure = DoubleField.ndAlgebra.structureND(5, 5) { index ->
+        val structure = Float64Field.ndAlgebra.structureND(5, 5) { index ->
             index.sumOf { it.toDouble() }
         }
 

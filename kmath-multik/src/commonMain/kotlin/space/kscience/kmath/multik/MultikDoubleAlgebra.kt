@@ -11,15 +11,15 @@ import org.jetbrains.kotlinx.multik.api.ndarrayOf
 import org.jetbrains.kotlinx.multik.ndarray.data.DataType
 import space.kscience.kmath.PerformancePitfall
 import space.kscience.kmath.nd.StructureND
-import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.operations.ExponentialOperations
+import space.kscience.kmath.operations.Float64Field
 import space.kscience.kmath.operations.TrigonometricOperations
 
 public class MultikDoubleAlgebra(
     multikEngine: Engine
-) : MultikDivisionTensorAlgebra<Double, DoubleField>(multikEngine),
+) : MultikDivisionTensorAlgebra<Double, Float64Field>(multikEngine),
     TrigonometricOperations<StructureND<Double>>, ExponentialOperations<StructureND<Double>> {
-    override val elementAlgebra: DoubleField get() = DoubleField
+    override val elementAlgebra: Float64Field get() = Float64Field
     override val type: DataType get() = DataType.DoubleDataType
 
     override fun sin(arg: StructureND<Double>): MultikTensor<Double> = multikMath.mathEx.sin(arg.asMultik().array).wrap()

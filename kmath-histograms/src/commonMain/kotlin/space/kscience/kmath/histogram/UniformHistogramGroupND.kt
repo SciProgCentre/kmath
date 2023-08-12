@@ -128,7 +128,7 @@ public fun <V : Any, A : Field<V>> Histogram.Companion.uniformNDFromRanges(
 
 public fun Histogram.Companion.uniformDoubleNDFromRanges(
     vararg ranges: ClosedFloatingPointRange<Double>,
-): UniformHistogramGroupND<Double, DoubleField> =
+): UniformHistogramGroupND<Double, Float64Field> =
     uniformNDFromRanges(DoubleFieldOpsND, *ranges, bufferFactory = ::DoubleBuffer)
 
 
@@ -163,5 +163,5 @@ public fun <V : Any, A : Field<V>> Histogram.Companion.uniformNDFromRanges(
 
 public fun Histogram.Companion.uniformDoubleNDFromRanges(
     vararg ranges: Pair<ClosedFloatingPointRange<Double>, Int>,
-): UniformHistogramGroupND<Double, DoubleField> =
+): UniformHistogramGroupND<Double, Float64Field> =
     uniformNDFromRanges(DoubleFieldOpsND, *ranges, bufferFactory = ::DoubleBuffer)

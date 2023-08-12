@@ -8,7 +8,7 @@ package space.kscience.kmath.dimensions
 import space.kscience.kmath.linear.*
 import space.kscience.kmath.nd.ShapeND
 import space.kscience.kmath.nd.Structure2D
-import space.kscience.kmath.operations.DoubleField
+import space.kscience.kmath.operations.Float64Field
 import space.kscience.kmath.operations.Ring
 import space.kscience.kmath.operations.algebra
 import kotlin.jvm.JvmInline
@@ -150,7 +150,7 @@ public value class DMatrixContext<T : Any, out A : Ring<T>>(public val context: 
         context.run { (this@transpose as Matrix<T>).transpose() }.coerce()
 
     public companion object {
-        public val real: DMatrixContext<Double, DoubleField> = DMatrixContext(Double.algebra.linearSpace)
+        public val real: DMatrixContext<Double, Float64Field> = DMatrixContext(Double.algebra.linearSpace)
     }
 }
 
@@ -158,12 +158,12 @@ public value class DMatrixContext<T : Any, out A : Ring<T>>(public val context: 
 /**
  * A square unit matrix
  */
-public inline fun <reified D : Dimension> DMatrixContext<Double, DoubleField>.one(): DMatrix<Double, D, D> =
+public inline fun <reified D : Dimension> DMatrixContext<Double, Float64Field>.one(): DMatrix<Double, D, D> =
     produce { i, j ->
         if (i == j) 1.0 else 0.0
     }
 
-public inline fun <reified R : Dimension, reified C : Dimension> DMatrixContext<Double, DoubleField>.zero(): DMatrix<Double, R, C> =
+public inline fun <reified R : Dimension, reified C : Dimension> DMatrixContext<Double, Float64Field>.zero(): DMatrix<Double, R, C> =
     produce { _, _ ->
         0.0
     }

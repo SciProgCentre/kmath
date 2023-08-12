@@ -6,20 +6,20 @@
 package space.kscience.kmath.nd
 
 import space.kscience.kmath.UnstableKMathAPI
+import space.kscience.kmath.operations.Int16Ring
 import space.kscience.kmath.operations.NumbersAddOps
-import space.kscience.kmath.operations.ShortRing
 import space.kscience.kmath.operations.bufferAlgebra
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
 
-public sealed class ShortRingOpsND : BufferedRingOpsND<Short, ShortRing>(ShortRing.bufferAlgebra) {
+public sealed class ShortRingOpsND : BufferedRingOpsND<Short, Int16Ring>(Int16Ring.bufferAlgebra) {
     public companion object : ShortRingOpsND()
 }
 
 @OptIn(UnstableKMathAPI::class)
 public class ShortRingND(
     override val shape: ShapeND
-) : ShortRingOpsND(), RingND<Short, ShortRing>, NumbersAddOps<StructureND<Short>> {
+) : ShortRingOpsND(), RingND<Short, Int16Ring>, NumbersAddOps<StructureND<Short>> {
 
     override fun number(value: Number): BufferND<Short> {
         val short
@@ -28,7 +28,7 @@ public class ShortRingND(
     }
 }
 
-public inline fun <R> ShortRing.withNdAlgebra(vararg shape: Int, action: ShortRingND.() -> R): R {
+public inline fun <R> Int16Ring.withNdAlgebra(vararg shape: Int, action: ShortRingND.() -> R): R {
     contract { callsInPlace(action, InvocationKind.EXACTLY_ONCE) }
     return ShortRingND(ShapeND(shape)).run(action)
 }

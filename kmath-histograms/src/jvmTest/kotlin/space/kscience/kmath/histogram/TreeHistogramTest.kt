@@ -7,7 +7,7 @@ package space.kscience.kmath.histogram
 
 import org.junit.jupiter.api.Test
 import space.kscience.kmath.UnstableKMathAPI
-import space.kscience.kmath.operations.DoubleField
+import space.kscience.kmath.operations.Float64Field
 import space.kscience.kmath.real.step
 import kotlin.random.Random
 import kotlin.test.assertEquals
@@ -19,7 +19,7 @@ class TreeHistogramTest {
     @Test
     fun normalFill() {
         val random  = Random(123)
-        val histogram = Histogram.custom1D(DoubleField, 0.0..1.0 step 0.1).produce {
+        val histogram = Histogram.custom1D(Float64Field, 0.0..1.0 step 0.1).produce {
             repeat(100_000) {
                 putValue(random.nextDouble())
             }

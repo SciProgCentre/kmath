@@ -14,32 +14,32 @@ import kotlin.math.sqrt
 /**
  * [ExtendedFieldOps] over [DoubleBuffer].
  */
-public abstract class DoubleBufferOps : BufferAlgebra<Double, DoubleField>, ExtendedFieldOps<Buffer<Double>>,
+public abstract class DoubleBufferOps : BufferAlgebra<Double, Float64Field>, ExtendedFieldOps<Buffer<Double>>,
     Norm<Buffer<Double>, Double> {
 
-    override val elementAlgebra: DoubleField get() = DoubleField
+    override val elementAlgebra: Float64Field get() = Float64Field
 
     override val elementBufferFactory: MutableBufferFactory<Double> get() = elementAlgebra.bufferFactory
 
     @Suppress("OVERRIDE_BY_INLINE")
     @OptIn(UnstableKMathAPI::class)
-    final override inline fun Buffer<Double>.map(block: DoubleField.(Double) -> Double): DoubleBuffer =
-        DoubleArray(size) { DoubleField.block(getDouble(it)) }.asBuffer()
+    final override inline fun Buffer<Double>.map(block: Float64Field.(Double) -> Double): DoubleBuffer =
+        DoubleArray(size) { Float64Field.block(getDouble(it)) }.asBuffer()
 
 
     @OptIn(UnstableKMathAPI::class)
     @Suppress("OVERRIDE_BY_INLINE")
-    final override inline fun Buffer<Double>.mapIndexed(block: DoubleField.(index: Int, arg: Double) -> Double): DoubleBuffer =
-        DoubleBuffer(size) { DoubleField.block(it, getDouble(it)) }
+    final override inline fun Buffer<Double>.mapIndexed(block: Float64Field.(index: Int, arg: Double) -> Double): DoubleBuffer =
+        DoubleBuffer(size) { Float64Field.block(it, getDouble(it)) }
 
     @OptIn(UnstableKMathAPI::class)
     @Suppress("OVERRIDE_BY_INLINE")
     final override inline fun Buffer<Double>.zip(
         other: Buffer<Double>,
-        block: DoubleField.(left: Double, right: Double) -> Double,
+        block: Float64Field.(left: Double, right: Double) -> Double,
     ): DoubleBuffer {
         require(size == other.size) { "Incompatible buffer sizes. left: ${size}, right: ${other.size}" }
-        return DoubleBuffer(size) { DoubleField.block(getDouble(it), other.getDouble(it)) }
+        return DoubleBuffer(size) { Float64Field.block(getDouble(it), other.getDouble(it)) }
     }
 
     override fun unaryOperationFunction(operation: String): (arg: Buffer<Double>) -> Buffer<Double> =

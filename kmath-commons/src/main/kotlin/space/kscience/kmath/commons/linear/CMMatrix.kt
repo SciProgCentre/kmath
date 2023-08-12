@@ -9,7 +9,7 @@ import org.apache.commons.math3.linear.*
 import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.linear.*
 import space.kscience.kmath.nd.StructureFeature
-import space.kscience.kmath.operations.DoubleField
+import space.kscience.kmath.operations.Float64Field
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.DoubleBuffer
 import kotlin.reflect.KClass
@@ -35,15 +35,15 @@ public value class CMVector(public val origin: RealVector) : Point<Double> {
 
 public fun RealVector.toPoint(): CMVector = CMVector(this)
 
-public object CMLinearSpace : LinearSpace<Double, DoubleField> {
-    override val elementAlgebra: DoubleField get() = DoubleField
+public object CMLinearSpace : LinearSpace<Double, Float64Field> {
+    override val elementAlgebra: Float64Field get() = Float64Field
 
     override fun buildMatrix(
         rows: Int,
         columns: Int,
-        initializer: DoubleField.(i: Int, j: Int) -> Double,
+        initializer: Float64Field.(i: Int, j: Int) -> Double,
     ): CMMatrix {
-        val array = Array(rows) { i -> DoubleArray(columns) { j -> DoubleField.initializer(i, j) } }
+        val array = Array(rows) { i -> DoubleArray(columns) { j -> Float64Field.initializer(i, j) } }
         return CMMatrix(Array2DRowRealMatrix(array))
     }
 
@@ -65,8 +65,8 @@ public object CMLinearSpace : LinearSpace<Double, DoubleField> {
     internal fun RealMatrix.wrap(): CMMatrix = CMMatrix(this)
     internal fun RealVector.wrap(): CMVector = CMVector(this)
 
-    override fun buildVector(size: Int, initializer: DoubleField.(Int) -> Double): Point<Double> =
-        ArrayRealVector(DoubleArray(size) { DoubleField.initializer(it) }).wrap()
+    override fun buildVector(size: Int, initializer: Float64Field.(Int) -> Double): Point<Double> =
+        ArrayRealVector(DoubleArray(size) { Float64Field.initializer(it) }).wrap()
 
     override fun Matrix<Double>.plus(other: Matrix<Double>): CMMatrix =
         toCM().origin.add(other.toCM().origin).wrap()

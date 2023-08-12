@@ -14,7 +14,7 @@ import space.kscience.kmath.linear.LinearSpace
 import space.kscience.kmath.linear.Matrix
 import space.kscience.kmath.linear.linearSpace
 import space.kscience.kmath.linear.matrix
-import space.kscience.kmath.operations.DoubleField
+import space.kscience.kmath.operations.Float64Field
 import kotlin.math.pow
 import kotlin.math.sqrt
 
@@ -66,7 +66,7 @@ public fun Euclidean3DSpace.rotate(vector: DoubleVector3D, composition: Quaterni
 
 public fun Euclidean3DSpace.rotate(vector: DoubleVector3D, matrix: Matrix<Double>): DoubleVector3D {
     require(matrix.colNum == 3 && matrix.rowNum == 3) { "Square 3x3 rotation matrix is required" }
-    return with(DoubleField.linearSpace) { matrix.dot(vector).asVector3D() }
+    return with(Float64Field.linearSpace) { matrix.dot(vector).asVector3D() }
 }
 
 /**
@@ -74,7 +74,7 @@ public fun Euclidean3DSpace.rotate(vector: DoubleVector3D, matrix: Matrix<Double
  */
 @OptIn(UnstableKMathAPI::class)
 public fun Quaternion.toRotationMatrix(
-    linearSpace: LinearSpace<Double, *> = DoubleField.linearSpace,
+    linearSpace: LinearSpace<Double, *> = Float64Field.linearSpace,
 ): Matrix<Double> {
     val s = QuaternionField.norm(this).pow(-2)
     return linearSpace.matrix(3, 3)(

@@ -11,7 +11,7 @@ package space.kscience.kmath.real
 import space.kscience.kmath.PerformancePitfall
 import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.linear.*
-import space.kscience.kmath.operations.DoubleField
+import space.kscience.kmath.operations.Float64Field
 import space.kscience.kmath.operations.algebra
 import space.kscience.kmath.operations.asIterable
 import space.kscience.kmath.structures.Buffer
@@ -32,11 +32,11 @@ import kotlin.math.pow
 
 public typealias RealMatrix = Matrix<Double>
 
-public fun realMatrix(rowNum: Int, colNum: Int, initializer: DoubleField.(i: Int, j: Int) -> Double): RealMatrix =
+public fun realMatrix(rowNum: Int, colNum: Int, initializer: Float64Field.(i: Int, j: Int) -> Double): RealMatrix =
     Double.algebra.linearSpace.buildMatrix(rowNum, colNum, initializer)
 
 @OptIn(UnstableKMathAPI::class)
-public fun realMatrix(rowNum: Int, colNum: Int): MatrixBuilder<Double, DoubleField> =
+public fun realMatrix(rowNum: Int, colNum: Int): MatrixBuilder<Double, Float64Field> =
     Double.algebra.linearSpace.matrix(rowNum, colNum)
 
 public fun Array<DoubleArray>.toMatrix(): RealMatrix {

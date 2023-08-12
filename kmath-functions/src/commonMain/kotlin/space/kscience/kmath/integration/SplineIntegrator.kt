@@ -85,7 +85,7 @@ public class SplineIntegrator<T : Comparable<T>>(
 public object DoubleSplineIntegrator : UnivariateIntegrator<Double> {
     override fun process(integrand: UnivariateIntegrand<Double>): UnivariateIntegrand<Double> {
         val range = integrand.getFeature<IntegrationRange>()?.range ?: 0.0..1.0
-        val interpolator: PolynomialInterpolator<Double> = SplineInterpolator(DoubleField, ::DoubleBuffer)
+        val interpolator: PolynomialInterpolator<Double> = SplineInterpolator(Float64Field, ::DoubleBuffer)
 
         val nodes: Buffer<Double> = integrand.getFeature<UnivariateIntegrationNodes>()?.nodes ?: run {
             val numPoints = integrand.getFeature<IntegrandMaxCalls>()?.maxCalls ?: 100
@@ -95,12 +95,12 @@ public object DoubleSplineIntegrator : UnivariateIntegrator<Double> {
 
         val values = nodes.mapToBuffer(::DoubleBuffer) { integrand.function(it) }
         val polynomials = interpolator.interpolatePolynomials(nodes, values)
-        val res = polynomials.integrate(DoubleField, range)
+        val res = polynomials.integrate(Float64Field, range)
         return integrand + IntegrandValue(res) + IntegrandCallsPerformed(integrand.calls + nodes.size)
     }
 }
 
 @Suppress("unused")
 @UnstableKMathAPI
-public inline val DoubleField.splineIntegrator: UnivariateIntegrator<Double>
+public inline val Float64Field.splineIntegrator: UnivariateIntegrator<Double>
     get() = DoubleSplineIntegrator

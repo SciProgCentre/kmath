@@ -10,7 +10,7 @@ import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.nd.ShapeND
 import space.kscience.kmath.nd.get
 import space.kscience.kmath.nd.structureND
-import space.kscience.kmath.operations.DoubleField
+import space.kscience.kmath.operations.Float64Field
 import space.kscience.kmath.tensors.core.DoubleTensorAlgebra
 import space.kscience.kmath.tensors.core.DoubleTensorAlgebra.Companion.sum
 import space.kscience.kmath.tensors.core.randomNormal
@@ -20,7 +20,7 @@ import kotlin.test.assertEquals
 class DoubleTensorFlowOps {
     @Test
     fun basicOps() {
-        val res = DoubleField.produceWithTF {
+        val res = Float64Field.produceWithTF {
             val initial = structureND(2, 2) { 1.0 }
 
             initial + (initial * 2.0)
@@ -36,14 +36,14 @@ class DoubleTensorFlowOps {
         val tensor1 = DoubleTensorAlgebra.randomNormal(shape = ShapeND(dim, dim), 12224)
         val tensor2 = DoubleTensorAlgebra.randomNormal(shape = ShapeND(dim, dim), 12225)
 
-        DoubleField.produceWithTF {
+        Float64Field.produceWithTF {
             tensor1 dot tensor2
         }.sum()
     }
 
     @Test
     fun extensionOps(){
-        val res = DoubleField.produceWithTF {
+        val res = Float64Field.produceWithTF {
             val i = structureND(2, 2) { 0.5 }
 
             sin(i).pow(2) + cos(i).pow(2)

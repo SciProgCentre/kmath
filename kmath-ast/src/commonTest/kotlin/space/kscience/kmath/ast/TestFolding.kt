@@ -6,8 +6,8 @@
 package space.kscience.kmath.ast
 
 import space.kscience.kmath.operations.ByteRing
-import space.kscience.kmath.operations.DoubleField
-import space.kscience.kmath.operations.IntRing
+import space.kscience.kmath.operations.Float64Field
+import space.kscience.kmath.operations.Int32Ring
 import space.kscience.kmath.operations.pi
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -17,31 +17,31 @@ internal class TestFolding {
     @Test
     fun foldUnary() = assertEquals(
         -1,
-        ("-(1)".parseMath().evaluateConstants(IntRing) as? TypedMst.Constant<Int> ?: fail()).value,
+        ("-(1)".parseMath().evaluateConstants(Int32Ring) as? TypedMst.Constant<Int> ?: fail()).value,
     )
 
     @Test
     fun foldDeepUnary() = assertEquals(
         1,
-        ("-(-(1))".parseMath().evaluateConstants(IntRing) as? TypedMst.Constant<Int> ?: fail()).value,
+        ("-(-(1))".parseMath().evaluateConstants(Int32Ring) as? TypedMst.Constant<Int> ?: fail()).value,
     )
 
     @Test
     fun foldBinary() = assertEquals(
         2,
-        ("1*2".parseMath().evaluateConstants(IntRing) as? TypedMst.Constant<Int> ?: fail()).value,
+        ("1*2".parseMath().evaluateConstants(Int32Ring) as? TypedMst.Constant<Int> ?: fail()).value,
     )
 
     @Test
     fun foldDeepBinary() = assertEquals(
         10,
-        ("1*2*5".parseMath().evaluateConstants(IntRing) as? TypedMst.Constant<Int> ?: fail()).value,
+        ("1*2*5".parseMath().evaluateConstants(Int32Ring) as? TypedMst.Constant<Int> ?: fail()).value,
     )
 
     @Test
     fun foldSymbol() = assertEquals(
-        DoubleField.pi,
-        ("pi".parseMath().evaluateConstants(DoubleField) as? TypedMst.Constant<Double> ?: fail()).value,
+        Float64Field.pi,
+        ("pi".parseMath().evaluateConstants(Float64Field) as? TypedMst.Constant<Double> ?: fail()).value,
     )
 
     @Test

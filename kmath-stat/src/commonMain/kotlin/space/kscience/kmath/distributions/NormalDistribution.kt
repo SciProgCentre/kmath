@@ -6,7 +6,7 @@
 package space.kscience.kmath.distributions
 
 import space.kscience.kmath.chains.Chain
-import space.kscience.kmath.operations.DoubleField.pow
+import space.kscience.kmath.operations.Float64Field.pow
 import space.kscience.kmath.random.RandomGenerator
 import space.kscience.kmath.samplers.GaussianSampler
 import space.kscience.kmath.samplers.InternalErf

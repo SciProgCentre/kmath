@@ -11,7 +11,7 @@ import org.openjdk.jmh.annotations.Scope
 import org.openjdk.jmh.annotations.State
 import space.kscience.kmath.jafama.JafamaDoubleField
 import space.kscience.kmath.jafama.StrictJafamaDoubleField
-import space.kscience.kmath.operations.DoubleField
+import space.kscience.kmath.operations.Float64Field
 import space.kscience.kmath.operations.invoke
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
@@ -26,7 +26,7 @@ internal class JafamaBenchmark {
 
     @Benchmark
     fun core(blackhole: Blackhole) = invokeBenchmarks(blackhole) { x ->
-        DoubleField { x * power(x, 4) * exp(x) / cos(x) + sin(x) }
+        Float64Field { x * power(x, 4) * exp(x) / cos(x) + sin(x) }
     }
 
     @Benchmark

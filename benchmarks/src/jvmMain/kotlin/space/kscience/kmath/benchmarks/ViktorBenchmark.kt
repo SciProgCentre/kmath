@@ -14,7 +14,7 @@ import space.kscience.kmath.nd.ShapeND
 import space.kscience.kmath.nd.StructureND
 import space.kscience.kmath.nd.ndAlgebra
 import space.kscience.kmath.nd.one
-import space.kscience.kmath.operations.DoubleField
+import space.kscience.kmath.operations.Float64Field
 import space.kscience.kmath.viktor.ViktorFieldND
 
 @State(Scope.Benchmark)
@@ -52,7 +52,7 @@ internal class ViktorBenchmark {
         private val shape = ShapeND(dim, dim)
 
         // automatically build context most suited for given type.
-        private val doubleField = DoubleField.ndAlgebra
+        private val doubleField = Float64Field.ndAlgebra
         private val viktorField = ViktorFieldND(dim, dim)
     }
 }

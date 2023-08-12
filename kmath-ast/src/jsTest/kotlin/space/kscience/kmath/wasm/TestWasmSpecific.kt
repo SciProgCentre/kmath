@@ -10,8 +10,8 @@ import space.kscience.kmath.expressions.MstExtendedField
 import space.kscience.kmath.expressions.MstRing
 import space.kscience.kmath.expressions.invoke
 import space.kscience.kmath.expressions.symbol
-import space.kscience.kmath.operations.DoubleField
-import space.kscience.kmath.operations.IntRing
+import space.kscience.kmath.operations.Float64Field
+import space.kscience.kmath.operations.Int32Ring
 import space.kscience.kmath.operations.invoke
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -20,20 +20,20 @@ import kotlin.test.assertEquals
 internal class TestWasmSpecific {
     @Test
     fun int() {
-        val res = MstRing { number(100000000) + number(10000000) }.compile(IntRing)
+        val res = MstRing { number(100000000) + number(10000000) }.compile(Int32Ring)
         assertEquals(110000000, res)
     }
 
     @Test
     fun real() {
-        val res = MstExtendedField { number(100000000) + number(2).pow(10) }.compile(DoubleField)
+        val res = MstExtendedField { number(100000000) + number(2).pow(10) }.compile(Float64Field)
         assertEquals(100001024.0, res)
     }
 
     @Test
     fun argsPassing() {
         val res = MstExtendedField { y + x.pow(10) }.compile(
-            DoubleField,
+            Float64Field,
             x to 2.0,
             y to 100000000.0,
         )
@@ -43,7 +43,7 @@ internal class TestWasmSpecific {
 
     @Test
     fun powFunction() {
-        val expr = MstExtendedField { x.pow(1.0 / 6.0) }.compileToExpression(DoubleField)
+        val expr = MstExtendedField { x.pow(1.0 / 6.0) }.compileToExpression(Float64Field)
         assertEquals(0.9730585187140817, expr(x to 0.8488554755054833))
     }
 

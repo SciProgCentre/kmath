@@ -15,8 +15,8 @@ import org.nd4j.linalg.ops.transforms.Transforms
 import space.kscience.kmath.PerformancePitfall
 import space.kscience.kmath.UnsafeKMathAPI
 import space.kscience.kmath.nd.*
-import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.operations.Field
+import space.kscience.kmath.operations.Float64Field
 import space.kscience.kmath.tensors.api.AnalyticTensorAlgebra
 import space.kscience.kmath.tensors.api.Tensor
 import space.kscience.kmath.tensors.api.TensorAlgebra
@@ -171,14 +171,14 @@ public sealed interface Nd4jTensorAlgebra<T : Number, A : Field<T>> : AnalyticTe
 /**
  * [Double] specialization of [Nd4jTensorAlgebra].
  */
-public object DoubleNd4jTensorAlgebra : Nd4jTensorAlgebra<Double, DoubleField> {
+public object DoubleNd4jTensorAlgebra : Nd4jTensorAlgebra<Double, Float64Field> {
 
-    override val elementAlgebra: DoubleField get() = DoubleField
+    override val elementAlgebra: Float64Field get() = Float64Field
 
     override fun INDArray.wrap(): Nd4jArrayStructure<Double> = asDoubleStructure()
 
     @OptIn(UnsafeKMathAPI::class)
-    override fun structureND(shape: ShapeND, initializer: DoubleField.(IntArray) -> Double): Nd4jArrayStructure<Double> {
+    override fun structureND(shape: ShapeND, initializer: Float64Field.(IntArray) -> Double): Nd4jArrayStructure<Double> {
         val array: INDArray = Nd4j.zeros(*shape.asArray())
         val indices = ColumnStrides(shape)
         indices.asSequence().forEach { index ->

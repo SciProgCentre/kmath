@@ -124,7 +124,7 @@ public sealed interface Nd4jArrayRingOps<T, out R : Ring<T>> : RingOpsND<T, R>, 
          */
         @Suppress("UNCHECKED_CAST")
         public inline fun <reified T : Number> auto(): Nd4jArrayRingOps<T, Ring<T>> = when {
-            T::class == Int::class -> IntRing.nd4j as Nd4jArrayRingOps<T, Ring<T>>
+            T::class == Int::class -> Int32Ring.nd4j as Nd4jArrayRingOps<T, Ring<T>>
             else -> throw UnsupportedOperationException("This factory method only supports Long type.")
         }
     }
@@ -149,8 +149,8 @@ public sealed interface Nd4jArrayField<T, out F : Field<T>> : FieldOpsND<T, F>, 
          */
         @Suppress("UNCHECKED_CAST")
         public inline fun <reified T : Any> auto(): Nd4jArrayField<T, Field<T>> = when {
-            T::class == Float::class -> FloatField.nd4j as Nd4jArrayField<T, Field<T>>
-            T::class == Double::class -> DoubleField.nd4j as Nd4jArrayField<T, Field<T>>
+            T::class == Float::class -> Float32Field.nd4j as Nd4jArrayField<T, Field<T>>
+            T::class == Double::class -> Float64Field.nd4j as Nd4jArrayField<T, Field<T>>
             else -> throw UnsupportedOperationException("This factory method only supports Float and Double types.")
         }
     }
@@ -190,8 +190,8 @@ public sealed interface Nd4jArrayExtendedFieldOps<T, out F : ExtendedField<T>> :
 /**
  * Represents [FieldND] over [Nd4jArrayDoubleStructure].
  */
-public open class DoubleNd4jArrayFieldOps : Nd4jArrayExtendedFieldOps<Double, DoubleField> {
-    override val elementAlgebra: DoubleField get() = DoubleField
+public open class DoubleNd4jArrayFieldOps : Nd4jArrayExtendedFieldOps<Double, Float64Field> {
+    override val elementAlgebra: Float64Field get() = Float64Field
 
     override fun INDArray.wrap(): Nd4jArrayStructure<Double> = asDoubleStructure()
 
@@ -223,19 +223,19 @@ public open class DoubleNd4jArrayFieldOps : Nd4jArrayExtendedFieldOps<Double, Do
     public companion object : DoubleNd4jArrayFieldOps()
 }
 
-public val DoubleField.nd4j: DoubleNd4jArrayFieldOps get() = DoubleNd4jArrayFieldOps
+public val Float64Field.nd4j: DoubleNd4jArrayFieldOps get() = DoubleNd4jArrayFieldOps
 
-public class DoubleNd4jArrayField(override val shape: ShapeND) : DoubleNd4jArrayFieldOps(), FieldND<Double, DoubleField>
+public class DoubleNd4jArrayField(override val shape: ShapeND) : DoubleNd4jArrayFieldOps(), FieldND<Double, Float64Field>
 
-public fun DoubleField.nd4j(shapeFirst: Int, vararg shapeRest: Int): DoubleNd4jArrayField =
+public fun Float64Field.nd4j(shapeFirst: Int, vararg shapeRest: Int): DoubleNd4jArrayField =
     DoubleNd4jArrayField(ShapeND(shapeFirst, * shapeRest))
 
 
 /**
  * Represents [FieldND] over [Nd4jArrayStructure] of [Float].
  */
-public open class FloatNd4jArrayFieldOps : Nd4jArrayExtendedFieldOps<Float, FloatField> {
-    override val elementAlgebra: FloatField get() = FloatField
+public open class FloatNd4jArrayFieldOps : Nd4jArrayExtendedFieldOps<Float, Float32Field> {
+    override val elementAlgebra: Float32Field get() = Float32Field
 
     override fun INDArray.wrap(): Nd4jArrayStructure<Float> = asFloatStructure()
 
@@ -272,18 +272,18 @@ public open class FloatNd4jArrayFieldOps : Nd4jArrayExtendedFieldOps<Float, Floa
     public companion object : FloatNd4jArrayFieldOps()
 }
 
-public class FloatNd4jArrayField(override val shape: ShapeND) : FloatNd4jArrayFieldOps(), RingND<Float, FloatField>
+public class FloatNd4jArrayField(override val shape: ShapeND) : FloatNd4jArrayFieldOps(), RingND<Float, Float32Field>
 
-public val FloatField.nd4j: FloatNd4jArrayFieldOps get() = FloatNd4jArrayFieldOps
+public val Float32Field.nd4j: FloatNd4jArrayFieldOps get() = FloatNd4jArrayFieldOps
 
-public fun FloatField.nd4j(shapeFirst: Int, vararg shapeRest: Int): FloatNd4jArrayField =
+public fun Float32Field.nd4j(shapeFirst: Int, vararg shapeRest: Int): FloatNd4jArrayField =
     FloatNd4jArrayField(ShapeND(shapeFirst, * shapeRest))
 
 /**
  * Represents [RingND] over [Nd4jArrayIntStructure].
  */
-public open class IntNd4jArrayRingOps : Nd4jArrayRingOps<Int, IntRing> {
-    override val elementAlgebra: IntRing get() = IntRing
+public open class IntNd4jArrayRingOps : Nd4jArrayRingOps<Int, Int32Ring> {
+    override val elementAlgebra: Int32Ring get() = Int32Ring
 
     override fun INDArray.wrap(): Nd4jArrayStructure<Int> = asIntStructure()
 
@@ -311,9 +311,9 @@ public open class IntNd4jArrayRingOps : Nd4jArrayRingOps<Int, IntRing> {
     public companion object : IntNd4jArrayRingOps()
 }
 
-public val IntRing.nd4j: IntNd4jArrayRingOps get() = IntNd4jArrayRingOps
+public val Int32Ring.nd4j: IntNd4jArrayRingOps get() = IntNd4jArrayRingOps
 
-public class IntNd4jArrayRing(override val shape: ShapeND) : IntNd4jArrayRingOps(), RingND<Int, IntRing>
+public class IntNd4jArrayRing(override val shape: ShapeND) : IntNd4jArrayRingOps(), RingND<Int, Int32Ring>
 
-public fun IntRing.nd4j(shapeFirst: Int, vararg shapeRest: Int): IntNd4jArrayRing =
+public fun Int32Ring.nd4j(shapeFirst: Int, vararg shapeRest: Int): IntNd4jArrayRing =
     IntNd4jArrayRing(ShapeND(shapeFirst, * shapeRest))

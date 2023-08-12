@@ -464,4 +464,4 @@ public class DSFieldProcessor<T, A : ExtendedField<T>>(
 }
 
 @UnstableKMathAPI
-public val Double.Companion.autodiff: DSFieldProcessor<Double, DoubleField> get() = DSFieldProcessor(DoubleField)
+public val Double.Companion.autodiff: DSFieldProcessor<Double, Float64Field> get() = DSFieldProcessor(Float64Field)

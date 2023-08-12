@@ -29,7 +29,7 @@ public class DoubleBufferND(
 }
 
 
-public sealed class DoubleFieldOpsND : BufferedFieldOpsND<Double, DoubleField>(DoubleField.bufferAlgebra),
+public sealed class DoubleFieldOpsND : BufferedFieldOpsND<Double, Float64Field>(Float64Field.bufferAlgebra),
     ScaleOperations<StructureND<Double>>, ExtendedFieldOps<StructureND<Double>> {
 
     @OptIn(PerformancePitfall::class)
@@ -63,18 +63,18 @@ public sealed class DoubleFieldOpsND : BufferedFieldOpsND<Double, DoubleField>(D
     }
 
     @OptIn(PerformancePitfall::class)
-    override fun StructureND<Double>.map(transform: DoubleField.(Double) -> Double): BufferND<Double> =
-        mapInline(toBufferND()) { DoubleField.transform(it) }
+    override fun StructureND<Double>.map(transform: Float64Field.(Double) -> Double): BufferND<Double> =
+        mapInline(toBufferND()) { Float64Field.transform(it) }
 
 
     @OptIn(PerformancePitfall::class)
     override fun zip(
         left: StructureND<Double>,
         right: StructureND<Double>,
-        transform: DoubleField.(Double, Double) -> Double,
-    ): BufferND<Double> = zipInline(left.toBufferND(), right.toBufferND()) { l, r -> DoubleField.transform(l, r) }
+        transform: Float64Field.(Double, Double) -> Double,
+    ): BufferND<Double> = zipInline(left.toBufferND(), right.toBufferND()) { l, r -> Float64Field.transform(l, r) }
 
-    override fun structureND(shape: ShapeND, initializer: DoubleField.(IntArray) -> Double): DoubleBufferND {
+    override fun structureND(shape: ShapeND, initializer: Float64Field.(IntArray) -> Double): DoubleBufferND {
         val indexer = indexerBuilder(shape)
         return DoubleBufferND(
             indexer,
@@ -190,7 +190,7 @@ public sealed class DoubleFieldOpsND : BufferedFieldOpsND<Double, DoubleField>(D
 
 @OptIn(UnstableKMathAPI::class)
 public class DoubleFieldND(override val shape: ShapeND) :
-    DoubleFieldOpsND(), FieldND<Double, DoubleField>, NumbersAddOps<StructureND<Double>>,
+    DoubleFieldOpsND(), FieldND<Double, Float64Field>, NumbersAddOps<StructureND<Double>>,
     ExtendedField<StructureND<Double>> {
 
     override fun power(arg: StructureND<Double>, pow: UInt): DoubleBufferND = mapInline(arg.toBufferND()) {
@@ -229,16 +229,16 @@ public class DoubleFieldND(override val shape: ShapeND) :
     }
 }
 
-public val DoubleField.ndAlgebra: DoubleFieldOpsND get() = DoubleFieldOpsND
+public val Float64Field.ndAlgebra: DoubleFieldOpsND get() = DoubleFieldOpsND
 
-public fun DoubleField.ndAlgebra(vararg shape: Int): DoubleFieldND = DoubleFieldND(ShapeND(shape))
-public fun DoubleField.ndAlgebra(shape: ShapeND): DoubleFieldND = DoubleFieldND(shape)
+public fun Float64Field.ndAlgebra(vararg shape: Int): DoubleFieldND = DoubleFieldND(ShapeND(shape))
+public fun Float64Field.ndAlgebra(shape: ShapeND): DoubleFieldND = DoubleFieldND(shape)
 
 /**
  * Produce a context for n-dimensional operations inside this real field
  */
 @UnstableKMathAPI
-public inline fun <R> DoubleField.withNdAlgebra(vararg shape: Int, action: DoubleFieldND.() -> R): R {
+public inline fun <R> Float64Field.withNdAlgebra(vararg shape: Int, action: DoubleFieldND.() -> R): R {
     contract { callsInPlace(action, InvocationKind.EXACTLY_ONCE) }
     return DoubleFieldND(ShapeND(shape)).run(action)
 }
