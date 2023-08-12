@@ -7,7 +7,7 @@ package space.kscience.kmath.integration
 
 import space.kscience.kmath.operations.mapToBuffer
 import space.kscience.kmath.structures.Buffer
-import space.kscience.kmath.structures.DoubleBuffer
+import space.kscience.kmath.structures.Float64Buffer
 import space.kscience.kmath.structures.asBuffer
 import kotlin.math.ulp
 import kotlin.native.concurrent.ThreadLocal
@@ -32,11 +32,11 @@ public fun GaussIntegratorRuleFactory.build(
     val normalized: Pair<Buffer<Double>, Buffer<Double>> = build(numPoints)
     val length = range.endInclusive - range.start
 
-    val points = normalized.first.mapToBuffer(::DoubleBuffer) {
+    val points = normalized.first.mapToBuffer(::Float64Buffer) {
         range.start + length / 2 + length / 2 * it
     }
 
-    val weights = normalized.second.mapToBuffer(::DoubleBuffer) {
+    val weights = normalized.second.mapToBuffer(::Float64Buffer) {
         it * length / 2
     }
 
@@ -64,8 +64,8 @@ public object GaussLegendreRuleFactory : GaussIntegratorRuleFactory {
         if (numPoints == 1) {
             // Break recursion.
             return Pair(
-                DoubleBuffer(0.0),
-                DoubleBuffer(0.0)
+                Float64Buffer(0.0),
+                Float64Buffer(0.0)
             )
         }
 

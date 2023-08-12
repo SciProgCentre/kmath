@@ -7,7 +7,7 @@ package space.kscience.kmath.operations
 
 import space.kscience.kmath.commons.linear.CMLinearSpace
 import space.kscience.kmath.linear.matrix
-import space.kscience.kmath.nd.DoubleBufferND
+import space.kscience.kmath.nd.Float64BufferND
 import space.kscience.kmath.nd.ShapeND
 import space.kscience.kmath.nd.Structure2D
 import space.kscience.kmath.nd.ndAlgebra
@@ -21,7 +21,7 @@ fun main() {
 
     val cmMatrix: Structure2D<Double> = CMLinearSpace.matrix(2, 2)(0.0, 1.0, 0.0, 3.0)
 
-    val res: DoubleBufferND = Float64Field.ndAlgebra {
+    val res: Float64BufferND = Float64Field.ndAlgebra {
         exp(viktorStructure) + 2.0 * cmMatrix
     }
 

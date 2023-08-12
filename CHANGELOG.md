@@ -3,14 +3,18 @@
 ## Unreleased
 
 ### Added
+- Integer divistion algebras
 
 ### Changed
+- Default naming for algebra and buffers now uses IntXX/FloatXX notation instead of Java types.
+- Remove unnecessary inlines in basic algebras.
 
 ### Deprecated
 
 ### Removed
 
 ### Fixed
+- Median statistics
 
 ### Security
 

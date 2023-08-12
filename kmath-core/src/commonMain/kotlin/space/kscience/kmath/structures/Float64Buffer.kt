@@ -14,7 +14,7 @@ import kotlin.jvm.JvmInline
  * @property array the underlying array.
  */
 @JvmInline
-public value class DoubleBuffer(public val array: DoubleArray) : PrimitiveBuffer<Double> {
+public value class Float64Buffer(public val array: DoubleArray) : PrimitiveBuffer<Double> {
     override val size: Int get() = array.size
 
     override operator fun get(index: Int): Double = array[index]
@@ -25,57 +25,59 @@ public value class DoubleBuffer(public val array: DoubleArray) : PrimitiveBuffer
 
     override operator fun iterator(): DoubleIterator = array.iterator()
 
-    override fun copy(): DoubleBuffer = DoubleBuffer(array.copyOf())
+    override fun copy(): Float64Buffer = Float64Buffer(array.copyOf())
 
     override fun toString(): String = Buffer.toString(this)
 
     public companion object {
-        public fun zero(size: Int): DoubleBuffer = DoubleArray(size).asBuffer()
+        public fun zero(size: Int): Float64Buffer = DoubleArray(size).asBuffer()
     }
 }
 
+public typealias DoubleBuffer = Float64Buffer
+
 /**
- * Creates a new [DoubleBuffer] with the specified [size], where each element is calculated by calling the specified
+ * Creates a new [Float64Buffer] with the specified [size], where each element is calculated by calling the specified
  * [init] function.
  *
  * The function [init] is called for each array element sequentially starting from the first one.
  * It should return the value for a buffer element given its index.
  */
-public inline fun DoubleBuffer(size: Int, init: (Int) -> Double): DoubleBuffer =
-    DoubleBuffer(DoubleArray(size) { init(it) })
+public inline fun Float64Buffer(size: Int, init: (Int) -> Double): Float64Buffer =
+    Float64Buffer(DoubleArray(size) { init(it) })
 
 /**
- * Returns a new [DoubleBuffer] of given elements.
+ * Returns a new [Float64Buffer] of given elements.
  */
-public fun DoubleBuffer(vararg doubles: Double): DoubleBuffer = DoubleBuffer(doubles)
+public fun Float64Buffer(vararg doubles: Double): Float64Buffer = Float64Buffer(doubles)
 
 /**
  * Returns a new [DoubleArray] containing all the elements of this [Buffer].
  */
 public fun Buffer<Double>.toDoubleArray(): DoubleArray = when (this) {
-    is DoubleBuffer -> array
+    is Float64Buffer -> array
     else -> DoubleArray(size, ::get)
 }
 
 /**
- * Represent this buffer as [DoubleBuffer]. Does not guarantee that changes in the original buffer are reflected on this buffer.
+ * Represent this buffer as [Float64Buffer]. Does not guarantee that changes in the original buffer are reflected on this buffer.
  */
-public fun Buffer<Double>.toDoubleBuffer(): DoubleBuffer = when (this) {
-    is DoubleBuffer -> this
+public fun Buffer<Double>.toFloat64Buffer(): Float64Buffer = when (this) {
+    is Float64Buffer -> this
     else -> DoubleArray(size, ::get).asBuffer()
 }
 
 /**
- * Returns [DoubleBuffer] over this array.
+ * Returns [Float64Buffer] over this array.
  *
  * @receiver the array.
  * @return the new buffer.
  */
-public fun DoubleArray.asBuffer(): DoubleBuffer = DoubleBuffer(this)
+public fun DoubleArray.asBuffer(): Float64Buffer = Float64Buffer(this)
 
 
-public fun interface DoubleBufferTransform : BufferTransform<Double, Double> {
-    public fun transform(arg: DoubleBuffer): DoubleBuffer
+public fun interface Float64BufferTransform : BufferTransform<Double, Double> {
+    public fun transform(arg: Float64Buffer): Float64Buffer
 
-    override fun transform(arg: Buffer<Double>): DoubleBuffer = arg.toDoubleBuffer()
+    override fun transform(arg: Buffer<Double>): Float64Buffer = arg.toFloat64Buffer()
 }

@@ -32,15 +32,15 @@ class StreamDoubleFieldND(override val shape: ShapeND) : FieldND<Double, Float64
     }
 
     @OptIn(PerformancePitfall::class)
-    private val StructureND<Double>.buffer: DoubleBuffer
+    private val StructureND<Double>.buffer: Float64Buffer
         get() = when {
             !shape.contentEquals(this@StreamDoubleFieldND.shape) -> throw ShapeMismatchException(
                 this@StreamDoubleFieldND.shape,
                 shape
             )
 
-            this is BufferND && indices == this@StreamDoubleFieldND.strides -> this.buffer as DoubleBuffer
-            else -> DoubleBuffer(strides.linearSize) { offset -> get(strides.index(offset)) }
+            this is BufferND && indices == this@StreamDoubleFieldND.strides -> this.buffer as Float64Buffer
+            else -> Float64Buffer(strides.linearSize) { offset -> get(strides.index(offset)) }
         }
 
     override fun structureND(shape: ShapeND, initializer: Float64Field.(IntArray) -> Double): BufferND<Double> {

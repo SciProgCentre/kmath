@@ -7,7 +7,7 @@ package space.kscience.kmath.misc
 
 import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.misc.PermSortTest.Platform.*
-import space.kscience.kmath.structures.IntBuffer
+import space.kscience.kmath.structures.Int32Buffer
 import space.kscience.kmath.structures.asBuffer
 import kotlin.random.Random
 import kotlin.test.Test
@@ -29,7 +29,7 @@ class PermSortTest {
      */
     @Test
     fun testOnEmptyBuffer() {
-        val emptyBuffer = IntBuffer(0) {it}
+        val emptyBuffer = Int32Buffer(0) {it}
         var permutations = emptyBuffer.indicesSorted()
         assertTrue(permutations.isEmpty(), "permutation on an empty buffer should return an empty result")
         permutations = emptyBuffer.indicesSortedDescending()
@@ -100,5 +100,5 @@ class PermSortTest {
         }
     }
 
-    private fun Random.buffer(size : Int) = IntBuffer(size) { nextInt() }
+    private fun Random.buffer(size : Int) = Int32Buffer(size) { nextInt() }
 }

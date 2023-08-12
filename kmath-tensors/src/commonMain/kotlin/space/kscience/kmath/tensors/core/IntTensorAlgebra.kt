@@ -37,7 +37,7 @@ public open class IntTensorAlgebra : TensorAlgebra<Int, Int32Ring> {
     final override inline fun StructureND<Int>.map(transform: Int32Ring.(Int) -> Int): IntTensor {
         val tensor = this.asIntTensor()
         //TODO remove additional copy
-        val array = IntBuffer(tensor.source.size) { Int32Ring.transform(tensor.source[it]) }
+        val array = Int32Buffer(tensor.source.size) { Int32Ring.transform(tensor.source[it]) }
         return IntTensor(
             tensor.shape,
             array,
@@ -60,7 +60,7 @@ public open class IntTensorAlgebra : TensorAlgebra<Int, Int32Ring> {
     final override inline fun StructureND<Int>.mapIndexed(transform: Int32Ring.(index: IntArray, Int) -> Int): IntTensor {
         val tensor = this.asIntTensor()
         //TODO remove additional copy
-        val buffer = IntBuffer(tensor.source.size) {
+        val buffer = Int32Buffer(tensor.source.size) {
             Int32Ring.transform(tensor.indices.index(it), tensor.source[it])
         }
         return IntTensor(tensor.shape, buffer)
@@ -76,14 +76,14 @@ public open class IntTensorAlgebra : TensorAlgebra<Int, Int32Ring> {
 
         val leftTensor = left.asIntTensor()
         val rightTensor = right.asIntTensor()
-        val buffer = IntBuffer(leftTensor.source.size) {
+        val buffer = Int32Buffer(leftTensor.source.size) {
             Int32Ring.transform(leftTensor.source[it], rightTensor.source[it])
         }
         return IntTensor(leftTensor.shape, buffer)
     }
 
 
-    public inline fun StructureND<Int>.reduceElements(transform: (IntBuffer) -> Int): Int =
+    public inline fun StructureND<Int>.reduceElements(transform: (Int32Buffer) -> Int): Int =
         transform(asIntTensor().source.copy())
     //TODO do we need protective copy?
 
@@ -139,7 +139,7 @@ public open class IntTensorAlgebra : TensorAlgebra<Int, Int32Ring> {
      */
     public fun full(value: Int, shape: ShapeND): IntTensor {
         checkNotEmptyShape(shape)
-        val buffer = IntBuffer(shape.linearSize) { value }
+        val buffer = Int32Buffer(shape.linearSize) { value }
         return IntTensor(shape, buffer)
     }
 
@@ -151,7 +151,7 @@ public open class IntTensorAlgebra : TensorAlgebra<Int, Int32Ring> {
      */
     public fun fullLike(structureND: StructureND<*>, value: Int): IntTensor {
         val shape = structureND.shape
-        val buffer = IntBuffer(structureND.indices.linearSize) { value }
+        val buffer = Int32Buffer(structureND.indices.linearSize) { value }
         return IntTensor(shape, buffer)
     }
 
@@ -193,7 +193,7 @@ public open class IntTensorAlgebra : TensorAlgebra<Int, Int32Ring> {
      */
     public fun eye(n: Int): IntTensor {
         val shape = ShapeND(n, n)
-        val buffer = IntBuffer(n * n) { 0 }
+        val buffer = Int32Buffer(n * n) { 0 }
         val res = IntTensor(shape, buffer)
         for (i in 0 until n) {
             res[intArrayOf(i, i)] = 1
@@ -420,7 +420,7 @@ public open class IntTensorAlgebra : TensorAlgebra<Int, Int32Ring> {
         val init = foldFunction(IntArray(1) { 0 })
         val resTensor = IntTensor(
             resShape,
-            IntBuffer(resNumElements) { init }
+            Int32Buffer(resNumElements) { init }
         )
         for (index in resTensor.indices) {
             val prefix = index.take(dim).toIntArray()

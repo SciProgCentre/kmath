@@ -5,16 +5,16 @@
 
 package space.kscience.kmath.testutils
 
-import space.kscience.kmath.structures.DoubleBuffer
+import space.kscience.kmath.structures.Float64Buffer
 import kotlin.jvm.JvmName
 
 /**
- * Simplified [DoubleBuffer] to array comparison
+ * Simplified [Float64Buffer] to array comparison
  */
-public fun DoubleBuffer.contentEquals(vararg doubles: Double): Boolean = array.contentEquals(doubles)
+public fun Float64Buffer.contentEquals(vararg doubles: Double): Boolean = array.contentEquals(doubles)
 
 @JvmName("contentEqualsArray")
-public infix fun DoubleBuffer.contentEquals(otherArray: DoubleArray): Boolean = array.contentEquals(otherArray)
+public infix fun Float64Buffer.contentEquals(otherArray: DoubleArray): Boolean = array.contentEquals(otherArray)
 
 @JvmName("contentEqualsBuffer")
-public infix fun DoubleBuffer.contentEquals(otherBuffer: DoubleBuffer): Boolean = array.contentEquals(otherBuffer.array)
+public infix fun Float64Buffer.contentEquals(otherBuffer: Float64Buffer): Boolean = array.contentEquals(otherBuffer.array)

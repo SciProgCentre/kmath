@@ -8,7 +8,7 @@ package space.kscience.kmath.tensors.core
 import space.kscience.kmath.nd.*
 import space.kscience.kmath.operations.covariance
 import space.kscience.kmath.structures.Buffer
-import space.kscience.kmath.structures.DoubleBuffer
+import space.kscience.kmath.structures.Float64Buffer
 import space.kscience.kmath.tensors.api.Tensor
 import space.kscience.kmath.tensors.core.internal.*
 import kotlin.math.min
@@ -24,7 +24,7 @@ import kotlin.math.sign
  * with `0.0` mean and `1.0` standard deviation.
  */
 public fun DoubleTensorAlgebra.randomNormal(shape: ShapeND, seed: Long = 0): DoubleTensor =
-    fromBuffer(shape, DoubleBuffer.randomNormals(shape.linearSize, seed))
+    fromBuffer(shape, Float64Buffer.randomNormals(shape.linearSize, seed))
 
 /**
  * Returns a tensor with the same shape as `input` of random numbers drawn from normal distributions
@@ -36,7 +36,7 @@ public fun DoubleTensorAlgebra.randomNormal(shape: ShapeND, seed: Long = 0): Dou
  * with `0.0` mean and `1.0` standard deviation.
  */
 public fun DoubleTensorAlgebra.randomNormalLike(structure: WithShape, seed: Long = 0): DoubleTensor =
-    DoubleTensor(structure.shape, DoubleBuffer.randomNormals(structure.shape.linearSize, seed))
+    DoubleTensor(structure.shape, Float64Buffer.randomNormals(structure.shape.linearSize, seed))
 
 /**
  * Concatenates a sequence of tensors with equal shapes along the first dimension.
@@ -336,7 +336,7 @@ public fun DoubleTensorAlgebra.detLU(structureND: StructureND<Double>, epsilon: 
         set(n - 2, 1)
     })
 
-    val resBuffer = DoubleBuffer(detTensorShape.linearSize) { 0.0 }
+    val resBuffer = Float64Buffer(detTensorShape.linearSize) { 0.0 }
 
     val detTensor = DoubleTensor(
         detTensorShape,
@@ -389,7 +389,7 @@ public fun DoubleTensorAlgebra.covariance(vectors: List<Buffer<Double>>): Double
     check(vectors.all { it.size == m }) { "Vectors must have same shapes" }
     val resTensor = DoubleTensor(
         ShapeND(n, n),
-        DoubleBuffer(n * n) { 0.0 }
+        Float64Buffer(n * n) { 0.0 }
     )
     for (i in 0 until n) {
         for (j in 0 until n) {

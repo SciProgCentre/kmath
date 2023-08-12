@@ -7,14 +7,14 @@ package space.kscience.kmath.real
 
 import space.kscience.kmath.nd.BufferND
 import space.kscience.kmath.operations.Float64Field
-import space.kscience.kmath.structures.DoubleBuffer
+import space.kscience.kmath.structures.Float64Buffer
 
 /**
  * Map one [BufferND] using function without indices.
  */
 public inline fun BufferND<Double>.mapInline(crossinline transform: Float64Field.(Double) -> Double): BufferND<Double> {
     val array = DoubleArray(indices.linearSize) { offset -> Float64Field.transform(buffer[offset]) }
-    return BufferND(indices, DoubleBuffer(array))
+    return BufferND(indices, Float64Buffer(array))
 }
 
 /**

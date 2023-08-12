@@ -12,7 +12,7 @@ import space.kscience.kmath.functions.Polynomial
 import space.kscience.kmath.operations.Field
 import space.kscience.kmath.operations.Float64Field
 import space.kscience.kmath.operations.invoke
-import space.kscience.kmath.structures.DoubleBuffer
+import space.kscience.kmath.structures.Float64Buffer
 import space.kscience.kmath.structures.MutableBufferFactory
 
 /**
@@ -80,4 +80,4 @@ public fun <T : Comparable<T>> Field<T>.splineInterpolator(
 ): SplineInterpolator<T> = SplineInterpolator(this, bufferFactory)
 
 public val Float64Field.splineInterpolator: SplineInterpolator<Double>
-    get() = SplineInterpolator(this, ::DoubleBuffer)
+    get() = SplineInterpolator(this, ::Float64Buffer)

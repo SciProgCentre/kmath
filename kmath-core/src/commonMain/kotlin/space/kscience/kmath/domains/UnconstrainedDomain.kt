@@ -8,7 +8,7 @@ import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.linear.Point
 
 @UnstableKMathAPI
-public class UnconstrainedDomain(override val dimension: Int) : DoubleDomain {
+public class UnconstrainedDomain(override val dimension: Int) : Float64Domain {
     override operator fun contains(point: Point<Double>): Boolean = true
 
     override fun getLowerBound(num: Int): Double = Double.NEGATIVE_INFINITY

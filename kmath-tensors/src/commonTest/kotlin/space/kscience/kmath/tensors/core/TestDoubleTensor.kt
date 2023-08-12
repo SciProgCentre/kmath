@@ -8,7 +8,7 @@ package space.kscience.kmath.tensors.core
 import space.kscience.kmath.PerformancePitfall
 import space.kscience.kmath.nd.*
 import space.kscience.kmath.operations.invoke
-import space.kscience.kmath.structures.DoubleBuffer
+import space.kscience.kmath.structures.Float64Buffer
 import space.kscience.kmath.structures.toDoubleArray
 import space.kscience.kmath.tensors.core.internal.matrixSequence
 import space.kscience.kmath.testutils.assertBufferEquals
@@ -65,10 +65,10 @@ internal class TestDoubleTensor {
     fun testNoBufferProtocol() {
 
         // create buffer
-        val doubleArray = DoubleBuffer(1.0, 2.0, 3.0)
+        val doubleArray = Float64Buffer(1.0, 2.0, 3.0)
 
         // create ND buffers, no data is copied
-        val ndArray: MutableBufferND<Double> = DoubleBufferND(ColumnStrides(ShapeND(3)), doubleArray)
+        val ndArray: MutableBufferND<Double> = Float64BufferND(ColumnStrides(ShapeND(3)), doubleArray)
 
         // map to tensors
         val tensorArray = ndArray.asDoubleTensor() // Data is copied because of strides change.
@@ -95,8 +95,8 @@ internal class TestDoubleTensor {
         val tensor: DoubleTensor = structureND(ShapeND(3, 3)) { (i, j) -> (i - j).toDouble() }
         //println(tensor.toPrettyString())
         val tensor2d = tensor.asDoubleTensor2D()
-        assertBufferEquals(DoubleBuffer(1.0, 0.0, -1.0), tensor2d.rows[1])
-        assertBufferEquals(DoubleBuffer(-2.0, -1.0, 0.0), tensor2d.columns[2])
+        assertBufferEquals(Float64Buffer(1.0, 0.0, -1.0), tensor2d.rows[1])
+        assertBufferEquals(Float64Buffer(-2.0, -1.0, 0.0), tensor2d.columns[2])
     }
 
     @Test

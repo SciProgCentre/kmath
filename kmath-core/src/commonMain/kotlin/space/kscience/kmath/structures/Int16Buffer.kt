@@ -13,7 +13,7 @@ import kotlin.jvm.JvmInline
  * @property array the underlying array.
  */
 @JvmInline
-public value class ShortBuffer(public val array: ShortArray) : MutableBuffer<Short> {
+public value class Int16Buffer(public val array: ShortArray) : MutableBuffer<Short> {
     override val size: Int get() = array.size
 
     override operator fun get(index: Int): Short = array[index]
@@ -23,35 +23,37 @@ public value class ShortBuffer(public val array: ShortArray) : MutableBuffer<Sho
     }
 
     override operator fun iterator(): ShortIterator = array.iterator()
-    override fun copy(): MutableBuffer<Short> = ShortBuffer(array.copyOf())
+    override fun copy(): MutableBuffer<Short> = Int16Buffer(array.copyOf())
 }
 
+public typealias ShortBuffer = Int16Buffer
+
 /**
- * Creates a new [ShortBuffer] with the specified [size], where each element is calculated by calling the specified
+ * Creates a new [Int16Buffer] with the specified [size], where each element is calculated by calling the specified
  * [init] function.
  *
  * The function [init] is called for each array element sequentially starting from the first one.
  * It should return the value for a buffer element given its index.
  */
-public inline fun ShortBuffer(size: Int, init: (Int) -> Short): ShortBuffer = ShortBuffer(ShortArray(size) { init(it) })
+public inline fun Int16Buffer(size: Int, init: (Int) -> Short): Int16Buffer = Int16Buffer(ShortArray(size) { init(it) })
 
 /**
- * Returns a new [ShortBuffer] of given elements.
+ * Returns a new [Int16Buffer] of given elements.
  */
-public fun ShortBuffer(vararg shorts: Short): ShortBuffer = ShortBuffer(shorts)
+public fun Int16Buffer(vararg shorts: Short): Int16Buffer = Int16Buffer(shorts)
 
 /**
  * Returns a new [ShortArray] containing all the elements of this [Buffer].
  */
 public fun Buffer<Short>.toShortArray(): ShortArray = when (this) {
-    is ShortBuffer -> array.copyOf()
+    is Int16Buffer -> array.copyOf()
     else -> ShortArray(size, ::get)
 }
 
 /**
- * Returns [ShortBuffer] over this array.
+ * Returns [Int16Buffer] over this array.
  *
  * @receiver the array.
  * @return the new buffer.
  */
-public fun ShortArray.asBuffer(): ShortBuffer = ShortBuffer(this)
+public fun ShortArray.asBuffer(): Int16Buffer = Int16Buffer(this)

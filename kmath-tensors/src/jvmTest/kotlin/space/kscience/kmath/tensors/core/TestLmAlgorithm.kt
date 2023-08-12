@@ -8,7 +8,7 @@ package space.kscience.kmath.tensors.core
 import space.kscience.kmath.PerformancePitfall
 import space.kscience.kmath.nd.*
 import space.kscience.kmath.operations.invoke
-import space.kscience.kmath.structures.DoubleBuffer
+import space.kscience.kmath.structures.Float64Buffer
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -283,7 +283,7 @@ class TestLmAlgorithm {
         assertEquals(4858, result.funcCalls)
         assertEquals(5.14347, result.resultLambda, 1e-5)
         assertEquals(result.typeOfConvergence, TypeOfConvergence.InParameters)
-        val expectedParameters = DoubleBuffer(
+        val expectedParameters = Float64Buffer(
             -23.6412,
             -16.7402,
             -21.5705,

@@ -12,7 +12,7 @@ import space.kscience.kmath.UnstableKMathAPI
  * @author Alexander Nozik
  */
 @UnstableKMathAPI
-public interface DoubleDomain : Domain<Double> {
+public interface Float64Domain : Domain<Double> {
     /**
      * Global lower edge
      * @param num axis number

@@ -47,7 +47,7 @@ public object Transformations {
     public fun sine(
         normalization: DstNormalization = DstNormalization.STANDARD_DST_I,
         direction: TransformType = TransformType.FORWARD,
-    ): BufferTransform<Double, Double> = DoubleBufferTransform {
+    ): BufferTransform<Double, Double> = Float64BufferTransform {
         FastSineTransformer(normalization).transform(it.array, direction).asBuffer()
     }
 
@@ -60,7 +60,7 @@ public object Transformations {
 
     public fun hadamard(
         direction: TransformType = TransformType.FORWARD,
-    ): BufferTransform<Double, Double> = DoubleBufferTransform {
+    ): BufferTransform<Double, Double> = Float64BufferTransform {
         FastHadamardTransformer().transform(it.array, direction).asBuffer()
     }
 }

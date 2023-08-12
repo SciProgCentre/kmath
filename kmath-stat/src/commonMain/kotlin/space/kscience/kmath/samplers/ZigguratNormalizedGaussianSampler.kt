@@ -7,7 +7,7 @@ package space.kscience.kmath.samplers
 
 import space.kscience.kmath.chains.BlockingDoubleChain
 import space.kscience.kmath.random.RandomGenerator
-import space.kscience.kmath.structures.DoubleBuffer
+import space.kscience.kmath.structures.Float64Buffer
 import kotlin.math.*
 
 /**
@@ -63,7 +63,7 @@ public object ZigguratNormalizedGaussianSampler : NormalizedGaussianSampler {
     }
 
     override fun sample(generator: RandomGenerator): BlockingDoubleChain = object : BlockingDoubleChain {
-        override fun nextBufferBlocking(size: Int): DoubleBuffer = DoubleBuffer(size) { sampleOne(generator) }
+        override fun nextBufferBlocking(size: Int): Float64Buffer = Float64Buffer(size) { sampleOne(generator) }
 
         override suspend fun fork(): BlockingDoubleChain = sample(generator.fork())
     }

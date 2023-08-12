@@ -10,7 +10,7 @@ package space.kscience.kmath.tensors.core
 
 import space.kscience.kmath.PerformancePitfall
 import space.kscience.kmath.nd.*
-import space.kscience.kmath.operations.DoubleBufferOps
+import space.kscience.kmath.operations.Float64BufferOps
 import space.kscience.kmath.operations.Float64Field
 import space.kscience.kmath.structures.*
 import space.kscience.kmath.tensors.api.AnalyticTensorAlgebra
@@ -34,7 +34,7 @@ public open class DoubleTensorAlgebra :
 
     override val elementAlgebra: Float64Field get() = Float64Field
 
-    public val bufferAlgebra: DoubleBufferOps get() = DoubleBufferOps
+    public val bufferAlgebra: Float64BufferOps get() = Float64BufferOps
 
 
     /**
@@ -47,7 +47,7 @@ public open class DoubleTensorAlgebra :
     final override inline fun StructureND<Double>.map(transform: Float64Field.(Double) -> Double): DoubleTensor {
         val tensor = asDoubleTensor()
         //TODO remove additional copy
-        val array = DoubleBuffer(tensor.source.size) { Float64Field.transform(tensor.source[it]) }
+        val array = Float64Buffer(tensor.source.size) { Float64Field.transform(tensor.source[it]) }
         return DoubleTensor(
             tensor.shape,
             array,
@@ -82,14 +82,14 @@ public open class DoubleTensorAlgebra :
 
         val leftTensor = left.asDoubleTensor()
         val rightTensor = right.asDoubleTensor()
-        val buffer = DoubleBuffer(leftTensor.source.size) {
+        val buffer = Float64Buffer(leftTensor.source.size) {
             Float64Field.transform(leftTensor.source[it], rightTensor.source[it])
         }
         return DoubleTensor(leftTensor.shape, buffer)
     }
 
 
-    public inline fun StructureND<Double>.reduceElements(transform: (DoubleBuffer) -> Double): Double =
+    public inline fun StructureND<Double>.reduceElements(transform: (Float64Buffer) -> Double): Double =
         transform(asDoubleTensor().source.copy())
     //TODO Add read-only DoubleBuffer wrapper. To avoid protective copy
 
@@ -107,7 +107,7 @@ public open class DoubleTensorAlgebra :
         check(buffer.size == shape.linearSize) {
             "Inconsistent shape $shape for buffer of size ${buffer.size} provided"
         }
-        return DoubleTensor(shape, buffer.toDoubleBuffer())
+        return DoubleTensor(shape, buffer.toFloat64Buffer())
     }
 
 
@@ -151,7 +151,7 @@ public open class DoubleTensorAlgebra :
      */
     public fun full(value: Double, shape: ShapeND): DoubleTensor {
         checkNotEmptyShape(shape)
-        val buffer = DoubleBuffer(shape.linearSize) { value }
+        val buffer = Float64Buffer(shape.linearSize) { value }
         return DoubleTensor(shape, buffer)
     }
 
@@ -163,7 +163,7 @@ public open class DoubleTensorAlgebra :
      */
     public fun fullLike(structureND: StructureND<*>, value: Double): DoubleTensor {
         val shape = structureND.shape
-        val buffer = DoubleBuffer(structureND.indices.linearSize) { value }
+        val buffer = Float64Buffer(structureND.indices.linearSize) { value }
         return DoubleTensor(shape, buffer)
     }
 
@@ -205,7 +205,7 @@ public open class DoubleTensorAlgebra :
      */
     public fun eye(n: Int): DoubleTensor {
         val shape = ShapeND(n, n)
-        val buffer = DoubleBuffer(n * n) { 0.0 }
+        val buffer = Float64Buffer(n * n) { 0.0 }
         val res = DoubleTensor(shape, buffer)
         for (i in 0 until n) {
             res[intArrayOf(i, i)] = 1.0
@@ -353,7 +353,7 @@ public open class DoubleTensorAlgebra :
      */
     public infix fun StructureND<Double>.matmul(other: StructureND<Double>): DoubleTensor {
         if (shape.size == 1 && other.shape.size == 1) {
-            return DoubleTensor(ShapeND(1), DoubleBuffer(times(other).sum()))
+            return DoubleTensor(ShapeND(1), Float64Buffer(times(other).sum()))
         }
 
         var penultimateDim = false
@@ -529,7 +529,7 @@ public open class DoubleTensorAlgebra :
         val init = foldFunction(DoubleArray(1) { 0.0 })
         val resTensor = DoubleTensor(
             resShape,
-            DoubleBuffer(resNumElements) { init }
+            Float64Buffer(resNumElements) { init }
         )
         val dt = asDoubleTensor()
         for (index in resTensor.indices) {
@@ -557,7 +557,7 @@ public open class DoubleTensorAlgebra :
         val init = foldFunction(DoubleArray(1) { 0.0 })
         val resTensor = IntTensor(
             resShape,
-            IntBuffer(resNumElements) { init }
+            Int32Buffer(resNumElements) { init }
         )
         for (index in resTensor.indices) {
             val prefix = index.take(dim).toIntArray()

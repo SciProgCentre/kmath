@@ -5,9 +5,9 @@
 
 package space.kscience.kmath.ast
 
-import space.kscience.kmath.operations.ByteRing
 import space.kscience.kmath.operations.Float64Field
 import space.kscience.kmath.operations.Int32Ring
+import space.kscience.kmath.operations.Int8Ring
 import space.kscience.kmath.operations.pi
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -47,6 +47,6 @@ internal class TestFolding {
     @Test
     fun foldNumeric() = assertEquals(
         42.toByte(),
-        ("42".parseMath().evaluateConstants(ByteRing) as? TypedMst.Constant<Byte> ?: fail()).value,
+        ("42".parseMath().evaluateConstants(Int8Ring) as? TypedMst.Constant<Byte> ?: fail()).value,
     )
 }

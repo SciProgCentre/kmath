@@ -11,7 +11,7 @@ import space.kscience.kmath.linear.*
 import space.kscience.kmath.nd.StructureFeature
 import space.kscience.kmath.operations.Float64Field
 import space.kscience.kmath.structures.Buffer
-import space.kscience.kmath.structures.DoubleBuffer
+import space.kscience.kmath.structures.Float64Buffer
 import kotlin.reflect.KClass
 import kotlin.reflect.cast
 
@@ -136,7 +136,7 @@ public object CMLinearSpace : LinearSpace<Double, Float64Field> {
                 override val u: Matrix<Double> by lazy { CMMatrix(sv.u) }
                 override val s: Matrix<Double> by lazy { CMMatrix(sv.s) }
                 override val v: Matrix<Double> by lazy { CMMatrix(sv.v) }
-                override val singularValues: Point<Double> by lazy { DoubleBuffer(sv.singularValues) }
+                override val singularValues: Point<Double> by lazy { Float64Buffer(sv.singularValues) }
             }
             else -> null
         }?.let(type::cast)

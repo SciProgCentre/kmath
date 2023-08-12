@@ -16,7 +16,7 @@ import kotlinx.coroutines.flow.flow
 import space.kscience.kmath.chains.BlockingDoubleChain
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.BufferFactory
-import space.kscience.kmath.structures.DoubleBuffer
+import space.kscience.kmath.structures.Float64Buffer
 
 /**
  * Create a [Flow] from buffer
@@ -55,7 +55,7 @@ public fun <T> Flow<T>.chunked(bufferSize: Int, bufferFactory: BufferFactory<T>)
 /**
  * Specialized flow chunker for real buffer
  */
-public fun Flow<Double>.chunked(bufferSize: Int): Flow<DoubleBuffer> = flow {
+public fun Flow<Double>.chunked(bufferSize: Int): Flow<Float64Buffer> = flow {
     require(bufferSize > 0) { "Resulting chunk size must be more than zero" }
 
     if (this@chunked is BlockingDoubleChain) {
@@ -70,13 +70,13 @@ public fun Flow<Double>.chunked(bufferSize: Int): Flow<DoubleBuffer> = flow {
             counter++
 
             if (counter == bufferSize) {
-                val buffer = DoubleBuffer(array)
+                val buffer = Float64Buffer(array)
                 emit(buffer)
                 counter = 0
             }
         }
 
-        if (counter > 0) emit(DoubleBuffer(counter) { array[it] })
+        if (counter > 0) emit(Float64Buffer(counter) { array[it] })
     }
 }
 

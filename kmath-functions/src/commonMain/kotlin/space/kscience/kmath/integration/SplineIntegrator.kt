@@ -14,7 +14,7 @@ import space.kscience.kmath.interpolation.SplineInterpolator
 import space.kscience.kmath.interpolation.interpolatePolynomials
 import space.kscience.kmath.operations.*
 import space.kscience.kmath.structures.Buffer
-import space.kscience.kmath.structures.DoubleBuffer
+import space.kscience.kmath.structures.Float64Buffer
 import space.kscience.kmath.structures.MutableBufferFactory
 
 /**
@@ -62,7 +62,7 @@ public class SplineIntegrator<T : Comparable<T>>(
         val nodes: Buffer<Double> = integrand.getFeature<UnivariateIntegrationNodes>()?.nodes ?: run {
             val numPoints = integrand.getFeature<IntegrandMaxCalls>()?.maxCalls ?: 100
             val step = (range.endInclusive - range.start) / (numPoints - 1)
-            DoubleBuffer(numPoints) { i -> range.start + i * step }
+            Float64Buffer(numPoints) { i -> range.start + i * step }
         }
 
         val values = nodes.mapToBuffer(bufferFactory) { integrand.function(it) }
@@ -85,15 +85,15 @@ public class SplineIntegrator<T : Comparable<T>>(
 public object DoubleSplineIntegrator : UnivariateIntegrator<Double> {
     override fun process(integrand: UnivariateIntegrand<Double>): UnivariateIntegrand<Double> {
         val range = integrand.getFeature<IntegrationRange>()?.range ?: 0.0..1.0
-        val interpolator: PolynomialInterpolator<Double> = SplineInterpolator(Float64Field, ::DoubleBuffer)
+        val interpolator: PolynomialInterpolator<Double> = SplineInterpolator(Float64Field, ::Float64Buffer)
 
         val nodes: Buffer<Double> = integrand.getFeature<UnivariateIntegrationNodes>()?.nodes ?: run {
             val numPoints = integrand.getFeature<IntegrandMaxCalls>()?.maxCalls ?: 100
             val step = (range.endInclusive - range.start) / (numPoints - 1)
-            DoubleBuffer(numPoints) { i -> range.start + i * step }
+            Float64Buffer(numPoints) { i -> range.start + i * step }
         }
 
-        val values = nodes.mapToBuffer(::DoubleBuffer) { integrand.function(it) }
+        val values = nodes.mapToBuffer(::Float64Buffer) { integrand.function(it) }
         val polynomials = interpolator.interpolatePolynomials(nodes, values)
         val res = polynomials.integrate(Float64Field, range)
         return integrand + IntegrandValue(res) + IntegrandCallsPerformed(integrand.calls + nodes.size)

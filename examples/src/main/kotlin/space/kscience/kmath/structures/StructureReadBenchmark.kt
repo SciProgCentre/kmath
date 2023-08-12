@@ -16,7 +16,7 @@ import kotlin.system.measureTimeMillis
 fun main() {
     val n = 6000
     val array = DoubleArray(n * n) { 1.0 }
-    val buffer = DoubleBuffer(array)
+    val buffer = Float64Buffer(array)
     val strides = ColumnStrides(ShapeND(n, n))
     val structure = BufferND(strides, buffer)
 

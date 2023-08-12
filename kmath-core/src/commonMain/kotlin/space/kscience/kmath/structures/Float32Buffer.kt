@@ -14,7 +14,7 @@ import kotlin.jvm.JvmInline
  * @author Iaroslav Postovalov
  */
 @JvmInline
-public value class FloatBuffer(public val array: FloatArray) : PrimitiveBuffer<Float> {
+public value class Float32Buffer(public val array: FloatArray) : PrimitiveBuffer<Float> {
     override val size: Int get() = array.size
 
     override operator fun get(index: Int): Float = array[index]
@@ -26,35 +26,37 @@ public value class FloatBuffer(public val array: FloatArray) : PrimitiveBuffer<F
     override operator fun iterator(): FloatIterator = array.iterator()
 
     override fun copy(): MutableBuffer<Float> =
-        FloatBuffer(array.copyOf())
+        Float32Buffer(array.copyOf())
 }
 
+public typealias FloatBuffer = Float32Buffer
+
 /**
- * Creates a new [FloatBuffer] with the specified [size], where each element is calculated by calling the specified
+ * Creates a new [Float32Buffer] with the specified [size], where each element is calculated by calling the specified
  * [init] function.
  *
  * The function [init] is called for each array element sequentially starting from the first one.
  * It should return the value for a buffer element given its index.
  */
-public inline fun FloatBuffer(size: Int, init: (Int) -> Float): FloatBuffer = FloatBuffer(FloatArray(size) { init(it) })
+public inline fun Float32Buffer(size: Int, init: (Int) -> Float): Float32Buffer = Float32Buffer(FloatArray(size) { init(it) })
 
 /**
- * Returns a new [FloatBuffer] of given elements.
+ * Returns a new [Float32Buffer] of given elements.
  */
-public fun FloatBuffer(vararg floats: Float): FloatBuffer = FloatBuffer(floats)
+public fun Float32Buffer(vararg floats: Float): Float32Buffer = Float32Buffer(floats)
 
 /**
  * Returns a new [FloatArray] containing all the elements of this [Buffer].
  */
 public fun Buffer<Float>.toFloatArray(): FloatArray = when (this) {
-    is FloatBuffer -> array.copyOf()
+    is Float32Buffer -> array.copyOf()
     else -> FloatArray(size, ::get)
 }
 
 /**
- * Returns [FloatBuffer] over this array.
+ * Returns [Float32Buffer] over this array.
  *
  * @receiver the array.
  * @return the new buffer.
  */
-public fun FloatArray.asBuffer(): FloatBuffer = FloatBuffer(this)
+public fun FloatArray.asBuffer(): Float32Buffer = Float32Buffer(this)

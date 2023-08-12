@@ -9,13 +9,13 @@ import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.operations.Int32Ring
 import space.kscience.kmath.operations.NumbersAddOps
 import space.kscience.kmath.operations.bufferAlgebra
-import space.kscience.kmath.structures.IntBuffer
+import space.kscience.kmath.structures.Int32Buffer
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
 
 public class IntBufferND(
     indexes: ShapeIndexer,
-    override val buffer: IntBuffer,
+    override val buffer: Int32Buffer,
 ) : MutableBufferND<Int>(indexes, buffer)
 
 public sealed class IntRingOpsND : BufferedRingOpsND<Int, Int32Ring>(Int32Ring.bufferAlgebra) {
@@ -24,7 +24,7 @@ public sealed class IntRingOpsND : BufferedRingOpsND<Int, Int32Ring>(Int32Ring.b
         val indexer = indexerBuilder(shape)
         return IntBufferND(
             indexer,
-            IntBuffer(indexer.linearSize) { offset ->
+            Int32Buffer(indexer.linearSize) { offset ->
                 elementAlgebra.initializer(indexer.index(offset))
             }
         )

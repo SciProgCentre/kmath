@@ -7,8 +7,8 @@ package space.kscience.kmath.tensors.core.internal
 
 import space.kscience.kmath.nd.*
 import space.kscience.kmath.operations.invoke
-import space.kscience.kmath.structures.DoubleBuffer
-import space.kscience.kmath.structures.IntBuffer
+import space.kscience.kmath.structures.Float64Buffer
+import space.kscience.kmath.structures.Int32Buffer
 import space.kscience.kmath.structures.asBuffer
 import space.kscience.kmath.structures.indices
 import space.kscience.kmath.tensors.core.*
@@ -97,7 +97,7 @@ internal fun <T> StructureND<T>.setUpPivots(): IntTensor {
 
     return IntTensor(
         ShapeND(pivotsShape),
-        IntBuffer(pivotsShape.reduce(Int::times)) { 0 }
+        Int32Buffer(pivotsShape.reduce(Int::times)) { 0 }
     )
 }
 
@@ -241,10 +241,10 @@ internal fun DoubleTensorAlgebra.svd1d(a: DoubleTensor, epsilon: Double = 1e-10)
     val b: DoubleTensor
     if (n > m) {
         b = a.transposed(0, 1).dot(a)
-        v = DoubleTensor(ShapeND(m), DoubleBuffer.randomUnitVector(m, 0))
+        v = DoubleTensor(ShapeND(m), Float64Buffer.randomUnitVector(m, 0))
     } else {
         b = a.dot(a.transposed(0, 1))
-        v = DoubleTensor(ShapeND(n), DoubleBuffer.randomUnitVector(n, 0))
+        v = DoubleTensor(ShapeND(n), Float64Buffer.randomUnitVector(n, 0))
     }
 
     var lastV: DoubleTensor

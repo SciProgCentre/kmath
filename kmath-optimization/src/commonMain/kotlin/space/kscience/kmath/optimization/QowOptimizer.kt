@@ -9,10 +9,10 @@ import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.expressions.*
 import space.kscience.kmath.linear.*
 import space.kscience.kmath.misc.log
-import space.kscience.kmath.operations.DoubleL2Norm
 import space.kscience.kmath.operations.Float64Field
+import space.kscience.kmath.operations.Float64L2Norm
 import space.kscience.kmath.operations.algebra
-import space.kscience.kmath.structures.DoubleBuffer
+import space.kscience.kmath.structures.Float64Buffer
 import kotlin.math.abs
 
 
@@ -63,7 +63,7 @@ public object QowOptimizer : Optimizer<Double, XYFit> {
          * Array of dispersions in each point
          */
         val dispersion: Point<Double> by lazy {
-            DoubleBuffer(problem.data.size) { d ->
+            Float64Buffer(problem.data.size) { d ->
                 1.0 / problem.weight(d).invoke(allParameters)
             }
         }
@@ -148,8 +148,8 @@ public object QowOptimizer : Optimizer<Double, XYFit> {
      * Quasi optimal weights equations values
      */
     private fun QoWeight.getEqValues(theta: Map<Symbol, Double>): Point<Double> {
-        val distances = DoubleBuffer(data.size) { d -> distance(d, theta) }
-        return DoubleBuffer(size) { s ->
+        val distances = Float64Buffer(data.size) { d -> distance(d, theta) }
+        return Float64Buffer(size) { s ->
             val base = (0 until data.size).sumOf { d -> distances[d] * derivs[d, s] / dispersion[d] }
             //Prior probability correction
             prior?.let { prior ->
@@ -186,7 +186,7 @@ public object QowOptimizer : Optimizer<Double, XYFit> {
 
         var eqvalues = getEqValues(par) //Values of the weight functions
 
-        dis = DoubleL2Norm.norm(eqvalues) // discrepancy
+        dis = Float64L2Norm.norm(eqvalues) // discrepancy
         logger?.log { "Starting discrepancy is $dis" }
         var i = 0
         var flag = false
@@ -205,7 +205,7 @@ public object QowOptimizer : Optimizer<Double, XYFit> {
             logger?.log { "Parameter values after step are: \n\t$currentSolution" }
 
             eqvalues = getEqValues(currentSolution.freeParameters)
-            val currentDis = DoubleL2Norm.norm(eqvalues)// discrepancy after the step
+            val currentDis = Float64L2Norm.norm(eqvalues)// discrepancy after the step
 
             logger?.log { "The discrepancy after step is: $currentDis." }
 

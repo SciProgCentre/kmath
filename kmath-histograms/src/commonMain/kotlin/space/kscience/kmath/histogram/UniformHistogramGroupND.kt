@@ -41,7 +41,7 @@ public class UniformHistogramGroupND<V : Any, A : Field<V>>(
 
     override val shape: ShapeND = ShapeND(IntArray(binNums.size) { binNums[it] + 2 })
 
-    private val binSize = DoubleBuffer(dimension) { (upper[it] - lower[it]) / binNums[it] }
+    private val binSize = Float64Buffer(dimension) { (upper[it] - lower[it]) / binNums[it] }
 
     /**
      * Get internal [StructureND] bin index for given axis
@@ -129,7 +129,7 @@ public fun <V : Any, A : Field<V>> Histogram.Companion.uniformNDFromRanges(
 public fun Histogram.Companion.uniformDoubleNDFromRanges(
     vararg ranges: ClosedFloatingPointRange<Double>,
 ): UniformHistogramGroupND<Double, Float64Field> =
-    uniformNDFromRanges(DoubleFieldOpsND, *ranges, bufferFactory = ::DoubleBuffer)
+    uniformNDFromRanges(Floa64FieldOpsND, *ranges, bufferFactory = ::Float64Buffer)
 
 
 /**
@@ -164,4 +164,4 @@ public fun <V : Any, A : Field<V>> Histogram.Companion.uniformNDFromRanges(
 public fun Histogram.Companion.uniformDoubleNDFromRanges(
     vararg ranges: Pair<ClosedFloatingPointRange<Double>, Int>,
 ): UniformHistogramGroupND<Double, Float64Field> =
-    uniformNDFromRanges(DoubleFieldOpsND, *ranges, bufferFactory = ::DoubleBuffer)
+    uniformNDFromRanges(Floa64FieldOpsND, *ranges, bufferFactory = ::Float64Buffer)

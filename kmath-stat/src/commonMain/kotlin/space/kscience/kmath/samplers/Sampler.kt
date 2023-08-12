@@ -12,8 +12,8 @@ import space.kscience.kmath.chains.combine
 import space.kscience.kmath.random.RandomGenerator
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.BufferFactory
-import space.kscience.kmath.structures.DoubleBuffer
-import space.kscience.kmath.structures.IntBuffer
+import space.kscience.kmath.structures.Float64Buffer
+import space.kscience.kmath.structures.Int32Buffer
 import kotlin.jvm.JvmName
 
 /**
@@ -62,14 +62,14 @@ public suspend fun <T : Any> Sampler<T>.next(generator: RandomGenerator): T = sa
  */
 @JvmName("sampleRealBuffer")
 public fun Sampler<Double>.sampleBuffer(generator: RandomGenerator, size: Int): Chain<Buffer<Double>> =
-    sampleBuffer(generator, size, ::DoubleBuffer)
+    sampleBuffer(generator, size, ::Float64Buffer)
 
 /**
  * Generates [size] integer samples and chunks them into some buffers.
  */
 @JvmName("sampleIntBuffer")
 public fun Sampler<Int>.sampleBuffer(generator: RandomGenerator, size: Int): Chain<Buffer<Int>> =
-    sampleBuffer(generator, size, ::IntBuffer)
+    sampleBuffer(generator, size, ::Int32Buffer)
 
 
 /**
