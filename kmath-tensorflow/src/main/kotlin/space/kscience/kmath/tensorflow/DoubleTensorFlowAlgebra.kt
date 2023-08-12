@@ -16,6 +16,7 @@ import space.kscience.kmath.expressions.Symbol
 import space.kscience.kmath.nd.ColumnStrides
 import space.kscience.kmath.nd.ShapeND
 import space.kscience.kmath.nd.StructureND
+import space.kscience.kmath.operations.FieldOps
 import space.kscience.kmath.operations.Float64Field
 import space.kscience.kmath.operations.PowerOperations
 
@@ -32,7 +33,8 @@ internal fun ShapeND.toLongArray(): LongArray = LongArray(size) { get(it).toLong
 
 public class DoubleTensorFlowAlgebra internal constructor(
     graph: Graph,
-) : TensorFlowAlgebra<Double, TFloat64, Float64Field>(graph), PowerOperations<StructureND<Double>> {
+) : TensorFlowAlgebra<Double, TFloat64,
+        Float64Field>(graph), FieldOps<StructureND<Double>>, PowerOperations<StructureND<Double>> {
 
     override val elementAlgebra: Float64Field get() = Float64Field
 

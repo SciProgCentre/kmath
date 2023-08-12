@@ -1,9 +1,9 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2023 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
-package space.kscience.kmath.geometry
+package space.kscience.kmath.geometry.euclidean2d
 
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerialName
@@ -11,43 +11,26 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
-import space.kscience.kmath.linear.Point
+import space.kscience.kmath.geometry.GeometrySpace
+import space.kscience.kmath.geometry.Vector2D
+import space.kscience.kmath.operations.Float64Field
 import space.kscience.kmath.operations.Norm
 import space.kscience.kmath.operations.ScaleOperations
 import kotlin.math.pow
 import kotlin.math.sqrt
 
-public interface Vector2D<T> : Point<T>, Vector {
-    public val x: T
-    public val y: T
-    override val size: Int get() = 2
 
-    override operator fun get(index: Int): T = when (index) {
-        0 -> x
-        1 -> y
-        else -> error("Accessing outside of point bounds")
-    }
-
-    override operator fun iterator(): Iterator<T> = iterator {
-        yield(x)
-        yield(y)
-    }
-}
-
-
-public operator fun <T> Vector2D<T>.component1(): T = x
-public operator fun <T> Vector2D<T>.component2(): T = y
 
 public typealias DoubleVector2D = Vector2D<Double>
 public typealias Float64Vector2D = Vector2D<Double>
 
-public val Vector2D<Double>.r: Double get() = Euclidean2DSpace.norm(this)
+public val Vector2D<Double>.r: Double get() = Float64Space2D.norm(this)
 
 
 /**
  * 2D Euclidean space
  */
-public object Euclidean2DSpace : GeometrySpace<DoubleVector2D>,
+public object Float64Space2D : GeometrySpace<DoubleVector2D>,
     ScaleOperations<DoubleVector2D>,
     Norm<DoubleVector2D, Double> {
 
@@ -88,3 +71,5 @@ public object Euclidean2DSpace : GeometrySpace<DoubleVector2D>,
     public val xAxis: DoubleVector2D = vector(1.0, 0.0)
     public val yAxis: DoubleVector2D = vector(0.0, 1.0)
 }
+
+public val Float64Field.euclidean2D: Float64Space2D get() = Float64Space2D

@@ -5,13 +5,15 @@
 
 package space.kscience.kmath.geometry
 
+import space.kscience.kmath.geometry.euclidean2d.Float64Space2D
+import space.kscience.kmath.geometry.euclidean3d.Float64Space3D
 import kotlin.test.Test
 import kotlin.test.assertTrue
 
 internal class ProjectionOntoLineTest {
     @Test
     fun projectionIntoOx() {
-        with(Euclidean2DSpace) {
+        with(Float64Space2D) {
             val ox = Line(zero, vector(1.0, 0.0))
 
             grid(-10.0..10.0, -10.0..10.0, 0.15).forEach { (x, y) ->
@@ -22,7 +24,7 @@ internal class ProjectionOntoLineTest {
 
     @Test
     fun projectionIntoOy() {
-        with(Euclidean2DSpace) {
+        with(Float64Space2D) {
             val line = Line(zero, vector(0.0, 1.0))
 
             grid(-10.0..10.0, -10.0..10.0, 0.15).forEach { (x, y) ->
@@ -33,7 +35,7 @@ internal class ProjectionOntoLineTest {
 
     @Test
     fun projectionIntoYEqualsX() {
-        with(Euclidean2DSpace) {
+        with(Float64Space2D) {
             val line = Line(zero, vector(1.0, 1.0))
 
             assertVectorEquals(zero, projectToLine(zero, line))
@@ -47,7 +49,7 @@ internal class ProjectionOntoLineTest {
 
     @Test
     fun projectionOntoLine2d() {
-        with(Euclidean2DSpace) {
+        with(Float64Space2D) {
             val a = 5.0
             val b = -3.0
             val c = -15.0
@@ -62,7 +64,7 @@ internal class ProjectionOntoLineTest {
     }
 
     @Test
-    fun projectionOntoLine3d() = with(Euclidean3DSpace) {
+    fun projectionOntoLine3d() = with(Float64Space3D) {
         val line = Line(
             base = vector(1.0, 3.5, 0.07),
             direction = vector(2.0, -0.0037, 11.1111)

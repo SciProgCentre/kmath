@@ -1,15 +1,16 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2023 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
-package space.kscience.kmath.geometry
+package space.kscience.kmath.geometry.euclidean3d
 
 import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.complex.Quaternion
-import space.kscience.kmath.complex.QuaternionField
+import space.kscience.kmath.complex.QuaternionAlgebra
 import space.kscience.kmath.complex.normalized
 import space.kscience.kmath.complex.reciprocal
+import space.kscience.kmath.geometry.*
 import space.kscience.kmath.linear.LinearSpace
 import space.kscience.kmath.linear.Matrix
 import space.kscience.kmath.linear.linearSpace
@@ -31,7 +32,7 @@ public val Quaternion.theta: Radians get() = (kotlin.math.acos(normalized().w) *
 public fun Quaternion.Companion.fromRotation(theta: Angle, vector: DoubleVector3D): Quaternion {
     val s = sin(theta / 2)
     val c = cos(theta / 2)
-    val norm = with(Euclidean3DSpace) { vector.norm() }
+    val norm = with(Float64Space3D) { vector.norm() }
     return Quaternion(c, vector.x * s / norm, vector.y * s / norm, vector.z * s / norm)
 }
 
@@ -50,9 +51,9 @@ public val Quaternion.vector: DoubleVector3D
     }
 
 /**
- * Rotate a vector in a [Euclidean3DSpace]
+ * Rotate a vector in a [Float64Space3D]
  */
-public fun Euclidean3DSpace.rotate(vector: DoubleVector3D, q: Quaternion): DoubleVector3D = with(QuaternionField) {
+public fun Float64Space3D.rotate(vector: DoubleVector3D, q: Quaternion): DoubleVector3D = with(QuaternionAlgebra) {
     val p = vector.toQuaternion()
     (q * p * q.reciprocal).vector
 }
@@ -61,10 +62,10 @@ public fun Euclidean3DSpace.rotate(vector: DoubleVector3D, q: Quaternion): Doubl
  * Use a composition of quaternions to create a rotation
  */
 @UnstableKMathAPI
-public fun Euclidean3DSpace.rotate(vector: DoubleVector3D, composition: QuaternionField.() -> Quaternion): DoubleVector3D =
-    rotate(vector, QuaternionField.composition())
+public fun Float64Space3D.rotate(vector: DoubleVector3D, composition: QuaternionAlgebra.() -> Quaternion): DoubleVector3D =
+    rotate(vector, QuaternionAlgebra.composition())
 
-public fun Euclidean3DSpace.rotate(vector: DoubleVector3D, matrix: Matrix<Double>): DoubleVector3D {
+public fun Float64Space3D.rotate(vector: DoubleVector3D, matrix: Matrix<Double>): DoubleVector3D {
     require(matrix.colNum == 3 && matrix.rowNum == 3) { "Square 3x3 rotation matrix is required" }
     return with(Float64Field.linearSpace) { matrix.dot(vector).asVector3D() }
 }
@@ -76,7 +77,7 @@ public fun Euclidean3DSpace.rotate(vector: DoubleVector3D, matrix: Matrix<Double
 public fun Quaternion.toRotationMatrix(
     linearSpace: LinearSpace<Double, *> = Float64Field.linearSpace,
 ): Matrix<Double> {
-    val s = QuaternionField.norm(this).pow(-2)
+    val s = QuaternionAlgebra.norm(this).pow(-2)
     return linearSpace.matrix(3, 3)(
         1.0 - 2 * s * (y * y + z * z), 2 * s * (x * y - z * w), 2 * s * (x * z + y * w),
         2 * s * (x * y + z * w), 1.0 - 2 * s * (x * x + z * z), 2 * s * (y * z - x * w),

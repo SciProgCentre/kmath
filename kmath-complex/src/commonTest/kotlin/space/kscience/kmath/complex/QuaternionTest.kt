@@ -14,20 +14,20 @@ internal class QuaternionTest {
 
     @Test
     fun testNorm() {
-        assertEquals(2.0, QuaternionField.norm(Quaternion(1.0, 1.0, 1.0, 1.0)))
+        assertEquals(2.0, QuaternionAlgebra.norm(Quaternion(1.0, 1.0, 1.0, 1.0)))
     }
 
     @Test
-    fun testInverse() = QuaternionField {
+    fun testInverse() = QuaternionAlgebra {
         val q = Quaternion(1.0, 2.0, -3.0, 4.0)
         assertBufferEquals(one, q * q.reciprocal, 1e-4)
     }
 
     @Test
     fun testAddition() {
-        assertEquals(Quaternion(42, 42), QuaternionField { Quaternion(16, 16) + Quaternion(26, 26) })
-        assertEquals(Quaternion(42, 16), QuaternionField { Quaternion(16, 16) + 26 })
-        assertEquals(Quaternion(42, 16), QuaternionField { 26 + Quaternion(16, 16) })
+        assertEquals(Quaternion(42, 42), QuaternionAlgebra { Quaternion(16, 16) + Quaternion(26, 26) })
+        assertEquals(Quaternion(42, 16), QuaternionAlgebra { Quaternion(16, 16) + 26 })
+        assertEquals(Quaternion(42, 16), QuaternionAlgebra { 26 + Quaternion(16, 16) })
     }
 
 //    @Test
@@ -39,9 +39,9 @@ internal class QuaternionTest {
 
     @Test
     fun testMultiplication() {
-        assertEquals(Quaternion(42, 42), QuaternionField { Quaternion(4.2, 0) * Quaternion(10, 10) })
-        assertEquals(Quaternion(42, 21), QuaternionField { Quaternion(4.2, 2.1) * 10 })
-        assertEquals(Quaternion(42, 21), QuaternionField { 10 * Quaternion(4.2, 2.1) })
+        assertEquals(Quaternion(42, 42), QuaternionAlgebra { Quaternion(4.2, 0) * Quaternion(10, 10) })
+        assertEquals(Quaternion(42, 21), QuaternionAlgebra { Quaternion(4.2, 2.1) * 10 })
+        assertEquals(Quaternion(42, 21), QuaternionAlgebra { 10 * Quaternion(4.2, 2.1) })
     }
 
 //    @Test
@@ -53,11 +53,11 @@ internal class QuaternionTest {
 
     @Test
     fun testPower() {
-        assertEquals(QuaternionField.zero, QuaternionField { zero pow 2 })
-        assertEquals(QuaternionField.zero, QuaternionField { zero pow 2 })
+        assertEquals(QuaternionAlgebra.zero, QuaternionAlgebra { zero pow 2 })
+        assertEquals(QuaternionAlgebra.zero, QuaternionAlgebra { zero pow 2 })
 
         assertEquals(
-            QuaternionField { i * 8 }.let { it.x.toInt() to it.w.toInt() },
-            QuaternionField { Quaternion(2, 2) pow 2 }.let { it.x.toInt() to it.w.toInt() })
+            QuaternionAlgebra { i * 8 }.let { it.x.toInt() to it.w.toInt() },
+            QuaternionAlgebra { Quaternion(2, 2) pow 2 }.let { it.x.toInt() to it.w.toInt() })
     }
 }
