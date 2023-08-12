@@ -16,7 +16,6 @@ import kotlin.math.min
 import kotlin.math.sign
 
 private typealias Magnitude = UIntArray
-private typealias TBase = ULong
 
 /**
  * Kotlin Multiplatform implementation of Big Integer numbers (KBigInteger).
@@ -215,6 +214,9 @@ public class BigInt internal constructor(
         }
     }
 
+    /**
+     * Convert this [BigInt] to a string using hexadecimal representation
+     */
     override fun toString(): String {
         if (this.sign == 0.toByte()) {
             return "0x0"
