@@ -8,7 +8,7 @@ package space.kscience.kmath.integration
 import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.misc.FeatureSet
 import space.kscience.kmath.structures.Buffer
-import space.kscience.kmath.structures.DoubleBuffer
+import space.kscience.kmath.structures.Float64Buffer
 
 public class UnivariateIntegrand<T> internal constructor(
     override val features: FeatureSet<IntegrandFeature>,
@@ -46,7 +46,7 @@ public class UnivariateIntegrandRanges(public val ranges: List<Pair<ClosedRange<
 }
 
 public class UnivariateIntegrationNodes(public val nodes: Buffer<Double>) : IntegrandFeature {
-    public constructor(vararg nodes: Double) : this(DoubleBuffer(nodes))
+    public constructor(vararg nodes: Double) : this(Float64Buffer(nodes))
 
     override fun toString(): String = "UnivariateNodes($nodes)"
 }

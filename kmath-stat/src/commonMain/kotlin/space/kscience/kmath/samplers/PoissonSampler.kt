@@ -9,7 +9,7 @@ import space.kscience.kmath.chains.BlockingIntChain
 import space.kscience.kmath.misc.toIntExact
 import space.kscience.kmath.random.RandomGenerator
 import space.kscience.kmath.stat.Sampler
-import space.kscience.kmath.structures.IntBuffer
+import space.kscience.kmath.structures.Int32Buffer
 import kotlin.math.*
 
 
@@ -71,7 +71,7 @@ public class SmallMeanPoissonSampler(public val mean: Double) : Sampler<Int> {
             return n
         }
 
-        override fun nextBufferBlocking(size: Int): IntBuffer = IntBuffer(size) { nextBlocking() }
+        override fun nextBufferBlocking(size: Int): Int32Buffer = Int32Buffer(size) { nextBlocking() }
 
         override suspend fun fork(): BlockingIntChain = sample(generator.fork())
     }
@@ -191,7 +191,7 @@ public class LargeMeanPoissonSampler(public val mean: Double) : Sampler<Int> {
             return min(y2 + y.toLong(), Int.MAX_VALUE.toLong()).toIntExact()
         }
 
-        override fun nextBufferBlocking(size: Int): IntBuffer = IntBuffer(size) { nextBlocking() }
+        override fun nextBufferBlocking(size: Int): Int32Buffer = Int32Buffer(size) { nextBlocking() }
 
         override suspend fun fork(): BlockingIntChain = sample(generator.fork())
     }

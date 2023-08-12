@@ -1,9 +1,9 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2023 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
-package space.kscience.kmath.geometry
+package space.kscience.kmath.geometry.euclidean3d
 
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerialName
@@ -11,51 +11,33 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
-import space.kscience.kmath.linear.Point
+import space.kscience.kmath.geometry.GeometrySpace
+import space.kscience.kmath.geometry.Vector3D
+import space.kscience.kmath.operations.Float64Field
 import space.kscience.kmath.operations.Norm
 import space.kscience.kmath.operations.ScaleOperations
-import space.kscience.kmath.structures.Buffer
 import kotlin.math.pow
 import kotlin.math.sqrt
 
-public interface Vector3D<T> : Point<T> {
-    public val x: T
-    public val y: T
-    public val z: T
-    override val size: Int get() = 3
+internal fun leviCivita(i: Int, j: Int, k: Int): Int = when {
+    // even permutation
+    i == 0 && j == 1 && k == 2 -> 1
+    i == 1 && j == 2 && k == 0 -> 1
+    i == 2 && j == 0 && k == 1 -> 1
+    // odd permutations
+    i == 2 && j == 1 && k == 0 -> -1
+    i == 0 && j == 2 && k == 1 -> -1
+    i == 1 && j == 0 && k == 2 -> -1
 
-    override operator fun get(index: Int): T = when (index) {
-        0 -> x
-        1 -> y
-        2 -> z
-        else -> error("Accessing outside of point bounds")
-    }
-
-    override operator fun iterator(): Iterator<T> = listOf(x, y, z).iterator()
-}
-
-public operator fun <T> Vector3D<T>.component1(): T = x
-public operator fun <T> Vector3D<T>.component2(): T = y
-public operator fun <T> Vector3D<T>.component3(): T = z
-
-public fun <T> Buffer<T>.asVector3D(): Vector3D<T> = object : Vector3D<T> {
-    init {
-        require(this@asVector3D.size == 3) { "Buffer of size 3 is required for Vector3D" }
-    }
-
-    override val x: T get() = this@asVector3D[0]
-    override val y: T get() = this@asVector3D[1]
-    override val z: T get() = this@asVector3D[2]
-
-    override fun toString(): String = this@asVector3D.toString()
+    else -> 0
 }
 
 public typealias DoubleVector3D = Vector3D<Double>
 public typealias Float64Vector3D = Vector3D<Double>
 
-public val DoubleVector3D.r: Double get() = Euclidean3DSpace.norm(this)
+public val DoubleVector3D.r: Double get() = Float64Space3D.norm(this)
 
-public object Euclidean3DSpace : GeometrySpace<DoubleVector3D, Double>, ScaleOperations<DoubleVector3D>,
+public object Float64Space3D : GeometrySpace<DoubleVector3D, Double>, ScaleOperations<DoubleVector3D>,
     Norm<DoubleVector3D, Double> {
 
     @Serializable
@@ -103,21 +85,8 @@ public object Euclidean3DSpace : GeometrySpace<DoubleVector3D, Double>, ScaleOpe
     override fun DoubleVector3D.dot(other: DoubleVector3D): Double =
         x * other.x + y * other.y + z * other.z
 
-    private fun leviCivita(i: Int, j: Int, k: Int): Int = when {
-        // even permutation
-        i == 0 && j == 1 && k == 2 -> 1
-        i == 1 && j == 2 && k == 0 -> 1
-        i == 2 && j == 0 && k == 1 -> 1
-        // odd permutations
-        i == 2 && j == 1 && k == 0 -> -1
-        i == 0 && j == 2 && k == 1 -> -1
-        i == 1 && j == 0 && k == 2 -> -1
-
-        else -> 0
-    }
-
     /**
-     * Compute vector product of [first] and [second]. The basis assumed to be right-handed.
+     * Compute vector product of [first] and [second]. The basis is assumed to be right-handed.
      */
     public fun vectorProduct(
         first: DoubleVector3D,
@@ -139,7 +108,7 @@ public object Euclidean3DSpace : GeometrySpace<DoubleVector3D, Double>, ScaleOpe
     }
 
     /**
-     * Vector product with right basis
+     * Vector product with the right basis
      */
     public infix fun DoubleVector3D.cross(other: DoubleVector3D): Vector3D<Double> = vectorProduct(this, other)
 
@@ -149,3 +118,5 @@ public object Euclidean3DSpace : GeometrySpace<DoubleVector3D, Double>, ScaleOpe
 
     override val defaultPrecision: Double = 1e-6
 }
+
+public val Float64Field.euclidean3D: Float64Space3D get() = Float64Space3D

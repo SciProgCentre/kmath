@@ -11,16 +11,16 @@ import kotlin.test.assertEquals
 
 internal class DoubleFieldTest {
     @Test
-    fun verify() = FieldVerifier(DoubleField, 42.0, 66.0, 2.0, 5).verify()
+    fun verify() = FieldVerifier(Float64Field, 42.0, 66.0, 2.0, 5).verify()
 
     @Test
     fun testSqrt() {
-        val sqrt = DoubleField { sqrt(25 * one) }
+        val sqrt = Float64Field { sqrt(25 * one) }
         assertEquals(5.0, sqrt)
     }
 
     @Test
-    fun testPow() = DoubleField {
+    fun testPow() = Float64Field {
         val num = 5 * one
         assertEquals(5.0, power(num, 1), 0.01)
         assertEquals(25.0, power(num, 2), 0.01)

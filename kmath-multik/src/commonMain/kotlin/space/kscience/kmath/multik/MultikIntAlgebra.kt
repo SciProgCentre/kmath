@@ -9,12 +9,12 @@ import org.jetbrains.kotlinx.multik.api.Engine
 import org.jetbrains.kotlinx.multik.api.Multik
 import org.jetbrains.kotlinx.multik.api.ndarrayOf
 import org.jetbrains.kotlinx.multik.ndarray.data.DataType
-import space.kscience.kmath.operations.IntRing
+import space.kscience.kmath.operations.Int32Ring
 
 public class MultikIntAlgebra(
     multikEngine: Engine
-) : MultikTensorAlgebra<Int, IntRing>(multikEngine) {
-    override val elementAlgebra: IntRing get() = IntRing
+) : MultikTensorAlgebra<Int, Int32Ring>(multikEngine) {
+    override val elementAlgebra: Int32Ring get() = Int32Ring
     override val type: DataType get() = DataType.IntDataType
     override fun scalar(value: Int): MultikTensor<Int>  = Multik.ndarrayOf(value).wrap()
 }

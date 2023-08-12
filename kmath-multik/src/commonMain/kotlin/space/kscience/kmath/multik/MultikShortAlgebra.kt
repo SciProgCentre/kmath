@@ -9,12 +9,12 @@ import org.jetbrains.kotlinx.multik.api.Engine
 import org.jetbrains.kotlinx.multik.api.Multik
 import org.jetbrains.kotlinx.multik.api.ndarrayOf
 import org.jetbrains.kotlinx.multik.ndarray.data.DataType
-import space.kscience.kmath.operations.ShortRing
+import space.kscience.kmath.operations.Int16Ring
 
 public class MultikShortAlgebra(
     multikEngine: Engine
-) : MultikTensorAlgebra<Short, ShortRing>(multikEngine) {
-    override val elementAlgebra: ShortRing get() = ShortRing
+) : MultikTensorAlgebra<Short, Int16Ring>(multikEngine) {
+    override val elementAlgebra: Int16Ring get() = Int16Ring
     override val type: DataType get() = DataType.ShortDataType
     override fun scalar(value: Short): MultikTensor<Short>  = Multik.ndarrayOf(value).wrap()
 }

@@ -27,40 +27,40 @@ public interface MutableBuffer<T> : Buffer<T> {
 
     public companion object {
         /**
-         * Creates a [DoubleBuffer] with the specified [size], where each element is calculated by calling the specified
+         * Creates a [Float64Buffer] with the specified [size], where each element is calculated by calling the specified
          * [initializer] function.
          */
-        public inline fun double(size: Int, initializer: (Int) -> Double): DoubleBuffer =
-            DoubleBuffer(size, initializer)
+        public inline fun double(size: Int, initializer: (Int) -> Double): Float64Buffer =
+            Float64Buffer(size, initializer)
 
         /**
-         * Creates a [ShortBuffer] with the specified [size], where each element is calculated by calling the specified
+         * Creates a [Int16Buffer] with the specified [size], where each element is calculated by calling the specified
          * [initializer] function.
          */
-        public inline fun short(size: Int, initializer: (Int) -> Short): ShortBuffer =
-            ShortBuffer(size, initializer)
+        public inline fun short(size: Int, initializer: (Int) -> Short): Int16Buffer =
+            Int16Buffer(size, initializer)
 
         /**
-         * Creates a [IntBuffer] with the specified [size], where each element is calculated by calling the specified
+         * Creates a [Int32Buffer] with the specified [size], where each element is calculated by calling the specified
          * [initializer] function.
          */
-        public inline fun int(size: Int, initializer: (Int) -> Int): IntBuffer =
-            IntBuffer(size, initializer)
+        public inline fun int(size: Int, initializer: (Int) -> Int): Int32Buffer =
+            Int32Buffer(size, initializer)
 
         /**
-         * Creates a [LongBuffer] with the specified [size], where each element is calculated by calling the specified
+         * Creates a [Int64Buffer] with the specified [size], where each element is calculated by calling the specified
          * [initializer] function.
          */
-        public inline fun long(size: Int, initializer: (Int) -> Long): LongBuffer =
-            LongBuffer(size, initializer)
+        public inline fun long(size: Int, initializer: (Int) -> Long): Int64Buffer =
+            Int64Buffer(size, initializer)
 
 
         /**
-         * Creates a [FloatBuffer] with the specified [size], where each element is calculated by calling the specified
+         * Creates a [Float32Buffer] with the specified [size], where each element is calculated by calling the specified
          * [initializer] function.
          */
-        public inline fun float(size: Int, initializer: (Int) -> Float): FloatBuffer =
-            FloatBuffer(size, initializer)
+        public inline fun float(size: Int, initializer: (Int) -> Float): Float32Buffer =
+            Float32Buffer(size, initializer)
 
 
         /**
@@ -71,7 +71,7 @@ public interface MutableBuffer<T> : Buffer<T> {
 
         /**
          * Creates a [MutableBuffer] of given [type]. If the type is primitive, specialized buffers are used
-         * ([IntBuffer], [DoubleBuffer], etc.), [ListBuffer] is returned otherwise.
+         * ([Int32Buffer], [Float64Buffer], etc.), [ListBuffer] is returned otherwise.
          *
          * The [size] is specified, and each element is calculated by calling the specified [initializer] function.
          */
@@ -88,7 +88,7 @@ public interface MutableBuffer<T> : Buffer<T> {
 
         /**
          * Creates a [MutableBuffer] of given type [T]. If the type is primitive, specialized buffers are used
-         * ([IntBuffer], [DoubleBuffer], etc.), [ListBuffer] is returned otherwise.
+         * ([Int32Buffer], [Float64Buffer], etc.), [ListBuffer] is returned otherwise.
          *
          * The [size] is specified, and each element is calculated by calling the specified [initializer] function.
          */

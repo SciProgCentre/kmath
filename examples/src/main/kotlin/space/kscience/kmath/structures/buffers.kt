@@ -5,7 +5,7 @@
 
 package space.kscience.kmath.structures
 
-import space.kscience.kmath.operations.DoubleField
+import space.kscience.kmath.operations.Float64Field
 import space.kscience.kmath.operations.buffer
 import space.kscience.kmath.operations.bufferAlgebra
 import space.kscience.kmath.operations.withSize
@@ -17,7 +17,7 @@ inline fun <reified R : Any> MutableBuffer.Companion.same(
 
 
 fun main() {
-    with(DoubleField.bufferAlgebra.withSize(5)) {
+    with(Float64Field.bufferAlgebra.withSize(5)) {
         println(number(2.0) + buffer(1, 2, 3, 4, 5))
     }
 }

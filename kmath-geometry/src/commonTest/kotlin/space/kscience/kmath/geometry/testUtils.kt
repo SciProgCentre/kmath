@@ -5,6 +5,8 @@
 
 package space.kscience.kmath.geometry
 
+import space.kscience.kmath.geometry.euclidean2d.DoubleVector2D
+import space.kscience.kmath.geometry.euclidean3d.DoubleVector3D
 import kotlin.math.abs
 import kotlin.test.assertEquals
 

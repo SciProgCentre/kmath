@@ -7,7 +7,10 @@ package space.kscience.kmath.tensors.core.internal
 
 import space.kscience.kmath.nd.*
 import space.kscience.kmath.operations.invoke
-import space.kscience.kmath.structures.*
+import space.kscience.kmath.structures.Float64Buffer
+import space.kscience.kmath.structures.Int32Buffer
+import space.kscience.kmath.structures.asBuffer
+import space.kscience.kmath.structures.indices
 import space.kscience.kmath.tensors.core.*
 import kotlin.math.abs
 import kotlin.math.max
@@ -94,7 +97,7 @@ internal fun <T> StructureND<T>.setUpPivots(): IntTensor {
 
     return IntTensor(
         ShapeND(pivotsShape),
-        IntBuffer(pivotsShape.reduce(Int::times)) { 0 }
+        Int32Buffer(pivotsShape.reduce(Int::times)) { 0 }
     )
 }
 
@@ -238,10 +241,10 @@ internal fun DoubleTensorAlgebra.svd1d(a: DoubleTensor, epsilon: Double = 1e-10)
     val b: DoubleTensor
     if (n > m) {
         b = a.transposed(0, 1).dot(a)
-        v = DoubleTensor(ShapeND(m), DoubleBuffer.randomUnitVector(m, 0))
+        v = DoubleTensor(ShapeND(m), Float64Buffer.randomUnitVector(m, 0))
     } else {
         b = a.dot(a.transposed(0, 1))
-        v = DoubleTensor(ShapeND(n), DoubleBuffer.randomUnitVector(n, 0))
+        v = DoubleTensor(ShapeND(n), Float64Buffer.randomUnitVector(n, 0))
     }
 
     var lastV: DoubleTensor
@@ -329,14 +332,16 @@ private fun SIGN(a: Double, b: Double): Double {
         return -abs(a)
 }
 
-internal fun MutableStructure2D<Double>.svdGolubKahanHelper(u: MutableStructure2D<Double>, w: BufferedTensor<Double>,
-                                                            v: MutableStructure2D<Double>, iterations: Int, epsilon: Double) {
+internal fun MutableStructure2D<Double>.svdGolubKahanHelper(
+    u: MutableStructure2D<Double>, w: BufferedTensor<Double>,
+    v: MutableStructure2D<Double>, iterations: Int, epsilon: Double,
+) {
     val shape = this.shape
     val m = shape.component1()
     val n = shape.component2()
-    var f = 0.0
+    var f: Double
     val rv1 = DoubleArray(n)
-    var s = 0.0
+    var s: Double
     var scale = 0.0
     var anorm = 0.0
     var g = 0.0
@@ -362,10 +367,10 @@ internal fun MutableStructure2D<Double>.svdGolubKahanHelper(u: MutableStructure2
                     s += this[k, i] * this[k, i]
                 }
                 f = this[i, i]
-                if (f >= 0) {
-                    g = (-1) * abs(sqrt(s))
+                g = if (f >= 0) {
+                    -abs(sqrt(s))
                 } else {
-                    g = abs(sqrt(s))
+                    abs(sqrt(s))
                 }
                 val h = f * g - s
                 this[i, i] = f - g
@@ -402,10 +407,10 @@ internal fun MutableStructure2D<Double>.svdGolubKahanHelper(u: MutableStructure2
                     s += this[i, k] * this[i, k]
                 }
                 f = this[i, l]
-                if (f >= 0) {
-                    g = (-1) * abs(sqrt(s))
+                g = if (f >= 0) {
+                    -abs(sqrt(s))
                 } else {
-                    g = abs(sqrt(s))
+                    abs(sqrt(s))
                 }
                 val h = f * g - s
                 this[i, l] = f - g
@@ -457,7 +462,7 @@ internal fun MutableStructure2D<Double>.svdGolubKahanHelper(u: MutableStructure2
 
     for (i in min(n, m) - 1 downTo 0) {
         l = i + 1
-        g =  wBuffer[wStart + i]
+        g = wBuffer[wStart + i]
         for (j in l until n) {
             this[i, j] = 0.0
         }
@@ -484,13 +489,13 @@ internal fun MutableStructure2D<Double>.svdGolubKahanHelper(u: MutableStructure2
         this[i, i] += 1.0
     }
 
-    var flag = 0
+    var flag: Int
     var nm = 0
-    var c = 0.0
-    var h = 0.0
-    var y = 0.0
-    var z = 0.0
-    var x = 0.0
+    var c: Double
+    var h: Double
+    var y: Double
+    var z: Double
+    var x: Double
     for (k in n - 1 downTo 0) {
         for (its in 1 until iterations) {
             flag = 1
@@ -531,7 +536,7 @@ internal fun MutableStructure2D<Double>.svdGolubKahanHelper(u: MutableStructure2
                 }
             }
 
-            z =  wBuffer[wStart + k]
+            z = wBuffer[wStart + k]
             if (l == k) {
                 if (z < 0.0) {
                     wBuffer[wStart + k] = -z
@@ -541,9 +546,9 @@ internal fun MutableStructure2D<Double>.svdGolubKahanHelper(u: MutableStructure2
                 break
             }
 
-            x =  wBuffer[wStart + l]
+            x = wBuffer[wStart + l]
             nm = k - 1
-            y =  wBuffer[wStart + nm]
+            y = wBuffer[wStart + nm]
             g = rv1[nm]
             h = rv1[k]
             f = ((y - z) * (y + z) + (g - h) * (g + h)) / (2.0 * h * y)
@@ -552,7 +557,7 @@ internal fun MutableStructure2D<Double>.svdGolubKahanHelper(u: MutableStructure2
             c = 1.0
             s = 1.0
 
-            var i = 0
+            var i: Int
             for (j in l until nm + 1) {
                 i = j + 1
                 g = rv1[i]

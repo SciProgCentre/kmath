@@ -13,7 +13,7 @@ import space.kscience.kmath.commons.linear.CMLinearSpace
 import space.kscience.kmath.ejml.EjmlLinearSpaceDDRM
 import space.kscience.kmath.linear.invoke
 import space.kscience.kmath.linear.linearSpace
-import space.kscience.kmath.operations.DoubleField
+import space.kscience.kmath.operations.Float64Field
 import space.kscience.kmath.operations.invoke
 import space.kscience.kmath.tensorflow.produceWithTF
 import space.kscience.kmath.tensors.core.DoubleTensorAlgebra
@@ -27,10 +27,10 @@ internal class DotBenchmark {
         const val dim = 1000
 
         //creating invertible matrix
-        val matrix1 = DoubleField.linearSpace.buildMatrix(dim, dim) { _, _ ->
+        val matrix1 = Float64Field.linearSpace.buildMatrix(dim, dim) { _, _ ->
             random.nextDouble()
         }
-        val matrix2 = DoubleField.linearSpace.buildMatrix(dim, dim) { _, _ ->
+        val matrix2 = Float64Field.linearSpace.buildMatrix(dim, dim) { _, _ ->
             random.nextDouble()
         }
 
@@ -45,7 +45,7 @@ internal class DotBenchmark {
     @Benchmark
     fun tfDot(blackhole: Blackhole) {
         blackhole.consume(
-            DoubleField.produceWithTF {
+            Float64Field.produceWithTF {
                 matrix1 dot matrix1
             }
         )
@@ -72,7 +72,7 @@ internal class DotBenchmark {
     }
 
     @Benchmark
-    fun tensorDot(blackhole: Blackhole) = with(DoubleField.tensorAlgebra) {
+    fun tensorDot(blackhole: Blackhole) = with(Float64Field.tensorAlgebra) {
         blackhole.consume(matrix1 dot matrix2)
     }
 
@@ -82,12 +82,12 @@ internal class DotBenchmark {
     }
 
     @Benchmark
-    fun bufferedDot(blackhole: Blackhole) = with(DoubleField.linearSpace) {
+    fun bufferedDot(blackhole: Blackhole) = with(Float64Field.linearSpace) {
         blackhole.consume(matrix1 dot matrix2)
     }
 
     @Benchmark
-    fun doubleDot(blackhole: Blackhole) = with(DoubleField.linearSpace) {
+    fun doubleDot(blackhole: Blackhole) = with(Float64Field.linearSpace) {
         blackhole.consume(matrix1 dot matrix2)
     }
 

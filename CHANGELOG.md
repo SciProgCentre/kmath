@@ -3,10 +3,16 @@
 ## Unreleased
 
 ### Added
+- Integer division algebras
+- Float32 geometries
 - New Attributes-kt module that could be used as stand-alone. It declares type-safe attributes containers.
 - Explicit `mutableStructureND` builders for mutable structures
 
 ### Changed
+- Default naming for algebra and buffers now uses IntXX/FloatXX notation instead of Java types.
+- Remove unnecessary inlines in basic algebras.
+- QuaternionField -> QuaternionAlgebra and does not implement `Field` anymore since it is non-commutative
+- kmath-geometry is split into `euclidean2d` and `euclidean3d`
 - Features replaced with Attributes.
 - Transposed refactored.
 
@@ -15,6 +21,7 @@
 ### Removed
 
 ### Fixed
+- Median statistics
 
 ### Security
 

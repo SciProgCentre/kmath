@@ -7,8 +7,8 @@ package space.kscience.kmath.functions
 
 import space.kscience.kmath.interpolation.SplineInterpolator
 import space.kscience.kmath.interpolation.interpolatePolynomials
-import space.kscience.kmath.operations.DoubleField
-import space.kscience.kmath.structures.DoubleBuffer
+import space.kscience.kmath.operations.Float64Field
+import space.kscience.kmath.structures.Float64Buffer
 import space.kscience.plotly.Plotly
 import space.kscience.plotly.UnstablePlotlyAPI
 import space.kscience.plotly.makeFile
@@ -25,10 +25,10 @@ fun main() {
     }
 
     val polynomial: PiecewisePolynomial<Double> = SplineInterpolator(
-        DoubleField, ::DoubleBuffer
+        Float64Field, ::Float64Buffer
     ).interpolatePolynomials(data)
 
-    val function = polynomial.asFunction(DoubleField, 0.0)
+    val function = polynomial.asFunction(Float64Field, 0.0)
 
     val cmInterpolate = org.apache.commons.math3.analysis.interpolation.SplineInterpolator().interpolate(
         data.map { it.first }.toDoubleArray(),

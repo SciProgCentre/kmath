@@ -7,7 +7,7 @@ package space.kscience.kmath.tensors.core
 
 import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.nd.StructureND
-import space.kscience.kmath.structures.DoubleBuffer
+import space.kscience.kmath.structures.Float64Buffer
 import space.kscience.kmath.tensors.api.Tensor
 import space.kscience.kmath.tensors.core.internal.broadcastTensors
 import space.kscience.kmath.tensors.core.internal.broadcastTo
@@ -22,7 +22,7 @@ public object BroadcastDoubleTensorAlgebra : DoubleTensorAlgebra() {
         val broadcast = broadcastTensors(asDoubleTensor(), arg.asDoubleTensor())
         val newThis = broadcast[0]
         val newOther = broadcast[1]
-        val resBuffer = DoubleBuffer(newThis.indices.linearSize) { i ->
+        val resBuffer = Float64Buffer(newThis.indices.linearSize) { i ->
             newThis.source[i] + newOther.source[i]
         }
         return DoubleTensor(newThis.shape, resBuffer)
@@ -39,7 +39,7 @@ public object BroadcastDoubleTensorAlgebra : DoubleTensorAlgebra() {
         val broadcast = broadcastTensors(asDoubleTensor(), arg.asDoubleTensor())
         val newThis = broadcast[0]
         val newOther = broadcast[1]
-        val resBuffer = DoubleBuffer(newThis.indices.linearSize) { i ->
+        val resBuffer = Float64Buffer(newThis.indices.linearSize) { i ->
             newThis.source[i] - newOther.source[i]
         }
         return DoubleTensor(newThis.shape, resBuffer)
@@ -56,7 +56,7 @@ public object BroadcastDoubleTensorAlgebra : DoubleTensorAlgebra() {
         val broadcast = broadcastTensors(asDoubleTensor(), arg.asDoubleTensor())
         val newThis = broadcast[0]
         val newOther = broadcast[1]
-        val resBuffer = DoubleBuffer(newThis.indices.linearSize) { i ->
+        val resBuffer = Float64Buffer(newThis.indices.linearSize) { i ->
             newThis.source[i] * newOther.source[i]
         }
         return DoubleTensor(newThis.shape, resBuffer)
@@ -73,7 +73,7 @@ public object BroadcastDoubleTensorAlgebra : DoubleTensorAlgebra() {
         val broadcast = broadcastTensors(asDoubleTensor(), arg.asDoubleTensor())
         val newThis = broadcast[0]
         val newOther = broadcast[1]
-        val resBuffer = DoubleBuffer(newThis.indices.linearSize) { i ->
+        val resBuffer = Float64Buffer(newThis.indices.linearSize) { i ->
             newThis.source[i] / newOther.source[i]
         }
         return DoubleTensor(newThis.shape, resBuffer)

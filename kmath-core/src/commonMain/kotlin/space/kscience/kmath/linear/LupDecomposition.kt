@@ -13,6 +13,10 @@ import space.kscience.attributes.safeTypeOf
 import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.operations.*
 import space.kscience.kmath.structures.*
+import space.kscience.kmath.structures.BufferAccessor2D
+import space.kscience.kmath.structures.Float64Buffer
+import space.kscience.kmath.structures.MutableBuffer
+import space.kscience.kmath.structures.MutableBufferFactory
 
 /**
  * Matrices with this feature support LU factorization with partial pivoting: *[p] &middot; a = [l] &middot; [u]* where
@@ -190,10 +194,11 @@ public fun <T : Comparable<T>> LinearSpace<T, Field<T>>.lup(
 }
 
 
-public fun LinearSpace<Double, DoubleField>.lup(
+public fun LinearSpace<Double, Float64Field>.lup(
     matrix: Matrix<Double>,
     singularityThreshold: Double = 1e-11,
-): LupDecomposition<Double> = lup(matrix) { it < singularityThreshold }
+): LupDecomposition<Double> =
+    lup(::Float64Buffer, matrix) { it < singularityThreshold }
 
 internal fun <T : Any, A : Field<T>> LinearSpace<T, A>.solve(
     lup: LupDecomposition<T>,
@@ -259,5 +264,5 @@ public fun <T : Comparable<T>, F : Field<T>> LinearSpace<T, F>.lupSolver(
     override fun inverse(matrix: Matrix<T>): Matrix<T> = solve(matrix, one(matrix.rowNum, matrix.colNum))
 }
 
-public fun LinearSpace<Double, DoubleField>.lupSolver(singularityThreshold: Double = 1e-11): LinearSolver<Double> =
-    lupSolver { it < singularityThreshold }
+public fun LinearSpace<Double, Float64Field>.lupSolver(singularityThreshold: Double = 1e-11): LinearSolver<Double> =
+    lupSolver(::Float64Buffer) { it < singularityThreshold }

@@ -382,7 +382,7 @@ internal sealed class PrimitiveAsmBuilder<T : Number, out E : Expression<T>>(
 
 @UnstableKMathAPI
 internal class DoubleAsmBuilder(target: TypedMst<Double>) : PrimitiveAsmBuilder<Double, DoubleExpression>(
-    DoubleField,
+    Float64Field,
     java.lang.Double::class.java,
     java.lang.Double.TYPE,
     DoubleExpression::class.java,
@@ -457,7 +457,7 @@ internal class DoubleAsmBuilder(target: TypedMst<Double>) : PrimitiveAsmBuilder<
 @UnstableKMathAPI
 internal class IntAsmBuilder(target: TypedMst<Int>) :
     PrimitiveAsmBuilder<Int, IntExpression>(
-        IntRing,
+        Int32Ring,
         Integer::class.java,
         Integer.TYPE,
         IntExpression::class.java,
@@ -487,7 +487,7 @@ internal class IntAsmBuilder(target: TypedMst<Int>) :
 
 @UnstableKMathAPI
 internal class LongAsmBuilder(target: TypedMst<Long>) : PrimitiveAsmBuilder<Long, LongExpression>(
-    LongRing,
+    Int64Ring,
     java.lang.Long::class.java,
     java.lang.Long.TYPE,
     LongExpression::class.java,

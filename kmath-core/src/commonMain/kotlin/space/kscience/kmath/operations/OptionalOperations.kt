@@ -82,9 +82,9 @@ public expect fun Number.isInteger(): Boolean
 /**
  * A context extension to include power operations based on exponentiation.
  *
- * @param T the type of element of this structure.
+ * @param T the type of this structure element
  */
-public interface PowerOperations<T> : FieldOps<T> {
+public interface PowerOperations<T>: Algebra<T> {
 
     /**
      * Raises [arg] to a power if possible (negative number could not be raised to a fractional power).

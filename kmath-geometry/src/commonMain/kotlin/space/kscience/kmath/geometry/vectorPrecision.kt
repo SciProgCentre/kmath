@@ -23,7 +23,7 @@ public fun <V : Any, D : Comparable<D>> V.equalsVector(
 public fun Float64Vector2D.equalsVector(
     other: Float64Vector2D,
     precision: Double = Euclidean3DSpace.defaultPrecision,
-): Boolean = equalsVector(Euclidean2DSpace, other, precision)
+): Boolean = equalsVector(Float64Space2D, other, precision)
 
 /**
  * Vector equality using Euclidean L2 norm and given [precision]
@@ -31,7 +31,7 @@ public fun Float64Vector2D.equalsVector(
 public fun Float64Vector3D.equalsVector(
     other: Float64Vector3D,
     precision: Double = Euclidean3DSpace.defaultPrecision,
-): Boolean = equalsVector(Euclidean3DSpace, other, precision)
+): Boolean = equalsVector(Float64Space3D, other, precision)
 
 /**
  * Line equality using [GeometrySpace.norm] provided by the [space] and given [precision]

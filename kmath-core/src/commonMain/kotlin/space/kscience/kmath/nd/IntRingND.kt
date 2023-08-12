@@ -6,25 +6,25 @@
 package space.kscience.kmath.nd
 
 import space.kscience.kmath.UnstableKMathAPI
-import space.kscience.kmath.operations.IntRing
+import space.kscience.kmath.operations.Int32Ring
 import space.kscience.kmath.operations.NumbersAddOps
 import space.kscience.kmath.operations.bufferAlgebra
-import space.kscience.kmath.structures.IntBuffer
+import space.kscience.kmath.structures.Int32Buffer
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
 
 public class IntBufferND(
     indexes: ShapeIndexer,
-    override val buffer: IntBuffer,
+    override val buffer: Int32Buffer,
 ) : MutableBufferND<Int>(indexes, buffer)
 
-public sealed class IntRingOpsND : BufferedRingOpsND<Int, IntRing>(IntRing.bufferAlgebra) {
+public sealed class IntRingOpsND : BufferedRingOpsND<Int, Int32Ring>(Int32Ring.bufferAlgebra) {
 
-    override fun structureND(shape: ShapeND, initializer: IntRing.(IntArray) -> Int): IntBufferND {
+    override fun structureND(shape: ShapeND, initializer: Int32Ring.(IntArray) -> Int): IntBufferND {
         val indexer = indexerBuilder(shape)
         return IntBufferND(
             indexer,
-            IntBuffer(indexer.linearSize) { offset ->
+            Int32Buffer(indexer.linearSize) { offset ->
                 elementAlgebra.initializer(indexer.index(offset))
             }
         )
@@ -36,7 +36,7 @@ public sealed class IntRingOpsND : BufferedRingOpsND<Int, IntRing>(IntRing.buffe
 @OptIn(UnstableKMathAPI::class)
 public class IntRingND(
     override val shape: ShapeND
-) : IntRingOpsND(), RingND<Int, IntRing>, NumbersAddOps<StructureND<Int>> {
+) : IntRingOpsND(), RingND<Int, Int32Ring>, NumbersAddOps<StructureND<Int>> {
 
     override fun number(value: Number): BufferND<Int> {
         val int = value.toInt() // minimize conversions
@@ -44,7 +44,7 @@ public class IntRingND(
     }
 }
 
-public inline fun <R> IntRing.withNdAlgebra(vararg shape: Int, action: IntRingND.() -> R): R {
+public inline fun <R> Int32Ring.withNdAlgebra(vararg shape: Int, action: IntRingND.() -> R): R {
     contract { callsInPlace(action, InvocationKind.EXACTLY_ONCE) }
     return IntRingND(ShapeND(shape)).run(action)
 }

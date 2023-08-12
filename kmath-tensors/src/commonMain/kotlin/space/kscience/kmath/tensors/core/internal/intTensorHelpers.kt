@@ -9,7 +9,7 @@ import space.kscience.kmath.nd.ShapeND
 import space.kscience.kmath.nd.first
 import space.kscience.kmath.nd.last
 import space.kscience.kmath.operations.asSequence
-import space.kscience.kmath.structures.IntBuffer
+import space.kscience.kmath.structures.Int32Buffer
 import space.kscience.kmath.structures.VirtualBuffer
 import space.kscience.kmath.structures.asBuffer
 import space.kscience.kmath.structures.indices
@@ -19,7 +19,7 @@ import space.kscience.kmath.tensors.core.OffsetIntBuffer
 /**
  * Concatenate a list of arrays
  */
-internal fun List<OffsetIntBuffer>.concat(): IntBuffer {
+internal fun List<OffsetIntBuffer>.concat(): Int32Buffer {
     val array = IntArray(sumOf { it.size })
     var pointer = 0
     while (pointer < array.size) {

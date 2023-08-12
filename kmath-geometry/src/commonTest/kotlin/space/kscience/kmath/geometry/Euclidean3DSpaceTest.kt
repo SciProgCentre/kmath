@@ -5,18 +5,19 @@
 
 package space.kscience.kmath.geometry
 
+import space.kscience.kmath.geometry.euclidean3d.Float64Space3D
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 internal class Euclidean3DSpaceTest {
     @Test
     fun zero() {
-        assertVectorEquals(Euclidean3DSpace.vector(0.0, 0.0, 0.0), Euclidean3DSpace.zero)
+        assertVectorEquals(Float64Space3D.vector(0.0, 0.0, 0.0), Float64Space3D.zero)
     }
 
     @Test
     fun distance() {
-        with(Euclidean3DSpace) {
+        with(Float64Space3D) {
             assertEquals(0.0, zero.distanceTo(zero))
             assertEquals(1.0, zero.distanceTo(vector(1.0, 0.0, 0.0)))
             assertEquals(kotlin.math.sqrt(5.000001), vector(1.0, -2.0, 0.001).distanceTo(zero))
@@ -31,7 +32,7 @@ internal class Euclidean3DSpaceTest {
 
     @Test
     fun norm() {
-        with(Euclidean3DSpace) {
+        with(Float64Space3D) {
             assertEquals(0.0, zero.norm())
             assertEquals(1.0, vector(1.0, 0.0, 0.0).norm())
             assertEquals(kotlin.math.sqrt(3.0), vector(1.0, 1.0, 1.0).norm())
@@ -41,7 +42,7 @@ internal class Euclidean3DSpaceTest {
 
     @Test
     fun dotProduct() {
-        with(Euclidean3DSpace) {
+        with(Float64Space3D) {
             assertEquals(0.0, zero dot zero)
             assertEquals(0.0, zero dot vector(1.0, 0.0, 0.0))
             assertEquals(0.0, vector(1.0, -2.0, 0.001) dot zero)
@@ -57,7 +58,7 @@ internal class Euclidean3DSpaceTest {
     }
 
     @Test
-    fun add() = with(Euclidean3DSpace) {
+    fun add() = with(Float64Space3D) {
         assertVectorEquals(
             vector(1.0, -2.0, 0.001),
             vector(1.0, -2.0, 0.001) + zero
@@ -69,19 +70,19 @@ internal class Euclidean3DSpaceTest {
     }
 
     @Test
-    fun multiply() = with(Euclidean3DSpace) {
+    fun multiply() = with(Float64Space3D) {
         assertVectorEquals(vector(2.0, -4.0, 0.0), vector(1.0, -2.0, 0.0) * 2)
     }
 
     @Test
-    fun vectorProduct() = with(Euclidean3DSpace) {
+    fun vectorProduct() = with(Float64Space3D) {
         assertVectorEquals(zAxis, vectorProduct(xAxis, yAxis))
         assertVectorEquals(zAxis, xAxis cross yAxis)
         assertVectorEquals(-zAxis, vectorProduct(yAxis, xAxis))
     }
 
     @Test
-    fun doubleVectorProduct() = with(Euclidean3DSpace) {
+    fun doubleVectorProduct() = with(Float64Space3D) {
         val a = vector(1, 2, -3)
         val b = vector(-1, 0, 1)
         val c = vector(4, 5, 6)

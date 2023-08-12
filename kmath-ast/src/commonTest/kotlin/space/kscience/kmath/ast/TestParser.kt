@@ -9,7 +9,7 @@ import space.kscience.kmath.complex.Complex
 import space.kscience.kmath.complex.ComplexField
 import space.kscience.kmath.expressions.interpret
 import space.kscience.kmath.operations.Algebra
-import space.kscience.kmath.operations.DoubleField
+import space.kscience.kmath.operations.Float64Field
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -32,7 +32,7 @@ internal class TestParser {
     @Test
     fun evaluateMstUnary() {
         val mst = "sin(0)".parseMath()
-        val res = mst.interpret(DoubleField)
+        val res = mst.interpret(Float64Field)
         assertEquals(0.0, res)
     }
 

@@ -11,8 +11,8 @@ import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.ast.TypedMst
 import space.kscience.kmath.ast.evaluateConstants
 import space.kscience.kmath.expressions.*
-import space.kscience.kmath.operations.DoubleField
-import space.kscience.kmath.operations.IntRing
+import space.kscience.kmath.operations.Float64Field
+import space.kscience.kmath.operations.Int32Ring
 import space.kscience.kmath.wasm.internal.DoubleWasmBuilder
 import space.kscience.kmath.wasm.internal.IntWasmBuilder
 
@@ -22,7 +22,7 @@ import space.kscience.kmath.wasm.internal.IntWasmBuilder
  * @author Iaroslav Postovalov
  */
 @UnstableKMathAPI
-public fun MST.compileToExpression(algebra: IntRing): IntExpression {
+public fun MST.compileToExpression(algebra: Int32Ring): IntExpression {
     val typed = evaluateConstants(algebra)
 
     return if (typed is TypedMst.Constant) object : IntExpression {
@@ -39,7 +39,7 @@ public fun MST.compileToExpression(algebra: IntRing): IntExpression {
  * @author Iaroslav Postovalov
  */
 @UnstableKMathAPI
-public fun MST.compile(algebra: IntRing, arguments: Map<Symbol, Int>): Int =
+public fun MST.compile(algebra: Int32Ring, arguments: Map<Symbol, Int>): Int =
     compileToExpression(algebra)(arguments)
 
 
@@ -49,7 +49,7 @@ public fun MST.compile(algebra: IntRing, arguments: Map<Symbol, Int>): Int =
  * @author Iaroslav Postovalov
  */
 @UnstableKMathAPI
-public fun MST.compile(algebra: IntRing, vararg arguments: Pair<Symbol, Int>): Int =
+public fun MST.compile(algebra: Int32Ring, vararg arguments: Pair<Symbol, Int>): Int =
     compileToExpression(algebra)(*arguments)
 
 /**
@@ -58,7 +58,7 @@ public fun MST.compile(algebra: IntRing, vararg arguments: Pair<Symbol, Int>): I
  * @author Iaroslav Postovalov
  */
 @UnstableKMathAPI
-public fun MST.compileToExpression(algebra: DoubleField): Expression<Double> {
+public fun MST.compileToExpression(algebra: Float64Field): Expression<Double> {
     val typed = evaluateConstants(algebra)
 
     return if (typed is TypedMst.Constant) object : DoubleExpression {
@@ -76,7 +76,7 @@ public fun MST.compileToExpression(algebra: DoubleField): Expression<Double> {
  * @author Iaroslav Postovalov
  */
 @UnstableKMathAPI
-public fun MST.compile(algebra: DoubleField, arguments: Map<Symbol, Double>): Double =
+public fun MST.compile(algebra: Float64Field, arguments: Map<Symbol, Double>): Double =
     compileToExpression(algebra)(arguments)
 
 
@@ -86,5 +86,5 @@ public fun MST.compile(algebra: DoubleField, arguments: Map<Symbol, Double>): Do
  * @author Iaroslav Postovalov
  */
 @UnstableKMathAPI
-public fun MST.compile(algebra: DoubleField, vararg arguments: Pair<Symbol, Double>): Double =
+public fun MST.compile(algebra: Float64Field, vararg arguments: Pair<Symbol, Double>): Double =
     compileToExpression(algebra)(*arguments)

@@ -12,14 +12,14 @@ import space.kscience.kmath.PerformancePitfall
 import space.kscience.kmath.UnsafeKMathAPI
 import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.nd.*
-import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.operations.ExtendedFieldOps
+import space.kscience.kmath.operations.Float64Field
 import space.kscience.kmath.operations.NumbersAddOps
 import space.kscience.kmath.operations.PowerOperations
 
 @OptIn(PerformancePitfall::class)
 public open class ViktorFieldOpsND :
-    FieldOpsND<Double, DoubleField>,
+    FieldOpsND<Double, Float64Field>,
     ExtendedFieldOps<StructureND<Double>>,
     PowerOperations<StructureND<Double>> {
 
@@ -29,13 +29,13 @@ public open class ViktorFieldOpsND :
             else -> mutableStructureND(shape) { this@f64Buffer[it] }.f64Buffer
         }
 
-    override val elementAlgebra: DoubleField get() = DoubleField
+    override val elementAlgebra: Float64Field get() = Float64Field
 
     @OptIn(UnsafeKMathAPI::class)
-    override fun mutableStructureND(shape: ShapeND, initializer: DoubleField.(IntArray) -> Double): ViktorStructureND =
+    override fun mutableStructureND(shape: ShapeND, initializer: Float64Field.(IntArray) -> Double): ViktorStructureND =
         F64Array(*shape.asArray()).apply {
             ColumnStrides(shape).asSequence().forEach { index ->
-                set(value = DoubleField.initializer(index), indices = index)
+                set(value = Float64Field.initializer(index), indices = index)
             }
         }.asStructure()
 
@@ -43,20 +43,20 @@ public open class ViktorFieldOpsND :
 
     @OptIn(UnsafeKMathAPI::class)
     @PerformancePitfall
-    override fun StructureND<Double>.map(transform: DoubleField.(Double) -> Double): ViktorStructureND =
+    override fun StructureND<Double>.map(transform: Float64Field.(Double) -> Double): ViktorStructureND =
         F64Array(*shape.asArray()).apply {
             ColumnStrides(ShapeND(shape)).asSequence().forEach { index ->
-                set(value = DoubleField.transform(this@map[index]), indices = index)
+                set(value = Float64Field.transform(this@map[index]), indices = index)
             }
         }.asStructure()
 
     @OptIn(UnsafeKMathAPI::class)
     @PerformancePitfall
     override fun StructureND<Double>.mapIndexed(
-        transform: DoubleField.(index: IntArray, Double) -> Double,
+        transform: Float64Field.(index: IntArray, Double) -> Double,
     ): ViktorStructureND = F64Array(*shape.asArray()).apply {
         ColumnStrides(ShapeND(shape)).asSequence().forEach { index ->
-            set(value = DoubleField.transform(index, this@mapIndexed[index]), indices = index)
+            set(value = Float64Field.transform(index, this@mapIndexed[index]), indices = index)
         }
     }.asStructure()
 
@@ -65,12 +65,12 @@ public open class ViktorFieldOpsND :
     override fun zip(
         left: StructureND<Double>,
         right: StructureND<Double>,
-        transform: DoubleField.(Double, Double) -> Double,
+        transform: Float64Field.(Double, Double) -> Double,
     ): ViktorStructureND {
         require(left.shape.contentEquals(right.shape))
         return F64Array(*left.shape.asArray()).apply {
             ColumnStrides(left.shape).asSequence().forEach { index ->
-                set(value = DoubleField.transform(left[index], right[index]), indices = index)
+                set(value = Float64Field.transform(left[index], right[index]), indices = index)
             }
         }.asStructure()
     }
@@ -119,12 +119,12 @@ public open class ViktorFieldOpsND :
     public companion object : ViktorFieldOpsND()
 }
 
-public val DoubleField.viktorAlgebra: ViktorFieldOpsND get() = ViktorFieldOpsND
+public val Float64Field.viktorAlgebra: ViktorFieldOpsND get() = ViktorFieldOpsND
 
 @OptIn(UnstableKMathAPI::class)
 public open class ViktorFieldND(
     private val shapeAsArray: IntArray,
-) : ViktorFieldOpsND(), FieldND<Double, DoubleField>, NumbersAddOps<StructureND<Double>> {
+) : ViktorFieldOpsND(), FieldND<Double, Float64Field>, NumbersAddOps<StructureND<Double>> {
 
     override val shape: ShapeND = ShapeND(shapeAsArray)
 
@@ -136,6 +136,6 @@ public open class ViktorFieldND(
         F64Array.full(init = value.toDouble(), shape = shapeAsArray).asStructure()
 }
 
-public fun DoubleField.viktorAlgebra(vararg shape: Int): ViktorFieldND = ViktorFieldND(shape)
+public fun Float64Field.viktorAlgebra(vararg shape: Int): ViktorFieldND = ViktorFieldND(shape)
 
 public fun ViktorFieldND(vararg shape: Int): ViktorFieldND = ViktorFieldND(shape)

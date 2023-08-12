@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
 import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.integration.integrate
 import space.kscience.kmath.integration.value
-import space.kscience.kmath.operations.DoubleField.sin
+import space.kscience.kmath.operations.Float64Field.sin
 import kotlin.math.PI
 import kotlin.math.abs
 import kotlin.test.assertTrue

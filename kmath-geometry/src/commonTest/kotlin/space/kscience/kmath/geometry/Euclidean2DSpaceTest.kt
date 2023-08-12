@@ -5,6 +5,7 @@
 
 package space.kscience.kmath.geometry
 
+import space.kscience.kmath.geometry.euclidean2d.Float64Space2D
 import kotlin.math.sqrt
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -12,12 +13,12 @@ import kotlin.test.assertEquals
 internal class Euclidean2DSpaceTest {
     @Test
     fun zero() {
-        assertVectorEquals(Euclidean2DSpace.vector(0.0, 0.0), Euclidean2DSpace.zero)
+        assertVectorEquals(Float64Space2D.vector(0.0, 0.0), Float64Space2D.zero)
     }
 
     @Test
     fun norm() {
-        with(Euclidean2DSpace) {
+        with(Float64Space2D) {
             assertEquals(0.0, norm(zero))
             assertEquals(1.0, norm(vector(1.0, 0.0)))
             assertEquals(sqrt(2.0), norm(vector(1.0, 1.0)))
@@ -27,7 +28,7 @@ internal class Euclidean2DSpaceTest {
 
     @Test
     fun dotProduct() {
-        with(Euclidean2DSpace) {
+        with(Float64Space2D) {
             assertEquals(0.0, zero dot zero)
             assertEquals(0.0, zero dot vector(1.0, 0.0))
             assertEquals(0.0, vector(-2.0, 0.001) dot zero)
@@ -44,7 +45,7 @@ internal class Euclidean2DSpaceTest {
 
     @Test
     fun add() {
-        with(Euclidean2DSpace) {
+        with(Float64Space2D) {
             assertVectorEquals(
                 vector(-2.0, 0.001),
                 vector(-2.0, 0.001) + zero
@@ -58,7 +59,7 @@ internal class Euclidean2DSpaceTest {
 
     @Test
     fun multiply() {
-        with(Euclidean2DSpace) {
+        with(Float64Space2D) {
             assertVectorEquals(vector(-4.0, 0.0), vector(-2.0, 0.0) * 2)
             assertVectorEquals(vector(4.0, 0.0), vector(-2.0, 0.0) * -2)
             assertVectorEquals(vector(300.0, 0.0003), vector(100.0, 0.0001) * 3)

@@ -7,7 +7,7 @@ package space.kscience.kmath.random
 
 import space.kscience.kmath.chains.BlockingDoubleChain
 import space.kscience.kmath.chains.Chain
-import space.kscience.kmath.structures.DoubleBuffer
+import space.kscience.kmath.structures.Float64Buffer
 
 /**
  * A possibly stateful chain producing random values.
@@ -31,8 +31,8 @@ public fun <R> RandomGenerator.chain(generator: suspend RandomGenerator.() -> R)
  * A type-specific double chunk random chain
  */
 public class UniformDoubleChain(public val generator: RandomGenerator) : BlockingDoubleChain {
-    override fun nextBufferBlocking(size: Int): DoubleBuffer = generator.nextDoubleBuffer(size)
-    override suspend fun nextBuffer(size: Int): DoubleBuffer = nextBufferBlocking(size)
+    override fun nextBufferBlocking(size: Int): Float64Buffer = generator.nextDoubleBuffer(size)
+    override suspend fun nextBuffer(size: Int): Float64Buffer = nextBufferBlocking(size)
 
     override suspend fun fork(): UniformDoubleChain = UniformDoubleChain(generator.fork())
 }

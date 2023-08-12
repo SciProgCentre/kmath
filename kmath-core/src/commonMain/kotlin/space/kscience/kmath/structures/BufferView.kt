@@ -97,6 +97,12 @@ public fun <T> Buffer<T>.slice(range: IntRange): BufferView<T> = if (this is Buf
 }
 
 /**
+ *  Dynamically create a range from the initial range
+ */
+@UnstableKMathAPI
+public inline fun <T> Buffer<T>.slice(rangeBuilder: IntRange.() -> IntRange): BufferView<T> = slice(rangeBuilder(indices))
+
+/**
  * Resize original buffer to a given range using given [range], filling additional segments with [defaultValue].
  * Range left border could be negative to designate adding new blank segment to the beginning of the buffer
  */

@@ -7,7 +7,7 @@ package space.kscience.kmath.samplers
 
 import space.kscience.kmath.chains.BlockingDoubleChain
 import space.kscience.kmath.random.RandomGenerator
-import space.kscience.kmath.structures.DoubleBuffer
+import space.kscience.kmath.structures.Float64Buffer
 import kotlin.math.*
 
 /**
@@ -22,11 +22,11 @@ public object BoxMullerSampler : NormalizedGaussianSampler {
     override fun sample(generator: RandomGenerator): BlockingDoubleChain = object : BlockingDoubleChain {
         var state = Double.NaN
 
-        override fun nextBufferBlocking(size: Int): DoubleBuffer {
+        override fun nextBufferBlocking(size: Int): Float64Buffer {
             val xs = generator.nextDoubleBuffer(size)
             val ys = generator.nextDoubleBuffer(size)
 
-            return DoubleBuffer(size) { index ->
+            return Float64Buffer(size) { index ->
                 if (state.isNaN()) {
                     // Generate a pair of Gaussian numbers.
                     val x = xs[index]

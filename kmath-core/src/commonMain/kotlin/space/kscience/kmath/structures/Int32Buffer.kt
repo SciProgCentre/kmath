@@ -13,7 +13,7 @@ import kotlin.jvm.JvmInline
  * @property array the underlying array.
  */
 @JvmInline
-public value class IntBuffer(public val array: IntArray) : PrimitiveBuffer<Int> {
+public value class Int32Buffer(public val array: IntArray) : PrimitiveBuffer<Int> {
     override val size: Int get() = array.size
 
     override operator fun get(index: Int): Int = array[index]
@@ -24,35 +24,37 @@ public value class IntBuffer(public val array: IntArray) : PrimitiveBuffer<Int> 
 
     override operator fun iterator(): IntIterator = array.iterator()
 
-    override fun copy(): IntBuffer = IntBuffer(array.copyOf())
+    override fun copy(): Int32Buffer = Int32Buffer(array.copyOf())
 }
 
+public typealias IntBuffer = Int32Buffer
+
 /**
- * Creates a new [IntBuffer] with the specified [size], where each element is calculated by calling the specified
+ * Creates a new [Int32Buffer] with the specified [size], where each element is calculated by calling the specified
  * [init] function.
  *
  * The function [init] is called for each array element sequentially starting from the first one.
  * It should return the value for a buffer element given its index.
  */
-public inline fun IntBuffer(size: Int, init: (Int) -> Int): IntBuffer = IntBuffer(IntArray(size) { init(it) })
+public inline fun Int32Buffer(size: Int, init: (Int) -> Int): Int32Buffer = Int32Buffer(IntArray(size) { init(it) })
 
 /**
- * Returns a new [IntBuffer] of given elements.
+ * Returns a new [Int32Buffer] of given elements.
  */
-public fun IntBuffer(vararg ints: Int): IntBuffer = IntBuffer(ints)
+public fun Int32Buffer(vararg ints: Int): Int32Buffer = Int32Buffer(ints)
 
 /**
  * Returns a new [IntArray] containing all the elements of this [Buffer].
  */
 public fun Buffer<Int>.toIntArray(): IntArray = when (this) {
-    is IntBuffer -> array.copyOf()
+    is Int32Buffer -> array.copyOf()
     else -> IntArray(size, ::get)
 }
 
 /**
- * Returns [IntBuffer] over this array.
+ * Returns [Int32Buffer] over this array.
  *
  * @receiver the array.
  * @return the new buffer.
  */
-public fun IntArray.asBuffer(): IntBuffer = IntBuffer(this)
+public fun IntArray.asBuffer(): Int32Buffer = Int32Buffer(this)

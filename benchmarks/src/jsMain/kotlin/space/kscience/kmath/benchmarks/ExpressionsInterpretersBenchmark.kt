@@ -11,7 +11,7 @@ import kotlinx.benchmark.Scope
 import kotlinx.benchmark.State
 import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.expressions.*
-import space.kscience.kmath.operations.DoubleField
+import space.kscience.kmath.operations.Float64Field
 import space.kscience.kmath.operations.bindSymbol
 import space.kscience.kmath.operations.invoke
 import kotlin.math.sin
@@ -84,7 +84,7 @@ class ExpressionsInterpretersBenchmark {
         private val x by symbol
         private const val times = 1_000_000
 
-        private val functional = DoubleField.expression {
+        private val functional = Float64Field.expression {
             val x = bindSymbol(Symbol.x)
             x * number(2.0) + 2.0 / x - 16.0 / sin(x)
         }
@@ -93,10 +93,10 @@ class ExpressionsInterpretersBenchmark {
             x * 2.0 + number(2.0) / x - number(16.0) / sin(x)
         }
 
-        private val mst = node.toExpression(DoubleField)
+        private val mst = node.toExpression(Float64Field)
         @OptIn(UnstableKMathAPI::class)
-        private val wasm = node.wasmCompileToExpression(DoubleField)
-        private val estree = node.estreeCompileToExpression(DoubleField)
+        private val wasm = node.wasmCompileToExpression(Float64Field)
+        private val estree = node.estreeCompileToExpression(Float64Field)
 
         private val raw = Expression<Double> { args ->
             val x = args[x]!!

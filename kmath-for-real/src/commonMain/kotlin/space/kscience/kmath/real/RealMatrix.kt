@@ -11,11 +11,11 @@ package space.kscience.kmath.real
 import space.kscience.kmath.PerformancePitfall
 import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.linear.*
-import space.kscience.kmath.operations.DoubleField
+import space.kscience.kmath.operations.Float64Field
 import space.kscience.kmath.operations.algebra
 import space.kscience.kmath.operations.asIterable
 import space.kscience.kmath.structures.Buffer
-import space.kscience.kmath.structures.DoubleBuffer
+import space.kscience.kmath.structures.Float64Buffer
 import kotlin.math.pow
 
 /*
@@ -32,11 +32,11 @@ import kotlin.math.pow
 
 public typealias RealMatrix = Matrix<Double>
 
-public fun realMatrix(rowNum: Int, colNum: Int, initializer: DoubleField.(i: Int, j: Int) -> Double): RealMatrix =
+public fun realMatrix(rowNum: Int, colNum: Int, initializer: Float64Field.(i: Int, j: Int) -> Double): RealMatrix =
     Double.algebra.linearSpace.buildMatrix(rowNum, colNum, initializer)
 
 @OptIn(UnstableKMathAPI::class)
-public fun realMatrix(rowNum: Int, colNum: Int): MatrixBuilder<Double, DoubleField> =
+public fun realMatrix(rowNum: Int, colNum: Int): MatrixBuilder<Double, Float64Field> =
     Double.algebra.linearSpace.matrix(rowNum, colNum)
 
 public fun Array<DoubleArray>.toMatrix(): RealMatrix {
@@ -130,19 +130,19 @@ public fun RealMatrix.extractColumns(columnRange: IntRange): RealMatrix =
 public fun RealMatrix.extractColumn(columnIndex: Int): RealMatrix =
     extractColumns(columnIndex..columnIndex)
 
-public fun RealMatrix.sumByColumn(): DoubleBuffer = DoubleBuffer(colNum) { j ->
+public fun RealMatrix.sumByColumn(): Float64Buffer = Float64Buffer(colNum) { j ->
     columns[j].sum()
 }
 
-public fun RealMatrix.minByColumn(): DoubleBuffer = DoubleBuffer(colNum) { j ->
+public fun RealMatrix.minByColumn(): Float64Buffer = Float64Buffer(colNum) { j ->
     columns[j].asIterable().minOrNull() ?: error("Cannot produce min on empty column")
 }
 
-public fun RealMatrix.maxByColumn(): DoubleBuffer = DoubleBuffer(colNum) { j ->
+public fun RealMatrix.maxByColumn(): Float64Buffer = Float64Buffer(colNum) { j ->
     columns[j].asIterable().maxOrNull() ?: error("Cannot produce min on empty column")
 }
 
-public fun RealMatrix.averageByColumn(): DoubleBuffer = DoubleBuffer(colNum) { j ->
+public fun RealMatrix.averageByColumn(): Float64Buffer = Float64Buffer(colNum) { j ->
     columns[j].asIterable().average()
 }
 

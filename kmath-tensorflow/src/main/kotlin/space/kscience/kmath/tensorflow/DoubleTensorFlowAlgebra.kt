@@ -17,7 +17,8 @@ import space.kscience.kmath.nd.ColumnStrides
 import space.kscience.kmath.nd.MutableStructureND
 import space.kscience.kmath.nd.ShapeND
 import space.kscience.kmath.nd.StructureND
-import space.kscience.kmath.operations.DoubleField
+import space.kscience.kmath.operations.FieldOps
+import space.kscience.kmath.operations.Float64Field
 import space.kscience.kmath.operations.PowerOperations
 
 public class DoubleTensorFlowOutput(
@@ -33,13 +34,14 @@ internal fun ShapeND.toLongArray(): LongArray = LongArray(size) { get(it).toLong
 
 public class DoubleTensorFlowAlgebra internal constructor(
     graph: Graph,
-) : TensorFlowAlgebra<Double, TFloat64, DoubleField>(graph), PowerOperations<StructureND<Double>> {
+) : TensorFlowAlgebra<Double, TFloat64,
+        Float64Field>(graph), FieldOps<StructureND<Double>>, PowerOperations<StructureND<Double>> {
 
-    override val elementAlgebra: DoubleField get() = DoubleField
+    override val elementAlgebra: Float64Field get() = Float64Field
 
     override fun mutableStructureND(
         shape: ShapeND,
-        initializer: DoubleField.(IntArray) -> Double,
+        initializer: Float64Field.(IntArray) -> Double,
     ): MutableStructureND<Double> {
         val res = TFloat64.tensorOf(org.tensorflow.ndarray.Shape.of(*shape.toLongArray())) { array ->
             ColumnStrides(shape).forEach { index ->
@@ -84,7 +86,7 @@ public class DoubleTensorFlowAlgebra internal constructor(
  * The resulting tensor is available outside of scope
  */
 @UnstableKMathAPI
-public fun DoubleField.produceWithTF(
+public fun Float64Field.produceWithTF(
     block: DoubleTensorFlowAlgebra.() -> StructureND<Double>,
 ): StructureND<Double> = Graph().use { graph ->
     val scope = DoubleTensorFlowAlgebra(graph)
@@ -97,7 +99,7 @@ public fun DoubleField.produceWithTF(
  * The resulting tensors are available outside of scope
  */
 @OptIn(UnstableKMathAPI::class)
-public fun DoubleField.produceMapWithTF(
+public fun Float64Field.produceMapWithTF(
     block: DoubleTensorFlowAlgebra.() -> Map<Symbol, StructureND<Double>>,
 ): Map<Symbol, StructureND<Double>> = Graph().use { graph ->
     val scope = DoubleTensorFlowAlgebra(graph)

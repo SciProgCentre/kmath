@@ -8,7 +8,7 @@ package space.kscience.kmath.samplers
 import space.kscience.kmath.chains.BlockingIntChain
 import space.kscience.kmath.random.RandomGenerator
 import space.kscience.kmath.stat.Sampler
-import space.kscience.kmath.structures.IntBuffer
+import space.kscience.kmath.structures.Int32Buffer
 import kotlin.math.exp
 
 /**
@@ -55,7 +55,7 @@ public class KempSmallMeanPoissonSampler internal constructor(
             return x
         }
 
-        override fun nextBufferBlocking(size: Int): IntBuffer = IntBuffer(size) { nextBlocking() }
+        override fun nextBufferBlocking(size: Int): Int32Buffer = Int32Buffer(size) { nextBlocking() }
 
         override suspend fun fork(): BlockingIntChain = sample(generator.fork())
     }

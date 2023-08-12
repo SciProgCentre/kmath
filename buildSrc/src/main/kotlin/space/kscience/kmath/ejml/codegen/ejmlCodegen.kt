@@ -389,9 +389,15 @@ import space.kscience.kmath.linear.*
 import space.kscience.kmath.linear.Matrix
 import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.nd.StructureFeature
+import space.kscience.kmath.structures.Float64
+import space.kscience.kmath.structures.Float32
+import space.kscience.kmath.operations.Float64Field
+import space.kscience.kmath.operations.Float32Field
 import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.operations.FloatField
 import space.kscience.kmath.operations.invoke
+import space.kscience.kmath.structures.Float64Buffer
+import space.kscience.kmath.structures.Float32Buffer
 import space.kscience.kmath.structures.DoubleBuffer
 import space.kscience.kmath.structures.FloatBuffer
 import kotlin.reflect.KClass
@@ -401,12 +407,12 @@ import kotlin.reflect.cast""")
         it.appendEjmlVector("Float", "FMatrix")
         it.appendEjmlMatrix("Double", "DMatrix")
         it.appendEjmlMatrix("Float", "FMatrix")
-        it.appendEjmlLinearSpace("Double", "DoubleField", "DMatrix", "DMatrixRMaj", "DMatrixRMaj", "DDRM", "DDRM", true)
-        it.appendEjmlLinearSpace("Float", "FloatField", "FMatrix", "FMatrixRMaj", "FMatrixRMaj", "FDRM", "FDRM", true)
+        it.appendEjmlLinearSpace("Double", "Float64Field", "DMatrix", "DMatrixRMaj", "DMatrixRMaj", "DDRM", "DDRM", true)
+        it.appendEjmlLinearSpace("Float", "Float32Field", "FMatrix", "FMatrixRMaj", "FMatrixRMaj", "FDRM", "FDRM", true)
 
         it.appendEjmlLinearSpace(
             type = "Double",
-            kmathAlgebra = "DoubleField",
+            kmathAlgebra = "Float64Field",
             ejmlMatrixParentTypeMatrix = "DMatrix",
             ejmlMatrixType = "DMatrixSparseCSC",
             ejmlMatrixDenseType = "DMatrixRMaj",
@@ -417,7 +423,7 @@ import kotlin.reflect.cast""")
 
         it.appendEjmlLinearSpace(
             type = "Float",
-            kmathAlgebra = "FloatField",
+            kmathAlgebra = "Float32Field",
             ejmlMatrixParentTypeMatrix = "FMatrix",
             ejmlMatrixType = "FMatrixSparseCSC",
             ejmlMatrixDenseType = "FMatrixRMaj",

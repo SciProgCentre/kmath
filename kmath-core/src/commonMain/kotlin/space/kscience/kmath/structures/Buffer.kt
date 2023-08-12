@@ -95,8 +95,8 @@ public interface Buffer<out T> : WithSize {
             List(size, initializer).asBuffer()
 
         /**
-         * Creates a [Buffer] of given [type]. If the type is primitive, specialized buffers are used ([IntBuffer],
-         * [DoubleBuffer], etc.), [ListBuffer] is returned otherwise.
+         * Creates a [Buffer] of given [type]. If the type is primitive, specialized buffers are used ([Int32Buffer],
+         * [Float64Buffer], etc.), [ListBuffer] is returned otherwise.
          *
          * The [size] is specified, and each element is calculated by calling the specified [initializer] function.
          */
@@ -112,8 +112,8 @@ public interface Buffer<out T> : WithSize {
             }
 
         /**
-         * Creates a [Buffer] of given type [T]. If the type is primitive, specialized buffers are used ([IntBuffer],
-         * [DoubleBuffer], etc.), [ListBuffer] is returned otherwise.
+         * Creates a [Buffer] of given type [T]. If the type is primitive, specialized buffers are used ([Int32Buffer],
+         * [Float64Buffer], etc.), [ListBuffer] is returned otherwise.
          *
          * The [size] is specified, and each element is calculated by calling the specified [initializer] function.
          */
