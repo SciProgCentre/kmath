@@ -14,17 +14,15 @@ import kotlinx.serialization.encoding.Encoder
 import space.kscience.kmath.geometry.GeometrySpace
 import space.kscience.kmath.geometry.Vector2D
 import space.kscience.kmath.operations.Float32Field
-import space.kscience.kmath.operations.ScaleOperations
+import space.kscience.kmath.structures.Float32
 import kotlin.math.pow
 import kotlin.math.sqrt
 
 @Serializable(Float32Space2D.VectorSerializer::class)
-public interface Float32Vector2D: Vector2D<Float>
+public interface Float32Vector2D : Vector2D<Float>
 
 
-public object Float32Space2D :
-    GeometrySpace<Float32Vector2D>,
-    ScaleOperations<Float32Vector2D> {
+public object Float32Space2D : GeometrySpace<Float32Vector2D, Float32> {
 
     @Serializable
     @SerialName("Float32Vector2D")
@@ -53,13 +51,13 @@ public object Float32Space2D :
 
     override val zero: Float32Vector2D by lazy { vector(0f, 0f) }
 
-    override fun norm(arg: Float32Vector2D): Double = sqrt(arg.x.pow(2) + arg.y.pow(2)).toDouble()
+    override fun norm(arg: Float32Vector2D): Float32 = sqrt(arg.x.pow(2) + arg.y.pow(2))
 
-    public fun Float32Vector2D.norm(): Double = norm(this)
+    public fun Float32Vector2D.norm(): Float32 = norm(this)
 
     override fun Float32Vector2D.unaryMinus(): Float32Vector2D = vector(-x, -y)
 
-    override fun Float32Vector2D.distanceTo(other: Float32Vector2D): Double = (this - other).norm()
+    override fun Float32Vector2D.distanceTo(other: Float32Vector2D): Float32 = (this - other).norm()
 
     override fun add(left: Float32Vector2D, right: Float32Vector2D): Float32Vector2D =
         vector(left.x + right.x, left.y + right.y)
@@ -72,6 +70,8 @@ public object Float32Space2D :
 
     public val xAxis: Float32Vector2D = vector(1.0, 0.0)
     public val yAxis: Float32Vector2D = vector(0.0, 1.0)
+
+    override val defaultPrecision: Float32 = 1e-3f
 }
 
 public fun Float32Vector2D(x: Number, y: Number): Float32Vector2D = Float32Space2D.vector(x, y)

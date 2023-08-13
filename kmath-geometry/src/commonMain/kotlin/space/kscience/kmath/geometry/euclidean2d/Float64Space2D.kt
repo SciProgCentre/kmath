@@ -13,12 +13,10 @@ import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 import space.kscience.kmath.geometry.GeometrySpace
 import space.kscience.kmath.geometry.Vector2D
+import space.kscience.kmath.linear.Float64LinearSpace
 import space.kscience.kmath.operations.Float64Field
-import space.kscience.kmath.operations.Norm
-import space.kscience.kmath.operations.ScaleOperations
 import kotlin.math.pow
 import kotlin.math.sqrt
-
 
 
 public typealias DoubleVector2D = Vector2D<Double>
@@ -30,10 +28,9 @@ public val Vector2D<Double>.r: Double get() = Float64Space2D.norm(this)
 /**
  * 2D Euclidean space
  */
-public object Float64Space2D :
-    GeometrySpace<DoubleVector2D, Double>,
-    ScaleOperations<DoubleVector2D>,
-    Norm<DoubleVector2D, Double> {
+public object Float64Space2D : GeometrySpace<DoubleVector2D, Double> {
+
+    public val linearSpace: Float64LinearSpace = Float64LinearSpace
 
     @Serializable
     @SerialName("Float64Vector2D")

@@ -5,6 +5,11 @@
 
 package space.kscience.kmath.geometry
 
+import space.kscience.kmath.geometry.euclidean2d.Float64Space2D
+import space.kscience.kmath.geometry.euclidean2d.Float64Vector2D
+import space.kscience.kmath.geometry.euclidean3d.Float64Space3D
+import space.kscience.kmath.geometry.euclidean3d.Float64Vector3D
+
 
 /**
  * Vector equality within given [precision] (using [GeometrySpace.norm] provided by the space
@@ -22,7 +27,7 @@ public fun <V : Any, D : Comparable<D>> V.equalsVector(
  */
 public fun Float64Vector2D.equalsVector(
     other: Float64Vector2D,
-    precision: Double = Euclidean3DSpace.defaultPrecision,
+    precision: Double = Float64Space2D.defaultPrecision,
 ): Boolean = equalsVector(Float64Space2D, other, precision)
 
 /**
@@ -30,7 +35,7 @@ public fun Float64Vector2D.equalsVector(
  */
 public fun Float64Vector3D.equalsVector(
     other: Float64Vector3D,
-    precision: Double = Euclidean3DSpace.defaultPrecision,
+    precision: Double = Float64Space3D.defaultPrecision,
 ): Boolean = equalsVector(Float64Space3D, other, precision)
 
 /**

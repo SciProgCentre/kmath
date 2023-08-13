@@ -13,9 +13,8 @@ import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 import space.kscience.kmath.geometry.GeometrySpace
 import space.kscience.kmath.geometry.Vector3D
+import space.kscience.kmath.linear.Float64LinearSpace
 import space.kscience.kmath.operations.Float64Field
-import space.kscience.kmath.operations.Norm
-import space.kscience.kmath.operations.ScaleOperations
 import kotlin.math.pow
 import kotlin.math.sqrt
 
@@ -37,8 +36,9 @@ public typealias Float64Vector3D = Vector3D<Double>
 
 public val DoubleVector3D.r: Double get() = Float64Space3D.norm(this)
 
-public object Float64Space3D : GeometrySpace<DoubleVector3D, Double>, ScaleOperations<DoubleVector3D>,
-    Norm<DoubleVector3D, Double> {
+public object Float64Space3D : GeometrySpace<DoubleVector3D, Double>{
+
+    public val linearSpace: Float64LinearSpace = Float64LinearSpace
 
     @Serializable
     @SerialName("Float64Vector3D")

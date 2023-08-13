@@ -8,7 +8,7 @@ package space.kscience.kmath.geometry
 import space.kscience.kmath.linear.Point
 import space.kscience.kmath.structures.Buffer
 
-public interface Vector3D<T> : Point<T>, Vector {
+public interface Vector3D<T> : Point<T> {
     public val x: T
     public val y: T
     public val z: T

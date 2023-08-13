@@ -6,6 +6,7 @@
 package space.kscience.kmath.geometry
 
 import space.kscience.kmath.complex.Quaternion
+import space.kscience.kmath.complex.QuaternionAlgebra
 import space.kscience.kmath.complex.normalized
 import space.kscience.kmath.geometry.euclidean3d.*
 import space.kscience.kmath.structures.Float64Buffer
@@ -26,11 +27,30 @@ class RotationTest {
     }
 
     @Test
-    fun matrixConversion() {
+    fun matrixConversion() = with(QuaternionAlgebra){
 
         val q = Quaternion(1.0, 2.0, -3.0, 4.0).normalized()
 
         val matrix = q.toRotationMatrix()
+
+        for (ro in listOf(
+            RotationOrder.XYZ,
+            RotationOrder.YXZ,
+            RotationOrder.ZXY,
+            RotationOrder.ZYX,
+            RotationOrder.YZX,
+            RotationOrder.XZY
+        )) {
+            val angles = AngleVector.fromRotationMatrix(matrix, ro)
+
+            val reconstructed = Quaternion.fromEuler(angles, ro)
+
+            if( reconstructed.w>0) {
+                assertBufferEquals(q, reconstructed)
+            } else{
+                assertBufferEquals(q, -reconstructed)
+            }
+        }
 
         assertBufferEquals(q, Quaternion.fromRotationMatrix(matrix))
     }
@@ -50,4 +70,5 @@ class RotationTest {
         val q1 = Quaternion.fromEuler(0.1.radians, 0.2.radians, 0.3.radians, RotationOrder.XYZ)
         assertBufferEquals(Float64Buffer(0.9818562, 0.0640713, 0.0911575, 0.1534393), q1)
     }
+
 }

@@ -6,8 +6,6 @@
 package space.kscience.kmath.geometry.euclidean2d
 
 import kotlinx.serialization.Serializable
-import space.kscience.kmath.geometry.Euclidean2DSpace.distanceTo
-import kotlin.math.*
 import kotlin.math.PI
 
 /**
@@ -16,7 +14,7 @@ import kotlin.math.PI
 @Serializable
 public data class Circle2D(
     @Serializable(Float64Space2D.VectorSerializer::class) public val center: DoubleVector2D,
-    public val radius: Double
+    public val radius: Double,
 )
 
 
