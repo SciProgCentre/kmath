@@ -60,6 +60,14 @@ public fun <A : Attribute<Unit>> Attributes.withAttribute(attribute: A): Attribu
     withAttribute(attribute, Unit)
 
 /**
+ * Create a new [Attributes] by modifying the current one
+ */
+public fun Attributes.modify(block: AttributesBuilder.() -> Unit): Attributes = Attributes {
+    from(this@modify)
+    block()
+}
+
+/**
  * Create new [Attributes] by removing [attribute] key
  */
 public fun Attributes.withoutAttribute(attribute: Attribute<*>): Attributes = Attributes(content.minus(attribute))

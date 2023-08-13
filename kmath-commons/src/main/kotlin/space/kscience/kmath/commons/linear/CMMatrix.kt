@@ -135,7 +135,7 @@ public object CMLinearSpace : LinearSpace<Double, Float64Field> {
                 override val r: Matrix<Double> by lazy<Matrix<Double>> { CMMatrix(qr.r).withAttribute(UpperTriangular) }
             }
 
-            SingularValueDecompositionAttribute::class -> object : SingularValueDecompositionAttribute<Double> {
+            SVDAttribute::class -> object : SVDAttribute<Double> {
                 private val sv by lazy { SingularValueDecomposition(origin) }
                 override val u: Matrix<Double> by lazy { CMMatrix(sv.u) }
                 override val s: Matrix<Double> by lazy { CMMatrix(sv.s) }

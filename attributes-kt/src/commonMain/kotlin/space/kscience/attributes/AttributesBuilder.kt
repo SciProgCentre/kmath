@@ -8,7 +8,9 @@ package space.kscience.attributes
 /**
  * A safe builder for [Attributes]
  */
-public class AttributesBuilder internal constructor(private val map: MutableMap<Attribute<*>, Any> = mutableMapOf()) {
+public class AttributesBuilder internal constructor(private val map: MutableMap<Attribute<*>, Any>) {
+
+    public constructor() : this(mutableMapOf())
 
     @Suppress("UNCHECKED_CAST")
     public operator fun <T> get(attribute: Attribute<T>): T? = map[attribute] as? T
@@ -49,4 +51,5 @@ public fun AttributesBuilder(
     attributes: Attributes,
 ): AttributesBuilder = AttributesBuilder(attributes.content.toMutableMap())
 
-public fun Attributes(builder: AttributesBuilder.() -> Unit): Attributes = AttributesBuilder().apply(builder).build()
+public inline fun Attributes(builder: AttributesBuilder.() -> Unit): Attributes =
+    AttributesBuilder().apply(builder).build()

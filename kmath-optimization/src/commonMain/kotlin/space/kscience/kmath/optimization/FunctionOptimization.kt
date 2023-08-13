@@ -53,7 +53,7 @@ public class OptimizationPrior<T>(type: SafeType<T>):
     PolymorphicAttribute<DifferentiableExpression<T>>(safeTypeOf()),
     Attribute<DifferentiableExpression<T>>
 
-public val <T> FunctionOptimization.Companion.Optimization get() =
+//public val <T> FunctionOptimization.Companion.Optimization get() =
 
 
 public fun <T> FunctionOptimization<T>.withFeatures(

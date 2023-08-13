@@ -240,7 +240,6 @@ public interface MutableStructureND<T> : StructureND<T> {
  * Set value at specified indices
  */
 @PerformancePitfall
-@Deprecated("")
 public operator fun <T> MutableStructureND<T>.set(vararg index: Int, value: T) {
     set(index, value)
 }

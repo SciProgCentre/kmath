@@ -45,16 +45,22 @@ public class SimpsonIntegrator<T : Any>(
     }
 
     override fun process(integrand: UnivariateIntegrand<T>): UnivariateIntegrand<T> {
-        val ranges = integrand.getFeature<UnivariateIntegrandRanges>()
+        val ranges = integrand[UnivariateIntegrandRanges]
         return if (ranges != null) {
             val res = algebra.sum(ranges.ranges.map { integrateRange(integrand, it.first, it.second) })
-            integrand + IntegrandValue(res) + IntegrandCallsPerformed(integrand.calls + ranges.ranges.sumOf { it.second })
+            integrand.modify {
+                value(res)
+                IntegrandCallsPerformed(integrand.calls + ranges.ranges.sumOf { it.second })
+            }
         } else {
-            val numPoints = integrand.getFeature<IntegrandMaxCalls>()?.maxCalls ?: 100
+            val numPoints = integrand[IntegrandMaxCalls] ?: 100
             require(numPoints >= 4) { "Simpson integrator requires at least 4 nodes" }
-            val range = integrand.getFeature<IntegrationRange>()?.range ?: 0.0..1.0
+            val range = integrand[IntegrationRange] ?: 0.0..1.0
             val res = integrateRange(integrand, range, numPoints)
-            integrand + IntegrandValue(res) + IntegrandCallsPerformed(integrand.calls + numPoints)
+            integrand.modify {
+                value(res)
+                IntegrandCallsPerformed(integrand.calls + numPoints)
+            }
         }
     }
 }
@@ -91,16 +97,22 @@ public object DoubleSimpsonIntegrator : UnivariateIntegrator<Double> {
     }
 
     override fun process(integrand: UnivariateIntegrand<Double>): UnivariateIntegrand<Double> {
-        val ranges = integrand.getFeature<UnivariateIntegrandRanges>()
+        val ranges = integrand[UnivariateIntegrandRanges]
         return if (ranges != null) {
             val res = ranges.ranges.sumOf { integrateRange(integrand, it.first, it.second) }
-            integrand + IntegrandValue(res) + IntegrandCallsPerformed(integrand.calls + ranges.ranges.sumOf { it.second })
+            integrand.modify {
+                value(res)
+                IntegrandCallsPerformed(integrand.calls + ranges.ranges.sumOf { it.second })
+            }
         } else {
-            val numPoints = integrand.getFeature<IntegrandMaxCalls>()?.maxCalls ?: 100
+            val numPoints = integrand[IntegrandMaxCalls] ?: 100
             require(numPoints >= 4) { "Simpson integrator requires at least 4 nodes" }
-            val range = integrand.getFeature<IntegrationRange>()?.range ?: 0.0..1.0
+            val range = integrand[IntegrationRange] ?: 0.0..1.0
             val res = integrateRange(integrand, range, numPoints)
-            integrand + IntegrandValue(res) + IntegrandCallsPerformed(integrand.calls + numPoints)
+            integrand.modify {
+                value(res)
+                IntegrandCallsPerformed(integrand.calls + numPoints)
+            }
         }
     }
 }

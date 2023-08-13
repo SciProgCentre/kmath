@@ -163,12 +163,12 @@ public interface SingularValueDecomposition<T> {
  *
  * @param T the type of matrices' items.
  */
-public class SingularValueDecompositionAttribute<T>(type: SafeType<SingularValueDecomposition<T>>) :
+public class SVDAttribute<T>(type: SafeType<SingularValueDecomposition<T>>) :
     PolymorphicAttribute<SingularValueDecomposition<T>>(type),
     MatrixAttribute<SingularValueDecomposition<T>>
 
-public val <T> MatrixOperations<T>.SVD: SingularValueDecompositionAttribute<T>
-    get() = SingularValueDecompositionAttribute(safeTypeOf())
+public val <T> MatrixOperations<T>.SVD: SVDAttribute<T>
+    get() = SVDAttribute(safeTypeOf())
 
 
 //TODO add sparse matrix feature

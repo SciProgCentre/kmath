@@ -5,44 +5,49 @@
 
 package space.kscience.kmath.integration
 
-import space.kscience.kmath.misc.Feature
-import space.kscience.kmath.misc.FeatureSet
-import space.kscience.kmath.misc.Featured
-import kotlin.reflect.KClass
+import space.kscience.attributes.*
+import kotlin.reflect.typeOf
 
-public interface IntegrandFeature : Feature<IntegrandFeature> {
-    override fun toString(): String
+public interface IntegrandAttribute<T> : Attribute<T>
+
+public interface Integrand<T> : AttributeContainer {
+
+    public fun modify(block: AttributesBuilder.() -> Unit): Integrand<T>
+
+    public fun <A : Any> withAttribute(attribute: Attribute<A>, value: A): Integrand<T>
+
+    public companion object
 }
 
-public interface Integrand : Featured<IntegrandFeature> {
-    public val features: FeatureSet<IntegrandFeature>
-    override fun <T : IntegrandFeature> getFeature(type: KClass<out T>): T? = features.getFeature(type)
+public operator fun <T> Integrand<*>.get(attribute: Attribute<T>): T? = attributes[attribute]
+
+public class IntegrandValue<T>(type: SafeType<T>) : PolymorphicAttribute<T>(type), IntegrandAttribute<T>
+
+public inline val <reified T : Any> Integrand<T>.Value: IntegrandValue<T> get() = IntegrandValue(safeTypeOf())
+
+public fun <T> AttributesBuilder.value(value: T){
+    val type: SafeType<T> = typeOf<T>()
+    IntegrandValue(type).invoke(value)
 }
 
-public inline fun <reified T : IntegrandFeature> Integrand.getFeature(): T? = getFeature(T::class)
+/**
+ * Value of the integrand if it is present or null
+ */
+public inline val <reified T : Any> Integrand<T>.valueOrNull: T? get() = attributes[Value]
 
-public class IntegrandValue<out T : Any>(public val value: T) : IntegrandFeature {
-    override fun toString(): String = "Value($value)"
-}
+/**
+ * Value of the integrand or error
+ */
+public inline val <reified T : Any> Integrand<T>.value: T get() = valueOrNull ?: error("No value in the integrand")
 
-public class IntegrandRelativeAccuracy(public val accuracy: Double) : IntegrandFeature {
-    override fun toString(): String = "TargetRelativeAccuracy($accuracy)"
-}
+public object IntegrandRelativeAccuracy : IntegrandAttribute<Double>
 
-public class IntegrandAbsoluteAccuracy(public val accuracy: Double) : IntegrandFeature {
-    override fun toString(): String = "TargetAbsoluteAccuracy($accuracy)"
-}
+public object IntegrandAbsoluteAccuracy : IntegrandAttribute<Double>
 
-public class IntegrandCallsPerformed(public val calls: Int) : IntegrandFeature {
-    override fun toString(): String = "Calls($calls)"
-}
+public object IntegrandCallsPerformed : IntegrandAttribute<Int>
 
-public val Integrand.calls: Int get() = getFeature<IntegrandCallsPerformed>()?.calls ?: 0
+public val Integrand<*>.calls: Int get() = attributes[IntegrandCallsPerformed] ?: 0
 
-public class IntegrandMaxCalls(public val maxCalls: Int) : IntegrandFeature {
-    override fun toString(): String = "MaxCalls($maxCalls)"
-}
+public object IntegrandMaxCalls : IntegrandAttribute<Int>
 
-public class IntegrandIterationsRange(public val range: IntRange) : IntegrandFeature {
-    override fun toString(): String = "Iterations(${range.first}..${range.last})"
-}
+public object IntegrandIterationsRange : IntegrandAttribute<IntRange>

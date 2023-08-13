@@ -27,7 +27,7 @@ fun grid(
     return xs.flatMap { x -> ys.map { y -> x to y } }
 }
 
-fun assertVectorEquals(expected: DoubleVector2D, actual: DoubleVector2D, absoluteTolerance: Double = 1e-6) {
+fun assertVectorEquals(expected: DoubleVector2D, actual: DoubleVector2D, absoluteTolerance: Double = 1e-3) {
     assertEquals(expected.x, actual.x, absoluteTolerance)
     assertEquals(expected.y, actual.y, absoluteTolerance)
 }

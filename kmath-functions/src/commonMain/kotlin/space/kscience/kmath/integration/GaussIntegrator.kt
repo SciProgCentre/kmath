@@ -4,6 +4,7 @@
  */
 package space.kscience.kmath.integration
 
+import space.kscience.attributes.AttributesBuilder
 import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.operations.Field
 import space.kscience.kmath.structures.Buffer
@@ -11,14 +12,14 @@ import space.kscience.kmath.structures.asBuffer
 import space.kscience.kmath.structures.indices
 
 /**
- * A simple one-pass integrator based on Gauss rule
- * Following integrand features are accepted:
+ * A simple one-pass integrator based on Gauss rule.
+ * The following integrand features are accepted:
  *
  * * [GaussIntegratorRuleFactory]&mdash;a factory for computing the Gauss integration rule. By default, uses
  * [GaussLegendreRuleFactory].
  * * [IntegrationRange]&mdash;the univariate range of integration. By default, uses `0..1` interval.
  * * [IntegrandMaxCalls]&mdash;the maximum number of function calls during integration. For non-iterative rules, always
- * uses the maximum number of points. By default, uses 10 points.
+ *  use the maximum number of points. By default, uses 10 points.
  * * [UnivariateIntegrandRanges]&mdash;set of ranges and number of points per range. Defaults to given
  * [IntegrationRange] and [IntegrandMaxCalls].
  */
@@ -27,11 +28,11 @@ public class GaussIntegrator<T : Any>(
 ) : UnivariateIntegrator<T> {
 
     private fun buildRule(integrand: UnivariateIntegrand<T>): Pair<Buffer<Double>, Buffer<Double>> {
-        val factory = integrand.getFeature<GaussIntegratorRuleFactory>() ?: GaussLegendreRuleFactory
-        val predefinedRanges = integrand.getFeature<UnivariateIntegrandRanges>()
+        val factory = integrand[GaussIntegratorRuleFactory] ?: GaussLegendreRuleFactory
+        val predefinedRanges = integrand[UnivariateIntegrandRanges]
         if (predefinedRanges == null || predefinedRanges.ranges.isEmpty()) {
-            val numPoints = integrand.getFeature<IntegrandMaxCalls>()?.maxCalls ?: 100
-            val range = integrand.getFeature<IntegrationRange>()?.range ?: 0.0..1.0
+            val numPoints = integrand[IntegrandMaxCalls] ?: 100
+            val range = integrand[IntegrationRange] ?: 0.0..1.0
             return factory.build(numPoints, range)
         } else {
             val ranges = predefinedRanges.ranges
@@ -66,7 +67,10 @@ public class GaussIntegrator<T : Any>(
             c = t - res - y
             res = t
         }
-        return integrand + IntegrandValue(res) + IntegrandCallsPerformed(integrand.calls + points.size)
+        return integrand.modify {
+            value(res)
+            IntegrandCallsPerformed(integrand.calls + points.size)
+        }
     }
 
     public companion object
@@ -88,7 +92,7 @@ public fun <T : Any> GaussIntegrator<T>.integrate(
     range: ClosedRange<Double>,
     order: Int = 10,
     intervals: Int = 10,
-    vararg features: IntegrandFeature,
+    attributesBuilder: AttributesBuilder.() -> Unit,
     function: (Double) -> T,
 ): UnivariateIntegrand<T> {
     require(range.endInclusive > range.start) { "The range upper bound should be higher than lower bound" }
@@ -100,11 +104,13 @@ public fun <T : Any> GaussIntegrator<T>.integrate(
     )
     return process(
         UnivariateIntegrand(
-            function,
-            IntegrationRange(range),
-            GaussLegendreRuleFactory,
-            ranges,
-            *features
+            attributeBuilder = {
+                IntegrationRange(range)
+                GaussIntegratorRuleFactory(GaussLegendreRuleFactory)
+                UnivariateIntegrandRanges(ranges)
+                attributesBuilder()
+            },
+            function = function,
         )
     )
 }
