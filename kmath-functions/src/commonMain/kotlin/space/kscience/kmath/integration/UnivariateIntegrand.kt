@@ -10,22 +10,23 @@ import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.Float64Buffer
 
-public class UnivariateIntegrand<T> internal constructor(
+public class UnivariateIntegrand<T>(
+    override val type: SafeType<T>,
     override val attributes: Attributes,
     public val function: (Double) -> T,
 ) : Integrand<T> {
 
     override fun <A : Any> withAttribute(attribute: Attribute<A>, value: A): UnivariateIntegrand<T> =
-        UnivariateIntegrand(attributes.withAttribute(attribute, value), function)
+        UnivariateIntegrand(type, attributes.withAttribute(attribute, value), function)
 
     override fun modify(block: AttributesBuilder.() -> Unit): UnivariateIntegrand<T> =
-        UnivariateIntegrand(attributes.modify(block), function)
+        UnivariateIntegrand(type, attributes.modify(block), function)
 }
 
-public fun <T : Any> UnivariateIntegrand(
+public inline fun <reified T : Any> UnivariateIntegrand(
     attributeBuilder: AttributesBuilder.() -> Unit,
-    function: (Double) -> T,
-): UnivariateIntegrand<T> = UnivariateIntegrand(Attributes(attributeBuilder), function)
+    noinline function: (Double) -> T,
+): UnivariateIntegrand<T> = UnivariateIntegrand(safeTypeOf(), Attributes(attributeBuilder), function)
 
 public typealias UnivariateIntegrator<T> = Integrator<UnivariateIntegrand<T>>
 
@@ -60,9 +61,9 @@ public fun AttributesBuilder.integrationNodes(vararg nodes: Double) {
  * The [function] is placed in the end position to allow passing a lambda.
  */
 @UnstableKMathAPI
-public fun <T : Any> UnivariateIntegrator<T>.integrate(
+public inline fun <reified T : Any> UnivariateIntegrator<T>.integrate(
     attributesBuilder: AttributesBuilder.() -> Unit,
-    function: (Double) -> T,
+    noinline function: (Double) -> T,
 ): UnivariateIntegrand<T> = process(UnivariateIntegrand(attributesBuilder, function))
 
 /**
@@ -70,14 +71,19 @@ public fun <T : Any> UnivariateIntegrator<T>.integrate(
  * The [function] is placed in the end position to allow passing a lambda.
  */
 @UnstableKMathAPI
-public fun <T : Any> UnivariateIntegrator<T>.integrate(
+public inline fun <reified T : Any> UnivariateIntegrator<T>.integrate(
     range: ClosedRange<Double>,
     attributeBuilder: AttributesBuilder.() -> Unit = {},
-    function: (Double) -> T,
+    noinline function: (Double) -> T,
 ): UnivariateIntegrand<T> {
-    val attributes = Attributes {
-        IntegrationRange(range)
-        attributeBuilder()
-    }
-    return process(UnivariateIntegrand(attributes, function))
+
+    return process(
+        UnivariateIntegrand(
+            attributeBuilder = {
+                IntegrationRange(range)
+                attributeBuilder()
+            },
+            function = function
+        )
+    )
 }

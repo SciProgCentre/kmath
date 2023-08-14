@@ -5,12 +5,16 @@
 
 package space.kscience.kmath.integration
 
-import space.kscience.attributes.*
-import kotlin.reflect.typeOf
+import space.kscience.attributes.Attribute
+import space.kscience.attributes.AttributeContainer
+import space.kscience.attributes.AttributesBuilder
+import space.kscience.attributes.SafeType
 
 public interface IntegrandAttribute<T> : Attribute<T>
 
 public interface Integrand<T> : AttributeContainer {
+
+    public val type: SafeType<T>
 
     public fun modify(block: AttributesBuilder.() -> Unit): Integrand<T>
 
@@ -21,19 +25,21 @@ public interface Integrand<T> : AttributeContainer {
 
 public operator fun <T> Integrand<*>.get(attribute: Attribute<T>): T? = attributes[attribute]
 
-public class IntegrandValue<T>(type: SafeType<T>) : PolymorphicAttribute<T>(type), IntegrandAttribute<T>
+public sealed class IntegrandValue<T> private constructor(): IntegrandAttribute<T>{
+    public companion object: IntegrandValue<Any?>(){
+        @Suppress("UNCHECKED_CAST")
+        public fun <T> forType(): IntegrandValue<T> = this as IntegrandValue<T>
+    }
+}
 
-public inline val <reified T : Any> Integrand<T>.Value: IntegrandValue<T> get() = IntegrandValue(safeTypeOf())
-
-public fun <T> AttributesBuilder.value(value: T){
-    val type: SafeType<T> = typeOf<T>()
-    IntegrandValue(type).invoke(value)
+public fun <T> AttributesBuilder.value(value: T) {
+    IntegrandValue.forType<T>().invoke(value)
 }
 
 /**
  * Value of the integrand if it is present or null
  */
-public inline val <reified T : Any> Integrand<T>.valueOrNull: T? get() = attributes[Value]
+public inline val <reified T : Any> Integrand<T>.valueOrNull: T? get() = attributes[IntegrandValue.forType<T>()]
 
 /**
  * Value of the integrand or error

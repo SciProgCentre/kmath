@@ -8,19 +8,20 @@ package space.kscience.kmath.integration
 import space.kscience.attributes.*
 import space.kscience.kmath.linear.Point
 
-public class MultivariateIntegrand<T> internal constructor(
+public class MultivariateIntegrand<T>(
+    override val type: SafeType<T>,
     override val attributes: Attributes,
     public val function: (Point<T>) -> T,
 ) : Integrand<T> {
 
     override fun modify(block: AttributesBuilder.() -> Unit): MultivariateIntegrand<T> =
-        MultivariateIntegrand(attributes.modify(block), function)
+        MultivariateIntegrand(type, attributes.modify(block), function)
 
     override fun <A : Any> withAttribute(attribute: Attribute<A>, value: A): MultivariateIntegrand<T> =
-        MultivariateIntegrand(attributes.withAttribute(attribute, value), function)
+        MultivariateIntegrand(type, attributes.withAttribute(attribute, value), function)
 }
 
-public fun <T : Any> MultivariateIntegrand(
+public inline fun <reified T : Any> MultivariateIntegrand(
     attributeBuilder: AttributesBuilder.() -> Unit,
-    function: (Point<T>) -> T,
-): MultivariateIntegrand<T> = MultivariateIntegrand(Attributes(attributeBuilder), function)
+    noinline function: (Point<T>) -> T,
+): MultivariateIntegrand<T> = MultivariateIntegrand(safeTypeOf<T>(), Attributes(attributeBuilder), function)

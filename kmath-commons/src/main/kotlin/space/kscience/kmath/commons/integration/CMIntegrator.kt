@@ -9,13 +9,14 @@ import org.apache.commons.math3.analysis.integration.IterativeLegendreGaussInteg
 import org.apache.commons.math3.analysis.integration.SimpsonIntegrator
 import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.integration.*
+import org.apache.commons.math3.analysis.integration.UnivariateIntegrator as CMUnivariateIntegrator
 
 /**
  * Integration wrapper for Common-maths UnivariateIntegrator
  */
 public class CMIntegrator(
     private val defaultMaxCalls: Int = 200,
-    public val integratorBuilder: (Integrand) -> org.apache.commons.math3.analysis.integration.UnivariateIntegrator,
+    public val integratorBuilder: (Integrand<Double>) -> CMUnivariateIntegrator,
 ) : UnivariateIntegrator<Double> {
 
     override fun process(integrand: UnivariateIntegrand<Double>): UnivariateIntegrand<Double> {
@@ -25,11 +26,12 @@ public class CMIntegrator(
         val range = integrand[IntegrationRange] ?: error("Integration range is not provided")
         val res = integrator.integrate(remainingCalls, integrand.function, range.start, range.endInclusive)
 
-        return integrand +
-                IntegrandValue(res) +
-                IntegrandAbsoluteAccuracy(integrator.absoluteAccuracy) +
-                IntegrandRelativeAccuracy(integrator.relativeAccuracy) +
-                IntegrandCallsPerformed(integrator.evaluations + integrand.calls)
+        return integrand.modify {
+            value(res)
+            IntegrandAbsoluteAccuracy(integrator.absoluteAccuracy)
+            IntegrandRelativeAccuracy(integrator.relativeAccuracy)
+            IntegrandCallsPerformed(integrator.evaluations + integrand.calls)
+        }
     }
 
 
