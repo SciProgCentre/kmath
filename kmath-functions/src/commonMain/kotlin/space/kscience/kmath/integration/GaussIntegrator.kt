@@ -4,7 +4,7 @@
  */
 package space.kscience.kmath.integration
 
-import space.kscience.attributes.AttributesBuilder
+import space.kscience.attributes.TypedAttributesBuilder
 import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.operations.Field
 import space.kscience.kmath.structures.Buffer
@@ -57,7 +57,7 @@ public class GaussIntegrator<T : Any>(
     override fun process(integrand: UnivariateIntegrand<T>): UnivariateIntegrand<T> = with(algebra) {
         val f = integrand.function
         val (points, weights) = buildRule(integrand)
-        var res = zero
+        var res: T = zero
         var c = zero
         for (i in points.indices) {
             val x = points[i]
@@ -67,7 +67,7 @@ public class GaussIntegrator<T : Any>(
             c = t - res - y
             res = t
         }
-        return integrand.modify {
+        return integrand.withAttributes {
             value(res)
             IntegrandCallsPerformed(integrand.calls + points.size)
         }
@@ -88,12 +88,12 @@ public val <T : Any> Field<T>.gaussIntegrator: GaussIntegrator<T> get() = GaussI
  * Integrate using [intervals] segments with Gauss-Legendre rule of [order] order.
  */
 @UnstableKMathAPI
-public fun <T : Any> GaussIntegrator<T>.integrate(
+public inline fun <reified T : Any> GaussIntegrator<T>.integrate(
     range: ClosedRange<Double>,
     order: Int = 10,
     intervals: Int = 10,
-    attributesBuilder: AttributesBuilder.() -> Unit,
-    function: (Double) -> T,
+    attributesBuilder: TypedAttributesBuilder<UnivariateIntegrand<T>>.() -> Unit,
+    noinline function: (Double) -> T,
 ): UnivariateIntegrand<T> {
     require(range.endInclusive > range.start) { "The range upper bound should be higher than lower bound" }
     require(order > 1) { "The order of polynomial must be more than 1" }
@@ -103,7 +103,7 @@ public fun <T : Any> GaussIntegrator<T>.integrate(
         (0 until intervals).map { i -> (range.start + rangeSize * i)..(range.start + rangeSize * (i + 1)) to order }
     )
     return process(
-        UnivariateIntegrand(
+        UnivariateIntegrand<T>(
             attributeBuilder = {
                 IntegrationRange(range)
                 GaussIntegratorRuleFactory(GaussLegendreRuleFactory)

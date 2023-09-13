@@ -5,10 +5,7 @@
 
 package space.kscience.kmath.integration
 
-import space.kscience.attributes.Attribute
-import space.kscience.attributes.AttributeContainer
-import space.kscience.attributes.AttributesBuilder
-import space.kscience.attributes.SafeType
+import space.kscience.attributes.*
 
 public interface IntegrandAttribute<T> : Attribute<T>
 
@@ -16,9 +13,10 @@ public interface Integrand<T> : AttributeContainer {
 
     public val type: SafeType<T>
 
-    public fun modify(block: AttributesBuilder.() -> Unit): Integrand<T>
-
-    public fun <A : Any> withAttribute(attribute: Attribute<A>, value: A): Integrand<T>
+    /**
+     * Create a copy of this integrand with a new set of attributes
+     */
+    public fun withAttributes(attributes: Attributes): Integrand<T>
 
     public companion object
 }
@@ -32,7 +30,7 @@ public sealed class IntegrandValue<T> private constructor(): IntegrandAttribute<
     }
 }
 
-public fun <T> AttributesBuilder.value(value: T) {
+public fun <T> TypedAttributesBuilder<Integrand<T>>.value(value: T) {
     IntegrandValue.forType<T>().invoke(value)
 }
 

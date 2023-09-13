@@ -71,7 +71,7 @@ public class SplineIntegrator<T : Comparable<T>>(
             values
         )
         val res = polynomials.integrate(algebra, number(range.start)..number(range.endInclusive))
-        integrand.modify {
+        integrand.withAttributes {
             value(res)
             IntegrandCallsPerformed(integrand.calls + nodes.size)
         }
@@ -99,7 +99,7 @@ public object DoubleSplineIntegrator : UnivariateIntegrator<Double> {
         val values = nodes.mapToBuffer(::Float64Buffer) { integrand.function(it) }
         val polynomials = interpolator.interpolatePolynomials(nodes, values)
         val res = polynomials.integrate(Float64Field, range)
-        return integrand.modify {
+        return integrand.withAttributes {
             value(res)
             IntegrandCallsPerformed(integrand.calls + nodes.size)
         }

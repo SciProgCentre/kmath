@@ -7,8 +7,10 @@ package space.kscience.attributes
 
 /**
  * A safe builder for [Attributes]
+ *
+ * @param O type marker of an owner object, for which these attributes are made
  */
-public class AttributesBuilder internal constructor(private val map: MutableMap<Attribute<*>, Any>) {
+public class TypedAttributesBuilder<in O> internal constructor(private val map: MutableMap<Attribute<*>, Any>) {
 
     public constructor() : this(mutableMapOf())
 
@@ -46,6 +48,8 @@ public class AttributesBuilder internal constructor(private val map: MutableMap<
 
     public fun build(): Attributes = Attributes(map)
 }
+
+public typealias AttributesBuilder = TypedAttributesBuilder<Any?>
 
 public fun AttributesBuilder(
     attributes: Attributes,

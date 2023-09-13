@@ -14,14 +14,21 @@ public class MultivariateIntegrand<T>(
     public val function: (Point<T>) -> T,
 ) : Integrand<T> {
 
-    override fun modify(block: AttributesBuilder.() -> Unit): MultivariateIntegrand<T> =
-        MultivariateIntegrand(type, attributes.modify(block), function)
+    override fun withAttributes(attributes: Attributes): MultivariateIntegrand<T> =
+        MultivariateIntegrand(type, attributes, function)
 
-    override fun <A : Any> withAttribute(attribute: Attribute<A>, value: A): MultivariateIntegrand<T> =
-        MultivariateIntegrand(type, attributes.withAttribute(attribute, value), function)
 }
 
+public fun <T, A : Any> MultivariateIntegrand<T>.withAttribute(
+    attribute: Attribute<A>,
+    value: A,
+): MultivariateIntegrand<T> = withAttributes(attributes.withAttribute(attribute, value))
+
+public fun <T> MultivariateIntegrand<T>.withAttributes(
+    block: TypedAttributesBuilder<MultivariateIntegrand<T>>.() -> Unit,
+): MultivariateIntegrand<T> = withAttributes(attributes.modify(block))
+
 public inline fun <reified T : Any> MultivariateIntegrand(
-    attributeBuilder: AttributesBuilder.() -> Unit,
+    attributeBuilder: TypedAttributesBuilder<MultivariateIntegrand<T>>.() -> Unit,
     noinline function: (Point<T>) -> T,
 ): MultivariateIntegrand<T> = MultivariateIntegrand(safeTypeOf<T>(), Attributes(attributeBuilder), function)

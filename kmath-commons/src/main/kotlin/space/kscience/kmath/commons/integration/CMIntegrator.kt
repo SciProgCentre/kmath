@@ -26,7 +26,7 @@ public class CMIntegrator(
         val range = integrand[IntegrationRange] ?: error("Integration range is not provided")
         val res = integrator.integrate(remainingCalls, integrand.function, range.start, range.endInclusive)
 
-        return integrand.modify {
+        return integrand.withAttributes {
             value(res)
             IntegrandAbsoluteAccuracy(integrator.absoluteAccuracy)
             IntegrandRelativeAccuracy(integrator.relativeAccuracy)

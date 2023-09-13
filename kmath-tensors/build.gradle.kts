@@ -6,7 +6,7 @@ kscience{
     jvm()
     js {
         browser {
-            testTask {
+            testTask{
                 useMocha().timeout = "0"
             }
         }

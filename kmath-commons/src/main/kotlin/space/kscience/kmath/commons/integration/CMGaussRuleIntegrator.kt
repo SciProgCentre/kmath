@@ -22,7 +22,7 @@ public class CMGaussRuleIntegrator(
         val integrator: GaussIntegrator = getIntegrator(range)
         //TODO check performance
         val res: Double = integrator.integrate(integrand.function)
-        return integrand.modify {
+        return integrand.withAttributes {
             IntegrandValue(res)
             IntegrandCallsPerformed(integrand.calls + numpoints)
         }
