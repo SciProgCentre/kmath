@@ -77,4 +77,4 @@ ksciencePublish {
 
 apiValidation.nonPublicMarkers.add("space.kscience.kmath.UnstableKMathAPI")
 
-val multikVersion by extra("0.2.0")
+val multikVersion by extra("0.2.2")

@@ -19,12 +19,10 @@ import kotlin.math.pow
 import kotlin.math.sqrt
 
 @Serializable(Float32Space2D.VectorSerializer::class)
-public interface Float32Vector2D: Vector2D<Float>
+public interface Float32Vector2D : Vector2D<Float>
 
 
-public object Float32Space2D :
-    GeometrySpace<Float32Vector2D>,
-    ScaleOperations<Float32Vector2D> {
+public object Float32Space2D : GeometrySpace<Float32Vector2D>, ScaleOperations<Float32Vector2D> {
 
     @Serializable
     @SerialName("Float32Vector2D")
