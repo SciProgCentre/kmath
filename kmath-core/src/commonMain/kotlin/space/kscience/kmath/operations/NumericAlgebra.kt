@@ -150,7 +150,7 @@ public interface ScaleOperations<T> : Algebra<T> {
  * TODO to be removed and replaced by extensions after multiple receivers are there
  */
 @UnstableKMathAPI
-public interface NumbersAddOps<T> : RingOps<T>, NumericAlgebra<T> {
+public interface NumbersAddOps<T> : GroupOps<T>, NumericAlgebra<T> {
     /**
      * Addition of element and scalar.
      *
@@ -177,7 +177,7 @@ public interface NumbersAddOps<T> : RingOps<T>, NumericAlgebra<T> {
     public operator fun T.minus(other: Number): T = this - number(other)
 
     /**
-     * Subtraction of number from element.
+     * Subtraction of number from the element.
      *
      * @receiver the minuend.
      * @param other the subtrahend.

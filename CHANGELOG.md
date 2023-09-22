@@ -3,14 +3,21 @@
 ## Unreleased
 
 ### Added
+- Integer division algebras
+- Float32 geometries
 
 ### Changed
+- Default naming for algebra and buffers now uses IntXX/FloatXX notation instead of Java types.
+- Remove unnecessary inlines in basic algebras.
+- QuaternionField -> QuaternionAlgebra and does not implement `Field` anymore since it is non-commutative
+- kmath-geometry is split into `euclidean2d` and `euclidean3d`
 
 ### Deprecated
 
 ### Removed
 
 ### Fixed
+- Median statistics
 
 ### Security
 

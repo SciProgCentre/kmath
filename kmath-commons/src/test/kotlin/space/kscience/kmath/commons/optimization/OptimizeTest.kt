@@ -13,18 +13,18 @@ import space.kscience.kmath.expressions.Symbol.Companion.x
 import space.kscience.kmath.expressions.Symbol.Companion.y
 import space.kscience.kmath.expressions.autodiff
 import space.kscience.kmath.expressions.symbol
-import space.kscience.kmath.operations.DoubleBufferOps.Companion.map
-import space.kscience.kmath.operations.DoubleField
+import space.kscience.kmath.operations.Float64BufferOps.Companion.map
+import space.kscience.kmath.operations.Float64Field
 import space.kscience.kmath.optimization.*
 import space.kscience.kmath.random.RandomGenerator
 import space.kscience.kmath.stat.chiSquaredExpression
-import space.kscience.kmath.structures.DoubleBuffer
+import space.kscience.kmath.structures.Float64Buffer
 import space.kscience.kmath.structures.asBuffer
 import kotlin.test.Test
 
 @OptIn(UnstableKMathAPI::class)
 internal class OptimizeTest {
-    val normal = DSFieldExpression(DoubleField) {
+    val normal = DSFieldExpression(Float64Field) {
         exp(-bindSymbol(x).pow(2) / 2) + exp(-bindSymbol(y).pow(2) / 2)
     }
 
@@ -61,7 +61,7 @@ internal class OptimizeTest {
             it.pow(2) + it + 1 + chain.next()
         }
 
-        val yErr = DoubleBuffer(x.size) { sigma }
+        val yErr = Float64Buffer(x.size) { sigma }
 
         val chi2 = Double.autodiff.chiSquaredExpression(
             x, y, yErr

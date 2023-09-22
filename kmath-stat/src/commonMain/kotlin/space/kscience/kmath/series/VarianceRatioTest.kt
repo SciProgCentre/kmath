@@ -6,7 +6,7 @@
 package space.kscience.kmath.series
 
 import space.kscience.kmath.distributions.NormalDistribution
-import space.kscience.kmath.operations.DoubleField.pow
+import space.kscience.kmath.operations.Float64Field.pow
 import space.kscience.kmath.operations.fold
 import kotlin.math.absoluteValue
 

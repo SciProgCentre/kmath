@@ -7,8 +7,8 @@ package space.kscience.kmath.structures
 
 import space.kscience.kmath.PerformancePitfall
 import space.kscience.kmath.nd.*
-import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.operations.ExtendedField
+import space.kscience.kmath.operations.Float64Field
 import space.kscience.kmath.operations.NumbersAddOps
 import java.util.*
 import java.util.stream.IntStream
@@ -17,12 +17,12 @@ import java.util.stream.IntStream
  * A demonstration implementation of NDField over Real using Java [java.util.stream.DoubleStream] for parallel
  * execution.
  */
-class StreamDoubleFieldND(override val shape: ShapeND) : FieldND<Double, DoubleField>,
+class StreamDoubleFieldND(override val shape: ShapeND) : FieldND<Double, Float64Field>,
     NumbersAddOps<StructureND<Double>>,
     ExtendedField<StructureND<Double>> {
 
     private val strides = ColumnStrides(shape)
-    override val elementAlgebra: DoubleField get() = DoubleField
+    override val elementAlgebra: Float64Field get() = Float64Field
     override val zero: BufferND<Double> by lazy { structureND(shape) { zero } }
     override val one: BufferND<Double> by lazy { structureND(shape) { one } }
 
@@ -32,21 +32,21 @@ class StreamDoubleFieldND(override val shape: ShapeND) : FieldND<Double, DoubleF
     }
 
     @OptIn(PerformancePitfall::class)
-    private val StructureND<Double>.buffer: DoubleBuffer
+    private val StructureND<Double>.buffer: Float64Buffer
         get() = when {
             !shape.contentEquals(this@StreamDoubleFieldND.shape) -> throw ShapeMismatchException(
                 this@StreamDoubleFieldND.shape,
                 shape
             )
 
-            this is BufferND && indices == this@StreamDoubleFieldND.strides -> this.buffer as DoubleBuffer
-            else -> DoubleBuffer(strides.linearSize) { offset -> get(strides.index(offset)) }
+            this is BufferND && indices == this@StreamDoubleFieldND.strides -> this.buffer as Float64Buffer
+            else -> Float64Buffer(strides.linearSize) { offset -> get(strides.index(offset)) }
         }
 
-    override fun structureND(shape: ShapeND, initializer: DoubleField.(IntArray) -> Double): BufferND<Double> {
+    override fun structureND(shape: ShapeND, initializer: Float64Field.(IntArray) -> Double): BufferND<Double> {
         val array = IntStream.range(0, strides.linearSize).parallel().mapToDouble { offset ->
             val index = strides.index(offset)
-            DoubleField.initializer(index)
+            Float64Field.initializer(index)
         }.toArray()
 
         return BufferND(strides, array.asBuffer())
@@ -54,18 +54,18 @@ class StreamDoubleFieldND(override val shape: ShapeND) : FieldND<Double, DoubleF
 
     @OptIn(PerformancePitfall::class)
     override fun StructureND<Double>.map(
-        transform: DoubleField.(Double) -> Double,
+        transform: Float64Field.(Double) -> Double,
     ): BufferND<Double> {
-        val array = Arrays.stream(buffer.array).parallel().map { DoubleField.transform(it) }.toArray()
+        val array = Arrays.stream(buffer.array).parallel().map { Float64Field.transform(it) }.toArray()
         return BufferND(strides, array.asBuffer())
     }
 
     @OptIn(PerformancePitfall::class)
     override fun StructureND<Double>.mapIndexed(
-        transform: DoubleField.(index: IntArray, Double) -> Double,
+        transform: Float64Field.(index: IntArray, Double) -> Double,
     ): BufferND<Double> {
         val array = IntStream.range(0, strides.linearSize).parallel().mapToDouble { offset ->
-            DoubleField.transform(
+            Float64Field.transform(
                 strides.index(offset),
                 buffer.array[offset]
             )
@@ -78,10 +78,10 @@ class StreamDoubleFieldND(override val shape: ShapeND) : FieldND<Double, DoubleF
     override fun zip(
         left: StructureND<Double>,
         right: StructureND<Double>,
-        transform: DoubleField.(Double, Double) -> Double,
+        transform: Float64Field.(Double, Double) -> Double,
     ): BufferND<Double> {
         val array = IntStream.range(0, strides.linearSize).parallel().mapToDouble { offset ->
-            DoubleField.transform(left.buffer.array[offset], right.buffer.array[offset])
+            Float64Field.transform(left.buffer.array[offset], right.buffer.array[offset])
         }.toArray()
         return BufferND(strides, array.asBuffer())
     }
@@ -111,4 +111,4 @@ class StreamDoubleFieldND(override val shape: ShapeND) : FieldND<Double, DoubleF
     override fun atanh(arg: StructureND<Double>): BufferND<Double> = arg.map { atanh(it) }
 }
 
-fun DoubleField.ndStreaming(vararg shape: Int): StreamDoubleFieldND = StreamDoubleFieldND(ShapeND(shape))
+fun Float64Field.ndStreaming(vararg shape: Int): StreamDoubleFieldND = StreamDoubleFieldND(ShapeND(shape))

@@ -6,7 +6,7 @@
 package space.kscience.kmath.integration
 
 import space.kscience.kmath.UnstableKMathAPI
-import space.kscience.kmath.operations.DoubleField
+import space.kscience.kmath.operations.Float64Field
 import kotlin.math.PI
 import kotlin.math.sin
 import kotlin.test.Test
@@ -16,7 +16,7 @@ import kotlin.test.assertEquals
 class GaussIntegralTest {
     @Test
     fun gaussSin() {
-        val res = DoubleField.gaussIntegrator.integrate(0.0..2 * PI) { x ->
+        val res = Float64Field.gaussIntegrator.integrate(0.0..2 * PI) { x ->
             sin(x)
         }
         assertEquals(0.0, res.value, 1e-2)
@@ -24,7 +24,7 @@ class GaussIntegralTest {
 
     @Test
     fun gaussUniform() {
-        val res = DoubleField.gaussIntegrator.integrate(35.0..100.0) { x ->
+        val res = Float64Field.gaussIntegrator.integrate(35.0..100.0) { x ->
             if(x in 30.0..50.0){
                 1.0
             } else {

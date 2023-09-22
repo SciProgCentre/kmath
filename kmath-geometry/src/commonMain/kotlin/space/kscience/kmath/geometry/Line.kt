@@ -7,6 +7,8 @@ package space.kscience.kmath.geometry
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import space.kscience.kmath.geometry.euclidean2d.DoubleVector2D
+import space.kscience.kmath.geometry.euclidean3d.DoubleVector3D
 
 /**
  * A line formed by [start] vector of start and a [direction] vector. Direction vector is not necessarily normalized,

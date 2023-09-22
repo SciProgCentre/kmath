@@ -13,7 +13,7 @@ import kotlin.jvm.JvmInline
  * @property array the underlying array.
  */
 @JvmInline
-public value class ByteBuffer(public val array: ByteArray) : MutableBuffer<Byte> {
+public value class Int8Buffer(public val array: ByteArray) : MutableBuffer<Byte> {
     override val size: Int get() = array.size
 
     override operator fun get(index: Int): Byte = array[index]
@@ -23,35 +23,35 @@ public value class ByteBuffer(public val array: ByteArray) : MutableBuffer<Byte>
     }
 
     override operator fun iterator(): ByteIterator = array.iterator()
-    override fun copy(): MutableBuffer<Byte> = ByteBuffer(array.copyOf())
+    override fun copy(): MutableBuffer<Byte> = Int8Buffer(array.copyOf())
 }
 
 /**
- * Creates a new [ByteBuffer] with the specified [size], where each element is calculated by calling the specified
+ * Creates a new [Int8Buffer] with the specified [size], where each element is calculated by calling the specified
  * [init] function.
  *
  * The function [init] is called for each array element sequentially starting from the first one.
  * It should return the value for a buffer element given its index.
  */
-public inline fun ByteBuffer(size: Int, init: (Int) -> Byte): ByteBuffer = ByteBuffer(ByteArray(size) { init(it) })
+public inline fun Int8Buffer(size: Int, init: (Int) -> Byte): Int8Buffer = Int8Buffer(ByteArray(size) { init(it) })
 
 /**
- * Returns a new [ByteBuffer] of given elements.
+ * Returns a new [Int8Buffer] of given elements.
  */
-public fun ByteBuffer(vararg bytes: Byte): ByteBuffer = ByteBuffer(bytes)
+public fun Int8Buffer(vararg bytes: Byte): Int8Buffer = Int8Buffer(bytes)
 
 /**
  * Returns a new [ByteArray] containing all the elements of this [Buffer].
  */
 public fun Buffer<Byte>.toByteArray(): ByteArray = when (this) {
-    is ByteBuffer -> array.copyOf()
+    is Int8Buffer -> array.copyOf()
     else -> ByteArray(size, ::get)
 }
 
 /**
- * Returns [ByteBuffer] over this array.
+ * Returns [Int8Buffer] over this array.
  *
  * @receiver the array.
  * @return the new buffer.
  */
-public fun ByteArray.asBuffer(): ByteBuffer = ByteBuffer(this)
+public fun ByteArray.asBuffer(): Int8Buffer = Int8Buffer(this)

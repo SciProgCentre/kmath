@@ -6,8 +6,8 @@
 package space.kscience.kmath.integration
 
 import space.kscience.kmath.UnstableKMathAPI
-import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.operations.Field
+import space.kscience.kmath.operations.Float64Field
 import space.kscience.kmath.operations.invoke
 import space.kscience.kmath.operations.sum
 
@@ -105,4 +105,4 @@ public object DoubleSimpsonIntegrator : UnivariateIntegrator<Double> {
     }
 }
 
-public val DoubleField.simpsonIntegrator: DoubleSimpsonIntegrator get() = DoubleSimpsonIntegrator
+public val Float64Field.simpsonIntegrator: DoubleSimpsonIntegrator get() = DoubleSimpsonIntegrator

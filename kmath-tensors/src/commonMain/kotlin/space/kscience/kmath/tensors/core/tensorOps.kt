@@ -8,7 +8,7 @@ package space.kscience.kmath.tensors.core
 import space.kscience.kmath.nd.*
 import space.kscience.kmath.operations.covariance
 import space.kscience.kmath.structures.Buffer
-import space.kscience.kmath.structures.DoubleBuffer
+import space.kscience.kmath.structures.Float64Buffer
 import space.kscience.kmath.tensors.api.Tensor
 import space.kscience.kmath.tensors.core.internal.*
 import kotlin.math.min
@@ -24,7 +24,7 @@ import kotlin.math.sign
  * with `0.0` mean and `1.0` standard deviation.
  */
 public fun DoubleTensorAlgebra.randomNormal(shape: ShapeND, seed: Long = 0): DoubleTensor =
-    fromBuffer(shape, DoubleBuffer.randomNormals(shape.linearSize, seed))
+    fromBuffer(shape, Float64Buffer.randomNormals(shape.linearSize, seed))
 
 /**
  * Returns a tensor with the same shape as `input` of random numbers drawn from normal distributions
@@ -36,7 +36,7 @@ public fun DoubleTensorAlgebra.randomNormal(shape: ShapeND, seed: Long = 0): Dou
  * with `0.0` mean and `1.0` standard deviation.
  */
 public fun DoubleTensorAlgebra.randomNormalLike(structure: WithShape, seed: Long = 0): DoubleTensor =
-    DoubleTensor(structure.shape, DoubleBuffer.randomNormals(structure.shape.linearSize, seed))
+    DoubleTensor(structure.shape, Float64Buffer.randomNormals(structure.shape.linearSize, seed))
 
 /**
  * Concatenates a sequence of tensors with equal shapes along the first dimension.
@@ -212,6 +212,36 @@ public fun DoubleTensorAlgebra.svd(
     return Triple(uTensor.transposed(), sTensor, vTensor.transposed())
 }
 
+public fun DoubleTensorAlgebra.svdGolubKahan(
+    structureND: StructureND<Double>,
+    iterations: Int = 30, epsilon: Double = 1e-10
+): Triple<DoubleTensor, DoubleTensor, DoubleTensor> {
+    val size = structureND.dimension
+    val commonShape = structureND.shape.slice(0 until size - 2)
+    val (n, m) = structureND.shape.slice(size - 2 until size)
+    val uTensor = zeros(commonShape + intArrayOf(n, m))
+    val sTensor = zeros(commonShape + intArrayOf(m))
+    val vTensor = zeros(commonShape + intArrayOf(m, m))
+
+    val matrices = structureND.asDoubleTensor().matrices
+    val uTensors = uTensor.matrices
+    val sTensorVectors = sTensor.vectors
+    val vTensors = vTensor.matrices
+
+    for (index in matrices.indices) {
+        val matrix = matrices[index]
+        val matrixSize = matrix.shape.linearSize
+        val curMatrix = DoubleTensor(
+            matrix.shape,
+            matrix.source.view(0, matrixSize).copy()
+        )
+        curMatrix.as2D().svdGolubKahanHelper(uTensors[index].as2D(), sTensorVectors[index], vTensors[index].as2D(),
+            iterations, epsilon)
+    }
+
+    return Triple(uTensor, sTensor, vTensor)
+}
+
 /**
  * Returns eigenvalues and eigenvectors of a real symmetric matrix input or a batch of real symmetric matrices,
  * represented by a pair `eigenvalues to eigenvectors`.
@@ -306,7 +336,7 @@ public fun DoubleTensorAlgebra.detLU(structureND: StructureND<Double>, epsilon: 
         set(n - 2, 1)
     })
 
-    val resBuffer = DoubleBuffer(detTensorShape.linearSize) { 0.0 }
+    val resBuffer = Float64Buffer(detTensorShape.linearSize) { 0.0 }
 
     val detTensor = DoubleTensor(
         detTensorShape,
@@ -359,7 +389,7 @@ public fun DoubleTensorAlgebra.covariance(vectors: List<Buffer<Double>>): Double
     check(vectors.all { it.size == m }) { "Vectors must have same shapes" }
     val resTensor = DoubleTensor(
         ShapeND(n, n),
-        DoubleBuffer(n * n) { 0.0 }
+        Float64Buffer(n * n) { 0.0 }
     )
     for (i in 0 until n) {
         for (j in 0 until n) {

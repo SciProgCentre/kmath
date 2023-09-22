@@ -6,7 +6,7 @@
 package space.kscience.kmath.ast
 
 import space.kscience.kmath.expressions.interpret
-import space.kscience.kmath.operations.DoubleField
+import space.kscience.kmath.operations.Float64Field
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -36,6 +36,6 @@ internal class TestParserPrecedence {
     fun test8(): Unit = assertEquals(18.0, "2*2^3+2".parseMath().interpret(f))
 
     private companion object {
-        private val f = DoubleField
+        private val f = Float64Field
     }
 }

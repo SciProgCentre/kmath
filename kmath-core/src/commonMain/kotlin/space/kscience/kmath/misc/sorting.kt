@@ -65,6 +65,15 @@ public fun <V, C : Comparable<C>> Buffer<V>.sortedByDescending(selector: (V) -> 
 public fun <V> Buffer<V>.indicesSortedWith(comparator: Comparator<V>): IntArray =
     permSortIndicesWith { i1, i2 -> comparator.compare(get(i1), get(i2)) }
 
+/**
+ * Create virtual zero-copy buffer with elements sorted by [comparator]
+ */
+@OptIn(UnstableKMathAPI::class)
+public fun <V> Buffer<V>.sortedWith(comparator: Comparator<V>): Buffer<V> {
+    val permutations = indicesSortedWith(comparator)
+    return VirtualBuffer(size) { this[permutations[it]] }
+}
+
 private fun <V> Buffer<V>.permSortIndicesWith(comparator: Comparator<Int>): IntArray {
     if (size < 2) return IntArray(size) { 0 }
 

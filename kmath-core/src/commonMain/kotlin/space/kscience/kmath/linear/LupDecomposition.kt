@@ -8,7 +8,7 @@ package space.kscience.kmath.linear
 import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.operations.*
 import space.kscience.kmath.structures.BufferAccessor2D
-import space.kscience.kmath.structures.DoubleBuffer
+import space.kscience.kmath.structures.Float64Buffer
 import space.kscience.kmath.structures.MutableBuffer
 import space.kscience.kmath.structures.MutableBufferFactory
 
@@ -155,11 +155,11 @@ public inline fun <reified T : Comparable<T>> LinearSpace<T, Field<T>>.lup(
     noinline checkSingular: (T) -> Boolean,
 ): LupDecomposition<T> = lup(MutableBuffer.Companion::auto, matrix, checkSingular)
 
-public fun LinearSpace<Double, DoubleField>.lup(
+public fun LinearSpace<Double, Float64Field>.lup(
     matrix: Matrix<Double>,
     singularityThreshold: Double = 1e-11,
 ): LupDecomposition<Double> =
-    lup(::DoubleBuffer, matrix) { it < singularityThreshold }
+    lup(::Float64Buffer, matrix) { it < singularityThreshold }
 
 internal fun <T : Any> LupDecomposition<T>.solve(
     factory: MutableBufferFactory<T>,
@@ -226,5 +226,5 @@ public fun <T : Comparable<T>, F : Field<T>> LinearSpace<T, F>.lupSolver(
     override fun inverse(matrix: Matrix<T>): Matrix<T> = solve(matrix, one(matrix.rowNum, matrix.colNum))
 }
 
-public fun LinearSpace<Double, DoubleField>.lupSolver(singularityThreshold: Double = 1e-11): LinearSolver<Double> =
-    lupSolver(::DoubleBuffer) { it < singularityThreshold }
+public fun LinearSpace<Double, Float64Field>.lupSolver(singularityThreshold: Double = 1e-11): LinearSolver<Double> =
+    lupSolver(::Float64Buffer) { it < singularityThreshold }

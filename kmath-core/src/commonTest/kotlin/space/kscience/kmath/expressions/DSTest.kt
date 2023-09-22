@@ -8,7 +8,7 @@
 package space.kscience.kmath.expressions
 
 import space.kscience.kmath.UnstableKMathAPI
-import space.kscience.kmath.operations.DoubleField
+import space.kscience.kmath.operations.Float64Field
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
 import kotlin.test.Test
@@ -18,10 +18,10 @@ import kotlin.test.assertFails
 internal inline fun diff(
     order: Int,
     vararg parameters: Pair<Symbol, Double>,
-    block: DSField<Double, DoubleField>.() -> Unit,
+    block: DSField<Double, Float64Field>.() -> Unit,
 ) {
     contract { callsInPlace(block, InvocationKind.EXACTLY_ONCE) }
-    DSField(DoubleField, order, mapOf(*parameters)).block()
+    DSField(Float64Field, order, mapOf(*parameters)).block()
 }
 
 internal class DSTest {
@@ -44,7 +44,7 @@ internal class DSTest {
 
     @Test
     fun dsExpressionTest() {
-        val f = DSFieldExpression(DoubleField) {
+        val f = DSFieldExpression(Float64Field) {
             val x by binding
             val y by binding
             x.pow(2) + 2 * x * y + y.pow(2) + 1

@@ -23,7 +23,7 @@ public abstract class Domain1D<T : Comparable<T>>(public val range: ClosedRange<
 @UnstableKMathAPI
 public class DoubleDomain1D(
     @Suppress("CanBeParameter") public val doubleRange: ClosedFloatingPointRange<Double>,
-) : Domain1D<Double>(doubleRange), DoubleDomain {
+) : Domain1D<Double>(doubleRange), Float64Domain {
     override fun getLowerBound(num: Int): Double {
         require(num == 0)
         return range.start

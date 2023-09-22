@@ -6,13 +6,13 @@
 package space.kscience.kmath.tensors.core
 
 import space.kscience.kmath.structures.Buffer
-import space.kscience.kmath.structures.DoubleBuffer
+import space.kscience.kmath.structures.Float64Buffer
 import space.kscience.kmath.structures.indices
 import kotlin.jvm.JvmName
 
 
 /**
- * Simplified [DoubleBuffer] to array comparison
+ * Simplified [Float64Buffer] to array comparison
  */
 public fun OffsetDoubleBuffer.contentEquals(vararg doubles: Double): Boolean = indices.all { get(it) == doubles[it] }
 

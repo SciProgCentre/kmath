@@ -5,7 +5,7 @@
 
 package space.kscience.kmath.expressions
 
-import space.kscience.kmath.operations.DoubleField
+import space.kscience.kmath.operations.Float64Field
 import space.kscience.kmath.operations.bindSymbol
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.asBuffer
@@ -21,19 +21,19 @@ internal class SimpleAutoDiffTest {
 
     fun dx(
         xBinding: Pair<Symbol, Double>,
-        body: SimpleAutoDiffField<Double, DoubleField>.(x: AutoDiffValue<Double>) -> AutoDiffValue<Double>,
-    ): DerivationResult<Double> = DoubleField.simpleAutoDiff(xBinding) { body(bindSymbol(xBinding.first)) }
+        body: SimpleAutoDiffField<Double, Float64Field>.(x: AutoDiffValue<Double>) -> AutoDiffValue<Double>,
+    ): DerivationResult<Double> = Float64Field.simpleAutoDiff(xBinding) { body(bindSymbol(xBinding.first)) }
 
     fun dxy(
         xBinding: Pair<Symbol, Double>,
         yBinding: Pair<Symbol, Double>,
-        body: SimpleAutoDiffField<Double, DoubleField>.(x: AutoDiffValue<Double>, y: AutoDiffValue<Double>) -> AutoDiffValue<Double>,
-    ): DerivationResult<Double> = DoubleField.simpleAutoDiff(xBinding, yBinding) {
+        body: SimpleAutoDiffField<Double, Float64Field>.(x: AutoDiffValue<Double>, y: AutoDiffValue<Double>) -> AutoDiffValue<Double>,
+    ): DerivationResult<Double> = Float64Field.simpleAutoDiff(xBinding, yBinding) {
         body(bindSymbol(xBinding.first), bindSymbol(yBinding.first))
     }
 
-    fun diff(block: SimpleAutoDiffField<Double, DoubleField>.() -> AutoDiffValue<Double>): SimpleAutoDiffExpression<Double, DoubleField> {
-        return SimpleAutoDiffExpression(DoubleField, block)
+    fun diff(block: SimpleAutoDiffField<Double, Float64Field>.() -> AutoDiffValue<Double>): SimpleAutoDiffExpression<Double, Float64Field> {
+        return SimpleAutoDiffExpression(Float64Field, block)
     }
 
     val x by symbol
@@ -42,7 +42,7 @@ internal class SimpleAutoDiffTest {
 
     @Test
     fun testPlusX2() {
-        val y = DoubleField.simpleAutoDiff(x to 3.0) {
+        val y = Float64Field.simpleAutoDiff(x to 3.0) {
             // diff w.r.t this x at 3
             val x = bindSymbol(x)
             x + x
@@ -65,7 +65,7 @@ internal class SimpleAutoDiffTest {
     @Test
     fun testPlus() {
         // two variables
-        val z = DoubleField.simpleAutoDiff(x to 2.0, y to 3.0) {
+        val z = Float64Field.simpleAutoDiff(x to 2.0, y to 3.0) {
             val x = bindSymbol(x)
             val y = bindSymbol(y)
             x + y
@@ -78,7 +78,7 @@ internal class SimpleAutoDiffTest {
     @Test
     fun testMinus() {
         // two variables
-        val z = DoubleField.simpleAutoDiff(x to 7.0, y to 3.0) {
+        val z = Float64Field.simpleAutoDiff(x to 7.0, y to 3.0) {
             val x = bindSymbol(x)
             val y = bindSymbol(y)
 

@@ -5,12 +5,13 @@
 
 package space.kscience.kmath.geometry
 
+import space.kscience.kmath.geometry.euclidean3d.Float64Space3D
 import space.kscience.kmath.operations.toList
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 internal class Vector3DTest {
-    private val vector = Euclidean3DSpace.vector(1.0, -7.999, 0.001)
+    private val vector = Float64Space3D.vector(1.0, -7.999, 0.001)
 
     @Test
     fun size() {

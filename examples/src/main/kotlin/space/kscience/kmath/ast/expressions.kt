@@ -8,13 +8,13 @@ package space.kscience.kmath.ast
 import space.kscience.kmath.asm.compileToExpression
 import space.kscience.kmath.expressions.MstExtendedField
 import space.kscience.kmath.expressions.Symbol.Companion.x
-import space.kscience.kmath.operations.DoubleField
+import space.kscience.kmath.operations.Float64Field
 import space.kscience.kmath.operations.invoke
 
 fun main() {
     val expr = MstExtendedField {
         x * 2.0 + number(2.0) / x - number(16.0) + asinh(x) / sin(x)
-    }.compileToExpression(DoubleField)
+    }.compileToExpression(Float64Field)
 
     val m = DoubleArray(expr.indexer.symbols.size)
     val xIdx = expr.indexer.indexOf(x)

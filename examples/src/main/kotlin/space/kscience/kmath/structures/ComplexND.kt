@@ -13,7 +13,7 @@ import space.kscience.kmath.nd.StructureND
 import space.kscience.kmath.nd.as2D
 import space.kscience.kmath.nd.ndAlgebra
 import space.kscience.kmath.nd.structureND
-import space.kscience.kmath.operations.DoubleField
+import space.kscience.kmath.operations.Float64Field
 import space.kscience.kmath.operations.invoke
 import kotlin.system.measureTimeMillis
 
@@ -21,7 +21,7 @@ fun main() {
     val dim = 1000
     val n = 1000
 
-    val realField = DoubleField.ndAlgebra(dim, dim)
+    val realField = Float64Field.ndAlgebra(dim, dim)
     val complexField: ComplexFieldND = ComplexField.ndAlgebra(dim, dim)
 
     val realTime = measureTimeMillis {

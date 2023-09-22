@@ -1,3 +1,4 @@
+import space.kscience.gradle.isInDevelopment
 import space.kscience.gradle.useApache2Licence
 import space.kscience.gradle.useSPCTeam
 
@@ -14,7 +15,7 @@ allprojects {
     }
 
     group = "space.kscience"
-    version = "0.3.2-dev-1"
+    version = "0.4.0-dev-2"
 }
 
 subprojects {
@@ -63,10 +64,17 @@ ksciencePublish {
         useApache2Licence()
         useSPCTeam()
     }
-    repository("spc","https://maven.sciprog.center/kscience")
+    github("kmath", "SciProgCentre")
+    space(
+        if (isInDevelopment) {
+            "https://maven.pkg.jetbrains.space/spc/p/sci/dev"
+        } else {
+            "https://maven.pkg.jetbrains.space/spc/p/sci/maven"
+        }
+    )
     sonatype("https://oss.sonatype.org")
 }
 
 apiValidation.nonPublicMarkers.add("space.kscience.kmath.UnstableKMathAPI")
 
-val multikVersion by extra("0.2.2")
+val multikVersion by extra("0.2.0")

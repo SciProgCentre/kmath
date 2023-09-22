@@ -6,6 +6,10 @@
 package space.kscience.kmath.geometry
 
 import space.kscience.kmath.geometry.GeometrySpace.Companion.DEFAULT_PRECISION
+import space.kscience.kmath.geometry.euclidean2d.Float64Space2D
+import space.kscience.kmath.geometry.euclidean2d.Float64Vector2D
+import space.kscience.kmath.geometry.euclidean3d.Float64Space3D
+import space.kscience.kmath.geometry.euclidean3d.Float64Vector3D
 
 /**
  * Float equality within given [precision]
@@ -36,7 +40,7 @@ public fun <V : Vector> V.equalsVector(
 public fun Float64Vector2D.equalsVector(
     other: Float64Vector2D,
     precision: Double = DEFAULT_PRECISION,
-): Boolean = equalsVector(Euclidean2DSpace, other, precision)
+): Boolean = equalsVector(Float64Space2D, other, precision)
 
 /**
  * Vector equality using Euclidian L2 norm and given [precision]
@@ -44,7 +48,7 @@ public fun Float64Vector2D.equalsVector(
 public fun Float64Vector3D.equalsVector(
     other: Float64Vector3D,
     precision: Double = DEFAULT_PRECISION,
-): Boolean = equalsVector(Euclidean3DSpace, other, precision)
+): Boolean = equalsVector(Float64Space3D, other, precision)
 
 /**
  * Line equality using [GeometrySpace.norm] provided by the [space] and given [precision]

@@ -13,21 +13,20 @@ import space.kscience.kmath.structures.indices
  * Arithmetic mean
  */
 public class Mean<T>(
-    private val group: Ring<T>,
-    private val division: (sum: T, count: Int) -> T,
+    private val field: Field<T>
 ) : ComposableStatistic<T, Pair<T, Int>, T>, BlockingStatistic<T, T> {
 
-    override fun evaluateBlocking(data: Buffer<T>): T = group {
+    override fun evaluateBlocking(data: Buffer<T>): T = with(field) {
         var res = zero
         for (i in data.indices) {
             res += data[i]
         }
-        division(res, data.size)
+        res / data.size
     }
 
     override suspend fun evaluate(data: Buffer<T>): T = super<ComposableStatistic>.evaluate(data)
 
-    override suspend fun computeIntermediate(data: Buffer<T>): Pair<T, Int> = group {
+    override suspend fun computeIntermediate(data: Buffer<T>): Pair<T, Int> = with(field) {
         var res = zero
         for (i in data.indices) {
             res += data[i]
@@ -36,32 +35,23 @@ public class Mean<T>(
     }
 
     override suspend fun composeIntermediate(first: Pair<T, Int>, second: Pair<T, Int>): Pair<T, Int> =
-        group { first.first + second.first } to (first.second + second.second)
+        with(field) { first.first + second.first } to (first.second + second.second)
 
-    override suspend fun toResult(intermediate: Pair<T, Int>): T = group {
-        division(intermediate.first, intermediate.second)
+    override suspend fun toResult(intermediate: Pair<T, Int>): T = with(field) {
+        intermediate.first/ intermediate.second
     }
 
     public companion object {
-        @Deprecated("Use Double.mean instead")
-        public val double: Mean<Double> = Mean(DoubleField) { sum, count -> sum / count }
-
-        @Deprecated("Use Int.mean instead")
-        public val int: Mean<Int> = Mean(IntRing) { sum, count -> sum / count }
-
-        @Deprecated("Use Long.mean instead")
-        public val long: Mean<Long> = Mean(LongRing) { sum, count -> sum / count }
-
-        public fun evaluate(buffer: Buffer<Double>): Double = DoubleField.mean.evaluateBlocking(buffer)
-        public fun evaluate(buffer: Buffer<Int>): Int = IntRing.mean.evaluateBlocking(buffer)
-        public fun evaluate(buffer: Buffer<Long>): Long = LongRing.mean.evaluateBlocking(buffer)
+        public fun evaluate(buffer: Buffer<Double>): Double = Float64Field.mean.evaluateBlocking(buffer)
+        public fun evaluate(buffer: Buffer<Int>): Int = Int32Ring.mean.evaluateBlocking(buffer)
+        public fun evaluate(buffer: Buffer<Long>): Long = Int64Ring.mean.evaluateBlocking(buffer)
     }
 }
 
 
 //TODO replace with optimized version which respects overflow
-public val DoubleField.mean: Mean<Double> get() = Mean(DoubleField) { sum, count -> sum / count }
-public val IntRing.mean: Mean<Int> get() = Mean(IntRing) { sum, count -> sum / count }
-public val LongRing.mean: Mean<Long> get() = Mean(LongRing) { sum, count -> sum / count }
+public val Float64Field.mean: Mean<Double> get() = Mean(Float64Field)
+public val Int32Ring.mean: Mean<Int> get() = Mean(Int32Field)
+public val Int64Ring.mean: Mean<Long> get() = Mean(Int64Field)
 
 

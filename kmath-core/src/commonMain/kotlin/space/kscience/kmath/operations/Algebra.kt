@@ -300,7 +300,7 @@ public interface Ring<T> : Group<T>, RingOps<T> {
  * commutative operations [add] and [multiply]; binary operation [divide] as multiplication of left operand by
  * reciprocal of right one.
  *
- * @param T the type of element of this semifield.
+ * @param T the type of the semifield element.
  */
 public interface FieldOps<T> : RingOps<T> {
     /**
@@ -336,10 +336,12 @@ public interface FieldOps<T> : RingOps<T> {
 
 /**
  * Represents field i.e., algebraic structure with three operations: associative, commutative addition and
- * multiplication, and division. **This interface differs from the eponymous mathematical definition: fields in KMath
+ * multiplication, and division.
+ *
+ * **This interface differs from the eponymous mathematical definition: fields in KMath
  * also support associative multiplication by scalar.**
  *
- * @param T the type of element of this field.
+ * @param T the type of the field element.
  */
 public interface Field<T> : Ring<T>, FieldOps<T>, ScaleOperations<T>, NumericAlgebra<T> {
     override fun number(value: Number): T = scale(one, value.toDouble())

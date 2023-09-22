@@ -7,7 +7,7 @@ package space.kscience.kmath.real
 
 import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.linear.Point
-import space.kscience.kmath.operations.DoubleL2Norm
+import space.kscience.kmath.operations.Float64L2Norm
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.MutableBuffer.Companion.double
 import space.kscience.kmath.structures.asBuffer
@@ -16,7 +16,6 @@ import kotlin.math.pow
 
 public typealias DoubleVector = Point<Double>
 
-@Suppress("FunctionName")
 public fun DoubleVector(vararg doubles: Double): DoubleVector = doubles.asBuffer()
 
 /**
@@ -103,4 +102,4 @@ public fun DoubleVector.sum(): Double {
     return res
 }
 
-public val DoubleVector.norm: Double get() = DoubleL2Norm.norm(this)
+public val DoubleVector.norm: Double get() = Float64L2Norm.norm(this)
