@@ -8,13 +8,7 @@ package space.kscience.kmath.geometry
 import space.kscience.kmath.complex.Quaternion
 import space.kscience.kmath.complex.QuaternionAlgebra
 import space.kscience.kmath.complex.conjugate
-import space.kscience.kmath.complex.normalized
-import space.kscience.kmath.geometry.euclidean3d.Float32Space3D
-import space.kscience.kmath.geometry.euclidean3d.Float32Vector3D
 import space.kscience.kmath.geometry.euclidean3d.theta
-import kotlin.math.asin
-import kotlin.math.atan2
-import kotlin.math.pow
 
 public operator fun Quaternion.times(other: Quaternion): Quaternion = QuaternionAlgebra.multiply(this, other)
 
@@ -50,11 +44,11 @@ public infix fun Quaternion.dot(other: Quaternion): Double = w * other.w + x * o
 //    return Float32Vector3D(roll, pitch, yaw)
 //}
 
-/**
- * Quaternion to XYZ Cardan angles
- */
-public fun Quaternion.toEuler(): Float32Vector3D = if (QuaternionAlgebra.norm(this) == 0.0) {
-    Float32Space3D.zero
-} else {
-    normalized().normalizedToEuler()
-}
+///**
+// * Quaternion to XYZ Cardan angles
+// */
+//public fun Quaternion.toEuler(): Float32Vector3D = if (QuaternionAlgebra.norm(this) == 0.0) {
+//    Float32Space3D.zero
+//} else {
+//    normalized().normalizedToEuler()
+//}
