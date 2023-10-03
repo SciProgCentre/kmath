@@ -7,7 +7,6 @@ package space.kscience.kmath.operations
 
 import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.expressions.Symbol
-import space.kscience.kmath.expressions.symbol
 
 /**
  * An algebra for generic boolean logic
@@ -61,8 +60,8 @@ public interface LogicAlgebra<T : Any> : Algebra<T> {
 
 
     public companion object {
-        public val TRUE: Symbol by symbol
-        public val FALSE: Symbol by symbol
+        public val TRUE: Symbol = Symbol("TRUE")//by symbol
+        public val FALSE: Symbol = Symbol("FALSE")// by symbol
     }
 }
 

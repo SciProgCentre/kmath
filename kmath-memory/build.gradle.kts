@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsRootExtension
-
 plugins {
     id("space.kscience.gradle.mpp")
 }
@@ -18,5 +16,5 @@ readme {
     """.trimIndent()
 }
 
-rootProject.the<NodeJsRootExtension>().versions.webpack.version = "5.76.2"
-rootProject.the<NodeJsRootExtension>().nodeVersion = "20.2.0"
+//rootProject.the<NodeJsRootExtension>().versions.webpack.version = "5.76.2"
+//rootProject.the<NodeJsRootExtension>().nodeVersion = "20.8.0"
