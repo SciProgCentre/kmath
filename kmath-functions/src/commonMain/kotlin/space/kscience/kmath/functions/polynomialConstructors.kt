@@ -21,8 +21,3 @@ public fun <C> Polynomial(coefficients: List<C>, reverse: Boolean = false): Poly
 @Suppress("FunctionName")
 public fun <C> Polynomial(vararg coefficients: C, reverse: Boolean = false): Polynomial<C> =
     Polynomial(with(coefficients) { if (reverse) reversed() else toList() })
-
-/**
- * Represents [this] constant as a [Polynomial].
- */
-public fun <C> C.asPolynomial() : Polynomial<C> = Polynomial(listOf(this))

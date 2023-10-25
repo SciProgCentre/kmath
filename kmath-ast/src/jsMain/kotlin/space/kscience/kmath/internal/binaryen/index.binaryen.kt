@@ -52,7 +52,7 @@ internal external fun createType(types: Array<Type>): Type
 
 internal external fun expandType(type: Type): Array<Type>
 
-internal external enum class ExpressionIds {
+internal external enum class  ExpressionIds {
     Invalid,
     Block,
     If,

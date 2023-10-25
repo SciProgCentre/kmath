@@ -5,6 +5,10 @@
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
+plugins {
+    id("org.gradle.toolchains.foojay-resolver-convention") version "0.7.0"
+}
+
 dependencyResolutionManagement {
     val projectProperties = java.util.Properties()
     file("../gradle.properties").inputStream().use {
