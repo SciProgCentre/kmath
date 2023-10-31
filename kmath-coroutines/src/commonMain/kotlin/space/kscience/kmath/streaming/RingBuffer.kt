@@ -65,9 +65,7 @@ public class RingBuffer<T>(
         }
     }
 
-
-    @Suppress("NOTHING_TO_INLINE")
-    private inline fun Int.forward(n: Int): Int = (this + n) % (buffer.size)
+    private fun Int.forward(n: Int): Int = (this + n) % (buffer.size)
 
     override fun toString(): String = Buffer.toString(this)
 

@@ -8,9 +8,8 @@
     "OVERRIDING_FINAL_MEMBER",
     "RETURN_TYPE_MISMATCH_ON_OVERRIDE",
     "CONFLICTING_OVERLOADS",
-    "NO_EXPLICIT_VISIBILITY_IN_API_MODE_WARNING",
     "PropertyName",
-    "ClassName",
+    "ClassName", "ENUM_CLASS_IN_EXTERNAL_DECLARATION_WARNING",
 )
 
 @file:JsModule("binaryen")
@@ -53,7 +52,7 @@ internal external fun createType(types: Array<Type>): Type
 
 internal external fun expandType(type: Type): Array<Type>
 
-internal external enum class ExpressionIds {
+internal external enum class  ExpressionIds {
     Invalid,
     Block,
     If,

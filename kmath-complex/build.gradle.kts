@@ -6,7 +6,6 @@ kscience {
     jvm()
     js()
     native()
-
     wasm()
 
     dependencies {

@@ -5,6 +5,8 @@
 
 package space.kscience.kmath.memory
 
+import kotlin.experimental.ExperimentalNativeApi
+
 @PublishedApi
 internal class NativeMemory(
     val array: ByteArray,
@@ -26,6 +28,7 @@ internal class NativeMemory(
         return NativeMemory(copy)
     }
 
+    @OptIn(ExperimentalNativeApi::class)
     private val reader: MemoryReader = object : MemoryReader {
         override val memory: Memory get() = this@NativeMemory
 
@@ -48,6 +51,7 @@ internal class NativeMemory(
 
     override fun reader(): MemoryReader = reader
 
+    @OptIn(ExperimentalNativeApi::class)
     private val writer: MemoryWriter = object : MemoryWriter {
         override val memory: Memory get() = this@NativeMemory
 
