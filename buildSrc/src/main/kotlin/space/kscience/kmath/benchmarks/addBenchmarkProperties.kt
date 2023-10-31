@@ -54,9 +54,9 @@ fun Project.addBenchmarkProperties() {
         p.extensions.findByType(KScienceReadmeExtension::class.java)?.run {
             benchmarksProject.extensions.findByType(BenchmarksExtension::class.java)?.configurations?.forEach { cfg ->
                 property("benchmark${cfg.name.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }}") {
-                    val launches = benchmarksProject.buildDir.resolve("reports/benchmarks/${cfg.name}")
+                    val launches = benchmarksProject.layout.buildDirectory.dir("reports/benchmarks/${cfg.name}").get()
 
-                    val resDirectory = launches.listFiles()?.maxByOrNull {
+                    val resDirectory = launches.files().maxByOrNull {
                         LocalDateTime.parse(it.name, ISO_DATE_TIME).atZone(ZoneId.systemDefault()).toInstant()
                     }
 

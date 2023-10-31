@@ -9,7 +9,7 @@
     "RETURN_TYPE_MISMATCH_ON_OVERRIDE",
     "CONFLICTING_OVERLOADS",
     "PropertyName",
-    "ClassName",
+    "ClassName", "ENUM_CLASS_IN_EXTERNAL_DECLARATION_WARNING",
 )
 
 @file:JsModule("binaryen")
