@@ -19,6 +19,7 @@
 ### Deprecated
 
 ### Removed
+- `asPolynomial` function due to scope pollution
 
 ### Fixed
 - Median statistics

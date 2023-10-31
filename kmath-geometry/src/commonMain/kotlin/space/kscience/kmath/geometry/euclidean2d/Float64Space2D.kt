@@ -15,6 +15,7 @@ import space.kscience.kmath.geometry.GeometrySpace
 import space.kscience.kmath.geometry.Vector2D
 import space.kscience.kmath.linear.Float64LinearSpace
 import space.kscience.kmath.operations.Float64Field
+import space.kscience.kmath.operations.ScaleOperations
 import kotlin.math.pow
 import kotlin.math.sqrt
 
@@ -28,9 +29,7 @@ public val Vector2D<Double>.r: Double get() = Float64Space2D.norm(this)
 /**
  * 2D Euclidean space
  */
-public object Float64Space2D : GeometrySpace<DoubleVector2D, Double> {
-
-    public val linearSpace: Float64LinearSpace = Float64LinearSpace
+public object Float64Space2D : GeometrySpace<DoubleVector2D>, ScaleOperations<DoubleVector2D> {
 
     @Serializable
     @SerialName("Float64Vector2D")
@@ -71,5 +70,7 @@ public object Float64Space2D : GeometrySpace<DoubleVector2D, Double> {
 
     override val defaultPrecision: Double = 1e-6
 }
+
+public fun Float64Vector2D(x: Number, y: Number): Float64Vector2D = Float64Space2D.vector(x, y)
 
 public val Float64Field.euclidean2D: Float64Space2D get() = Float64Space2D
