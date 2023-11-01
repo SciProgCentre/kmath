@@ -54,7 +54,7 @@ public class SplineIntegrator<T : Comparable<T>>(
     public val algebra: Field<T>,
     public val bufferFactory: MutableBufferFactory<T>,
 ) : UnivariateIntegrator<T> {
-    override fun process(integrand: UnivariateIntegrand<T>): UnivariateIntegrand<T> = algebra {
+    override fun integrate(integrand: UnivariateIntegrand<T>): UnivariateIntegrand<T> = algebra {
         val range = integrand[IntegrationRange] ?: 0.0..1.0
 
         val interpolator: PolynomialInterpolator<T> = SplineInterpolator(algebra, bufferFactory)
@@ -72,7 +72,7 @@ public class SplineIntegrator<T : Comparable<T>>(
         )
         val res = polynomials.integrate(algebra, number(range.start)..number(range.endInclusive))
         integrand.withAttributes {
-            value(res)
+            IntegrandValue(res)
             IntegrandCallsPerformed(integrand.calls + nodes.size)
         }
     }
@@ -86,7 +86,7 @@ public class SplineIntegrator<T : Comparable<T>>(
  */
 @UnstableKMathAPI
 public object DoubleSplineIntegrator : UnivariateIntegrator<Double> {
-    override fun process(integrand: UnivariateIntegrand<Double>): UnivariateIntegrand<Double> {
+    override fun integrate(integrand: UnivariateIntegrand<Double>): UnivariateIntegrand<Double> {
         val range = integrand[IntegrationRange] ?: 0.0..1.0
         val interpolator: PolynomialInterpolator<Double> = SplineInterpolator(Float64Field, ::Float64Buffer)
 
@@ -100,7 +100,7 @@ public object DoubleSplineIntegrator : UnivariateIntegrator<Double> {
         val polynomials = interpolator.interpolatePolynomials(nodes, values)
         val res = polynomials.integrate(Float64Field, range)
         return integrand.withAttributes {
-            value(res)
+            IntegrandValue(res)
             IntegrandCallsPerformed(integrand.calls + nodes.size)
         }
     }

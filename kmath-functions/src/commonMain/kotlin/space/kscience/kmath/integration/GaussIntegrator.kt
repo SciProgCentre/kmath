@@ -54,7 +54,7 @@ public class GaussIntegrator<T : Any>(
         }
     }
 
-    override fun process(integrand: UnivariateIntegrand<T>): UnivariateIntegrand<T> = with(algebra) {
+    override fun integrate(integrand: UnivariateIntegrand<T>): UnivariateIntegrand<T> = with(algebra) {
         val f = integrand.function
         val (points, weights) = buildRule(integrand)
         var res: T = zero
@@ -68,7 +68,7 @@ public class GaussIntegrator<T : Any>(
             res = t
         }
         return integrand.withAttributes {
-            value(res)
+            IntegrandValue(res)
             IntegrandCallsPerformed(integrand.calls + points.size)
         }
     }
@@ -102,7 +102,7 @@ public inline fun <reified T : Any> GaussIntegrator<T>.integrate(
     val ranges = UnivariateIntegrandRanges(
         (0 until intervals).map { i -> (range.start + rangeSize * i)..(range.start + rangeSize * (i + 1)) to order }
     )
-    return process(
+    return integrate(
         UnivariateIntegrand<T>(
             attributeBuilder = {
                 IntegrationRange(range)

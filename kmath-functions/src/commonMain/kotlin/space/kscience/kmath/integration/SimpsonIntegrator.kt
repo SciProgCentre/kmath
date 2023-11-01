@@ -44,12 +44,12 @@ public class SimpsonIntegrator<T : Any>(
         return res
     }
 
-    override fun process(integrand: UnivariateIntegrand<T>): UnivariateIntegrand<T> {
+    override fun integrate(integrand: UnivariateIntegrand<T>): UnivariateIntegrand<T> {
         val ranges = integrand[UnivariateIntegrandRanges]
         return if (ranges != null) {
             val res = algebra.sum(ranges.ranges.map { integrateRange(integrand, it.first, it.second) })
             integrand.withAttributes {
-                value(res)
+                IntegrandValue(res)
                 IntegrandCallsPerformed(integrand.calls + ranges.ranges.sumOf { it.second })
             }
         } else {
@@ -58,7 +58,7 @@ public class SimpsonIntegrator<T : Any>(
             val range = integrand[IntegrationRange] ?: 0.0..1.0
             val res = integrateRange(integrand, range, numPoints)
             integrand.withAttributes {
-                value(res)
+                IntegrandValue(res)
                 IntegrandCallsPerformed(integrand.calls + numPoints)
             }
         }
@@ -96,12 +96,12 @@ public object DoubleSimpsonIntegrator : UnivariateIntegrator<Double> {
         return res
     }
 
-    override fun process(integrand: UnivariateIntegrand<Double>): UnivariateIntegrand<Double> {
+    override fun integrate(integrand: UnivariateIntegrand<Double>): UnivariateIntegrand<Double> {
         val ranges = integrand[UnivariateIntegrandRanges]
         return if (ranges != null) {
             val res = ranges.ranges.sumOf { integrateRange(integrand, it.first, it.second) }
             integrand.withAttributes {
-                value(res)
+                IntegrandValue(res)
                 IntegrandCallsPerformed(integrand.calls + ranges.ranges.sumOf { it.second })
             }
         } else {
@@ -110,7 +110,7 @@ public object DoubleSimpsonIntegrator : UnivariateIntegrator<Double> {
             val range = integrand[IntegrationRange] ?: 0.0..1.0
             val res = integrateRange(integrand, range, numPoints)
             integrand.withAttributes {
-                value(res)
+                IntegrandValue(res)
                 IntegrandCallsPerformed(integrand.calls + numPoints)
             }
         }

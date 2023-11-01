@@ -8,9 +8,9 @@ package space.kscience.kmath.integration
 /**
  * A general interface for all integrators.
  */
-public interface Integrator<I : Integrand> {
+public interface Integrator<T, I : Integrand<T>> {
     /**
      * Runs one integration pass and return a new [Integrand] with a new set of features.
      */
-    public fun process(integrand: I): I
+    public fun integrate(integrand: I): I
 }

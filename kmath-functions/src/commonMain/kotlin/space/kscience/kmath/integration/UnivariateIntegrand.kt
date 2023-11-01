@@ -34,7 +34,7 @@ public inline fun <reified T : Any> UnivariateIntegrand(
     noinline function: (Double) -> T,
 ): UnivariateIntegrand<T> = UnivariateIntegrand(safeTypeOf(), Attributes(attributeBuilder), function)
 
-public typealias UnivariateIntegrator<T> = Integrator<UnivariateIntegrand<T>>
+public typealias UnivariateIntegrator<T> = Integrator<T, UnivariateIntegrand<T>>
 
 public object IntegrationRange : IntegrandAttribute<ClosedRange<Double>>
 
@@ -70,7 +70,7 @@ public fun TypedAttributesBuilder<UnivariateIntegrand<*>>.integrationNodes(varar
 public inline fun <reified T : Any> UnivariateIntegrator<T>.integrate(
     attributesBuilder: TypedAttributesBuilder<UnivariateIntegrand<T>>.() -> Unit,
     noinline function: (Double) -> T,
-): UnivariateIntegrand<T> = process(UnivariateIntegrand(attributesBuilder, function))
+): UnivariateIntegrand<T> = integrate(UnivariateIntegrand(attributesBuilder, function))
 
 /**
  * A shortcut method to integrate a [function] in [range] with additional features.
@@ -83,7 +83,7 @@ public inline fun <reified T : Any> UnivariateIntegrator<T>.integrate(
     noinline function: (Double) -> T,
 ): UnivariateIntegrand<T> {
 
-    return process(
+    return integrate(
         UnivariateIntegrand(
             attributeBuilder = {
                 IntegrationRange(range)
