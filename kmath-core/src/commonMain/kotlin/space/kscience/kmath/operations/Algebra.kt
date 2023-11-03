@@ -5,22 +5,32 @@
 
 package space.kscience.kmath.operations
 
+import space.kscience.attributes.SafeType
 import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.expressions.Symbol
 import space.kscience.kmath.operations.Ring.Companion.optimizedPower
 import space.kscience.kmath.structures.MutableBufferFactory
-import kotlin.reflect.KType
+
+/**
+ * An interface containing [type] for dynamic type checking.
+ */
+public interface WithType<out T> {
+    public val type: SafeType<T>
+}
+
 
 /**
  * Represents an algebraic structure.
  *
  * @param T the type of element which Algebra operates on.
  */
-public interface Algebra<T> {
+public interface Algebra<T> : WithType<T> {
     /**
      * Provide a factory for buffers, associated with this [Algebra]
      */
-    public val bufferFactory: MutableBufferFactory<T> get() = MutableBufferFactory.boxing()
+    public val bufferFactory: MutableBufferFactory<T>
+
+    override val type: SafeType<T> get() = bufferFactory.type
 
     /**
      * Wraps a raw string to [T] object. This method is designed for three purposes:
@@ -265,7 +275,7 @@ public interface Ring<T> : Group<T>, RingOps<T> {
      */
     public fun power(arg: T, pow: UInt): T = optimizedPower(arg, pow)
 
-    public companion object{
+    public companion object {
         /**
          * Raises [arg] to the non-negative integer power [exponent].
          *
@@ -348,7 +358,7 @@ public interface Field<T> : Ring<T>, FieldOps<T>, ScaleOperations<T>, NumericAlg
 
     public fun power(arg: T, pow: Int): T = optimizedPower(arg, pow)
 
-    public companion object{
+    public companion object {
         /**
          * Raises [arg] to the integer power [exponent].
          *
@@ -361,7 +371,11 @@ public interface Field<T> : Ring<T>, FieldOps<T>, ScaleOperations<T>, NumericAlg
          * @author Iaroslav Postovalov, Evgeniy Zhelenskiy
          */
         private fun <T> Field<T>.optimizedPower(arg: T, exponent: Int): T = when {
-            exponent < 0 -> one / (this as Ring<T>).optimizedPower(arg, if (exponent == Int.MIN_VALUE) Int.MAX_VALUE.toUInt().inc() else (-exponent).toUInt())
+            exponent < 0 -> one / (this as Ring<T>).optimizedPower(
+                arg,
+                if (exponent == Int.MIN_VALUE) Int.MAX_VALUE.toUInt().inc() else (-exponent).toUInt()
+            )
+
             else -> (this as Ring<T>).optimizedPower(arg, exponent.toUInt())
         }
     }

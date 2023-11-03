@@ -22,11 +22,27 @@ import space.kscience.kmath.structures.*
  * @param l The lower triangular matrix in this decomposition. It may have [LowerTriangular].
  * @param u The upper triangular matrix in this decomposition. It may have [UpperTriangular].
  */
-public data class LupDecomposition<T>(
+public class LupDecomposition<T>(
+    public val linearSpace: LinearSpace<T, Ring<T>>,
     public val l: Matrix<T>,
     public val u: Matrix<T>,
     public val pivot: IntBuffer,
-)
+) {
+    public val elementAlgebra: Ring<T> get() = linearSpace.elementAlgebra
+
+    public val pivotMatrix: VirtualMatrix<T>
+        get() = VirtualMatrix(linearSpace.type, l.rowNum, l.colNum) { row, column ->
+            if (column == pivot[row]) elementAlgebra.one else elementAlgebra.zero
+        }
+
+    public val <T> LupDecomposition<T>.determinant by lazy {
+        elementAlgebra { (0 until l.shape[0]).fold(if (even) one else -one) { value, i -> value * lu[i, i] } }
+    }
+
+}
+
+
+
 
 
 public class LupDecompositionAttribute<T>(type: SafeType<LupDecomposition<T>>) :
@@ -168,7 +184,7 @@ public fun <T : Comparable<T>> LinearSpace<T, Field<T>>.lup(
                 for (row in col + 1 until m) lu[row, col] /= luDiag
             }
 
-            val l: MatrixWrapper<T> = VirtualMatrix(rowNum, colNum) { i, j ->
+            val l: MatrixWrapper<T> = VirtualMatrix(type, rowNum, colNum) { i, j ->
                 when {
                     j < i -> lu[i, j]
                     j == i -> one
@@ -176,7 +192,7 @@ public fun <T : Comparable<T>> LinearSpace<T, Field<T>>.lup(
                 }
             }.withAttribute(LowerTriangular)
 
-            val u = VirtualMatrix(rowNum, colNum) { i, j ->
+            val u = VirtualMatrix(type, rowNum, colNum) { i, j ->
                 if (j >= i) lu[i, j] else zero
             }.withAttribute(UpperTriangular)
 //
@@ -184,7 +200,7 @@ public fun <T : Comparable<T>> LinearSpace<T, Field<T>>.lup(
 //                if (j == pivot[i]) one else zero
 //            }.withAttribute(Determinant, if (even) one else -one)
 
-            return LupDecomposition(l, u, pivot.asBuffer())
+            return LupDecomposition(this@lup, l, u, pivot.asBuffer())
         }
     }
 }

@@ -3,13 +3,11 @@
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
-@file:OptIn(UnstableKMathAPI::class)
 @file:Suppress("UnusedReceiverParameter")
 
 package space.kscience.kmath.linear
 
 import space.kscience.attributes.*
-import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.nd.StructureAttribute
 
 /**
@@ -51,9 +49,11 @@ public val <T> MatrixOperations<T>.Inverted: Inverted<T> get() = Inverted(safeTy
  *
  * @param T the type of matrices' items.
  */
-public class Determinant<T> : MatrixAttribute<T>
+public class Determinant<T>(type: SafeType<T>) :
+    PolymorphicAttribute<T>(type),
+    MatrixAttribute<T>
 
-public val <T> MatrixOperations<T>.Determinant: Determinant<T> get() = Determinant()
+public val <T> MatrixOperations<T>.Determinant: Determinant<T> get() = Determinant(type)
 
 /**
  * Matrices with this feature are lower triangular ones.

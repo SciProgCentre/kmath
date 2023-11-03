@@ -5,6 +5,8 @@
 
 package space.kscience.kmath.structures
 
+import space.kscience.attributes.SafeType
+import space.kscience.attributes.safeTypeOf
 import kotlin.jvm.JvmInline
 
 /**
@@ -14,6 +16,8 @@ import kotlin.jvm.JvmInline
  */
 @JvmInline
 public value class Int16Buffer(public val array: ShortArray) : MutableBuffer<Short> {
+
+    override val type: SafeType<Short> get() = safeTypeOf()
     override val size: Int get() = array.size
 
     override operator fun get(index: Int): Short = array[index]

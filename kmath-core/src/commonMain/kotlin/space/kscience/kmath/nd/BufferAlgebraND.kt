@@ -7,6 +7,8 @@
 
 package space.kscience.kmath.nd
 
+import space.kscience.attributes.SafeType
+import space.kscience.attributes.safeTypeOf
 import space.kscience.kmath.PerformancePitfall
 import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.operations.*
@@ -105,6 +107,9 @@ public open class BufferedGroupNDOps<T, out A : Group<T>>(
     override val bufferAlgebra: BufferAlgebra<T, A>,
     override val indexerBuilder: (ShapeND) -> ShapeIndexer = BufferAlgebraND.defaultIndexerBuilder,
 ) : GroupOpsND<T, A>, BufferAlgebraND<T, A> {
+
+    override val type: SafeType<StructureND<T>> get() = safeTypeOf<StructureND<T>>()
+
     override fun StructureND<T>.unaryMinus(): StructureND<T> = map { -it }
 }
 

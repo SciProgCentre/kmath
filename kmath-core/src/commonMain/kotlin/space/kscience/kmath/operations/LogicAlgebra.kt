@@ -5,6 +5,8 @@
 
 package space.kscience.kmath.operations
 
+import space.kscience.attributes.SafeType
+import space.kscience.attributes.safeTypeOf
 import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.expressions.Symbol
 
@@ -71,6 +73,8 @@ public interface LogicAlgebra<T : Any> : Algebra<T> {
 @UnstableKMathAPI
 @Suppress("EXTENSION_SHADOWED_BY_MEMBER")
 public object BooleanAlgebra : LogicAlgebra<Boolean> {
+
+    override val type: SafeType<Boolean> get() = safeTypeOf()
 
     override fun const(boolean: Boolean): Boolean = boolean
 

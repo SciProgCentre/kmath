@@ -5,6 +5,7 @@
 
 package space.kscience.kmath.nd
 
+import space.kscience.attributes.SafeType
 import space.kscience.kmath.PerformancePitfall
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.BufferFactory
@@ -23,6 +24,8 @@ public open class BufferND<out T>(
     public open val buffer: Buffer<T>,
 ) : StructureND<T> {
 
+    override val type: SafeType<T> get() = buffer.type
+
     @PerformancePitfall
     override operator fun get(index: IntArray): T = buffer[indices.offset(index)]
 
@@ -36,7 +39,7 @@ public open class BufferND<out T>(
  */
 public inline fun <reified T> BufferND(
     shape: ShapeND,
-    bufferFactory: BufferFactory<T> = BufferFactory.auto<T>(),
+    bufferFactory: BufferFactory<T> = BufferFactory<T>(),
     crossinline initializer: (IntArray) -> T,
 ): BufferND<T> {
     val strides = Strides(shape)
@@ -84,10 +87,10 @@ public open class MutableBufferND<T>(
 /**
  * Create a generic [BufferND] using provided [initializer]
  */
-public fun <T> MutableBufferND(
+public inline fun <reified T> MutableBufferND(
     shape: ShapeND,
-    bufferFactory: MutableBufferFactory<T> = MutableBufferFactory.boxing(),
-    initializer: (IntArray) -> T,
+    bufferFactory: MutableBufferFactory<T> = MutableBufferFactory(),
+    crossinline initializer: (IntArray) -> T,
 ): MutableBufferND<T> {
     val strides = Strides(shape)
     return MutableBufferND(strides, bufferFactory(strides.linearSize) { initializer(strides.index(it)) })

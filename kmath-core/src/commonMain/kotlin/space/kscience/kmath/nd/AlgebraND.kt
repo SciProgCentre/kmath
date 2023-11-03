@@ -8,7 +8,7 @@ package space.kscience.kmath.nd
 import space.kscience.kmath.PerformancePitfall
 import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.operations.*
-import kotlin.reflect.KClass
+import space.kscience.kmath.structures.MutableBufferFactory
 
 /**
  * The base interface for all ND-algebra implementations.
@@ -91,6 +91,8 @@ public interface AlgebraND<T, out C : Algebra<T>> : Algebra<StructureND<T>> {
  * @param A the type of group over structure elements.
  */
 public interface GroupOpsND<T, out A : GroupOps<T>> : GroupOps<StructureND<T>>, AlgebraND<T, A> {
+    override val bufferFactory: MutableBufferFactory<StructureND<T>> get() = MutableBufferFactory<StructureND<T>>()
+
     /**
      * Element-wise addition.
      *

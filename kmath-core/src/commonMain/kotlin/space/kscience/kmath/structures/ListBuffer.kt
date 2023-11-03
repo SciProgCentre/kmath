@@ -5,7 +5,8 @@
 
 package space.kscience.kmath.structures
 
-import kotlin.jvm.JvmInline
+import space.kscience.attributes.SafeType
+import space.kscience.attributes.safeTypeOf
 
 /**
  * [Buffer] implementation over [List].
@@ -13,9 +14,7 @@ import kotlin.jvm.JvmInline
  * @param T the type of elements contained in the buffer.
  * @property list The underlying list.
  */
-public class ListBuffer<T>(public val list: List<T>) : Buffer<T> {
-
-    public constructor(size: Int, initializer: (Int) -> T) : this(List(size, initializer))
+public class ListBuffer<T>(override val type: SafeType<T>, public val list: List<T>) : Buffer<T> {
 
     override val size: Int get() = list.size
 
@@ -29,7 +28,12 @@ public class ListBuffer<T>(public val list: List<T>) : Buffer<T> {
 /**
  * Returns an [ListBuffer] that wraps the original list.
  */
-public fun <T> List<T>.asBuffer(): ListBuffer<T> = ListBuffer(this)
+public fun <T> List<T>.asBuffer(type: SafeType<T>): ListBuffer<T> = ListBuffer(type, this)
+
+/**
+ * Returns an [ListBuffer] that wraps the original list.
+ */
+public inline fun <reified T> List<T>.asBuffer(): ListBuffer<T> = asBuffer(safeTypeOf())
 
 /**
  * [MutableBuffer] implementation over [MutableList].
@@ -37,10 +41,7 @@ public fun <T> List<T>.asBuffer(): ListBuffer<T> = ListBuffer(this)
  * @param T the type of elements contained in the buffer.
  * @property list The underlying list.
  */
-@JvmInline
-public value class MutableListBuffer<T>(public val list: MutableList<T>) : MutableBuffer<T> {
-
-    public constructor(size: Int, initializer: (Int) -> T) : this(MutableList(size, initializer))
+public class MutableListBuffer<T>(override val type: SafeType<T>, public val list: MutableList<T>) : MutableBuffer<T> {
 
     override val size: Int get() = list.size
 
@@ -51,10 +52,24 @@ public value class MutableListBuffer<T>(public val list: MutableList<T>) : Mutab
     }
 
     override operator fun iterator(): Iterator<T> = list.iterator()
-    override fun copy(): MutableBuffer<T> = MutableListBuffer(ArrayList(list))
+    override fun copy(): MutableBuffer<T> = MutableListBuffer(type, ArrayList(list))
+
+    override fun toString(): String = Buffer.toString(this)
 }
+
 
 /**
  * Returns an [MutableListBuffer] that wraps the original list.
  */
-public fun <T> MutableList<T>.asMutableBuffer(): MutableListBuffer<T> = MutableListBuffer(this)
+public fun <T> MutableList<T>.asMutableBuffer(type: SafeType<T>): MutableListBuffer<T> = MutableListBuffer(
+    type,
+    this
+)
+
+/**
+ * Returns an [MutableListBuffer] that wraps the original list.
+ */
+public inline fun <reified T> MutableList<T>.asMutableBuffer(): MutableListBuffer<T> = MutableListBuffer(
+    safeTypeOf(),
+    this
+)

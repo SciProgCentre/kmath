@@ -13,8 +13,6 @@ import space.kscience.kmath.structures.MutableBufferFactory
 import space.kscience.kmath.structures.asBuffer
 import kotlin.math.max
 import kotlin.math.min
-import kotlin.reflect.KType
-import kotlin.reflect.typeOf
 
 /**
  * Class representing both the value and the differentials of a function.
@@ -83,6 +81,8 @@ public abstract class DSAlgebra<T, A : Ring<T>>(
     public val order: Int,
     bindings: Map<Symbol, T>,
 ) : ExpressionAlgebra<T, DS<T, A>>, SymbolIndexer {
+
+    override val bufferFactory: MutableBufferFactory<DS<T, A>> = MutableBufferFactory()
 
     /**
      * Get the compiler for number of free parameters and order.

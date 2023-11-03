@@ -52,10 +52,10 @@ public interface XYColumnarData<out T, out X : T, out Y : T> : ColumnarData<T> {
          * Create two-column data from a list of row-objects (zero-copy)
          */
         @UnstableKMathAPI
-        public fun <I, T, X : T, Y : T> ofList(
+        public inline fun <I, T, reified X : T, reified Y : T> ofList(
             list: List<I>,
-            xConverter: (I) -> X,
-            yConverter: (I) -> Y,
+            noinline xConverter: (I) -> X,
+            noinline yConverter: (I) -> Y,
         ): XYColumnarData<T, X, Y> = object : XYColumnarData<T, X, Y> {
             override val size: Int get() = list.size
 

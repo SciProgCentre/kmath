@@ -5,6 +5,7 @@
 
 package space.kscience.kmath.nd
 
+import space.kscience.attributes.SafeType
 import space.kscience.kmath.PerformancePitfall
 import space.kscience.kmath.operations.asSequence
 import space.kscience.kmath.structures.Buffer
@@ -46,6 +47,9 @@ public interface MutableStructure1D<T> : Structure1D<T>, MutableStructureND<T>, 
  */
 @JvmInline
 private value class Structure1DWrapper<out T>(val structure: StructureND<T>) : Structure1D<T> {
+
+    override val type: SafeType<T> get() = structure.type
+
     override val shape: ShapeND get() = structure.shape
     override val size: Int get() = structure.shape[0]
 
@@ -60,6 +64,9 @@ private value class Structure1DWrapper<out T>(val structure: StructureND<T>) : S
  * A 1D wrapper for a mutable nd-structure
  */
 private class MutableStructure1DWrapper<T>(val structure: MutableStructureND<T>) : MutableStructure1D<T> {
+
+    override val type: SafeType<T> get() = structure.type
+
     override val shape: ShapeND get() = structure.shape
     override val size: Int get() = structure.shape[0]
 
@@ -79,7 +86,7 @@ private class MutableStructure1DWrapper<T>(val structure: MutableStructureND<T>)
         .elements()
         .map(Pair<IntArray, T>::second)
         .toMutableList()
-        .asMutableBuffer()
+        .asMutableBuffer(type)
 
     override fun toString(): String = Buffer.toString(this)
 }
@@ -90,6 +97,9 @@ private class MutableStructure1DWrapper<T>(val structure: MutableStructureND<T>)
  */
 @JvmInline
 private value class Buffer1DWrapper<out T>(val buffer: Buffer<T>) : Structure1D<T> {
+
+    override val type: SafeType<T> get() = buffer.type
+
     override val shape: ShapeND get() = ShapeND(buffer.size)
     override val size: Int get() = buffer.size
 
@@ -102,6 +112,9 @@ private value class Buffer1DWrapper<out T>(val buffer: Buffer<T>) : Structure1D<
 }
 
 internal class MutableBuffer1DWrapper<T>(val buffer: MutableBuffer<T>) : MutableStructure1D<T> {
+
+    override val type: SafeType<T> get() = buffer.type
+
     override val shape: ShapeND get() = ShapeND(buffer.size)
     override val size: Int get() = buffer.size
 

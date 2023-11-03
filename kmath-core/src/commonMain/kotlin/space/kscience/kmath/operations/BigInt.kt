@@ -5,6 +5,8 @@
 
 package space.kscience.kmath.operations
 
+import space.kscience.attributes.SafeType
+import space.kscience.attributes.safeTypeOf
 import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.nd.BufferedRingOpsND
 import space.kscience.kmath.operations.BigInt.Companion.BASE
@@ -26,6 +28,9 @@ private typealias TBase = ULong
  */
 @OptIn(UnstableKMathAPI::class)
 public object BigIntField : Field<BigInt>, NumbersAddOps<BigInt>, ScaleOperations<BigInt> {
+
+    override val type: SafeType<BigInt> = safeTypeOf()
+
     override val zero: BigInt = BigInt.ZERO
     override val one: BigInt = BigInt.ONE
 
@@ -528,10 +533,10 @@ public fun String.parseBigInteger(): BigInt? {
 public val BigInt.algebra: BigIntField get() = BigIntField
 
 public inline fun BigInt.Companion.buffer(size: Int, initializer: (Int) -> BigInt): Buffer<BigInt> =
-    Buffer.boxing(size, initializer)
+    Buffer(size, initializer)
 
 public inline fun BigInt.Companion.mutableBuffer(size: Int, initializer: (Int) -> BigInt): Buffer<BigInt> =
-    Buffer.boxing(size, initializer)
+    Buffer(size, initializer)
 
 public val BigIntField.nd: BufferedRingOpsND<BigInt, BigIntField>
     get() = BufferedRingOpsND(BufferRingOps(BigIntField))

@@ -7,11 +7,14 @@ package space.kscience.kmath.expressions
 
 import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.operations.*
+import space.kscience.kmath.structures.MutableBufferFactory
 
 /**
  * [Algebra] over [MST] nodes.
  */
 public object MstNumericAlgebra : NumericAlgebra<MST> {
+    override val bufferFactory: MutableBufferFactory<MST> = MutableBufferFactory()
+
     override fun number(value: Number): MST.Numeric = MST.Numeric(value)
     override fun bindSymbolOrNull(value: String): Symbol = StringSymbol(value)
     override fun bindSymbol(value: String): Symbol = bindSymbolOrNull(value)
@@ -27,6 +30,9 @@ public object MstNumericAlgebra : NumericAlgebra<MST> {
  * [Group] over [MST] nodes.
  */
 public object MstGroup : Group<MST>, NumericAlgebra<MST>, ScaleOperations<MST> {
+
+    override val bufferFactory: MutableBufferFactory<MST> = MutableBufferFactory()
+
     override val zero: MST.Numeric = number(0.0)
 
     override fun number(value: Number): MST.Numeric = MstNumericAlgebra.number(value)
@@ -57,7 +63,11 @@ public object MstGroup : Group<MST>, NumericAlgebra<MST>, ScaleOperations<MST> {
 @Suppress("OVERRIDE_BY_INLINE")
 @OptIn(UnstableKMathAPI::class)
 public object MstRing : Ring<MST>, NumbersAddOps<MST>, ScaleOperations<MST> {
+
+    override val bufferFactory: MutableBufferFactory<MST> = MutableBufferFactory()
+
     override inline val zero: MST.Numeric get() = MstGroup.zero
+
     override val one: MST.Numeric = number(1.0)
 
     override fun number(value: Number): MST.Numeric = MstGroup.number(value)
@@ -87,7 +97,11 @@ public object MstRing : Ring<MST>, NumbersAddOps<MST>, ScaleOperations<MST> {
 @Suppress("OVERRIDE_BY_INLINE")
 @OptIn(UnstableKMathAPI::class)
 public object MstField : Field<MST>, NumbersAddOps<MST>, ScaleOperations<MST> {
+
+    override val bufferFactory: MutableBufferFactory<MST> = MutableBufferFactory()
+
     override inline val zero: MST.Numeric get() = MstRing.zero
+
     override inline val one: MST.Numeric get() = MstRing.one
 
     override fun bindSymbolOrNull(value: String): Symbol = MstNumericAlgebra.bindSymbolOrNull(value)
@@ -117,7 +131,11 @@ public object MstField : Field<MST>, NumbersAddOps<MST>, ScaleOperations<MST> {
  */
 @Suppress("OVERRIDE_BY_INLINE")
 public object MstExtendedField : ExtendedField<MST>, NumericAlgebra<MST> {
+
+    override val bufferFactory: MutableBufferFactory<MST> = MutableBufferFactory()
+
     override inline val zero: MST.Numeric get() = MstField.zero
+
     override inline val one: MST.Numeric get() = MstField.one
 
     override fun bindSymbolOrNull(value: String): Symbol = MstNumericAlgebra.bindSymbolOrNull(value)
@@ -164,6 +182,9 @@ public object MstExtendedField : ExtendedField<MST>, NumericAlgebra<MST> {
  */
 @UnstableKMathAPI
 public object MstLogicAlgebra : LogicAlgebra<MST> {
+
+    override val bufferFactory: MutableBufferFactory<MST> = MutableBufferFactory()
+
     override fun bindSymbolOrNull(value: String): MST = super.bindSymbolOrNull(value) ?: StringSymbol(value)
 
     override fun const(boolean: Boolean): Symbol = if (boolean) {
@@ -176,7 +197,7 @@ public object MstLogicAlgebra : LogicAlgebra<MST> {
 
     override fun MST.and(other: MST): MST = MST.Binary(Boolean::and.name, this, other)
 
-    override fun MST.or(other: MST): MST  = MST.Binary(Boolean::or.name, this, other)
+    override fun MST.or(other: MST): MST = MST.Binary(Boolean::or.name, this, other)
 
-    override fun MST.xor(other: MST): MST  = MST.Binary(Boolean::xor.name, this, other)
+    override fun MST.xor(other: MST): MST = MST.Binary(Boolean::xor.name, this, other)
 }

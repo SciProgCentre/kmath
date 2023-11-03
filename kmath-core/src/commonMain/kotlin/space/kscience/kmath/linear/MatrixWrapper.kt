@@ -39,7 +39,7 @@ public fun <T : Any, A : Attribute<T>> Matrix<T>.withAttribute(
     attribute: A,
     attrValue: T,
 ): MatrixWrapper<T> = if (this is MatrixWrapper) {
-    MatrixWrapper(origin, attributes.withAttribute(attribute,attrValue))
+    MatrixWrapper(origin, attributes.withAttribute(attribute, attrValue))
 } else {
     MatrixWrapper(this, Attributes(attribute, attrValue))
 }
@@ -68,7 +68,7 @@ public fun <T : Any> Matrix<T>.modifyAttributes(modifier: (Attributes) -> Attrib
 public fun <T : Any> LinearSpace<T, Ring<T>>.one(
     rows: Int,
     columns: Int,
-): MatrixWrapper<T> = VirtualMatrix(rows, columns) { i, j ->
+): MatrixWrapper<T> = VirtualMatrix(type, rows, columns) { i, j ->
     if (i == j) elementAlgebra.one else elementAlgebra.zero
 }.withAttribute(IsUnit)
 
@@ -79,6 +79,6 @@ public fun <T : Any> LinearSpace<T, Ring<T>>.one(
 public fun <T : Any> LinearSpace<T, Ring<T>>.zero(
     rows: Int,
     columns: Int,
-): MatrixWrapper<T> = VirtualMatrix(rows, columns) { _, _ ->
+): MatrixWrapper<T> = VirtualMatrix(type, rows, columns) { _, _ ->
     elementAlgebra.zero
 }.withAttribute(IsZero)

@@ -3,10 +3,11 @@
 ## Unreleased
 
 ### Added
-- Integer division algebras
-- Float32 geometries
-- New Attributes-kt module that could be used as stand-alone. It declares type-safe attributes containers.
-- Explicit `mutableStructureND` builders for mutable structures
+- Explicit `SafeType` for algebras and buffers.
+- Integer division algebras.
+- Float32 geometries.
+- New Attributes-kt module that could be used as stand-alone. It declares. type-safe attributes containers.
+- Explicit `mutableStructureND` builders for mutable structures.
 
 ### Changed
 - Default naming for algebra and buffers now uses IntXX/FloatXX notation instead of Java types.

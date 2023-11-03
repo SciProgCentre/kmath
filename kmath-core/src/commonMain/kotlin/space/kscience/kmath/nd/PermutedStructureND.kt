@@ -5,6 +5,7 @@
 
 package space.kscience.kmath.nd
 
+import space.kscience.attributes.SafeType
 import space.kscience.kmath.PerformancePitfall
 
 
@@ -12,6 +13,8 @@ public class PermutedStructureND<T>(
     public val origin: StructureND<T>,
     public val permutation: (IntArray) -> IntArray,
 ) : StructureND<T> {
+
+    override val type: SafeType<T> get() = origin.type
 
     override val shape: ShapeND
         get() = origin.shape
@@ -32,6 +35,7 @@ public class PermutedMutableStructureND<T>(
     public val permutation: (IntArray) -> IntArray,
 ) : MutableStructureND<T> {
 
+    override val type: SafeType<T> get() = origin.type
 
     @OptIn(PerformancePitfall::class)
     override fun set(index: IntArray, value: T) {

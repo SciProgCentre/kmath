@@ -8,7 +8,10 @@ package space.kscience.kmath.operations
 import space.kscience.kmath.operations.Int16Field.div
 import space.kscience.kmath.operations.Int32Field.div
 import space.kscience.kmath.operations.Int64Field.div
-import space.kscience.kmath.structures.*
+import space.kscience.kmath.structures.Int16
+import space.kscience.kmath.structures.Int32
+import space.kscience.kmath.structures.Int64
+import space.kscience.kmath.structures.MutableBufferFactory
 import kotlin.math.roundToInt
 import kotlin.math.roundToLong
 
@@ -22,7 +25,7 @@ import kotlin.math.roundToLong
  */
 @Suppress("EXTENSION_SHADOWED_BY_MEMBER")
 public object Int16Field : Field<Int16>, Norm<Int16, Int16>, NumericAlgebra<Int16> {
-    override val bufferFactory: MutableBufferFactory<Int16> = MutableBufferFactory(::Int16Buffer)
+    override val bufferFactory: MutableBufferFactory<Int16> = MutableBufferFactory<Int16>()
     override val zero: Int16 get() = 0
     override val one: Int16 get() = 1
 
@@ -45,7 +48,8 @@ public object Int16Field : Field<Int16>, Norm<Int16, Int16>, NumericAlgebra<Int1
  */
 @Suppress("EXTENSION_SHADOWED_BY_MEMBER")
 public object Int32Field : Field<Int32>, Norm<Int32, Int32>, NumericAlgebra<Int32> {
-    override val bufferFactory: MutableBufferFactory<Int> = MutableBufferFactory(::Int32Buffer)
+    override val bufferFactory: MutableBufferFactory<Int> = MutableBufferFactory()
+
     override val zero: Int get() = 0
     override val one: Int get() = 1
 
@@ -68,7 +72,7 @@ public object Int32Field : Field<Int32>, Norm<Int32, Int32>, NumericAlgebra<Int3
  */
 @Suppress("EXTENSION_SHADOWED_BY_MEMBER")
 public object Int64Field : Field<Int64>, Norm<Int64, Int64>, NumericAlgebra<Int64> {
-    override val bufferFactory: MutableBufferFactory<Int64> = MutableBufferFactory(::Int64Buffer)
+    override val bufferFactory: MutableBufferFactory<Int64> = MutableBufferFactory()
     override val zero: Int64 get() = 0L
     override val one: Int64 get() = 1L
 

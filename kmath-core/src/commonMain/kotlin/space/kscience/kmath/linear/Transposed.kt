@@ -6,10 +6,14 @@
 package space.kscience.kmath.linear
 
 import space.kscience.attributes.Attributes
+import space.kscience.attributes.SafeType
 
 
 public class TransposedMatrix<T>(public val origin: Matrix<T>) : Matrix<T> {
+    override val type: SafeType<T> get() = origin.type
+
     override val rowNum: Int get() = origin.colNum
+
     override val colNum: Int get() = origin.rowNum
 
     override fun get(i: Int, j: Int): T = origin[j, i]

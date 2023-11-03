@@ -10,10 +10,9 @@ import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.nd.*
 import space.kscience.kmath.operations.BufferRingOps
 import space.kscience.kmath.operations.Ring
+import space.kscience.kmath.operations.WithType
 import space.kscience.kmath.operations.invoke
 import space.kscience.kmath.structures.Buffer
-import kotlin.reflect.KType
-import kotlin.reflect.typeOf
 
 /**
  * Alias for [Structure2D] with more familiar name.
@@ -34,7 +33,7 @@ public typealias Point<T> = Buffer<T>
  * A marker interface for algebras that operate on matrices
  * @param T type of matrix element
  */
-public interface MatrixOperations<T>
+public interface MatrixOperations<T> : WithType<T>
 
 /**
  * Basic operations on matrices and vectors.
@@ -44,6 +43,8 @@ public interface MatrixOperations<T>
  */
 public interface LinearSpace<T, out A : Ring<T>> : MatrixOperations<T> {
     public val elementAlgebra: A
+
+    override val type: SafeType<T> get() = elementAlgebra.type
 
     /**
      * Produces a matrix with this context and given dimensions.
@@ -212,4 +213,4 @@ public fun <T : Any> Matrix<T>.asVector(): Point<T> =
  * @receiver a buffer.
  * @return the new matrix.
  */
-public fun <T : Any> Point<T>.asMatrix(): VirtualMatrix<T> = VirtualMatrix(size, 1) { i, _ -> get(i) }
+public fun <T : Any> Point<T>.asMatrix(): VirtualMatrix<T> = VirtualMatrix(type, size, 1) { i, _ -> get(i) }

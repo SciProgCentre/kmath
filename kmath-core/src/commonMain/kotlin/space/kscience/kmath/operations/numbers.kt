@@ -67,7 +67,7 @@ public interface ExtendedField<T> : ExtendedFieldOps<T>, Field<T>, NumericAlgebr
  */
 @Suppress("EXTENSION_SHADOWED_BY_MEMBER")
 public object Float64Field : ExtendedField<Double>, Norm<Double, Double>, ScaleOperations<Double> {
-    override val bufferFactory: MutableBufferFactory<Double> = MutableBufferFactory(::Float64Buffer)
+    override val bufferFactory: MutableBufferFactory<Double> = MutableBufferFactory()
 
     override val zero: Double get() = 0.0
     override val one: Double get() = 1.0

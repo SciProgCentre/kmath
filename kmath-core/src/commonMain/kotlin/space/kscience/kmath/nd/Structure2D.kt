@@ -6,13 +6,12 @@
 package space.kscience.kmath.nd
 
 import space.kscience.attributes.Attributes
+import space.kscience.attributes.SafeType
 import space.kscience.kmath.PerformancePitfall
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.MutableBuffer
-import space.kscience.kmath.structures.MutableListBuffer
 import space.kscience.kmath.structures.VirtualBuffer
 import kotlin.jvm.JvmInline
-import kotlin.reflect.KClass
 
 /**
  * A structure that is guaranteed to be two-dimensional.
@@ -33,18 +32,18 @@ public interface Structure2D<out T> : StructureND<T> {
     override val shape: ShapeND get() = ShapeND(rowNum, colNum)
 
     /**
-     * The buffer of rows of this structure. It gets elements from the structure dynamically.
+     * The buffer of rows for this structure. It gets elements from the structure dynamically.
      */
     @PerformancePitfall
     public val rows: List<Buffer<T>>
-        get() = List(rowNum) { i -> VirtualBuffer(colNum) { j -> get(i, j) } }
+        get() = List(rowNum) { i -> VirtualBuffer(type, colNum) { j -> get(i, j) } }
 
     /**
-     * The buffer of columns of this structure. It gets elements from the structure dynamically.
+     * The buffer of columns for this structure. It gets elements from the structure dynamically.
      */
     @PerformancePitfall
     public val columns: List<Buffer<T>>
-        get() = List(colNum) { j -> VirtualBuffer(rowNum) { i -> get(i, j) } }
+        get() = List(colNum) { j -> VirtualBuffer(type, rowNum) { i -> get(i, j) } }
 
     /**
      * Retrieves an element from the structure by two indices.
@@ -88,14 +87,14 @@ public interface MutableStructure2D<T> : Structure2D<T>, MutableStructureND<T> {
      */
     @PerformancePitfall
     override val rows: List<MutableBuffer<T>>
-        get() = List(rowNum) { i -> MutableListBuffer(colNum) { j -> get(i, j) } }
+        get() = List(rowNum) { i -> MutableBuffer(type, colNum) { j -> get(i, j) } }
 
     /**
-     * The buffer of columns of this structure. It gets elements from the structure dynamically.
+     * The buffer of columns for this structure. It gets elements from the structure dynamically.
      */
     @PerformancePitfall
     override val columns: List<MutableBuffer<T>>
-        get() = List(colNum) { j -> MutableListBuffer(rowNum) { i -> get(i, j) } }
+        get() = List(colNum) { j -> MutableBuffer(type, rowNum) { i -> get(i, j) } }
 }
 
 /**
@@ -103,6 +102,9 @@ public interface MutableStructure2D<T> : Structure2D<T>, MutableStructureND<T> {
  */
 @JvmInline
 private value class Structure2DWrapper<out T>(val structure: StructureND<T>) : Structure2D<T> {
+
+    override val type: SafeType<T> get() = structure.type
+
     override val shape: ShapeND get() = structure.shape
 
     override val rowNum: Int get() = shape[0]
@@ -122,6 +124,9 @@ private value class Structure2DWrapper<out T>(val structure: StructureND<T>) : S
  * A 2D wrapper for a mutable nd-structure
  */
 private class MutableStructure2DWrapper<T>(val structure: MutableStructureND<T>) : MutableStructure2D<T> {
+
+    override val type: SafeType<T> get() = structure.type
+
     override val shape: ShapeND get() = structure.shape
 
     override val rowNum: Int get() = shape[0]

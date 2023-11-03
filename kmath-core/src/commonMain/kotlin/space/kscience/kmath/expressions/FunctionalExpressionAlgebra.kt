@@ -6,6 +6,7 @@
 package space.kscience.kmath.expressions
 
 import space.kscience.kmath.operations.*
+import space.kscience.kmath.structures.MutableBufferFactory
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
 
@@ -17,6 +18,8 @@ import kotlin.contracts.contract
 public abstract class FunctionalExpressionAlgebra<T, out A : Algebra<T>>(
     public val algebra: A,
 ) : ExpressionAlgebra<T, Expression<T>> {
+    override val bufferFactory: MutableBufferFactory<Expression<T>> = MutableBufferFactory<Expression<T>>()
+
     /**
      * Builds an Expression of constant expression that does not depend on arguments.
      */
@@ -49,6 +52,7 @@ public abstract class FunctionalExpressionAlgebra<T, out A : Algebra<T>>(
 public open class FunctionalExpressionGroup<T, out A : Group<T>>(
     algebra: A,
 ) : FunctionalExpressionAlgebra<T, A>(algebra), Group<Expression<T>> {
+
     override val zero: Expression<T> get() = const(algebra.zero)
 
     override fun Expression<T>.unaryMinus(): Expression<T> =

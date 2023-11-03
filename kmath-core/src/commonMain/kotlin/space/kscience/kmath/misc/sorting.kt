@@ -4,6 +4,8 @@
  */
 
 
+@file:OptIn(UnstableKMathAPI::class)
+
 package space.kscience.kmath.misc
 
 import space.kscience.kmath.UnstableKMathAPI
@@ -22,10 +24,9 @@ public fun <V : Comparable<V>> Buffer<V>.indicesSorted(): IntArray = permSortInd
 /**
  * Create a zero-copy virtual buffer that contains the same elements but in ascending order
  */
-@OptIn(UnstableKMathAPI::class)
 public fun <V : Comparable<V>> Buffer<V>.sorted(): Buffer<V> {
     val permutations = indicesSorted()
-    return VirtualBuffer(size) { this[permutations[it]] }
+    return VirtualBuffer(type, size) { this[permutations[it]] }
 }
 
 @UnstableKMathAPI
@@ -35,30 +36,27 @@ public fun <V : Comparable<V>> Buffer<V>.indicesSortedDescending(): IntArray =
 /**
  * Create a zero-copy virtual buffer that contains the same elements but in descending order
  */
-@OptIn(UnstableKMathAPI::class)
 public fun <V : Comparable<V>> Buffer<V>.sortedDescending(): Buffer<V> {
     val permutations = indicesSortedDescending()
-    return VirtualBuffer(size) { this[permutations[it]] }
+    return VirtualBuffer(type, size) { this[permutations[it]] }
 }
 
 @UnstableKMathAPI
 public fun <V, C : Comparable<C>> Buffer<V>.indicesSortedBy(selector: (V) -> C): IntArray =
     permSortIndicesWith(compareBy { selector(get(it)) })
 
-@OptIn(UnstableKMathAPI::class)
 public fun <V, C : Comparable<C>> Buffer<V>.sortedBy(selector: (V) -> C): Buffer<V> {
     val permutations = indicesSortedBy(selector)
-    return VirtualBuffer(size) { this[permutations[it]] }
+    return VirtualBuffer(type, size) { this[permutations[it]] }
 }
 
 @UnstableKMathAPI
 public fun <V, C : Comparable<C>> Buffer<V>.indicesSortedByDescending(selector: (V) -> C): IntArray =
     permSortIndicesWith(compareByDescending { selector(get(it)) })
 
-@OptIn(UnstableKMathAPI::class)
 public fun <V, C : Comparable<C>> Buffer<V>.sortedByDescending(selector: (V) -> C): Buffer<V> {
     val permutations = indicesSortedByDescending(selector)
-    return VirtualBuffer(size) { this[permutations[it]] }
+    return VirtualBuffer(type, size) { this[permutations[it]] }
 }
 
 @UnstableKMathAPI
@@ -68,10 +66,9 @@ public fun <V> Buffer<V>.indicesSortedWith(comparator: Comparator<V>): IntArray 
 /**
  * Create virtual zero-copy buffer with elements sorted by [comparator]
  */
-@OptIn(UnstableKMathAPI::class)
 public fun <V> Buffer<V>.sortedWith(comparator: Comparator<V>): Buffer<V> {
     val permutations = indicesSortedWith(comparator)
-    return VirtualBuffer(size) { this[permutations[it]] }
+    return VirtualBuffer(type,size) { this[permutations[it]] }
 }
 
 private fun <V> Buffer<V>.permSortIndicesWith(comparator: Comparator<Int>): IntArray {

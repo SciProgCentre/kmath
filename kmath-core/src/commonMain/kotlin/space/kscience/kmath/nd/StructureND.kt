@@ -12,6 +12,7 @@ import space.kscience.attributes.SafeType
 import space.kscience.kmath.PerformancePitfall
 import space.kscience.kmath.linear.LinearSpace
 import space.kscience.kmath.operations.Ring
+import space.kscience.kmath.operations.WithType
 import space.kscience.kmath.operations.invoke
 import space.kscience.kmath.structures.Buffer
 import kotlin.jvm.JvmName
@@ -28,9 +29,9 @@ public interface StructureAttribute<T> : Attribute<T>
  *
  * @param T the type of items.
  */
-public interface StructureND<out T> : AttributeContainer, WithShape {
+public interface StructureND<out T> : AttributeContainer, WithShape, WithType<T> {
     /**
-     * The shape of structure i.e., non-empty sequence of non-negative integers that specify sizes of dimensions of
+     * The shape of structure i.e., non-empty sequence of non-negative integers that specify sizes of dimensions for
      * this structure.
      */
     override val shape: ShapeND
@@ -117,56 +118,60 @@ public interface StructureND<out T> : AttributeContainer, WithShape {
             return "$className(shape=${structure.shape}, buffer=$bufferRepr)"
         }
 
-        /**
-         * Creates a NDStructure with explicit buffer factory.
-         *
-         * Strides should be reused if possible.
-         */
-        public fun <T> buffered(
-            strides: Strides,
-            initializer: (IntArray) -> T,
-        ): BufferND<T> = BufferND(strides, Buffer.boxing(strides.linearSize) { i -> initializer(strides.index(i)) })
-
-
-        public fun <T> buffered(
-            shape: ShapeND,
-            initializer: (IntArray) -> T,
-        ): BufferND<T> = buffered(ColumnStrides(shape), initializer)
-
-        /**
-         * Inline create NDStructure with non-boxing buffer implementation if it is possible
-         */
-        public inline fun <reified T : Any> auto(
-            strides: Strides,
-            crossinline initializer: (IntArray) -> T,
-        ): BufferND<T> = BufferND(strides, Buffer.auto(strides.linearSize) { i -> initializer(strides.index(i)) })
-
-        public inline fun <T : Any> auto(
-            type: SafeType<T>,
-            strides: Strides,
-            crossinline initializer: (IntArray) -> T,
-        ): BufferND<T> = BufferND(strides, Buffer.auto(type, strides.linearSize) { i -> initializer(strides.index(i)) })
-
-
-        public inline fun <reified T : Any> auto(
-            shape: ShapeND,
-            crossinline initializer: (IntArray) -> T,
-        ): BufferND<T> = auto(ColumnStrides(shape), initializer)
-
-        @JvmName("autoVarArg")
-        public inline fun <reified T : Any> auto(
-            vararg shape: Int,
-            crossinline initializer: (IntArray) -> T,
-        ): BufferND<T> =
-            auto(ColumnStrides(ShapeND(shape)), initializer)
-
-        public inline fun <T : Any> auto(
-            type: SafeType<T>,
-            vararg shape: Int,
-            crossinline initializer: (IntArray) -> T,
-        ): BufferND<T> = auto(type, ColumnStrides(ShapeND(shape)), initializer)
     }
 }
+
+
+/**
+ * Creates a NDStructure with explicit buffer factory.
+ *
+ * Strides should be reused if possible.
+ */
+public fun <T> BufferND(
+    type: SafeType<T>,
+    strides: Strides,
+    initializer: (IntArray) -> T,
+): BufferND<T> = BufferND(strides, Buffer(type, strides.linearSize) { i -> initializer(strides.index(i)) })
+
+
+public fun <T> BufferND(
+    type: SafeType<T>,
+    shape: ShapeND,
+    initializer: (IntArray) -> T,
+): BufferND<T> = BufferND(type, ColumnStrides(shape), initializer)
+
+/**
+ * Inline create NDStructure with non-boxing buffer implementation if it is possible
+ */
+public inline fun <reified T : Any> BufferND(
+    strides: Strides,
+    crossinline initializer: (IntArray) -> T,
+): BufferND<T> = BufferND(strides, Buffer(strides.linearSize) { i -> initializer(strides.index(i)) })
+
+public inline fun <T : Any> BufferND(
+    type: SafeType<T>,
+    strides: Strides,
+    crossinline initializer: (IntArray) -> T,
+): BufferND<T> = BufferND(strides, Buffer(type, strides.linearSize) { i -> initializer(strides.index(i)) })
+
+
+public inline fun <reified T : Any> BufferND(
+    shape: ShapeND,
+    crossinline initializer: (IntArray) -> T,
+): BufferND<T> = BufferND(ColumnStrides(shape), initializer)
+
+@JvmName("autoVarArg")
+public inline fun <reified T : Any> BufferND(
+    vararg shape: Int,
+    crossinline initializer: (IntArray) -> T,
+): BufferND<T> = BufferND(ColumnStrides(ShapeND(shape)), initializer)
+
+public inline fun <T : Any> BufferND(
+    type: SafeType<T>,
+    vararg shape: Int,
+    crossinline initializer: (IntArray) -> T,
+): BufferND<T> = BufferND(type, ColumnStrides(ShapeND(shape)), initializer)
+
 
 /**
  * Indicates whether some [StructureND] is equal to another one.

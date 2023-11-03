@@ -5,6 +5,8 @@
 
 package space.kscience.kmath.structures
 
+import space.kscience.attributes.SafeType
+import space.kscience.attributes.safeTypeOf
 import kotlin.jvm.JvmInline
 
 /**
@@ -14,6 +16,9 @@ import kotlin.jvm.JvmInline
  */
 @JvmInline
 public value class Int32Buffer(public val array: IntArray) : PrimitiveBuffer<Int> {
+
+    override val type: SafeType<Int> get() = safeTypeOf()
+
     override val size: Int get() = array.size
 
     override operator fun get(index: Int): Int = array[index]

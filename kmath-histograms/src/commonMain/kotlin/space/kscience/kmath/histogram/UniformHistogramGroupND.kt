@@ -147,12 +147,12 @@ public fun <V : Any, A : Field<V>> Histogram.Companion.uniformNDFromRanges(
     bufferFactory: BufferFactory<V> = valueAlgebraND.elementAlgebra.bufferFactory,
 ): UniformHistogramGroupND<V, A> = UniformHistogramGroupND(
     valueAlgebraND,
-    ListBuffer(
+    DoubleBuffer(
         ranges
             .map(Pair<ClosedFloatingPointRange<Double>, Int>::first)
             .map(ClosedFloatingPointRange<Double>::start)
     ),
-    ListBuffer(
+    DoubleBuffer(
         ranges
             .map(Pair<ClosedFloatingPointRange<Double>, Int>::first)
             .map(ClosedFloatingPointRange<Double>::endInclusive)

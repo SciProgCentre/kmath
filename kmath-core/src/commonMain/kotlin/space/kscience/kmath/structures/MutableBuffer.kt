@@ -61,41 +61,35 @@ public interface MutableBuffer<T> : Buffer<T> {
          */
         public inline fun float(size: Int, initializer: (Int) -> Float): Float32Buffer =
             Float32Buffer(size, initializer)
-
-
-        /**
-         * Create a boxing mutable buffer of given type
-         */
-        public inline fun <T> boxing(size: Int, initializer: (Int) -> T): MutableBuffer<T> =
-            MutableListBuffer(MutableList(size, initializer))
-
-        /**
-         * Creates a [MutableBuffer] of given [type]. If the type is primitive, specialized buffers are used
-         * ([Int32Buffer], [Float64Buffer], etc.), [ListBuffer] is returned otherwise.
-         *
-         * The [size] is specified, and each element is calculated by calling the specified [initializer] function.
-         */
-        @Suppress("UNCHECKED_CAST")
-        public inline fun <T> auto(type: SafeType<T>, size: Int, initializer: (Int) -> T): MutableBuffer<T> =
-            when (type.kType) {
-                typeOf<Double>() -> double(size) { initializer(it) as Double } as MutableBuffer<T>
-                typeOf<Short>() -> short(size) { initializer(it) as Short } as MutableBuffer<T>
-                typeOf<Int>() -> int(size) { initializer(it) as Int } as MutableBuffer<T>
-                typeOf<Float>() -> float(size) { initializer(it) as Float } as MutableBuffer<T>
-                typeOf<Long>() -> long(size) { initializer(it) as Long } as MutableBuffer<T>
-                else -> boxing(size, initializer)
-            }
-
-        /**
-         * Creates a [MutableBuffer] of given type [T]. If the type is primitive, specialized buffers are used
-         * ([Int32Buffer], [Float64Buffer], etc.), [ListBuffer] is returned otherwise.
-         *
-         * The [size] is specified, and each element is calculated by calling the specified [initializer] function.
-         */
-        public inline fun <reified T> auto(size: Int, initializer: (Int) -> T): MutableBuffer<T> =
-            auto(safeTypeOf<T>(), size, initializer)
     }
 }
+
+
+/**
+ * Creates a [MutableBuffer] of given [type]. If the type is primitive, specialized buffers are used
+ * ([Int32Buffer], [Float64Buffer], etc.), [ListBuffer] is returned otherwise.
+ *
+ * The [size] is specified, and each element is calculated by calling the specified [initializer] function.
+ */
+@Suppress("UNCHECKED_CAST")
+public inline fun <T> MutableBuffer(type: SafeType<T>, size: Int, initializer: (Int) -> T): MutableBuffer<T> =
+    when (type.kType) {
+        typeOf<Double>() -> MutableBuffer.double(size) { initializer(it) as Double } as MutableBuffer<T>
+        typeOf<Short>() -> MutableBuffer.short(size) { initializer(it) as Short } as MutableBuffer<T>
+        typeOf<Int>() -> MutableBuffer.int(size) { initializer(it) as Int } as MutableBuffer<T>
+        typeOf<Float>() -> MutableBuffer.float(size) { initializer(it) as Float } as MutableBuffer<T>
+        typeOf<Long>() -> MutableBuffer.long(size) { initializer(it) as Long } as MutableBuffer<T>
+        else -> MutableListBuffer(type, MutableList(size, initializer))
+    }
+
+/**
+ * Creates a [MutableBuffer] of given type [T]. If the type is primitive, specialized buffers are used
+ * ([Int32Buffer], [Float64Buffer], etc.), [ListBuffer] is returned otherwise.
+ *
+ * The [size] is specified, and each element is calculated by calling the specified [initializer] function.
+ */
+public inline fun <reified T> MutableBuffer(size: Int, initializer: (Int) -> T): MutableBuffer<T> =
+    MutableBuffer(safeTypeOf<T>(), size, initializer)
 
 
 public sealed interface PrimitiveBuffer<T> : MutableBuffer<T>

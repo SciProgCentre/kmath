@@ -16,7 +16,7 @@ import kotlin.reflect.typeOf
  * @param kType raw [KType]
  */
 @JvmInline
-public value class SafeType<T> @PublishedApi internal constructor(public val kType: KType)
+public value class SafeType<out T> @PublishedApi internal constructor(public val kType: KType)
 
 public inline fun <reified T> safeTypeOf(): SafeType<T> = SafeType(typeOf<T>())
 
