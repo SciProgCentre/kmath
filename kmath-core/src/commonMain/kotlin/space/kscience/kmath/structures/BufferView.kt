@@ -1,5 +1,6 @@
 package space.kscience.kmath.structures
 
+import space.kscience.attributes.SafeType
 import space.kscience.kmath.UnstableKMathAPI
 
 /**
@@ -7,6 +8,8 @@ import space.kscience.kmath.UnstableKMathAPI
  */
 public interface BufferView<T> : Buffer<T> {
     public val origin: Buffer<T>
+
+    override val type: SafeType<T> get() = origin.type
 
     /**
      * Get the index in [origin] buffer from index in this buffer.
@@ -35,6 +38,7 @@ public class BufferSlice<T>(
             "End of buffer ${offset + size} is beyond the end of origin buffer size ${origin.size}"
         }
     }
+
 
     override fun get(index: Int): T = if (index >= size) {
         throw IndexOutOfBoundsException("$index is out of ${0 until size} rage")
@@ -100,7 +104,8 @@ public fun <T> Buffer<T>.slice(range: IntRange): BufferView<T> = if (this is Buf
  *  Dynamically create a range from the initial range
  */
 @UnstableKMathAPI
-public inline fun <T> Buffer<T>.slice(rangeBuilder: IntRange.() -> IntRange): BufferView<T> = slice(rangeBuilder(indices))
+public inline fun <T> Buffer<T>.slice(rangeBuilder: IntRange.() -> IntRange): BufferView<T> =
+    slice(rangeBuilder(indices))
 
 /**
  * Resize original buffer to a given range using given [range], filling additional segments with [defaultValue].

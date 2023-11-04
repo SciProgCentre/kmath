@@ -8,7 +8,6 @@ package space.kscience.kmath.linear
 import space.kscience.kmath.PerformancePitfall
 import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.nd.StructureND
-import space.kscience.kmath.nd.as2D
 import space.kscience.kmath.operations.algebra
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -22,7 +21,7 @@ class MatrixTest {
     @Test
     fun testTranspose() = Double.algebra.linearSpace.run {
         val matrix = one(3, 3)
-        val transposed = matrix.transpose()
+        val transposed = matrix.transposed
         assertTrue { StructureND.contentEquals(matrix, transposed) }
     }
 
@@ -38,7 +37,7 @@ class MatrixTest {
 
     @Test
     fun testMatrixExtension() = Double.algebra.linearSpace.run {
-        val transitionMatrix: Matrix<Double> = VirtualMatrix(6, 6) { row, col ->
+        val transitionMatrix: Matrix<Double> = VirtualMatrix(type,6, 6) { row, col ->
             when {
                 col == 0 -> .50
                 row + 1 == col -> .50
@@ -60,8 +59,8 @@ class MatrixTest {
 
     @Test
     fun test2DDot() = Double.algebra.linearSpace.run {
-        val firstMatrix = StructureND.auto(2, 3) { (i, j) -> (i + j).toDouble() }.as2D()
-        val secondMatrix = StructureND.auto(3, 2) { (i, j) -> (i + j).toDouble() }.as2D()
+        val firstMatrix = buildMatrix(2, 3) { i, j -> (i + j).toDouble() }
+        val secondMatrix = buildMatrix(3, 2) { i, j -> (i + j).toDouble() }
 
 //            val firstMatrix = produce(2, 3) { i, j -> (i + j).toDouble() }
 //            val secondMatrix = produce(3, 2) { i, j -> (i + j).toDouble() }

@@ -9,7 +9,6 @@ kscience{
     wasm()
 
     dependencies {
-        api(projects.kmathMemory)
         api(projects.attributesKt)
     }
 

@@ -7,6 +7,8 @@
 
 package space.kscience.kmath.interpolation
 
+import space.kscience.attributes.SafeType
+import space.kscience.attributes.WithType
 import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.data.XYColumnarData
 import space.kscience.kmath.functions.PiecewisePolynomial
@@ -26,8 +28,10 @@ public fun interface Interpolator<T, in X : T, Y : T> {
 /**
  * And interpolator returning [PiecewisePolynomial] function
  */
-public interface PolynomialInterpolator<T : Comparable<T>> : Interpolator<T, T, T> {
+public interface PolynomialInterpolator<T : Comparable<T>> : Interpolator<T, T, T>, WithType<T> {
     public val algebra: Ring<T>
+
+    override val type: SafeType<T> get() = algebra.type
 
     public fun getDefaultValue(): T = error("Out of bounds")
 
@@ -50,14 +54,14 @@ public fun <T : Comparable<T>> PolynomialInterpolator<T>.interpolatePolynomials(
 public fun <T : Comparable<T>> PolynomialInterpolator<T>.interpolatePolynomials(
     data: Map<T, T>,
 ): PiecewisePolynomial<T> {
-    val pointSet = XYColumnarData.of(data.keys.toList().asBuffer(), data.values.toList().asBuffer())
+    val pointSet = XYColumnarData.of(data.keys.toList().asBuffer(type), data.values.toList().asBuffer(type))
     return interpolatePolynomials(pointSet)
 }
 
 public fun <T : Comparable<T>> PolynomialInterpolator<T>.interpolatePolynomials(
     data: List<Pair<T, T>>,
 ): PiecewisePolynomial<T> {
-    val pointSet = XYColumnarData.of(data.map { it.first }.asBuffer(), data.map { it.second }.asBuffer())
+    val pointSet = XYColumnarData.of(data.map { it.first }.asBuffer(type), data.map { it.second }.asBuffer(type))
     return interpolatePolynomials(pointSet)
 }
 

@@ -7,9 +7,9 @@ package space.kscience.kmath.linear
 
 import space.kscience.attributes.FlagAttribute
 import space.kscience.attributes.SafeType
+import space.kscience.attributes.WithType
 import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.operations.Ring
-import space.kscience.kmath.operations.WithType
 import space.kscience.kmath.structures.BufferAccessor2D
 import space.kscience.kmath.structures.MutableBufferFactory
 

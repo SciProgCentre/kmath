@@ -6,18 +6,11 @@
 package space.kscience.kmath.operations
 
 import space.kscience.attributes.SafeType
+import space.kscience.attributes.WithType
 import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.expressions.Symbol
 import space.kscience.kmath.operations.Ring.Companion.optimizedPower
 import space.kscience.kmath.structures.MutableBufferFactory
-
-/**
- * An interface containing [type] for dynamic type checking.
- */
-public interface WithType<out T> {
-    public val type: SafeType<T>
-}
-
 
 /**
  * Represents an algebraic structure.

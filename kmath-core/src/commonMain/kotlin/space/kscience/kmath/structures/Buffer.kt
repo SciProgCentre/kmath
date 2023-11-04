@@ -6,9 +6,9 @@
 package space.kscience.kmath.structures
 
 import space.kscience.attributes.SafeType
+import space.kscience.attributes.WithType
 import space.kscience.attributes.safeTypeOf
 import space.kscience.kmath.operations.WithSize
-import space.kscience.kmath.operations.WithType
 import space.kscience.kmath.operations.asSequence
 import kotlin.reflect.typeOf
 

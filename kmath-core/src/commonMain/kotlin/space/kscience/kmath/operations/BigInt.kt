@@ -5,20 +5,18 @@
 
 package space.kscience.kmath.operations
 
-import space.kscience.attributes.SafeType
-import space.kscience.attributes.safeTypeOf
 import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.nd.BufferedRingOpsND
 import space.kscience.kmath.operations.BigInt.Companion.BASE
 import space.kscience.kmath.operations.BigInt.Companion.BASE_SIZE
 import space.kscience.kmath.structures.Buffer
+import space.kscience.kmath.structures.MutableBufferFactory
 import kotlin.math.log2
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.sign
 
 private typealias Magnitude = UIntArray
-private typealias TBase = ULong
 
 /**
  * Kotlin Multiplatform implementation of Big Integer numbers (KBigInteger).
@@ -29,7 +27,7 @@ private typealias TBase = ULong
 @OptIn(UnstableKMathAPI::class)
 public object BigIntField : Field<BigInt>, NumbersAddOps<BigInt>, ScaleOperations<BigInt> {
 
-    override val type: SafeType<BigInt> = safeTypeOf()
+    override val bufferFactory: MutableBufferFactory<BigInt> = MutableBufferFactory()
 
     override val zero: BigInt = BigInt.ZERO
     override val one: BigInt = BigInt.ONE

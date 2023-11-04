@@ -5,6 +5,7 @@
 
 package space.kscience.kmath.operations
 
+import space.kscience.kmath.structures.MutableBufferFactory
 import java.math.BigDecimal
 import java.math.BigInteger
 import java.math.MathContext
@@ -13,6 +14,8 @@ import java.math.MathContext
  * A field over [BigInteger].
  */
 public object JBigIntegerField : Ring<BigInteger>, NumericAlgebra<BigInteger> {
+
+    override val bufferFactory: MutableBufferFactory<BigInteger> = MutableBufferFactory()
     override val zero: BigInteger get() = BigInteger.ZERO
 
     override val one: BigInteger get() = BigInteger.ONE
@@ -33,6 +36,7 @@ public object JBigIntegerField : Ring<BigInteger>, NumericAlgebra<BigInteger> {
 public abstract class JBigDecimalFieldBase internal constructor(
     private val mathContext: MathContext = MathContext.DECIMAL64,
 ) : Field<BigDecimal>, PowerOperations<BigDecimal>, NumericAlgebra<BigDecimal>, ScaleOperations<BigDecimal> {
+    override val bufferFactory: MutableBufferFactory<BigDecimal> = MutableBufferFactory()
     override val zero: BigDecimal
         get() = BigDecimal.ZERO
 

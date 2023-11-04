@@ -5,12 +5,14 @@
 
 package space.kscience.kmath.complex
 
+import space.kscience.attributes.SafeType
+import space.kscience.attributes.safeTypeOf
 import space.kscience.kmath.UnstableKMathAPI
-import space.kscience.kmath.memory.MemoryReader
-import space.kscience.kmath.memory.MemorySpec
-import space.kscience.kmath.memory.MemoryWriter
+import space.kscience.kmath.memory.*
 import space.kscience.kmath.operations.*
-import space.kscience.kmath.structures.*
+import space.kscience.kmath.structures.Buffer
+import space.kscience.kmath.structures.MutableBuffer
+import space.kscience.kmath.structures.MutableBufferFactory
 import kotlin.math.*
 
 /**
@@ -51,8 +53,11 @@ public object ComplexField :
     Norm<Complex, Complex>,
     NumbersAddOps<Complex>,
     ScaleOperations<Complex> {
-    override val bufferFactory: MutableBufferFactory<Complex> = MutableBufferFactory { size, init ->
-        MutableMemoryBuffer.create(Complex, size, init)
+    override val bufferFactory: MutableBufferFactory<Complex> = object : MutableBufferFactory<Complex> {
+        override fun invoke(size: Int, builder: (Int) -> Complex): MutableBuffer<Complex> =
+            MutableMemoryBuffer.create(Complex, size, builder)
+
+        override val type: SafeType<Complex> = safeTypeOf()
     }
 
     override val zero: Complex = 0.0.toComplex()
@@ -202,8 +207,10 @@ public data class Complex(val re: Double, val im: Double) {
     override fun toString(): String = "($re + i * $im)"
 
     public companion object : MemorySpec<Complex> {
-        override val objectSize: Int
-            get() = 16
+
+        override val type: SafeType<Complex> get() = safeTypeOf()
+
+        override val objectSize: Int get() = 16
 
         override fun MemoryReader.read(offset: Int): Complex =
             Complex(readDouble(offset), readDouble(offset + 8))

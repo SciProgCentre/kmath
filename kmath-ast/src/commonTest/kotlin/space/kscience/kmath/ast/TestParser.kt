@@ -10,6 +10,7 @@ import space.kscience.kmath.complex.ComplexField
 import space.kscience.kmath.expressions.interpret
 import space.kscience.kmath.operations.Algebra
 import space.kscience.kmath.operations.Float64Field
+import space.kscience.kmath.structures.MutableBufferFactory
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -39,6 +40,8 @@ internal class TestParser {
     @Test
     fun evaluateMstBinary() {
         val magicalAlgebra = object : Algebra<String> {
+            override val bufferFactory: MutableBufferFactory<String> get() = MutableBufferFactory()
+
             override fun bindSymbolOrNull(value: String): String = value
 
             override fun unaryOperationFunction(operation: String): (arg: String) -> String {

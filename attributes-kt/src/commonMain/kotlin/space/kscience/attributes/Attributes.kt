@@ -106,4 +106,11 @@ public fun <T : Any, A : Attribute<T>> Attributes(
     attrValue: T,
 ): Attributes = Attributes(mapOf(attribute to attrValue))
 
+/**
+ * Create Attributes with a single [Unit] valued attribute
+ */
+public fun <A : Attribute<Unit>> Attributes(
+    attribute: A
+): Attributes = Attributes(mapOf(attribute to Unit))
+
 public operator fun Attributes.plus(other: Attributes): Attributes = Attributes(content + other.content)

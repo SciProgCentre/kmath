@@ -96,7 +96,7 @@ internal class EjmlMatrixTest {
         val u = space.buildMatrix(dim, dim) { i, j -> if (i <= j) random.nextDouble() else 0.0 }
         val l = space.buildMatrix(dim, dim) { i, j -> if (i >= j) random.nextDouble() else 0.0 }
         val matrix = space { l dot u }
-        val inverted = matrix.toEjml().inverse()
+        val inverted = matrix.toEjml().inverted()
 
         val res = matrix dot inverted
 

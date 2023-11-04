@@ -47,7 +47,7 @@ internal class MatrixInverseBenchmark {
     @Benchmark
     fun ejmlInverse(blackhole: Blackhole) {
         EjmlLinearSpaceDDRM {
-            blackhole.consume(matrix.toEjml().inverse())
+            blackhole.consume(matrix.toEjml().inverted())
         }
     }
 }

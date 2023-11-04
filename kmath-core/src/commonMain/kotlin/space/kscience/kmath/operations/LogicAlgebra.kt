@@ -5,10 +5,9 @@
 
 package space.kscience.kmath.operations
 
-import space.kscience.attributes.SafeType
-import space.kscience.attributes.safeTypeOf
 import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.expressions.Symbol
+import space.kscience.kmath.structures.MutableBufferFactory
 
 /**
  * An algebra for generic boolean logic
@@ -74,7 +73,7 @@ public interface LogicAlgebra<T : Any> : Algebra<T> {
 @Suppress("EXTENSION_SHADOWED_BY_MEMBER")
 public object BooleanAlgebra : LogicAlgebra<Boolean> {
 
-    override val type: SafeType<Boolean> get() = safeTypeOf()
+    override val bufferFactory: MutableBufferFactory<Boolean> get() = MutableBufferFactory()
 
     override fun const(boolean: Boolean): Boolean = boolean
 

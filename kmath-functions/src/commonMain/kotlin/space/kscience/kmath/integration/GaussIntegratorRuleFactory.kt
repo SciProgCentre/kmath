@@ -5,6 +5,7 @@
 
 package space.kscience.kmath.integration
 
+import space.kscience.kmath.operations.Float64Field
 import space.kscience.kmath.operations.mapToBuffer
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.Float64Buffer
@@ -32,11 +33,11 @@ public fun GaussIntegratorRuleFactory.build(
     val normalized: Pair<Buffer<Double>, Buffer<Double>> = build(numPoints)
     val length = range.endInclusive - range.start
 
-    val points = normalized.first.mapToBuffer(::Float64Buffer) {
+    val points = normalized.first.mapToBuffer(Float64Field.bufferFactory) {
         range.start + length / 2 + length / 2 * it
     }
 
-    val weights = normalized.second.mapToBuffer(::Float64Buffer) {
+    val weights = normalized.second.mapToBuffer(Float64Field.bufferFactory) {
         it * length / 2
     }
 

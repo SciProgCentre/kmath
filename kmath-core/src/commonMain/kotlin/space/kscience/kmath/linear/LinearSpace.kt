@@ -6,11 +6,11 @@
 package space.kscience.kmath.linear
 
 import space.kscience.attributes.SafeType
+import space.kscience.attributes.WithType
 import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.nd.*
 import space.kscience.kmath.operations.BufferRingOps
 import space.kscience.kmath.operations.Ring
-import space.kscience.kmath.operations.WithType
 import space.kscience.kmath.operations.invoke
 import space.kscience.kmath.structures.Buffer
 
@@ -173,15 +173,15 @@ public interface LinearSpace<T, out A : Ring<T>> : MatrixOperations<T> {
     public operator fun T.times(v: Point<T>): Point<T> = v * this
 
     /**
-     * Get an attribute value for the structure in this scope. Structure features take precedence other context features.
+     * Get an attribute value for the structure in this scope. Structure attributes are preferred to computed attributes.
      *
      * @param structure the structure.
      * @param attribute to be computed.
      * @return a feature object or `null` if it isn't present.
      */
     @UnstableKMathAPI
-    public fun <T, A : StructureAttribute<T>> attributeFor(structure: StructureND<*>, attribute: A): T? =
-        structure.attributes[attribute]
+    public fun <T, A : StructureAttribute<T>> attributeFor(structure: StructureND<*>, attribute: A): T =
+        structure.attributes[attribute] ?: error("Can't compute attribute $attribute for $structure")
 
     public companion object {
 

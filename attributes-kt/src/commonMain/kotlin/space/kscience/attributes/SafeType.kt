@@ -26,3 +26,10 @@ public inline fun <reified T> safeTypeOf(): SafeType<T> = SafeType(typeOf<T>())
 @Suppress("UNCHECKED_CAST")
 @UnstableAttributesAPI
 public val <T> SafeType<T>.kClass: KClass<T & Any> get() = kType.classifier as KClass<T & Any>
+
+/**
+ * An interface containing [type] for dynamic type checking.
+ */
+public interface WithType<out T> {
+    public val type: SafeType<T>
+}

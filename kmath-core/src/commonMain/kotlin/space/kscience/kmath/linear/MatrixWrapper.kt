@@ -16,7 +16,7 @@ import space.kscience.kmath.operations.Ring
  *
  * @param T the type of items.
  */
-public class MatrixWrapper<out T : Any> internal constructor(
+public class MatrixWrapper<out T> internal constructor(
     public val origin: Matrix<T>,
     override val attributes: Attributes,
 ) : Matrix<T> by origin {

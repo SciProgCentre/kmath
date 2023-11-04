@@ -7,6 +7,8 @@ package space.kscience.kmath.streaming
 
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import space.kscience.attributes.SafeType
+import space.kscience.kmath.operations.Group
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.MutableBuffer
 import space.kscience.kmath.structures.VirtualBuffer
@@ -14,12 +16,14 @@ import space.kscience.kmath.structures.VirtualBuffer
 /**
  * Thread-safe ring buffer
  */
-@Suppress("UNCHECKED_CAST")
 public class RingBuffer<T>(
-    private val buffer: MutableBuffer<T?>,
+    private val buffer: MutableBuffer<T>,
     private var startIndex: Int = 0,
     size: Int = 0,
 ) : Buffer<T> {
+
+    override val type: SafeType<T> get() = buffer.type
+
     private val mutex: Mutex = Mutex()
 
     override var size: Int = size
@@ -28,7 +32,7 @@ public class RingBuffer<T>(
     override operator fun get(index: Int): T {
         require(index >= 0) { "Index must be positive" }
         require(index < size) { "Index $index is out of circular buffer size $size" }
-        return buffer[startIndex.forward(index)] as T
+        return buffer[startIndex.forward(index)]
     }
 
     public fun isFull(): Boolean = size == buffer.size
@@ -43,7 +47,7 @@ public class RingBuffer<T>(
 
         override fun computeNext() {
             if (count == 0) done() else {
-                setNext(copy[index] as T)
+                setNext(copy[index])
                 index = index.forward(1)
                 count--
             }
@@ -55,7 +59,7 @@ public class RingBuffer<T>(
      */
     public suspend fun snapshot(): Buffer<T> = mutex.withLock {
         val copy = buffer.copy()
-        VirtualBuffer(size) { i -> copy[startIndex.forward(i)] as T }
+        VirtualBuffer(type, size) { i -> copy[startIndex.forward(i)] }
     }
 
     public suspend fun push(element: T) {
@@ -68,19 +72,17 @@ public class RingBuffer<T>(
     private fun Int.forward(n: Int): Int = (this + n) % (buffer.size)
 
     override fun toString(): String = Buffer.toString(this)
+}
 
-    public companion object {
-        public inline fun <reified T : Any> build(size: Int, empty: T): RingBuffer<T> {
-            val buffer = MutableBuffer.auto(size) { empty } as MutableBuffer<T?>
-            return RingBuffer(buffer)
-        }
+public inline fun <reified T : Any> RingBuffer(size: Int, empty: T): RingBuffer<T> {
+    val buffer = MutableBuffer(size) { empty }
+    return RingBuffer(buffer)
+}
 
-        /**
-         * Slow yet universal buffer
-         */
-        public fun <T> boxing(size: Int): RingBuffer<T> {
-            val buffer: MutableBuffer<T?> = MutableBuffer.boxing(size) { null }
-            return RingBuffer(buffer)
-        }
-    }
+/**
+ * Slow yet universal buffer
+ */
+public fun <T> RingBuffer(size: Int, algebra: Group<T>): RingBuffer<T> {
+    val buffer: MutableBuffer<T> = MutableBuffer(algebra.type, size) { algebra.zero }
+    return RingBuffer(buffer)
 }

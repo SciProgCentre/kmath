@@ -72,15 +72,21 @@ public interface MutableBuffer<T> : Buffer<T> {
  * The [size] is specified, and each element is calculated by calling the specified [initializer] function.
  */
 @Suppress("UNCHECKED_CAST")
-public inline fun <T> MutableBuffer(type: SafeType<T>, size: Int, initializer: (Int) -> T): MutableBuffer<T> =
-    when (type.kType) {
-        typeOf<Double>() -> MutableBuffer.double(size) { initializer(it) as Double } as MutableBuffer<T>
-        typeOf<Short>() -> MutableBuffer.short(size) { initializer(it) as Short } as MutableBuffer<T>
-        typeOf<Int>() -> MutableBuffer.int(size) { initializer(it) as Int } as MutableBuffer<T>
-        typeOf<Float>() -> MutableBuffer.float(size) { initializer(it) as Float } as MutableBuffer<T>
-        typeOf<Long>() -> MutableBuffer.long(size) { initializer(it) as Long } as MutableBuffer<T>
-        else -> MutableListBuffer(type, MutableList(size, initializer))
-    }
+public inline fun <T> MutableBuffer(
+    type: SafeType<T>,
+    size: Int,
+    initializer: (Int) -> T,
+): MutableBuffer<T> = when (type.kType) {
+    typeOf<Boolean>() -> TODO()
+    typeOf<Int8>() -> Int8Buffer(size) { initializer(it) as Int8 } as MutableBuffer<T>
+    typeOf<Int16>() -> MutableBuffer.short(size) { initializer(it) as Int16 } as MutableBuffer<T>
+    typeOf<Int32>() -> MutableBuffer.int(size) { initializer(it) as Int32 } as MutableBuffer<T>
+    typeOf<Int64>() -> MutableBuffer.long(size) { initializer(it) as Int64 } as MutableBuffer<T>
+    typeOf<Float>() -> MutableBuffer.float(size) { initializer(it) as Float } as MutableBuffer<T>
+    typeOf<Double>() -> MutableBuffer.double(size) { initializer(it) as Double } as MutableBuffer<T>
+    //TODO add unsigned types
+    else -> MutableListBuffer(type, MutableList(size, initializer))
+}
 
 /**
  * Creates a [MutableBuffer] of given type [T]. If the type is primitive, specialized buffers are used

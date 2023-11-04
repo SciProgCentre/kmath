@@ -88,7 +88,7 @@ public class SplineIntegrator<T : Comparable<T>>(
 public object DoubleSplineIntegrator : UnivariateIntegrator<Double> {
     override fun integrate(integrand: UnivariateIntegrand<Double>): UnivariateIntegrand<Double> {
         val range = integrand[IntegrationRange] ?: 0.0..1.0
-        val interpolator: PolynomialInterpolator<Double> = SplineInterpolator(Float64Field, ::Float64Buffer)
+        val interpolator: PolynomialInterpolator<Double> = SplineInterpolator(Float64Field, Float64Field.bufferFactory)
 
         val nodes: Buffer<Double> = integrand[UnivariateIntegrationNodes] ?: run {
             val numPoints = integrand[IntegrandMaxCalls] ?: 100
@@ -96,7 +96,7 @@ public object DoubleSplineIntegrator : UnivariateIntegrator<Double> {
             Float64Buffer(numPoints) { i -> range.start + i * step }
         }
 
-        val values = nodes.mapToBuffer(::Float64Buffer) { integrand.function(it) }
+        val values = nodes.mapToBuffer(Float64Field.bufferFactory) { integrand.function(it) }
         val polynomials = interpolator.interpolatePolynomials(nodes, values)
         val res = polynomials.integrate(Float64Field, range)
         return integrand.withAttributes {

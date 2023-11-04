@@ -6,6 +6,7 @@
 package space.kscience.kmath.expressions
 
 import space.kscience.attributes.SafeType
+import space.kscience.attributes.WithType
 import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.linear.Point
 import space.kscience.kmath.operations.*

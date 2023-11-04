@@ -188,7 +188,7 @@ public abstract class DSAlgebra<T, A : Ring<T>>(
         vararg derivatives: T,
     ): DS<T, A> {
         require(derivatives.size == compiler.size) { "dimension mismatch: ${derivatives.size} and ${compiler.size}" }
-        val data = derivatives.asBuffer()
+        val data = derivatives.asList().asBuffer(algebra.type)
 
         return DS(data)
     }

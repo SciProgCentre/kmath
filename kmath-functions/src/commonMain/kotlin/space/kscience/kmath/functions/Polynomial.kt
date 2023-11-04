@@ -7,14 +7,12 @@
 
 package space.kscience.kmath.functions
 
-import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.operations.Ring
 import space.kscience.kmath.operations.ScaleOperations
 import space.kscience.kmath.operations.invoke
+import space.kscience.kmath.structures.MutableBufferFactory
 import kotlin.math.max
 import kotlin.math.min
-import kotlin.reflect.KType
-import kotlin.reflect.typeOf
 
 
 /**
@@ -67,6 +65,7 @@ public data class Polynomial<out C>(
 public open class PolynomialSpace<C, A>(
     public val ring: A,
 ) : Ring<Polynomial<C>>, ScaleOperations<Polynomial<C>> where A : Ring<C>, A : ScaleOperations<C> {
+    override val bufferFactory: MutableBufferFactory<Polynomial<C>> get() = MutableBufferFactory()
 
     /**
      * Instance of zero constant (zero of the underlying ring).

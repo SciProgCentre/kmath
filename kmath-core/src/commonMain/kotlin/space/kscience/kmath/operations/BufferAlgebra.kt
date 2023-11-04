@@ -5,8 +5,6 @@
 
 package space.kscience.kmath.operations
 
-import space.kscience.attributes.SafeType
-import space.kscience.attributes.safeTypeOf
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.MutableBuffer
 import space.kscience.kmath.structures.MutableBufferFactory
@@ -21,9 +19,9 @@ public interface WithSize {
 public interface BufferAlgebra<T, out A : Algebra<T>> : Algebra<Buffer<T>> {
     public val elementAlgebra: A
 
-    override val type: SafeType<Buffer<T>> get() = safeTypeOf<Buffer<T>>()
-
     public val elementBufferFactory: MutableBufferFactory<T> get() = elementAlgebra.bufferFactory
+
+    override val bufferFactory: MutableBufferFactory<Buffer<T>> get() = MutableBufferFactory()
 
     public fun buffer(size: Int, vararg elements: T): Buffer<T> {
         require(elements.size == size) { "Expected $size elements but found ${elements.size}" }

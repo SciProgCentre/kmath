@@ -5,17 +5,12 @@
 
 package space.kscience.kmath.nd
 
-import space.kscience.attributes.Attribute
-import space.kscience.attributes.AttributeContainer
-import space.kscience.attributes.Attributes
-import space.kscience.attributes.SafeType
+import space.kscience.attributes.*
 import space.kscience.kmath.PerformancePitfall
 import space.kscience.kmath.linear.LinearSpace
 import space.kscience.kmath.operations.Ring
-import space.kscience.kmath.operations.WithType
 import space.kscience.kmath.operations.invoke
 import space.kscience.kmath.structures.Buffer
-import kotlin.jvm.JvmName
 import kotlin.math.abs
 
 public interface StructureAttribute<T> : Attribute<T>
@@ -148,28 +143,20 @@ public inline fun <reified T : Any> BufferND(
     crossinline initializer: (IntArray) -> T,
 ): BufferND<T> = BufferND(strides, Buffer(strides.linearSize) { i -> initializer(strides.index(i)) })
 
-public inline fun <T : Any> BufferND(
-    type: SafeType<T>,
-    strides: Strides,
-    crossinline initializer: (IntArray) -> T,
-): BufferND<T> = BufferND(strides, Buffer(type, strides.linearSize) { i -> initializer(strides.index(i)) })
-
-
 public inline fun <reified T : Any> BufferND(
     shape: ShapeND,
     crossinline initializer: (IntArray) -> T,
 ): BufferND<T> = BufferND(ColumnStrides(shape), initializer)
 
-@JvmName("autoVarArg")
 public inline fun <reified T : Any> BufferND(
     vararg shape: Int,
     crossinline initializer: (IntArray) -> T,
 ): BufferND<T> = BufferND(ColumnStrides(ShapeND(shape)), initializer)
 
-public inline fun <T : Any> BufferND(
+public fun <T : Any> BufferND(
     type: SafeType<T>,
     vararg shape: Int,
-    crossinline initializer: (IntArray) -> T,
+    initializer: (IntArray) -> T,
 ): BufferND<T> = BufferND(type, ColumnStrides(ShapeND(shape)), initializer)
 
 
