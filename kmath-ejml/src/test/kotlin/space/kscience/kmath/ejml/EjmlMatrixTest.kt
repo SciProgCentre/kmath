@@ -61,9 +61,9 @@ internal class EjmlMatrixTest {
     fun features() {
         val m = randomMatrix
         val w = EjmlDoubleMatrix(m)
-        val det: Determinant<Double> = EjmlLinearSpaceDDRM.attributeFor(w) ?: fail()
+        val det: Determinant<Double> = EjmlLinearSpaceDDRM.attributeForOrNull(w) ?: fail()
         assertEquals(CommonOps_DDRM.det(m), det.determinant)
-        val lup: LupDecompositionAttribute<Double> = EjmlLinearSpaceDDRM.attributeFor(w) ?: fail()
+        val lup: LupDecompositionAttribute<Double> = EjmlLinearSpaceDDRM.attributeForOrNull(w) ?: fail()
 
         val ludecompositionF64 = DecompositionFactory_DDRM.lu(m.numRows, m.numCols)
             .also { it.decompose(m.copy()) }

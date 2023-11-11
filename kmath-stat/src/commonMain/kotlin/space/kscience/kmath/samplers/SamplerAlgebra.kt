@@ -14,6 +14,7 @@ import space.kscience.kmath.operations.ScaleOperations
 import space.kscience.kmath.operations.invoke
 import space.kscience.kmath.random.RandomGenerator
 import space.kscience.kmath.stat.Sampler
+import space.kscience.kmath.structures.MutableBufferFactory
 
 /**
  * Implements [Sampler] by sampling only certain [value].
@@ -40,6 +41,8 @@ public class BasicSampler<out T : Any>(public val chainBuilder: (RandomGenerator
  */
 public class SamplerSpace<T : Any, out S>(public val algebra: S) : Group<Sampler<T>>,
     ScaleOperations<Sampler<T>> where S : Group<T>, S : ScaleOperations<T> {
+
+    override val bufferFactory: MutableBufferFactory<Sampler<T>> = MutableBufferFactory()
 
     override val zero: Sampler<T> = ConstantSampler(algebra.zero)
 

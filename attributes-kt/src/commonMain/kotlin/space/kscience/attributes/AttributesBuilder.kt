@@ -10,7 +10,7 @@ package space.kscience.attributes
  *
  * @param O type marker of an owner object, for which these attributes are made
  */
-public class TypedAttributesBuilder<in O> internal constructor(private val map: MutableMap<Attribute<*>, Any>) {
+public class TypedAttributesBuilder<in O> internal constructor(private val map: MutableMap<Attribute<*>, Any?>) {
 
     public constructor() : this(mutableMapOf())
 

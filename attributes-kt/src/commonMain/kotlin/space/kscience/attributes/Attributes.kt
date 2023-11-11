@@ -8,7 +8,7 @@ package space.kscience.attributes
 import kotlin.jvm.JvmInline
 
 @JvmInline
-public value class Attributes internal constructor(public val content: Map<out Attribute<*>, Any>) {
+public value class Attributes internal constructor(public val content: Map<out Attribute<*>, Any?>) {
 
     public val keys: Set<Attribute<*>> get() = content.keys
 
@@ -51,7 +51,7 @@ public inline fun <reified A : FlagAttribute> Attributes.has(): Boolean =
 /**
  * Create [Attributes] with an added or replaced attribute key.
  */
-public fun <T : Any, A : Attribute<T>> Attributes.withAttribute(
+public fun <T, A : Attribute<T>> Attributes.withAttribute(
     attribute: A,
     attrValue: T,
 ): Attributes = Attributes(content + (attribute to attrValue))
@@ -101,7 +101,7 @@ public fun <T, A : SetAttribute<T>> Attributes.withoutAttributeElement(
 /**
  * Create [Attributes] with a single key
  */
-public fun <T : Any, A : Attribute<T>> Attributes(
+public fun <T, A : Attribute<T>> Attributes(
     attribute: A,
     attrValue: T,
 ): Attributes = Attributes(mapOf(attribute to attrValue))

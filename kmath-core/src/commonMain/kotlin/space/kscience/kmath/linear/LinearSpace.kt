@@ -5,8 +5,10 @@
 
 package space.kscience.kmath.linear
 
+import space.kscience.attributes.Attributes
 import space.kscience.attributes.SafeType
 import space.kscience.attributes.WithType
+import space.kscience.attributes.withAttribute
 import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.nd.*
 import space.kscience.kmath.operations.BufferRingOps
@@ -173,15 +175,36 @@ public interface LinearSpace<T, out A : Ring<T>> : MatrixOperations<T> {
     public operator fun T.times(v: Point<T>): Point<T> = v * this
 
     /**
-     * Get an attribute value for the structure in this scope. Structure attributes are preferred to computed attributes.
+     * Compute an [attribute] value for given [structure]. Return null if the attribute could not be computed.
+     */
+    public fun <V, A : StructureAttribute<V>> computeAttribute(structure: StructureND<*>, attribute: A): V? = null
+
+    @UnstableKMathAPI
+    public fun <V, A : StructureAttribute<V>> StructureND<*>.getOrComputeAttribute(attribute: A): V? {
+        return attributes[attribute] ?: computeAttribute(this, attribute)
+    }
+
+    /**
+     * If the structure holds given [attribute] return itself. Otherwise, return a new [Matrix] that contains a computed attribute.
      *
-     * @param structure the structure.
-     * @param attribute to be computed.
-     * @return a feature object or `null` if it isn't present.
+     * This method is used to compute and cache attribute inside the structure. If one needs an attribute only once,
+     * better use [StructureND.getOrComputeAttribute].
      */
     @UnstableKMathAPI
-    public fun <T, A : StructureAttribute<T>> attributeFor(structure: StructureND<*>, attribute: A): T =
-        structure.attributes[attribute] ?: error("Can't compute attribute $attribute for $structure")
+    public fun <V : Any, A : StructureAttribute<V>> Matrix<T>.compute(
+        attribute: A,
+    ): Matrix<T>? {
+        return if (attributes[attribute] != null) {
+            this
+        } else {
+            val value = computeAttribute(this, attribute) ?: return null
+            if (this is MatrixWrapper) {
+                MatrixWrapper(this, attributes.withAttribute(attribute, value))
+            } else {
+                MatrixWrapper(this, Attributes(attribute, value))
+            }
+        }
+    }
 
     public companion object {
 

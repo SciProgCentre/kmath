@@ -5,9 +5,13 @@
 
 package space.kscience.kmath.stat
 
+import space.kscience.attributes.SafeType
+import space.kscience.attributes.safeTypeOf
 import space.kscience.kmath.operations.Field
+import space.kscience.kmath.structures.*
 import kotlin.math.pow
 import kotlin.math.sqrt
+
 
 /**
  * A combination of a random [value] and its [dispersion].
@@ -53,4 +57,48 @@ public object ValueAndErrorField : Field<ValueAndError> {
 
     override fun scale(a: ValueAndError, value: Double): ValueAndError =
         ValueAndError(a.value * value, a.dispersion * value.pow(2))
+
+
+    private class ValueAndErrorBuffer(val values: DoubleBuffer, val ds: DoubleBuffer) : MutableBuffer<ValueAndError> {
+        init {
+            require(values.size == ds.size)
+        }
+
+        override val type: SafeType<ValueAndError> get() = safeTypeOf()
+        override val size: Int
+            get() = values.size
+
+        override fun get(index: Int): ValueAndError = ValueAndError(values[index], ds[index])
+
+        override fun toString(): String = Buffer.toString(this)
+
+        override fun set(index: Int, value: ValueAndError) {
+            values[index] = value.value
+            values[index] = value.dispersion
+        }
+
+        override fun copy(): MutableBuffer<ValueAndError> = ValueAndErrorBuffer(values.copy(), ds.copy())
+    }
+
+    override val bufferFactory: MutableBufferFactory<ValueAndError> = object : MutableBufferFactory<ValueAndError> {
+        override fun invoke(
+            size: Int,
+            builder: (Int) -> ValueAndError,
+        ): MutableBuffer<ValueAndError> {
+            val values: DoubleArray = DoubleArray(size)
+            val ds = DoubleArray(size)
+            repeat(size){
+                val (v, d) = builder(it)
+                values[it] = v
+                ds[it] = d
+            }
+            return ValueAndErrorBuffer(
+                values.asBuffer(),
+                ds.asBuffer()
+            )
+        }
+
+        override val type: SafeType<ValueAndError> get() = safeTypeOf()
+
+    }
 }

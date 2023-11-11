@@ -131,10 +131,10 @@ public object EjmlLinearSpaceDDRM : EjmlLinearSpace<Double, Float64Field, DMatri
         val out = DMatrixRMaj(1, 1)
 
         CommonOps_DDRM.add(
-            elementAlgebra.one,
-            toEjml().origin,
+            elementAlgebra.one, 
+            toEjml().origin, 
             elementAlgebra { -one },
-            other.toEjml().origin,
+            other.toEjml().origin, 
             out,
         )
 
@@ -155,12 +155,12 @@ public object EjmlLinearSpaceDDRM : EjmlLinearSpace<Double, Float64Field, DMatri
 
     override fun Matrix<Double>.plus(other: Matrix<Double>): EjmlDoubleMatrix<DMatrixRMaj> {
         val out = DMatrixRMaj(1, 1)
-
+        
         CommonOps_DDRM.add(
             elementAlgebra.one,
             toEjml().origin,
             elementAlgebra.one,
-            other.toEjml().origin,
+            other.toEjml().origin, 
             out,
         )
 
@@ -369,10 +369,10 @@ public object EjmlLinearSpaceFDRM : EjmlLinearSpace<Float, Float32Field, FMatrix
         val out = FMatrixRMaj(1, 1)
 
         CommonOps_FDRM.add(
-            elementAlgebra.one,
-            toEjml().origin,
+            elementAlgebra.one, 
+            toEjml().origin, 
             elementAlgebra { -one },
-            other.toEjml().origin,
+            other.toEjml().origin, 
             out,
         )
 
@@ -393,12 +393,12 @@ public object EjmlLinearSpaceFDRM : EjmlLinearSpace<Float, Float32Field, FMatrix
 
     override fun Matrix<Float>.plus(other: Matrix<Float>): EjmlFloatMatrix<FMatrixRMaj> {
         val out = FMatrixRMaj(1, 1)
-
+        
         CommonOps_FDRM.add(
             elementAlgebra.one,
             toEjml().origin,
             elementAlgebra.one,
-            other.toEjml().origin,
+            other.toEjml().origin, 
             out,
         )
 
@@ -607,12 +607,12 @@ public object EjmlLinearSpaceDSCC : EjmlLinearSpace<Double, Float64Field, DMatri
         val out = DMatrixSparseCSC(1, 1)
 
         CommonOps_DSCC.add(
-            elementAlgebra.one,
-            toEjml().origin,
+            elementAlgebra.one, 
+            toEjml().origin, 
             elementAlgebra { -one },
-            other.toEjml().origin,
+            other.toEjml().origin, 
             out,
-            null,
+            null, 
             null,
         )
 
@@ -633,14 +633,14 @@ public object EjmlLinearSpaceDSCC : EjmlLinearSpace<Double, Float64Field, DMatri
 
     override fun Matrix<Double>.plus(other: Matrix<Double>): EjmlDoubleMatrix<DMatrixSparseCSC> {
         val out = DMatrixSparseCSC(1, 1)
-
+        
         CommonOps_DSCC.add(
             elementAlgebra.one,
             toEjml().origin,
             elementAlgebra.one,
-            other.toEjml().origin,
+            other.toEjml().origin, 
             out,
-            null,
+            null, 
             null,
         )
 
@@ -656,7 +656,7 @@ public object EjmlLinearSpaceDSCC : EjmlLinearSpace<Double, Float64Field, DMatri
             elementAlgebra.one,
             other.toEjml().origin,
             out,
-            null,
+            null, 
             null,
         )
 
@@ -672,7 +672,7 @@ public object EjmlLinearSpaceDSCC : EjmlLinearSpace<Double, Float64Field, DMatri
             elementAlgebra { -one },
             other.toEjml().origin,
             out,
-            null,
+            null, 
             null,
         )
 
@@ -840,12 +840,12 @@ public object EjmlLinearSpaceFSCC : EjmlLinearSpace<Float, Float32Field, FMatrix
         val out = FMatrixSparseCSC(1, 1)
 
         CommonOps_FSCC.add(
-            elementAlgebra.one,
-            toEjml().origin,
+            elementAlgebra.one, 
+            toEjml().origin, 
             elementAlgebra { -one },
-            other.toEjml().origin,
+            other.toEjml().origin, 
             out,
-            null,
+            null, 
             null,
         )
 
@@ -866,14 +866,14 @@ public object EjmlLinearSpaceFSCC : EjmlLinearSpace<Float, Float32Field, FMatrix
 
     override fun Matrix<Float>.plus(other: Matrix<Float>): EjmlFloatMatrix<FMatrixSparseCSC> {
         val out = FMatrixSparseCSC(1, 1)
-
+        
         CommonOps_FSCC.add(
             elementAlgebra.one,
             toEjml().origin,
             elementAlgebra.one,
-            other.toEjml().origin,
+            other.toEjml().origin, 
             out,
-            null,
+            null, 
             null,
         )
 
@@ -889,7 +889,7 @@ public object EjmlLinearSpaceFSCC : EjmlLinearSpace<Float, Float32Field, FMatrix
             elementAlgebra.one,
             other.toEjml().origin,
             out,
-            null,
+            null, 
             null,
         )
 
@@ -905,7 +905,7 @@ public object EjmlLinearSpaceFSCC : EjmlLinearSpace<Float, Float32Field, FMatrix
             elementAlgebra { -one },
             other.toEjml().origin,
             out,
-            null,
+            null, 
             null,
         )
 

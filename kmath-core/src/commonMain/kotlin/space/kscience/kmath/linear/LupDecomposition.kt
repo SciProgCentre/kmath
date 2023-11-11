@@ -209,8 +209,8 @@ public fun <T : Comparable<T>, F : Field<T>> LinearSpace<T, F>.lupSolver(
     singularityCheck: (T) -> Boolean,
 ): LinearSolver<T> = object : LinearSolver<T> {
     override fun solve(a: Matrix<T>, b: Matrix<T>): Matrix<T> {
-        // Use existing decomposition if it is provided by matrix
-        val decomposition = attributeFor(a, LUP) ?: lup(a, singularityCheck)
+        // Use existing decomposition if it is provided by matrix or linear space itself
+        val decomposition = a.getOrComputeAttribute(LUP) ?: lup(a, singularityCheck)
         return solve(decomposition, b)
     }
 

@@ -5,8 +5,6 @@
 
 package space.kscience.attributes
 
-import kotlin.reflect.KType
-
 public interface Attribute<T>
 
 /**
