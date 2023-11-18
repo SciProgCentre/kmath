@@ -9,11 +9,19 @@ package space.kscience.kmath.linear
 
 import space.kscience.attributes.Attributes
 import space.kscience.attributes.PolymorphicAttribute
-import space.kscience.attributes.SafeType
 import space.kscience.attributes.safeTypeOf
 import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.operations.*
 import space.kscience.kmath.structures.*
+
+public interface LupDecomposition<T> {
+    public val linearSpace: LinearSpace<T, Field<T>>
+    public val elementAlgebra: Field<T> get() = linearSpace.elementAlgebra
+
+    public val pivot: IntBuffer
+    public val l: Matrix<T>
+    public val u: Matrix<T>
+}
 
 /**
  * Matrices with this feature support LU factorization with partial pivoting: *[p] &middot; a = [l] &middot; [u]* where
@@ -22,15 +30,14 @@ import space.kscience.kmath.structures.*
  * @param T the type of matrices' items.
  * @param lu combined L and U matrix
  */
-public class LupDecomposition<T>(
-    public val linearSpace: LinearSpace<T, Ring<T>>,
+public class GenericLupDecomposition<T>(
+    override val linearSpace: LinearSpace<T, Field<T>>,
     private val lu: Matrix<T>,
-    public val pivot: IntBuffer,
+    override val pivot: IntBuffer,
     private val even: Boolean,
-) {
-    public val elementAlgebra: Ring<T> get() = linearSpace.elementAlgebra
+) : LupDecomposition<T> {
 
-    public val l: Matrix<T>
+    override val l: Matrix<T>
         get() = VirtualMatrix(lu.type, lu.rowNum, lu.colNum, attributes = Attributes(LowerTriangular)) { i, j ->
             when {
                 j < i -> lu[i, j]
@@ -39,7 +46,7 @@ public class LupDecomposition<T>(
             }
         }
 
-    public val u: Matrix<T>
+    override val u: Matrix<T>
         get() = VirtualMatrix(lu.type, lu.rowNum, lu.colNum, attributes = Attributes(UpperTriangular)) { i, j ->
             if (j >= i) lu[i, j] else elementAlgebra.zero
         }
@@ -55,13 +62,12 @@ public class LupDecomposition<T>(
 
 }
 
-
-public class LupDecompositionAttribute<T>(type: SafeType<LupDecomposition<T>>) :
-    PolymorphicAttribute<LupDecomposition<T>>(type),
+public class LupDecompositionAttribute<T> :
+    PolymorphicAttribute<LupDecomposition<T>>(safeTypeOf()),
     MatrixAttribute<LupDecomposition<T>>
 
-public val <T> MatrixOperations<T>.LUP: LupDecompositionAttribute<T>
-    get() = LupDecompositionAttribute(safeTypeOf())
+public val <T> MatrixScope<T>.LUP: LupDecompositionAttribute<T>
+    get() = LupDecompositionAttribute()
 
 @PublishedApi
 internal fun <T : Comparable<T>> LinearSpace<T, Ring<T>>.abs(value: T): T =
@@ -79,7 +85,7 @@ public fun <T : Comparable<T>> LinearSpace<T, Field<T>>.lup(
     val pivot = IntArray(matrix.rowNum)
 
     //TODO just waits for multi-receivers
-    with(BufferAccessor2D(matrix.rowNum, matrix.colNum, elementAlgebra.bufferFactory)){
+    with(BufferAccessor2D(matrix.rowNum, matrix.colNum, elementAlgebra.bufferFactory)) {
 
         val lu = create(matrix)
 
@@ -142,10 +148,9 @@ public fun <T : Comparable<T>> LinearSpace<T, Field<T>>.lup(
             for (row in col + 1 until m) lu[row, col] /= luDiag
         }
 
-        return LupDecomposition(this@lup, lu.toStructure2D(), pivot.asBuffer(), even)
+        return GenericLupDecomposition(this@lup, lu.toStructure2D(), pivot.asBuffer(), even)
     }
 }
-
 
 
 public fun LinearSpace<Double, Float64Field>.lup(
@@ -153,7 +158,7 @@ public fun LinearSpace<Double, Float64Field>.lup(
     singularityThreshold: Double = 1e-11,
 ): LupDecomposition<Double> = lup(matrix) { it < singularityThreshold }
 
-internal fun <T : Any, A : Field<T>> LinearSpace<T, A>.solve(
+internal fun <T> LinearSpace<T, Field<T>>.solve(
     lup: LupDecomposition<T>,
     matrix: Matrix<T>,
 ): Matrix<T> {
@@ -205,7 +210,7 @@ internal fun <T : Any, A : Field<T>> LinearSpace<T, A>.solve(
  * Produce a generic solver based on LUP decomposition
  */
 @OptIn(UnstableKMathAPI::class)
-public fun <T : Comparable<T>, F : Field<T>> LinearSpace<T, F>.lupSolver(
+public fun <T : Comparable<T>> LinearSpace<T, Field<T>>.lupSolver(
     singularityCheck: (T) -> Boolean,
 ): LinearSolver<T> = object : LinearSolver<T> {
     override fun solve(a: Matrix<T>, b: Matrix<T>): Matrix<T> {

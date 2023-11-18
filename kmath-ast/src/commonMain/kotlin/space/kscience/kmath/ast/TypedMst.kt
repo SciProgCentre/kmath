@@ -5,6 +5,8 @@
 
 package space.kscience.kmath.ast
 
+import space.kscience.attributes.SafeType
+import space.kscience.attributes.WithType
 import space.kscience.kmath.expressions.Expression
 import space.kscience.kmath.expressions.Symbol
 import space.kscience.kmath.operations.Algebra
@@ -15,7 +17,7 @@ import space.kscience.kmath.operations.NumericAlgebra
  *
  * @param T the type.
  */
-public sealed interface TypedMst<T> {
+public sealed interface TypedMst<T> : WithType<T> {
     /**
      * A node containing a unary operation.
      *
@@ -24,8 +26,13 @@ public sealed interface TypedMst<T> {
      * @property function The function implementing this operation.
      * @property value The argument of this operation.
      */
-    public class Unary<T>(public val operation: String, public val function: (T) -> T, public val value: TypedMst<T>) :
-        TypedMst<T> {
+    public class Unary<T>(
+        public val operation: String,
+        public val function: (T) -> T,
+        public val value: TypedMst<T>,
+    ) : TypedMst<T> {
+        override val type: SafeType<T> get() = value.type
+
         override fun equals(other: Any?): Boolean {
             if (this === other) return true
             if (other == null || this::class != other::class) return false
@@ -59,6 +66,13 @@ public sealed interface TypedMst<T> {
         public val left: TypedMst<T>,
         public val right: TypedMst<T>,
     ) : TypedMst<T> {
+
+        init {
+            require(left.type==right.type){"Left and right expressions must be of the same type"}
+        }
+
+        override val type: SafeType<T> get() = left.type
+
         override fun equals(other: Any?): Boolean {
             if (this === other) return true
             if (other == null || this::class != other::class) return false
@@ -89,7 +103,12 @@ public sealed interface TypedMst<T> {
      * @property value The held value.
      * @property number The number this value corresponds.
      */
-    public class Constant<T>(public val value: T, public val number: Number?) : TypedMst<T> {
+    public class Constant<T>(
+        override val type: SafeType<T>,
+        public val value: T,
+        public val number: Number?,
+    ) : TypedMst<T> {
+
         override fun equals(other: Any?): Boolean {
             if (this === other) return true
             if (other == null || this::class != other::class) return false
@@ -114,7 +133,7 @@ public sealed interface TypedMst<T> {
      * @param T the type.
      * @property symbol The symbol of the variable.
      */
-    public class Variable<T>(public val symbol: Symbol) : TypedMst<T> {
+    public class Variable<T>(override val type: SafeType<T>, public val symbol: Symbol) : TypedMst<T> {
         override fun equals(other: Any?): Boolean {
             if (this === other) return true
             if (other == null || this::class != other::class) return false
@@ -167,6 +186,7 @@ public fun <T> TypedMst<T>.interpret(algebra: Algebra<T>, vararg arguments: Pair
 /**
  * Interpret this [TypedMst] node as expression.
  */
-public fun <T : Any> TypedMst<T>.toExpression(algebra: Algebra<T>): Expression<T> = Expression { arguments ->
-    interpret(algebra, arguments)
-}
+public fun <T : Any> TypedMst<T>.toExpression(algebra: Algebra<T>): Expression<T> =
+    Expression(algebra.type) { arguments ->
+        interpret(algebra, arguments)
+    }

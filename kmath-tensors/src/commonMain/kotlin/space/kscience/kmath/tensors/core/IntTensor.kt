@@ -5,8 +5,10 @@
 
 package space.kscience.kmath.tensors.core
 
+import space.kscience.attributes.SafeType
 import space.kscience.kmath.PerformancePitfall
 import space.kscience.kmath.nd.ShapeND
+import space.kscience.kmath.operations.IntRing
 import space.kscience.kmath.structures.*
 
 /**
@@ -23,6 +25,8 @@ public class OffsetIntBuffer(
         require(size >= 0) { "Size must be non-negative" }
         require(offset + size <= source.size) { "Maximum index must be inside source dimension" }
     }
+
+    override val type: SafeType<Int> get() = IntRing.type
 
     override fun set(index: Int, value: Int) {
         require(index in 0 until size) { "Index must be in [0, size)" }
@@ -82,6 +86,8 @@ public class IntTensor(
     init {
         require(linearSize == source.size) { "Source buffer size must be equal tensor size" }
     }
+
+    override val type: SafeType<Int> get() = IntRing.type
 
     public constructor(shape: ShapeND, buffer: Int32Buffer) : this(shape, OffsetIntBuffer(buffer, 0, buffer.size))
 

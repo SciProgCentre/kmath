@@ -15,7 +15,7 @@ import space.kscience.kmath.operations.asIterable
 import space.kscience.kmath.operations.toList
 import space.kscience.kmath.optimization.FunctionOptimizationTarget
 import space.kscience.kmath.optimization.optimizeWith
-import space.kscience.kmath.optimization.resultPoint
+import space.kscience.kmath.optimization.result
 import space.kscience.kmath.optimization.resultValue
 import space.kscience.kmath.random.RandomGenerator
 import space.kscience.kmath.real.DoubleVector
@@ -98,7 +98,7 @@ suspend fun main() {
             scatter {
                 mode = ScatterMode.lines
                 x(x)
-                y(x.map { result.resultPoint[a]!! * it.pow(2) + result.resultPoint[b]!! * it + 1 })
+                y(x.map { result.result[a]!! * it.pow(2) + result.result[b]!! * it + 1 })
                 name = "fit"
             }
         }

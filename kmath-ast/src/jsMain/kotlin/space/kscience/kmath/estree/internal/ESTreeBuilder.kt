@@ -5,13 +5,22 @@
 
 package space.kscience.kmath.estree.internal
 
+import space.kscience.attributes.SafeType
+import space.kscience.attributes.WithType
 import space.kscience.kmath.expressions.Expression
 import space.kscience.kmath.expressions.Symbol
 import space.kscience.kmath.internal.astring.generate
 import space.kscience.kmath.internal.estree.*
 
-internal class ESTreeBuilder<T>(val bodyCallback: ESTreeBuilder<T>.() -> BaseExpression) {
-    private class GeneratedExpression<T>(val executable: dynamic, val constants: Array<dynamic>) : Expression<T> {
+internal class ESTreeBuilder<T>(
+    override val type: SafeType<T>,
+    val bodyCallback: ESTreeBuilder<T>.() -> BaseExpression,
+) : WithType<T> {
+    private class GeneratedExpression<T>(
+        override val type: SafeType<T>,
+        val executable: dynamic,
+        val constants: Array<dynamic>,
+    ) : Expression<T> {
         @Suppress("UNUSED_VARIABLE")
         override fun invoke(arguments: Map<Symbol, T>): T {
             val e = executable
@@ -30,7 +39,7 @@ internal class ESTreeBuilder<T>(val bodyCallback: ESTreeBuilder<T>.() -> BaseExp
         )
 
         val code = generate(node)
-        GeneratedExpression(js("new Function('constants', 'arguments_0', code)"), constants.toTypedArray())
+        GeneratedExpression(type, js("new Function('constants', 'arguments_0', code)"), constants.toTypedArray())
     }
 
     private val constants = mutableListOf<Any>()

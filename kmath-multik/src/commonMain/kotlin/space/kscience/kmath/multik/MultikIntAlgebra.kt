@@ -15,7 +15,7 @@ public class MultikIntAlgebra(
     multikEngine: Engine
 ) : MultikTensorAlgebra<Int, Int32Ring>(multikEngine) {
     override val elementAlgebra: Int32Ring get() = Int32Ring
-    override val type: DataType get() = DataType.IntDataType
+    override val dataType: DataType get() = DataType.IntDataType
     override fun scalar(value: Int): MultikTensor<Int>  = Multik.ndarrayOf(value).wrap()
 }
 

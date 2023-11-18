@@ -35,7 +35,7 @@ public val <T : Any> Matrix<T>.origin: Matrix<T>
 /**
  * Add a single feature to a [Matrix]
  */
-public fun <T : Any, A : Attribute<T>> Matrix<T>.withAttribute(
+public fun <T, A : Attribute<T>> Matrix<T>.withAttribute(
     attribute: A,
     attrValue: T,
 ): MatrixWrapper<T> = if (this is MatrixWrapper) {
@@ -44,7 +44,7 @@ public fun <T : Any, A : Attribute<T>> Matrix<T>.withAttribute(
     MatrixWrapper(this, Attributes(attribute, attrValue))
 }
 
-public fun <T : Any, A : Attribute<Unit>> Matrix<T>.withAttribute(
+public fun <T, A : Attribute<Unit>> Matrix<T>.withAttribute(
     attribute: A,
 ): MatrixWrapper<T> = if (this is MatrixWrapper) {
     MatrixWrapper(origin, attributes.withAttribute(attribute))
@@ -55,7 +55,7 @@ public fun <T : Any, A : Attribute<Unit>> Matrix<T>.withAttribute(
 /**
  * Modify matrix attributes
  */
-public fun <T : Any> Matrix<T>.modifyAttributes(modifier: (Attributes) -> Attributes): MatrixWrapper<T> =
+public fun <T> Matrix<T>.modifyAttributes(modifier: (Attributes) -> Attributes): MatrixWrapper<T> =
     if (this is MatrixWrapper) {
         MatrixWrapper(origin, modifier(attributes))
     } else {
@@ -65,7 +65,7 @@ public fun <T : Any> Matrix<T>.modifyAttributes(modifier: (Attributes) -> Attrib
 /**
  * Diagonal matrix of ones. The matrix is virtual, no actual matrix is created.
  */
-public fun <T : Any> LinearSpace<T, Ring<T>>.one(
+public fun <T> LinearSpace<T, Ring<T>>.one(
     rows: Int,
     columns: Int,
 ): MatrixWrapper<T> = VirtualMatrix(type, rows, columns) { i, j ->
@@ -76,7 +76,7 @@ public fun <T : Any> LinearSpace<T, Ring<T>>.one(
 /**
  * A virtual matrix of zeroes
  */
-public fun <T : Any> LinearSpace<T, Ring<T>>.zero(
+public fun <T> LinearSpace<T, Ring<T>>.zero(
     rows: Int,
     columns: Int,
 ): MatrixWrapper<T> = VirtualMatrix(type, rows, columns) { _, _ ->

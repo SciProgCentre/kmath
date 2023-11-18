@@ -94,13 +94,13 @@ suspend fun main() {
             scatter {
                 mode = ScatterMode.lines
                 x(x)
-                y(x.map { result.model(result.startPoint + result.resultPoint + (Symbol.x to it)) })
+                y(x.map { result.model(result.startPoint + result.result + (Symbol.x to it)) })
                 name = "fit"
             }
         }
         br()
         h3 {
-            +"Fit result: ${result.resultPoint}"
+            +"Fit result: ${result.result}"
         }
         h3 {
             +"Chi2/dof = ${result.chiSquaredOrNull!! / result.dof}"

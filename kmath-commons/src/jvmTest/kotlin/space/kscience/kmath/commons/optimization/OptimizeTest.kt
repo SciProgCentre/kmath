@@ -31,7 +31,7 @@ internal class OptimizeTest {
     @Test
     fun testGradientOptimization() = runBlocking {
         val result = normal.optimizeWith(CMOptimizer, x to 1.0, y to 1.0)
-        println(result.resultPoint)
+        println(result.result)
         println(result.resultValue)
     }
 
@@ -42,7 +42,7 @@ internal class OptimizeTest {
             //this sets simplex optimizer
         }
 
-        println(result.resultPoint)
+        println(result.result)
         println(result.resultValue)
     }
 

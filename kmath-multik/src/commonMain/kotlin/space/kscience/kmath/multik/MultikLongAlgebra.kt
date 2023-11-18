@@ -15,7 +15,7 @@ public class MultikLongAlgebra(
     multikEngine: Engine
 ) : MultikTensorAlgebra<Long, Int64Ring>(multikEngine) {
     override val elementAlgebra: Int64Ring get() = Int64Ring
-    override val type: DataType get() = DataType.LongDataType
+    override val dataType: DataType get() = DataType.LongDataType
 
     override fun scalar(value: Long): MultikTensor<Long>  = Multik.ndarrayOf(value).wrap()
 }

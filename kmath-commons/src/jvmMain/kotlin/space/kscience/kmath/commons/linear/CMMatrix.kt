@@ -6,18 +6,20 @@
 package space.kscience.kmath.commons.linear
 
 import org.apache.commons.math3.linear.*
+import org.apache.commons.math3.linear.LUDecomposition
+import space.kscience.attributes.SafeType
 import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.linear.*
+import space.kscience.kmath.nd.Structure2D
 import space.kscience.kmath.nd.StructureAttribute
+import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.operations.Float64Field
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.Float64Buffer
-import kotlin.reflect.KClass
-import kotlin.reflect.KType
 import kotlin.reflect.cast
-import kotlin.reflect.typeOf
 
 public class CMMatrix(public val origin: RealMatrix) : Matrix<Double> {
+    override val type: SafeType<Double> get() = DoubleField.type
     override val rowNum: Int get() = origin.rowDimension
     override val colNum: Int get() = origin.columnDimension
 
@@ -26,6 +28,7 @@ public class CMMatrix(public val origin: RealMatrix) : Matrix<Double> {
 
 @JvmInline
 public value class CMVector(public val origin: RealVector) : Point<Double> {
+    override val type: SafeType<Double> get() = DoubleField.type
     override val size: Int get() = origin.dimension
 
     override operator fun get(index: Int): Double = origin.getEntry(index)
@@ -40,7 +43,7 @@ public fun RealVector.toPoint(): CMVector = CMVector(this)
 public object CMLinearSpace : LinearSpace<Double, Float64Field> {
     override val elementAlgebra: Float64Field get() = Float64Field
 
-    override val elementType: KType = typeOf<Double>()
+    override val type: SafeType<Double> get() = DoubleField.type
 
     override fun buildMatrix(
         rows: Int,
@@ -102,19 +105,14 @@ public object CMLinearSpace : LinearSpace<Double, Float64Field> {
     override fun Double.times(v: Point<Double>): CMVector =
         v * this
 
-    @UnstableKMathAPI
-    override fun <F : StructureAttribute> computeFeature(structure: Matrix<Double>, type: KClass<out F>): F? {
-        //Return the feature if it is intrinsic to the structure
-        structure.getFeature(type)?.let { return it }
+    override fun <V, A : StructureAttribute<V>> computeAttribute(structure: Structure2D<Double>, attribute: A): V? {
 
         val origin = structure.toCM().origin
 
-        return when (type) {
-            IsDiagonal::class -> if (origin is DiagonalMatrix) IsDiagonal else null
-
-            Determinant::class, LupDecompositionAttribute::class -> object :
-                Determinant<Double>,
-                LupDecompositionAttribute<Double> {
+        return when (attribute) {
+            IsDiagonal -> if (origin is DiagonalMatrix) IsDiagonal else null
+            Determinant -> LUDecomposition(origin).determinant
+            LUP -> GenericLupDecomposition {
                 private val lup by lazy { LUDecomposition(origin) }
                 override val determinant: Double by lazy { lup.determinant }
                 override val l: Matrix<Double> by lazy<Matrix<Double>> { CMMatrix(lup.l).withAttribute(LowerTriangular) }
@@ -122,20 +120,24 @@ public object CMLinearSpace : LinearSpace<Double, Float64Field> {
                 override val p: Matrix<Double> by lazy { CMMatrix(lup.p) }
             }
 
-            CholeskyDecompositionAttribute::class -> object : CholeskyDecompositionAttribute<Double> {
+            CholeskyDecompositionAttribute -> object : CholeskyDecompositionAttribute<Double> {
                 override val l: Matrix<Double> by lazy<Matrix<Double>> {
                     val cholesky = CholeskyDecomposition(origin)
                     CMMatrix(cholesky.l).withAttribute(LowerTriangular)
                 }
             }
 
-            QRDecompositionAttribute::class -> object : QRDecompositionAttribute<Double> {
+            QRDecompositionAttribute -> object : QRDecompositionAttribute<Double> {
                 private val qr by lazy { QRDecomposition(origin) }
-                override val q: Matrix<Double> by lazy<Matrix<Double>> { CMMatrix(qr.q).withAttribute(OrthogonalAttribute) }
+                override val q: Matrix<Double> by lazy<Matrix<Double>> {
+                    CMMatrix(qr.q).withAttribute(
+                        OrthogonalAttribute
+                    )
+                }
                 override val r: Matrix<Double> by lazy<Matrix<Double>> { CMMatrix(qr.r).withAttribute(UpperTriangular) }
             }
 
-            SVDAttribute::class -> object : SVDAttribute<Double> {
+            SVDAttribute -> object : SVDAttribute<Double> {
                 private val sv by lazy { SingularValueDecomposition(origin) }
                 override val u: Matrix<Double> by lazy { CMMatrix(sv.u) }
                 override val s: Matrix<Double> by lazy { CMMatrix(sv.s) }

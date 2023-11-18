@@ -24,14 +24,3 @@ public interface AttributeWithDefault<T> : Attribute<T> {
  */
 public interface SetAttribute<V> : Attribute<Set<V>>
 
-/**
- * An attribute that has a type parameter for value
- * @param type parameter-type
- */
-public abstract class PolymorphicAttribute<T>(public val type: SafeType<T>) : Attribute<T> {
-    override fun equals(other: Any?): Boolean = other != null &&
-            (this::class == other::class) &&
-            (other as? PolymorphicAttribute<*>)?.type == this.type
-
-    override fun hashCode(): Int = this::class.hashCode() + type.hashCode()
-}

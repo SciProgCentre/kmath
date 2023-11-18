@@ -30,7 +30,7 @@ public sealed class IntegrandValue<T> private constructor(): IntegrandAttribute<
     }
 }
 
-public fun <T> TypedAttributesBuilder<Integrand<T>>.value(value: T) {
+public fun <T> AttributesBuilder<Integrand<T>>.value(value: T) {
     IntegrandValue.forType<T>().invoke(value)
 }
 

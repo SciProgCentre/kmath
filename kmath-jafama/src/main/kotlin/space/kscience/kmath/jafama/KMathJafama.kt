@@ -7,16 +7,17 @@ package space.kscience.kmath.jafama
 
 import net.jafama.FastMath
 import net.jafama.StrictFastMath
-import space.kscience.kmath.operations.ExtendedField
-import space.kscience.kmath.operations.Norm
-import space.kscience.kmath.operations.PowerOperations
-import space.kscience.kmath.operations.ScaleOperations
+import space.kscience.kmath.operations.*
+import space.kscience.kmath.structures.MutableBufferFactory
 
 /**
  * A field for [Double] (using FastMath) without boxing. Does not produce appropriate field element.
  */
 @Suppress("EXTENSION_SHADOWED_BY_MEMBER", "OVERRIDE_BY_INLINE", "NOTHING_TO_INLINE")
 public object JafamaDoubleField : ExtendedField<Double>, Norm<Double, Double>, ScaleOperations<Double> {
+
+    override val bufferFactory: MutableBufferFactory<Double> get() = DoubleField.bufferFactory
+
     override inline val zero: Double get() = 0.0
     override inline val one: Double get() = 1.0
 
@@ -68,6 +69,9 @@ public object JafamaDoubleField : ExtendedField<Double>, Norm<Double, Double>, S
  */
 @Suppress("EXTENSION_SHADOWED_BY_MEMBER", "OVERRIDE_BY_INLINE", "NOTHING_TO_INLINE")
 public object StrictJafamaDoubleField : ExtendedField<Double>, Norm<Double, Double>, ScaleOperations<Double> {
+
+    override val bufferFactory: MutableBufferFactory<Double> get() = DoubleField.bufferFactory
+
     override inline val zero: Double get() = 0.0
     override inline val one: Double get() = 1.0
 

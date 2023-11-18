@@ -23,26 +23,27 @@ public abstract class FunctionalExpressionAlgebra<T, out A : Algebra<T>>(
     /**
      * Builds an Expression of constant expression that does not depend on arguments.
      */
-    override fun const(value: T): Expression<T> = Expression { value }
+    override fun const(value: T): Expression<T> = Expression(algebra.type) { value }
 
     /**
      * Builds an Expression to access a variable.
      */
-    override fun bindSymbolOrNull(value: String): Expression<T>? = Expression { arguments ->
+    override fun bindSymbolOrNull(value: String): Expression<T>? = Expression(algebra.type) { arguments ->
         algebra.bindSymbolOrNull(value)
             ?: arguments[StringSymbol(value)]
             ?: error("Symbol '$value' is not supported in $this")
     }
 
-    override fun binaryOperationFunction(operation: String): (left: Expression<T>, right: Expression<T>) -> Expression<T> =
-        { left, right ->
-            Expression { arguments ->
-                algebra.binaryOperationFunction(operation)(left(arguments), right(arguments))
-            }
+    override fun binaryOperationFunction(
+        operation: String,
+    ): (left: Expression<T>, right: Expression<T>) -> Expression<T> = { left, right ->
+        Expression(algebra.type) { arguments ->
+            algebra.binaryOperationFunction(operation)(left(arguments), right(arguments))
         }
+    }
 
     override fun unaryOperationFunction(operation: String): (arg: Expression<T>) -> Expression<T> = { arg ->
-        Expression { arguments -> algebra.unaryOperation(operation, arg(arguments)) }
+        Expression(algebra.type) { arguments -> algebra.unaryOperation(operation, arg(arguments)) }
     }
 }
 
@@ -124,7 +125,7 @@ public open class FunctionalExpressionField<T, out A : Field<T>>(
         super<FunctionalExpressionRing>.binaryOperationFunction(operation)
 
     override fun scale(a: Expression<T>, value: Double): Expression<T> = algebra {
-        Expression { args -> a(args) * value }
+        Expression(algebra.type) { args -> a(args) * value }
     }
 
     override fun bindSymbolOrNull(value: String): Expression<T>? =

@@ -5,10 +5,15 @@
 
 package space.kscience.kmath.expressions
 
+import space.kscience.attributes.SafeType
+
 public class ExpressionWithDefault<T>(
     private val origin: Expression<T>,
     private val defaultArgs: Map<Symbol, T>,
 ) : Expression<T> {
+    override val type: SafeType<T>
+        get() = origin.type
+
     override fun invoke(arguments: Map<Symbol, T>): T = origin.invoke(defaultArgs + arguments)
 }
 
@@ -20,6 +25,9 @@ public class DiffExpressionWithDefault<T>(
     private val origin: DifferentiableExpression<T>,
     private val defaultArgs: Map<Symbol, T>,
 ) : DifferentiableExpression<T> {
+
+    override val type: SafeType<T>
+        get() = origin.type
 
     override fun invoke(arguments: Map<Symbol, T>): T = origin.invoke(defaultArgs + arguments)
 

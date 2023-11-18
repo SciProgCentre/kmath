@@ -39,5 +39,5 @@ public abstract class EjmlLinearSpace<T : Any, out A : Ring<T>, out M : org.ejml
 
     @UnstableKMathAPI
     public fun EjmlMatrix<T, *>.inverted(): Matrix<Double> =
-        attributeForOrNull(this, Float64Field.linearSpace.Inverted)
+        computeAttribute(this, Float64Field.linearSpace.Inverted)!!
 }

@@ -10,6 +10,13 @@ package space.kscience.kmath.linear
 import space.kscience.attributes.*
 import space.kscience.kmath.nd.StructureAttribute
 
+
+/**
+ * A marker interface for algebras that operate on matrices
+ * @param T type of matrix element
+ */
+public interface MatrixScope<T> : AttributeScope<Matrix<T>>, WithType<T>
+
 /**
  * A marker interface representing some properties of matrices or additional transformations of them. Features are used
  * to optimize matrix operations performance in some cases or retrieve the APIs.
@@ -38,11 +45,11 @@ public object IsUnit : IsDiagonal
  *
  * @param T the type of matrices' items.
  */
-public class Inverted<T>(type: SafeType<Matrix<T>>) :
-    PolymorphicAttribute<Matrix<T>>(type),
+public class Inverted<T>() :
+    PolymorphicAttribute<Matrix<T>>(safeTypeOf()),
     MatrixAttribute<Matrix<T>>
 
-public val <T> MatrixOperations<T>.Inverted: Inverted<T> get() = Inverted(safeTypeOf())
+public val <T> MatrixScope<T>.Inverted: Inverted<T> get() = Inverted()
 
 /**
  * Matrices with this feature can compute their determinant.
@@ -53,7 +60,7 @@ public class Determinant<T>(type: SafeType<T>) :
     PolymorphicAttribute<T>(type),
     MatrixAttribute<T>
 
-public val <T> MatrixOperations<T>.Determinant: Determinant<T> get() = Determinant(type)
+public val <T> MatrixScope<T>.Determinant: Determinant<T> get() = Determinant(type)
 
 /**
  * Matrices with this feature are lower triangular ones.
@@ -77,11 +84,11 @@ public data class LUDecomposition<T>(val l: Matrix<T>, val u: Matrix<T>)
  *
  * @param T the type of matrices' items.
  */
-public class LuDecompositionAttribute<T>(type: SafeType<LUDecomposition<T>>) :
-    PolymorphicAttribute<LUDecomposition<T>>(type),
+public class LuDecompositionAttribute<T> :
+    PolymorphicAttribute<LUDecomposition<T>>(safeTypeOf()),
     MatrixAttribute<LUDecomposition<T>>
 
-public val <T> MatrixOperations<T>.LU: LuDecompositionAttribute<T> get() = LuDecompositionAttribute(safeTypeOf())
+public val <T> MatrixScope<T>.LU: LuDecompositionAttribute<T> get() = LuDecompositionAttribute()
 
 
 /**
@@ -108,12 +115,12 @@ public interface QRDecomposition<out T> {
  *
  * @param T the type of matrices' items.
  */
-public class QRDecompositionAttribute<T>(type: SafeType<QRDecomposition<T>>) :
-    PolymorphicAttribute<QRDecomposition<T>>(type),
+public class QRDecompositionAttribute<T>() :
+    PolymorphicAttribute<QRDecomposition<T>>(safeTypeOf()),
     MatrixAttribute<QRDecomposition<T>>
 
-public val <T> MatrixOperations<T>.QR: QRDecompositionAttribute<T>
-    get() = QRDecompositionAttribute(safeTypeOf())
+public val <T> MatrixScope<T>.QR: QRDecompositionAttribute<T>
+    get() = QRDecompositionAttribute()
 
 public interface CholeskyDecomposition<T> {
     /**
@@ -128,12 +135,12 @@ public interface CholeskyDecomposition<T> {
  *
  * @param T the type of matrices' items.
  */
-public class CholeskyDecompositionAttribute<T>(type: SafeType<CholeskyDecomposition<T>>) :
-    PolymorphicAttribute<CholeskyDecomposition<T>>(type),
+public class CholeskyDecompositionAttribute<T> :
+    PolymorphicAttribute<CholeskyDecomposition<T>>(safeTypeOf()),
     MatrixAttribute<CholeskyDecomposition<T>>
 
-public val <T> MatrixOperations<T>.Cholesky: CholeskyDecompositionAttribute<T>
-    get() = CholeskyDecompositionAttribute(safeTypeOf())
+public val <T> MatrixScope<T>.Cholesky: CholeskyDecompositionAttribute<T>
+    get() = CholeskyDecompositionAttribute()
 
 public interface SingularValueDecomposition<T> {
     /**
@@ -163,12 +170,11 @@ public interface SingularValueDecomposition<T> {
  *
  * @param T the type of matrices' items.
  */
-public class SVDAttribute<T>(type: SafeType<SingularValueDecomposition<T>>) :
-    PolymorphicAttribute<SingularValueDecomposition<T>>(type),
+public class SVDAttribute<T>() :
+    PolymorphicAttribute<SingularValueDecomposition<T>>(safeTypeOf()),
     MatrixAttribute<SingularValueDecomposition<T>>
 
-public val <T> MatrixOperations<T>.SVD: SVDAttribute<T>
-    get() = SVDAttribute(safeTypeOf())
+public val <T> MatrixScope<T>.SVD: SVDAttribute<T> get() = SVDAttribute()
 
 
 //TODO add sparse matrix feature

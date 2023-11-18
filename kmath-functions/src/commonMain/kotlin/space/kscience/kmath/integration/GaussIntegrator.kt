@@ -4,7 +4,7 @@
  */
 package space.kscience.kmath.integration
 
-import space.kscience.attributes.TypedAttributesBuilder
+import space.kscience.attributes.AttributesBuilder
 import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.operations.Field
 import space.kscience.kmath.structures.Buffer
@@ -92,7 +92,7 @@ public inline fun <reified T : Any> GaussIntegrator<T>.integrate(
     range: ClosedRange<Double>,
     order: Int = 10,
     intervals: Int = 10,
-    attributesBuilder: TypedAttributesBuilder<UnivariateIntegrand<T>>.() -> Unit,
+    attributesBuilder: AttributesBuilder<UnivariateIntegrand<T>>.() -> Unit,
     noinline function: (Double) -> T,
 ): UnivariateIntegrand<T> {
     require(range.endInclusive > range.start) { "The range upper bound should be higher than lower bound" }

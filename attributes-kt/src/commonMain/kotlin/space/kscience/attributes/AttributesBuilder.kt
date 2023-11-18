@@ -10,19 +10,24 @@ package space.kscience.attributes
  *
  * @param O type marker of an owner object, for which these attributes are made
  */
-public class TypedAttributesBuilder<in O> internal constructor(private val map: MutableMap<Attribute<*>, Any?>) {
+public class AttributesBuilder<out O> internal constructor(
+    private val map: MutableMap<Attribute<*>, Any?>,
+) : Attributes {
 
     public constructor() : this(mutableMapOf())
 
-    @Suppress("UNCHECKED_CAST")
-    public operator fun <T> get(attribute: Attribute<T>): T? = map[attribute] as? T
+    override val content: Map<out Attribute<*>, Any?> get() = map
+
+    public operator fun <T> set(attribute: Attribute<T>, value: T?) {
+        if (value == null) {
+            map.remove(attribute)
+        } else {
+            map[attribute] = value
+        }
+    }
 
     public operator fun <V> Attribute<V>.invoke(value: V?) {
-        if (value == null) {
-            map.remove(this)
-        } else {
-            map[this] = value
-        }
+        set(this, value)
     }
 
     public fun from(attributes: Attributes) {
@@ -46,14 +51,8 @@ public class TypedAttributesBuilder<in O> internal constructor(private val map: 
         map[this] = currentSet - attrValue
     }
 
-    public fun build(): Attributes = Attributes(map)
+    public fun build(): Attributes = AttributesImpl(map)
 }
 
-public typealias AttributesBuilder = TypedAttributesBuilder<Any?>
-
-public fun AttributesBuilder(
-    attributes: Attributes,
-): AttributesBuilder = AttributesBuilder(attributes.content.toMutableMap())
-
-public inline fun Attributes(builder: AttributesBuilder.() -> Unit): Attributes =
-    AttributesBuilder().apply(builder).build()
+public inline fun <O> Attributes(builder: AttributesBuilder<O>.() -> Unit): Attributes =
+    AttributesBuilder<O>().apply(builder).build()

@@ -13,6 +13,8 @@ import org.apache.commons.math3.optim.nonlinear.scalar.ObjectiveFunctionGradient
 import org.apache.commons.math3.optim.nonlinear.scalar.gradient.NonLinearConjugateGradientOptimizer
 import org.apache.commons.math3.optim.nonlinear.scalar.noderiv.NelderMeadSimplex
 import org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizer
+import space.kscience.attributes.AttributesBuilder
+import space.kscience.attributes.SetAttribute
 import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.expressions.Symbol
 import space.kscience.kmath.expressions.SymbolIndexer
@@ -26,34 +28,25 @@ import kotlin.reflect.KClass
 public operator fun PointValuePair.component1(): DoubleArray = point
 public operator fun PointValuePair.component2(): Double = value
 
-public class CMOptimizerEngine(public val optimizerBuilder: () -> MultivariateOptimizer) : OptimizationFeature {
-    override fun toString(): String = "CMOptimizer($optimizerBuilder)"
-}
+public object CMOptimizerEngine: OptimizationAttribute<() -> MultivariateOptimizer>
 
 /**
  * Specify a Commons-maths optimization engine
  */
-public fun FunctionOptimizationBuilder<Double>.cmEngine(optimizerBuilder: () -> MultivariateOptimizer) {
-    addFeature(CMOptimizerEngine(optimizerBuilder))
+public fun AttributesBuilder<FunctionOptimization<Double>>.cmEngine(optimizerBuilder: () -> MultivariateOptimizer) {
+    set(CMOptimizerEngine, optimizerBuilder)
 }
 
-public class CMOptimizerData(public val data: List<SymbolIndexer.() -> OptimizationData>) : OptimizationFeature {
-    public constructor(vararg data: (SymbolIndexer.() -> OptimizationData)) : this(data.toList())
-
-    override fun toString(): String = "CMOptimizerData($data)"
-}
+public object CMOptimizerData: SetAttribute<SymbolIndexer.() -> OptimizationData>
 
 /**
  * Specify Commons-maths optimization data.
  */
-public fun FunctionOptimizationBuilder<Double>.cmOptimizationData(data: SymbolIndexer.() -> OptimizationData) {
-    updateFeature<CMOptimizerData> {
-        val newData = (it?.data ?: emptyList()) + data
-        CMOptimizerData(newData)
-    }
+public fun AttributesBuilder<FunctionOptimization<Double>>.cmOptimizationData(data: SymbolIndexer.() -> OptimizationData) {
+    CMOptimizerData.add(data)
 }
 
-public fun FunctionOptimizationBuilder<Double>.simplexSteps(vararg steps: Pair<Symbol, Double>) {
+public fun AttributesBuilder<FunctionOptimization<Double>>.simplexSteps(vararg steps: Pair<Symbol, Double>) {
     //TODO use convergence checker from features
     cmEngine { SimplexOptimizer(CMOptimizer.defaultConvergenceChecker) }
     cmOptimizationData { NelderMeadSimplex(mapOf(*steps).toDoubleArray()) }
@@ -78,8 +71,8 @@ public object CMOptimizer : Optimizer<Double, FunctionOptimization<Double>> {
     ): FunctionOptimization<Double> {
         val startPoint = problem.startPoint
 
-        val parameters = problem.getFeature<OptimizationParameters>()?.symbols
-            ?: problem.getFeature<OptimizationStartPoint<Double>>()?.point?.keys
+        val parameters = problem.attributes[OptimizationParameters]
+            ?: problem.attributes[OptimizationStartPoint<Double>()]?.keys
             ?: startPoint.keys
 
 
@@ -90,7 +83,7 @@ public object CMOptimizer : Optimizer<Double, FunctionOptimization<Double>> {
                 DEFAULT_MAX_ITER
             )
 
-            val cmOptimizer: MultivariateOptimizer = problem.getFeature<CMOptimizerEngine>()?.optimizerBuilder?.invoke()
+            val cmOptimizer: MultivariateOptimizer = problem.attributes[CMOptimizerEngine]?.invoke()
                 ?: NonLinearConjugateGradientOptimizer(
                     NonLinearConjugateGradientOptimizer.Formula.FLETCHER_REEVES,
                     convergenceChecker
@@ -123,7 +116,7 @@ public object CMOptimizer : Optimizer<Double, FunctionOptimization<Double>> {
             }
             addOptimizationData(gradientFunction)
 
-            val logger = problem.getFeature<OptimizationLog>()
+            val logger = problem.attributes[OptimizationLog]
 
             for (feature in problem.attributes) {
                 when (feature) {
@@ -139,7 +132,7 @@ public object CMOptimizer : Optimizer<Double, FunctionOptimization<Double>> {
             }
 
             val (point, value) = cmOptimizer.optimize(*optimizationData.values.toTypedArray())
-            return problem.withFeatures(OptimizationResult(point.toMap()), OptimizationValue(value))
+            return problem.withAttributes(OptimizationResult(point.toMap()), OptimizationValue(value))
         }
     }
 }

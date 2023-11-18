@@ -5,10 +5,7 @@
 
 package space.kscience.kmath.linear
 
-import space.kscience.attributes.Attributes
-import space.kscience.attributes.SafeType
-import space.kscience.attributes.WithType
-import space.kscience.attributes.withAttribute
+import space.kscience.attributes.*
 import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.nd.*
 import space.kscience.kmath.operations.BufferRingOps
@@ -32,18 +29,12 @@ public typealias MutableMatrix<T> = MutableStructure2D<T>
 public typealias Point<T> = Buffer<T>
 
 /**
- * A marker interface for algebras that operate on matrices
- * @param T type of matrix element
- */
-public interface MatrixOperations<T> : WithType<T>
-
-/**
  * Basic operations on matrices and vectors.
  *
  * @param T the type of items in the matrices.
  * @param A the type of ring over [T].
  */
-public interface LinearSpace<T, out A : Ring<T>> : MatrixOperations<T> {
+public interface LinearSpace<T, out A : Ring<T>> : MatrixScope<T> {
     public val elementAlgebra: A
 
     override val type: SafeType<T> get() = elementAlgebra.type
@@ -177,10 +168,10 @@ public interface LinearSpace<T, out A : Ring<T>> : MatrixOperations<T> {
     /**
      * Compute an [attribute] value for given [structure]. Return null if the attribute could not be computed.
      */
-    public fun <V, A : StructureAttribute<V>> computeAttribute(structure: StructureND<*>, attribute: A): V? = null
+    public fun <V, A : StructureAttribute<V>> computeAttribute(structure: Structure2D<T>, attribute: A): V? = null
 
     @UnstableKMathAPI
-    public fun <V, A : StructureAttribute<V>> StructureND<*>.getOrComputeAttribute(attribute: A): V? {
+    public fun <V, A : StructureAttribute<V>> Structure2D<T>.getOrComputeAttribute(attribute: A): V? {
         return attributes[attribute] ?: computeAttribute(this, attribute)
     }
 
@@ -225,7 +216,7 @@ public inline operator fun <LS : LinearSpace<*, *>, R> LS.invoke(block: LS.() ->
 /**
  * Convert matrix to vector if it is possible.
  */
-public fun <T : Any> Matrix<T>.asVector(): Point<T> =
+public fun <T> Matrix<T>.asVector(): Point<T> =
     if (this.colNum == 1) as1D()
     else error("Can't convert matrix with more than one column to vector")
 
@@ -236,4 +227,4 @@ public fun <T : Any> Matrix<T>.asVector(): Point<T> =
  * @receiver a buffer.
  * @return the new matrix.
  */
-public fun <T : Any> Point<T>.asMatrix(): VirtualMatrix<T> = VirtualMatrix(type, size, 1) { i, _ -> get(i) }
+public fun <T> Point<T>.asMatrix(): VirtualMatrix<T> = VirtualMatrix(type, size, 1) { i, _ -> get(i) }

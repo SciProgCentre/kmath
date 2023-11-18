@@ -25,10 +25,10 @@ public fun <T, A : Any> MultivariateIntegrand<T>.withAttribute(
 ): MultivariateIntegrand<T> = withAttributes(attributes.withAttribute(attribute, value))
 
 public fun <T> MultivariateIntegrand<T>.withAttributes(
-    block: TypedAttributesBuilder<MultivariateIntegrand<T>>.() -> Unit,
+    block: AttributesBuilder<MultivariateIntegrand<T>>.() -> Unit,
 ): MultivariateIntegrand<T> = withAttributes(attributes.modify(block))
 
 public inline fun <reified T : Any> MultivariateIntegrand(
-    attributeBuilder: TypedAttributesBuilder<MultivariateIntegrand<T>>.() -> Unit,
+    attributeBuilder: AttributesBuilder<MultivariateIntegrand<T>>.() -> Unit,
     noinline function: (Point<T>) -> T,
 ): MultivariateIntegrand<T> = MultivariateIntegrand(safeTypeOf<T>(), Attributes(attributeBuilder), function)

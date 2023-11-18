@@ -7,6 +7,7 @@ package space.kscience.kmath.commons.integration
 
 import org.apache.commons.math3.analysis.integration.IterativeLegendreGaussIntegrator
 import org.apache.commons.math3.analysis.integration.SimpsonIntegrator
+import space.kscience.attributes.Attributes
 import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.integration.*
 import org.apache.commons.math3.analysis.integration.UnivariateIntegrator as CMUnivariateIntegrator
@@ -19,7 +20,7 @@ public class CMIntegrator(
     public val integratorBuilder: (Integrand<Double>) -> CMUnivariateIntegrator,
 ) : UnivariateIntegrator<Double> {
 
-    override fun process(integrand: UnivariateIntegrand<Double>): UnivariateIntegrand<Double> {
+    override fun integrate(integrand: UnivariateIntegrand<Double>): UnivariateIntegrand<Double> {
         val integrator = integratorBuilder(integrand)
         val maxCalls = integrand[IntegrandMaxCalls] ?: defaultMaxCalls
         val remainingCalls = maxCalls - integrand.calls
@@ -73,15 +74,9 @@ public class CMIntegrator(
 }
 
 @UnstableKMathAPI
-public var MutableList<IntegrandFeature>.targetAbsoluteAccuracy: Double?
-    get() = filterIsInstance<IntegrandAbsoluteAccuracy>().lastOrNull()?.accuracy
-    set(value) {
-        value?.let { add(IntegrandAbsoluteAccuracy(value)) }
-    }
+public val Attributes.targetAbsoluteAccuracy: Double?
+    get() = get(IntegrandAbsoluteAccuracy)
 
 @UnstableKMathAPI
-public var MutableList<IntegrandFeature>.targetRelativeAccuracy: Double?
-    get() = filterIsInstance<IntegrandRelativeAccuracy>().lastOrNull()?.accuracy
-    set(value) {
-        value?.let { add(IntegrandRelativeAccuracy(value)) }
-    }
+public val Attributes.targetRelativeAccuracy: Double?
+    get() = get(IntegrandRelativeAccuracy)

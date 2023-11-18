@@ -5,10 +5,12 @@
 
 package space.kscience.kmath.tensors.core
 
+import space.kscience.attributes.SafeType
 import space.kscience.kmath.PerformancePitfall
 import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.nd.MutableStructureNDOfDouble
 import space.kscience.kmath.nd.ShapeND
+import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.structures.*
 import space.kscience.kmath.tensors.core.internal.toPrettyString
 
@@ -87,6 +89,8 @@ public open class DoubleTensor(
     shape: ShapeND,
     final override val source: OffsetDoubleBuffer,
 ) : BufferedTensor<Double>(shape), MutableStructureNDOfDouble {
+
+    override val type: SafeType<Double> get() = DoubleField.type
 
     init {
         require(linearSize == source.size) { "Source buffer size must be equal tensor size" }

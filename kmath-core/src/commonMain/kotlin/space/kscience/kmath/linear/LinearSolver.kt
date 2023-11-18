@@ -11,7 +11,7 @@ package space.kscience.kmath.linear
  *
  * @param T the type of items.
  */
-public interface LinearSolver<T : Any> {
+public interface LinearSolver<T> {
     /**
      * Solve a dot x = b matrix equation and return x
      */

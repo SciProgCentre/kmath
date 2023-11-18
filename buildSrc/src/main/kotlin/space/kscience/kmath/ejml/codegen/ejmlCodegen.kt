@@ -19,6 +19,8 @@ public class Ejml${type}Vector<out M : $ejmlMatrixType>(override val origin: M) 
         require(origin.numRows == 1) { "The origin matrix must have only one row to form a vector" }
     }
 
+    override val type: SafeType<${type}> get() = safeTypeOf()
+
     override operator fun get(index: Int): $type = origin[0, index]
 }"""
     appendLine(text)
@@ -30,6 +32,8 @@ private fun Appendable.appendEjmlMatrix(type: String, ejmlMatrixType: String) {
  * [EjmlMatrix] specialization for [$type].
  */
 public class Ejml${type}Matrix<out M : $ejmlMatrixType>(override val origin: M) : EjmlMatrix<$type, M>(origin) {
+    override val type: SafeType<${type}> get() = safeTypeOf()
+
     override operator fun get(i: Int, j: Int): $type = origin[i, j]
 }"""
     appendLine(text)
@@ -46,7 +50,9 @@ private fun Appendable.appendEjmlLinearSpace(
     denseOps: String,
     isDense: Boolean,
 ) {
-    @Language("kotlin") val text = """/**
+    @Language("kotlin") val text = """
+
+/**
  * [EjmlLinearSpace] implementation based on [CommonOps_$ops], [DecompositionFactory_${ops}] operations and
  * [${ejmlMatrixType}] matrices.
  */
@@ -56,7 +62,7 @@ public object EjmlLinearSpace${ops} : EjmlLinearSpace<${type}, ${kmathAlgebra}, 
      */
     override val elementAlgebra: $kmathAlgebra get() = $kmathAlgebra
 
-    override val elementType: KType get() = typeOf<$type>()
+    override val type: SafeType<${type}> get() = safeTypeOf()
 
     @Suppress("UNCHECKED_CAST")
     override fun Matrix<${type}>.toEjml(): Ejml${type}Matrix<${ejmlMatrixType}> = when {
@@ -385,6 +391,8 @@ import org.ejml.sparse.csc.factory.DecompositionFactory_DSCC
 import org.ejml.sparse.csc.factory.DecompositionFactory_FSCC
 import org.ejml.sparse.csc.factory.LinearSolverFactory_DSCC
 import org.ejml.sparse.csc.factory.LinearSolverFactory_FSCC
+import space.kscience.attributes.SafeType
+import space.kscience.attributes.safeTypeOf
 import space.kscience.kmath.linear.*
 import space.kscience.kmath.linear.Matrix
 import space.kscience.kmath.UnstableKMathAPI

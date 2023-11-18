@@ -5,6 +5,7 @@
 
 package space.kscience.kmath.expressions
 
+import space.kscience.attributes.SafeType
 import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.operations.*
 import space.kscience.kmath.structures.Buffer
@@ -331,10 +332,13 @@ public class DerivativeStructureRingExpression<T, A>(
     public val elementBufferFactory: MutableBufferFactory<T> = algebra.bufferFactory,
     public val function: DSRing<T, A>.() -> DS<T, A>,
 ) : DifferentiableExpression<T> where A : Ring<T>, A : ScaleOperations<T>, A : NumericAlgebra<T> {
+
+    override val type: SafeType<T> get() = elementBufferFactory.type
+
     override operator fun invoke(arguments: Map<Symbol, T>): T =
         DSRing(algebra, 0, arguments).function().value
 
-    override fun derivativeOrNull(symbols: List<Symbol>): Expression<T> = Expression { arguments ->
+    override fun derivativeOrNull(symbols: List<Symbol>): Expression<T> = Expression(type) { arguments ->
         with(
             DSRing(
                 algebra,
@@ -443,10 +447,13 @@ public class DSFieldExpression<T, A : ExtendedField<T>>(
     public val algebra: A,
     public val function: DSField<T, A>.() -> DS<T, A>,
 ) : DifferentiableExpression<T> {
+
+    override val type: SafeType<T> get() = algebra.type
+
     override operator fun invoke(arguments: Map<Symbol, T>): T =
         DSField(algebra, 0, arguments).function().value
 
-    override fun derivativeOrNull(symbols: List<Symbol>): Expression<T> = Expression { arguments ->
+    override fun derivativeOrNull(symbols: List<Symbol>): Expression<T> = Expression(type) { arguments ->
         DSField(
             algebra,
             symbols.size,

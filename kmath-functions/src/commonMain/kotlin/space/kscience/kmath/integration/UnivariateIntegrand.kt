@@ -26,11 +26,11 @@ public fun <T, A : Any> UnivariateIntegrand<T>.withAttribute(
 ): UnivariateIntegrand<T> = withAttributes(attributes.withAttribute(attribute, value))
 
 public fun <T> UnivariateIntegrand<T>.withAttributes(
-    block: TypedAttributesBuilder<UnivariateIntegrand<T>>.() -> Unit,
+    block: AttributesBuilder<UnivariateIntegrand<T>>.() -> Unit,
 ): UnivariateIntegrand<T> = withAttributes(attributes.modify(block))
 
 public inline fun <reified T : Any> UnivariateIntegrand(
-    attributeBuilder: TypedAttributesBuilder<UnivariateIntegrand<T>>.() -> Unit,
+    attributeBuilder: AttributesBuilder<UnivariateIntegrand<T>>.() -> Unit,
     noinline function: (Double) -> T,
 ): UnivariateIntegrand<T> = UnivariateIntegrand(safeTypeOf(), Attributes(attributeBuilder), function)
 
@@ -58,7 +58,7 @@ public class UnivariateIntegrandRanges(public val ranges: List<Pair<ClosedRange<
 
 public object UnivariateIntegrationNodes : IntegrandAttribute<Buffer<Double>>
 
-public fun TypedAttributesBuilder<UnivariateIntegrand<*>>.integrationNodes(vararg nodes: Double) {
+public fun AttributesBuilder<UnivariateIntegrand<*>>.integrationNodes(vararg nodes: Double) {
     UnivariateIntegrationNodes(Float64Buffer(nodes))
 }
 
@@ -68,7 +68,7 @@ public fun TypedAttributesBuilder<UnivariateIntegrand<*>>.integrationNodes(varar
  */
 @UnstableKMathAPI
 public inline fun <reified T : Any> UnivariateIntegrator<T>.integrate(
-    attributesBuilder: TypedAttributesBuilder<UnivariateIntegrand<T>>.() -> Unit,
+    attributesBuilder: AttributesBuilder<UnivariateIntegrand<T>>.() -> Unit,
     noinline function: (Double) -> T,
 ): UnivariateIntegrand<T> = integrate(UnivariateIntegrand(attributesBuilder, function))
 
@@ -79,7 +79,7 @@ public inline fun <reified T : Any> UnivariateIntegrator<T>.integrate(
 @UnstableKMathAPI
 public inline fun <reified T : Any> UnivariateIntegrator<T>.integrate(
     range: ClosedRange<Double>,
-    attributeBuilder: TypedAttributesBuilder<UnivariateIntegrand<T>>.() -> Unit = {},
+    attributeBuilder: AttributesBuilder<UnivariateIntegrand<T>>.() -> Unit = {},
     noinline function: (Double) -> T,
 ): UnivariateIntegrand<T> {
 

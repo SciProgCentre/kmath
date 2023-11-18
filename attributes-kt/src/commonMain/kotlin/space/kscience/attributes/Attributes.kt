@@ -7,19 +7,25 @@ package space.kscience.attributes
 
 import kotlin.jvm.JvmInline
 
-@JvmInline
-public value class Attributes internal constructor(public val content: Map<out Attribute<*>, Any?>) {
+/**
+ * A set of attributes. The implementation must guarantee that [content] keys correspond to its value types.
+ */
+public interface Attributes {
+    public val content: Map<out Attribute<*>, Any?>
 
     public val keys: Set<Attribute<*>> get() = content.keys
 
     @Suppress("UNCHECKED_CAST")
     public operator fun <T> get(attribute: Attribute<T>): T? = content[attribute] as? T
 
-    override fun toString(): String = "Attributes(value=${content.entries})"
-
     public companion object {
-        public val EMPTY: Attributes = Attributes(emptyMap())
+        public val EMPTY: Attributes = AttributesImpl(emptyMap())
     }
+}
+
+@JvmInline
+internal value class AttributesImpl(override val content: Map<out Attribute<*>, Any?>) : Attributes {
+    override fun toString(): String = "Attributes(value=${content.entries})"
 }
 
 public fun Attributes.isEmpty(): Boolean = content.isEmpty()
@@ -33,19 +39,19 @@ public fun <T> Attributes.getOrDefault(attribute: AttributeWithDefault<T>): T = 
  * Check if there is an attribute that matches given key by type and adheres to [predicate].
  */
 @Suppress("UNCHECKED_CAST")
-public inline fun <T, reified A : Attribute<T>> Attributes.any(predicate: (value: T) -> Boolean): Boolean =
+public inline fun <T, reified A : Attribute<T>> Attributes.hasAny(predicate: (value: T) -> Boolean): Boolean =
     content.any { (mapKey, mapValue) -> mapKey is A && predicate(mapValue as T) }
 
 /**
  * Check if there is an attribute of given type (subtypes included)
  */
-public inline fun <T, reified A : Attribute<T>> Attributes.any(): Boolean =
+public inline fun <reified A : Attribute<*>> Attributes.hasAny(): Boolean =
     content.any { (mapKey, _) -> mapKey is A }
 
 /**
  * Check if [Attributes] contains a flag. Multiple keys that are instances of a flag could be present
  */
-public inline fun <reified A : FlagAttribute> Attributes.has(): Boolean =
+public inline fun <reified A : FlagAttribute> Attributes.hasFlag(): Boolean =
     content.keys.any { it is A }
 
 /**
@@ -54,7 +60,7 @@ public inline fun <reified A : FlagAttribute> Attributes.has(): Boolean =
 public fun <T, A : Attribute<T>> Attributes.withAttribute(
     attribute: A,
     attrValue: T,
-): Attributes = Attributes(content + (attribute to attrValue))
+): Attributes = AttributesImpl(content + (attribute to attrValue))
 
 public fun <A : Attribute<Unit>> Attributes.withAttribute(attribute: A): Attributes =
     withAttribute(attribute, Unit)
@@ -62,7 +68,7 @@ public fun <A : Attribute<Unit>> Attributes.withAttribute(attribute: A): Attribu
 /**
  * Create a new [Attributes] by modifying the current one
  */
-public fun Attributes.modify(block: AttributesBuilder.() -> Unit): Attributes = Attributes {
+public fun <T> Attributes.modify(block: AttributesBuilder<T>.() -> Unit): Attributes = Attributes<T> {
     from(this@modify)
     block()
 }
@@ -70,7 +76,7 @@ public fun Attributes.modify(block: AttributesBuilder.() -> Unit): Attributes = 
 /**
  * Create new [Attributes] by removing [attribute] key
  */
-public fun Attributes.withoutAttribute(attribute: Attribute<*>): Attributes = Attributes(content.minus(attribute))
+public fun Attributes.withoutAttribute(attribute: Attribute<*>): Attributes = AttributesImpl(content.minus(attribute))
 
 /**
  * Add an element to a [SetAttribute]
@@ -80,7 +86,7 @@ public fun <T, A : SetAttribute<T>> Attributes.withAttributeElement(
     attrValue: T,
 ): Attributes {
     val currentSet: Set<T> = get(attribute) ?: emptySet()
-    return Attributes(
+    return AttributesImpl(
         content + (attribute to (currentSet + attrValue))
     )
 }
@@ -93,9 +99,7 @@ public fun <T, A : SetAttribute<T>> Attributes.withoutAttributeElement(
     attrValue: T,
 ): Attributes {
     val currentSet: Set<T> = get(attribute) ?: emptySet()
-    return Attributes(
-        content + (attribute to (currentSet - attrValue))
-    )
+    return AttributesImpl(content + (attribute to (currentSet - attrValue)))
 }
 
 /**
@@ -104,13 +108,13 @@ public fun <T, A : SetAttribute<T>> Attributes.withoutAttributeElement(
 public fun <T, A : Attribute<T>> Attributes(
     attribute: A,
     attrValue: T,
-): Attributes = Attributes(mapOf(attribute to attrValue))
+): Attributes = AttributesImpl(mapOf(attribute to attrValue))
 
 /**
  * Create Attributes with a single [Unit] valued attribute
  */
 public fun <A : Attribute<Unit>> Attributes(
-    attribute: A
-): Attributes = Attributes(mapOf(attribute to Unit))
+    attribute: A,
+): Attributes = AttributesImpl(mapOf(attribute to Unit))
 
-public operator fun Attributes.plus(other: Attributes): Attributes = Attributes(content + other.content)
+public operator fun Attributes.plus(other: Attributes): Attributes = AttributesImpl(content + other.content)

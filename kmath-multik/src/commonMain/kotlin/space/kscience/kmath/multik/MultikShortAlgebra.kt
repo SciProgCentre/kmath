@@ -15,7 +15,7 @@ public class MultikShortAlgebra(
     multikEngine: Engine
 ) : MultikTensorAlgebra<Short, Int16Ring>(multikEngine) {
     override val elementAlgebra: Int16Ring get() = Int16Ring
-    override val type: DataType get() = DataType.ShortDataType
+    override val dataType: DataType get() = DataType.ShortDataType
     override fun scalar(value: Short): MultikTensor<Short>  = Multik.ndarrayOf(value).wrap()
 }
 

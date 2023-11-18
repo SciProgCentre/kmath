@@ -243,12 +243,15 @@ public class SimpleAutoDiffExpression<T : Any, F : Field<T>>(
     public val field: F,
     public val function: SimpleAutoDiffField<T, F>.() -> AutoDiffValue<T>,
 ) : FirstDerivativeExpression<T>() {
+
+    override val type: SafeType<T> get() = this.field.type
+
     override operator fun invoke(arguments: Map<Symbol, T>): T {
         //val bindings = arguments.entries.map { it.key.bind(it.value) }
         return SimpleAutoDiffField(field, arguments).function().value
     }
 
-    override fun derivativeOrNull(symbol: Symbol): Expression<T> = Expression { arguments ->
+    override fun derivativeOrNull(symbol: Symbol): Expression<T> = Expression(type) { arguments ->
         //val bindings = arguments.entries.map { it.key.bind(it.value) }
         val derivationResult = SimpleAutoDiffField(field, arguments).differentiate(function)
         derivationResult.derivative(symbol)

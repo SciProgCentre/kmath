@@ -3,7 +3,7 @@
 ## Unreleased
 
 ### Added
-- Explicit `SafeType` for algebras and buffers.
+- Reification. Explicit `SafeType` for algebras and buffers.
 - Integer division algebras.
 - Float32 geometries.
 - New Attributes-kt module that could be used as stand-alone. It declares. type-safe attributes containers.
@@ -16,6 +16,7 @@
 - kmath-geometry is split into `euclidean2d` and `euclidean3d`
 - Features replaced with Attributes.
 - Transposed refactored.
+- Kmath-memory is moved on top of core.
 
 ### Deprecated
 

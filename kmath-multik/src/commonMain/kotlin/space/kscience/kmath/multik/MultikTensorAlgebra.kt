@@ -26,7 +26,7 @@ public abstract class MultikTensorAlgebra<T, A : Ring<T>>(
     private val multikEngine: Engine,
 ) : TensorAlgebra<T, A> where T : Number, T : Comparable<T> {
 
-    public abstract val type: DataType
+    public abstract val dataType: DataType
 
     protected val multikMath: Math = multikEngine.getMath()
     protected val multikLinAl: LinAlg = multikEngine.getLinAlg()
@@ -35,7 +35,7 @@ public abstract class MultikTensorAlgebra<T, A : Ring<T>>(
     @OptIn(UnsafeKMathAPI::class)
     override fun mutableStructureND(shape: ShapeND, initializer: A.(IntArray) -> T): MultikTensor<T> {
         val strides = ColumnStrides(shape)
-        val memoryView = initMemoryView<T>(strides.linearSize, type)
+        val memoryView = initMemoryView<T>(strides.linearSize, dataType)
         strides.asSequence().forEachIndexed { linearIndex, tensorIndex ->
             memoryView[linearIndex] = elementAlgebra.initializer(tensorIndex)
         }
@@ -44,7 +44,7 @@ public abstract class MultikTensorAlgebra<T, A : Ring<T>>(
 
     @OptIn(PerformancePitfall::class, UnsafeKMathAPI::class)
     override fun StructureND<T>.map(transform: A.(T) -> T): MultikTensor<T> = if (this is MultikTensor) {
-        val data = initMemoryView<T>(array.size, type)
+        val data = initMemoryView<T>(array.size, dataType)
         var count = 0
         for (el in array) data[count++] = elementAlgebra.transform(el)
         NDArray(data, shape = shape.asArray(), dim = array.dim).wrap()
@@ -58,7 +58,7 @@ public abstract class MultikTensorAlgebra<T, A : Ring<T>>(
     override fun StructureND<T>.mapIndexed(transform: A.(index: IntArray, T) -> T): MultikTensor<T> =
         if (this is MultikTensor) {
             val array = asMultik().array
-            val data = initMemoryView<T>(array.size, type)
+            val data = initMemoryView<T>(array.size, dataType)
             val indexIter = array.multiIndices.iterator()
             var index = 0
             for (item in array) {
@@ -95,7 +95,7 @@ public abstract class MultikTensorAlgebra<T, A : Ring<T>>(
         require(left.shape.contentEquals(right.shape)) { "ND array shape mismatch" } //TODO replace by ShapeMismatchException
         val leftArray = left.asMultik().array
         val rightArray = right.asMultik().array
-        val data = initMemoryView<T>(leftArray.size, type)
+        val data = initMemoryView<T>(leftArray.size, dataType)
         var counter = 0
         val leftIterator = leftArray.iterator()
         val rightIterator = rightArray.iterator()
@@ -114,7 +114,7 @@ public abstract class MultikTensorAlgebra<T, A : Ring<T>>(
     public fun StructureND<T>.asMultik(): MultikTensor<T> = if (this is MultikTensor) {
         this
     } else {
-        val res = mk.zeros<T, DN>(shape.asArray(), type).asDNArray()
+        val res = mk.zeros<T, DN>(shape.asArray(), dataType).asDNArray()
         for (index in res.multiIndices) {
             res[index] = this[index]
         }
@@ -296,7 +296,7 @@ public abstract class MultikDivisionTensorAlgebra<T, A : Field<T>>(
 
     @OptIn(UnsafeKMathAPI::class)
     override fun T.div(arg: StructureND<T>): MultikTensor<T> =
-        Multik.ones<T, DN>(arg.shape.asArray(), type).apply { divAssign(arg.asMultik().array) }.wrap()
+        Multik.ones<T, DN>(arg.shape.asArray(), dataType).apply { divAssign(arg.asMultik().array) }.wrap()
 
     override fun StructureND<T>.div(arg: T): MultikTensor<T> =
         asMultik().array.div(arg).wrap()

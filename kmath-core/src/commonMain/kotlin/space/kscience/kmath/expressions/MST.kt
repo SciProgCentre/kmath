@@ -108,4 +108,4 @@ public fun <T> MST.interpret(algebra: Algebra<T>, vararg arguments: Pair<Symbol,
  * Interpret this [MST] as expression.
  */
 public fun <T : Any> MST.toExpression(algebra: Algebra<T>): Expression<T> =
-    Expression { arguments -> interpret(algebra, arguments) }
+    Expression(algebra.type) { arguments -> interpret(algebra, arguments) }

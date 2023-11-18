@@ -9,20 +9,21 @@ import space.kscience.attributes.*
 import space.kscience.kmath.expressions.DifferentiableExpression
 import space.kscience.kmath.expressions.Symbol
 
-public class OptimizationValue<T>(public val value: T) : OptimizationFeature {
-    override fun toString(): String = "Value($value)"
-}
+public class OptimizationValue<V>(type: SafeType<V>) : PolymorphicAttribute<V>(type)
 
-public enum class FunctionOptimizationTarget {
+public enum class OptimizationDirection {
     MAXIMIZE,
     MINIMIZE
 }
 
+public object FunctionOptimizationTarget: OptimizationAttribute<OptimizationDirection>
+
 public class FunctionOptimization<T>(
-    override val attributes: Attributes,
     public val expression: DifferentiableExpression<T>,
+    override val attributes: Attributes,
 ) : OptimizationProblem<T> {
 
+    override val type: SafeType<T> get() = expression.type
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -47,36 +48,52 @@ public class FunctionOptimization<T>(
     public companion object
 }
 
+public fun <T> FunctionOptimization(
+    expression: DifferentiableExpression<T>,
+    attributeBuilder: AttributesBuilder<FunctionOptimization<T>>.() -> Unit,
+): FunctionOptimization<T> = FunctionOptimization(expression, Attributes(attributeBuilder))
 
-
-public class OptimizationPrior<T>(type: SafeType<T>):
+public class OptimizationPrior<T> :
     PolymorphicAttribute<DifferentiableExpression<T>>(safeTypeOf()),
     Attribute<DifferentiableExpression<T>>
 
-//public val <T> FunctionOptimization.Companion.Optimization get() =
-
-
-public fun <T> FunctionOptimization<T>.withFeatures(
-    vararg newFeature: OptimizationFeature,
+public fun <T> FunctionOptimization<T>.withAttributes(
+    modifier: AttributesBuilder<FunctionOptimization<T>>.() -> Unit,
 ): FunctionOptimization<T> = FunctionOptimization(
-    attributes.with(*newFeature),
     expression,
+    attributes.modify(modifier),
 )
 
 /**
  * Optimizes differentiable expression using specific [optimizer] form given [startingPoint].
  */
-public suspend fun <T : Any> DifferentiableExpression<T>.optimizeWith(
+public suspend fun <T> DifferentiableExpression<T>.optimizeWith(
     optimizer: Optimizer<T, FunctionOptimization<T>>,
     startingPoint: Map<Symbol, T>,
-    vararg features: OptimizationFeature,
+    modifier: AttributesBuilder<FunctionOptimization<T>>.() -> Unit = {},
 ): FunctionOptimization<T> {
-    val problem = FunctionOptimization<T>(FeatureSet.of(OptimizationStartPoint(startingPoint), *features), this)
+    val problem = FunctionOptimization(this){
+        startAt(startingPoint)
+        modifier()
+    }
     return optimizer.optimize(problem)
 }
 
 public val <T> FunctionOptimization<T>.resultValueOrNull: T?
-    get() = getFeature<OptimizationResult<T>>()?.point?.let { expression(it) }
+    get() = attributes[OptimizationResult<T>()]?.let { expression(it) }
 
 public val <T> FunctionOptimization<T>.resultValue: T
     get() = resultValueOrNull ?: error("Result is not present in $this")
+
+
+public suspend fun <T> DifferentiableExpression<T>.optimizeWith(
+    optimizer: Optimizer<T, FunctionOptimization<T>>,
+    vararg startingPoint: Pair<Symbol, T>,
+    builder: AttributesBuilder<FunctionOptimization<T>>.() -> Unit = {},
+): FunctionOptimization<T> {
+    val problem = FunctionOptimization<T>(this) {
+        startAt(mapOf(*startingPoint))
+        builder()
+    }
+    return optimizer.optimize(problem)
+}

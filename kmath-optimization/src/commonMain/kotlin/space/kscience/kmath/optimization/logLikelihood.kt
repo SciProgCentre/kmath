@@ -5,6 +5,8 @@
 
 package space.kscience.kmath.optimization
 
+import space.kscience.attributes.AttributesBuilder
+import space.kscience.attributes.SafeType
 import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.data.XYColumnarData
 import space.kscience.kmath.data.indices
@@ -12,6 +14,7 @@ import space.kscience.kmath.expressions.DifferentiableExpression
 import space.kscience.kmath.expressions.Expression
 import space.kscience.kmath.expressions.Symbol
 import space.kscience.kmath.expressions.derivative
+import space.kscience.kmath.operations.Float64Field
 import kotlin.math.PI
 import kotlin.math.ln
 import kotlin.math.pow
@@ -22,7 +25,9 @@ private val oneOver2Pi = 1.0 / sqrt(2 * PI)
 
 @UnstableKMathAPI
 internal fun XYFit.logLikelihood(): DifferentiableExpression<Double> = object : DifferentiableExpression<Double> {
-    override fun derivativeOrNull(symbols: List<Symbol>): Expression<Double> = Expression { arguments ->
+    override val type: SafeType<Double> get() = Float64Field.type
+
+    override fun derivativeOrNull(symbols: List<Symbol>): Expression<Double> = Expression(type) { arguments ->
         data.indices.sumOf { index ->
             val d = distance(index)(arguments)
             val weight = weight(index)(arguments)
@@ -53,14 +58,18 @@ internal fun XYFit.logLikelihood(): DifferentiableExpression<Double> = object : 
  */
 @UnstableKMathAPI
 public suspend fun Optimizer<Double, FunctionOptimization<Double>>.maximumLogLikelihood(problem: XYFit): XYFit {
-    val functionOptimization = FunctionOptimization(problem.attributes, problem.logLikelihood())
-    val result = optimize(functionOptimization.withFeatures(FunctionOptimizationTarget.MAXIMIZE))
-    return XYFit(problem.data, problem.model, result.attributes)
+    val functionOptimization = FunctionOptimization(problem.logLikelihood(), problem.attributes)
+    val result = optimize(
+        functionOptimization.withAttributes {
+            FunctionOptimizationTarget(OptimizationDirection.MAXIMIZE)
+        }
+    )
+    return XYFit(problem.data,problem.model, result.attributes)
 }
 
 @UnstableKMathAPI
 public suspend fun Optimizer<Double, FunctionOptimization<Double>>.maximumLogLikelihood(
     data: XYColumnarData<Double, Double, Double>,
     model: DifferentiableExpression<Double>,
-    builder: XYOptimizationBuilder.() -> Unit,
+    builder: AttributesBuilder<XYFit>.() -> Unit,
 ): XYFit = maximumLogLikelihood(XYOptimization(data, model, builder))

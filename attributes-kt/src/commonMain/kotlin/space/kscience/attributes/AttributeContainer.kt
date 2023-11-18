@@ -6,8 +6,14 @@
 package space.kscience.attributes
 
 /**
- * A container for attributes. [attributes] could be made mutable by implementation
+ * A container for [Attributes]
  */
 public interface AttributeContainer {
     public val attributes: Attributes
 }
+
+/**
+ * A scope, where attribute keys could be resolved
+ */
+public interface AttributeScope<O>
+

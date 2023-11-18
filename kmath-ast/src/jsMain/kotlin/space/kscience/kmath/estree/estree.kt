@@ -22,7 +22,7 @@ import space.kscience.kmath.operations.Algebra
 @OptIn(UnstableKMathAPI::class)
 public fun <T : Any> MST.compileToExpression(algebra: Algebra<T>): Expression<T> {
     val typed = evaluateConstants(algebra)
-    if (typed is TypedMst.Constant<T>) return Expression { typed.value }
+    if (typed is TypedMst.Constant<T>) return Expression(algebra.type) { typed.value }
 
     fun ESTreeBuilder<T>.visit(node: TypedMst<T>): BaseExpression = when (node) {
         is TypedMst.Constant -> constant(node.value)
@@ -36,7 +36,7 @@ public fun <T : Any> MST.compileToExpression(algebra: Algebra<T>): Expression<T>
         )
     }
 
-    return ESTreeBuilder { visit(typed) }.instance
+    return ESTreeBuilder(algebra.type) { visit(typed) }.instance
 }
 
 /**
