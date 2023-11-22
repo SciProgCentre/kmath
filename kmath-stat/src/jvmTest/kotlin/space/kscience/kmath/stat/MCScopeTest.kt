@@ -68,7 +68,7 @@ internal class MCScopeTest {
     }
 
 
-    @OptIn(DelicateCoroutinesApi::class)
+    @OptIn(DelicateCoroutinesApi::class, ExperimentalCoroutinesApi::class)
     fun compareResult(test: ATest) {
         val res1 = runBlocking(Dispatchers.Default) { test() }
         val res2 = runBlocking(newSingleThreadContext("test")) { test() }

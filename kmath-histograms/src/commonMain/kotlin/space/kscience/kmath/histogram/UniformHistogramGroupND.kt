@@ -91,7 +91,7 @@ public class UniformHistogramGroupND<V : Any, A : Field<V>>(
         val hBuilder = object : HistogramBuilder<Double, V> {
             override val defaultValue: V get() = valueAlgebraND.elementAlgebra.one
 
-            override fun putValue(point: Point<out Double>, value: V) = with(valueAlgebraND.elementAlgebra) {
+            override fun putValue(point: Point<Double>, value: V) = with(valueAlgebraND.elementAlgebra) {
                 val index = getIndexOrNull(point)
                 ndCounter[index].add(value)
             }

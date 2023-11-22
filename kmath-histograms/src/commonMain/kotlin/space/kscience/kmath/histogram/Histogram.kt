@@ -33,7 +33,7 @@ public interface Histogram<in T : Any, out V, out B : Bin<T, V>> {
     /**
      * Find existing bin, corresponding to given coordinates
      */
-    public operator fun get(point: Point<out T>): B?
+    public operator fun get(point: Point<T>): B?
 
     /**
      * Dimension of the histogram
@@ -57,11 +57,11 @@ public interface HistogramBuilder<in T : Any, V : Any> {
     /**
      * Increment appropriate bin with given value
      */
-    public fun putValue(point: Point<out T>, value: V = defaultValue)
+    public fun putValue(point: Point<T>, value: V = defaultValue)
 
 }
 
-public fun <T : Any> HistogramBuilder<T, *>.put(point: Point<out T>): Unit = putValue(point)
+public fun <T : Any> HistogramBuilder<T, *>.put(point: Point<T>): Unit = putValue(point)
 
 public fun <T : Any> HistogramBuilder<T, *>.put(vararg point: T): Unit = put(point.asBuffer())
 

@@ -37,7 +37,7 @@ public object Float64Space2D : GeometrySpace<DoubleVector2D>, ScaleOperations<Do
         override val y: Double,
     ) : DoubleVector2D
 
-    public object VectorSerializer : KSerializer<DoubleVector2D> {
+    public object VectorSerializer : KSerializer<Float64Vector2D> {
         private val proxySerializer = Vector2DImpl.serializer()
         override val descriptor: SerialDescriptor get() = proxySerializer.descriptor
 
