@@ -8,6 +8,7 @@
 - Float32 geometries.
 - New Attributes-kt module that could be used as stand-alone. It declares. type-safe attributes containers.
 - Explicit `mutableStructureND` builders for mutable structures.
+- `Buffer.asList()` zero-copy transformation. 
 
 ### Changed
 - Default naming for algebra and buffers now uses IntXX/FloatXX notation instead of Java types.

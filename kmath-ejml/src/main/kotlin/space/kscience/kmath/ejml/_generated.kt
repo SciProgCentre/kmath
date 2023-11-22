@@ -24,8 +24,6 @@ import space.kscience.attributes.safeTypeOf
 import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.linear.*
 import space.kscience.kmath.linear.Matrix
-import space.kscience.kmath.nd.Structure2D
-import space.kscience.kmath.nd.StructureAttribute
 import space.kscience.kmath.nd.StructureFeature
 import space.kscience.kmath.operations.Float32Field
 import space.kscience.kmath.operations.Float64Field
@@ -78,6 +76,7 @@ public class EjmlFloatMatrix<out M : FMatrix>(override val origin: M) : EjmlMatr
 
     override operator fun get(i: Int, j: Int): Float = origin[i, j]
 }
+
 
 
 /**
@@ -218,18 +217,6 @@ public object EjmlLinearSpaceDDRM : EjmlLinearSpace<Double, Float64Field, DMatri
 
     override fun Double.times(v: Point<Double>): EjmlDoubleVector<DMatrixRMaj> = v * this
 
-    override fun <V, A : StructureAttribute<V>> computeAttribute(structure: Structure2D<Double>, attribute: A): V? {
-        val origin = structure.toEjml().origin
-        return when(attribute){
-            Inverted -> {
-                val res = origin.copy()
-                CommonOps_DDRM.invert(res)
-                res.wrapMatrix()
-            }
-            else->
-        }
-    }
-
     @UnstableKMathAPI
     override fun <F : StructureFeature> computeFeature(structure: Matrix<Double>, type: KClass<out F>): F? {
         structure.getFeature(type)?.let { return it }
@@ -330,7 +317,7 @@ public object EjmlLinearSpaceDDRM : EjmlLinearSpace<Double, Float64Field, DMatri
     }
 }
 
-import org.checkerframework.checker.guieffect.qual.SafeType
+
 
 /**
  * [EjmlLinearSpace] implementation based on [CommonOps_FDRM], [DecompositionFactory_FDRM] operations and
@@ -570,7 +557,7 @@ public object EjmlLinearSpaceFDRM : EjmlLinearSpace<Float, Float32Field, FMatrix
     }
 }
 
-import org.checkerframework.checker.guieffect.qual.SafeType
+
 
 /**
  * [EjmlLinearSpace] implementation based on [CommonOps_DSCC], [DecompositionFactory_DSCC] operations and
@@ -805,7 +792,7 @@ public object EjmlLinearSpaceDSCC : EjmlLinearSpace<Double, Float64Field, DMatri
     }
 }
 
-import org.checkerframework.checker.guieffect.qual.SafeType
+
 
 /**
  * [EjmlLinearSpace] implementation based on [CommonOps_FSCC], [DecompositionFactory_FSCC] operations and

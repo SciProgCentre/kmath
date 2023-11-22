@@ -102,31 +102,12 @@ public interface Buffer<out T> : WithSize, WithType<T> {
 }
 
 /**
- * Creates a [Buffer] of given type [T]. If the type is primitive, specialized buffers are used ([Int32Buffer],
- * [Float64Buffer], etc.), [ListBuffer] is returned otherwise.
- *
- * The [size] is specified, and each element is calculated by calling the specified [initializer] function.
- */
-@Suppress("UNCHECKED_CAST")
-public inline fun <reified T> Buffer(size: Int, initializer: (Int) -> T): Buffer<T> {
-    val type = safeTypeOf<T>()
-    return when (type.kType) {
-        typeOf<Double>() -> MutableBuffer.double(size) { initializer(it) as Double } as Buffer<T>
-        typeOf<Short>() -> MutableBuffer.short(size) { initializer(it) as Short } as Buffer<T>
-        typeOf<Int>() -> MutableBuffer.int(size) { initializer(it) as Int } as Buffer<T>
-        typeOf<Long>() -> MutableBuffer.long(size) { initializer(it) as Long } as Buffer<T>
-        typeOf<Float>() -> MutableBuffer.float(size) { initializer(it) as Float } as Buffer<T>
-        else -> List(size, initializer).asBuffer(type)
-    }
-}
-
-/**
  * Creates a [Buffer] of given [type]. If the type is primitive, specialized buffers are used ([Int32Buffer],
  * [Float64Buffer], etc.), [ListBuffer] is returned otherwise.
  *
  * The [size] is specified, and each element is calculated by calling the specified [initializer] function.
  */
-@Suppress("UNCHECKED_CAST")
+@Suppress("UNCHECKED_CAST", "DuplicatedCode")
 public fun <T> Buffer(
     type: SafeType<T>,
     size: Int,
@@ -138,6 +119,26 @@ public fun <T> Buffer(
     typeOf<Long>() -> MutableBuffer.long(size) { initializer(it) as Long } as Buffer<T>
     typeOf<Float>() -> MutableBuffer.float(size) { initializer(it) as Float } as Buffer<T>
     else -> List(size, initializer).asBuffer(type)
+}
+
+/**
+ * Creates a [Buffer] of given type [T]. If the type is primitive, specialized buffers are used ([Int32Buffer],
+ * [Float64Buffer], etc.), [ListBuffer] is returned otherwise.
+ *
+ * The [size] is specified, and each element is calculated by calling the specified [initializer] function.
+ */
+@Suppress("UNCHECKED_CAST", "DuplicatedCode")
+public inline fun <reified T> Buffer(size: Int, initializer: (Int) -> T): Buffer<T> {
+    //code duplication here because we want to inline initializers
+    val type = safeTypeOf<T>()
+    return when (type.kType) {
+        typeOf<Double>() -> MutableBuffer.double(size) { initializer(it) as Double } as Buffer<T>
+        typeOf<Short>() -> MutableBuffer.short(size) { initializer(it) as Short } as Buffer<T>
+        typeOf<Int>() -> MutableBuffer.int(size) { initializer(it) as Int } as Buffer<T>
+        typeOf<Long>() -> MutableBuffer.long(size) { initializer(it) as Long } as Buffer<T>
+        typeOf<Float>() -> MutableBuffer.float(size) { initializer(it) as Float } as Buffer<T>
+        else -> List(size, initializer).asBuffer(type)
+    }
 }
 
 /**
