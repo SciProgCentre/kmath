@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -363,8 +363,8 @@ fun ejmlCodegen(outputFile: String): Unit = File(outputFile).run {
 
     writer().use {
         it.appendLine("/*")
-        it.appendLine(" * Copyright 2018-2021 KMath contributors.")
-        it.appendLine(" * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.")
+        it.appendLine(" * Copyright 2018-2024 KMath contributors.")
+        it.appendLine(" * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.")
         it.appendLine(" */")
         it.appendLine()
         it.appendLine("/* This file is generated with buildSrc/src/main/kotlin/space/kscience/kmath/ejml/codegen/ejmlCodegen.kt */")
