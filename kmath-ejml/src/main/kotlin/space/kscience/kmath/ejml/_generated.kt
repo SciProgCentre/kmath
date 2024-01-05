@@ -1,6 +1,6 @@
 /*
- * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
+ * Copyright 2018-2024 KMath contributors.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
 /* This file is generated with buildSrc/src/main/kotlin/space/kscience/kmath/ejml/codegen/ejmlCodegen.kt */
@@ -19,13 +19,19 @@ import org.ejml.sparse.csc.factory.DecompositionFactory_DSCC
 import org.ejml.sparse.csc.factory.DecompositionFactory_FSCC
 import org.ejml.sparse.csc.factory.LinearSolverFactory_DSCC
 import org.ejml.sparse.csc.factory.LinearSolverFactory_FSCC
-import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.linear.*
 import space.kscience.kmath.linear.Matrix
+import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.nd.StructureFeature
-import space.kscience.kmath.operations.Float32Field
+import space.kscience.kmath.structures.Float64
+import space.kscience.kmath.structures.Float32
 import space.kscience.kmath.operations.Float64Field
+import space.kscience.kmath.operations.Float32Field
+import space.kscience.kmath.operations.DoubleField
+import space.kscience.kmath.operations.FloatField
 import space.kscience.kmath.operations.invoke
+import space.kscience.kmath.structures.Float64Buffer
+import space.kscience.kmath.structures.Float32Buffer
 import space.kscience.kmath.structures.DoubleBuffer
 import space.kscience.kmath.structures.FloatBuffer
 import kotlin.reflect.KClass
