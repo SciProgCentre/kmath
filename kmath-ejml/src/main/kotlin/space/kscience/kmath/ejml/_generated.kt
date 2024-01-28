@@ -23,7 +23,6 @@ import space.kscience.attributes.SafeType
 import space.kscience.attributes.safeTypeOf
 import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.linear.*
-import space.kscience.kmath.linear.Matrix
 import space.kscience.kmath.nd.StructureFeature
 import space.kscience.kmath.operations.Float32Field
 import space.kscience.kmath.operations.Float64Field

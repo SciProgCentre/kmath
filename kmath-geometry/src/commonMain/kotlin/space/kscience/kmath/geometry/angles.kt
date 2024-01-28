@@ -74,6 +74,7 @@ public fun tan(angle: Angle): Double = kotlin.math.tan(angle.toRadians().value)
 
 public val Number.radians: Radians get() = Radians(toDouble())
 
+@Deprecated("Convert to radians", ReplaceWith("toRadians().value"))
 public val Angle.radians: Double get() = toRadians().value
 
 /**
@@ -98,6 +99,7 @@ public value class Degrees(public val value: Double) : Angle {
 
 public val Number.degrees: Degrees get() = Degrees(toDouble())
 
+@Deprecated("Convert to degrees", ReplaceWith("toDegrees().value"))
 public val Angle.degrees: Double get() = toDegrees().value
 
 /**
