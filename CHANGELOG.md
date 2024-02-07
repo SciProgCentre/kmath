@@ -19,6 +19,7 @@
 
 ### Fixed
 - Median statistics
+- Complex power of negative real numbers
 
 ### Security
 

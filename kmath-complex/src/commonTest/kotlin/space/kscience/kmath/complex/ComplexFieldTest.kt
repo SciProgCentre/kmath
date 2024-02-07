@@ -58,24 +58,25 @@ internal class ComplexFieldTest {
     }
 
     @Test
-    fun testInverseHyperbolicSine() {
-        assertEquals(
-            ComplexField { i * PI.toComplex() / 2 },
-            ComplexField { asinh(i) })
+    fun testInverseHyperbolicSine() = ComplexField {
+        assertEquals(i * PI.toComplex() / 2, asinh(i))
     }
 
     @Test
-    fun testPower() {
-        assertEquals(ComplexField.zero, ComplexField { zero pow 2 })
-        assertEquals(ComplexField.zero, ComplexField { zero pow 2 })
+    fun testPower() = ComplexField {
+        assertEquals(zero, zero pow 2)
+        assertEquals(zero, zero pow 2)
 
         assertEquals(
-            ComplexField { i * 8 }.let { it.im.toInt() to it.re.toInt() },
-            ComplexField { Complex(2, 2) pow 2 }.let { it.im.toInt() to it.re.toInt() })
+            (i * 8).let { it.im.toInt() to it.re.toInt() },
+            (Complex(2, 2) pow 2).let { it.im.toInt() to it.re.toInt() })
+
+        assertEquals(2.0, power(Complex(-4.0, 0.0), 0.5 + 0 * i).im, 0.01)
+        assertEquals(2.0, power(Complex(-4.0, 0.0), 0.5).im, 0.01)
     }
 
     @Test
-    fun testNorm() {
-        assertEquals(2.toComplex(), ComplexField { norm(2 * i) })
+    fun testNorm() = ComplexField {
+        assertEquals(2.toComplex(), norm(2 * i))
     }
 }
