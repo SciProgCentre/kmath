@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -134,12 +134,24 @@ public object ComplexField :
     }
 
     override fun power(arg: Complex, pow: Number): Complex = if (arg.im == 0.0) {
-        arg.re.pow(pow.toDouble()).toComplex()
+        val powDouble = pow.toDouble()
+        when {
+            arg.re > 0 -> arg.re.pow(powDouble).toComplex()
+            arg.re < 0 -> i * (-arg.re).pow(powDouble)
+            else -> if (powDouble == 0.0) {
+                one
+            } else {
+                zero
+            }
+        }
+
     } else {
         exp(pow * ln(arg))
     }
 
     public fun power(arg: Complex, pow: Complex): Complex = exp(pow * ln(arg))
+
+    public fun Complex.pow(power: Complex): Complex = power(this, power)
 
 
     override fun exp(arg: Complex): Complex = exp(arg.re) * (cos(arg.im) + i * sin(arg.im))
@@ -193,6 +205,7 @@ public object ComplexField :
 
     override fun norm(arg: Complex): Complex = sqrt(arg.conjugate * arg)
 }
+
 
 /**
  * Represents `double`-based complex number.
