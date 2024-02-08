@@ -19,19 +19,15 @@ import org.ejml.sparse.csc.factory.DecompositionFactory_DSCC
 import org.ejml.sparse.csc.factory.DecompositionFactory_FSCC
 import org.ejml.sparse.csc.factory.LinearSolverFactory_DSCC
 import org.ejml.sparse.csc.factory.LinearSolverFactory_FSCC
+import space.kscience.attributes.SafeType
+import space.kscience.attributes.safeTypeOf
+import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.linear.*
 import space.kscience.kmath.linear.Matrix
-import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.nd.StructureFeature
-import space.kscience.kmath.structures.Float64
-import space.kscience.kmath.structures.Float32
-import space.kscience.kmath.operations.Float64Field
 import space.kscience.kmath.operations.Float32Field
-import space.kscience.kmath.operations.DoubleField
-import space.kscience.kmath.operations.FloatField
+import space.kscience.kmath.operations.Float64Field
 import space.kscience.kmath.operations.invoke
-import space.kscience.kmath.structures.Float64Buffer
-import space.kscience.kmath.structures.Float32Buffer
 import space.kscience.kmath.structures.DoubleBuffer
 import space.kscience.kmath.structures.FloatBuffer
 import kotlin.reflect.KClass
@@ -45,6 +41,8 @@ public class EjmlDoubleVector<out M : DMatrix>(override val origin: M) : EjmlVec
         require(origin.numRows == 1) { "The origin matrix must have only one row to form a vector" }
     }
 
+    override val type: SafeType<Double> get() = safeTypeOf()
+
     override operator fun get(index: Int): Double = origin[0, index]
 }
 
@@ -56,6 +54,8 @@ public class EjmlFloatVector<out M : FMatrix>(override val origin: M) : EjmlVect
         require(origin.numRows == 1) { "The origin matrix must have only one row to form a vector" }
     }
 
+    override val type: SafeType<Float> get() = safeTypeOf()
+
     override operator fun get(index: Int): Float = origin[0, index]
 }
 
@@ -63,6 +63,8 @@ public class EjmlFloatVector<out M : FMatrix>(override val origin: M) : EjmlVect
  * [EjmlMatrix] specialization for [Double].
  */
 public class EjmlDoubleMatrix<out M : DMatrix>(override val origin: M) : EjmlMatrix<Double, M>(origin) {
+    override val type: SafeType<Double> get() = safeTypeOf()
+
     override operator fun get(i: Int, j: Int): Double = origin[i, j]
 }
 
@@ -70,8 +72,12 @@ public class EjmlDoubleMatrix<out M : DMatrix>(override val origin: M) : EjmlMat
  * [EjmlMatrix] specialization for [Float].
  */
 public class EjmlFloatMatrix<out M : FMatrix>(override val origin: M) : EjmlMatrix<Float, M>(origin) {
+    override val type: SafeType<Float> get() = safeTypeOf()
+
     override operator fun get(i: Int, j: Int): Float = origin[i, j]
 }
+
+
 
 /**
  * [EjmlLinearSpace] implementation based on [CommonOps_DDRM], [DecompositionFactory_DDRM] operations and
@@ -82,6 +88,8 @@ public object EjmlLinearSpaceDDRM : EjmlLinearSpace<Double, Float64Field, DMatri
      * The [Float64Field] reference.
      */
     override val elementAlgebra: Float64Field get() = Float64Field
+
+    override val type: SafeType<Double> get() = safeTypeOf()
 
     @Suppress("UNCHECKED_CAST")
     override fun Matrix<Double>.toEjml(): EjmlDoubleMatrix<DMatrixRMaj> = when {
@@ -309,6 +317,8 @@ public object EjmlLinearSpaceDDRM : EjmlLinearSpace<Double, Float64Field, DMatri
     }
 }
 
+
+
 /**
  * [EjmlLinearSpace] implementation based on [CommonOps_FDRM], [DecompositionFactory_FDRM] operations and
  * [FMatrixRMaj] matrices.
@@ -318,6 +328,8 @@ public object EjmlLinearSpaceFDRM : EjmlLinearSpace<Float, Float32Field, FMatrix
      * The [Float32Field] reference.
      */
     override val elementAlgebra: Float32Field get() = Float32Field
+
+    override val type: SafeType<Float> get() = safeTypeOf()
 
     @Suppress("UNCHECKED_CAST")
     override fun Matrix<Float>.toEjml(): EjmlFloatMatrix<FMatrixRMaj> = when {
@@ -545,6 +557,8 @@ public object EjmlLinearSpaceFDRM : EjmlLinearSpace<Float, Float32Field, FMatrix
     }
 }
 
+
+
 /**
  * [EjmlLinearSpace] implementation based on [CommonOps_DSCC], [DecompositionFactory_DSCC] operations and
  * [DMatrixSparseCSC] matrices.
@@ -554,6 +568,8 @@ public object EjmlLinearSpaceDSCC : EjmlLinearSpace<Double, Float64Field, DMatri
      * The [Float64Field] reference.
      */
     override val elementAlgebra: Float64Field get() = Float64Field
+
+    override val type: SafeType<Double> get() = safeTypeOf()
 
     @Suppress("UNCHECKED_CAST")
     override fun Matrix<Double>.toEjml(): EjmlDoubleMatrix<DMatrixSparseCSC> = when {
@@ -776,6 +792,8 @@ public object EjmlLinearSpaceDSCC : EjmlLinearSpace<Double, Float64Field, DMatri
     }
 }
 
+
+
 /**
  * [EjmlLinearSpace] implementation based on [CommonOps_FSCC], [DecompositionFactory_FSCC] operations and
  * [FMatrixSparseCSC] matrices.
@@ -785,6 +803,8 @@ public object EjmlLinearSpaceFSCC : EjmlLinearSpace<Float, Float32Field, FMatrix
      * The [Float32Field] reference.
      */
     override val elementAlgebra: Float32Field get() = Float32Field
+
+    override val type: SafeType<Float> get() = safeTypeOf()
 
     @Suppress("UNCHECKED_CAST")
     override fun Matrix<Float>.toEjml(): EjmlFloatMatrix<FMatrixSparseCSC> = when {
