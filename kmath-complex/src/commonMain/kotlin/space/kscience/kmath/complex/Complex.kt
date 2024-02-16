@@ -144,12 +144,19 @@ public object ComplexField :
                 zero
             }
         }
-
     } else {
         exp(pow * ln(arg))
     }
 
-    public fun power(arg: Complex, pow: Complex): Complex = exp(pow * ln(arg))
+    public fun power(arg: Complex, pow: Complex): Complex = if(arg == zero || arg == (-0.0).toComplex()){
+        if(pow == zero){
+            one
+        } else {
+            zero
+        }
+    } else {
+        exp(pow * ln(arg))
+    }
 
     public fun Complex.pow(power: Complex): Complex = power(this, power)
 

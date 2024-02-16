@@ -71,6 +71,11 @@ internal class ComplexFieldTest {
             (i * 8).let { it.im.toInt() to it.re.toInt() },
             (Complex(2, 2) pow 2).let { it.im.toInt() to it.re.toInt() })
 
+        assertEquals(1.0, Complex(0.0).pow(Complex(0.0)).re, 0.01)
+        assertEquals(1.0, Complex(-0.0).pow(Complex(0.0)).re, 0.01)
+        assertEquals(0.0, Complex(0.0).pow(Complex(2.0)).re, 0.01)
+        assertEquals(0.0, Complex(-0.0).pow(Complex(2.0)).re, 0.01)
+        assertEquals(1.0, Complex(-1.0).pow(Complex(2.0)).re, 0.01)
         assertEquals(2.0, power(Complex(-4.0, 0.0), 0.5 + 0 * i).im, 0.01)
         assertEquals(2.0, power(Complex(-4.0, 0.0), 0.5).im, 0.01)
     }
