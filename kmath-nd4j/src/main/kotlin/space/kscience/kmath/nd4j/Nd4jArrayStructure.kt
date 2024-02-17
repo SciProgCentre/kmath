@@ -6,8 +6,10 @@
 package space.kscience.kmath.nd4j
 
 import org.nd4j.linalg.api.ndarray.INDArray
+import space.kscience.attributes.SafeType
 import space.kscience.kmath.PerformancePitfall
 import space.kscience.kmath.nd.*
+import space.kscience.kmath.operations.Float32Field
 
 /**
  * Represents a [StructureND] wrapping an [INDArray] object.
@@ -31,6 +33,7 @@ public sealed class Nd4jArrayStructure<T> : MutableStructureND<T> {
 }
 
 public data class Nd4jArrayIntStructure(override val ndArray: INDArray) : Nd4jArrayStructure<Int>(), StructureNDOfInt {
+
     override fun elementsIterator(): Iterator<Pair<IntArray, Int>> = ndArray.intIterator()
 
     @OptIn(PerformancePitfall::class)
@@ -47,8 +50,10 @@ public data class Nd4jArrayIntStructure(override val ndArray: INDArray) : Nd4jAr
  */
 public fun INDArray.asIntStructure(): Nd4jArrayIntStructure = Nd4jArrayIntStructure(this)
 
-public data class Nd4jArrayDoubleStructure(override val ndArray: INDArray) : Nd4jArrayStructure<Double>(), StructureNDOfDouble {
+public data class Nd4jArrayDoubleStructure(override val ndArray: INDArray) : Nd4jArrayStructure<Double>(),
+    StructureNDOfDouble {
     override fun elementsIterator(): Iterator<Pair<IntArray, Double>> = ndArray.realIterator()
+
     @OptIn(PerformancePitfall::class)
     override fun get(index: IntArray): Double = ndArray.getDouble(*index)
 
@@ -64,7 +69,11 @@ public data class Nd4jArrayDoubleStructure(override val ndArray: INDArray) : Nd4
 public fun INDArray.asDoubleStructure(): Nd4jArrayStructure<Double> = Nd4jArrayDoubleStructure(this)
 
 public data class Nd4jArrayFloatStructure(override val ndArray: INDArray) : Nd4jArrayStructure<Float>() {
+
+    override val type: SafeType<Float> get() = Float32Field.type
+
     override fun elementsIterator(): Iterator<Pair<IntArray, Float>> = ndArray.floatIterator()
+
     @PerformancePitfall
     override fun get(index: IntArray): Float = ndArray.getFloat(*index)
 

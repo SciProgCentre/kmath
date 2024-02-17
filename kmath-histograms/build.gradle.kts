@@ -6,6 +6,8 @@ kscience{
     jvm()
     js()
     native()
+    wasm()
+    useCoroutines()
 }
 
 //apply(plugin = "kotlinx-atomicfu")
@@ -21,7 +23,6 @@ kotlin.sourceSets {
         dependencies {
             implementation(project(":kmath-for-real"))
             implementation(projects.kmath.kmathStat)
-            implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.0")
         }
     }
 }

@@ -11,19 +11,22 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
+import space.kscience.attributes.SafeType
 import space.kscience.kmath.geometry.GeometrySpace
 import space.kscience.kmath.geometry.Vector2D
 import space.kscience.kmath.operations.Float32Field
 import space.kscience.kmath.structures.Float32
+import space.kscience.kmath.structures.MutableBufferFactory
 import kotlin.math.pow
 import kotlin.math.sqrt
 
 @Serializable(Float32Space2D.VectorSerializer::class)
-public interface Float32Vector2D : Vector2D<Float>
+public interface Float32Vector2D : Vector2D<Float32>{
+    override val type: SafeType<Float32> get() = Float32Field.type
+}
 
 
 public object Float32Space2D : GeometrySpace<Float32Vector2D, Float32> {
-
     @Serializable
     @SerialName("Float32Vector2D")
     private data class Vector2DImpl(
@@ -72,6 +75,8 @@ public object Float32Space2D : GeometrySpace<Float32Vector2D, Float32> {
     public val yAxis: Float32Vector2D = vector(0.0, 1.0)
 
     override val defaultPrecision: Float32 = 1e-3f
+
+    override val bufferFactory: MutableBufferFactory<Float32Vector2D> = MutableBufferFactory()
 }
 
 public fun Float32Vector2D(x: Number, y: Number): Float32Vector2D = Float32Space2D.vector(x, y)

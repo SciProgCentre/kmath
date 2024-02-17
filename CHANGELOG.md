@@ -20,9 +20,11 @@
 - Kmath-memory is moved on top of core.
 
 ### Deprecated
+- ND4J engine
 
 ### Removed
 - `asPolynomial` function due to scope pollution
+- Codegend for ejml (450 lines of codegen for 1000 lines of code is too much)
 
 ### Fixed
 - Median statistics

@@ -5,9 +5,15 @@
 
 package space.kscience.kmath.nd
 
+import space.kscience.attributes.SafeType
 import space.kscience.kmath.PerformancePitfall
+import space.kscience.kmath.operations.Float64Field
+import space.kscience.kmath.operations.Int32Field
+import space.kscience.kmath.structures.Float64
 
 public interface StructureNDOfDouble : StructureND<Double> {
+    override val type: SafeType<Float64> get() = Float64Field.type
+
     /**
      * Guaranteed non-blocking access to content
      */
@@ -22,6 +28,7 @@ public fun StructureND<Double>.getDouble(index: IntArray): Double =
     if (this is StructureNDOfDouble) getDouble(index) else get(index)
 
 public interface MutableStructureNDOfDouble : StructureNDOfDouble, MutableStructureND<Double> {
+
     /**
      * Guaranteed non-blocking access to content
      */
@@ -34,6 +41,9 @@ public fun MutableStructureND<Double>.getDouble(index: IntArray): Double =
 
 
 public interface StructureNDOfInt : StructureND<Int> {
+
+    override val type: SafeType<Int> get() = Int32Field.type
+
     /**
      * Guaranteed non-blocking access to content
      */

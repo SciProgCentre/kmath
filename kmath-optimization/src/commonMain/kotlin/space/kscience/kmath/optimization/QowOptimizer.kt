@@ -264,10 +264,10 @@ public object QowOptimizer : Optimizer<Double, XYFit> {
             qow = QoWeight(problem, res.freeParameters)
             res = qow.newtonianRun(maxSteps = iterations)
         }
-        val covariance = res.covariance()
+
         return res.problem.withAttributes {
-            set(OptimizationResult(), res.freeParameters)
-            set(OptimizationCovariance(), covariance)
+            result(res.freeParameters)
+            covariance(res.covariance())
         }
     }
 }

@@ -5,10 +5,13 @@
 
 package space.kscience.kmath.tensors.api
 
+import space.kscience.kmath.nd.MutableStructureND
 import space.kscience.kmath.nd.RingOpsND
 import space.kscience.kmath.nd.ShapeND
 import space.kscience.kmath.nd.StructureND
 import space.kscience.kmath.operations.Ring
+
+public typealias Tensor<T> = MutableStructureND<T>
 
 /**
  * Algebra over a ring on [Tensor].

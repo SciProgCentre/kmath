@@ -153,7 +153,7 @@ public value class DMatrixContext<T : Any, out A : Ring<T>>(public val context: 
         context.run { this@unaryMinus.unaryMinus() }.coerce()
 
     public inline fun <reified R : Dimension, reified C : Dimension> DMatrix<T, C, R>.transposed(): DMatrix<T, R, C> =
-        context.run { (this@transposed as Matrix<T>).transposed }.coerce()
+        context.run { (this@transposed as Matrix<T>).transposed() }.coerce()
 
     public companion object {
         public val real: DMatrixContext<Double, Float64Field> = DMatrixContext(Double.algebra.linearSpace)

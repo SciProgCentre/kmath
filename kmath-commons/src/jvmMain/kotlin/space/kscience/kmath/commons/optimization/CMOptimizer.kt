@@ -3,6 +3,7 @@
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 @file:OptIn(UnstableKMathAPI::class)
+
 package space.kscience.kmath.commons.optimization
 
 import org.apache.commons.math3.optim.*
@@ -20,7 +21,6 @@ import space.kscience.kmath.expressions.Symbol
 import space.kscience.kmath.expressions.SymbolIndexer
 import space.kscience.kmath.expressions.derivative
 import space.kscience.kmath.expressions.withSymbols
-import space.kscience.kmath.misc.log
 import space.kscience.kmath.optimization.*
 import kotlin.collections.set
 import kotlin.reflect.KClass
@@ -28,7 +28,7 @@ import kotlin.reflect.KClass
 public operator fun PointValuePair.component1(): DoubleArray = point
 public operator fun PointValuePair.component2(): Double = value
 
-public object CMOptimizerEngine: OptimizationAttribute<() -> MultivariateOptimizer>
+public object CMOptimizerEngine : OptimizationAttribute<() -> MultivariateOptimizer>
 
 /**
  * Specify a Commons-maths optimization engine
@@ -37,7 +37,7 @@ public fun AttributesBuilder<FunctionOptimization<Double>>.cmEngine(optimizerBui
     set(CMOptimizerEngine, optimizerBuilder)
 }
 
-public object CMOptimizerData: SetAttribute<SymbolIndexer.() -> OptimizationData>
+public object CMOptimizerData : SetAttribute<SymbolIndexer.() -> OptimizationData>
 
 /**
  * Specify Commons-maths optimization data.
@@ -118,21 +118,24 @@ public object CMOptimizer : Optimizer<Double, FunctionOptimization<Double>> {
 
             val logger = problem.attributes[OptimizationLog]
 
-            for (feature in problem.attributes) {
-                when (feature) {
-                    is CMOptimizerData -> feature.data.forEach { dataBuilder ->
-                        addOptimizationData(dataBuilder())
-                    }
-                    is FunctionOptimizationTarget -> when (feature) {
-                        FunctionOptimizationTarget.MAXIMIZE -> addOptimizationData(GoalType.MAXIMIZE)
-                        FunctionOptimizationTarget.MINIMIZE -> addOptimizationData(GoalType.MINIMIZE)
-                    }
-                    else -> logger?.log { "The feature $feature is unused in optimization" }
+            problem.attributes[CMOptimizerData]?.let { builders: Set<SymbolIndexer.() -> OptimizationData> ->
+                builders.forEach { dataBuilder ->
+                    addOptimizationData(dataBuilder())
+                }
+            }
+
+            problem.attributes[FunctionOptimizationTarget]?.let { direction: OptimizationDirection ->
+                when (direction) {
+                    OptimizationDirection.MAXIMIZE -> addOptimizationData(GoalType.MAXIMIZE)
+                    OptimizationDirection.MINIMIZE -> addOptimizationData(GoalType.MINIMIZE)
                 }
             }
 
             val (point, value) = cmOptimizer.optimize(*optimizationData.values.toTypedArray())
-            return problem.withAttributes(OptimizationResult(point.toMap()), OptimizationValue(value))
+            return problem.withAttributes {
+                result(point.toMap())
+                value(value)
+            }
         }
     }
 }

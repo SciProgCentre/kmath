@@ -14,10 +14,7 @@ import space.kscience.kmath.misc.sorted
 import space.kscience.kmath.operations.Group
 import space.kscience.kmath.operations.Ring
 import space.kscience.kmath.operations.ScaleOperations
-import space.kscience.kmath.structures.Buffer
-import space.kscience.kmath.structures.first
-import space.kscience.kmath.structures.indices
-import space.kscience.kmath.structures.last
+import space.kscience.kmath.structures.*
 import java.util.*
 
 private fun <B : ClosedRange<Double>> TreeMap<Double, B>.getBin(value: Double): B? {
@@ -52,6 +49,8 @@ public class TreeHistogramGroup<V : Any, A>(
     public val valueAlgebra: A,
     @PublishedApi internal val binFactory: (Double) -> DoubleDomain1D,
 ) : Group<TreeHistogram<V>>, ScaleOperations<TreeHistogram<V>> where A : Ring<V>, A : ScaleOperations<V> {
+
+    override val bufferFactory: MutableBufferFactory<TreeHistogram<V>> = MutableBufferFactory()
 
     internal inner class DomainCounter(val domain: DoubleDomain1D, val counter: Counter<V> = Counter.of(valueAlgebra)) :
         ClosedRange<Double> by domain.range

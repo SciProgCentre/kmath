@@ -7,6 +7,7 @@ package space.kscience.kmath.kotlingrad
 
 import ai.hypergraph.kotlingrad.api.SFun
 import ai.hypergraph.kotlingrad.api.SVar
+import space.kscience.attributes.SafeType
 import space.kscience.kmath.expressions.*
 import space.kscience.kmath.operations.NumericAlgebra
 
@@ -25,6 +26,8 @@ public class KotlingradExpression<T : Number, A : NumericAlgebra<T>>(
     public val algebra: A,
     public val mst: MST,
 ) : SpecialDifferentiableExpression<T, KotlingradExpression<T, A>> {
+    override val type: SafeType<T> = algebra.type
+
     override fun invoke(arguments: Map<Symbol, T>): T = mst.interpret(algebra, arguments)
 
     override fun derivativeOrNull(

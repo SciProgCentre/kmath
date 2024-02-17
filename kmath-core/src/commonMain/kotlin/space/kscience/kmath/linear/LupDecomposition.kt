@@ -15,13 +15,18 @@ import space.kscience.kmath.operations.*
 import space.kscience.kmath.structures.*
 
 public interface LupDecomposition<T> {
-    public val linearSpace: LinearSpace<T, Field<T>>
-    public val elementAlgebra: Field<T> get() = linearSpace.elementAlgebra
-
     public val pivot: IntBuffer
     public val l: Matrix<T>
     public val u: Matrix<T>
 }
+
+/**
+ * Create a pivot matrix from pivot vector using provided [LinearSpace]
+ */
+public fun <T> LupDecomposition<T>.pivotMatrix(linearSpace: LinearSpace<T, Ring<T>>): Matrix<T> =
+    VirtualMatrix(linearSpace.type, l.rowNum, l.colNum) { row, column ->
+        if (column == pivot[row]) linearSpace.elementAlgebra.one else linearSpace.elementAlgebra.zero
+    }
 
 /**
  * Matrices with this feature support LU factorization with partial pivoting: *[p] &middot; a = [l] &middot; [u]* where
@@ -31,11 +36,13 @@ public interface LupDecomposition<T> {
  * @param lu combined L and U matrix
  */
 public class GenericLupDecomposition<T>(
-    override val linearSpace: LinearSpace<T, Field<T>>,
+    public val linearSpace: LinearSpace<T, Field<T>>,
     private val lu: Matrix<T>,
     override val pivot: IntBuffer,
     private val even: Boolean,
 ) : LupDecomposition<T> {
+
+    private val elementAlgebra get() = linearSpace.elementAlgebra
 
     override val l: Matrix<T>
         get() = VirtualMatrix(lu.type, lu.rowNum, lu.colNum, attributes = Attributes(LowerTriangular)) { i, j ->
@@ -49,11 +56,6 @@ public class GenericLupDecomposition<T>(
     override val u: Matrix<T>
         get() = VirtualMatrix(lu.type, lu.rowNum, lu.colNum, attributes = Attributes(UpperTriangular)) { i, j ->
             if (j >= i) lu[i, j] else elementAlgebra.zero
-        }
-
-    public val pivotMatrix: Matrix<T>
-        get() = VirtualMatrix(linearSpace.type, l.rowNum, l.colNum) { row, column ->
-            if (column == pivot[row]) elementAlgebra.one else elementAlgebra.zero
         }
 
     public val determinant: T by lazy {
@@ -79,7 +81,7 @@ internal fun <T : Comparable<T>> LinearSpace<T, Ring<T>>.abs(value: T): T =
 public fun <T : Comparable<T>> LinearSpace<T, Field<T>>.lup(
     matrix: Matrix<T>,
     checkSingular: (T) -> Boolean,
-): LupDecomposition<T> = elementAlgebra {
+): GenericLupDecomposition<T> = elementAlgebra {
     require(matrix.rowNum == matrix.colNum) { "LU decomposition supports only square matrices" }
     val m = matrix.colNum
     val pivot = IntArray(matrix.rowNum)
@@ -156,7 +158,7 @@ public fun <T : Comparable<T>> LinearSpace<T, Field<T>>.lup(
 public fun LinearSpace<Double, Float64Field>.lup(
     matrix: Matrix<Double>,
     singularityThreshold: Double = 1e-11,
-): LupDecomposition<Double> = lup(matrix) { it < singularityThreshold }
+): GenericLupDecomposition<Double> = lup(matrix) { it < singularityThreshold }
 
 internal fun <T> LinearSpace<T, Field<T>>.solve(
     lup: LupDecomposition<T>,

@@ -7,6 +7,7 @@ package space.kscience.kmath.fit
 
 import kotlinx.html.br
 import kotlinx.html.h3
+import space.kscience.attributes.Attributes
 import space.kscience.kmath.data.XYErrorColumnarData
 import space.kscience.kmath.distributions.NormalDistribution
 import space.kscience.kmath.expressions.Symbol
@@ -64,7 +65,7 @@ suspend fun main() {
         QowOptimizer,
         Double.autodiff,
         mapOf(a to 0.9, b to 1.2, c to 2.0, e to 1.0, d to 1.0, e to 0.0),
-        OptimizationParameters(a, b, c, d)
+        attributes = Attributes(OptimizationParameters, listOf(a, b, c, d))
     ) { arg ->
         //bind variables to autodiff context
         val a by binding

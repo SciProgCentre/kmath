@@ -5,6 +5,7 @@
 
 package space.kscience.kmath.geometry
 
+import space.kscience.attributes.SafeType
 import space.kscience.kmath.linear.Point
 import space.kscience.kmath.structures.Buffer
 
@@ -32,6 +33,9 @@ public fun <T> Buffer<T>.asVector3D(): Vector3D<T> = object : Vector3D<T> {
     init {
         require(this@asVector3D.size == 3) { "Buffer of size 3 is required for Vector3D" }
     }
+
+    override val type: SafeType<T> = this@asVector3D.type
+
 
     override val x: T get() = this@asVector3D[0]
     override val y: T get() = this@asVector3D[1]

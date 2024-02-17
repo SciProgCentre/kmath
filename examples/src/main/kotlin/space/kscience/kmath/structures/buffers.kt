@@ -13,7 +13,7 @@ import space.kscience.kmath.operations.withSize
 inline fun <reified R : Any> MutableBuffer.Companion.same(
     n: Int,
     value: R
-): MutableBuffer<R> = auto(n) { value }
+): MutableBuffer<R> = MutableBuffer(n) { value }
 
 
 fun main() {

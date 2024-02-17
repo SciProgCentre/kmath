@@ -8,7 +8,7 @@
 package space.kscience.kmath.structures
 
 import space.kscience.kmath.complex.*
-import space.kscience.kmath.linear.transpose
+import space.kscience.kmath.linear.transposed
 import space.kscience.kmath.nd.StructureND
 import space.kscience.kmath.nd.as2D
 import space.kscience.kmath.nd.ndAlgebra
@@ -60,7 +60,7 @@ fun complexExample() {
             val sum = matrix + x + 1.0
 
             //Represent the sum as 2d-structure and transpose
-            sum.as2D().transpose()
+            sum.as2D().transposed()
         }
     }
 }

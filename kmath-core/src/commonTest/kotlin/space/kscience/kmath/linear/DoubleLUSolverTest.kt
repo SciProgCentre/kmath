@@ -40,7 +40,7 @@ class DoubleLUSolverTest {
         //Check determinant
         assertEquals(7.0, lup.determinant)
 
-        assertMatrixEquals(lup.pivotMatrix dot matrix, lup.l dot lup.u)
+        assertMatrixEquals(lup.pivotMatrix(this) dot matrix, lup.l dot lup.u)
     }
 
     @Test

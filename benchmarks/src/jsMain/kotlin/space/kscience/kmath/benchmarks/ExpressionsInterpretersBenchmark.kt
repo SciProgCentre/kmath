@@ -99,7 +99,7 @@ class ExpressionsInterpretersBenchmark {
         private val estree = node.estreeCompileToExpression(Float64Field)
 
         private val raw = Expression<Double> { args ->
-            val x = args[x]!!
+            val x = args.getValue(x)
             x * 2.0 + 2.0 / x - 16.0 / sin(x)
         }
     }

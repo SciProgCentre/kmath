@@ -25,5 +25,4 @@ public class TransposedMatrix<T>(public val origin: Matrix<T>) : Matrix<T> {
 /**
  * Create a virtual transposed matrix without copying anything. `A.transpose().transpose() === A`
  */
-public val <T> Matrix<T>.transposed: Matrix<T>
-    get() = (this as? TransposedMatrix<T>)?.origin ?: TransposedMatrix(this)
+public fun <T> Matrix<T>.transposed(): Matrix<T> = (this as? TransposedMatrix<T>)?.origin ?: TransposedMatrix(this)

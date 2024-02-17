@@ -17,6 +17,7 @@ import org.tensorflow.op.core.*
 import org.tensorflow.types.TInt32
 import org.tensorflow.types.family.TNumber
 import org.tensorflow.types.family.TType
+import space.kscience.attributes.SafeType
 import space.kscience.kmath.PerformancePitfall
 import space.kscience.kmath.UnsafeKMathAPI
 import space.kscience.kmath.UnstableKMathAPI
@@ -39,8 +40,8 @@ public sealed interface TensorFlowTensor<T> : Tensor<T>
 /**
  * Static (eager) in-memory TensorFlow tensor
  */
-@JvmInline
-public value class TensorFlowArray<T>(public val tensor: NdArray<T>) : Tensor<T> {
+public class TensorFlowArray<T>(override val type: SafeType<T>, public val tensor: NdArray<T>) : Tensor<T> {
+
     override val shape: ShapeND get() = ShapeND(tensor.shape().asArray().toIntArray())
 
     @PerformancePitfall
@@ -73,7 +74,7 @@ public abstract class TensorFlowOutput<T, TT : TType>(
 
     internal val actualTensor by lazy {
         Session(graph).use { session ->
-            TensorFlowArray(session.runner().fetch(output).run().first().actualizeTensor())
+            TensorFlowArray(type, session.runner().fetch(output).run().first().actualizeTensor())
         }
     }
 

@@ -7,16 +7,20 @@ package space.kscience.kmath.commons.linear
 
 import org.apache.commons.math3.linear.*
 import org.apache.commons.math3.linear.LUDecomposition
+import org.apache.commons.math3.linear.SingularValueDecomposition
 import space.kscience.attributes.SafeType
 import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.linear.*
+import space.kscience.kmath.linear.CholeskyDecomposition
+import space.kscience.kmath.linear.QRDecomposition
 import space.kscience.kmath.nd.Structure2D
 import space.kscience.kmath.nd.StructureAttribute
 import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.operations.Float64Field
 import space.kscience.kmath.structures.Buffer
-import space.kscience.kmath.structures.Float64Buffer
-import kotlin.reflect.cast
+import space.kscience.kmath.structures.Float64
+import space.kscience.kmath.structures.IntBuffer
+import space.kscience.kmath.structures.asBuffer
 
 public class CMMatrix(public val origin: RealMatrix) : Matrix<Double> {
     override val type: SafeType<Double> get() = DoubleField.type
@@ -109,45 +113,44 @@ public object CMLinearSpace : LinearSpace<Double, Float64Field> {
 
         val origin = structure.toCM().origin
 
-        return when (attribute) {
-            IsDiagonal -> if (origin is DiagonalMatrix) IsDiagonal else null
+        val raw: Any? = when (attribute) {
+            IsDiagonal -> if (origin is DiagonalMatrix) Unit else null
             Determinant -> LUDecomposition(origin).determinant
-            LUP -> GenericLupDecomposition {
-                private val lup by lazy { LUDecomposition(origin) }
-                override val determinant: Double by lazy { lup.determinant }
-                override val l: Matrix<Double> by lazy<Matrix<Double>> { CMMatrix(lup.l).withAttribute(LowerTriangular) }
-                override val u: Matrix<Double> by lazy<Matrix<Double>> { CMMatrix(lup.u).withAttribute(UpperTriangular) }
-                override val p: Matrix<Double> by lazy { CMMatrix(lup.p) }
+
+            LUP -> object : LupDecomposition<Float64> {
+                val lup by lazy { LUDecomposition(origin) }
+                override val pivot: IntBuffer get() = lup.pivot.asBuffer()
+                override val l: Matrix<Float64> get() = lup.l.wrap()
+                override val u: Matrix<Float64> get() = lup.u.wrap()
             }
 
-            CholeskyDecompositionAttribute -> object : CholeskyDecompositionAttribute<Double> {
-                override val l: Matrix<Double> by lazy<Matrix<Double>> {
-                    val cholesky = CholeskyDecomposition(origin)
-                    CMMatrix(cholesky.l).withAttribute(LowerTriangular)
-                }
+            Cholesky -> object : CholeskyDecomposition<Float64> {
+                val cmCholesky by lazy { org.apache.commons.math3.linear.CholeskyDecomposition(origin) }
+                override val l: Matrix<Double> get() = cmCholesky.l.wrap()
             }
 
-            QRDecompositionAttribute -> object : QRDecompositionAttribute<Double> {
-                private val qr by lazy { QRDecomposition(origin) }
-                override val q: Matrix<Double> by lazy<Matrix<Double>> {
-                    CMMatrix(qr.q).withAttribute(
-                        OrthogonalAttribute
-                    )
-                }
-                override val r: Matrix<Double> by lazy<Matrix<Double>> { CMMatrix(qr.r).withAttribute(UpperTriangular) }
+            QR -> object : QRDecomposition<Float64> {
+                val cmQr by lazy { org.apache.commons.math3.linear.QRDecomposition(origin) }
+                override val q: Matrix<Float64> get() = cmQr.q.wrap().withAttribute(OrthogonalAttribute)
+                override val r: Matrix<Float64> get() = cmQr.r.wrap().withAttribute(UpperTriangular)
             }
 
-            SVDAttribute -> object : SVDAttribute<Double> {
-                private val sv by lazy { SingularValueDecomposition(origin) }
-                override val u: Matrix<Double> by lazy { CMMatrix(sv.u) }
-                override val s: Matrix<Double> by lazy { CMMatrix(sv.s) }
-                override val v: Matrix<Double> by lazy { CMMatrix(sv.v) }
-                override val singularValues: Point<Double> by lazy { Float64Buffer(sv.singularValues) }
+            SVD -> object : space.kscience.kmath.linear.SingularValueDecomposition<Float64> {
+                val cmSvd by lazy { SingularValueDecomposition(origin) }
+
+                override val u: Matrix<Float64> get() = cmSvd.u.wrap()
+                override val s: Matrix<Float64> get() = cmSvd.s.wrap()
+                override val v: Matrix<Float64> get() = cmSvd.v.wrap()
+                override val singularValues: Point<Float64> get() = cmSvd.singularValues.asBuffer()
+
             }
 
             else -> null
-        }?.let(type::cast)
+        }
+        @Suppress("UNCHECKED_CAST")
+        return raw as V?
     }
+
 }
 
 public operator fun CMMatrix.plus(other: CMMatrix): CMMatrix = CMMatrix(origin.add(other.origin))

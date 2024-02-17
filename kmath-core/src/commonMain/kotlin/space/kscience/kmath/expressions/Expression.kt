@@ -7,6 +7,7 @@ package space.kscience.kmath.expressions
 
 import space.kscience.attributes.SafeType
 import space.kscience.attributes.WithType
+import space.kscience.attributes.safeTypeOf
 import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.operations.Algebra
 import space.kscience.kmath.operations.DoubleField
@@ -30,11 +31,17 @@ public interface Expression<T> : WithType<T> {
     public operator fun invoke(arguments: Map<Symbol, T>): T
 }
 
+/**
+ * Create an expression from a functional block.
+ */
 public fun <T> Expression(type: SafeType<T>, block: (Map<Symbol, T>) -> T): Expression<T> = object : Expression<T> {
     override fun invoke(arguments: Map<Symbol, T>): T = block(arguments)
 
     override val type: SafeType<T> = type
 }
+
+public inline fun <reified T> Expression(noinline block: (Map<Symbol, T>) -> T): Expression<T> =
+    Expression(safeTypeOf<T>(), block)
 
 /**
  * Specialization of [Expression] for [Double] allowing better performance because of using array.

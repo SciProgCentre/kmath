@@ -7,8 +7,8 @@ package space.kscience.kmath.geometry
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import space.kscience.kmath.geometry.euclidean2d.DoubleVector2D
-import space.kscience.kmath.geometry.euclidean3d.DoubleVector3D
+import space.kscience.kmath.geometry.euclidean2d.Float64Vector2D
+import space.kscience.kmath.geometry.euclidean3d.Float64Vector3D
 
 /**
  * A line formed by [start] vector of start and a [direction] vector. Direction vector is not necessarily normalized,
@@ -25,8 +25,8 @@ private data class LineImpl<out V : Any>(override val start: V, override val dir
 
 public fun <V : Any> Line(base: V, direction: V): Line<V> = LineImpl(base, direction)
 
-public typealias Line2D = Line<DoubleVector2D>
-public typealias Line3D = Line<DoubleVector3D>
+public typealias Line2D = Line<Float64Vector2D>
+public typealias Line3D = Line<Float64Vector3D>
 
 /**
  * A directed line segment between [begin] and [end]
@@ -49,5 +49,5 @@ public fun <V : Any> LineSegment<V>.line(algebra: GeometrySpace<V, *>): Line<V> 
     Line(begin, end - begin)
 }
 
-public typealias LineSegment2D = LineSegment<DoubleVector2D>
-public typealias LineSegment3D = LineSegment<DoubleVector3D>
+public typealias LineSegment2D = LineSegment<Float64Vector2D>
+public typealias LineSegment3D = LineSegment<Float64Vector3D>

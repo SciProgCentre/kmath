@@ -9,6 +9,7 @@ package space.kscience.kmath.functions.testUtils
 
 import space.kscience.kmath.operations.Ring
 import space.kscience.kmath.operations.ScaleOperations
+import space.kscience.kmath.structures.MutableBufferFactory
 
 
 class IntModulo {
@@ -109,14 +110,16 @@ class IntModulo {
 }
 
 @Suppress("EXTENSION_SHADOWED_BY_MEMBER", "OVERRIDE_BY_INLINE")
-class IntModuloRing : Ring<IntModulo>, ScaleOperations<IntModulo> {
+class IntModuloRing(modulus: Int) : Ring<IntModulo>, ScaleOperations<IntModulo> {
 
     val modulus: Int
 
-    constructor(modulus: Int) {
+    init {
         require(modulus != 0) { "modulus can not be zero" }
         this.modulus = if (modulus < 0) -modulus else modulus
     }
+
+    override val bufferFactory: MutableBufferFactory<IntModulo> = MutableBufferFactory()
 
     override inline val zero: IntModulo get() = IntModulo(0, modulus, toCheckInput = false)
     override inline val one: IntModulo get() = IntModulo(1, modulus, toCheckInput = false)

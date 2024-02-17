@@ -7,6 +7,7 @@ package space.kscience.kmath.structures
 
 import space.kscience.kmath.PerformancePitfall
 import space.kscience.kmath.nd.*
+import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.operations.ExtendedField
 import space.kscience.kmath.operations.Float64Field
 import space.kscience.kmath.operations.NumbersAddOps

@@ -23,7 +23,7 @@ import space.kscience.kmath.structures.MutableBufferFactory
  */
 public class SplineInterpolator<T : Comparable<T>>(
     override val algebra: Field<T>,
-    public val bufferFactory: MutableBufferFactory<T>,
+    public val bufferFactory: MutableBufferFactory<T> = algebra.bufferFactory,
 ) : PolynomialInterpolator<T> {
     //TODO possibly optimize zeroed buffers
 

@@ -21,7 +21,7 @@ class MatrixTest {
     @Test
     fun testTranspose() = Double.algebra.linearSpace.run {
         val matrix = one(3, 3)
-        val transposed = matrix.transposed
+        val transposed = matrix.transposed()
         assertTrue { StructureND.contentEquals(matrix, transposed) }
     }
 

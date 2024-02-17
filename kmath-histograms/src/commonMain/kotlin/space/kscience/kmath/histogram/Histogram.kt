@@ -47,7 +47,7 @@ public interface Histogram<in T : Any, out V, out B : Bin<T, V>> {
     }
 }
 
-public interface HistogramBuilder<in T : Any, V : Any> {
+public interface HistogramBuilder<in T, V> {
 
     /**
      * The default value increment for a bin
@@ -61,9 +61,9 @@ public interface HistogramBuilder<in T : Any, V : Any> {
 
 }
 
-public fun <T : Any> HistogramBuilder<T, *>.put(point: Point<out T>): Unit = putValue(point)
+public fun <T> HistogramBuilder<T, *>.put(point: Point<T>): Unit = putValue(point)
 
-public fun <T : Any> HistogramBuilder<T, *>.put(vararg point: T): Unit = put(point.asBuffer())
+public inline fun <reified T> HistogramBuilder<T, *>.put(vararg point: T): Unit = put(point.asList().asBuffer())
 
 public fun HistogramBuilder<Double, *>.put(vararg point: Number): Unit =
     put(Float64Buffer(point.map { it.toDouble() }.toDoubleArray()))

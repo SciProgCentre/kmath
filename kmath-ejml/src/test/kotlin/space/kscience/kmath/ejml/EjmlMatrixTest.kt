@@ -58,19 +58,19 @@ internal class EjmlMatrixTest {
 
     @OptIn(UnstableKMathAPI::class)
     @Test
-    fun features() {
+    fun features() = EjmlLinearSpaceDDRM {
         val m = randomMatrix
         val w = EjmlDoubleMatrix(m)
-        val det: Determinant<Double> = EjmlLinearSpaceDDRM.attributeForOrNull(w) ?: fail()
-        assertEquals(CommonOps_DDRM.det(m), det.determinant)
-        val lup: LupDecompositionAttribute<Double> = EjmlLinearSpaceDDRM.attributeForOrNull(w) ?: fail()
+        val det: Double = w.getOrComputeAttribute(Determinant) ?: fail()
+        assertEquals(CommonOps_DDRM.det(m), det)
+        val lup: LupDecomposition<Double> = w.getOrComputeAttribute(LUP) ?: fail()
 
         val ludecompositionF64 = DecompositionFactory_DDRM.lu(m.numRows, m.numCols)
             .also { it.decompose(m.copy()) }
 
         assertMatrixEquals(EjmlDoubleMatrix(ludecompositionF64.getLower(null)), lup.l)
         assertMatrixEquals(EjmlDoubleMatrix(ludecompositionF64.getUpper(null)), lup.u)
-        assertMatrixEquals(EjmlDoubleMatrix(ludecompositionF64.getRowPivot(null)), lup.p)
+        assertMatrixEquals(EjmlDoubleMatrix(ludecompositionF64.getRowPivot(null)), lup.pivotMatrix(this))
     }
 
     @Test

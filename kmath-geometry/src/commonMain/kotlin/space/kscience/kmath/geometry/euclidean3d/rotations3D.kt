@@ -5,6 +5,7 @@
 
 package space.kscience.kmath.geometry.euclidean3d
 
+import space.kscience.attributes.SafeType
 import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.complex.*
 import space.kscience.kmath.geometry.*
@@ -13,6 +14,7 @@ import space.kscience.kmath.linear.Matrix
 import space.kscience.kmath.linear.linearSpace
 import space.kscience.kmath.linear.matrix
 import space.kscience.kmath.operations.Float64Field
+import space.kscience.kmath.structures.Float64
 import kotlin.math.*
 
 public operator fun Quaternion.times(other: Quaternion): Quaternion = QuaternionAlgebra.multiply(this, other)
@@ -35,7 +37,7 @@ public infix fun Quaternion.dot(other: Quaternion): Double = w * other.w + x * o
 /**
  * Represent a vector as quaternion with zero a rotation angle.
  */
-internal fun DoubleVector3D.asQuaternion(): Quaternion = Quaternion(0.0, x, y, z)
+internal fun Float64Vector3D.asQuaternion(): Quaternion = Quaternion(0.0, x, y, z)
 
 /**
  * Angle in radians denoted by this quaternion rotation
@@ -45,7 +47,7 @@ public val Quaternion.theta: Radians get() = (kotlin.math.acos(normalized().w) *
 /**
  * Create a normalized Quaternion from rotation angle and rotation vector
  */
-public fun Quaternion.Companion.fromRotation(theta: Angle, vector: DoubleVector3D): Quaternion {
+public fun Quaternion.Companion.fromRotation(theta: Angle, vector: Float64Vector3D): Quaternion {
     val s = sin(theta / 2)
     val c = cos(theta / 2)
     val norm = with(Float64Space3D) { vector.norm() }
@@ -55,9 +57,9 @@ public fun Quaternion.Companion.fromRotation(theta: Angle, vector: DoubleVector3
 /**
  * An axis of quaternion rotation
  */
-public val Quaternion.vector: DoubleVector3D
+public val Quaternion.vector: Float64Vector3D
     get() {
-        return object : DoubleVector3D {
+        return object : Float64Vector3D {
             private val sint2 = sqrt(1 - w * w)
             override val x: Double get() = this@vector.x / sint2
             override val y: Double get() = this@vector.y / sint2
@@ -69,7 +71,7 @@ public val Quaternion.vector: DoubleVector3D
 /**
  * Rotate a vector in a [Float64Space3D] with [quaternion]
  */
-public fun Float64Space3D.rotate(vector: DoubleVector3D, quaternion: Quaternion): DoubleVector3D =
+public fun Float64Space3D.rotate(vector: Float64Vector3D, quaternion: Quaternion): Float64Vector3D =
     with(QuaternionAlgebra) {
         val p = vector.asQuaternion()
         (quaternion * p * quaternion.reciprocal).vector
@@ -80,15 +82,15 @@ public fun Float64Space3D.rotate(vector: DoubleVector3D, quaternion: Quaternion)
  */
 @UnstableKMathAPI
 public fun Float64Space3D.rotate(
-    vector: DoubleVector3D,
+    vector: Float64Vector3D,
     composition: QuaternionAlgebra.() -> Quaternion,
-): DoubleVector3D =
+): Float64Vector3D =
     rotate(vector, QuaternionAlgebra.composition())
 
 /**
  * Rotate a [Float64] vector in 3D space with a rotation matrix
  */
-public fun Float64Space3D.rotate(vector: DoubleVector3D, matrix: Matrix<Double>): DoubleVector3D {
+public fun Float64Space3D.rotate(vector: Float64Vector3D, matrix: Matrix<Double>):  Vector3D<Float64> {
     require(matrix.colNum == 3 && matrix.rowNum == 3) { "Square 3x3 rotation matrix is required" }
     return with(linearSpace) { (matrix dot vector).asVector3D() }
 }
@@ -242,6 +244,8 @@ public fun Quaternion.Companion.fromEuler(
  * A vector consisting of angles
  */
 public data class AngleVector(override val x: Angle, override val y: Angle, override val z: Angle) : Vector3D<Angle> {
+    override val type: SafeType<Angle> get() = Angle.type
+
     public companion object
 }
 

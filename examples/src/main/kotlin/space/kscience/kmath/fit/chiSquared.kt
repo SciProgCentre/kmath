@@ -13,10 +13,7 @@ import space.kscience.kmath.expressions.autodiff
 import space.kscience.kmath.expressions.symbol
 import space.kscience.kmath.operations.asIterable
 import space.kscience.kmath.operations.toList
-import space.kscience.kmath.optimization.FunctionOptimizationTarget
-import space.kscience.kmath.optimization.optimizeWith
-import space.kscience.kmath.optimization.result
-import space.kscience.kmath.optimization.resultValue
+import space.kscience.kmath.optimization.*
 import space.kscience.kmath.random.RandomGenerator
 import space.kscience.kmath.real.DoubleVector
 import space.kscience.kmath.real.map
@@ -80,8 +77,9 @@ suspend fun main() {
     val result = chi2.optimizeWith(
         CMOptimizer,
         mapOf(a to 1.5, b to 0.9, c to 1.0),
-        FunctionOptimizationTarget.MINIMIZE
-    )
+    ){
+        FunctionOptimizationTarget(OptimizationDirection.MINIMIZE)
+    }
 
     //display a page with plot and numerical results
     val page = Plotly.page {

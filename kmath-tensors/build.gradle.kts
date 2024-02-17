@@ -12,6 +12,7 @@ kscience{
         }
     }
     native()
+    wasm()
 
     dependencies {
         api(projects.kmathCore)
