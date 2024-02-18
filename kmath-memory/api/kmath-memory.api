@@ -1,14 +1,3 @@
-public abstract interface annotation class space/kscience/kmath/PerformancePitfall : java/lang/annotation/Annotation {
-	public abstract fun message ()Ljava/lang/String;
-}
-
-public abstract interface annotation class space/kscience/kmath/UnsafeKMathAPI : java/lang/annotation/Annotation {
-	public abstract fun message ()Ljava/lang/String;
-}
-
-public abstract interface annotation class space/kscience/kmath/UnstableKMathAPI : java/lang/annotation/Annotation {
-}
-
 public final class space/kscience/kmath/memory/ByteBufferMemory : space/kscience/kmath/memory/Memory {
 	public fun <init> (Ljava/nio/ByteBuffer;II)V
 	public synthetic fun <init> (Ljava/nio/ByteBuffer;IIILkotlin/jvm/internal/DefaultConstructorMarker;)V
@@ -42,6 +31,23 @@ public abstract interface class space/kscience/kmath/memory/Memory {
 public final class space/kscience/kmath/memory/Memory$Companion {
 }
 
+public class space/kscience/kmath/memory/MemoryBuffer : space/kscience/kmath/structures/Buffer {
+	public static final field Companion Lspace/kscience/kmath/memory/MemoryBuffer$Companion;
+	public fun <init> (Lspace/kscience/kmath/memory/Memory;Lspace/kscience/kmath/memory/MemorySpec;)V
+	public fun get (I)Ljava/lang/Object;
+	protected final fun getMemory ()Lspace/kscience/kmath/memory/Memory;
+	public fun getSize ()I
+	protected final fun getSpec ()Lspace/kscience/kmath/memory/MemorySpec;
+	public fun getType-V0oMfBY ()Lkotlin/reflect/KType;
+	public fun iterator ()Ljava/util/Iterator;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class space/kscience/kmath/memory/MemoryBuffer$Companion {
+	public final fun create (Lspace/kscience/kmath/memory/MemorySpec;I)Lspace/kscience/kmath/memory/MemoryBuffer;
+	public final fun create (Lspace/kscience/kmath/memory/MemorySpec;ILkotlin/jvm/functions/Function1;)Lspace/kscience/kmath/memory/MemoryBuffer;
+}
+
 public final class space/kscience/kmath/memory/MemoryKt {
 	public static final fun read (Lspace/kscience/kmath/memory/Memory;Lkotlin/jvm/functions/Function1;)Ljava/lang/Object;
 	public static final fun write (Lspace/kscience/kmath/memory/Memory;Lkotlin/jvm/functions/Function1;)V
@@ -58,7 +64,7 @@ public abstract interface class space/kscience/kmath/memory/MemoryReader : java/
 	public abstract fun readShort (I)S
 }
 
-public abstract interface class space/kscience/kmath/memory/MemorySpec {
+public abstract interface class space/kscience/kmath/memory/MemorySpec : space/kscience/attributes/WithType {
 	public abstract fun getObjectSize ()I
 	public abstract fun read (Lspace/kscience/kmath/memory/MemoryReader;I)Ljava/lang/Object;
 	public abstract fun write (Lspace/kscience/kmath/memory/MemoryWriter;ILjava/lang/Object;)V
@@ -79,5 +85,17 @@ public abstract interface class space/kscience/kmath/memory/MemoryWriter : java/
 	public abstract fun writeInt (II)V
 	public abstract fun writeLong (IJ)V
 	public abstract fun writeShort (IS)V
+}
+
+public final class space/kscience/kmath/memory/MutableMemoryBuffer : space/kscience/kmath/memory/MemoryBuffer, space/kscience/kmath/structures/MutableBuffer {
+	public static final field Companion Lspace/kscience/kmath/memory/MutableMemoryBuffer$Companion;
+	public fun <init> (Lspace/kscience/kmath/memory/Memory;Lspace/kscience/kmath/memory/MemorySpec;)V
+	public fun copy ()Lspace/kscience/kmath/structures/MutableBuffer;
+	public fun set (ILjava/lang/Object;)V
+}
+
+public final class space/kscience/kmath/memory/MutableMemoryBuffer$Companion {
+	public final fun create (Lspace/kscience/kmath/memory/MemorySpec;I)Lspace/kscience/kmath/memory/MutableMemoryBuffer;
+	public final fun create (Lspace/kscience/kmath/memory/MemorySpec;ILkotlin/jvm/functions/Function1;)Lspace/kscience/kmath/memory/MutableMemoryBuffer;
 }
 

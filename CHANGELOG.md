@@ -3,6 +3,21 @@
 ## Unreleased
 
 ### Added
+
+### Changed
+
+### Deprecated
+
+### Removed
+
+### Fixed
+
+### Security
+
+## 0.4.0-dev-3 - 2024-02-18
+
+### Added
+
 - Reification. Explicit `SafeType` for algebras and buffers.
 - Integer division algebras.
 - Float32 geometries.
@@ -14,6 +29,7 @@
 - Parallel buffer factories
 
 ### Changed
+
 - Default naming for algebra and buffers now uses IntXX/FloatXX notation instead of Java types.
 - Remove unnecessary inlines in basic algebras.
 - QuaternionField -> QuaternionAlgebra and does not implement `Field` anymore since it is non-commutative
@@ -23,22 +39,24 @@
 - Kmath-memory is moved on top of core.
 
 ### Deprecated
+
 - ND4J engine
 
 ### Removed
+
 - `asPolynomial` function due to scope pollution
 - Codegend for ejml (450 lines of codegen for 1000 lines of code is too much)
 
 ### Fixed
+
 - Median statistics
 - Complex power of negative real numbers
 - Add proper mutability for MutableBufferND rows and columns
 
-### Security
-
 ## 0.3.1 - 2023-04-09
 
 ### Added
+
 - Wasm support for `memory`, `core`, `complex` and `functions` modules.
 - Generic builders for `BufferND` and `MutableBufferND`
 - `NamedMatrix` - matrix with symbol-based indexing
@@ -48,6 +66,7 @@
 - Algebra now has an obligatory `bufferFactory` (#477).
 
 ### Changed
+
 - Removed marker `Vector` type for geometry
 - Geometry uses type-safe angles
 - Tensor operations switched to prefix notation
@@ -60,12 +79,14 @@
 - Multik went MPP
 
 ### Removed
+
 - Trajectory moved to https://github.com/SciProgCentre/maps-kt
 - Polynomials moved to https://github.com/SciProgCentre/kmath-polynomial
 
 ## 0.3.0
 
 ### Added
+
 - `ScaleOperations` interface
 - `Field` extends `ScaleOperations`
 - Basic integration API
@@ -90,6 +111,7 @@
 - Compilation to TeX for MST: #254
 
 ### Changed
+
 - Annotations moved to `space.kscience.kmath`
 - Exponential operations merged with hyperbolic functions
 - Space is replaced by Group. Space is reserved for vector spaces.
@@ -123,9 +145,11 @@
 - `UnivariateFunction` -> `Function1D`, `MultivariateFunction` -> `FunctionND`
 
 ### Deprecated
+
 - Specialized `DoubleBufferAlgebra`
 
 ### Removed
+
 - Nearest in Domain. To be implemented in geometry package.
 - Number multiplication and division in main Algebra chain
 - `contentEquals` from Buffer. It moved to the companion.
@@ -136,12 +160,14 @@
 - Algebra elements are completely removed. Use algebra contexts instead.
 
 ### Fixed
+
 - Ring inherits RingOperations, not GroupOperations
 - Univariate histogram filling
 
 ## 0.2.0
 
 ### Added
+
 - `fun` annotation for SAM interfaces in library
 - Explicit `public` visibility for all public APIs
 - Better trigonometric and hyperbolic functions for `AutoDiffField` (https://github.com/mipt-npm/kmath/pull/140)
@@ -161,6 +187,7 @@
 - Basic Quaternion vector support in `kmath-complex`.
 
 ### Changed
+
 - Package changed from `scientifik` to `space.kscience`
 - Gradle version: 6.6 -> 6.8.2
 - Minor exceptions refactor (throwing `IllegalArgumentException` by argument checks instead of `IllegalStateException`)
@@ -185,6 +212,7 @@
 - Add `out` projection to `Buffer` generic
 
 ### Removed
+
 - `kmath-koma` module because it doesn't support Kotlin 1.4.
 - Support of `legacy` JS backend (we will support only IR)
 - `toGrid` method.
@@ -193,11 +221,13 @@
 - StructureND identity and equals
 
 ### Fixed
+
 - `symbol` method in `MstExtendedField` (https://github.com/mipt-npm/kmath/pull/140)
 
 ## 0.1.4
 
 ### Added
+
 - Functional Expressions API
 - Mathematical Syntax Tree, its interpreter and API
 - String to MST parser (https://github.com/mipt-npm/kmath/pull/120)
@@ -215,6 +245,7 @@
 - Norm support for `Complex`
 
 ### Changed
+
 - `readAsMemory` now has `throws IOException` in JVM signature.
 - Several functions taking functional types were made `inline`.
 - Several functions taking functional types now have `callsInPlace` contracts.
@@ -226,6 +257,7 @@
 - Moved probability distributions to commons-rng and to `kmath-prob`
 
 ### Fixed
+
 - Missing copy method in Memory implementation on JS (https://github.com/mipt-npm/kmath/pull/106)
 - D3.dim value in `kmath-dimensions`
 - Multiplication in integer rings in `kmath-core` (https://github.com/mipt-npm/kmath/pull/101)

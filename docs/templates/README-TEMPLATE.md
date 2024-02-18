@@ -11,18 +11,21 @@ analog to Python's NumPy library. Later we found that kotlin is much more flexib
 architecture designs. In contrast to `numpy` and `scipy` it is modular and has a lightweight core. The `numpy`-like
 experience could be achieved with [kmath-for-real](/kmath-for-real) extension module.
 
-[Documentation site (**WIP**)](https://SciProgCentre.github.io/kmath/)
+[Documentation site](https://SciProgCentre.github.io/kmath/)
 
 ## Publications and talks
 
 * [A conceptual article about context-oriented design](https://proandroiddev.com/an-introduction-context-oriented-programming-in-kotlin-2e79d316b0a2)
 * [Another article about context-oriented design](https://proandroiddev.com/diving-deeper-into-context-oriented-programming-in-kotlin-3ecb4ec38814)
 * [ACAT 2019 conference paper](https://aip.scitation.org/doi/abs/10.1063/1.5130103)
+* [A talk at KotlinConf 2019 about using kotlin for science](https://youtu.be/LI_5TZ7tnOE?si=4LknX41gl_YeUbIe)
+* [A talk on architecture at Joker-2021 (in Russian)](https://youtu.be/1bZ2doHiRRM?si=9w953ro9yu98X_KJ)
+* [The same talk in English](https://youtu.be/yP5DIc2fVwQ?si=louZzQ1dcXV6gP10)
+* [A seminar on tensor API](https://youtu.be/0H99wUs0xTM?si=6c__04jrByFQtVpo)
 
 # Goal
 
-* Provide a flexible and powerful API to work with mathematics abstractions in Kotlin-multiplatform (JVM, JS and Native)
-  .
+* Provide a flexible and powerful API to work with mathematics abstractions in Kotlin-multiplatform (JVM, JS, Native and Wasm).
 * Provide basic multiplatform implementations for those abstractions (without significant performance optimization).
 * Provide bindings and wrappers with those abstractions for popular optimized platform libraries.
 
@@ -73,7 +76,7 @@ native/SciPy (mostly due to boxing operations on primitive numbers). The best pe
 
 ## Requirements
 
-KMath currently relies on JDK 11 for compilation and execution of Kotlin-JVM part. We recommend using GraalVM-CE 11/17 for execution to get better performance.
+KMath currently relies on JDK 11 for compilation and execution of Kotlin-JVM part. We recommend using GraalVM-CE or Oracle GraalVM for execution to get better performance.
 
 ### Repositories
 
@@ -95,7 +98,5 @@ dependencies {
 
 ## Contributing
 
-The project requires a lot of additional work. The most important thing we need is a feedback about what features are
-required the most. Feel free to create feature requests. We are also welcome to code contributions, especially in issues
-marked with
-[good first issue](hhttps://github.com/SciProgCentre/kmath/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22) label.
+The project requires a lot of additional work. The most important thing we need is feedback about what features are
+required the most. Feel free to create feature requests. We are also welcome to code contributions, especially in issues marked with [good first issue](hhttps://github.com/SciProgCentre/kmath/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22) label.

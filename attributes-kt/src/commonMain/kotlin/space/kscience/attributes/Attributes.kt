@@ -11,10 +11,19 @@ import kotlin.jvm.JvmInline
  * A set of attributes. The implementation must guarantee that [content] keys correspond to its value types.
  */
 public interface Attributes {
+    /**
+     * Raw content for this [Attributes]
+     */
     public val content: Map<out Attribute<*>, Any?>
 
+    /**
+     * Attribute keys contained in this [Attributes]
+     */
     public val keys: Set<Attribute<*>> get() = content.keys
 
+    /**
+     * Provide an attribute value. Return null if attribute is not present or if its value is null.
+     */
     @Suppress("UNCHECKED_CAST")
     public operator fun <T> get(attribute: Attribute<T>): T? = content[attribute] as? T
 

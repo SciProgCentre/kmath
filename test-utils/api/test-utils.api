@@ -4,7 +4,7 @@ public final class space/kscience/kmath/testutils/AssertsKt {
 }
 
 public final class space/kscience/kmath/testutils/BufferEqualityKt {
-	public static final fun contentEquals-2c9zdjM ([D[D)Z
+	public static final fun contentEquals-YsAwp1c ([D[D)Z
 	public static final fun contentEqualsArray ([D[D)Z
 	public static final fun contentEqualsBuffer ([D[D)Z
 }

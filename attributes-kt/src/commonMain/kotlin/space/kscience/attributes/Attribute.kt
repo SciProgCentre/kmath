@@ -5,6 +5,9 @@
 
 package space.kscience.attributes
 
+/**
+ * A marker interface for an attribute. Attributes are used as keys to access contents of type [T] in the container.
+ */
 public interface Attribute<T>
 
 /**

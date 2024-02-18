@@ -71,4 +71,12 @@ readme {
         id = "autodiff",
         ref = "src/commonMain/kotlin/space/kscience/kmath/expressions/SimpleAutoDiff.kt"
     ) { "Automatic differentiation" }
+
+    feature(
+        id="Parallel linear algebra"
+    ){
+        """
+            Parallel implementation for `LinearAlgebra`
+        """.trimIndent()
+    }
 }

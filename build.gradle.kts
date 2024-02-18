@@ -3,7 +3,7 @@ import space.kscience.gradle.useSPCTeam
 
 plugins {
     id("space.kscience.gradle.project")
-    id("org.jetbrains.kotlinx.kover") version "0.6.0"
+    id("org.jetbrains.kotlinx.kover") version "0.7.6"
 }
 
 allprojects {
@@ -14,7 +14,7 @@ allprojects {
     }
 
     group = "space.kscience"
-    version = "0.4.0-dev-3"
+    version = "0.4.0"
 }
 
 subprojects {
@@ -34,7 +34,7 @@ subprojects {
                     localDirectory.set(kotlinDir)
 
                     remoteUrl.set(
-                        java.net.URL("https://github.com/SciProgCentre/kmath/tree/master/${this@subprojects.name}/$kotlinDirPath")
+                        uri("https://github.com/SciProgCentre/kmath/tree/master/${this@subprojects.name}/$kotlinDirPath").toURL()
                     )
                 }
 

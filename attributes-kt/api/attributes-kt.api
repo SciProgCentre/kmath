@@ -1,0 +1,97 @@
+public abstract interface class space/kscience/attributes/Attribute {
+}
+
+public abstract interface class space/kscience/attributes/AttributeContainer {
+	public abstract fun getAttributes ()Lspace/kscience/attributes/Attributes;
+}
+
+public abstract interface class space/kscience/attributes/AttributeScope {
+}
+
+public abstract interface class space/kscience/attributes/AttributeWithDefault : space/kscience/attributes/Attribute {
+	public abstract fun getDefault ()Ljava/lang/Object;
+}
+
+public abstract interface class space/kscience/attributes/Attributes {
+	public static final field Companion Lspace/kscience/attributes/Attributes$Companion;
+	public fun get (Lspace/kscience/attributes/Attribute;)Ljava/lang/Object;
+	public abstract fun getContent ()Ljava/util/Map;
+	public fun getKeys ()Ljava/util/Set;
+}
+
+public final class space/kscience/attributes/Attributes$Companion {
+	public final fun getEMPTY ()Lspace/kscience/attributes/Attributes;
+}
+
+public final class space/kscience/attributes/AttributesBuilder : space/kscience/attributes/Attributes {
+	public fun <init> ()V
+	public final fun add (Lspace/kscience/attributes/SetAttribute;Ljava/lang/Object;)V
+	public final fun build ()Lspace/kscience/attributes/Attributes;
+	public final fun from (Lspace/kscience/attributes/Attributes;)V
+	public fun getContent ()Ljava/util/Map;
+	public final fun invoke (Lspace/kscience/attributes/Attribute;Ljava/lang/Object;)V
+	public final fun remove (Lspace/kscience/attributes/SetAttribute;Ljava/lang/Object;)V
+	public final fun set (Lspace/kscience/attributes/Attribute;Ljava/lang/Object;)V
+}
+
+public final class space/kscience/attributes/AttributesBuilderKt {
+	public static final fun Attributes (Lkotlin/jvm/functions/Function1;)Lspace/kscience/attributes/Attributes;
+}
+
+public final class space/kscience/attributes/AttributesKt {
+	public static final fun Attributes (Lspace/kscience/attributes/Attribute;)Lspace/kscience/attributes/Attributes;
+	public static final fun Attributes (Lspace/kscience/attributes/Attribute;Ljava/lang/Object;)Lspace/kscience/attributes/Attributes;
+	public static final fun getOrDefault (Lspace/kscience/attributes/Attributes;Lspace/kscience/attributes/AttributeWithDefault;)Ljava/lang/Object;
+	public static final fun isEmpty (Lspace/kscience/attributes/Attributes;)Z
+	public static final fun modify (Lspace/kscience/attributes/Attributes;Lkotlin/jvm/functions/Function1;)Lspace/kscience/attributes/Attributes;
+	public static final fun plus (Lspace/kscience/attributes/Attributes;Lspace/kscience/attributes/Attributes;)Lspace/kscience/attributes/Attributes;
+	public static final fun withAttribute (Lspace/kscience/attributes/Attributes;Lspace/kscience/attributes/Attribute;)Lspace/kscience/attributes/Attributes;
+	public static final fun withAttribute (Lspace/kscience/attributes/Attributes;Lspace/kscience/attributes/Attribute;Ljava/lang/Object;)Lspace/kscience/attributes/Attributes;
+	public static final fun withAttributeElement (Lspace/kscience/attributes/Attributes;Lspace/kscience/attributes/SetAttribute;Ljava/lang/Object;)Lspace/kscience/attributes/Attributes;
+	public static final fun withoutAttribute (Lspace/kscience/attributes/Attributes;Lspace/kscience/attributes/Attribute;)Lspace/kscience/attributes/Attributes;
+	public static final fun withoutAttributeElement (Lspace/kscience/attributes/Attributes;Lspace/kscience/attributes/SetAttribute;Ljava/lang/Object;)Lspace/kscience/attributes/Attributes;
+}
+
+public abstract interface class space/kscience/attributes/FlagAttribute : space/kscience/attributes/Attribute {
+}
+
+public abstract class space/kscience/attributes/PolymorphicAttribute : space/kscience/attributes/Attribute {
+	public synthetic fun <init> (Lkotlin/reflect/KType;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getType-V0oMfBY ()Lkotlin/reflect/KType;
+	public fun hashCode ()I
+}
+
+public final class space/kscience/attributes/PolymorphicAttributeKt {
+	public static final fun get (Lspace/kscience/attributes/Attributes;Lkotlin/jvm/functions/Function0;)Ljava/lang/Object;
+	public static final fun set (Lspace/kscience/attributes/AttributesBuilder;Lkotlin/jvm/functions/Function0;Ljava/lang/Object;)V
+}
+
+public final class space/kscience/attributes/SafeType {
+	public static final synthetic fun box-impl (Lkotlin/reflect/KType;)Lspace/kscience/attributes/SafeType;
+	public static fun constructor-impl (Lkotlin/reflect/KType;)Lkotlin/reflect/KType;
+	public fun equals (Ljava/lang/Object;)Z
+	public static fun equals-impl (Lkotlin/reflect/KType;Ljava/lang/Object;)Z
+	public static final fun equals-impl0 (Lkotlin/reflect/KType;Lkotlin/reflect/KType;)Z
+	public final fun getKType ()Lkotlin/reflect/KType;
+	public fun hashCode ()I
+	public static fun hashCode-impl (Lkotlin/reflect/KType;)I
+	public fun toString ()Ljava/lang/String;
+	public static fun toString-impl (Lkotlin/reflect/KType;)Ljava/lang/String;
+	public final synthetic fun unbox-impl ()Lkotlin/reflect/KType;
+}
+
+public final class space/kscience/attributes/SafeTypeKt {
+	public static final fun getKClass-X0YbwmU (Lkotlin/reflect/KType;)Lkotlin/reflect/KClass;
+}
+
+public abstract interface class space/kscience/attributes/SetAttribute : space/kscience/attributes/Attribute {
+}
+
+public abstract interface annotation class space/kscience/attributes/UnstableAttributesAPI : java/lang/annotation/Annotation {
+}
+
+public abstract interface class space/kscience/attributes/WithType {
+	public abstract fun getType-V0oMfBY ()Lkotlin/reflect/KType;
+}
+

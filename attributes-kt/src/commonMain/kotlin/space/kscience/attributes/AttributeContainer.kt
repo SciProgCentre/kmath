@@ -13,7 +13,8 @@ public interface AttributeContainer {
 }
 
 /**
- * A scope, where attribute keys could be resolved
+ * A scope, where attribute keys could be resolved.
+ * [O] is used only to resolve types in compile-time.
  */
 public interface AttributeScope<O>
 

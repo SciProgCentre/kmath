@@ -2,6 +2,8 @@ plugins {
     id("space.kscience.gradle.mpp")
 }
 
+version = "0.1.0"
+
 kscience {
     jvm()
     js()
