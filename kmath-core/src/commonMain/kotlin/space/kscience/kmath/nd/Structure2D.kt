@@ -70,6 +70,29 @@ public interface Structure2D<out T> : StructureND<T> {
 }
 
 /**
+ * A linear accessor for a [MutableStructureND]
+ */
+@OptIn(PerformancePitfall::class)
+public class MutableStructureNDAccessorBuffer<T>(
+    public val structure: MutableStructureND<T>,
+    override val size: Int,
+    private val indexer: (Int) -> IntArray,
+) : MutableBuffer<T> {
+
+    override val type: SafeType<T> get() = structure.type
+
+    override fun set(index: Int, value: T) {
+        structure[indexer(index)] = value
+    }
+
+    override fun get(index: Int): T = structure[indexer(index)]
+
+    override fun toString(): String = "AccessorBuffer(structure=$structure, size=$size)"
+
+    override fun copy(): MutableBuffer<T> = MutableBuffer(type, size, ::get)
+}
+
+/**
  * Represents mutable [Structure2D].
  */
 public interface MutableStructure2D<T> : Structure2D<T>, MutableStructureND<T> {
@@ -87,14 +110,18 @@ public interface MutableStructure2D<T> : Structure2D<T>, MutableStructureND<T> {
      */
     @PerformancePitfall
     override val rows: List<MutableBuffer<T>>
-        get() = List(rowNum) { i -> MutableBuffer(type, colNum) { j -> get(i, j) } }
+        get() = List(rowNum) { i ->
+            MutableStructureNDAccessorBuffer(this, colNum) { j -> intArrayOf(i, j) }
+        }
 
     /**
      * The buffer of columns for this structure. It gets elements from the structure dynamically.
      */
     @PerformancePitfall
     override val columns: List<MutableBuffer<T>>
-        get() = List(colNum) { j -> MutableBuffer(type, rowNum) { i -> get(i, j) } }
+        get() = List(colNum) { j ->
+            MutableStructureNDAccessorBuffer(this, rowNum) { i -> intArrayOf(i, j) }
+        }
 }
 
 /**
