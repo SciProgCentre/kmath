@@ -54,7 +54,7 @@ public object Float64LinearSpace : LinearSpace<Double, Float64Field> {
         require(colNum == other.rowNum) { "Matrix dot operation dimension mismatch: ($rowNum, $colNum) x (${other.rowNum}, ${other.colNum})" }
         val rows = this@dot.rows.map { it.linearize() }
         val columns = other.columns.map { it.linearize() }
-        val indices = 0 until this.rowNum
+        val indices = 0 until this.colNum
         return buildMatrix(rowNum, other.colNum) { i, j ->
             val r = rows[i]
             val c = columns[j]
@@ -70,7 +70,7 @@ public object Float64LinearSpace : LinearSpace<Double, Float64Field> {
     override fun Matrix<Double>.dot(vector: Point<Double>): Float64Buffer {
         require(colNum == vector.size) { "Matrix dot vector operation dimension mismatch: ($rowNum, $colNum) x (${vector.size})" }
         val rows = this@dot.rows.map { it.linearize() }
-        val indices = 0 until this.rowNum
+        val indices = 0 until this.colNum
         return Float64Buffer(rowNum) { i ->
             val r = rows[i]
             var res = 0.0

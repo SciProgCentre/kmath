@@ -9,7 +9,6 @@ import space.kscience.kmath.PerformancePitfall
 import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.nd.StructureND
 import space.kscience.kmath.operations.Float64Field
-import space.kscience.kmath.operations.algebra
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -17,17 +16,17 @@ import kotlin.test.assertTrue
 @UnstableKMathAPI
 @OptIn(PerformancePitfall::class)
 @Suppress("UNUSED_VARIABLE")
-class MatrixTest {
+class ParallelMatrixTest {
 
     @Test
-    fun testTranspose() = Double.algebra.linearSpace.run {
+    fun testTranspose() =  Float64Field.linearSpace.parallel{
         val matrix = one(3, 3)
         val transposed = matrix.transposed()
         assertTrue { StructureND.contentEquals(matrix, transposed) }
     }
 
     @Test
-    fun testBuilder() = Double.algebra.linearSpace.run {
+    fun testBuilder() = Float64Field.linearSpace.parallel{
         val matrix = matrix(2, 3)(
             1.0, 0.0, 0.0,
             0.0, 1.0, 2.0
@@ -37,7 +36,7 @@ class MatrixTest {
     }
 
     @Test
-    fun testMatrixExtension() = Double.algebra.linearSpace.run {
+    fun testMatrixExtension() = Float64Field.linearSpace.parallel{
         val transitionMatrix: Matrix<Double> = VirtualMatrix(type,6, 6) { row, col ->
             when {
                 col == 0 -> .50
@@ -59,7 +58,7 @@ class MatrixTest {
     }
 
     @Test
-    fun test2DDot() = Float64Field.linearSpace {
+    fun test2DDot() = Float64Field.linearSpace.parallel {
         val firstMatrix = buildMatrix(2, 3) { i, j -> (i + j).toDouble() }
         val secondMatrix = buildMatrix(3, 2) { i, j -> (i + j).toDouble() }
 

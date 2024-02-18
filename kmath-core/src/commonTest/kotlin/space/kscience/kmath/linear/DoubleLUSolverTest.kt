@@ -28,13 +28,13 @@ class DoubleLUSolverTest {
     }
 
     @Test
-    fun testDecomposition() = Double.algebra.linearSpace.run {
+    fun testDecomposition() = with(Double.algebra.linearSpace){
         val matrix = matrix(2, 2)(
             3.0, 1.0,
             2.0, 3.0
         )
 
-        val lup = lup(matrix)
+        val lup = elementAlgebra.lup(matrix)
 
         //Check determinant
 //        assertEquals(7.0, lup.determinant)
