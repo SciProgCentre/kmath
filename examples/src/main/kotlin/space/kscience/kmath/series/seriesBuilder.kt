@@ -7,7 +7,7 @@ package space.kscience.kmath.series
 
 
 import space.kscience.kmath.structures.Buffer
-import space.kscience.kmath.structures.DoubleBuffer
+import space.kscience.kmath.structures.Float64Buffer
 import space.kscience.kmath.structures.asBuffer
 import space.kscience.kmath.structures.toDoubleArray
 import space.kscience.plotly.*
@@ -21,7 +21,7 @@ fun main(): Unit = with(Double.seriesAlgebra()) {
 
     val arrayOfRandoms = DoubleArray(20) { random.nextDouble() }
 
-    val series1: DoubleBuffer = arrayOfRandoms.asBuffer()
+    val series1: Float64Buffer = arrayOfRandoms.asBuffer()
     val series2: Series<Double> = series1.moveBy(3)
 
     val res = series2 - series1
@@ -42,7 +42,7 @@ fun main(): Unit = with(Double.seriesAlgebra()) {
     Plotly.plot {
         series("series1", series1)
         series("series2", series2)
-        series("dif", res){
+        series("dif", res) {
             mode = ScatterMode.lines
             line.color("magenta")
         }

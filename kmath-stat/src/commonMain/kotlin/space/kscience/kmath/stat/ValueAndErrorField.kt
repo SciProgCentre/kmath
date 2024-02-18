@@ -59,7 +59,7 @@ public object ValueAndErrorField : Field<ValueAndError> {
         ValueAndError(a.value * value, a.dispersion * value.pow(2))
 
 
-    private class ValueAndErrorBuffer(val values: DoubleBuffer, val ds: DoubleBuffer) : MutableBuffer<ValueAndError> {
+    private class ValueAndErrorBuffer(val values: Float64Buffer, val ds: Float64Buffer) : MutableBuffer<ValueAndError> {
         init {
             require(values.size == ds.size)
         }

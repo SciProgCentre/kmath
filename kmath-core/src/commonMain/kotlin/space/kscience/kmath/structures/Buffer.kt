@@ -42,6 +42,8 @@ public inline fun <reified T> BufferFactory(): BufferFactory<T> = BufferFactory(
  */
 public interface MutableBufferFactory<T> : BufferFactory<T> {
     override fun invoke(size: Int, builder: (Int) -> T): MutableBuffer<T>
+
+    public companion object
 }
 
 /**

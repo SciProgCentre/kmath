@@ -39,6 +39,7 @@ public value class Float64Buffer(public val array: DoubleArray) : PrimitiveBuffe
     }
 }
 
+@Deprecated("Use Float64Buffer instead", ReplaceWith("Float64Buffer"))
 public typealias DoubleBuffer = Float64Buffer
 
 /**

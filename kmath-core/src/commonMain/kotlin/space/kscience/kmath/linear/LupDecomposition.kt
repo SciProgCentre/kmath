@@ -11,6 +11,7 @@ import space.kscience.attributes.Attributes
 import space.kscience.attributes.PolymorphicAttribute
 import space.kscience.attributes.safeTypeOf
 import space.kscience.kmath.UnstableKMathAPI
+import space.kscience.kmath.nd.*
 import space.kscience.kmath.operations.*
 import space.kscience.kmath.structures.*
 
@@ -150,7 +151,14 @@ public fun <T : Comparable<T>> LinearSpace<T, Field<T>>.lup(
             for (row in col + 1 until m) lu[row, col] /= luDiag
         }
 
-        return GenericLupDecomposition(this@lup, lu.toStructure2D(), pivot.asBuffer(), even)
+        val shape = ShapeND(rowNum, colNum)
+
+        val structure2D = BufferND(
+            RowStrides(ShapeND(rowNum, colNum)),
+            lu
+        ).as2D()
+
+        return GenericLupDecomposition(this@lup, structure2D, pivot.asBuffer(), even)
     }
 }
 
@@ -166,7 +174,7 @@ internal fun <T> LinearSpace<T, Field<T>>.solve(
 ): Matrix<T> {
     require(matrix.rowNum == lup.l.rowNum) { "Matrix dimension mismatch. Expected ${lup.l.rowNum}, but got ${matrix.colNum}" }
 
-    BufferAccessor2D(matrix.rowNum, matrix.colNum, elementAlgebra.bufferFactory).run {
+    with(BufferAccessor2D(matrix.rowNum, matrix.colNum, elementAlgebra.bufferFactory)) {
         elementAlgebra {
             // Apply permutations to b
             val bp = create { _, _ -> zero }

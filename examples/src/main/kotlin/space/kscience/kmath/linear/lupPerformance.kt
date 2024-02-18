@@ -8,24 +8,20 @@ package space.kscience.kmath.linear
 import kotlin.random.Random
 import kotlin.time.measureTime
 
-fun main() = with(Float64ParallelLinearSpace) {
-    val random = Random(12224)
-    val dim = 1000
+fun main(): Unit = with(Float64LinearSpace) {
+    val random = Random(1224)
+    val dim = 500
 
     //creating invertible matrix
-    val matrix1 = buildMatrix(dim, dim) { i, j ->
-        if (i <= j) random.nextDouble() else 0.0
-    }
-    val matrix2 = buildMatrix(dim, dim) { i, j ->
-        if (i <= j) random.nextDouble() else 0.0
-    }
+    val u = buildMatrix(dim, dim) { i, j -> if (i <= j) random.nextDouble() else 0.0 }
+    val l = buildMatrix(dim, dim) { i, j -> if (i >= j) random.nextDouble() else 0.0 }
+    val matrix = l dot u
 
     val time = measureTime {
-        repeat(30) {
-            matrix1 dot matrix2
+        repeat(20) {
+            lupSolver().inverse(matrix)
         }
     }
 
     println(time)
-
 }

@@ -12,21 +12,36 @@ import space.kscience.kmath.operations.Float64Field
 import space.kscience.kmath.operations.invoke
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.Float64Buffer
+import space.kscience.kmath.structures.asBuffer
+import java.util.stream.IntStream
 
-public object Float64LinearSpace : LinearSpace<Double, Float64Field> {
 
-    override val elementAlgebra: Float64Field get() = Float64Field
+public object Float64ParallelLinearSpace : LinearSpace<Double, Float64Field> {
+
+    override val elementAlgebra: Float64Field = Float64Field
+
 
     override fun buildMatrix(
         rows: Int,
         columns: Int,
         initializer: Float64Field.(i: Int, j: Int) -> Double,
-    ): Matrix<Double> = Floa64FieldOpsND.structureND(ShapeND(rows, columns)) { (i, j) ->
-        Float64Field.initializer(i, j)
-    }.as2D()
+    ): Matrix<Double> {
+        val shape = ShapeND(rows, columns)
+        val indexer = BufferAlgebraND.defaultIndexerBuilder(shape)
+
+        val buffer = IntStream.range(0, indexer.linearSize).parallel().mapToDouble { offset ->
+            val (i, j) = indexer.index(offset)
+            elementAlgebra.initializer(i, j)
+        }.toArray().asBuffer()
+
+        return MutableBufferND(
+            indexer,
+            buffer
+        ).as2D()
+    }
 
     override fun buildVector(size: Int, initializer: Float64Field.(Int) -> Double): Float64Buffer =
-        Float64Buffer(size) { Float64Field.initializer(it) }
+        IntStream.range(0, size).parallel().mapToDouble{ Float64Field.initializer(it) }.toArray().asBuffer()
 
     override fun Matrix<Double>.unaryMinus(): Matrix<Double> = Floa64FieldOpsND {
         asND().map { -it }.as2D()
@@ -107,4 +122,4 @@ public object Float64LinearSpace : LinearSpace<Double, Float64Field> {
 
 }
 
-public val Float64Field.linearSpace: Float64LinearSpace get() = Float64LinearSpace
+public val Float64LinearSpace.parallel: Float64ParallelLinearSpace get() = Float64ParallelLinearSpace

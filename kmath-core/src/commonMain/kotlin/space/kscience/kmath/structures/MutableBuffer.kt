@@ -77,7 +77,6 @@ public inline fun <T> MutableBuffer(
     size: Int,
     initializer: (Int) -> T,
 ): MutableBuffer<T> = when (type.kType) {
-    typeOf<Boolean>() -> TODO()
     typeOf<Int8>() -> Int8Buffer(size) { initializer(it) as Int8 } as MutableBuffer<T>
     typeOf<Int16>() -> MutableBuffer.short(size) { initializer(it) as Int16 } as MutableBuffer<T>
     typeOf<Int32>() -> MutableBuffer.int(size) { initializer(it) as Int32 } as MutableBuffer<T>

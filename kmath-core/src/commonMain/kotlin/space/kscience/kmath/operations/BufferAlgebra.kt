@@ -77,13 +77,11 @@ private inline fun <T, A : Algebra<T>> BufferAlgebra<T, A>.zipInline(
     return elementBufferFactory(l.size) { elementAlgebra.block(l[it], r[it]) }
 }
 
-public fun <T> BufferAlgebra<T, *>.buffer(size: Int, initializer: (Int) -> T): MutableBuffer<T> {
-    return elementBufferFactory(size, initializer)
-}
+public fun <T> BufferAlgebra<T, *>.buffer(size: Int, initializer: (Int) -> T): MutableBuffer<T> =
+    elementBufferFactory(size, initializer)
 
-public fun <T, A> A.buffer(initializer: (Int) -> T): MutableBuffer<T> where A : BufferAlgebra<T, *>, A : WithSize {
-    return elementBufferFactory(size, initializer)
-}
+public fun <T, A> A.buffer(initializer: (Int) -> T): MutableBuffer<T> where A : BufferAlgebra<T, *>, A : WithSize =
+    elementBufferFactory(size, initializer)
 
 public fun <T, A : TrigonometricOperations<T>> BufferAlgebra<T, A>.sin(arg: Buffer<T>): Buffer<T> =
     mapInline(arg) { sin(it) }

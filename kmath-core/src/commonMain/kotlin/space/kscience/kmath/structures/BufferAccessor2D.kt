@@ -6,12 +6,7 @@
 package space.kscience.kmath.structures
 
 import space.kscience.attributes.SafeType
-import space.kscience.kmath.nd.BufferND
-import space.kscience.kmath.nd.ShapeND
 import space.kscience.kmath.nd.Structure2D
-import space.kscience.kmath.nd.as2D
-import kotlin.collections.component1
-import kotlin.collections.component2
 
 /**
  * A context that allows to operate on a [MutableBuffer] as on 2d array
@@ -32,10 +27,10 @@ internal class BufferAccessor2D<T>(
 
     fun create(mat: Structure2D<T>): MutableBuffer<T> = create { i, j -> mat[i, j] }
 
-    //TODO optimize wrapper
-    fun MutableBuffer<T>.toStructure2D(): Structure2D<T> = BufferND(
-        type, ShapeND(rowNum, colNum)
-    ) { (i, j) -> get(i, j) }.as2D()
+//    //TODO optimize wrapper
+//    fun MutableBuffer<T>.toStructure2D(): Structure2D<T> = BufferND(
+//        type, ShapeND(rowNum, colNum)
+//    ) { (i, j) -> get(i, j) }.as2D()
 
     inner class Row(val buffer: MutableBuffer<T>, val rowIndex: Int) : MutableBuffer<T> {
         override val type: SafeType<T> get() = buffer.type
