@@ -35,7 +35,7 @@ public typealias DoubleVector2D = Float64Vector2D
 /**
  * 2D Euclidean space
  */
-public object Float64Space2D : GeometrySpace<Float64Vector2D, Float64>, ScaleOperations<Float64Vector2D> {
+public object Float64Space2D : GeometrySpace<Vector2D<Float64>, Float64>, ScaleOperations<Vector2D<Float64>> {
 
 
     @Serializable
@@ -61,23 +61,23 @@ public object Float64Space2D : GeometrySpace<Float64Vector2D, Float64>, ScaleOpe
 
     override val zero: Float64Vector2D by lazy { vector(0.0, 0.0) }
 
-    override fun norm(arg: Float64Vector2D): Double = sqrt(arg.x.pow(2) + arg.y.pow(2))
+    override fun norm(arg: Vector2D<Float64>): Double = sqrt(arg.x.pow(2) + arg.y.pow(2))
 
-    override fun Float64Vector2D.unaryMinus(): Float64Vector2D = vector(-x, -y)
+    override fun Vector2D<Float64>.unaryMinus(): Float64Vector2D = vector(-x, -y)
 
-    override fun Float64Vector2D.distanceTo(other: Float64Vector2D): Double = norm(this - other)
-    override fun add(left: Float64Vector2D, right: Float64Vector2D): Float64Vector2D =
+    override fun Vector2D<Float64>.distanceTo(other: Vector2D<Float64>): Double = norm(this - other)
+    override fun add(left: Vector2D<Float64>, right: Vector2D<Float64>): Float64Vector2D =
         vector(left.x + right.x, left.y + right.y)
 
-    override fun scale(a: Float64Vector2D, value: Double): Float64Vector2D = vector(a.x * value, a.y * value)
-    override fun Float64Vector2D.dot(other: Float64Vector2D): Double = x * other.x + y * other.y
+    override fun scale(a: Vector2D<Float64>, value: Double): Float64Vector2D = vector(a.x * value, a.y * value)
+    override fun Vector2D<Float64>.dot(other: Vector2D<Float64>): Double = x * other.x + y * other.y
 
     public val xAxis: Float64Vector2D = vector(1.0, 0.0)
     public val yAxis: Float64Vector2D = vector(0.0, 1.0)
 
     override val defaultPrecision: Double = 1e-6
 
-    override val bufferFactory: MutableBufferFactory<Float64Vector2D> = MutableBufferFactory()
+    override val bufferFactory: MutableBufferFactory<Vector2D<Float64>> = MutableBufferFactory()
 }
 
 public fun Float64Vector2D(x: Number, y: Number): Float64Vector2D = Float64Space2D.vector(x, y)

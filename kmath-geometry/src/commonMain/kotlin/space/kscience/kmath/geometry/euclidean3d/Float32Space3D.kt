@@ -26,7 +26,7 @@ public interface Float32Vector3D : Vector3D<Float>{
 }
 
 
-public object Float32Space3D : GeometrySpace<Float32Vector3D, Float32> {
+public object Float32Space3D : GeometrySpace<Vector3D<Float32>, Float32> {
 
     @Serializable
     @SerialName("Float32Vector3D")
@@ -56,21 +56,21 @@ public object Float32Space3D : GeometrySpace<Float32Vector3D, Float32> {
 
     override val zero: Float32Vector3D by lazy { vector(0.0, 0.0, 0.0) }
 
-    override fun norm(arg: Float32Vector3D): Float32 = sqrt(arg.x.pow(2) + arg.y.pow(2) + arg.z.pow(2))
+    override fun norm(arg: Vector3D<Float32>): Float32 = sqrt(arg.x.pow(2) + arg.y.pow(2) + arg.z.pow(2))
 
-    public fun Float32Vector3D.norm(): Float32 = norm(this)
+    public fun Vector3D<Float32>.norm(): Float32 = norm(this)
 
-    override fun Float32Vector3D.unaryMinus(): Float32Vector3D = vector(-x, -y, -z)
+    override fun Vector3D<Float32>.unaryMinus(): Float32Vector3D = vector(-x, -y, -z)
 
-    override fun Float32Vector3D.distanceTo(other: Float32Vector3D): Float32 = (this - other).norm()
+    override fun Vector3D<Float32>.distanceTo(other: Vector3D<Float32>): Float32 = (this - other).norm()
 
-    override fun add(left: Float32Vector3D, right: Float32Vector3D): Float32Vector3D =
+    override fun add(left: Vector3D<Float32>, right: Vector3D<Float32>): Float32Vector3D =
         vector(left.x + right.x, left.y + right.y, left.z + right.z)
 
-    override fun scale(a: Float32Vector3D, value: Double): Float32Vector3D =
+    override fun scale(a: Vector3D<Float32>, value: Double): Float32Vector3D =
         vector(a.x * value, a.y * value, a.z * value)
 
-    override fun Float32Vector3D.dot(other: Float32Vector3D): Double =
+    override fun Vector3D<Float32>.dot(other: Vector3D<Float32>): Double =
         (x * other.x + y * other.y + z * other.z).toDouble()
 
     /**
@@ -106,7 +106,7 @@ public object Float32Space3D : GeometrySpace<Float32Vector3D, Float32> {
 
     override val defaultPrecision: Float32 = 1e-3f
 
-    override val bufferFactory: MutableBufferFactory<Float32Vector3D> = MutableBufferFactory()
+    override val bufferFactory: MutableBufferFactory<Vector3D<Float32>> = MutableBufferFactory()
 }
 
 public fun Float32Vector3D(x: Number, y: Number, z: Number): Float32Vector3D = Float32Space3D.vector(x, y, z)

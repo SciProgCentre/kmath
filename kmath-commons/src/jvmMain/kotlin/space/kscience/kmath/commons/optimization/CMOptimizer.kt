@@ -116,7 +116,7 @@ public object CMOptimizer : Optimizer<Double, FunctionOptimization<Double>> {
             }
             addOptimizationData(gradientFunction)
 
-            val logger = problem.attributes[OptimizationLog]
+//            val logger = problem.attributes[OptimizationLog]
 
             problem.attributes[CMOptimizerData]?.let { builders: Set<SymbolIndexer.() -> OptimizationData> ->
                 builders.forEach { dataBuilder ->

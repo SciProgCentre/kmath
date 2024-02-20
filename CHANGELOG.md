@@ -52,6 +52,7 @@
 - Median statistics
 - Complex power of negative real numbers
 - Add proper mutability for MutableBufferND rows and columns
+- Generic Float32 and Float64 vectors are used in geometry algebras.
 
 ## 0.3.1 - 2023-04-09
 
