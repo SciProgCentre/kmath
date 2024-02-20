@@ -25,6 +25,16 @@ import space.kscience.kmath.viktor.viktorAlgebra
 @State(Scope.Benchmark)
 internal class NDFieldBenchmark {
 
+    private companion object {
+        private const val dim = 1000
+        private const val n = 100
+        private val shape = ShapeND(dim, dim)
+        private val specializedField = Float64Field.ndAlgebra
+        private val genericField = BufferedFieldOpsND(Float64Field)
+        private val nd4jField = Float64Field.nd4j
+        private val viktorField = Float64Field.viktorAlgebra
+    }
+
     @Benchmark
     fun specializedFieldAdd(blackhole: Blackhole) = with(specializedField) {
         var res: StructureND<Double> = one(shape)
@@ -82,13 +92,5 @@ internal class NDFieldBenchmark {
 //        blackhole.consume(res)
 //    }
 
-    private companion object {
-        private const val dim = 1000
-        private const val n = 100
-        private val shape = ShapeND(dim, dim)
-        private val specializedField = Float64Field.ndAlgebra
-        private val genericField = BufferedFieldOpsND(Float64Field)
-        private val nd4jField = Float64Field.nd4j
-        private val viktorField = Float64Field.viktorAlgebra
-    }
+
 }

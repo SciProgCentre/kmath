@@ -1,5 +1,6 @@
 plugins {
     id("space.kscience.gradle.mpp")
+    `maven-publish`
 }
 
 version = "0.1.0"
