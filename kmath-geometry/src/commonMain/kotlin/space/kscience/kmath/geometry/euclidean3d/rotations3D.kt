@@ -37,7 +37,8 @@ public infix fun Quaternion.dot(other: Quaternion): Double = w * other.w + x * o
 /**
  * Represent a vector as quaternion with zero a rotation angle.
  */
-internal fun Float64Vector3D.asQuaternion(): Quaternion = Quaternion(0.0, x, y, z)
+internal fun Vector3D<Float64>.asQuaternion(): Quaternion = Quaternion(0.0, x, y, z)
+
 
 /**
  * Angle in radians denoted by this quaternion rotation
@@ -71,7 +72,7 @@ public val Quaternion.vector: Float64Vector3D
 /**
  * Rotate a vector in a [Float64Space3D] with [quaternion]
  */
-public fun Float64Space3D.rotate(vector: Float64Vector3D, quaternion: Quaternion): Float64Vector3D =
+public fun Float64Space3D.rotate(vector: Vector3D<Float64>, quaternion: Quaternion): Float64Vector3D =
     with(QuaternionAlgebra) {
         val p = vector.asQuaternion()
         (quaternion * p * quaternion.reciprocal).vector

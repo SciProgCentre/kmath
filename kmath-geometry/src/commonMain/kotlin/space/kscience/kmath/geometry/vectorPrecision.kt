@@ -9,6 +9,7 @@ import space.kscience.kmath.geometry.euclidean2d.Float64Space2D
 import space.kscience.kmath.geometry.euclidean2d.Float64Vector2D
 import space.kscience.kmath.geometry.euclidean3d.Float64Space3D
 import space.kscience.kmath.geometry.euclidean3d.Float64Vector3D
+import space.kscience.kmath.structures.Float64
 
 
 /**
@@ -25,7 +26,7 @@ public fun <V : Any, D : Comparable<D>> V.equalsVector(
 /**
  * Vector equality using Euclidian L2 norm and given [precision]
  */
-public fun Float64Vector2D.equalsVector(
+public fun Vector2D<Float64>.equalsVector(
     other: Float64Vector2D,
     precision: Double = Float64Space2D.defaultPrecision,
 ): Boolean = equalsVector(Float64Space2D, other, precision)
@@ -33,7 +34,7 @@ public fun Float64Vector2D.equalsVector(
 /**
  * Vector equality using Euclidean L2 norm and given [precision]
  */
-public fun Float64Vector3D.equalsVector(
+public fun Vector3D<Float64>.equalsVector(
     other: Float64Vector3D,
     precision: Double = Float64Space3D.defaultPrecision,
 ): Boolean = equalsVector(Float64Space3D, other, precision)

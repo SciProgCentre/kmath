@@ -128,7 +128,8 @@ public object Float64Space3D : GeometrySpace<Vector3D<Float64>, Double> {
     override val bufferFactory: MutableBufferFactory<Vector3D<Float64>> = MutableBufferFactory()
 }
 
+@Suppress("UnusedReceiverParameter")
 public val Float64Field.euclidean3D: Float64Space3D get() = Float64Space3D
 
 
-public val Float64Vector3D.r: Double get() = Float64Space3D.norm(this)
+public val Vector3D<Float64>.r: Double get() = Float64Space3D.norm(this)
