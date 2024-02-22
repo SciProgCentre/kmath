@@ -5,7 +5,6 @@
 
 package space.kscience.kmath.memory
 
-import space.kscience.attributes.SafeType
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.MutableBuffer
 
@@ -17,8 +16,6 @@ import space.kscience.kmath.structures.MutableBuffer
  * @property spec the spec of [T] type.
  */
 public open class MemoryBuffer<T : Any>(protected val memory: Memory, protected val spec: MemorySpec<T>) : Buffer<T> {
-
-    override val type: SafeType<T> get() = spec.type
 
     override val size: Int get() = memory.size / spec.objectSize
 
@@ -56,7 +53,6 @@ public class MutableMemoryBuffer<T : Any>(
     private val writer: MemoryWriter = memory.writer()
 
     override operator fun set(index: Int, value: T): Unit = writer.write(spec, spec.objectSize * index, value)
-    override fun copy(): MutableBuffer<T> = MutableMemoryBuffer(memory.copy(), spec)
 
     public companion object {
         public fun <T : Any> create(spec: MemorySpec<T>, size: Int): MutableMemoryBuffer<T> =

@@ -227,4 +227,4 @@ public fun <T> Matrix<T>.asVector(): Point<T> =
  * @receiver a buffer.
  * @return the new matrix.
  */
-public fun <T> Point<T>.asMatrix(): VirtualMatrix<T> = VirtualMatrix(type, size, 1) { i, _ -> get(i) }
+public fun <T> Point<T>.asMatrix(): VirtualMatrix<T> = VirtualMatrix(size, 1) { i, _ -> get(i) }

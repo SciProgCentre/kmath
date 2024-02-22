@@ -38,7 +38,6 @@ public class EjmlDoubleVector<out M : DMatrix>(override val origin: M) : EjmlVec
         require(origin.numRows == 1) { "The origin matrix must have only one row to form a vector" }
     }
 
-    override val type: SafeType<Double> get() = safeTypeOf()
 
     override operator fun get(index: Int): Double = origin[0, index]
 }
@@ -51,8 +50,6 @@ public class EjmlFloatVector<out M : FMatrix>(override val origin: M) : EjmlVect
         require(origin.numRows == 1) { "The origin matrix must have only one row to form a vector" }
     }
 
-    override val type: SafeType<Float> get() = safeTypeOf()
-
     override operator fun get(index: Int): Float = origin[0, index]
 }
 
@@ -60,8 +57,6 @@ public class EjmlFloatVector<out M : FMatrix>(override val origin: M) : EjmlVect
  * [EjmlMatrix] specialization for [Double].
  */
 public class EjmlDoubleMatrix<out M : DMatrix>(override val origin: M) : EjmlMatrix<Double, M>(origin) {
-    override val type: SafeType<Double> get() = safeTypeOf()
-
     override operator fun get(i: Int, j: Int): Double = origin[i, j]
 }
 
@@ -69,7 +64,6 @@ public class EjmlDoubleMatrix<out M : DMatrix>(override val origin: M) : EjmlMat
  * [EjmlMatrix] specialization for [Float].
  */
 public class EjmlFloatMatrix<out M : FMatrix>(override val origin: M) : EjmlMatrix<Float, M>(origin) {
-    override val type: SafeType<Float> get() = safeTypeOf()
 
     override operator fun get(i: Int, j: Int): Float = origin[i, j]
 }

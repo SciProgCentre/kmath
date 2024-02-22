@@ -23,7 +23,7 @@ import space.kscience.kmath.structures.IntBuffer
 import space.kscience.kmath.structures.asBuffer
 
 public class CMMatrix(public val origin: RealMatrix) : Matrix<Double> {
-    override val type: SafeType<Double> get() = DoubleField.type
+
     override val rowNum: Int get() = origin.rowDimension
     override val colNum: Int get() = origin.columnDimension
 
@@ -32,7 +32,6 @@ public class CMMatrix(public val origin: RealMatrix) : Matrix<Double> {
 
 @JvmInline
 public value class CMVector(public val origin: RealVector) : Point<Double> {
-    override val type: SafeType<Double> get() = DoubleField.type
     override val size: Int get() = origin.dimension
 
     override operator fun get(index: Int): Double = origin.getEntry(index)

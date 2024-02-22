@@ -36,8 +36,6 @@ public class Quaternion(
         require(!z.isNaN()) { "z-component of quaternion is not-a-number" }
     }
 
-    override val type: SafeType<Double> get() = safeTypeOf()
-
     /**
      * Returns a string representation of this quaternion.
      */

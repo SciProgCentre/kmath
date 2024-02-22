@@ -428,7 +428,6 @@ public final class space/kscience/kmath/expressions/NamedMatrix : space/kscience
 	public fun getRowNum ()I
 	public fun getRows ()Ljava/util/List;
 	public fun getShape-IIYLAfE ()[I
-	public fun getType-V0oMfBY ()Lkotlin/reflect/KType;
 	public final fun getValues ()Lspace/kscience/kmath/nd/Structure2D;
 }
 
@@ -820,7 +819,6 @@ public final class space/kscience/kmath/linear/MatrixWrapper : space/kscience/km
 	public fun getRowNum ()I
 	public fun getRows ()Ljava/util/List;
 	public fun getShape-IIYLAfE ()[I
-	public fun getType-V0oMfBY ()Lkotlin/reflect/KType;
 	public fun toString ()Ljava/lang/String;
 }
 
@@ -871,7 +869,6 @@ public final class space/kscience/kmath/linear/TransposedMatrix : space/kscience
 	public fun getColNum ()I
 	public final fun getOrigin ()Lspace/kscience/kmath/nd/Structure2D;
 	public fun getRowNum ()I
-	public fun getType-V0oMfBY ()Lkotlin/reflect/KType;
 }
 
 public final class space/kscience/kmath/linear/UpperTriangular : space/kscience/attributes/FlagAttribute, space/kscience/kmath/linear/MatrixAttribute {
@@ -879,15 +876,14 @@ public final class space/kscience/kmath/linear/UpperTriangular : space/kscience/
 }
 
 public final class space/kscience/kmath/linear/VirtualMatrix : space/kscience/kmath/nd/Structure2D {
-	public synthetic fun <init> (Lkotlin/reflect/KType;IILspace/kscience/attributes/Attributes;Lkotlin/jvm/functions/Function2;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public synthetic fun <init> (Lkotlin/reflect/KType;IILspace/kscience/attributes/Attributes;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun <init> (IILspace/kscience/attributes/Attributes;Lkotlin/jvm/functions/Function2;)V
+	public synthetic fun <init> (IILspace/kscience/attributes/Attributes;Lkotlin/jvm/functions/Function2;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public fun get (II)Ljava/lang/Object;
 	public fun getAttributes ()Lspace/kscience/attributes/Attributes;
 	public fun getColNum ()I
 	public final fun getGenerator ()Lkotlin/jvm/functions/Function2;
 	public fun getRowNum ()I
 	public fun getShape-IIYLAfE ()[I
-	public fun getType-V0oMfBY ()Lkotlin/reflect/KType;
 }
 
 public final class space/kscience/kmath/linear/VirtualMatrixKt {
@@ -1009,7 +1005,6 @@ public class space/kscience/kmath/nd/BufferND : space/kscience/kmath/nd/Structur
 	public fun getBuffer ()Lspace/kscience/kmath/structures/Buffer;
 	public fun getIndices ()Lspace/kscience/kmath/nd/ShapeIndexer;
 	public fun getShape-IIYLAfE ()[I
-	public fun getType-V0oMfBY ()Lkotlin/reflect/KType;
 	public fun toString ()Ljava/lang/String;
 }
 
@@ -1160,7 +1155,6 @@ public final class space/kscience/kmath/nd/Float64BufferND : space/kscience/kmat
 	public synthetic fun getBuffer ()Lspace/kscience/kmath/structures/MutableBuffer;
 	public fun getBuffer-E20IKn8 ()[D
 	public fun getDouble ([I)D
-	public fun getType-V0oMfBY ()Lkotlin/reflect/KType;
 	public fun setDouble ([ID)V
 }
 
@@ -1290,11 +1284,9 @@ public abstract interface class space/kscience/kmath/nd/MutableStructureND : spa
 
 public final class space/kscience/kmath/nd/MutableStructureNDAccessorBuffer : space/kscience/kmath/structures/MutableBuffer {
 	public fun <init> (Lspace/kscience/kmath/nd/MutableStructureND;ILkotlin/jvm/functions/Function1;)V
-	public fun copy ()Lspace/kscience/kmath/structures/MutableBuffer;
 	public fun get (I)Ljava/lang/Object;
 	public fun getSize ()I
 	public final fun getStructure ()Lspace/kscience/kmath/nd/MutableStructureND;
-	public fun getType-V0oMfBY ()Lkotlin/reflect/KType;
 	public fun set (ILjava/lang/Object;)V
 	public fun toString ()Ljava/lang/String;
 }
@@ -1316,7 +1308,6 @@ public final class space/kscience/kmath/nd/PermutedMutableStructureND : space/ks
 	public final fun getOrigin ()Lspace/kscience/kmath/nd/MutableStructureND;
 	public final fun getPermutation ()Lkotlin/jvm/functions/Function1;
 	public fun getShape-IIYLAfE ()[I
-	public fun getType-V0oMfBY ()Lkotlin/reflect/KType;
 	public fun set ([ILjava/lang/Object;)V
 }
 
@@ -1326,7 +1317,6 @@ public final class space/kscience/kmath/nd/PermutedStructureND : space/kscience/
 	public final fun getOrigin ()Lspace/kscience/kmath/nd/StructureND;
 	public final fun getPermutation ()Lkotlin/jvm/functions/Function1;
 	public fun getShape-IIYLAfE ()[I
-	public fun getType-V0oMfBY ()Lkotlin/reflect/KType;
 }
 
 public final class space/kscience/kmath/nd/PermutedStructureNDKt {
@@ -1477,7 +1467,7 @@ public final class space/kscience/kmath/nd/Structure2DKt {
 public abstract interface class space/kscience/kmath/nd/StructureAttribute : space/kscience/attributes/Attribute {
 }
 
-public abstract interface class space/kscience/kmath/nd/StructureND : space/kscience/attributes/AttributeContainer, space/kscience/attributes/WithType, space/kscience/kmath/nd/WithShape {
+public abstract interface class space/kscience/kmath/nd/StructureND : space/kscience/attributes/AttributeContainer, space/kscience/kmath/nd/WithShape {
 	public static final field Companion Lspace/kscience/kmath/nd/StructureND$Companion;
 	public fun elements ()Lkotlin/sequences/Sequence;
 	public abstract fun get ([I)Ljava/lang/Object;
@@ -1509,20 +1499,17 @@ public final class space/kscience/kmath/nd/StructureNDKt {
 
 public abstract interface class space/kscience/kmath/nd/StructureNDOfDouble : space/kscience/kmath/nd/StructureND {
 	public abstract fun getDouble ([I)D
-	public fun getType-V0oMfBY ()Lkotlin/reflect/KType;
 }
 
 public abstract interface class space/kscience/kmath/nd/StructureNDOfInt : space/kscience/kmath/nd/StructureND {
 	public abstract fun getInt ([I)I
-	public fun getType-V0oMfBY ()Lkotlin/reflect/KType;
 }
 
 public class space/kscience/kmath/nd/VirtualStructureND : space/kscience/kmath/nd/StructureND {
-	public synthetic fun <init> (Lkotlin/reflect/KType;[ILkotlin/jvm/functions/Function1;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> ([ILkotlin/jvm/functions/Function1;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public fun get ([I)Ljava/lang/Object;
 	public final fun getProducer ()Lkotlin/jvm/functions/Function1;
 	public fun getShape-IIYLAfE ()[I
-	public fun getType-V0oMfBY ()Lkotlin/reflect/KType;
 }
 
 public abstract interface class space/kscience/kmath/nd/WithShape {
@@ -2376,21 +2363,31 @@ public abstract interface class space/kscience/kmath/operations/WithSize {
 }
 
 public final class space/kscience/kmath/structures/ArrayBuffer : space/kscience/kmath/structures/MutableBuffer {
-	public synthetic fun <init> (Lkotlin/reflect/KType;[Ljava/lang/Object;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public fun copy ()Lspace/kscience/kmath/structures/MutableBuffer;
+	public static final synthetic fun box-impl ([Ljava/lang/Object;)Lspace/kscience/kmath/structures/ArrayBuffer;
+	public static fun constructor-impl ([Ljava/lang/Object;)[Ljava/lang/Object;
+	public fun equals (Ljava/lang/Object;)Z
+	public static fun equals-impl ([Ljava/lang/Object;Ljava/lang/Object;)Z
+	public static final fun equals-impl0 ([Ljava/lang/Object;[Ljava/lang/Object;)Z
 	public fun get (I)Ljava/lang/Object;
+	public static fun get-impl ([Ljava/lang/Object;I)Ljava/lang/Object;
 	public fun getSize ()I
-	public fun getType-V0oMfBY ()Lkotlin/reflect/KType;
+	public static fun getSize-impl ([Ljava/lang/Object;)I
+	public fun hashCode ()I
+	public static fun hashCode-impl ([Ljava/lang/Object;)I
 	public fun iterator ()Ljava/util/Iterator;
+	public static fun iterator-impl ([Ljava/lang/Object;)Ljava/util/Iterator;
 	public fun set (ILjava/lang/Object;)V
+	public static fun set-impl ([Ljava/lang/Object;ILjava/lang/Object;)V
 	public fun toString ()Ljava/lang/String;
+	public static fun toString-impl ([Ljava/lang/Object;)Ljava/lang/String;
+	public final synthetic fun unbox-impl ()[Ljava/lang/Object;
 }
 
 public final class space/kscience/kmath/structures/ArrayBufferKt {
-	public static final fun asBuffer-Fnn_obI ([Ljava/lang/Object;Lkotlin/reflect/KType;)Lspace/kscience/kmath/structures/ArrayBuffer;
+	public static final fun asBuffer ([Ljava/lang/Object;)[Ljava/lang/Object;
 }
 
-public abstract interface class space/kscience/kmath/structures/Buffer : space/kscience/attributes/WithType, space/kscience/kmath/operations/WithSize {
+public abstract interface class space/kscience/kmath/structures/Buffer : space/kscience/kmath/operations/WithSize {
 	public static final field Companion Lspace/kscience/kmath/structures/Buffer$Companion;
 	public abstract fun get (I)Ljava/lang/Object;
 	public abstract fun getSize ()I
@@ -2449,7 +2446,6 @@ public final class space/kscience/kmath/structures/BufferSlice : space/kscience/
 public abstract interface class space/kscience/kmath/structures/BufferView : space/kscience/kmath/structures/Buffer {
 	public fun get (I)Ljava/lang/Object;
 	public abstract fun getOrigin ()Lspace/kscience/kmath/structures/Buffer;
-	public fun getType-V0oMfBY ()Lkotlin/reflect/KType;
 }
 
 public final class space/kscience/kmath/structures/BufferViewKt {
@@ -2477,7 +2473,6 @@ public final class space/kscience/kmath/structures/FlaggedDoubleBuffer : space/k
 	public fun getFlag (I)B
 	public final fun getFlags ()[B
 	public fun getSize ()I
-	public fun getType-V0oMfBY ()Lkotlin/reflect/KType;
 	public final fun getValues ()[D
 	public fun iterator ()Ljava/util/Iterator;
 	public fun toString ()Ljava/lang/String;
@@ -2486,8 +2481,6 @@ public final class space/kscience/kmath/structures/FlaggedDoubleBuffer : space/k
 public final class space/kscience/kmath/structures/Float32Buffer : space/kscience/kmath/structures/PrimitiveBuffer {
 	public static final synthetic fun box-impl ([F)Lspace/kscience/kmath/structures/Float32Buffer;
 	public static fun constructor-impl ([F)[F
-	public fun copy ()Lspace/kscience/kmath/structures/MutableBuffer;
-	public static fun copy-impl ([F)Lspace/kscience/kmath/structures/MutableBuffer;
 	public fun equals (Ljava/lang/Object;)Z
 	public static fun equals-impl ([FLjava/lang/Object;)Z
 	public static final fun equals-impl0 ([F[F)Z
@@ -2497,8 +2490,6 @@ public final class space/kscience/kmath/structures/Float32Buffer : space/kscienc
 	public final fun getArray ()[F
 	public fun getSize ()I
 	public static fun getSize-impl ([F)I
-	public fun getType-V0oMfBY ()Lkotlin/reflect/KType;
-	public static fun getType-V0oMfBY ([F)Lkotlin/reflect/KType;
 	public fun hashCode ()I
 	public static fun hashCode-impl ([F)I
 	public synthetic fun iterator ()Ljava/util/Iterator;
@@ -2523,9 +2514,6 @@ public final class space/kscience/kmath/structures/Float64Buffer : space/kscienc
 	public static final field Companion Lspace/kscience/kmath/structures/Float64Buffer$Companion;
 	public static final synthetic fun box-impl ([D)Lspace/kscience/kmath/structures/Float64Buffer;
 	public static fun constructor-impl ([D)[D
-	public synthetic fun copy ()Lspace/kscience/kmath/structures/MutableBuffer;
-	public fun copy-E20IKn8 ()[D
-	public static fun copy-E20IKn8 ([D)[D
 	public fun equals (Ljava/lang/Object;)Z
 	public static fun equals-impl ([DLjava/lang/Object;)Z
 	public static final fun equals-impl0 ([D[D)Z
@@ -2535,8 +2523,6 @@ public final class space/kscience/kmath/structures/Float64Buffer : space/kscienc
 	public final fun getArray ()[D
 	public fun getSize ()I
 	public static fun getSize-impl ([D)I
-	public fun getType-V0oMfBY ()Lkotlin/reflect/KType;
-	public static fun getType-V0oMfBY ([D)Lkotlin/reflect/KType;
 	public fun hashCode ()I
 	public static fun hashCode-impl ([D)I
 	public synthetic fun iterator ()Ljava/util/Iterator;
@@ -2571,8 +2557,6 @@ public abstract interface class space/kscience/kmath/structures/Float64BufferTra
 public final class space/kscience/kmath/structures/Int16Buffer : space/kscience/kmath/structures/MutableBuffer {
 	public static final synthetic fun box-impl ([S)Lspace/kscience/kmath/structures/Int16Buffer;
 	public static fun constructor-impl ([S)[S
-	public fun copy ()Lspace/kscience/kmath/structures/MutableBuffer;
-	public static fun copy-impl ([S)Lspace/kscience/kmath/structures/MutableBuffer;
 	public fun equals (Ljava/lang/Object;)Z
 	public static fun equals-impl ([SLjava/lang/Object;)Z
 	public static final fun equals-impl0 ([S[S)Z
@@ -2582,8 +2566,6 @@ public final class space/kscience/kmath/structures/Int16Buffer : space/kscience/
 	public final fun getArray ()[S
 	public fun getSize ()I
 	public static fun getSize-impl ([S)I
-	public fun getType-V0oMfBY ()Lkotlin/reflect/KType;
-	public static fun getType-V0oMfBY ([S)Lkotlin/reflect/KType;
 	public fun hashCode ()I
 	public static fun hashCode-impl ([S)I
 	public synthetic fun iterator ()Ljava/util/Iterator;
@@ -2607,9 +2589,6 @@ public final class space/kscience/kmath/structures/Int16BufferKt {
 public final class space/kscience/kmath/structures/Int32Buffer : space/kscience/kmath/structures/PrimitiveBuffer {
 	public static final synthetic fun box-impl ([I)Lspace/kscience/kmath/structures/Int32Buffer;
 	public static fun constructor-impl ([I)[I
-	public synthetic fun copy ()Lspace/kscience/kmath/structures/MutableBuffer;
-	public fun copy-M_oXE9g ()[I
-	public static fun copy-M_oXE9g ([I)[I
 	public fun equals (Ljava/lang/Object;)Z
 	public static fun equals-impl ([ILjava/lang/Object;)Z
 	public static final fun equals-impl0 ([I[I)Z
@@ -2619,8 +2598,6 @@ public final class space/kscience/kmath/structures/Int32Buffer : space/kscience/
 	public final fun getArray ()[I
 	public fun getSize ()I
 	public static fun getSize-impl ([I)I
-	public fun getType-V0oMfBY ()Lkotlin/reflect/KType;
-	public static fun getType-V0oMfBY ([I)Lkotlin/reflect/KType;
 	public fun hashCode ()I
 	public static fun hashCode-impl ([I)I
 	public synthetic fun iterator ()Ljava/util/Iterator;
@@ -2644,8 +2621,6 @@ public final class space/kscience/kmath/structures/Int32BufferKt {
 public final class space/kscience/kmath/structures/Int64Buffer : space/kscience/kmath/structures/PrimitiveBuffer {
 	public static final synthetic fun box-impl ([J)Lspace/kscience/kmath/structures/Int64Buffer;
 	public static fun constructor-impl ([J)[J
-	public fun copy ()Lspace/kscience/kmath/structures/MutableBuffer;
-	public static fun copy-impl ([J)Lspace/kscience/kmath/structures/MutableBuffer;
 	public fun equals (Ljava/lang/Object;)Z
 	public static fun equals-impl ([JLjava/lang/Object;)Z
 	public static final fun equals-impl0 ([J[J)Z
@@ -2655,8 +2630,6 @@ public final class space/kscience/kmath/structures/Int64Buffer : space/kscience/
 	public final fun getArray ()[J
 	public fun getSize ()I
 	public static fun getSize-impl ([J)I
-	public fun getType-V0oMfBY ()Lkotlin/reflect/KType;
-	public static fun getType-V0oMfBY ([J)Lkotlin/reflect/KType;
 	public fun hashCode ()I
 	public static fun hashCode-impl ([J)I
 	public synthetic fun iterator ()Ljava/util/Iterator;
@@ -2680,8 +2653,6 @@ public final class space/kscience/kmath/structures/Int64BufferKt {
 public final class space/kscience/kmath/structures/Int8Buffer : space/kscience/kmath/structures/MutableBuffer {
 	public static final synthetic fun box-impl ([B)Lspace/kscience/kmath/structures/Int8Buffer;
 	public static fun constructor-impl ([B)[B
-	public fun copy ()Lspace/kscience/kmath/structures/MutableBuffer;
-	public static fun copy-impl ([B)Lspace/kscience/kmath/structures/MutableBuffer;
 	public fun equals (Ljava/lang/Object;)Z
 	public static fun equals-impl ([BLjava/lang/Object;)Z
 	public static final fun equals-impl0 ([B[B)Z
@@ -2691,8 +2662,6 @@ public final class space/kscience/kmath/structures/Int8Buffer : space/kscience/k
 	public final fun getArray ()[B
 	public fun getSize ()I
 	public static fun getSize-impl ([B)I
-	public fun getType-V0oMfBY ()Lkotlin/reflect/KType;
-	public static fun getType-V0oMfBY ([B)Lkotlin/reflect/KType;
 	public fun hashCode ()I
 	public static fun hashCode-impl ([B)I
 	public synthetic fun iterator ()Ljava/util/Iterator;
@@ -2714,23 +2683,21 @@ public final class space/kscience/kmath/structures/Int8BufferKt {
 }
 
 public final class space/kscience/kmath/structures/ListBuffer : space/kscience/kmath/structures/Buffer {
-	public synthetic fun <init> (Lkotlin/reflect/KType;Ljava/util/List;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun <init> (Ljava/util/List;)V
 	public fun get (I)Ljava/lang/Object;
 	public final fun getList ()Ljava/util/List;
 	public fun getSize ()I
-	public fun getType-V0oMfBY ()Lkotlin/reflect/KType;
 	public fun iterator ()Ljava/util/Iterator;
 	public fun toString ()Ljava/lang/String;
 }
 
 public final class space/kscience/kmath/structures/ListBufferKt {
-	public static final fun asBuffer-Fnn_obI (Ljava/util/List;Lkotlin/reflect/KType;)Lspace/kscience/kmath/structures/ListBuffer;
-	public static final fun asMutableBuffer-Fnn_obI (Ljava/util/List;Lkotlin/reflect/KType;)Lspace/kscience/kmath/structures/MutableListBuffer;
+	public static final fun asBuffer (Ljava/util/List;)Lspace/kscience/kmath/structures/ListBuffer;
+	public static final fun asMutableBuffer (Ljava/util/List;)Lspace/kscience/kmath/structures/MutableListBuffer;
 }
 
 public abstract interface class space/kscience/kmath/structures/MutableBuffer : space/kscience/kmath/structures/Buffer {
 	public static final field Companion Lspace/kscience/kmath/structures/MutableBuffer$Companion;
-	public abstract fun copy ()Lspace/kscience/kmath/structures/MutableBuffer;
 	public abstract fun set (ILjava/lang/Object;)V
 }
 
@@ -2752,15 +2719,15 @@ public final class space/kscience/kmath/structures/MutableBufferFactory$Companio
 
 public final class space/kscience/kmath/structures/MutableBufferKt {
 	public static final fun MutableBuffer--rwW0uw (Lkotlin/reflect/KType;ILkotlin/jvm/functions/Function1;)Lspace/kscience/kmath/structures/MutableBuffer;
+	public static final fun copy (Lspace/kscience/kmath/structures/Buffer;Lspace/kscience/kmath/structures/BufferFactory;)Lspace/kscience/kmath/structures/Buffer;
+	public static final fun mutableCopy (Lspace/kscience/kmath/structures/Buffer;Lspace/kscience/kmath/structures/MutableBufferFactory;)Lspace/kscience/kmath/structures/MutableBuffer;
 }
 
 public final class space/kscience/kmath/structures/MutableListBuffer : space/kscience/kmath/structures/MutableBuffer {
-	public synthetic fun <init> (Lkotlin/reflect/KType;Ljava/util/List;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public fun copy ()Lspace/kscience/kmath/structures/MutableBuffer;
+	public fun <init> (Ljava/util/List;)V
 	public fun get (I)Ljava/lang/Object;
 	public final fun getList ()Ljava/util/List;
 	public fun getSize ()I
-	public fun getType-V0oMfBY ()Lkotlin/reflect/KType;
 	public fun iterator ()Ljava/util/Iterator;
 	public fun set (ILjava/lang/Object;)V
 	public fun toString ()Ljava/lang/String;
@@ -2789,7 +2756,6 @@ public final class space/kscience/kmath/structures/PermutedBuffer : space/kscien
 
 public final class space/kscience/kmath/structures/PermutedMutableBuffer : space/kscience/kmath/structures/BufferView, space/kscience/kmath/structures/MutableBuffer {
 	public fun <init> (Lspace/kscience/kmath/structures/MutableBuffer;[I)V
-	public fun copy ()Lspace/kscience/kmath/structures/MutableBuffer;
 	public fun get (I)Ljava/lang/Object;
 	public synthetic fun getOrigin ()Lspace/kscience/kmath/structures/Buffer;
 	public fun getOrigin ()Lspace/kscience/kmath/structures/MutableBuffer;
@@ -2814,10 +2780,9 @@ public final class space/kscience/kmath/structures/ValueFlag : java/lang/Enum {
 }
 
 public final class space/kscience/kmath/structures/VirtualBuffer : space/kscience/kmath/structures/Buffer {
-	public synthetic fun <init> (Lkotlin/reflect/KType;ILkotlin/jvm/functions/Function1;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun <init> (ILkotlin/jvm/functions/Function1;)V
 	public fun get (I)Ljava/lang/Object;
 	public fun getSize ()I
-	public fun getType-V0oMfBY ()Lkotlin/reflect/KType;
 	public fun iterator ()Ljava/util/Iterator;
 	public fun toString ()Ljava/lang/String;
 }

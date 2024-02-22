@@ -5,8 +5,6 @@
 
 package space.kscience.kmath.structures
 
-import space.kscience.attributes.SafeType
-import space.kscience.attributes.safeTypeOf
 import kotlin.jvm.JvmInline
 
 /**
@@ -17,8 +15,6 @@ import kotlin.jvm.JvmInline
 @JvmInline
 public value class Int8Buffer(public val array: ByteArray) : MutableBuffer<Byte> {
 
-    override val type: SafeType<Byte> get() = safeTypeOf()
-
     override val size: Int get() = array.size
 
     override operator fun get(index: Int): Byte = array[index]
@@ -28,7 +24,6 @@ public value class Int8Buffer(public val array: ByteArray) : MutableBuffer<Byte>
     }
 
     override operator fun iterator(): ByteIterator = array.iterator()
-    override fun copy(): MutableBuffer<Byte> = Int8Buffer(array.copyOf())
 }
 
 /**

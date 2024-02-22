@@ -5,7 +5,6 @@
 
 package space.kscience.kmath.dimensions
 
-import space.kscience.attributes.SafeType
 import space.kscience.kmath.linear.*
 import space.kscience.kmath.nd.ShapeND
 import space.kscience.kmath.nd.Structure2D
@@ -50,8 +49,6 @@ public value class DMatrixWrapper<out T, R : Dimension, C : Dimension>(
     private val structure: Structure2D<T>,
 ) : DMatrix<T, R, C> {
 
-    override val type: SafeType<T> get() = structure.type
-
     override val shape: ShapeND get() = structure.shape
     override val rowNum: Int get() = shape[0]
     override val colNum: Int get() = shape[1]
@@ -80,8 +77,6 @@ public interface DPoint<out T, D : Dimension> : Point<T> {
  */
 @JvmInline
 public value class DPointWrapper<out T, D : Dimension>(public val point: Point<T>) : DPoint<T, D> {
-
-    override val type: SafeType<T> get() = point.type
 
     override val size: Int get() = point.size
 

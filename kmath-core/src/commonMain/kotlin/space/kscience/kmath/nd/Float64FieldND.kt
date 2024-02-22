@@ -5,11 +5,9 @@
 
 package space.kscience.kmath.nd
 
-import space.kscience.attributes.SafeType
 import space.kscience.kmath.PerformancePitfall
 import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.operations.*
-import space.kscience.kmath.structures.Float64
 import space.kscience.kmath.structures.Float64Buffer
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
@@ -23,8 +21,6 @@ public class Float64BufferND(
     indexes: ShapeIndexer,
     override val buffer: Float64Buffer,
 ) : MutableBufferND<Double>(indexes, buffer), MutableStructureNDOfDouble {
-
-    override val type: SafeType<Float64> get() = Float64Field.type
 
     override fun getDouble(index: IntArray): Double = buffer[indices.offset(index)]
 

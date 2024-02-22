@@ -38,7 +38,6 @@ public class space/kscience/kmath/memory/MemoryBuffer : space/kscience/kmath/str
 	protected final fun getMemory ()Lspace/kscience/kmath/memory/Memory;
 	public fun getSize ()I
 	protected final fun getSpec ()Lspace/kscience/kmath/memory/MemorySpec;
-	public fun getType-V0oMfBY ()Lkotlin/reflect/KType;
 	public fun iterator ()Ljava/util/Iterator;
 	public fun toString ()Ljava/lang/String;
 }
@@ -90,7 +89,6 @@ public abstract interface class space/kscience/kmath/memory/MemoryWriter : java/
 public final class space/kscience/kmath/memory/MutableMemoryBuffer : space/kscience/kmath/memory/MemoryBuffer, space/kscience/kmath/structures/MutableBuffer {
 	public static final field Companion Lspace/kscience/kmath/memory/MutableMemoryBuffer$Companion;
 	public fun <init> (Lspace/kscience/kmath/memory/Memory;Lspace/kscience/kmath/memory/MemorySpec;)V
-	public fun copy ()Lspace/kscience/kmath/structures/MutableBuffer;
 	public fun set (ILjava/lang/Object;)V
 }
 

@@ -5,13 +5,10 @@
 
 package space.kscience.kmath.nd
 
-import space.kscience.attributes.SafeType
-import space.kscience.attributes.safeTypeOf
 import space.kscience.kmath.PerformancePitfall
 import space.kscience.kmath.UnstableKMathAPI
 
 public open class VirtualStructureND<T>(
-    override val type: SafeType<T>,
     override val shape: ShapeND,
     public val producer: (IntArray) -> T,
 ) : StructureND<T> {
@@ -27,10 +24,10 @@ public open class VirtualStructureND<T>(
 public class VirtualDoubleStructureND(
     shape: ShapeND,
     producer: (IntArray) -> Double,
-) : VirtualStructureND<Double>(safeTypeOf(), shape, producer)
+) : VirtualStructureND<Double>(shape, producer)
 
 @UnstableKMathAPI
 public class VirtualIntStructureND(
     shape: ShapeND,
     producer: (IntArray) -> Int,
-) : VirtualStructureND<Int>(safeTypeOf(), shape, producer)
+) : VirtualStructureND<Int>(shape, producer)

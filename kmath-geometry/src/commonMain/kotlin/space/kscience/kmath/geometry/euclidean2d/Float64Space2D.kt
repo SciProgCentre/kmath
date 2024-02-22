@@ -11,7 +11,6 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
-import space.kscience.attributes.SafeType
 import space.kscience.kmath.geometry.GeometrySpace
 import space.kscience.kmath.geometry.Vector2D
 import space.kscience.kmath.operations.Float64Field
@@ -22,10 +21,7 @@ import kotlin.math.pow
 import kotlin.math.sqrt
 
 
-@Serializable(Float64Space2D.VectorSerializer::class)
-public interface Float64Vector2D : Vector2D<Float64> {
-    override val type: SafeType<Float64> get() = Float64Field.type
-}
+public typealias Float64Vector2D = Vector2D<Float64>
 
 @Deprecated("Use Float64Vector2D", ReplaceWith("Float64Vector2D"))
 public typealias DoubleVector2D = Float64Vector2D

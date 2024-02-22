@@ -11,7 +11,6 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
-import space.kscience.attributes.SafeType
 import space.kscience.kmath.geometry.GeometrySpace
 import space.kscience.kmath.geometry.Vector3D
 import space.kscience.kmath.linear.Float64LinearSpace
@@ -34,10 +33,7 @@ internal fun leviCivita(i: Int, j: Int, k: Int): Int = when {
     else -> 0
 }
 
-@Serializable(Float64Space3D.VectorSerializer::class)
-public interface Float64Vector3D : Vector3D<Float64> {
-    override val type: SafeType<Float64> get() = Float64Field.type
-}
+public typealias Float64Vector3D = Vector3D<Float64>
 
 @Deprecated("Use Float64Vector3D", ReplaceWith("Float64Vector3D"))
 public typealias DoubleVector3D = Float64Vector3D

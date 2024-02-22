@@ -5,7 +5,6 @@
 
 package space.kscience.kmath.structures
 
-import space.kscience.attributes.SafeType
 import space.kscience.kmath.nd.Structure2D
 
 /**
@@ -33,7 +32,6 @@ internal class BufferAccessor2D<T>(
 //    ) { (i, j) -> get(i, j) }.as2D()
 
     inner class Row(val buffer: MutableBuffer<T>, val rowIndex: Int) : MutableBuffer<T> {
-        override val type: SafeType<T> get() = buffer.type
 
         override val size: Int get() = colNum
 
@@ -43,7 +41,6 @@ internal class BufferAccessor2D<T>(
             buffer[rowIndex, index] = value
         }
 
-        override fun copy(): MutableBuffer<T> = factory(colNum) { get(it) }
         override operator fun iterator(): Iterator<T> = (0 until colNum).map(::get).iterator()
 
         override fun toString(): String = Buffer.toString(this)

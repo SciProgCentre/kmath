@@ -30,8 +30,6 @@ public val DataType.type: SafeType<*>
 
 @JvmInline
 public value class MultikTensor<T>(public val array: MutableMultiArray<T, DN>) : Tensor<T> {
-    @Suppress("UNCHECKED_CAST")
-    override val type: SafeType<T> get() = array.dtype.type as SafeType<T>
 
     override val shape: ShapeND get() = ShapeND(array.shape)
 

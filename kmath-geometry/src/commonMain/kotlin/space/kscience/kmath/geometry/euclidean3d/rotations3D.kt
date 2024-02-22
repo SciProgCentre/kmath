@@ -5,7 +5,6 @@
 
 package space.kscience.kmath.geometry.euclidean3d
 
-import space.kscience.attributes.SafeType
 import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.complex.*
 import space.kscience.kmath.geometry.*
@@ -245,8 +244,6 @@ public fun Quaternion.Companion.fromEuler(
  * A vector consisting of angles
  */
 public data class AngleVector(override val x: Angle, override val y: Angle, override val z: Angle) : Vector3D<Angle> {
-    override val type: SafeType<Angle> get() = Angle.type
-
     public companion object
 }
 

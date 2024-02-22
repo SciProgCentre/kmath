@@ -11,7 +11,6 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
-import space.kscience.attributes.SafeType
 import space.kscience.kmath.geometry.GeometrySpace
 import space.kscience.kmath.geometry.Vector3D
 import space.kscience.kmath.operations.Float32Field
@@ -20,10 +19,8 @@ import space.kscience.kmath.structures.MutableBufferFactory
 import kotlin.math.pow
 import kotlin.math.sqrt
 
-@Serializable(Float32Space3D.VectorSerializer::class)
-public interface Float32Vector3D : Vector3D<Float>{
-    override val type: SafeType<Float32> get() = Float32Field.type
-}
+
+public typealias Float32Vector3D = Vector3D<Float>
 
 
 public object Float32Space3D : GeometrySpace<Vector3D<Float32>, Float32> {

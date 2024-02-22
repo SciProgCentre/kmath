@@ -14,16 +14,13 @@ import kotlin.reflect.typeOf
  *
  * @param T the type of elements contained in the buffer.
  */
-public interface MutableBuffer<T> : Buffer<T> {
+public interface MutableBuffer<T> : Buffer<T>{
+
     /**
      * Sets the array element at the specified [index] to the specified [value].
      */
     public operator fun set(index: Int, value: T)
 
-    /**
-     * Returns a shallow copy of the buffer.
-     */
-    public fun copy(): MutableBuffer<T>
 
     public companion object {
         /**
@@ -66,6 +63,25 @@ public interface MutableBuffer<T> : Buffer<T> {
 
 
 /**
+ * Returns a shallow copy of the buffer.
+ */
+public fun <T> Buffer<T>.copy(bufferFactory: BufferFactory<T>): Buffer<T> =if(this is ArrayBuffer){
+    ArrayBuffer(array.copyOf())
+}else{
+    bufferFactory(size,::get)
+}
+
+/**
+ * Returns a mutable shallow copy of the buffer.
+ */
+public fun <T> Buffer<T>.mutableCopy(bufferFactory: MutableBufferFactory<T>): MutableBuffer<T> =if(this is ArrayBuffer){
+    ArrayBuffer(array.copyOf())
+}else{
+    bufferFactory(size,::get)
+}
+
+
+/**
  * Creates a [MutableBuffer] of given [type]. If the type is primitive, specialized buffers are used
  * ([Int32Buffer], [Float64Buffer], etc.), [ListBuffer] is returned otherwise.
  *
@@ -84,7 +100,7 @@ public inline fun <T> MutableBuffer(
     typeOf<Float>() -> MutableBuffer.float(size) { initializer(it) as Float } as MutableBuffer<T>
     typeOf<Double>() -> MutableBuffer.double(size) { initializer(it) as Double } as MutableBuffer<T>
     //TODO add unsigned types
-    else -> MutableListBuffer(type, MutableList(size, initializer))
+    else -> MutableListBuffer(MutableList(size, initializer))
 }
 
 /**

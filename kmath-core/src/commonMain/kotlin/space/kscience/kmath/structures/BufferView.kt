@@ -5,7 +5,6 @@
 
 package space.kscience.kmath.structures
 
-import space.kscience.attributes.SafeType
 import space.kscience.kmath.UnstableKMathAPI
 
 /**
@@ -13,8 +12,6 @@ import space.kscience.kmath.UnstableKMathAPI
  */
 public interface BufferView<T> : Buffer<T> {
     public val origin: Buffer<T>
-
-    override val type: SafeType<T> get() = origin.type
 
     /**
      * Get the index in [origin] buffer from index in this buffer.
@@ -190,9 +187,7 @@ public class PermutedMutableBuffer<T>(
         origin[permutations[index]] = value
     }
 
-    override fun copy(): MutableBuffer<T> = PermutedMutableBuffer(origin.copy(), permutations)
     //TODO Probably could be optimized
-
     override fun iterator(): Iterator<T> = permutations.asSequence().map { origin[it] }.iterator()
 
     @UnstableKMathAPI

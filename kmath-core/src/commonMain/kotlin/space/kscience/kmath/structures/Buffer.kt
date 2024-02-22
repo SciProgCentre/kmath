@@ -66,7 +66,7 @@ public inline fun <reified T> MutableBufferFactory(): MutableBufferFactory<T> = 
  *
  * @param T the type of elements contained in the buffer.
  */
-public interface Buffer<out T> : WithSize, WithType<T> {
+public interface Buffer<out T> : WithSize {
     /**
      * The size of this buffer.
      */
@@ -120,7 +120,7 @@ public fun <T> Buffer(
     typeOf<Int>() -> MutableBuffer.int(size) { initializer(it) as Int } as Buffer<T>
     typeOf<Long>() -> MutableBuffer.long(size) { initializer(it) as Long } as Buffer<T>
     typeOf<Float>() -> MutableBuffer.float(size) { initializer(it) as Float } as Buffer<T>
-    else -> List(size, initializer).asBuffer(type)
+    else -> List(size, initializer).asBuffer()
 }
 
 /**
@@ -139,7 +139,7 @@ public inline fun <reified T> Buffer(size: Int, initializer: (Int) -> T): Buffer
         typeOf<Int>() -> MutableBuffer.int(size) { initializer(it) as Int } as Buffer<T>
         typeOf<Long>() -> MutableBuffer.long(size) { initializer(it) as Long } as Buffer<T>
         typeOf<Float>() -> MutableBuffer.float(size) { initializer(it) as Float } as Buffer<T>
-        else -> List(size, initializer).asBuffer(type)
+        else -> List(size, initializer).asBuffer()
     }
 }
 
@@ -172,7 +172,6 @@ public fun <T> Buffer<T>.last(): T {
  * @param T the type of elements provided by the buffer.
  */
 public class VirtualBuffer<out T>(
-    override val type: SafeType<T>,
     override val size: Int,
     private val generator: (Int) -> T,
 ) : Buffer<T> {
@@ -185,11 +184,3 @@ public class VirtualBuffer<out T>(
 
     override fun toString(): String = Buffer.toString(this)
 }
-
-/**
- * Inline builder for [VirtualBuffer]
- */
-public inline fun <reified T> VirtualBuffer(
-    size: Int,
-    noinline generator: (Int) -> T,
-): VirtualBuffer<T> = VirtualBuffer(safeTypeOf(), size, generator)

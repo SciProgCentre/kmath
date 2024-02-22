@@ -5,7 +5,10 @@
 
 package space.kscience.kmath.nd
 
-import space.kscience.attributes.*
+import space.kscience.attributes.Attribute
+import space.kscience.attributes.AttributeContainer
+import space.kscience.attributes.Attributes
+import space.kscience.attributes.SafeType
 import space.kscience.kmath.PerformancePitfall
 import space.kscience.kmath.linear.LinearSpace
 import space.kscience.kmath.operations.Ring
@@ -24,7 +27,7 @@ public interface StructureAttribute<T> : Attribute<T>
  *
  * @param T the type of items.
  */
-public interface StructureND<out T> : AttributeContainer, WithShape, WithType<T> {
+public interface StructureND<out T> : AttributeContainer, WithShape {
     /**
      * The shape of structure i.e., non-empty sequence of non-negative integers that specify sizes of dimensions for
      * this structure.

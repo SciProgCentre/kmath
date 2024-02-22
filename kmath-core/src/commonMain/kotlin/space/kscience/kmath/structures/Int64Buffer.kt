@@ -5,8 +5,6 @@
 
 package space.kscience.kmath.structures
 
-import space.kscience.attributes.SafeType
-import space.kscience.attributes.safeTypeOf
 import kotlin.jvm.JvmInline
 
 /**
@@ -16,8 +14,6 @@ import kotlin.jvm.JvmInline
  */
 @JvmInline
 public value class Int64Buffer(public val array: LongArray) : PrimitiveBuffer<Long> {
-
-    override val type: SafeType<Long> get() = safeTypeOf()
 
     override val size: Int get() = array.size
 
@@ -29,8 +25,6 @@ public value class Int64Buffer(public val array: LongArray) : PrimitiveBuffer<Lo
 
     override operator fun iterator(): LongIterator = array.iterator()
 
-    override fun copy(): MutableBuffer<Long> =
-        Int64Buffer(array.copyOf())
 }
 
 public typealias LongBuffer = Int64Buffer

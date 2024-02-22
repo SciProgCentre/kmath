@@ -6,10 +6,8 @@
 package space.kscience.kmath.nd4j
 
 import org.nd4j.linalg.api.ndarray.INDArray
-import space.kscience.attributes.SafeType
 import space.kscience.kmath.PerformancePitfall
 import space.kscience.kmath.nd.*
-import space.kscience.kmath.operations.Float32Field
 
 /**
  * Represents a [StructureND] wrapping an [INDArray] object.
@@ -69,8 +67,6 @@ public data class Nd4jArrayDoubleStructure(override val ndArray: INDArray) : Nd4
 public fun INDArray.asDoubleStructure(): Nd4jArrayStructure<Double> = Nd4jArrayDoubleStructure(this)
 
 public data class Nd4jArrayFloatStructure(override val ndArray: INDArray) : Nd4jArrayStructure<Float>() {
-
-    override val type: SafeType<Float> get() = Float32Field.type
 
     override fun elementsIterator(): Iterator<Pair<IntArray, Float>> = ndArray.floatIterator()
 

@@ -5,12 +5,10 @@
 
 package space.kscience.kmath.nd
 
-import space.kscience.attributes.SafeType
 import space.kscience.kmath.PerformancePitfall
 import space.kscience.kmath.operations.asSequence
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.MutableBuffer
-import space.kscience.kmath.structures.asMutableBuffer
 import kotlin.jvm.JvmInline
 
 /**
@@ -48,8 +46,6 @@ public interface MutableStructure1D<T> : Structure1D<T>, MutableStructureND<T>, 
 @JvmInline
 private value class Structure1DWrapper<out T>(val structure: StructureND<T>) : Structure1D<T> {
 
-    override val type: SafeType<T> get() = structure.type
-
     override val shape: ShapeND get() = structure.shape
     override val size: Int get() = structure.shape[0]
 
@@ -65,8 +61,6 @@ private value class Structure1DWrapper<out T>(val structure: StructureND<T>) : S
  */
 private class MutableStructure1DWrapper<T>(val structure: MutableStructureND<T>) : MutableStructure1D<T> {
 
-    override val type: SafeType<T> get() = structure.type
-
     override val shape: ShapeND get() = structure.shape
     override val size: Int get() = structure.shape[0]
 
@@ -81,13 +75,6 @@ private class MutableStructure1DWrapper<T>(val structure: MutableStructureND<T>)
         structure[intArrayOf(index)] = value
     }
 
-    @OptIn(PerformancePitfall::class)
-    override fun copy(): MutableBuffer<T> = structure
-        .elements()
-        .map(Pair<IntArray, T>::second)
-        .toMutableList()
-        .asMutableBuffer(type)
-
     override fun toString(): String = Buffer.toString(this)
 }
 
@@ -97,8 +84,6 @@ private class MutableStructure1DWrapper<T>(val structure: MutableStructureND<T>)
  */
 @JvmInline
 private value class Buffer1DWrapper<out T>(val buffer: Buffer<T>) : Structure1D<T> {
-
-    override val type: SafeType<T> get() = buffer.type
 
     override val shape: ShapeND get() = ShapeND(buffer.size)
     override val size: Int get() = buffer.size
@@ -113,8 +98,6 @@ private value class Buffer1DWrapper<out T>(val buffer: Buffer<T>) : Structure1D<
 
 internal class MutableBuffer1DWrapper<T>(val buffer: MutableBuffer<T>) : MutableStructure1D<T> {
 
-    override val type: SafeType<T> get() = buffer.type
-
     override val shape: ShapeND get() = ShapeND(buffer.size)
     override val size: Int get() = buffer.size
 
@@ -127,8 +110,6 @@ internal class MutableBuffer1DWrapper<T>(val buffer: MutableBuffer<T>) : Mutable
     override fun set(index: Int, value: T) {
         buffer[index] = value
     }
-
-    override fun copy(): MutableBuffer<T> = buffer.copy()
 
     override fun toString(): String = Buffer.toString(this)
 }

@@ -5,8 +5,6 @@
 
 package space.kscience.kmath.structures
 
-import space.kscience.attributes.SafeType
-import space.kscience.attributes.safeTypeOf
 import space.kscience.kmath.operations.BufferTransform
 import kotlin.jvm.JvmInline
 
@@ -18,8 +16,6 @@ import kotlin.jvm.JvmInline
 @JvmInline
 public value class Float64Buffer(public val array: DoubleArray) : PrimitiveBuffer<Double> {
 
-    override val type: SafeType<Double> get() = safeTypeOf()
-
     override val size: Int get() = array.size
 
     override operator fun get(index: Int): Double = array[index]
@@ -29,8 +25,6 @@ public value class Float64Buffer(public val array: DoubleArray) : PrimitiveBuffe
     }
 
     override operator fun iterator(): DoubleIterator = array.iterator()
-
-    override fun copy(): Float64Buffer = Float64Buffer(array.copyOf())
 
     override fun toString(): String = Buffer.toString(this)
 

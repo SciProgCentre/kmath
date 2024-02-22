@@ -37,7 +37,7 @@ class ParallelMatrixTest {
 
     @Test
     fun testMatrixExtension() = Float64Field.linearSpace.parallel{
-        val transitionMatrix: Matrix<Double> = VirtualMatrix(type,6, 6) { row, col ->
+        val transitionMatrix: Matrix<Double> = VirtualMatrix(6, 6) { row, col ->
             when {
                 col == 0 -> .50
                 row + 1 == col -> .50

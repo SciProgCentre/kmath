@@ -10,7 +10,6 @@ import org.tensorflow.Output
 import org.tensorflow.ndarray.NdArray
 import org.tensorflow.op.core.Constant
 import org.tensorflow.types.TFloat64
-import space.kscience.attributes.SafeType
 import space.kscience.kmath.PerformancePitfall
 import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.expressions.Symbol
@@ -26,7 +25,6 @@ public class DoubleTensorFlowOutput(
     graph: Graph,
     output: Output<TFloat64>,
 ) : TensorFlowOutput<Double, TFloat64>(graph, output) {
-    override val type: SafeType<Double> get() = Float64Field.type
 
     override fun org.tensorflow.Tensor.actualizeTensor(): NdArray<Double> = this as TFloat64
 }

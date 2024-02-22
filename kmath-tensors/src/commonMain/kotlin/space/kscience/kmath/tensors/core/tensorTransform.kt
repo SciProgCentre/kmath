@@ -17,7 +17,7 @@ import space.kscience.kmath.tensors.api.Tensor
 public fun StructureND<Double>.copyToTensor(): DoubleTensor = if (this is DoubleTensor) {
     DoubleTensor(shape, source.copy())
 } else if (this is Float64BufferND && indices is RowStrides) {
-    DoubleTensor(shape, buffer.copy())
+    DoubleTensor(shape, buffer.array.copyOf().asBuffer())
 } else {
     DoubleTensor(
         shape,

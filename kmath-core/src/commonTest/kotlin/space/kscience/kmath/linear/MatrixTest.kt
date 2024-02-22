@@ -38,7 +38,7 @@ class MatrixTest {
 
     @Test
     fun testMatrixExtension() = Double.algebra.linearSpace.run {
-        val transitionMatrix: Matrix<Double> = VirtualMatrix(type,6, 6) { row, col ->
+        val transitionMatrix: Matrix<Double> = VirtualMatrix(6, 6) { row, col ->
             when {
                 col == 0 -> .50
                 row + 1 == col -> .50

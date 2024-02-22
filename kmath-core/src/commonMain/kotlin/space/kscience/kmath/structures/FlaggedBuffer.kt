@@ -5,8 +5,6 @@
 
 package space.kscience.kmath.structures
 
-import space.kscience.attributes.SafeType
-import space.kscience.attributes.safeTypeOf
 import kotlin.experimental.and
 
 /**
@@ -59,8 +57,6 @@ public class FlaggedDoubleBuffer(
     public val values: DoubleArray,
     public val flags: ByteArray
 ) : FlaggedBuffer<Double?>, Buffer<Double?> {
-
-    override val type: SafeType<Double?> = safeTypeOf()
 
     init {
         require(values.size == flags.size) { "Values and flags must have the same dimensions" }

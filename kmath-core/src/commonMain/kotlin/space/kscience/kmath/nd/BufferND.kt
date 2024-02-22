@@ -5,7 +5,6 @@
 
 package space.kscience.kmath.nd
 
-import space.kscience.attributes.SafeType
 import space.kscience.kmath.PerformancePitfall
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.BufferFactory
@@ -23,8 +22,6 @@ public open class BufferND<out T>(
     override val indices: ShapeIndexer,
     public open val buffer: Buffer<T>,
 ) : StructureND<T> {
-
-    override val type: SafeType<T> get() = buffer.type
 
     @PerformancePitfall
     override operator fun get(index: IntArray): T = buffer[indices.offset(index)]

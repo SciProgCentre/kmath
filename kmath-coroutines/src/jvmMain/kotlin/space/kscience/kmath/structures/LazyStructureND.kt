@@ -6,8 +6,6 @@
 package space.kscience.kmath.structures
 
 import kotlinx.coroutines.*
-import space.kscience.attributes.SafeType
-import space.kscience.attributes.safeTypeOf
 import space.kscience.kmath.PerformancePitfall
 import space.kscience.kmath.coroutines.Math
 import space.kscience.kmath.nd.ColumnStrides
@@ -16,7 +14,6 @@ import space.kscience.kmath.nd.StructureND
 
 public class LazyStructureND<out T>(
     public val scope: CoroutineScope,
-    override val type: SafeType<T>,
     override val shape: ShapeND,
     public val function: suspend (IntArray) -> T,
 ) : StructureND<T> {
@@ -54,10 +51,10 @@ public suspend fun <T> StructureND<T>.await(index: IntArray): T =
 public inline fun <T, reified R> StructureND<T>.mapAsyncIndexed(
     scope: CoroutineScope,
     crossinline function: suspend (T, index: IntArray) -> R,
-): LazyStructureND<R> = LazyStructureND(scope, safeTypeOf(), shape) { index -> function(get(index), index) }
+): LazyStructureND<R> = LazyStructureND(scope, shape) { index -> function(get(index), index) }
 
 @OptIn(PerformancePitfall::class)
 public inline fun <T, reified R> StructureND<T>.mapAsync(
     scope: CoroutineScope,
     crossinline function: suspend (T) -> R,
-): LazyStructureND<R> = LazyStructureND(scope, safeTypeOf(), shape) { index -> function(get(index)) }
+): LazyStructureND<R> = LazyStructureND(scope,  shape) { index -> function(get(index)) }

@@ -202,7 +202,6 @@ public final class space/kscience/kmath/nd4j/Nd4jArrayFloatStructure : space/ksc
 	public fun get ([I)Ljava/lang/Float;
 	public synthetic fun get ([I)Ljava/lang/Object;
 	public fun getNdArray ()Lorg/nd4j/linalg/api/ndarray/INDArray;
-	public fun getType-V0oMfBY ()Lkotlin/reflect/KType;
 	public fun hashCode ()I
 	public fun set ([IF)V
 	public synthetic fun set ([ILjava/lang/Object;)V

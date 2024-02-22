@@ -27,7 +27,7 @@ public interface LupDecomposition<T> {
  * Create a pivot matrix from pivot vector using provided [LinearSpace]
  */
 public fun <T> LupDecomposition<T>.pivotMatrix(linearSpace: LinearSpace<T, Ring<T>>): Matrix<T> =
-    VirtualMatrix(linearSpace.type, l.rowNum, l.colNum) { row, column ->
+    VirtualMatrix(l.rowNum, l.colNum) { row, column ->
         if (column == pivot[row]) linearSpace.elementAlgebra.one else linearSpace.elementAlgebra.zero
     }
 
@@ -47,7 +47,7 @@ public class GenericLupDecomposition<T>(
 
 
     override val l: Matrix<T>
-        get() = VirtualMatrix(lu.type, lu.rowNum, lu.colNum, attributes = Attributes(LowerTriangular)) { i, j ->
+        get() = VirtualMatrix(lu.rowNum, lu.colNum, attributes = Attributes(LowerTriangular)) { i, j ->
             when {
                 j < i -> lu[i, j]
                 j == i -> elementAlgebra.one
@@ -56,7 +56,7 @@ public class GenericLupDecomposition<T>(
         }
 
     override val u: Matrix<T>
-        get() = VirtualMatrix(lu.type, lu.rowNum, lu.colNum, attributes = Attributes(UpperTriangular)) { i, j ->
+        get() = VirtualMatrix(lu.rowNum, lu.colNum, attributes = Attributes(UpperTriangular)) { i, j ->
             if (j >= i) lu[i, j] else elementAlgebra.zero
         }
 

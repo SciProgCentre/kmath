@@ -53,7 +53,7 @@ public class DerivationResult<T : Any>(
  */
 public fun <T : Any> DerivationResult<T>.grad(vararg variables: Symbol): Point<T> {
     check(variables.isNotEmpty()) { "Variable order is not provided for gradient construction" }
-    return variables.map(::derivative).asBuffer(type)
+    return variables.map(::derivative).asBuffer()
 }
 
 /**

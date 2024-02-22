@@ -7,22 +7,19 @@ package space.kscience.kmath.streaming
 
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
-import space.kscience.attributes.SafeType
 import space.kscience.kmath.operations.Group
-import space.kscience.kmath.structures.Buffer
-import space.kscience.kmath.structures.MutableBuffer
-import space.kscience.kmath.structures.VirtualBuffer
+import space.kscience.kmath.structures.*
 
 /**
  * Thread-safe ring buffer
  */
 public class RingBuffer<T>(
     private val buffer: MutableBuffer<T>,
+    private val bufferFactory: BufferFactory<T>,
     private var startIndex: Int = 0,
     size: Int = 0,
 ) : Buffer<T> {
 
-    override val type: SafeType<T> get() = buffer.type
 
     private val mutex: Mutex = Mutex()
 
@@ -43,7 +40,7 @@ public class RingBuffer<T>(
     override operator fun iterator(): Iterator<T> = object : AbstractIterator<T>() {
         private var count = size
         private var index = startIndex
-        val copy = buffer.copy()
+        val copy = buffer.copy(bufferFactory)
 
         override fun computeNext() {
             if (count == 0) done() else {
@@ -58,8 +55,8 @@ public class RingBuffer<T>(
      * A safe snapshot operation
      */
     public suspend fun snapshot(): Buffer<T> = mutex.withLock {
-        val copy = buffer.copy()
-        VirtualBuffer(type, size) { i -> copy[startIndex.forward(i)] }
+        val copy = buffer.copy(bufferFactory)
+        VirtualBuffer(size) { i -> copy[startIndex.forward(i)] }
     }
 
     public suspend fun push(element: T) {
@@ -76,7 +73,7 @@ public class RingBuffer<T>(
 
 public inline fun <reified T : Any> RingBuffer(size: Int, empty: T): RingBuffer<T> {
     val buffer = MutableBuffer(size) { empty }
-    return RingBuffer(buffer)
+    return RingBuffer(buffer, BufferFactory())
 }
 
 /**
@@ -84,5 +81,5 @@ public inline fun <reified T : Any> RingBuffer(size: Int, empty: T): RingBuffer<
  */
 public fun <T> RingBuffer(size: Int, algebra: Group<T>): RingBuffer<T> {
     val buffer: MutableBuffer<T> = MutableBuffer(algebra.type, size) { algebra.zero }
-    return RingBuffer(buffer)
+    return RingBuffer(buffer, algebra.bufferFactory)
 }

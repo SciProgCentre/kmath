@@ -6,17 +6,13 @@
 package space.kscience.kmath.viktor
 
 import org.jetbrains.bio.viktor.F64Array
-import space.kscience.attributes.SafeType
 import space.kscience.kmath.PerformancePitfall
 import space.kscience.kmath.nd.ColumnStrides
 import space.kscience.kmath.nd.MutableStructureND
 import space.kscience.kmath.nd.ShapeND
-import space.kscience.kmath.operations.Float64Field
 
 @Suppress("OVERRIDE_BY_INLINE", "NOTHING_TO_INLINE")
 public class ViktorStructureND(public val f64Buffer: F64Array) : MutableStructureND<Double> {
-    override val type: SafeType<Double> get() = Float64Field.type
-
     override val shape: ShapeND get() = ShapeND(f64Buffer.shape)
 
     @OptIn(PerformancePitfall::class)

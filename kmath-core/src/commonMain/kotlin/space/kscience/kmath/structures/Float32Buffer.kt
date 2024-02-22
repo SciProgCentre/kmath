@@ -5,8 +5,6 @@
 
 package space.kscience.kmath.structures
 
-import space.kscience.attributes.SafeType
-import space.kscience.attributes.safeTypeOf
 import kotlin.jvm.JvmInline
 
 /**
@@ -18,8 +16,6 @@ import kotlin.jvm.JvmInline
 @JvmInline
 public value class Float32Buffer(public val array: FloatArray) : PrimitiveBuffer<Float> {
 
-    override val type: SafeType<Float32> get() =  safeTypeOf<Float32>()
-
     override val size: Int get() = array.size
 
     override operator fun get(index: Int): Float = array[index]
@@ -30,8 +26,6 @@ public value class Float32Buffer(public val array: FloatArray) : PrimitiveBuffer
 
     override operator fun iterator(): FloatIterator = array.iterator()
 
-    override fun copy(): MutableBuffer<Float> =
-        Float32Buffer(array.copyOf())
 }
 
 public typealias FloatBuffer = Float32Buffer

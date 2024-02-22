@@ -64,7 +64,6 @@ public object ValueAndErrorField : Field<ValueAndError> {
             require(values.size == ds.size)
         }
 
-        override val type: SafeType<ValueAndError> get() = safeTypeOf()
         override val size: Int
             get() = values.size
 
@@ -77,7 +76,6 @@ public object ValueAndErrorField : Field<ValueAndError> {
             values[index] = value.dispersion
         }
 
-        override fun copy(): MutableBuffer<ValueAndError> = ValueAndErrorBuffer(values.copy(), ds.copy())
     }
 
     override val bufferFactory: MutableBufferFactory<ValueAndError> = object : MutableBufferFactory<ValueAndError> {

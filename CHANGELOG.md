@@ -18,7 +18,7 @@
 
 ### Added
 
-- Reification. Explicit `SafeType` for algebras and buffers.
+- Reification. Explicit `SafeType` for algebras.
 - Integer division algebras.
 - Float32 geometries.
 - New Attributes-kt module that could be used as stand-alone. It declares. type-safe attributes containers.
@@ -30,6 +30,7 @@
 
 ### Changed
 
+- Buffer copy removed from API (added as an extension).
 - Default naming for algebra and buffers now uses IntXX/FloatXX notation instead of Java types.
 - Remove unnecessary inlines in basic algebras.
 - QuaternionField -> QuaternionAlgebra and does not implement `Field` anymore since it is non-commutative

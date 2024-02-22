@@ -6,7 +6,6 @@
 package space.kscience.kmath.linear
 
 import space.kscience.attributes.Attributes
-import space.kscience.attributes.SafeType
 import space.kscience.kmath.nd.ShapeND
 
 
@@ -16,7 +15,6 @@ import space.kscience.kmath.nd.ShapeND
  * @property generator the function that provides elements.
  */
 public class VirtualMatrix<out T>(
-    override val type: SafeType<T>,
     override val rowNum: Int,
     override val colNum: Int,
     override val attributes: Attributes = Attributes.EMPTY,
@@ -31,4 +29,4 @@ public class VirtualMatrix<out T>(
 public fun <T : Any> MatrixBuilder<T, *>.virtual(
     attributes: Attributes = Attributes.EMPTY,
     generator: (i: Int, j: Int) -> T,
-): VirtualMatrix<T> = VirtualMatrix(type, rows, columns, attributes, generator)
+): VirtualMatrix<T> = VirtualMatrix(rows, columns, attributes, generator)

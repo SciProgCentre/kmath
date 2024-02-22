@@ -26,7 +26,7 @@ public fun <V : Comparable<V>> Buffer<V>.indicesSorted(): IntArray = permSortInd
  */
 public fun <V : Comparable<V>> Buffer<V>.sorted(): Buffer<V> {
     val permutations = indicesSorted()
-    return VirtualBuffer(type, size) { this[permutations[it]] }
+    return VirtualBuffer(size) { this[permutations[it]] }
 }
 
 @UnstableKMathAPI
@@ -38,7 +38,7 @@ public fun <V : Comparable<V>> Buffer<V>.indicesSortedDescending(): IntArray =
  */
 public fun <V : Comparable<V>> Buffer<V>.sortedDescending(): Buffer<V> {
     val permutations = indicesSortedDescending()
-    return VirtualBuffer(type, size) { this[permutations[it]] }
+    return VirtualBuffer(size) { this[permutations[it]] }
 }
 
 @UnstableKMathAPI
@@ -47,7 +47,7 @@ public fun <V, C : Comparable<C>> Buffer<V>.indicesSortedBy(selector: (V) -> C):
 
 public fun <V, C : Comparable<C>> Buffer<V>.sortedBy(selector: (V) -> C): Buffer<V> {
     val permutations = indicesSortedBy(selector)
-    return VirtualBuffer(type, size) { this[permutations[it]] }
+    return VirtualBuffer(size) { this[permutations[it]] }
 }
 
 @UnstableKMathAPI
@@ -56,7 +56,7 @@ public fun <V, C : Comparable<C>> Buffer<V>.indicesSortedByDescending(selector: 
 
 public fun <V, C : Comparable<C>> Buffer<V>.sortedByDescending(selector: (V) -> C): Buffer<V> {
     val permutations = indicesSortedByDescending(selector)
-    return VirtualBuffer(type, size) { this[permutations[it]] }
+    return VirtualBuffer(size) { this[permutations[it]] }
 }
 
 @UnstableKMathAPI
@@ -68,7 +68,7 @@ public fun <V> Buffer<V>.indicesSortedWith(comparator: Comparator<V>): IntArray 
  */
 public fun <V> Buffer<V>.sortedWith(comparator: Comparator<V>): Buffer<V> {
     val permutations = indicesSortedWith(comparator)
-    return VirtualBuffer(type,size) { this[permutations[it]] }
+    return VirtualBuffer(size) { this[permutations[it]] }
 }
 
 private fun <V> Buffer<V>.permSortIndicesWith(comparator: Comparator<Int>): IntArray {

@@ -33,7 +33,7 @@ public fun <T> MutableBuffer.Companion.parallel(
     typeOf<Double>() -> IntStream.range(0, size).parallel().mapToDouble { initializer(it) as Float64 }.toArray()
         .asBuffer() as MutableBuffer<T>
     //TODO add unsigned types
-    else -> IntStream.range(0, size).parallel().mapToObj { initializer(it) }.collect(Collectors.toList<T>()).asMutableBuffer(type)
+    else -> IntStream.range(0, size).parallel().mapToObj { initializer(it) }.collect(Collectors.toList<T>()).asMutableBuffer()
 }
 
 public class ParallelBufferFactory<T>(override val type: SafeType<T>) : MutableBufferFactory<T> {
