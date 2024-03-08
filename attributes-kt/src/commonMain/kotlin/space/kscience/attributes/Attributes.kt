@@ -5,8 +5,6 @@
 
 package space.kscience.attributes
 
-import kotlin.jvm.JvmInline
-
 /**
  * A set of attributes. The implementation must guarantee that [content] keys correspond to its value types.
  */
@@ -27,14 +25,22 @@ public interface Attributes {
     @Suppress("UNCHECKED_CAST")
     public operator fun <T> get(attribute: Attribute<T>): T? = content[attribute] as? T
 
+    override fun toString(): String
+    override fun equals(other: Any?): Boolean
+    override fun hashCode(): Int
+
     public companion object {
         public val EMPTY: Attributes = AttributesImpl(emptyMap())
+
+        public fun equals(a1: Attributes, a2: Attributes): Boolean =
+            a1.keys == a2.keys && a1.keys.all { a1[it] == a2[it] }
     }
 }
 
-@JvmInline
-internal value class AttributesImpl(override val content: Map<out Attribute<*>, Any?>) : Attributes {
+internal class AttributesImpl(override val content: Map<out Attribute<*>, Any?>) : Attributes {
     override fun toString(): String = "Attributes(value=${content.entries})"
+    override fun equals(other: Any?): Boolean = other is Attributes && Attributes.equals(this, other)
+    override fun hashCode(): Int = content.hashCode()
 }
 
 public fun Attributes.isEmpty(): Boolean = content.isEmpty()

@@ -16,6 +16,10 @@ public class AttributesBuilder<out O> internal constructor(
 
     public constructor() : this(mutableMapOf())
 
+    override fun toString(): String = "Attributes(value=${content.entries})"
+    override fun equals(other: Any?): Boolean = other is Attributes && Attributes.equals(this, other)
+    override fun hashCode(): Int = content.hashCode()
+
     override val content: Map<out Attribute<*>, Any?> get() = map
 
     public operator fun <T> set(attribute: Attribute<T>, value: T?) {
