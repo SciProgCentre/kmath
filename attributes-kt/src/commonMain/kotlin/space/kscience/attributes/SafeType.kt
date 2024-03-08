@@ -11,7 +11,7 @@ import kotlin.reflect.KType
 import kotlin.reflect.typeOf
 
 /**
- * Safe variant ok Kotlin [KType] that ensures that the type parameter is of the same type ask [kType]
+ * Safe variant ok Kotlin [KType] that ensures that the type parameter is of the same type as [kType]
  *
  * @param kType raw [KType]
  */
