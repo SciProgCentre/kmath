@@ -8,7 +8,7 @@ package space.kscience.attributes
 import kotlin.jvm.JvmInline
 
 /**
- * A set of attributes. The implementation must guarantee that [content] keys correspond to its value types.
+ * A set of attributes. The implementation must guarantee that [content] keys correspond to their value types.
  */
 public interface Attributes {
     /**
