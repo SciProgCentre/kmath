@@ -14,12 +14,16 @@ public abstract interface class space/kscience/attributes/AttributeWithDefault :
 
 public abstract interface class space/kscience/attributes/Attributes {
 	public static final field Companion Lspace/kscience/attributes/Attributes$Companion;
+	public abstract fun equals (Ljava/lang/Object;)Z
 	public fun get (Lspace/kscience/attributes/Attribute;)Ljava/lang/Object;
 	public abstract fun getContent ()Ljava/util/Map;
 	public fun getKeys ()Ljava/util/Set;
+	public abstract fun hashCode ()I
+	public abstract fun toString ()Ljava/lang/String;
 }
 
 public final class space/kscience/attributes/Attributes$Companion {
+	public final fun equals (Lspace/kscience/attributes/Attributes;Lspace/kscience/attributes/Attributes;)Z
 	public final fun getEMPTY ()Lspace/kscience/attributes/Attributes;
 }
 
@@ -27,11 +31,14 @@ public final class space/kscience/attributes/AttributesBuilder : space/kscience/
 	public fun <init> ()V
 	public final fun add (Lspace/kscience/attributes/SetAttribute;Ljava/lang/Object;)V
 	public final fun build ()Lspace/kscience/attributes/Attributes;
+	public fun equals (Ljava/lang/Object;)Z
 	public final fun from (Lspace/kscience/attributes/Attributes;)V
 	public fun getContent ()Ljava/util/Map;
+	public fun hashCode ()I
 	public final fun invoke (Lspace/kscience/attributes/Attribute;Ljava/lang/Object;)V
 	public final fun remove (Lspace/kscience/attributes/SetAttribute;Ljava/lang/Object;)V
 	public final fun set (Lspace/kscience/attributes/Attribute;Ljava/lang/Object;)V
+	public fun toString ()Ljava/lang/String;
 }
 
 public final class space/kscience/attributes/AttributesBuilderKt {

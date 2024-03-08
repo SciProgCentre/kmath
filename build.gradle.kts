@@ -14,7 +14,7 @@ allprojects {
     }
 
     group = "space.kscience"
-    version = "0.4.0-RC2"
+    version = "0.4.0"
 }
 
 subprojects {
@@ -69,4 +69,4 @@ ksciencePublish {
 
 apiValidation.nonPublicMarkers.add("space.kscience.kmath.UnstableKMathAPI")
 
-val multikVersion by extra("0.2.2")
+val multikVersion by extra("0.2.3")
