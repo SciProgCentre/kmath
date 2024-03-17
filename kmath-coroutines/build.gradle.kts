@@ -9,8 +9,7 @@ kscience {
     wasm()
 
     dependencies {
-        api(project(":kmath-core"))
-        api(project(":kmath-complex"))
+        api(projects.kmathCore)
         api(spclibs.kotlinx.coroutines.core)
     }
 }

@@ -9,7 +9,6 @@ import org.jetbrains.kotlinx.multik.ndarray.data.*
 import space.kscience.attributes.SafeType
 import space.kscience.attributes.safeTypeOf
 import space.kscience.kmath.PerformancePitfall
-import space.kscience.kmath.complex.ComplexField
 import space.kscience.kmath.nd.ShapeND
 import space.kscience.kmath.operations.*
 import space.kscience.kmath.tensors.api.Tensor
@@ -24,7 +23,7 @@ public val DataType.type: SafeType<*>
         DataType.FloatDataType -> Float32Field.type
         DataType.DoubleDataType -> Float64Field.type
         DataType.ComplexFloatDataType -> safeTypeOf<Pair<Float, Float>>()
-        DataType.ComplexDoubleDataType -> ComplexField.type
+        DataType.ComplexDoubleDataType -> safeTypeOf<Pair<Double, Double>>()
     }
 
 
