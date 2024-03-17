@@ -23,6 +23,8 @@ public class RingBuffer<T>(
 
     private val mutex: Mutex = Mutex()
 
+    public val capacity: Int get() = buffer.size
+
     override var size: Int = size
         private set
 
@@ -32,7 +34,7 @@ public class RingBuffer<T>(
         return buffer[startIndex.forward(index)]
     }
 
-    public fun isFull(): Boolean = size == buffer.size
+    public fun isFull(): Boolean = size == capacity
 
     /**
      * Iterator could provide wrong results if buffer is changed in initialization (iteration is safe)
@@ -59,6 +61,9 @@ public class RingBuffer<T>(
         VirtualBuffer(size) { i -> copy[startIndex.forward(i)] }
     }
 
+    /**
+     * Add an element to the end of the [RingBuffer]. If buffer capacity is reached, the first element is automatically removed.
+     */
     public suspend fun push(element: T) {
         mutex.withLock {
             buffer[startIndex.forward(size)] = element
@@ -66,7 +71,15 @@ public class RingBuffer<T>(
         }
     }
 
-    private fun Int.forward(n: Int): Int = (this + n) % (buffer.size)
+    /**
+     * Reset buffer to its empty state
+     */
+    public suspend fun reset(): Unit = mutex.withLock {
+        startIndex = 0
+        size = 0
+    }
+
+    private fun Int.forward(n: Int): Int = (this + n) % capacity
 
     override fun toString(): String = Buffer.toString(this)
 }
