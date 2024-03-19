@@ -15,7 +15,7 @@ kotlin{
     sourceSets{
         commonMain{
             dependencies{
-                api(project(":kmath-tensors"))
+                api(projects.kmathTensors)
                 api("org.jetbrains.kotlinx:multik-core:$multikVersion")
             }
         }

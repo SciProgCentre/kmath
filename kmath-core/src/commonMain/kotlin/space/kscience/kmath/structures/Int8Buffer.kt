@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -14,6 +14,7 @@ import kotlin.jvm.JvmInline
  */
 @JvmInline
 public value class Int8Buffer(public val array: ByteArray) : MutableBuffer<Byte> {
+
     override val size: Int get() = array.size
 
     override operator fun get(index: Int): Byte = array[index]
@@ -23,7 +24,6 @@ public value class Int8Buffer(public val array: ByteArray) : MutableBuffer<Byte>
     }
 
     override operator fun iterator(): ByteIterator = array.iterator()
-    override fun copy(): MutableBuffer<Byte> = Int8Buffer(array.copyOf())
 }
 
 /**

@@ -1,9 +1,11 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
 package space.kscience.kmath.structures
+
+import kotlin.jvm.JvmInline
 
 /**
  * [MutableBuffer] implementation over [Array].
@@ -11,7 +13,8 @@ package space.kscience.kmath.structures
  * @param T the type of elements contained in the buffer.
  * @property array The underlying array.
  */
-public class ArrayBuffer<T>(internal val array: Array<T>) : MutableBuffer<T> {
+@JvmInline
+public value class ArrayBuffer<T>(internal val array: Array<T>) : MutableBuffer<T> {
     // Can't inline because array is invariant
     override val size: Int get() = array.size
 
@@ -22,13 +25,11 @@ public class ArrayBuffer<T>(internal val array: Array<T>) : MutableBuffer<T> {
     }
 
     override operator fun iterator(): Iterator<T> = array.iterator()
-    override fun copy(): MutableBuffer<T> = ArrayBuffer(array.copyOf())
 
     override fun toString(): String = Buffer.toString(this)
 }
 
-
 /**
  * Returns an [ArrayBuffer] that wraps the original array.
  */
-public fun <T> Array<T>.asBuffer(): ArrayBuffer<T> = ArrayBuffer(this)
+public fun <T> Array<T>.asBuffer(): ArrayBuffer<T> = ArrayBuffer( this)

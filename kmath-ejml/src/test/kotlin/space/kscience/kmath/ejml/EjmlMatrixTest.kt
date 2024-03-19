@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -58,19 +58,19 @@ internal class EjmlMatrixTest {
 
     @OptIn(UnstableKMathAPI::class)
     @Test
-    fun features() {
+    fun features() = EjmlLinearSpaceDDRM {
         val m = randomMatrix
         val w = EjmlDoubleMatrix(m)
-        val det: DeterminantFeature<Double> = EjmlLinearSpaceDDRM.computeFeature(w) ?: fail()
-        assertEquals(CommonOps_DDRM.det(m), det.determinant)
-        val lup: LupDecompositionFeature<Double> = EjmlLinearSpaceDDRM.computeFeature(w) ?: fail()
+        val det: Double = w.getOrComputeAttribute(Determinant) ?: fail()
+        assertEquals(CommonOps_DDRM.det(m), det)
+        val lup: LupDecomposition<Double> = w.getOrComputeAttribute(LUP) ?: fail()
 
         val ludecompositionF64 = DecompositionFactory_DDRM.lu(m.numRows, m.numCols)
             .also { it.decompose(m.copy()) }
 
         assertMatrixEquals(EjmlDoubleMatrix(ludecompositionF64.getLower(null)), lup.l)
         assertMatrixEquals(EjmlDoubleMatrix(ludecompositionF64.getUpper(null)), lup.u)
-        assertMatrixEquals(EjmlDoubleMatrix(ludecompositionF64.getRowPivot(null)), lup.p)
+        assertMatrixEquals(EjmlDoubleMatrix(ludecompositionF64.getRowPivot(null)), lup.pivotMatrix(this))
     }
 
     @Test
@@ -96,7 +96,7 @@ internal class EjmlMatrixTest {
         val u = space.buildMatrix(dim, dim) { i, j -> if (i <= j) random.nextDouble() else 0.0 }
         val l = space.buildMatrix(dim, dim) { i, j -> if (i >= j) random.nextDouble() else 0.0 }
         val matrix = space { l dot u }
-        val inverted = matrix.toEjml().inverse()
+        val inverted = matrix.toEjml().inverted()
 
         val res = matrix dot inverted
 

@@ -1,69 +1,77 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
+@file:Suppress("UnusedReceiverParameter")
+@file:OptIn(PerformancePitfall::class)
+
 package space.kscience.kmath.linear
 
+import space.kscience.attributes.Attributes
+import space.kscience.attributes.PolymorphicAttribute
+import space.kscience.attributes.safeTypeOf
+import space.kscience.kmath.PerformancePitfall
 import space.kscience.kmath.UnstableKMathAPI
+import space.kscience.kmath.nd.*
 import space.kscience.kmath.operations.*
-import space.kscience.kmath.structures.BufferAccessor2D
-import space.kscience.kmath.structures.Float64Buffer
-import space.kscience.kmath.structures.MutableBuffer
-import space.kscience.kmath.structures.MutableBufferFactory
+import space.kscience.kmath.structures.*
+
+public interface LupDecomposition<T> {
+    public val pivot: IntBuffer
+    public val l: Matrix<T>
+    public val u: Matrix<T>
+}
 
 /**
- * Common implementation of [LupDecompositionFeature].
+ * Create a pivot matrix from pivot vector using provided [LinearSpace]
  */
-public class LupDecomposition<T : Any>(
-    public val context: LinearSpace<T, *>,
-    public val elementContext: Field<T>,
-    public val lu: Matrix<T>,
-    public val pivot: IntArray,
-    private val even: Boolean,
-) : LupDecompositionFeature<T>, DeterminantFeature<T> {
-    /**
-     * Returns the matrix L of the decomposition.
-     *
-     * L is a lower-triangular matrix with [Ring.one] in diagonal
-     */
-    override val l: Matrix<T> = VirtualMatrix(lu.shape[0], lu.shape[1]) { i, j ->
-        when {
-            j < i -> lu[i, j]
-            j == i -> elementContext.one
-            else -> elementContext.zero
-        }
-    }.withFeature(LFeature)
-
-
-    /**
-     * Returns the matrix U of the decomposition.
-     *
-     * U is an upper-triangular matrix including the diagonal
-     */
-    override val u: Matrix<T> = VirtualMatrix(lu.shape[0], lu.shape[1]) { i, j ->
-        if (j >= i) lu[i, j] else elementContext.zero
-    }.withFeature(UFeature)
-
-    /**
-     * Returns the P rows permutation matrix.
-     *
-     * P is a sparse matrix with exactly one element set to [Ring.one] in
-     * each row and each column, all other elements being set to [Ring.zero].
-     */
-    override val p: Matrix<T> = VirtualMatrix(lu.shape[0], lu.shape[1]) { i, j ->
-        if (j == pivot[i]) elementContext.one else elementContext.zero
+public fun <T> LupDecomposition<T>.pivotMatrix(linearSpace: LinearSpace<T, Ring<T>>): Matrix<T> =
+    VirtualMatrix(l.rowNum, l.colNum) { row, column ->
+        if (column == pivot[row]) linearSpace.elementAlgebra.one else linearSpace.elementAlgebra.zero
     }
 
-    /**
-     * Return the determinant of the matrix
-     * @return determinant of the matrix
-     */
-    override val determinant: T by lazy {
-        elementContext { (0 until lu.shape[0]).fold(if (even) one else -one) { value, i -> value * lu[i, i] } }
+/**
+ * Matrices with this feature support LU factorization with partial pivoting: *[p] &middot; a = [l] &middot; [u]* where
+ * *a* is the owning matrix.
+ *
+ * @param T the type of matrices' items.
+ * @param lu combined L and U matrix
+ */
+public class GenericLupDecomposition<T>(
+    public val elementAlgebra: Field<T>,
+    private val lu: Matrix<T>,
+    override val pivot: IntBuffer,
+    private val even: Boolean,
+) : LupDecomposition<T> {
+
+
+    override val l: Matrix<T>
+        get() = VirtualMatrix(lu.rowNum, lu.colNum, attributes = Attributes(LowerTriangular)) { i, j ->
+            when {
+                j < i -> lu[i, j]
+                j == i -> elementAlgebra.one
+                else -> elementAlgebra.zero
+            }
+        }
+
+    override val u: Matrix<T>
+        get() = VirtualMatrix(lu.rowNum, lu.colNum, attributes = Attributes(UpperTriangular)) { i, j ->
+            if (j >= i) lu[i, j] else elementAlgebra.zero
+        }
+
+    public val determinant: T by lazy {
+        elementAlgebra { (0 until l.shape[0]).fold(if (even) one else -one) { value, i -> value * lu[i, i] } }
     }
 
 }
+
+public class LupDecompositionAttribute<T> :
+    PolymorphicAttribute<LupDecomposition<T>>(safeTypeOf()),
+    MatrixAttribute<LupDecomposition<T>>
+
+public val <T> MatrixScope<T>.LUP: LupDecompositionAttribute<T>
+    get() = LupDecompositionAttribute()
 
 @PublishedApi
 internal fun <T : Comparable<T>> LinearSpace<T, Ring<T>>.abs(value: T): T =
@@ -72,159 +80,160 @@ internal fun <T : Comparable<T>> LinearSpace<T, Ring<T>>.abs(value: T): T =
 /**
  * Create a lup decomposition of generic matrix.
  */
-public fun <T : Comparable<T>> LinearSpace<T, Field<T>>.lup(
-    factory: MutableBufferFactory<T>,
+public fun <T : Comparable<T>> Field<T>.lup(
     matrix: Matrix<T>,
     checkSingular: (T) -> Boolean,
-): LupDecomposition<T> {
+): GenericLupDecomposition<T>  {
     require(matrix.rowNum == matrix.colNum) { "LU decomposition supports only square matrices" }
     val m = matrix.colNum
     val pivot = IntArray(matrix.rowNum)
 
-    //TODO just waits for multi-receivers
-    BufferAccessor2D(matrix.rowNum, matrix.colNum, factory).run {
-        elementAlgebra {
-            val lu = create(matrix)
+    val strides = RowStrides(ShapeND(matrix.rowNum, matrix.colNum))
 
-            // Initialize permutation array and parity
-            for (row in 0 until m) pivot[row] = row
-            var even = true
+    val lu = MutableBufferND(
+        strides,
+        bufferAlgebra.buffer(strides.linearSize) { offset ->
+            matrix[strides.index(offset)]
+        }
+    )
 
-            // Initialize permutation array and parity
-            for (row in 0 until m) pivot[row] = row
 
-            // Loop over columns
-            for (col in 0 until m) {
-                // upper
-                for (row in 0 until col) {
-                    val luRow = lu.row(row)
-                    var sum = luRow[col]
-                    for (i in 0 until row) sum -= luRow[i] * lu[i, col]
-                    luRow[col] = sum
-                }
+    // Initialize the permutation array and parity
+    for (row in 0 until m) pivot[row] = row
+    var even = true
 
-                // lower
-                var max = col // permutation row
-                var largest = -one
+    // Initialize the permutation array and parity
+    for (row in 0 until m) pivot[row] = row
 
-                for (row in col until m) {
-                    val luRow = lu.row(row)
-                    var sum = luRow[col]
-                    for (i in 0 until col) sum -= luRow[i] * lu[i, col]
-                    luRow[col] = sum
+    // Loop over columns
+    for (col in 0 until m) {
+        // upper
+        for (row in 0 until col) {
+            var sum = lu[row, col]
+            for (i in 0 until row){
+                sum -= lu[row, i] * lu[i, col]
+            }
+            lu[row, col] = sum
+        }
 
-                    // maintain the best permutation choice
-                    if (abs(sum) > largest) {
-                        largest = abs(sum)
-                        max = row
-                    }
-                }
+        // lower
+        var max = col // permutation row
+        var largest = -one
 
-                // Singularity check
-                check(!checkSingular(abs(lu[max, col]))) { "The matrix is singular" }
+        for (row in col until m) {
+            var sum = lu[row, col]
+            for (i in 0 until col){
+                sum -= lu[row, i] * lu[i, col]
+            }
+            lu[row, col] = sum
 
-                // Pivot if necessary
-                if (max != col) {
-                    val luMax = lu.row(max)
-                    val luCol = lu.row(col)
+            // maintain the best permutation choice
+            if (abs(sum) > largest) {
+                largest = abs(sum)
+                max = row
+            }
+        }
 
-                    for (i in 0 until m) {
-                        val tmp = luMax[i]
-                        luMax[i] = luCol[i]
-                        luCol[i] = tmp
-                    }
+        // Singularity check
+        check(!checkSingular(abs(lu[max, col]))) { "The matrix is singular" }
 
-                    val temp = pivot[max]
-                    pivot[max] = pivot[col]
-                    pivot[col] = temp
-                    even = !even
-                }
-
-                // Divide the lower elements by the "winning" diagonal elt.
-                val luDiag = lu[col, col]
-                for (row in col + 1 until m) lu[row, col] /= luDiag
+        // Pivot if necessary
+        if (max != col) {
+            for (i in 0 until m) {
+                val tmp = lu[max, i]
+                lu[max, i] = lu[col, i]
+                lu[col, i] = tmp
             }
 
-            return LupDecomposition(this@lup, elementAlgebra, lu.collect(), pivot, even)
+            val temp = pivot[max]
+            pivot[max] = pivot[col]
+            pivot[col] = temp
+            even = !even
         }
+
+        // Divide the lower elements by the "winning" diagonal elt.
+        val luDiag = lu[col, col]
+        for (row in col + 1 until m) lu[row, col] /= luDiag
     }
+
+
+    return GenericLupDecomposition(this, lu.as2D(), pivot.asBuffer(), even)
+
 }
 
-public inline fun <reified T : Comparable<T>> LinearSpace<T, Field<T>>.lup(
-    matrix: Matrix<T>,
-    noinline checkSingular: (T) -> Boolean,
-): LupDecomposition<T> = lup(MutableBuffer.Companion::auto, matrix, checkSingular)
 
-public fun LinearSpace<Double, Float64Field>.lup(
+public fun Field<Float64>.lup(
     matrix: Matrix<Double>,
     singularityThreshold: Double = 1e-11,
-): LupDecomposition<Double> =
-    lup(::Float64Buffer, matrix) { it < singularityThreshold }
+): GenericLupDecomposition<Double> = lup(matrix) { it < singularityThreshold }
 
-internal fun <T : Any> LupDecomposition<T>.solve(
-    factory: MutableBufferFactory<T>,
+private fun <T> Field<T>.solve(
+    lup: LupDecomposition<T>,
     matrix: Matrix<T>,
 ): Matrix<T> {
-    require(matrix.rowNum == pivot.size) { "Matrix dimension mismatch. Expected ${pivot.size}, but got ${matrix.colNum}" }
+    require(matrix.rowNum == lup.l.rowNum) { "Matrix dimension mismatch. Expected ${lup.l.rowNum}, but got ${matrix.colNum}" }
 
-    BufferAccessor2D(matrix.rowNum, matrix.colNum, factory).run {
-        elementContext {
-            // Apply permutations to b
-            val bp = create { _, _ -> zero }
+    val strides = RowStrides(ShapeND(matrix.rowNum, matrix.colNum))
 
-            for (row in pivot.indices) {
-                val bpRow = bp.row(row)
-                val pRow = pivot[row]
-                for (col in 0 until matrix.colNum) bpRow[col] = matrix[pRow, col]
-            }
+    // Apply permutations to b
+    val bp = MutableBufferND(
+        strides,
+        bufferAlgebra.buffer(strides.linearSize) { _ -> zero }
+    )
 
-            // Solve LY = b
-            for (col in pivot.indices) {
-                val bpCol = bp.row(col)
 
-                for (i in col + 1 until pivot.size) {
-                    val bpI = bp.row(i)
-                    val luICol = lu[i, col]
-                    for (j in 0 until matrix.colNum) {
-                        bpI[j] -= bpCol[j] * luICol
-                    }
-                }
-            }
-
-            // Solve UX = Y
-            for (col in pivot.size - 1 downTo 0) {
-                val bpCol = bp.row(col)
-                val luDiag = lu[col, col]
-                for (j in 0 until matrix.colNum) bpCol[j] /= luDiag
-
-                for (i in 0 until col) {
-                    val bpI = bp.row(i)
-                    val luICol = lu[i, col]
-                    for (j in 0 until matrix.colNum) bpI[j] -= bpCol[j] * luICol
-                }
-            }
-
-            return context.buildMatrix(pivot.size, matrix.colNum) { i, j -> bp[i, j] }
+    for (row in 0 until matrix.rowNum) {
+        val pRow = lup.pivot[row]
+        for (col in 0 until matrix.colNum) {
+            bp[row, col] = matrix[pRow, col]
         }
     }
+
+    // Solve LY = b
+    for (col in 0 until matrix.colNum) {
+
+        for (i in col + 1 until matrix.colNum) {
+            val luICol = lup.l[i, col]
+            for (j in 0 until matrix.colNum) {
+                bp[i, j] -= bp[col, j] * luICol
+            }
+        }
+    }
+
+    // Solve UX = Y
+    for (col in matrix.colNum - 1 downTo 0) {
+        val luDiag = lup.u[col, col]
+        for (j in 0 until matrix.colNum) {
+            bp[col, j] /= luDiag
+        }
+
+        for (i in 0 until col) {
+            val luICol = lup.u[i, col]
+            for (j in 0 until matrix.colNum) {
+                bp[i, j] -= bp[col, j] * luICol
+            }
+        }
+    }
+
+    return bp.as2D()
 }
+
 
 /**
  * Produce a generic solver based on LUP decomposition
  */
 @OptIn(UnstableKMathAPI::class)
-public fun <T : Comparable<T>, F : Field<T>> LinearSpace<T, F>.lupSolver(
-    bufferFactory: MutableBufferFactory<T>,
+public fun <T : Comparable<T>> LinearSpace<T, Field<T>>.lupSolver(
     singularityCheck: (T) -> Boolean,
 ): LinearSolver<T> = object : LinearSolver<T> {
-    override fun solve(a: Matrix<T>, b: Matrix<T>): Matrix<T> {
-        // Use existing decomposition if it is provided by matrix
-        val decomposition = computeFeature(a) ?: lup(bufferFactory, a, singularityCheck)
-        return decomposition.solve(bufferFactory, b)
+    override fun solve(a: Matrix<T>, b: Matrix<T>): Matrix<T>  = elementAlgebra{
+        // Use existing decomposition if it is provided by matrix or linear space itself
+        val decomposition = a.getOrComputeAttribute(LUP) ?: lup(a, singularityCheck)
+        return solve(decomposition, b)
     }
 
     override fun inverse(matrix: Matrix<T>): Matrix<T> = solve(matrix, one(matrix.rowNum, matrix.colNum))
 }
 
 public fun LinearSpace<Double, Float64Field>.lupSolver(singularityThreshold: Double = 1e-11): LinearSolver<Double> =
-    lupSolver(::Float64Buffer) { it < singularityThreshold }
+    lupSolver { it < singularityThreshold }

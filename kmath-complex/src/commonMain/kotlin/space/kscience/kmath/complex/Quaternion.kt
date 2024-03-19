@@ -1,19 +1,18 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
 package space.kscience.kmath.complex
 
+import space.kscience.attributes.SafeType
+import space.kscience.attributes.safeTypeOf
 import space.kscience.kmath.UnstableKMathAPI
-import space.kscience.kmath.memory.MemoryReader
-import space.kscience.kmath.memory.MemorySpec
-import space.kscience.kmath.memory.MemoryWriter
+import space.kscience.kmath.memory.*
 import space.kscience.kmath.operations.*
 import space.kscience.kmath.structures.Buffer
-import space.kscience.kmath.structures.MemoryBuffer
 import space.kscience.kmath.structures.MutableBuffer
-import space.kscience.kmath.structures.MutableMemoryBuffer
+import space.kscience.kmath.structures.MutableBufferFactory
 import kotlin.math.*
 
 /**
@@ -78,6 +77,7 @@ public class Quaternion(
 
     public companion object : MemorySpec<Quaternion> {
         override val objectSize: Int get() = 32
+        override val type: SafeType<Quaternion> get() = safeTypeOf()
 
         override fun MemoryReader.read(offset: Int): Quaternion = Quaternion(
             readDouble(offset),
@@ -122,7 +122,7 @@ public val Quaternion.reciprocal: Quaternion
 /**
  * Produce a normalized version of this quaternion
  */
-public fun Quaternion.normalized(): Quaternion = with(QuaternionAlgebra){ this@normalized / norm(this@normalized) }
+public fun Quaternion.normalized(): Quaternion = with(QuaternionAlgebra) { this@normalized / norm(this@normalized) }
 
 /**
  * A field of [Quaternion].
@@ -130,6 +130,8 @@ public fun Quaternion.normalized(): Quaternion = with(QuaternionAlgebra){ this@n
 @OptIn(UnstableKMathAPI::class)
 public object QuaternionAlgebra : Group<Quaternion>, Norm<Quaternion, Double>, PowerOperations<Quaternion>,
     ExponentialOperations<Quaternion>, NumbersAddOps<Quaternion>, ScaleOperations<Quaternion> {
+
+    override val bufferFactory: MutableBufferFactory<Quaternion> = MutableBufferFactory()
 
     override val zero: Quaternion = Quaternion(0.0)
     public val one: Quaternion = Quaternion(1.0)

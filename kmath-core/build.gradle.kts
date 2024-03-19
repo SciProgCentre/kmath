@@ -9,12 +9,21 @@ kscience{
     wasm()
 
     dependencies {
-        api(projects.kmathMemory)
+        api(projects.attributesKt)
     }
 
     testDependencies {
         implementation(projects.testUtils)
     }
+}
+
+kotlin.sourceSets {
+    filter { it.name.contains("test", true) }
+        .map(org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet::languageSettings)
+        .forEach {
+            it.optIn("space.kscience.kmath.PerformancePitfall")
+            it.optIn("space.kscience.kmath.UnstableKMathAPI")
+        }
 }
 
 readme {
@@ -62,4 +71,12 @@ readme {
         id = "autodiff",
         ref = "src/commonMain/kotlin/space/kscience/kmath/expressions/SimpleAutoDiff.kt"
     ) { "Automatic differentiation" }
+
+    feature(
+        id="Parallel linear algebra"
+    ){
+        """
+            Parallel implementation for `LinearAlgebra`
+        """.trimIndent()
+    }
 }

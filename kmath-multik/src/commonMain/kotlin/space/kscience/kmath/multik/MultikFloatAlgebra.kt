@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -15,7 +15,7 @@ public class MultikFloatAlgebra(
     multikEngine: Engine
 ) : MultikDivisionTensorAlgebra<Float, Float32Field>(multikEngine) {
     override val elementAlgebra: Float32Field get() = Float32Field
-    override val type: DataType get() = DataType.FloatDataType
+    override val dataType: DataType get() = DataType.FloatDataType
 
     override fun scalar(value: Float): MultikTensor<Float> = Multik.ndarrayOf(value).wrap()
 }

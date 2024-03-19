@@ -1,16 +1,19 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
 package space.kscience.kmath.memory
+
+import space.kscience.attributes.WithType
 
 /**
  * A specification to read or write custom objects with fixed size in bytes.
  *
  * @param T the type of object this spec manages.
  */
-public interface MemorySpec<T : Any> {
+public interface MemorySpec<T : Any>: WithType<T> {
+
     /**
      * Size of [T] in bytes after serialization.
      */

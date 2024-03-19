@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -18,15 +18,15 @@ import kotlin.test.assertEquals
 class SplineIntegralTest {
 
     @Test
-    fun integratePolynomial(){
+    fun integratePolynomial() {
         val polynomial = Polynomial(1.0, 2.0, 3.0)
-        val integral = polynomial.integrate(Float64Field,1.0..2.0)
+        val integral = polynomial.integrate(Float64Field, 1.0..2.0)
         assertEquals(11.0, integral, 0.001)
     }
 
     @Test
     fun gaussSin() {
-        val res = Float64Field.splineIntegrator.integrate(0.0..2 * PI, IntegrandMaxCalls(5)) { x ->
+        val res = Float64Field.splineIntegrator.integrate(0.0..2 * PI, { IntegrandMaxCalls(5) }) { x ->
             sin(x)
         }
         assertEquals(0.0, res.value, 1e-2)
@@ -34,8 +34,8 @@ class SplineIntegralTest {
 
     @Test
     fun gaussUniform() {
-        val res = Float64Field.splineIntegrator.integrate(35.0..100.0, IntegrandMaxCalls(20)) { x ->
-            if(x in 30.0..50.0){
+        val res = Float64Field.splineIntegrator.integrate(35.0..100.0, { IntegrandMaxCalls(20) }) { x ->
+            if (x in 30.0..50.0) {
                 1.0
             } else {
                 0.0

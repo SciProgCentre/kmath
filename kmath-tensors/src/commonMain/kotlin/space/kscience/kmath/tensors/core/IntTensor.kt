@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -34,7 +34,7 @@ public class OffsetIntBuffer(
     /**
      * Copy only a part of buffer that belongs to this tensor
      */
-    override fun copy(): Int32Buffer = source.array.copyOfRange(offset, offset + size).asBuffer()
+    public fun copy(): Int32Buffer = source.array.copyOfRange(offset, offset + size).asBuffer()
 
     override fun iterator(): Iterator<Int> = iterator {
         for (i in indices) {
@@ -82,6 +82,7 @@ public class IntTensor(
     init {
         require(linearSize == source.size) { "Source buffer size must be equal tensor size" }
     }
+
 
     public constructor(shape: ShapeND, buffer: Int32Buffer) : this(shape, OffsetIntBuffer(buffer, 0, buffer.size))
 

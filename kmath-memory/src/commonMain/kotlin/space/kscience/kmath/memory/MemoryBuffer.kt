@@ -1,11 +1,12 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
-package space.kscience.kmath.structures
+package space.kscience.kmath.memory
 
-import space.kscience.kmath.memory.*
+import space.kscience.kmath.structures.Buffer
+import space.kscience.kmath.structures.MutableBuffer
 
 /**
  * A non-boxing buffer over [Memory] object.
@@ -15,6 +16,7 @@ import space.kscience.kmath.memory.*
  * @property spec the spec of [T] type.
  */
 public open class MemoryBuffer<T : Any>(protected val memory: Memory, protected val spec: MemorySpec<T>) : Buffer<T> {
+
     override val size: Int get() = memory.size / spec.objectSize
 
     override operator fun get(index: Int): T = memory.read { read(spec, spec.objectSize * index) }
@@ -43,13 +45,14 @@ public open class MemoryBuffer<T : Any>(protected val memory: Memory, protected 
  * @property memory the underlying memory segment.
  * @property spec the spec of [T] type.
  */
-public class MutableMemoryBuffer<T : Any>(memory: Memory, spec: MemorySpec<T>) : MemoryBuffer<T>(memory, spec),
-    MutableBuffer<T> {
+public class MutableMemoryBuffer<T : Any>(
+    memory: Memory,
+    spec: MemorySpec<T>,
+) : MemoryBuffer<T>(memory, spec), MutableBuffer<T> {
 
     private val writer: MemoryWriter = memory.writer()
 
     override operator fun set(index: Int, value: T): Unit = writer.write(spec, spec.objectSize * index, value)
-    override fun copy(): MutableBuffer<T> = MutableMemoryBuffer(memory.copy(), spec)
 
     public companion object {
         public fun <T : Any> create(spec: MemorySpec<T>, size: Int): MutableMemoryBuffer<T> =

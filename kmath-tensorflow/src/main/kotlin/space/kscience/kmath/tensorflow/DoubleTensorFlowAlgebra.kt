@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -14,6 +14,7 @@ import space.kscience.kmath.PerformancePitfall
 import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.expressions.Symbol
 import space.kscience.kmath.nd.ColumnStrides
+import space.kscience.kmath.nd.MutableStructureND
 import space.kscience.kmath.nd.ShapeND
 import space.kscience.kmath.nd.StructureND
 import space.kscience.kmath.operations.FieldOps
@@ -26,7 +27,6 @@ public class DoubleTensorFlowOutput(
 ) : TensorFlowOutput<Double, TFloat64>(graph, output) {
 
     override fun org.tensorflow.Tensor.actualizeTensor(): NdArray<Double> = this as TFloat64
-
 }
 
 internal fun ShapeND.toLongArray(): LongArray = LongArray(size) { get(it).toLong() }
@@ -38,10 +38,10 @@ public class DoubleTensorFlowAlgebra internal constructor(
 
     override val elementAlgebra: Float64Field get() = Float64Field
 
-    override fun structureND(
+    override fun mutableStructureND(
         shape: ShapeND,
         initializer: Float64Field.(IntArray) -> Double,
-    ): StructureND<Double> {
+    ): MutableStructureND<Double> {
         val res = TFloat64.tensorOf(org.tensorflow.ndarray.Shape.of(*shape.toLongArray())) { array ->
             ColumnStrides(shape).forEach { index ->
                 array.setDouble(elementAlgebra.initializer(index), *index.toLongArray())

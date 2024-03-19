@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -11,12 +11,11 @@ import kotlinx.benchmark.Scope
 import kotlinx.benchmark.State
 import space.kscience.kmath.commons.linear.CMLinearSpace
 import space.kscience.kmath.ejml.EjmlLinearSpaceDDRM
+import space.kscience.kmath.linear.Float64ParallelLinearSpace
 import space.kscience.kmath.linear.invoke
 import space.kscience.kmath.linear.linearSpace
 import space.kscience.kmath.operations.Float64Field
-import space.kscience.kmath.operations.invoke
 import space.kscience.kmath.tensorflow.produceWithTF
-import space.kscience.kmath.tensors.core.DoubleTensorAlgebra
 import space.kscience.kmath.tensors.core.tensorAlgebra
 import kotlin.random.Random
 
@@ -72,12 +71,12 @@ internal class DotBenchmark {
     }
 
     @Benchmark
-    fun tensorDot(blackhole: Blackhole) = with(Float64Field.tensorAlgebra) {
+    fun multikDot(blackhole: Blackhole) = with(multikAlgebra) {
         blackhole.consume(matrix1 dot matrix2)
     }
 
     @Benchmark
-    fun multikDot(blackhole: Blackhole) = with(multikAlgebra) {
+    fun tensorDot(blackhole: Blackhole) = with(Float64Field.tensorAlgebra) {
         blackhole.consume(matrix1 dot matrix2)
     }
 
@@ -87,12 +86,8 @@ internal class DotBenchmark {
     }
 
     @Benchmark
-    fun doubleDot(blackhole: Blackhole) = with(Float64Field.linearSpace) {
+    fun parallelDot(blackhole: Blackhole) = with(Float64ParallelLinearSpace) {
         blackhole.consume(matrix1 dot matrix2)
     }
 
-    @Benchmark
-    fun doubleTensorDot(blackhole: Blackhole) = DoubleTensorAlgebra.invoke {
-        blackhole.consume(matrix1 dot matrix2)
-    }
 }

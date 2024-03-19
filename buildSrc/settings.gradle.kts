@@ -6,7 +6,7 @@
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 plugins {
-    id("org.gradle.toolchains.foojay-resolver-convention") version "0.7.0"
+    id("org.gradle.toolchains.foojay-resolver-convention") version "0.8.0"
 }
 
 dependencyResolutionManagement {
@@ -22,6 +22,7 @@ dependencyResolutionManagement {
 
     val toolsVersion: String = projectProperties["toolsVersion"].toString()
 
+    @Suppress("UnstableApiUsage")
     repositories {
         mavenLocal()
         maven("https://repo.kotlin.link")

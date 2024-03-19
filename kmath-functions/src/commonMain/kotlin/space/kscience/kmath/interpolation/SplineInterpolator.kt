@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -12,7 +12,6 @@ import space.kscience.kmath.functions.Polynomial
 import space.kscience.kmath.operations.Field
 import space.kscience.kmath.operations.Float64Field
 import space.kscience.kmath.operations.invoke
-import space.kscience.kmath.structures.Float64Buffer
 import space.kscience.kmath.structures.MutableBufferFactory
 
 /**
@@ -24,7 +23,7 @@ import space.kscience.kmath.structures.MutableBufferFactory
  */
 public class SplineInterpolator<T : Comparable<T>>(
     override val algebra: Field<T>,
-    public val bufferFactory: MutableBufferFactory<T>,
+    public val bufferFactory: MutableBufferFactory<T> = algebra.bufferFactory,
 ) : PolynomialInterpolator<T> {
     //TODO possibly optimize zeroed buffers
 
@@ -80,4 +79,4 @@ public fun <T : Comparable<T>> Field<T>.splineInterpolator(
 ): SplineInterpolator<T> = SplineInterpolator(this, bufferFactory)
 
 public val Float64Field.splineInterpolator: SplineInterpolator<Double>
-    get() = SplineInterpolator(this, ::Float64Buffer)
+    get() = SplineInterpolator(this, bufferFactory)

@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -13,7 +13,7 @@ import space.kscience.kmath.operations.withSize
 inline fun <reified R : Any> MutableBuffer.Companion.same(
     n: Int,
     value: R
-): MutableBuffer<R> = auto(n) { value }
+): MutableBuffer<R> = MutableBuffer(n) { value }
 
 
 fun main() {

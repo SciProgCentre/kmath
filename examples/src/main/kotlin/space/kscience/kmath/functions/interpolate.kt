@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -8,7 +8,6 @@ package space.kscience.kmath.functions
 import space.kscience.kmath.interpolation.SplineInterpolator
 import space.kscience.kmath.interpolation.interpolatePolynomials
 import space.kscience.kmath.operations.Float64Field
-import space.kscience.kmath.structures.Float64Buffer
 import space.kscience.plotly.Plotly
 import space.kscience.plotly.UnstablePlotlyAPI
 import space.kscience.plotly.makeFile
@@ -24,9 +23,7 @@ fun main() {
         x to sin(x)
     }
 
-    val polynomial: PiecewisePolynomial<Double> = SplineInterpolator(
-        Float64Field, ::Float64Buffer
-    ).interpolatePolynomials(data)
+    val polynomial: PiecewisePolynomial<Double> = SplineInterpolator(Float64Field).interpolatePolynomials(data)
 
     val function = polynomial.asFunction(Float64Field, 0.0)
 

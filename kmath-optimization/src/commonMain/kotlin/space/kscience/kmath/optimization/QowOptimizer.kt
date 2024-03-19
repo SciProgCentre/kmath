@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -16,13 +16,7 @@ import space.kscience.kmath.structures.Float64Buffer
 import kotlin.math.abs
 
 
-public class QowRuns(public val runs: Int) : OptimizationFeature {
-    init {
-        require(runs >= 1) { "Number of runs must be more than zero" }
-    }
-
-    override fun toString(): String = "QowRuns(runs=$runs)"
-}
+public object QowRuns: OptimizationAttribute<Int>
 
 
 /**
@@ -69,7 +63,7 @@ public object QowOptimizer : Optimizer<Double, XYFit> {
         }
 
         val prior: DifferentiableExpression<Double>?
-            get() = problem.getFeature<OptimizationPrior<Double>>()?.withDefaultArgs(allParameters)
+            get() = problem.attributes[OptimizationPrior<Double>()]?.withDefaultArgs(allParameters)
 
         override fun toString(): String = freeParameters.toString()
     }
@@ -176,7 +170,7 @@ public object QowOptimizer : Optimizer<Double, XYFit> {
         fast: Boolean = false,
     ): QoWeight {
 
-        val logger = problem.getFeature<OptimizationLog>()
+        val logger = problem.attributes[OptimizationLog]
 
         var dis: Double //discrepancy value
 
@@ -231,7 +225,7 @@ public object QowOptimizer : Optimizer<Double, XYFit> {
     }
 
     private fun QoWeight.covariance(): NamedMatrix<Double> {
-        val logger = problem.getFeature<OptimizationLog>()
+        val logger = problem.attributes[OptimizationLog]
 
         logger?.log {
             """
@@ -257,11 +251,11 @@ public object QowOptimizer : Optimizer<Double, XYFit> {
     }
 
     override suspend fun optimize(problem: XYFit): XYFit {
-        val qowRuns = problem.getFeature<QowRuns>()?.runs ?: 2
-        val iterations = problem.getFeature<OptimizationIterations>()?.maxIterations ?: 50
+        val qowRuns = problem.attributes[QowRuns] ?: 2
+        val iterations = problem.attributes[OptimizationIterations] ?: 50
 
-        val freeParameters: Map<Symbol, Double> = problem.getFeature<OptimizationParameters>()?.let { op ->
-            problem.startPoint.filterKeys { it in op.symbols }
+        val freeParameters: Map<Symbol, Double> = problem.attributes[OptimizationParameters]?.let { symbols ->
+            problem.startPoint.filterKeys { it in symbols }
         } ?: problem.startPoint
 
         var qow = QoWeight(problem, freeParameters)
@@ -270,7 +264,10 @@ public object QowOptimizer : Optimizer<Double, XYFit> {
             qow = QoWeight(problem, res.freeParameters)
             res = qow.newtonianRun(maxSteps = iterations)
         }
-        val covariance = res.covariance()
-        return res.problem.withFeature(OptimizationResult(res.freeParameters), OptimizationCovariance(covariance))
+
+        return res.problem.withAttributes {
+            result(res.freeParameters)
+            covariance(res.covariance())
+        }
     }
 }

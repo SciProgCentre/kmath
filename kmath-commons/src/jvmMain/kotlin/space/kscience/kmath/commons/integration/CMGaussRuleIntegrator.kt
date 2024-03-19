@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 package space.kscience.kmath.commons.integration
@@ -13,26 +13,29 @@ import space.kscience.kmath.integration.*
  */
 public class CMGaussRuleIntegrator(
     private val numpoints: Int,
-    private var type: GaussRule = GaussRule.LEGANDRE,
+    private var type: GaussRule = GaussRule.LEGENDRE,
 ) : UnivariateIntegrator<Double> {
 
-    override fun process(integrand: UnivariateIntegrand<Double>): UnivariateIntegrand<Double> {
-        val range = integrand.getFeature<IntegrationRange>()?.range
+    override fun integrate(integrand: UnivariateIntegrand<Double>): UnivariateIntegrand<Double> {
+        val range = integrand[IntegrationRange]
             ?: error("Integration range is not provided")
         val integrator: GaussIntegrator = getIntegrator(range)
         //TODO check performance
         val res: Double = integrator.integrate(integrand.function)
-        return integrand + IntegrandValue(res) + IntegrandCallsPerformed(integrand.calls + numpoints)
+        return integrand.withAttributes {
+            IntegrandValue(res)
+            IntegrandCallsPerformed(integrand.calls + numpoints)
+        }
     }
 
     private fun getIntegrator(range: ClosedRange<Double>): GaussIntegrator {
         return when (type) {
-            GaussRule.LEGANDRE -> factory.legendre(
+            GaussRule.LEGENDRE -> factory.legendre(
                 numpoints,
                 range.start,
                 range.endInclusive
             )
-            GaussRule.LEGANDREHP -> factory.legendreHighPrecision(
+            GaussRule.LEGENDREHP -> factory.legendreHighPrecision(
                 numpoints,
                 range.start,
                 range.endInclusive
@@ -65,7 +68,7 @@ public class CMGaussRuleIntegrator(
     }
 
     public enum class GaussRule {
-        UNIFORM, LEGANDRE, LEGANDREHP
+        UNIFORM, LEGENDRE, LEGENDREHP
     }
 
     public companion object {
@@ -74,10 +77,10 @@ public class CMGaussRuleIntegrator(
         public fun integrate(
             range: ClosedRange<Double>,
             numPoints: Int = 100,
-            type: GaussRule = GaussRule.LEGANDRE,
+            type: GaussRule = GaussRule.LEGENDRE,
             function: (Double) -> Double,
-        ): Double = CMGaussRuleIntegrator(numPoints, type).process(
-            UnivariateIntegrand(function, IntegrationRange(range))
+        ): Double = CMGaussRuleIntegrator(numPoints, type).integrate(
+            UnivariateIntegrand({IntegrationRange(range)},function)
         ).value
     }
 }

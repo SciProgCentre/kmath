@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -8,7 +8,7 @@ package space.kscience.kmath.linear
 import space.kscience.kmath.PerformancePitfall
 import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.nd.StructureND
-import space.kscience.kmath.nd.as2D
+import space.kscience.kmath.operations.Float64Field
 import space.kscience.kmath.operations.algebra
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -22,7 +22,7 @@ class MatrixTest {
     @Test
     fun testTranspose() = Double.algebra.linearSpace.run {
         val matrix = one(3, 3)
-        val transposed = matrix.transpose()
+        val transposed = matrix.transposed()
         assertTrue { StructureND.contentEquals(matrix, transposed) }
     }
 
@@ -59,9 +59,9 @@ class MatrixTest {
     }
 
     @Test
-    fun test2DDot() = Double.algebra.linearSpace.run {
-        val firstMatrix = StructureND.auto(2, 3) { (i, j) -> (i + j).toDouble() }.as2D()
-        val secondMatrix = StructureND.auto(3, 2) { (i, j) -> (i + j).toDouble() }.as2D()
+    fun test2DDot() = Float64Field.linearSpace {
+        val firstMatrix = buildMatrix(2, 3) { i, j -> (i + j).toDouble() }
+        val secondMatrix = buildMatrix(3, 2) { i, j -> (i + j).toDouble() }
 
 //            val firstMatrix = produce(2, 3) { i, j -> (i + j).toDouble() }
 //            val secondMatrix = produce(3, 2) { i, j -> (i + j).toDouble() }
@@ -71,6 +71,5 @@ class MatrixTest {
         assertEquals(8.0, result[0, 1])
         assertEquals(8.0, result[1, 0])
         assertEquals(14.0, result[1, 1])
-
     }
 }

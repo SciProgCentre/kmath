@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -13,10 +13,7 @@ import space.kscience.kmath.expressions.autodiff
 import space.kscience.kmath.expressions.symbol
 import space.kscience.kmath.operations.asIterable
 import space.kscience.kmath.operations.toList
-import space.kscience.kmath.optimization.FunctionOptimizationTarget
-import space.kscience.kmath.optimization.optimizeWith
-import space.kscience.kmath.optimization.resultPoint
-import space.kscience.kmath.optimization.resultValue
+import space.kscience.kmath.optimization.*
 import space.kscience.kmath.random.RandomGenerator
 import space.kscience.kmath.real.DoubleVector
 import space.kscience.kmath.real.map
@@ -80,8 +77,9 @@ suspend fun main() {
     val result = chi2.optimizeWith(
         CMOptimizer,
         mapOf(a to 1.5, b to 0.9, c to 1.0),
-        FunctionOptimizationTarget.MINIMIZE
-    )
+    ){
+        FunctionOptimizationTarget(OptimizationDirection.MINIMIZE)
+    }
 
     //display a page with plot and numerical results
     val page = Plotly.page {
@@ -98,7 +96,7 @@ suspend fun main() {
             scatter {
                 mode = ScatterMode.lines
                 x(x)
-                y(x.map { result.resultPoint[a]!! * it.pow(2) + result.resultPoint[b]!! * it + 1 })
+                y(x.map { result.result[a]!! * it.pow(2) + result.result[b]!! * it + 1 })
                 name = "fit"
             }
         }

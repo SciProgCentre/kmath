@@ -6,10 +6,7 @@ kscience{
     jvm()
     js()
     native()
-
     wasm()
-
-
 
     dependencies {
         api(projects.kmathCore)

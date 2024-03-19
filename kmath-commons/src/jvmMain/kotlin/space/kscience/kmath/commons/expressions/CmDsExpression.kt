@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -8,10 +8,13 @@
 package space.kscience.kmath.commons.expressions
 
 import org.apache.commons.math3.analysis.differentiation.DerivativeStructure
+import space.kscience.attributes.SafeType
 import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.expressions.*
+import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.operations.ExtendedField
 import space.kscience.kmath.operations.NumbersAddOps
+import space.kscience.kmath.structures.MutableBufferFactory
 
 /**
  * A field over commons-math [DerivativeStructure].
@@ -26,6 +29,9 @@ public class CmDsField(
     bindings: Map<Symbol, Double>,
 ) : ExtendedField<DerivativeStructure>, ExpressionAlgebra<Double, DerivativeStructure>,
     NumbersAddOps<DerivativeStructure> {
+
+    override val bufferFactory: MutableBufferFactory<DerivativeStructure> = MutableBufferFactory()
+
     public val numberOfVariables: Int = bindings.size
 
     override val zero: DerivativeStructure by lazy { DerivativeStructure(numberOfVariables, order) }
@@ -77,7 +83,9 @@ public class CmDsField(
 
     override fun scale(a: DerivativeStructure, value: Double): DerivativeStructure = a.multiply(value)
 
-    override fun multiply(left: DerivativeStructure, right: DerivativeStructure): DerivativeStructure = left.multiply(right)
+    override fun multiply(left: DerivativeStructure, right: DerivativeStructure): DerivativeStructure =
+        left.multiply(right)
+
     override fun divide(left: DerivativeStructure, right: DerivativeStructure): DerivativeStructure = left.divide(right)
     override fun sin(arg: DerivativeStructure): DerivativeStructure = arg.sin()
     override fun cos(arg: DerivativeStructure): DerivativeStructure = arg.cos()
@@ -113,8 +121,8 @@ public class CmDsField(
  */
 @Deprecated("Use generic DSAlgebra from the core")
 public object CmDsProcessor : AutoDiffProcessor<Double, DerivativeStructure, CmDsField> {
-     override fun differentiate(
-         function: CmDsField.() -> DerivativeStructure,
+    override fun differentiate(
+        function: CmDsField.() -> DerivativeStructure,
     ): CmDsExpression = CmDsExpression(function)
 }
 
@@ -125,13 +133,16 @@ public object CmDsProcessor : AutoDiffProcessor<Double, DerivativeStructure, CmD
 public class CmDsExpression(
     public val function: CmDsField.() -> DerivativeStructure,
 ) : DifferentiableExpression<Double> {
+
+    override val type: SafeType<Double> get() = DoubleField.type
+
     override operator fun invoke(arguments: Map<Symbol, Double>): Double =
         CmDsField(0, arguments).function().value
 
     /**
      * Get the derivative expression with given orders
      */
-    override fun derivativeOrNull(symbols: List<Symbol>): Expression<Double> = Expression { arguments ->
+    override fun derivativeOrNull(symbols: List<Symbol>): Expression<Double> = Expression(type) { arguments ->
         with(CmDsField(symbols.size, arguments)) { function().derivative(symbols) }
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -92,7 +92,7 @@ internal class TestDoubleTensor {
 
     @Test
     fun test2D() = with(DoubleTensorAlgebra) {
-        val tensor: DoubleTensor = structureND(ShapeND(3, 3)) { (i, j) -> (i - j).toDouble() }
+        val tensor: DoubleTensor = mutableStructureND(ShapeND(3, 3)) { (i, j) -> (i - j).toDouble() }
         //println(tensor.toPrettyString())
         val tensor2d = tensor.asDoubleTensor2D()
         assertBufferEquals(Float64Buffer(1.0, 0.0, -1.0), tensor2d.rows[1])
@@ -101,7 +101,7 @@ internal class TestDoubleTensor {
 
     @Test
     fun testMatrixIteration() = with(DoubleTensorAlgebra) {
-        val tensor = structureND(ShapeND(3, 3, 3, 3)) { index -> index.sum().toDouble() }
+        val tensor = mutableStructureND(ShapeND(3, 3, 3, 3)) { index -> index.sum().toDouble() }
         tensor.forEachMatrix { index, matrix ->
             println(index.joinToString { it.toString() })
             println(matrix)

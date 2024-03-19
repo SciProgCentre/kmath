@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -34,7 +34,7 @@ public class OffsetDoubleBuffer(
     /**
      * Copy only a part of buffer that belongs to this [OffsetDoubleBuffer]
      */
-    override fun copy(): Float64Buffer = origin.array.copyOfRange(offset, offset + size).asBuffer()
+    public fun copy(): Float64Buffer = origin.array.copyOfRange(offset, offset + size).asBuffer()
 
     override fun iterator(): Iterator<Double> = iterator {
         for (i in indices) {

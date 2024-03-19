@@ -1,11 +1,11 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
 package space.kscience.kmath.structures
 
-import space.kscience.kmath.nd.*
+import space.kscience.kmath.nd.Structure2D
 
 /**
  * A context that allows to operate on a [MutableBuffer] as on 2d array
@@ -26,15 +26,13 @@ internal class BufferAccessor2D<T>(
 
     fun create(mat: Structure2D<T>): MutableBuffer<T> = create { i, j -> mat[i, j] }
 
-    //TODO optimize wrapper
-    fun MutableBuffer<T>.collect(): Structure2D<T> = StructureND.buffered(
-        ColumnStrides(ShapeND(rowNum, colNum)),
-        factory
-    ) { (i, j) ->
-        get(i, j)
-    }.as2D()
+//    //TODO optimize wrapper
+//    fun MutableBuffer<T>.toStructure2D(): Structure2D<T> = BufferND(
+//        type, ShapeND(rowNum, colNum)
+//    ) { (i, j) -> get(i, j) }.as2D()
 
     inner class Row(val buffer: MutableBuffer<T>, val rowIndex: Int) : MutableBuffer<T> {
+
         override val size: Int get() = colNum
 
         override operator fun get(index: Int): T = buffer[rowIndex, index]
@@ -43,7 +41,6 @@ internal class BufferAccessor2D<T>(
             buffer[rowIndex, index] = value
         }
 
-        override fun copy(): MutableBuffer<T> = factory(colNum) { get(it) }
         override operator fun iterator(): Iterator<T> = (0 until colNum).map(::get).iterator()
 
         override fun toString(): String = Buffer.toString(this)

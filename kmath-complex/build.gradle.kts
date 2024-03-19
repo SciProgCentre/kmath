@@ -10,6 +10,7 @@ kscience {
 
     dependencies {
         api(projects.kmathCore)
+        api(projects.kmathMemory)
     }
 
     testDependencies {

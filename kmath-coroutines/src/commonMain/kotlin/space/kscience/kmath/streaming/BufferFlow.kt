@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.flow
 import space.kscience.kmath.chains.BlockingDoubleChain
+import space.kscience.kmath.operations.Group
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.BufferFactory
 import space.kscience.kmath.structures.Float64Buffer
@@ -84,9 +85,9 @@ public fun Flow<Double>.chunked(bufferSize: Int): Flow<Float64Buffer> = flow {
  * Map a flow to a moving window buffer. The window step is one.
  * To get different steps, one could use skip operation.
  */
-public fun <T> Flow<T>.windowed(window: Int): Flow<Buffer<T>> = flow {
+public fun <T> Flow<T>.windowed(window: Int, algebra: Group<T>): Flow<Buffer<T>> = flow {
     require(window > 1) { "Window size must be more than one" }
-    val ringBuffer = RingBuffer.boxing<T>(window)
+    val ringBuffer = RingBuffer(window, algebra)
 
     this@windowed.collect { element ->
         ringBuffer.push(element)

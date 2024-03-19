@@ -1,3 +1,8 @@
+/*
+ * Copyright 2018-2024 KMath contributors.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ */
+
 package space.kscience.kmath.series
 
 
@@ -13,7 +18,10 @@ import space.kscience.kmath.structures.slice
 import space.kscience.plotly.*
 import kotlin.math.PI
 
-fun main() = with(Double.algebra.bufferAlgebra.seriesAlgebra()) {
+fun Double.Companion.seriesAlgebra() = Double.algebra.bufferAlgebra.seriesAlgebra()
+
+
+fun main() = with(Double.seriesAlgebra()) {
 
 
     fun Plot.plotSeries(name: String, buffer: Buffer<Double>) {

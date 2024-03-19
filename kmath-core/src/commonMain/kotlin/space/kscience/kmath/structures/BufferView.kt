@@ -1,3 +1,8 @@
+/*
+ * Copyright 2018-2024 KMath contributors.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ */
+
 package space.kscience.kmath.structures
 
 import space.kscience.kmath.UnstableKMathAPI
@@ -35,6 +40,7 @@ public class BufferSlice<T>(
             "End of buffer ${offset + size} is beyond the end of origin buffer size ${origin.size}"
         }
     }
+
 
     override fun get(index: Int): T = if (index >= size) {
         throw IndexOutOfBoundsException("$index is out of ${0 until size} rage")
@@ -100,7 +106,8 @@ public fun <T> Buffer<T>.slice(range: IntRange): BufferView<T> = if (this is Buf
  *  Dynamically create a range from the initial range
  */
 @UnstableKMathAPI
-public inline fun <T> Buffer<T>.slice(rangeBuilder: IntRange.() -> IntRange): BufferView<T> = slice(rangeBuilder(indices))
+public inline fun <T> Buffer<T>.slice(rangeBuilder: IntRange.() -> IntRange): BufferView<T> =
+    slice(rangeBuilder(indices))
 
 /**
  * Resize original buffer to a given range using given [range], filling additional segments with [defaultValue].
@@ -180,9 +187,7 @@ public class PermutedMutableBuffer<T>(
         origin[permutations[index]] = value
     }
 
-    override fun copy(): MutableBuffer<T> = PermutedMutableBuffer(origin.copy(), permutations)
     //TODO Probably could be optimized
-
     override fun iterator(): Iterator<T> = permutations.asSequence().map { origin[it] }.iterator()
 
     @UnstableKMathAPI

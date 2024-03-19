@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -17,7 +17,7 @@ import space.kscience.kmath.tensors.api.Tensor
 public fun StructureND<Double>.copyToTensor(): DoubleTensor = if (this is DoubleTensor) {
     DoubleTensor(shape, source.copy())
 } else if (this is Float64BufferND && indices is RowStrides) {
-    DoubleTensor(shape, buffer.copy())
+    DoubleTensor(shape, buffer.array.copyOf().asBuffer())
 } else {
     DoubleTensor(
         shape,

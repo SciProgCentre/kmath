@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -15,7 +15,7 @@ public class MultikShortAlgebra(
     multikEngine: Engine
 ) : MultikTensorAlgebra<Short, Int16Ring>(multikEngine) {
     override val elementAlgebra: Int16Ring get() = Int16Ring
-    override val type: DataType get() = DataType.ShortDataType
+    override val dataType: DataType get() = DataType.ShortDataType
     override fun scalar(value: Short): MultikTensor<Short>  = Multik.ndarrayOf(value).wrap()
 }
 

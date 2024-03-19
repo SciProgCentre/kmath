@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -20,7 +20,7 @@ public object Float64LinearSpace : LinearSpace<Double, Float64Field> {
     override fun buildMatrix(
         rows: Int,
         columns: Int,
-        initializer: Float64Field.(i: Int, j: Int) -> Double
+        initializer: Float64Field.(i: Int, j: Int) -> Double,
     ): Matrix<Double> = Floa64FieldOpsND.structureND(ShapeND(rows, columns)) { (i, j) ->
         Float64Field.initializer(i, j)
     }.as2D()
@@ -54,11 +54,12 @@ public object Float64LinearSpace : LinearSpace<Double, Float64Field> {
         require(colNum == other.rowNum) { "Matrix dot operation dimension mismatch: ($rowNum, $colNum) x (${other.rowNum}, ${other.colNum})" }
         val rows = this@dot.rows.map { it.linearize() }
         val columns = other.columns.map { it.linearize() }
+        val indices = 0 until this.colNum
         return buildMatrix(rowNum, other.colNum) { i, j ->
             val r = rows[i]
             val c = columns[j]
             var res = 0.0
-            for (l in r.indices) {
+            for (l in indices) {
                 res += r[l] * c[l]
             }
             res
@@ -69,10 +70,11 @@ public object Float64LinearSpace : LinearSpace<Double, Float64Field> {
     override fun Matrix<Double>.dot(vector: Point<Double>): Float64Buffer {
         require(colNum == vector.size) { "Matrix dot vector operation dimension mismatch: ($rowNum, $colNum) x (${vector.size})" }
         val rows = this@dot.rows.map { it.linearize() }
+        val indices = 0 until this.colNum
         return Float64Buffer(rowNum) { i ->
             val r = rows[i]
             var res = 0.0
-            for (j in r.indices) {
+            for (j in indices) {
                 res += r[j] * vector[j]
             }
             res

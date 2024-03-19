@@ -1,25 +1,43 @@
 /*
- * Copyright 2018-2023 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
 package space.kscience.kmath.geometry.euclidean3d
 
 import space.kscience.kmath.UnstableKMathAPI
-import space.kscience.kmath.complex.Quaternion
-import space.kscience.kmath.complex.QuaternionAlgebra
-import space.kscience.kmath.complex.normalized
-import space.kscience.kmath.complex.reciprocal
+import space.kscience.kmath.complex.*
 import space.kscience.kmath.geometry.*
 import space.kscience.kmath.linear.LinearSpace
 import space.kscience.kmath.linear.Matrix
 import space.kscience.kmath.linear.linearSpace
 import space.kscience.kmath.linear.matrix
 import space.kscience.kmath.operations.Float64Field
-import kotlin.math.pow
-import kotlin.math.sqrt
+import space.kscience.kmath.structures.Float64
+import kotlin.math.*
 
-internal fun DoubleVector3D.toQuaternion(): Quaternion = Quaternion(0.0, x, y, z)
+public operator fun Quaternion.times(other: Quaternion): Quaternion = QuaternionAlgebra.multiply(this, other)
+
+public operator fun Quaternion.div(other: Quaternion): Quaternion = QuaternionAlgebra.divide(this, other)
+
+public fun Quaternion.power(number: Number): Quaternion = QuaternionAlgebra.power(this, number)
+
+/**
+ * Linear interpolation between [from] and [to] in spherical space
+ */
+public fun QuaternionAlgebra.slerp(from: Quaternion, to: Quaternion, fraction: Double): Quaternion =
+    (to / from).pow(fraction) * from
+
+public fun QuaternionAlgebra.angleBetween(q1: Quaternion, q2: Quaternion): Angle = (q1.conjugate * q2).theta
+
+public infix fun Quaternion.dot(other: Quaternion): Double = w * other.w + x * other.x + y * other.y + z * other.z
+
+
+/**
+ * Represent a vector as quaternion with zero a rotation angle.
+ */
+internal fun Vector3D<Float64>.asQuaternion(): Quaternion = Quaternion(0.0, x, y, z)
+
 
 /**
  * Angle in radians denoted by this quaternion rotation
@@ -29,7 +47,7 @@ public val Quaternion.theta: Radians get() = (kotlin.math.acos(normalized().w) *
 /**
  * Create a normalized Quaternion from rotation angle and rotation vector
  */
-public fun Quaternion.Companion.fromRotation(theta: Angle, vector: DoubleVector3D): Quaternion {
+public fun Quaternion.Companion.fromRotation(theta: Angle, vector: Float64Vector3D): Quaternion {
     val s = sin(theta / 2)
     val c = cos(theta / 2)
     val norm = with(Float64Space3D) { vector.norm() }
@@ -39,9 +57,9 @@ public fun Quaternion.Companion.fromRotation(theta: Angle, vector: DoubleVector3
 /**
  * An axis of quaternion rotation
  */
-public val Quaternion.vector: DoubleVector3D
+public val Quaternion.vector: Float64Vector3D
     get() {
-        return object : DoubleVector3D {
+        return object : Float64Vector3D {
             private val sint2 = sqrt(1 - w * w)
             override val x: Double get() = this@vector.x / sint2
             override val y: Double get() = this@vector.y / sint2
@@ -51,23 +69,30 @@ public val Quaternion.vector: DoubleVector3D
     }
 
 /**
- * Rotate a vector in a [Float64Space3D]
+ * Rotate a vector in a [Float64Space3D] with [quaternion]
  */
-public fun Float64Space3D.rotate(vector: DoubleVector3D, q: Quaternion): DoubleVector3D = with(QuaternionAlgebra) {
-    val p = vector.toQuaternion()
-    (q * p * q.reciprocal).vector
-}
+public fun Float64Space3D.rotate(vector: Vector3D<Float64>, quaternion: Quaternion): Float64Vector3D =
+    with(QuaternionAlgebra) {
+        val p = vector.asQuaternion()
+        (quaternion * p * quaternion.reciprocal).vector
+    }
 
 /**
  * Use a composition of quaternions to create a rotation
  */
 @UnstableKMathAPI
-public fun Float64Space3D.rotate(vector: DoubleVector3D, composition: QuaternionAlgebra.() -> Quaternion): DoubleVector3D =
+public fun Float64Space3D.rotate(
+    vector: Float64Vector3D,
+    composition: QuaternionAlgebra.() -> Quaternion,
+): Float64Vector3D =
     rotate(vector, QuaternionAlgebra.composition())
 
-public fun Float64Space3D.rotate(vector: DoubleVector3D, matrix: Matrix<Double>): DoubleVector3D {
+/**
+ * Rotate a [Float64] vector in 3D space with a rotation matrix
+ */
+public fun Float64Space3D.rotate(vector: Float64Vector3D, matrix: Matrix<Double>):  Vector3D<Float64> {
     require(matrix.colNum == 3 && matrix.rowNum == 3) { "Square 3x3 rotation matrix is required" }
-    return with(Float64Field.linearSpace) { matrix.dot(vector).asVector3D() }
+    return with(linearSpace) { (matrix dot vector).asVector3D() }
 }
 
 /**
@@ -86,6 +111,8 @@ public fun Quaternion.toRotationMatrix(
 }
 
 /**
+ * Convert a quaternion to a rotation matrix
+ *
  * taken from https://www.euclideanspace.com/maths/geometry/rotations/conversions/matrixToQuaternion/
  */
 public fun Quaternion.Companion.fromRotationMatrix(matrix: Matrix<Double>): Quaternion {
@@ -146,6 +173,8 @@ public enum class RotationOrder {
 }
 
 /**
+ * Create a quaternion from Euler angles
+ *
  * Based on https://github.com/mrdoob/three.js/blob/master/src/math/Quaternion.js
  */
 public fun Quaternion.Companion.fromEuler(
@@ -154,13 +183,13 @@ public fun Quaternion.Companion.fromEuler(
     c: Angle,
     rotationOrder: RotationOrder,
 ): Quaternion {
-    val c1 = cos (a / 2)
-    val c2 = cos (b / 2)
-    val c3 = cos (c / 2)
+    val c1 = cos(a / 2)
+    val c2 = cos(b / 2)
+    val c3 = cos(c / 2)
 
-    val s1 = sin (a / 2)
-    val s2 = sin (b / 2)
-    val s3 = sin (c / 2)
+    val s1 = sin(a / 2)
+    val s2 = sin(b / 2)
+    val s3 = sin(c / 2)
 
     return when (rotationOrder) {
 
@@ -206,6 +235,130 @@ public fun Quaternion.Companion.fromEuler(
             c1 * s2 * c3 - s1 * c2 * s3,
             c1 * c2 * s3 + s1 * s2 * c3
         )
-         else -> TODO("Proper Euler rotation orders are not supported yet")
+
+        else -> TODO("Proper Euler rotation orders are not supported yet")
     }
+}
+
+/**
+ * A vector consisting of angles
+ */
+public data class AngleVector(override val x: Angle, override val y: Angle, override val z: Angle) : Vector3D<Angle> {
+    public companion object
+}
+
+public fun Quaternion.Companion.fromEuler(
+    angles: AngleVector,
+    rotationOrder: RotationOrder,
+): Quaternion = fromEuler(angles.x, angles.y, angles.z, rotationOrder)
+
+/**
+ * Based on https://github.com/mrdoob/three.js/blob/master/src/math/Euler.js
+ */
+public fun AngleVector.Companion.fromRotationMatrix(
+    matrix: Matrix<Double>,
+    rotationOrder: RotationOrder,
+    gimbaldLockThreshold: Double = 0.9999999,
+): AngleVector = when (rotationOrder) {
+
+    RotationOrder.XYZ -> {
+        if (abs(matrix[0, 2]) < gimbaldLockThreshold) {
+            AngleVector(
+                atan2(-matrix[1, 2], matrix[2, 2]).radians,
+                asin(matrix[0, 2].coerceIn(-1.0, 1.0)).radians,
+                atan2(-matrix[0, 1], matrix[0, 0]).radians
+            )
+
+        } else {
+            AngleVector(
+                atan2(matrix[2, 1], matrix[1, 1]).radians,
+                asin(matrix[0, 2].coerceIn(-1.0, 1.0)).radians,
+                Angle.zero
+            )
+        }
+    }
+
+    RotationOrder.YXZ -> {
+        if (abs(matrix[1, 2]) < gimbaldLockThreshold) {
+            AngleVector(
+                x = asin(-matrix[1, 2].coerceIn(-1.0, 1.0)).radians,
+                y = atan2(matrix[0, 2], matrix[2, 2]).radians,
+                z = atan2(matrix[1, 0], matrix[1, 1]).radians,
+            )
+        } else {
+            AngleVector(
+                x = asin(-matrix[1, 2].coerceIn(-1.0, 1.0)).radians,
+                y = atan2(-matrix[2, 0], matrix[0, 0]).radians,
+                z = Angle.zero,
+            )
+
+        }
+    }
+
+    RotationOrder.ZXY -> {
+        if (abs(matrix[2, 1]) < gimbaldLockThreshold) {
+            AngleVector(
+                x = asin(matrix[2, 1].coerceIn(-1.0, 1.0)).radians,
+                y = atan2(-matrix[2, 0], matrix[2, 2]).radians,
+                z = atan2(-matrix[0, 1], matrix[1, 1]).radians,
+            )
+
+        } else {
+            AngleVector(
+                x = asin(matrix[2, 1].coerceIn(-1.0, 1.0)).radians,
+                y = Angle.zero,
+                z = atan2(matrix[1, 0], matrix[0, 0]).radians,
+            )
+        }
+    }
+
+    RotationOrder.ZYX -> {
+        if (abs(matrix[2, 0]) < gimbaldLockThreshold) {
+            AngleVector(
+                x = atan2(matrix[2, 1], matrix[2, 2]).radians,
+                y = asin(-matrix[2, 0].coerceIn(-1.0, 1.0)).radians,
+                z = atan2(matrix[1, 0], matrix[0, 0]).radians,
+            )
+        } else {
+            AngleVector(
+                x = Angle.zero,
+                y = asin(-matrix[2, 0].coerceIn(-1.0, 1.0)).radians,
+                z = atan2(-matrix[0, 1], matrix[1, 1]).radians,
+            )
+        }
+    }
+
+    RotationOrder.YZX -> {
+        if (abs(matrix[1, 0]) < gimbaldLockThreshold) {
+            AngleVector(
+                x = atan2(-matrix[1, 2], matrix[1, 1]).radians,
+                y = atan2(-matrix[2, 0], matrix[0, 0]).radians,
+                z = asin(matrix[1, 0].coerceIn(-1.0, 1.0)).radians,
+            )
+        } else {
+            AngleVector(
+                x = Angle.zero,
+                y = atan2(matrix[0, 2], matrix[2, 2]).radians,
+                z = asin(matrix[1, 0].coerceIn(-1.0, 1.0)).radians,
+            )
+        }
+    }
+
+    RotationOrder.XZY -> {
+        if (abs(matrix[0, 1]) < gimbaldLockThreshold) {
+            AngleVector(
+                x = atan2(matrix[2, 1], matrix[1, 1]).radians,
+                y = atan2(matrix[0, 2], matrix[0, 0]).radians,
+                z = asin(-matrix[0, 1].coerceIn(-1.0, 1.0)).radians,
+            )
+        } else {
+            AngleVector(
+                x = atan2(-matrix[1, 2], matrix[2, 2]).radians,
+                y = Angle.zero,
+                z = asin(-matrix[0, 1].coerceIn(-1.0, 1.0)).radians,
+            )
+        }
+    }
+
+    else -> TODO("Proper Euler rotation orders are not supported yet")
 }

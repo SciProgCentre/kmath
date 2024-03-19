@@ -6,12 +6,13 @@ kscience{
     jvm()
     js {
         browser {
-            testTask {
+            testTask{
                 useMocha().timeout = "0"
             }
         }
     }
     native()
+    wasm()
 
     dependencies {
         api(projects.kmathCore)

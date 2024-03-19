@@ -1,40 +1,49 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
 package space.kscience.kmath.integration
 
+import space.kscience.attributes.*
 import space.kscience.kmath.UnstableKMathAPI
-import space.kscience.kmath.misc.FeatureSet
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.Float64Buffer
 
-public class UnivariateIntegrand<T> internal constructor(
-    override val features: FeatureSet<IntegrandFeature>,
+public class UnivariateIntegrand<T>(
+    override val type: SafeType<T>,
+    override val attributes: Attributes,
     public val function: (Double) -> T,
-) : Integrand {
-    public operator fun <F : IntegrandFeature> plus(feature: F): UnivariateIntegrand<T> =
-        UnivariateIntegrand(features.with(feature), function)
+) : Integrand<T> {
+
+    override fun withAttributes(attributes: Attributes): UnivariateIntegrand<T> =
+        UnivariateIntegrand(type, attributes, function)
 }
 
-@Suppress("FunctionName")
-public fun <T : Any> UnivariateIntegrand(
-    function: (Double) -> T,
-    vararg features: IntegrandFeature,
-): UnivariateIntegrand<T> = UnivariateIntegrand(FeatureSet.of(*features), function)
+public fun <T, A : Any> UnivariateIntegrand<T>.withAttribute(
+    attribute: Attribute<A>,
+    value: A,
+): UnivariateIntegrand<T> = withAttributes(attributes.withAttribute(attribute, value))
 
-public typealias UnivariateIntegrator<T> = Integrator<UnivariateIntegrand<T>>
+public fun <T> UnivariateIntegrand<T>.withAttributes(
+    block: AttributesBuilder<UnivariateIntegrand<T>>.() -> Unit,
+): UnivariateIntegrand<T> = withAttributes(attributes.modify(block))
 
-public class IntegrationRange(public val range: ClosedRange<Double>) : IntegrandFeature {
-    override fun toString(): String = "Range(${range.start}..${range.endInclusive})"
-}
+public inline fun <reified T : Any> UnivariateIntegrand(
+    attributeBuilder: AttributesBuilder<UnivariateIntegrand<T>>.() -> Unit,
+    noinline function: (Double) -> T,
+): UnivariateIntegrand<T> = UnivariateIntegrand(safeTypeOf(), Attributes(attributeBuilder), function)
+
+public typealias UnivariateIntegrator<T> = Integrator<T, UnivariateIntegrand<T>>
+
+public object IntegrationRange : IntegrandAttribute<ClosedRange<Double>>
+
 
 /**
  * Set of univariate integration ranges. First components correspond to the ranges themselves, second components to
- * number of integration nodes per range.
+ * the number of integration nodes per range.
  */
-public class UnivariateIntegrandRanges(public val ranges: List<Pair<ClosedRange<Double>, Int>>) : IntegrandFeature {
+public class UnivariateIntegrandRanges(public val ranges: List<Pair<ClosedRange<Double>, Int>>) {
     public constructor(vararg pairs: Pair<ClosedRange<Double>, Int>) : this(pairs.toList())
 
     override fun toString(): String {
@@ -43,60 +52,44 @@ public class UnivariateIntegrandRanges(public val ranges: List<Pair<ClosedRange<
         }
         return "UnivariateRanges($rangesString)"
     }
+
+    public companion object : IntegrandAttribute<UnivariateIntegrandRanges>
 }
 
-public class UnivariateIntegrationNodes(public val nodes: Buffer<Double>) : IntegrandFeature {
-    public constructor(vararg nodes: Double) : this(Float64Buffer(nodes))
+public object UnivariateIntegrationNodes : IntegrandAttribute<Buffer<Double>>
 
-    override fun toString(): String = "UnivariateNodes($nodes)"
+public fun AttributesBuilder<UnivariateIntegrand<*>>.integrationNodes(vararg nodes: Double) {
+    UnivariateIntegrationNodes(Float64Buffer(nodes))
 }
-
-
-/**
- * Value of the integrand if it is present or null
- */
-public val <T : Any> UnivariateIntegrand<T>.valueOrNull: T? get() = getFeature<IntegrandValue<T>>()?.value
-
-/**
- * Value of the integrand or error
- */
-public val <T : Any> UnivariateIntegrand<T>.value: T get() = valueOrNull ?: error("No value in the integrand")
 
 /**
  * A shortcut method to integrate a [function] with additional [features]. Range must be provided in features.
  * The [function] is placed in the end position to allow passing a lambda.
  */
 @UnstableKMathAPI
-public fun <T : Any> UnivariateIntegrator<T>.integrate(
-    vararg features: IntegrandFeature,
-    function: (Double) -> T,
-): UnivariateIntegrand<T> = process(UnivariateIntegrand(function, *features))
-
-/**
- * A shortcut method to integrate a [function] in [range] with additional [features].
- * The [function] is placed in the end position to allow passing a lambda.
- */
-@UnstableKMathAPI
-public fun <T : Any> UnivariateIntegrator<T>.integrate(
-    range: ClosedRange<Double>,
-    vararg features: IntegrandFeature,
-    function: (Double) -> T,
-): UnivariateIntegrand<T> = process(UnivariateIntegrand(function, IntegrationRange(range), *features))
+public inline fun <reified T : Any> UnivariateIntegrator<T>.integrate(
+    attributesBuilder: AttributesBuilder<UnivariateIntegrand<T>>.() -> Unit,
+    noinline function: (Double) -> T,
+): UnivariateIntegrand<T> = integrate(UnivariateIntegrand(attributesBuilder, function))
 
 /**
  * A shortcut method to integrate a [function] in [range] with additional features.
  * The [function] is placed in the end position to allow passing a lambda.
  */
 @UnstableKMathAPI
-public fun <T : Any> UnivariateIntegrator<T>.integrate(
+public inline fun <reified T : Any> UnivariateIntegrator<T>.integrate(
     range: ClosedRange<Double>,
-    featureBuilder: MutableList<IntegrandFeature>.() -> Unit = {},
-    function: (Double) -> T,
+    attributeBuilder: AttributesBuilder<UnivariateIntegrand<T>>.() -> Unit = {},
+    noinline function: (Double) -> T,
 ): UnivariateIntegrand<T> {
-    //TODO use dedicated feature builder class instead or add extensions to MutableList<IntegrandFeature>
-    val features = buildList {
-        featureBuilder()
-        add(IntegrationRange(range))
-    }
-    return process(UnivariateIntegrand(function, *features.toTypedArray()))
+
+    return integrate(
+        UnivariateIntegrand(
+            attributeBuilder = {
+                IntegrationRange(range)
+                attributeBuilder()
+            },
+            function = function
+        )
+    )
 }

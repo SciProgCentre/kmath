@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -10,6 +10,7 @@ package space.kscience.kmath.functions.testUtils
 import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.operations.Field
 import space.kscience.kmath.operations.NumbersAddOps
+import space.kscience.kmath.structures.MutableBufferFactory
 
 @Suppress("NAME_SHADOWING")
 class Rational {
@@ -159,6 +160,7 @@ class Rational {
 @Suppress("EXTENSION_SHADOWED_BY_MEMBER", "OVERRIDE_BY_INLINE")
 @OptIn(UnstableKMathAPI::class)
 object RationalField : Field<Rational>, NumbersAddOps<Rational> {
+    override val bufferFactory: MutableBufferFactory<Rational> = MutableBufferFactory()
     override inline val zero: Rational get() = Rational.ZERO
     override inline val one: Rational get() = Rational.ONE
 

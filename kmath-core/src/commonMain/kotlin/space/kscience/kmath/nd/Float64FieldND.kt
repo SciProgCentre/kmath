@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -20,7 +20,8 @@ import kotlin.math.pow as kpow
 public class Float64BufferND(
     indexes: ShapeIndexer,
     override val buffer: Float64Buffer,
-) : MutableBufferND<Double>(indexes, buffer), MutableStructureNDOfDouble{
+) : MutableBufferND<Double>(indexes, buffer), MutableStructureNDOfDouble {
+
     override fun getDouble(index: IntArray): Double = buffer[indices.offset(index)]
 
     override fun setDouble(index: IntArray, value: Double) {
@@ -74,7 +75,7 @@ public sealed class Floa64FieldOpsND : BufferedFieldOpsND<Double, Float64Field>(
         transform: Float64Field.(Double, Double) -> Double,
     ): BufferND<Double> = zipInline(left.toBufferND(), right.toBufferND()) { l, r -> Float64Field.transform(l, r) }
 
-    override fun structureND(shape: ShapeND, initializer: Float64Field.(IntArray) -> Double): Float64BufferND {
+    override fun mutableStructureND(shape: ShapeND, initializer: Float64Field.(IntArray) -> Double): Float64BufferND {
         val indexer = indexerBuilder(shape)
         return Float64BufferND(
             indexer,
@@ -225,7 +226,7 @@ public class Float64FieldND(override val shape: ShapeND) :
 
     override fun number(value: Number): Float64BufferND {
         val d = value.toDouble() // minimize conversions
-        return structureND(shape) { d }
+        return mutableStructureND(shape) { d }
     }
 }
 

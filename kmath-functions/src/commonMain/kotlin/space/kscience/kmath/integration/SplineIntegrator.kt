@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -54,13 +54,13 @@ public class SplineIntegrator<T : Comparable<T>>(
     public val algebra: Field<T>,
     public val bufferFactory: MutableBufferFactory<T>,
 ) : UnivariateIntegrator<T> {
-    override fun process(integrand: UnivariateIntegrand<T>): UnivariateIntegrand<T> = algebra {
-        val range = integrand.getFeature<IntegrationRange>()?.range ?: 0.0..1.0
+    override fun integrate(integrand: UnivariateIntegrand<T>): UnivariateIntegrand<T> = algebra {
+        val range = integrand[IntegrationRange] ?: 0.0..1.0
 
         val interpolator: PolynomialInterpolator<T> = SplineInterpolator(algebra, bufferFactory)
 
-        val nodes: Buffer<Double> = integrand.getFeature<UnivariateIntegrationNodes>()?.nodes ?: run {
-            val numPoints = integrand.getFeature<IntegrandMaxCalls>()?.maxCalls ?: 100
+        val nodes: Buffer<Double> = integrand[UnivariateIntegrationNodes] ?: run {
+            val numPoints = integrand[IntegrandMaxCalls] ?: 100
             val step = (range.endInclusive - range.start) / (numPoints - 1)
             Float64Buffer(numPoints) { i -> range.start + i * step }
         }
@@ -71,7 +71,10 @@ public class SplineIntegrator<T : Comparable<T>>(
             values
         )
         val res = polynomials.integrate(algebra, number(range.start)..number(range.endInclusive))
-        integrand + IntegrandValue(res) + IntegrandCallsPerformed(integrand.calls + nodes.size)
+        integrand.withAttributes {
+            IntegrandValue(res)
+            IntegrandCallsPerformed(integrand.calls + nodes.size)
+        }
     }
 }
 
@@ -83,20 +86,23 @@ public class SplineIntegrator<T : Comparable<T>>(
  */
 @UnstableKMathAPI
 public object DoubleSplineIntegrator : UnivariateIntegrator<Double> {
-    override fun process(integrand: UnivariateIntegrand<Double>): UnivariateIntegrand<Double> {
-        val range = integrand.getFeature<IntegrationRange>()?.range ?: 0.0..1.0
-        val interpolator: PolynomialInterpolator<Double> = SplineInterpolator(Float64Field, ::Float64Buffer)
+    override fun integrate(integrand: UnivariateIntegrand<Double>): UnivariateIntegrand<Double> {
+        val range = integrand[IntegrationRange] ?: 0.0..1.0
+        val interpolator: PolynomialInterpolator<Double> = SplineInterpolator(Float64Field, Float64Field.bufferFactory)
 
-        val nodes: Buffer<Double> = integrand.getFeature<UnivariateIntegrationNodes>()?.nodes ?: run {
-            val numPoints = integrand.getFeature<IntegrandMaxCalls>()?.maxCalls ?: 100
+        val nodes: Buffer<Double> = integrand[UnivariateIntegrationNodes] ?: run {
+            val numPoints = integrand[IntegrandMaxCalls] ?: 100
             val step = (range.endInclusive - range.start) / (numPoints - 1)
             Float64Buffer(numPoints) { i -> range.start + i * step }
         }
 
-        val values = nodes.mapToBuffer(::Float64Buffer) { integrand.function(it) }
+        val values = nodes.mapToBuffer(Float64Field.bufferFactory) { integrand.function(it) }
         val polynomials = interpolator.interpolatePolynomials(nodes, values)
         val res = polynomials.integrate(Float64Field, range)
-        return integrand + IntegrandValue(res) + IntegrandCallsPerformed(integrand.calls + nodes.size)
+        return integrand.withAttributes {
+            IntegrandValue(res)
+            IntegrandCallsPerformed(integrand.calls + nodes.size)
+        }
     }
 }
 

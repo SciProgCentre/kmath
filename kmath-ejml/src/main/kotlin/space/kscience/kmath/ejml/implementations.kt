@@ -1,6 +1,6 @@
 /*
- * Copyright 2018-2021 KMath contributors.
- * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
+ * Copyright 2018-2024 KMath contributors.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
 /* This file is generated with buildSrc/src/main/kotlin/space/kscience/kmath/ejml/codegen/ejmlCodegen.kt */
@@ -17,19 +17,18 @@ import org.ejml.sparse.csc.CommonOps_DSCC
 import org.ejml.sparse.csc.CommonOps_FSCC
 import org.ejml.sparse.csc.factory.DecompositionFactory_DSCC
 import org.ejml.sparse.csc.factory.DecompositionFactory_FSCC
-import org.ejml.sparse.csc.factory.LinearSolverFactory_DSCC
-import org.ejml.sparse.csc.factory.LinearSolverFactory_FSCC
-import space.kscience.kmath.UnstableKMathAPI
+import space.kscience.attributes.SafeType
+import space.kscience.attributes.safeTypeOf
 import space.kscience.kmath.linear.*
 import space.kscience.kmath.linear.Matrix
-import space.kscience.kmath.nd.StructureFeature
+import space.kscience.kmath.nd.Structure2D
+import space.kscience.kmath.nd.StructureAttribute
 import space.kscience.kmath.operations.Float32Field
 import space.kscience.kmath.operations.Float64Field
 import space.kscience.kmath.operations.invoke
-import space.kscience.kmath.structures.DoubleBuffer
-import space.kscience.kmath.structures.FloatBuffer
-import kotlin.reflect.KClass
-import kotlin.reflect.cast
+import space.kscience.kmath.structures.Float32
+import space.kscience.kmath.structures.IntBuffer
+import space.kscience.kmath.structures.asBuffer
 
 /**
  * [EjmlVector] specialization for [Double].
@@ -38,6 +37,7 @@ public class EjmlDoubleVector<out M : DMatrix>(override val origin: M) : EjmlVec
     init {
         require(origin.numRows == 1) { "The origin matrix must have only one row to form a vector" }
     }
+
 
     override operator fun get(index: Int): Double = origin[0, index]
 }
@@ -64,8 +64,10 @@ public class EjmlDoubleMatrix<out M : DMatrix>(override val origin: M) : EjmlMat
  * [EjmlMatrix] specialization for [Float].
  */
 public class EjmlFloatMatrix<out M : FMatrix>(override val origin: M) : EjmlMatrix<Float, M>(origin) {
+
     override operator fun get(i: Int, j: Int): Float = origin[i, j]
 }
+
 
 /**
  * [EjmlLinearSpace] implementation based on [CommonOps_DDRM], [DecompositionFactory_DDRM] operations and
@@ -76,6 +78,8 @@ public object EjmlLinearSpaceDDRM : EjmlLinearSpace<Double, Float64Field, DMatri
      * The [Float64Field] reference.
      */
     override val elementAlgebra: Float64Field get() = Float64Field
+
+    override val type: SafeType<Double> get() = safeTypeOf()
 
     @Suppress("UNCHECKED_CAST")
     override fun Matrix<Double>.toEjml(): EjmlDoubleMatrix<DMatrixRMaj> = when {
@@ -129,10 +133,10 @@ public object EjmlLinearSpaceDDRM : EjmlLinearSpace<Double, Float64Field, DMatri
         val out = DMatrixRMaj(1, 1)
 
         CommonOps_DDRM.add(
-            elementAlgebra.one, 
-            toEjml().origin, 
+            elementAlgebra.one,
+            toEjml().origin,
             elementAlgebra { -one },
-            other.toEjml().origin, 
+            other.toEjml().origin,
             out,
         )
 
@@ -153,12 +157,12 @@ public object EjmlLinearSpaceDDRM : EjmlLinearSpace<Double, Float64Field, DMatri
 
     override fun Matrix<Double>.plus(other: Matrix<Double>): EjmlDoubleMatrix<DMatrixRMaj> {
         val out = DMatrixRMaj(1, 1)
-        
+
         CommonOps_DDRM.add(
             elementAlgebra.one,
             toEjml().origin,
             elementAlgebra.one,
-            other.toEjml().origin, 
+            other.toEjml().origin,
             out,
         )
 
@@ -203,77 +207,65 @@ public object EjmlLinearSpaceDDRM : EjmlLinearSpace<Double, Float64Field, DMatri
 
     override fun Double.times(v: Point<Double>): EjmlDoubleVector<DMatrixRMaj> = v * this
 
-    @UnstableKMathAPI
-    override fun <F : StructureFeature> computeFeature(structure: Matrix<Double>, type: KClass<out F>): F? {
-        structure.getFeature(type)?.let { return it }
+    override fun <V, A : StructureAttribute<V>> computeAttribute(structure: Structure2D<Double>, attribute: A): V? {
         val origin = structure.toEjml().origin
 
-        return when (type) {
-            InverseMatrixFeature::class -> object : InverseMatrixFeature<Double> {
-                override val inverse: Matrix<Double> by lazy {
-                    val res = origin.copy()
-                    CommonOps_DDRM.invert(res)
-                    res.wrapMatrix()
-                }
+        val raw: Any? = when (attribute) {
+            Inverted -> {
+                val res = origin.copy()
+                CommonOps_DDRM.invert(res)
+                res.wrapMatrix()
             }
 
-            DeterminantFeature::class -> object : DeterminantFeature<Double> {
-                override val determinant: Double by lazy { CommonOps_DDRM.det(origin) }
-            }
-
-            SingularValueDecompositionFeature::class -> object : SingularValueDecompositionFeature<Double> {
-                private val svd by lazy {
-                    DecompositionFactory_DDRM.svd(origin.numRows, origin.numCols, true, true, false)
+            Determinant -> CommonOps_DDRM.det(origin)
+            SVD -> object : SingularValueDecomposition<Double> {
+                val ejmlSvd by lazy {
+                    DecompositionFactory_DDRM
+                        .svd(origin.numRows, origin.numCols, true, true, false)
                         .apply { decompose(origin.copy()) }
                 }
+                override val u: Matrix<Double> get() = ejmlSvd.getU(null, false).wrapMatrix()
 
-                override val u: Matrix<Double> by lazy { svd.getU(null, false).wrapMatrix() }
-                override val s: Matrix<Double> by lazy { svd.getW(null).wrapMatrix() }
-                override val v: Matrix<Double> by lazy { svd.getV(null, false).wrapMatrix() }
-                override val singularValues: Point<Double> by lazy { DoubleBuffer(svd.singularValues) }
+                override val s: Matrix<Double> get() = ejmlSvd.getW(null).wrapMatrix()
+                override val v: Matrix<Double> get() = ejmlSvd.getV(null, false).wrapMatrix()
+                override val singularValues: Point<Double> get() = ejmlSvd.singularValues.asBuffer()
+
             }
 
-            QRDecompositionFeature::class -> object : QRDecompositionFeature<Double> {
-                private val qr by lazy {
-                    DecompositionFactory_DDRM.qr().apply { decompose(origin.copy()) }
-                }
-
-                override val q: Matrix<Double> by lazy {
-                    qr.getQ(null, false).wrapMatrix().withFeature(OrthogonalFeature)
-                }
-
-                override val r: Matrix<Double> by lazy { qr.getR(null, false).wrapMatrix().withFeature(UFeature) }
+            QR -> object : QRDecomposition<Double> {
+                val ejmlQr by lazy { DecompositionFactory_DDRM.qr().apply { decompose(origin.copy()) } }
+                override val q: Matrix<Double> get() = ejmlQr.getQ(null, false).wrapMatrix()
+                override val r: Matrix<Double> get() = ejmlQr.getR(null, false).wrapMatrix()
             }
 
-            CholeskyDecompositionFeature::class -> object : CholeskyDecompositionFeature<Double> {
+            Cholesky -> object : CholeskyDecomposition<Double> {
                 override val l: Matrix<Double> by lazy {
                     val cholesky =
                         DecompositionFactory_DDRM.chol(structure.rowNum, true).apply { decompose(origin.copy()) }
 
-                    cholesky.getT(null).wrapMatrix().withFeature(LFeature)
+                    cholesky.getT(null).wrapMatrix().withAttribute(LowerTriangular)
                 }
             }
 
-            LupDecompositionFeature::class -> object : LupDecompositionFeature<Double> {
+            LUP -> object : LupDecomposition<Double> {
                 private val lup by lazy {
                     DecompositionFactory_DDRM.lu(origin.numRows, origin.numCols).apply { decompose(origin.copy()) }
                 }
 
-                override val l: Matrix<Double> by lazy {
-                    lup.getLower(null).wrapMatrix().withFeature(LFeature)
-                }
+                override val l: Matrix<Double>
+                    get() = lup.getLower(null).wrapMatrix().withAttribute(LowerTriangular)
 
-                override val u: Matrix<Double> by lazy {
-                    lup.getUpper(null).wrapMatrix().withFeature(UFeature)
-                }
 
-                override val p: Matrix<Double> by lazy { lup.getRowPivot(null).wrapMatrix() }
+                override val u: Matrix<Double>
+                    get() = lup.getUpper(null).wrapMatrix().withAttribute(UpperTriangular)
+                override val pivot: IntBuffer get() = lup.getRowPivotV(null).asBuffer()
             }
 
             else -> null
-        }?.let{
-            type.cast(it)
         }
+
+        @Suppress("UNCHECKED_CAST")
+        return raw as V?
     }
 
     /**
@@ -303,6 +295,7 @@ public object EjmlLinearSpaceDDRM : EjmlLinearSpace<Double, Float64Field, DMatri
     }
 }
 
+
 /**
  * [EjmlLinearSpace] implementation based on [CommonOps_FDRM], [DecompositionFactory_FDRM] operations and
  * [FMatrixRMaj] matrices.
@@ -312,6 +305,8 @@ public object EjmlLinearSpaceFDRM : EjmlLinearSpace<Float, Float32Field, FMatrix
      * The [Float32Field] reference.
      */
     override val elementAlgebra: Float32Field get() = Float32Field
+
+    override val type: SafeType<Float> get() = safeTypeOf()
 
     @Suppress("UNCHECKED_CAST")
     override fun Matrix<Float>.toEjml(): EjmlFloatMatrix<FMatrixRMaj> = when {
@@ -365,10 +360,10 @@ public object EjmlLinearSpaceFDRM : EjmlLinearSpace<Float, Float32Field, FMatrix
         val out = FMatrixRMaj(1, 1)
 
         CommonOps_FDRM.add(
-            elementAlgebra.one, 
-            toEjml().origin, 
+            elementAlgebra.one,
+            toEjml().origin,
             elementAlgebra { -one },
-            other.toEjml().origin, 
+            other.toEjml().origin,
             out,
         )
 
@@ -389,12 +384,12 @@ public object EjmlLinearSpaceFDRM : EjmlLinearSpace<Float, Float32Field, FMatrix
 
     override fun Matrix<Float>.plus(other: Matrix<Float>): EjmlFloatMatrix<FMatrixRMaj> {
         val out = FMatrixRMaj(1, 1)
-        
+
         CommonOps_FDRM.add(
             elementAlgebra.one,
             toEjml().origin,
             elementAlgebra.one,
-            other.toEjml().origin, 
+            other.toEjml().origin,
             out,
         )
 
@@ -439,77 +434,65 @@ public object EjmlLinearSpaceFDRM : EjmlLinearSpace<Float, Float32Field, FMatrix
 
     override fun Float.times(v: Point<Float>): EjmlFloatVector<FMatrixRMaj> = v * this
 
-    @UnstableKMathAPI
-    override fun <F : StructureFeature> computeFeature(structure: Matrix<Float>, type: KClass<out F>): F? {
-        structure.getFeature(type)?.let { return it }
+    override fun <V, A : StructureAttribute<V>> computeAttribute(structure: Structure2D<Float32>, attribute: A): V? {
         val origin = structure.toEjml().origin
 
-        return when (type) {
-            InverseMatrixFeature::class -> object : InverseMatrixFeature<Float> {
-                override val inverse: Matrix<Float> by lazy {
-                    val res = origin.copy()
-                    CommonOps_FDRM.invert(res)
-                    res.wrapMatrix()
-                }
+        val raw: Any? = when (attribute) {
+            Inverted -> {
+                val res = origin.copy()
+                CommonOps_FDRM.invert(res)
+                res.wrapMatrix()
             }
 
-            DeterminantFeature::class -> object : DeterminantFeature<Float> {
-                override val determinant: Float by lazy { CommonOps_FDRM.det(origin) }
-            }
-
-            SingularValueDecompositionFeature::class -> object : SingularValueDecompositionFeature<Float> {
-                private val svd by lazy {
-                    DecompositionFactory_FDRM.svd(origin.numRows, origin.numCols, true, true, false)
+            Determinant -> CommonOps_FDRM.det(origin)
+            SVD -> object : SingularValueDecomposition<Float32> {
+                val ejmlSvd by lazy {
+                    DecompositionFactory_FDRM
+                        .svd(origin.numRows, origin.numCols, true, true, false)
                         .apply { decompose(origin.copy()) }
                 }
+                override val u: Matrix<Float32> get() = ejmlSvd.getU(null, false).wrapMatrix()
 
-                override val u: Matrix<Float> by lazy { svd.getU(null, false).wrapMatrix() }
-                override val s: Matrix<Float> by lazy { svd.getW(null).wrapMatrix() }
-                override val v: Matrix<Float> by lazy { svd.getV(null, false).wrapMatrix() }
-                override val singularValues: Point<Float> by lazy { FloatBuffer(svd.singularValues) }
+                override val s: Matrix<Float32> get() = ejmlSvd.getW(null).wrapMatrix()
+                override val v: Matrix<Float32> get() = ejmlSvd.getV(null, false).wrapMatrix()
+                override val singularValues: Point<Float32> get() = ejmlSvd.singularValues.asBuffer()
+
             }
 
-            QRDecompositionFeature::class -> object : QRDecompositionFeature<Float> {
-                private val qr by lazy {
-                    DecompositionFactory_FDRM.qr().apply { decompose(origin.copy()) }
-                }
-
-                override val q: Matrix<Float> by lazy {
-                    qr.getQ(null, false).wrapMatrix().withFeature(OrthogonalFeature)
-                }
-
-                override val r: Matrix<Float> by lazy { qr.getR(null, false).wrapMatrix().withFeature(UFeature) }
+            QR -> object : QRDecomposition<Float32> {
+                val ejmlQr by lazy { DecompositionFactory_FDRM.qr().apply { decompose(origin.copy()) } }
+                override val q: Matrix<Float32> get() = ejmlQr.getQ(null, false).wrapMatrix()
+                override val r: Matrix<Float32> get() = ejmlQr.getR(null, false).wrapMatrix()
             }
 
-            CholeskyDecompositionFeature::class -> object : CholeskyDecompositionFeature<Float> {
-                override val l: Matrix<Float> by lazy {
+            Cholesky -> object : CholeskyDecomposition<Float32> {
+                override val l: Matrix<Float32> by lazy {
                     val cholesky =
                         DecompositionFactory_FDRM.chol(structure.rowNum, true).apply { decompose(origin.copy()) }
 
-                    cholesky.getT(null).wrapMatrix().withFeature(LFeature)
+                    cholesky.getT(null).wrapMatrix().withAttribute(LowerTriangular)
                 }
             }
 
-            LupDecompositionFeature::class -> object : LupDecompositionFeature<Float> {
+            LUP -> object : LupDecomposition<Float32> {
                 private val lup by lazy {
                     DecompositionFactory_FDRM.lu(origin.numRows, origin.numCols).apply { decompose(origin.copy()) }
                 }
 
-                override val l: Matrix<Float> by lazy {
-                    lup.getLower(null).wrapMatrix().withFeature(LFeature)
-                }
+                override val l: Matrix<Float32>
+                    get() = lup.getLower(null).wrapMatrix().withAttribute(LowerTriangular)
 
-                override val u: Matrix<Float> by lazy {
-                    lup.getUpper(null).wrapMatrix().withFeature(UFeature)
-                }
 
-                override val p: Matrix<Float> by lazy { lup.getRowPivot(null).wrapMatrix() }
+                override val u: Matrix<Float32>
+                    get() = lup.getUpper(null).wrapMatrix().withAttribute(UpperTriangular)
+                override val pivot: IntBuffer get() = lup.getRowPivotV(null).asBuffer()
             }
 
             else -> null
-        }?.let{
-            type.cast(it)
         }
+
+        @Suppress("UNCHECKED_CAST")
+        return raw as V?
     }
 
     /**
@@ -539,6 +522,7 @@ public object EjmlLinearSpaceFDRM : EjmlLinearSpace<Float, Float32Field, FMatrix
     }
 }
 
+
 /**
  * [EjmlLinearSpace] implementation based on [CommonOps_DSCC], [DecompositionFactory_DSCC] operations and
  * [DMatrixSparseCSC] matrices.
@@ -548,6 +532,8 @@ public object EjmlLinearSpaceDSCC : EjmlLinearSpace<Double, Float64Field, DMatri
      * The [Float64Field] reference.
      */
     override val elementAlgebra: Float64Field get() = Float64Field
+
+    override val type: SafeType<Double> get() = safeTypeOf()
 
     @Suppress("UNCHECKED_CAST")
     override fun Matrix<Double>.toEjml(): EjmlDoubleMatrix<DMatrixSparseCSC> = when {
@@ -601,12 +587,12 @@ public object EjmlLinearSpaceDSCC : EjmlLinearSpace<Double, Float64Field, DMatri
         val out = DMatrixSparseCSC(1, 1)
 
         CommonOps_DSCC.add(
-            elementAlgebra.one, 
-            toEjml().origin, 
+            elementAlgebra.one,
+            toEjml().origin,
             elementAlgebra { -one },
-            other.toEjml().origin, 
+            other.toEjml().origin,
             out,
-            null, 
+            null,
             null,
         )
 
@@ -627,14 +613,14 @@ public object EjmlLinearSpaceDSCC : EjmlLinearSpace<Double, Float64Field, DMatri
 
     override fun Matrix<Double>.plus(other: Matrix<Double>): EjmlDoubleMatrix<DMatrixSparseCSC> {
         val out = DMatrixSparseCSC(1, 1)
-        
+
         CommonOps_DSCC.add(
             elementAlgebra.one,
             toEjml().origin,
             elementAlgebra.one,
-            other.toEjml().origin, 
+            other.toEjml().origin,
             out,
-            null, 
+            null,
             null,
         )
 
@@ -650,7 +636,7 @@ public object EjmlLinearSpaceDSCC : EjmlLinearSpace<Double, Float64Field, DMatri
             elementAlgebra.one,
             other.toEjml().origin,
             out,
-            null, 
+            null,
             null,
         )
 
@@ -666,7 +652,7 @@ public object EjmlLinearSpaceDSCC : EjmlLinearSpace<Double, Float64Field, DMatri
             elementAlgebra { -one },
             other.toEjml().origin,
             out,
-            null, 
+            null,
             null,
         )
 
@@ -683,64 +669,52 @@ public object EjmlLinearSpaceDSCC : EjmlLinearSpace<Double, Float64Field, DMatri
 
     override fun Double.times(v: Point<Double>): EjmlDoubleVector<DMatrixSparseCSC> = v * this
 
-    @UnstableKMathAPI
-    override fun <F : StructureFeature> computeFeature(structure: Matrix<Double>, type: KClass<out F>): F? {
-        structure.getFeature(type)?.let { return it }
+    override fun <V, A : StructureAttribute<V>> computeAttribute(structure: Structure2D<Double>, attribute: A): V? {
         val origin = structure.toEjml().origin
 
-        return when (type) {
-            QRDecompositionFeature::class -> object : QRDecompositionFeature<Double> {
-                private val qr by lazy {
-                    DecompositionFactory_DSCC.qr(FillReducing.NONE).apply { decompose(origin.copy()) }
-                }
-
-                override val q: Matrix<Double> by lazy {
-                    qr.getQ(null, false).wrapMatrix().withFeature(OrthogonalFeature)
-                }
-
-                override val r: Matrix<Double> by lazy { qr.getR(null, false).wrapMatrix().withFeature(UFeature) }
+        val raw: Any? = when (attribute) {
+            Inverted -> {
+                val res = DMatrixRMaj(origin.numRows,origin.numCols)
+                CommonOps_DSCC.invert(origin,res)
+                res.wrapMatrix()
             }
 
-            CholeskyDecompositionFeature::class -> object : CholeskyDecompositionFeature<Double> {
+            Determinant -> CommonOps_DSCC.det(origin)
+
+            QR -> object : QRDecomposition<Double> {
+                val ejmlQr by lazy { DecompositionFactory_DSCC.qr(FillReducing.NONE).apply { decompose(origin.copy()) } }
+                override val q: Matrix<Double> get() = ejmlQr.getQ(null, false).wrapMatrix()
+                override val r: Matrix<Double> get() = ejmlQr.getR(null, false).wrapMatrix()
+            }
+
+            Cholesky -> object : CholeskyDecomposition<Double> {
                 override val l: Matrix<Double> by lazy {
                     val cholesky =
                         DecompositionFactory_DSCC.cholesky().apply { decompose(origin.copy()) }
 
-                    (cholesky.getT(null) as DMatrix).wrapMatrix().withFeature(LFeature)
+                    (cholesky.getT(null) as DMatrix).wrapMatrix().withAttribute(LowerTriangular)
                 }
             }
 
-            LUDecompositionFeature::class, DeterminantFeature::class, InverseMatrixFeature::class -> object :
-                LUDecompositionFeature<Double>, DeterminantFeature<Double>, InverseMatrixFeature<Double> {
-                private val lu by lazy {
+            LUP -> object : LupDecomposition<Double> {
+                private val lup by lazy {
                     DecompositionFactory_DSCC.lu(FillReducing.NONE).apply { decompose(origin.copy()) }
                 }
 
-                override val l: Matrix<Double> by lazy {
-                    lu.getLower(null).wrapMatrix().withFeature(LFeature)
-                }
+                override val l: Matrix<Double>
+                    get() = lup.getLower(null).wrapMatrix().withAttribute(LowerTriangular)
 
-                override val u: Matrix<Double> by lazy {
-                    lu.getUpper(null).wrapMatrix().withFeature(UFeature)
-                }
 
-                override val inverse: Matrix<Double> by lazy {
-                    var a = origin
-                    val inverse = DMatrixRMaj(1, 1)
-                    val solver = LinearSolverFactory_DSCC.lu(FillReducing.NONE)
-                    if (solver.modifiesA()) a = a.copy()
-                    val i = CommonOps_DDRM.identity(a.numRows)
-                    solver.solve(i, inverse)
-                    inverse.wrapMatrix()
-                }
-
-                override val determinant: Double by lazy { elementAlgebra.number(lu.computeDeterminant().real) }
+                override val u: Matrix<Double>
+                    get() = lup.getUpper(null).wrapMatrix().withAttribute(UpperTriangular)
+                override val pivot: IntBuffer get() = lup.getRowPivotV(null).asBuffer()
             }
 
             else -> null
-        }?.let{
-            type.cast(it)
         }
+
+        @Suppress("UNCHECKED_CAST")
+        return raw as V?
     }
 
     /**
@@ -770,6 +744,7 @@ public object EjmlLinearSpaceDSCC : EjmlLinearSpace<Double, Float64Field, DMatri
     }
 }
 
+
 /**
  * [EjmlLinearSpace] implementation based on [CommonOps_FSCC], [DecompositionFactory_FSCC] operations and
  * [FMatrixSparseCSC] matrices.
@@ -779,6 +754,8 @@ public object EjmlLinearSpaceFSCC : EjmlLinearSpace<Float, Float32Field, FMatrix
      * The [Float32Field] reference.
      */
     override val elementAlgebra: Float32Field get() = Float32Field
+
+    override val type: SafeType<Float> get() = safeTypeOf()
 
     @Suppress("UNCHECKED_CAST")
     override fun Matrix<Float>.toEjml(): EjmlFloatMatrix<FMatrixSparseCSC> = when {
@@ -832,12 +809,12 @@ public object EjmlLinearSpaceFSCC : EjmlLinearSpace<Float, Float32Field, FMatrix
         val out = FMatrixSparseCSC(1, 1)
 
         CommonOps_FSCC.add(
-            elementAlgebra.one, 
-            toEjml().origin, 
+            elementAlgebra.one,
+            toEjml().origin,
             elementAlgebra { -one },
-            other.toEjml().origin, 
+            other.toEjml().origin,
             out,
-            null, 
+            null,
             null,
         )
 
@@ -858,14 +835,14 @@ public object EjmlLinearSpaceFSCC : EjmlLinearSpace<Float, Float32Field, FMatrix
 
     override fun Matrix<Float>.plus(other: Matrix<Float>): EjmlFloatMatrix<FMatrixSparseCSC> {
         val out = FMatrixSparseCSC(1, 1)
-        
+
         CommonOps_FSCC.add(
             elementAlgebra.one,
             toEjml().origin,
             elementAlgebra.one,
-            other.toEjml().origin, 
+            other.toEjml().origin,
             out,
-            null, 
+            null,
             null,
         )
 
@@ -881,7 +858,7 @@ public object EjmlLinearSpaceFSCC : EjmlLinearSpace<Float, Float32Field, FMatrix
             elementAlgebra.one,
             other.toEjml().origin,
             out,
-            null, 
+            null,
             null,
         )
 
@@ -897,7 +874,7 @@ public object EjmlLinearSpaceFSCC : EjmlLinearSpace<Float, Float32Field, FMatrix
             elementAlgebra { -one },
             other.toEjml().origin,
             out,
-            null, 
+            null,
             null,
         )
 
@@ -913,65 +890,52 @@ public object EjmlLinearSpaceFSCC : EjmlLinearSpace<Float, Float32Field, FMatrix
     }
 
     override fun Float.times(v: Point<Float>): EjmlFloatVector<FMatrixSparseCSC> = v * this
-
-    @UnstableKMathAPI
-    override fun <F : StructureFeature> computeFeature(structure: Matrix<Float>, type: KClass<out F>): F? {
-        structure.getFeature(type)?.let { return it }
+    override fun <V, A : StructureAttribute<V>> computeAttribute(structure: Structure2D<Float32>, attribute: A): V? {
         val origin = structure.toEjml().origin
 
-        return when (type) {
-            QRDecompositionFeature::class -> object : QRDecompositionFeature<Float> {
-                private val qr by lazy {
-                    DecompositionFactory_FSCC.qr(FillReducing.NONE).apply { decompose(origin.copy()) }
-                }
-
-                override val q: Matrix<Float> by lazy {
-                    qr.getQ(null, false).wrapMatrix().withFeature(OrthogonalFeature)
-                }
-
-                override val r: Matrix<Float> by lazy { qr.getR(null, false).wrapMatrix().withFeature(UFeature) }
+        val raw: Any? = when (attribute) {
+            Inverted -> {
+                val res = FMatrixRMaj(origin.numRows,origin.numCols)
+                CommonOps_FSCC.invert(origin,res)
+                res.wrapMatrix()
             }
 
-            CholeskyDecompositionFeature::class -> object : CholeskyDecompositionFeature<Float> {
-                override val l: Matrix<Float> by lazy {
+            Determinant -> CommonOps_FSCC.det(origin)
+
+            QR -> object : QRDecomposition<Float32> {
+                val ejmlQr by lazy { DecompositionFactory_FSCC.qr(FillReducing.NONE).apply { decompose(origin.copy()) } }
+                override val q: Matrix<Float32> get() = ejmlQr.getQ(null, false).wrapMatrix()
+                override val r: Matrix<Float32> get() = ejmlQr.getR(null, false).wrapMatrix()
+            }
+
+            Cholesky -> object : CholeskyDecomposition<Float32> {
+                override val l: Matrix<Float32> by lazy {
                     val cholesky =
                         DecompositionFactory_FSCC.cholesky().apply { decompose(origin.copy()) }
 
-                    (cholesky.getT(null) as FMatrix).wrapMatrix().withFeature(LFeature)
+                    (cholesky.getT(null) as FMatrix).wrapMatrix().withAttribute(LowerTriangular)
                 }
             }
 
-            LUDecompositionFeature::class, DeterminantFeature::class, InverseMatrixFeature::class -> object :
-                LUDecompositionFeature<Float>, DeterminantFeature<Float>, InverseMatrixFeature<Float> {
-                private val lu by lazy {
+            LUP -> object : LupDecomposition<Float32> {
+                private val lup by lazy {
                     DecompositionFactory_FSCC.lu(FillReducing.NONE).apply { decompose(origin.copy()) }
                 }
 
-                override val l: Matrix<Float> by lazy {
-                    lu.getLower(null).wrapMatrix().withFeature(LFeature)
-                }
+                override val l: Matrix<Float32>
+                    get() = lup.getLower(null).wrapMatrix().withAttribute(LowerTriangular)
 
-                override val u: Matrix<Float> by lazy {
-                    lu.getUpper(null).wrapMatrix().withFeature(UFeature)
-                }
 
-                override val inverse: Matrix<Float> by lazy {
-                    var a = origin
-                    val inverse = FMatrixRMaj(1, 1)
-                    val solver = LinearSolverFactory_FSCC.lu(FillReducing.NONE)
-                    if (solver.modifiesA()) a = a.copy()
-                    val i = CommonOps_FDRM.identity(a.numRows)
-                    solver.solve(i, inverse)
-                    inverse.wrapMatrix()
-                }
-
-                override val determinant: Float by lazy { elementAlgebra.number(lu.computeDeterminant().real) }
+                override val u: Matrix<Float32>
+                    get() = lup.getUpper(null).wrapMatrix().withAttribute(UpperTriangular)
+                override val pivot: IntBuffer get() = lup.getRowPivotV(null).asBuffer()
             }
 
             else -> null
-        }?.let{
-            type.cast(it)
         }
+
+        @Suppress("UNCHECKED_CAST")
+        return raw as V?
     }
 
     /**

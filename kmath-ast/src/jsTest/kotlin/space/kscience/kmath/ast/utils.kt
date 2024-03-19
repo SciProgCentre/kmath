@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -20,6 +20,7 @@ import space.kscience.kmath.estree.compileToExpression as estreeCompileToExpress
 import space.kscience.kmath.wasm.compile as wasmCompile
 import space.kscience.kmath.wasm.compileToExpression as wasmCompileToExpression
 
+@OptIn(UnstableKMathAPI::class)
 private object WasmCompilerTestContext : CompilerTestContext {
     override fun MST.compileToExpression(algebra: Int32Ring): Expression<Int> = wasmCompileToExpression(algebra)
     override fun MST.compile(algebra: Int32Ring, arguments: Map<Symbol, Int>): Int = wasmCompile(algebra, arguments)

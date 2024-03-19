@@ -1,10 +1,11 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
 package space.kscience.kmath.expressions
 
+import space.kscience.attributes.SafeType
 import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.operations.*
 import space.kscience.kmath.structures.Buffer
@@ -81,6 +82,8 @@ public abstract class DSAlgebra<T, A : Ring<T>>(
     public val order: Int,
     bindings: Map<Symbol, T>,
 ) : ExpressionAlgebra<T, DS<T, A>>, SymbolIndexer {
+
+    override val bufferFactory: MutableBufferFactory<DS<T, A>> = MutableBufferFactory()
 
     /**
      * Get the compiler for number of free parameters and order.
@@ -186,7 +189,7 @@ public abstract class DSAlgebra<T, A : Ring<T>>(
         vararg derivatives: T,
     ): DS<T, A> {
         require(derivatives.size == compiler.size) { "dimension mismatch: ${derivatives.size} and ${compiler.size}" }
-        val data = derivatives.asBuffer()
+        val data = derivatives.asList().asBuffer()
 
         return DS(data)
     }
@@ -329,10 +332,13 @@ public class DerivativeStructureRingExpression<T, A>(
     public val elementBufferFactory: MutableBufferFactory<T> = algebra.bufferFactory,
     public val function: DSRing<T, A>.() -> DS<T, A>,
 ) : DifferentiableExpression<T> where A : Ring<T>, A : ScaleOperations<T>, A : NumericAlgebra<T> {
+
+    override val type: SafeType<T> get() = elementBufferFactory.type
+
     override operator fun invoke(arguments: Map<Symbol, T>): T =
         DSRing(algebra, 0, arguments).function().value
 
-    override fun derivativeOrNull(symbols: List<Symbol>): Expression<T> = Expression { arguments ->
+    override fun derivativeOrNull(symbols: List<Symbol>): Expression<T> = Expression(type) { arguments ->
         with(
             DSRing(
                 algebra,
@@ -441,10 +447,13 @@ public class DSFieldExpression<T, A : ExtendedField<T>>(
     public val algebra: A,
     public val function: DSField<T, A>.() -> DS<T, A>,
 ) : DifferentiableExpression<T> {
+
+    override val type: SafeType<T> get() = algebra.type
+
     override operator fun invoke(arguments: Map<Symbol, T>): T =
         DSField(algebra, 0, arguments).function().value
 
-    override fun derivativeOrNull(symbols: List<Symbol>): Expression<T> = Expression { arguments ->
+    override fun derivativeOrNull(symbols: List<Symbol>): Expression<T> = Expression(type) { arguments ->
         DSField(
             algebra,
             symbols.size,

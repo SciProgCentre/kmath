@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -31,7 +31,7 @@ internal class OptimizeTest {
     @Test
     fun testGradientOptimization() = runBlocking {
         val result = normal.optimizeWith(CMOptimizer, x to 1.0, y to 1.0)
-        println(result.resultPoint)
+        println(result.result)
         println(result.resultValue)
     }
 
@@ -42,7 +42,7 @@ internal class OptimizeTest {
             //this sets simplex optimizer
         }
 
-        println(result.resultPoint)
+        println(result.result)
         println(result.resultValue)
     }
 
@@ -73,8 +73,9 @@ internal class OptimizeTest {
         val result: FunctionOptimization<Double> = chi2.optimizeWith(
             CMOptimizer,
             mapOf(a to 1.5, b to 0.9, c to 1.0),
-            FunctionOptimizationTarget.MINIMIZE
-        )
+        ){
+            FunctionOptimizationTarget(OptimizationDirection.MINIMIZE)
+        }
         println(result)
         println("Chi2/dof = ${result.resultValue / (x.size - 3)}")
     }

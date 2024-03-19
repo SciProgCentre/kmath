@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -7,6 +7,8 @@ package space.kscience.kmath.commons.integration
 
 import org.junit.jupiter.api.Test
 import space.kscience.kmath.UnstableKMathAPI
+import space.kscience.kmath.integration.IntegrandAbsoluteAccuracy
+import space.kscience.kmath.integration.IntegrandRelativeAccuracy
 import space.kscience.kmath.integration.integrate
 import space.kscience.kmath.integration.value
 import space.kscience.kmath.operations.Float64Field.sin
@@ -27,8 +29,8 @@ internal class IntegrationTest {
     @Test
     fun customSimpson() {
         val res = CMIntegrator.simpson().integrate(0.0..PI, {
-            targetRelativeAccuracy = 1e-4
-            targetAbsoluteAccuracy = 1e-4
+            IntegrandRelativeAccuracy(1e-4)
+            IntegrandAbsoluteAccuracy(1e-4)
         }, function).value
         assertTrue { abs(res - 2) < 1e-3 }
         assertTrue { abs(res - 2) > 1e-12 }

@@ -1,18 +1,35 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
 package space.kscience.kmath.multik
 
 import org.jetbrains.kotlinx.multik.ndarray.data.*
+import space.kscience.attributes.SafeType
+import space.kscience.attributes.safeTypeOf
 import space.kscience.kmath.PerformancePitfall
 import space.kscience.kmath.nd.ShapeND
+import space.kscience.kmath.operations.*
 import space.kscience.kmath.tensors.api.Tensor
 import kotlin.jvm.JvmInline
 
+public val DataType.type: SafeType<*>
+    get() = when (this) {
+        DataType.ByteDataType -> ByteRing.type
+        DataType.ShortDataType -> ShortRing.type
+        DataType.IntDataType -> IntRing.type
+        DataType.LongDataType -> LongRing.type
+        DataType.FloatDataType -> Float32Field.type
+        DataType.DoubleDataType -> Float64Field.type
+        DataType.ComplexFloatDataType -> safeTypeOf<Pair<Float, Float>>()
+        DataType.ComplexDoubleDataType -> safeTypeOf<Pair<Double, Double>>()
+    }
+
+
 @JvmInline
 public value class MultikTensor<T>(public val array: MutableMultiArray<T, DN>) : Tensor<T> {
+
     override val shape: ShapeND get() = ShapeND(array.shape)
 
     @PerformancePitfall

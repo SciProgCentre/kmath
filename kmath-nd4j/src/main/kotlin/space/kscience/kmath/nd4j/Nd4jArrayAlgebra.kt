@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -34,7 +34,7 @@ public sealed interface Nd4jArrayAlgebra<T, out C : Algebra<T>> : AlgebraND<T, C
     public val StructureND<T>.ndArray: INDArray
 
     @OptIn(PerformancePitfall::class)
-    override fun structureND(shape: ShapeND, initializer: C.(IntArray) -> T): Nd4jArrayStructure<T> {
+    override fun mutableStructureND(shape: ShapeND, initializer: C.(IntArray) -> T): Nd4jArrayStructure<T> {
         @OptIn(UnsafeKMathAPI::class)
         val struct: Nd4jArrayStructure<T> = Nd4j.create(*shape.asArray())!!.wrap()
         struct.indicesIterator().forEach { struct[it] = elementAlgebra.initializer(it) }

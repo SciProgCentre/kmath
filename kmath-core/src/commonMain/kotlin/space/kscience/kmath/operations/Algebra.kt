@@ -1,10 +1,12 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
 package space.kscience.kmath.operations
 
+import space.kscience.attributes.SafeType
+import space.kscience.attributes.WithType
 import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.expressions.Symbol
 import space.kscience.kmath.operations.Ring.Companion.optimizedPower
@@ -13,14 +15,15 @@ import space.kscience.kmath.structures.MutableBufferFactory
 /**
  * Represents an algebraic structure.
  *
- * @param T the type of element of this structure.
+ * @param T the type of element which Algebra operates on.
  */
-public interface Algebra<T> {
-
+public interface Algebra<T> : WithType<T> {
     /**
      * Provide a factory for buffers, associated with this [Algebra]
      */
-    public val bufferFactory: MutableBufferFactory<T> get() = MutableBufferFactory.boxing()
+    public val bufferFactory: MutableBufferFactory<T>
+
+    override val type: SafeType<T> get() = bufferFactory.type
 
     /**
      * Wraps a raw string to [T] object. This method is designed for three purposes:
@@ -67,12 +70,12 @@ public interface Algebra<T> {
      *
      * @param operation the name of operation.
      * @param arg the argument of operation.
-     * @return a result of operation.
+     * @return the result of the operation.
      */
     public fun unaryOperation(operation: String, arg: T): T = unaryOperationFunction(operation)(arg)
 
     /**
-     * Dynamically dispatches a binary operation with the certain name.
+     * Dynamically dispatches a binary operation with a certain name.
      *
      * Implementations must fulfil the following requirements:
      *
@@ -87,7 +90,7 @@ public interface Algebra<T> {
         error("Binary operation '$operation' not defined in $this")
 
     /**
-     * Dynamically invokes a binary operation with the certain name.
+     * Dynamically invokes a binary operation with a certain name.
      *
      * Implementations must fulfil the following requirements:
      *
@@ -265,7 +268,7 @@ public interface Ring<T> : Group<T>, RingOps<T> {
      */
     public fun power(arg: T, pow: UInt): T = optimizedPower(arg, pow)
 
-    public companion object{
+    public companion object {
         /**
          * Raises [arg] to the non-negative integer power [exponent].
          *
@@ -348,7 +351,7 @@ public interface Field<T> : Ring<T>, FieldOps<T>, ScaleOperations<T>, NumericAlg
 
     public fun power(arg: T, pow: Int): T = optimizedPower(arg, pow)
 
-    public companion object{
+    public companion object {
         /**
          * Raises [arg] to the integer power [exponent].
          *
@@ -361,7 +364,11 @@ public interface Field<T> : Ring<T>, FieldOps<T>, ScaleOperations<T>, NumericAlg
          * @author Iaroslav Postovalov, Evgeniy Zhelenskiy
          */
         private fun <T> Field<T>.optimizedPower(arg: T, exponent: Int): T = when {
-            exponent < 0 -> one / (this as Ring<T>).optimizedPower(arg, if (exponent == Int.MIN_VALUE) Int.MAX_VALUE.toUInt().inc() else (-exponent).toUInt())
+            exponent < 0 -> one / (this as Ring<T>).optimizedPower(
+                arg,
+                if (exponent == Int.MIN_VALUE) Int.MAX_VALUE.toUInt().inc() else (-exponent).toUInt()
+            )
+
             else -> (this as Ring<T>).optimizedPower(arg, exponent.toUInt())
         }
     }

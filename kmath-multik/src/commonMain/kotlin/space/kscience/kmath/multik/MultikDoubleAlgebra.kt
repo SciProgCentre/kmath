@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -20,7 +20,7 @@ public class MultikDoubleAlgebra(
 ) : MultikDivisionTensorAlgebra<Double, Float64Field>(multikEngine),
     TrigonometricOperations<StructureND<Double>>, ExponentialOperations<StructureND<Double>> {
     override val elementAlgebra: Float64Field get() = Float64Field
-    override val type: DataType get() = DataType.DoubleDataType
+    override val dataType: DataType get() = DataType.DoubleDataType
 
     override fun sin(arg: StructureND<Double>): MultikTensor<Double> = multikMath.mathEx.sin(arg.asMultik().array).wrap()
 

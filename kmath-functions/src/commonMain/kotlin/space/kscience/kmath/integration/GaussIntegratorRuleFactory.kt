@@ -1,10 +1,11 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
 package space.kscience.kmath.integration
 
+import space.kscience.kmath.operations.Float64Field
 import space.kscience.kmath.operations.mapToBuffer
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.Float64Buffer
@@ -12,10 +13,10 @@ import space.kscience.kmath.structures.asBuffer
 import kotlin.math.ulp
 import kotlin.native.concurrent.ThreadLocal
 
-public interface GaussIntegratorRuleFactory : IntegrandFeature {
+public interface GaussIntegratorRuleFactory {
     public fun build(numPoints: Int): Pair<Buffer<Double>, Buffer<Double>>
 
-    public companion object {
+    public companion object: IntegrandAttribute<GaussIntegratorRuleFactory>{
         public fun double(numPoints: Int, range: ClosedRange<Double>): Pair<Buffer<Double>, Buffer<Double>> =
             GaussLegendreRuleFactory.build(numPoints, range)
     }
@@ -32,11 +33,11 @@ public fun GaussIntegratorRuleFactory.build(
     val normalized: Pair<Buffer<Double>, Buffer<Double>> = build(numPoints)
     val length = range.endInclusive - range.start
 
-    val points = normalized.first.mapToBuffer(::Float64Buffer) {
+    val points = normalized.first.mapToBuffer(Float64Field.bufferFactory) {
         range.start + length / 2 + length / 2 * it
     }
 
-    val weights = normalized.second.mapToBuffer(::Float64Buffer) {
+    val weights = normalized.second.mapToBuffer(Float64Field.bufferFactory) {
         it * length / 2
     }
 

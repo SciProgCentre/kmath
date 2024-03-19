@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -14,6 +14,8 @@ import kotlin.jvm.JvmInline
  */
 @JvmInline
 public value class Int32Buffer(public val array: IntArray) : PrimitiveBuffer<Int> {
+
+
     override val size: Int get() = array.size
 
     override operator fun get(index: Int): Int = array[index]
@@ -24,7 +26,6 @@ public value class Int32Buffer(public val array: IntArray) : PrimitiveBuffer<Int
 
     override operator fun iterator(): IntIterator = array.iterator()
 
-    override fun copy(): Int32Buffer = Int32Buffer(array.copyOf())
 }
 
 public typealias IntBuffer = Int32Buffer

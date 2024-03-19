@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -29,7 +29,7 @@ import space.kscience.kmath.operations.Int64Ring
 @PublishedApi
 internal fun <T : Any> MST.compileWith(type: Class<T>, algebra: Algebra<T>): Expression<T> {
     val typed = evaluateConstants(algebra)
-    if (typed is TypedMst.Constant<T>) return Expression { typed.value }
+    if (typed is TypedMst.Constant<T>) return Expression(algebra.type) { typed.value }
 
     fun GenericAsmBuilder<T>.variablesVisitor(node: TypedMst<T>): Unit = when (node) {
         is TypedMst.Unary -> variablesVisitor(node.value)

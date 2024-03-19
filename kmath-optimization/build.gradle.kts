@@ -6,6 +6,7 @@ kscience{
     jvm()
     js()
     native()
+    wasm()
 }
 
 kotlin.sourceSets {

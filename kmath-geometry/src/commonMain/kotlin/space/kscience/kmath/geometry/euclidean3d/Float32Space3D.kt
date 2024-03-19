@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2023 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -14,17 +14,16 @@ import kotlinx.serialization.encoding.Encoder
 import space.kscience.kmath.geometry.GeometrySpace
 import space.kscience.kmath.geometry.Vector3D
 import space.kscience.kmath.operations.Float32Field
-import space.kscience.kmath.operations.ScaleOperations
+import space.kscience.kmath.structures.Float32
+import space.kscience.kmath.structures.MutableBufferFactory
 import kotlin.math.pow
 import kotlin.math.sqrt
 
-@Serializable(Float32Space3D.VectorSerializer::class)
-public interface Float32Vector3D: Vector3D<Float>
+
+public typealias Float32Vector3D = Vector3D<Float>
 
 
-public object Float32Space3D :
-    GeometrySpace<Float32Vector3D>,
-    ScaleOperations<Float32Vector3D>{
+public object Float32Space3D : GeometrySpace<Vector3D<Float32>, Float32> {
 
     @Serializable
     @SerialName("Float32Vector3D")
@@ -54,21 +53,21 @@ public object Float32Space3D :
 
     override val zero: Float32Vector3D by lazy { vector(0.0, 0.0, 0.0) }
 
-    override fun norm(arg: Float32Vector3D): Double = sqrt(arg.x.pow(2) + arg.y.pow(2) + arg.z.pow(2)).toDouble()
+    override fun norm(arg: Vector3D<Float32>): Float32 = sqrt(arg.x.pow(2) + arg.y.pow(2) + arg.z.pow(2))
 
-    public fun Float32Vector3D.norm(): Double = norm(this)
+    public fun Vector3D<Float32>.norm(): Float32 = norm(this)
 
-    override fun Float32Vector3D.unaryMinus(): Float32Vector3D = vector(-x, -y, -z)
+    override fun Vector3D<Float32>.unaryMinus(): Float32Vector3D = vector(-x, -y, -z)
 
-    override fun Float32Vector3D.distanceTo(other: Float32Vector3D): Double = (this - other).norm()
+    override fun Vector3D<Float32>.distanceTo(other: Vector3D<Float32>): Float32 = (this - other).norm()
 
-    override fun add(left: Float32Vector3D, right: Float32Vector3D): Float32Vector3D =
+    override fun add(left: Vector3D<Float32>, right: Vector3D<Float32>): Float32Vector3D =
         vector(left.x + right.x, left.y + right.y, left.z + right.z)
 
-    override fun scale(a: Float32Vector3D, value: Double): Float32Vector3D =
+    override fun scale(a: Vector3D<Float32>, value: Double): Float32Vector3D =
         vector(a.x * value, a.y * value, a.z * value)
 
-    override fun Float32Vector3D.dot(other: Float32Vector3D): Double =
+    override fun Vector3D<Float32>.dot(other: Vector3D<Float32>): Double =
         (x * other.x + y * other.y + z * other.z).toDouble()
 
     /**
@@ -101,6 +100,10 @@ public object Float32Space3D :
     public val xAxis: Float32Vector3D = vector(1.0, 0.0, 0.0)
     public val yAxis: Float32Vector3D = vector(0.0, 1.0, 0.0)
     public val zAxis: Float32Vector3D = vector(0.0, 0.0, 1.0)
+
+    override val defaultPrecision: Float32 = 1e-3f
+
+    override val bufferFactory: MutableBufferFactory<Vector3D<Float32>> = MutableBufferFactory()
 }
 
 public fun Float32Vector3D(x: Number, y: Number, z: Number): Float32Vector3D = Float32Space3D.vector(x, y, z)

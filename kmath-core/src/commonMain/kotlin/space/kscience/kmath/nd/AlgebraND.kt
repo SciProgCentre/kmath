@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -8,7 +8,7 @@ package space.kscience.kmath.nd
 import space.kscience.kmath.PerformancePitfall
 import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.operations.*
-import kotlin.reflect.KClass
+import space.kscience.kmath.structures.MutableBufferFactory
 
 /**
  * The base interface for all ND-algebra implementations.
@@ -16,16 +16,22 @@ import kotlin.reflect.KClass
  * @param T the type of ND-structure element.
  * @param C the type of the element context.
  */
-public interface AlgebraND<T, out C : Algebra<T>>: Algebra<StructureND<T>> {
+public interface AlgebraND<T, out C : Algebra<T>> : Algebra<StructureND<T>> {
     /**
      * The algebra over elements of ND structure.
      */
     public val elementAlgebra: C
 
     /**
+     * Produces a new [MutableStructureND] using given initializer function.
+     */
+    public fun mutableStructureND(shape: ShapeND, initializer: C.(IntArray) -> T): MutableStructureND<T>
+
+    /**
      * Produces a new [StructureND] using given initializer function.
      */
-    public fun structureND(shape: ShapeND, initializer: C.(IntArray) -> T): StructureND<T>
+    public fun structureND(shape: ShapeND, initializer: C.(IntArray) -> T): StructureND<T> =
+        mutableStructureND(shape, initializer)
 
     /**
      * Maps elements from one structure to another one by applying [transform] to them.
@@ -65,30 +71,18 @@ public interface AlgebraND<T, out C : Algebra<T>>: Algebra<StructureND<T>> {
         structure.map { value -> this@invoke(value) }
 
     /**
-     * Get a feature of the structure in this scope. Structure features take precedence other context features.
+     * Get an attribute value for the structure in this scope. Structure features take precedence other context features.
      *
-     * @param F the type of feature.
      * @param structure the structure.
-     * @param type the [KClass] instance of [F].
+     * @param attribute to be computed.
      * @return a feature object or `null` if it isn't present.
      */
     @UnstableKMathAPI
-    public fun <F : StructureFeature> getFeature(structure: StructureND<T>, type: KClass<out F>): F? =
-        structure.getFeature(type)
+    public fun <T, A : StructureAttribute<T>> attributeFor(structure: StructureND<*>, attribute: A): T? =
+        structure.attributes[attribute]
 
     public companion object
 }
-
-/**
- * Get a feature of the structure in this scope. Structure features take precedence other context features.
- *
- * @param T the type of items in the matrices.
- * @param F the type of feature.
- * @return a feature object or `null` if it isn't present.
- */
-@UnstableKMathAPI
-public inline fun <T : Any, reified F : StructureFeature> AlgebraND<T, *>.getFeature(structure: StructureND<T>): F? =
-    getFeature(structure, F::class)
 
 /**
  * Space of [StructureND].
@@ -97,6 +91,8 @@ public inline fun <T : Any, reified F : StructureFeature> AlgebraND<T, *>.getFea
  * @param A the type of group over structure elements.
  */
 public interface GroupOpsND<T, out A : GroupOps<T>> : GroupOps<StructureND<T>>, AlgebraND<T, A> {
+    override val bufferFactory: MutableBufferFactory<StructureND<T>> get() = MutableBufferFactory<StructureND<T>>()
+
     /**
      * Element-wise addition.
      *
@@ -108,7 +104,7 @@ public interface GroupOpsND<T, out A : GroupOps<T>> : GroupOps<StructureND<T>>, 
     override fun add(left: StructureND<T>, right: StructureND<T>): StructureND<T> =
         zip(left, right) { aValue, bValue -> add(aValue, bValue) }
 
-    // TODO move to extensions after KEEP-176
+    // TODO implement using context receivers
 
     /**
      * Adds an ND structure to an element of it.
@@ -175,8 +171,6 @@ public interface RingOpsND<T, out A : RingOps<T>> : RingOps<StructureND<T>>, Gro
     override fun multiply(left: StructureND<T>, right: StructureND<T>): StructureND<T> =
         zip(left, right) { aValue, bValue -> multiply(aValue, bValue) }
 
-    //TODO move to extensions with context receivers
-
     /**
      * Multiplies an ND structure by an element of it.
      *
@@ -226,7 +220,6 @@ public interface FieldOpsND<T, out A : Field<T>> :
     override fun divide(left: StructureND<T>, right: StructureND<T>): StructureND<T> =
         zip(left, right) { aValue, bValue -> divide(aValue, bValue) }
 
-    //TODO move to extensions after https://github.com/Kotlin/KEEP/blob/master/proposals/context-receivers.md
     /**
      * Divides an ND structure by an element of it.
      *

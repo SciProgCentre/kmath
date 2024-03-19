@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2023 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -13,9 +13,10 @@ import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 import space.kscience.kmath.geometry.GeometrySpace
 import space.kscience.kmath.geometry.Vector3D
+import space.kscience.kmath.linear.Float64LinearSpace
 import space.kscience.kmath.operations.Float64Field
-import space.kscience.kmath.operations.Norm
-import space.kscience.kmath.operations.ScaleOperations
+import space.kscience.kmath.structures.Float64
+import space.kscience.kmath.structures.MutableBufferFactory
 import kotlin.math.pow
 import kotlin.math.sqrt
 
@@ -32,13 +33,15 @@ internal fun leviCivita(i: Int, j: Int, k: Int): Int = when {
     else -> 0
 }
 
-public typealias DoubleVector3D = Vector3D<Double>
-public typealias Float64Vector3D = Vector3D<Double>
+public typealias Float64Vector3D = Vector3D<Float64>
 
-public val DoubleVector3D.r: Double get() = Float64Space3D.norm(this)
+@Deprecated("Use Float64Vector3D", ReplaceWith("Float64Vector3D"))
+public typealias DoubleVector3D = Float64Vector3D
 
-public object Float64Space3D : GeometrySpace<DoubleVector3D>, ScaleOperations<DoubleVector3D>,
-    Norm<DoubleVector3D, Double> {
+
+public object Float64Space3D : GeometrySpace<Vector3D<Float64>, Double> {
+
+    public val linearSpace: Float64LinearSpace = Float64LinearSpace
 
     @Serializable
     @SerialName("Float64Vector3D")
@@ -46,52 +49,52 @@ public object Float64Space3D : GeometrySpace<DoubleVector3D>, ScaleOperations<Do
         override val x: Double,
         override val y: Double,
         override val z: Double,
-    ) : DoubleVector3D
+    ) : Float64Vector3D
 
-    public object VectorSerializer : KSerializer<DoubleVector3D> {
+    public object VectorSerializer : KSerializer<Float64Vector3D> {
         private val proxySerializer = Vector3DImpl.serializer()
         override val descriptor: SerialDescriptor get() = proxySerializer.descriptor
 
-        override fun deserialize(decoder: Decoder): DoubleVector3D = decoder.decodeSerializableValue(proxySerializer)
+        override fun deserialize(decoder: Decoder): Float64Vector3D = decoder.decodeSerializableValue(proxySerializer)
 
-        override fun serialize(encoder: Encoder, value: DoubleVector3D) {
+        override fun serialize(encoder: Encoder, value: Float64Vector3D) {
             val vector = value as? Vector3DImpl ?: Vector3DImpl(value.x, value.y, value.z)
             encoder.encodeSerializableValue(proxySerializer, vector)
         }
     }
 
-    public fun vector(x: Double, y: Double, z: Double): DoubleVector3D =
+    public fun vector(x: Double, y: Double, z: Double): Float64Vector3D =
         Vector3DImpl(x, y, z)
 
-    public fun vector(x: Number, y: Number, z: Number): DoubleVector3D =
+    public fun vector(x: Number, y: Number, z: Number): Float64Vector3D =
         vector(x.toDouble(), y.toDouble(), z.toDouble())
 
-    override val zero: DoubleVector3D by lazy { vector(0.0, 0.0, 0.0) }
+    override val zero: Float64Vector3D by lazy { vector(0.0, 0.0, 0.0) }
 
-    override fun norm(arg: DoubleVector3D): Double = sqrt(arg.x.pow(2) + arg.y.pow(2) + arg.z.pow(2))
+    override fun norm(arg: Vector3D<Float64>): Double = sqrt(arg.x.pow(2) + arg.y.pow(2) + arg.z.pow(2))
 
-    public fun DoubleVector3D.norm(): Double = norm(this)
+    public fun Vector3D<Float64>.norm(): Double = norm(this)
 
-    override fun DoubleVector3D.unaryMinus(): DoubleVector3D = vector(-x, -y, -z)
+    override fun Vector3D<Float64>.unaryMinus(): Float64Vector3D = vector(-x, -y, -z)
 
-    override fun DoubleVector3D.distanceTo(other: DoubleVector3D): Double = (this - other).norm()
+    override fun Vector3D<Float64>.distanceTo(other: Vector3D<Float64>): Double = (this - other).norm()
 
-    override fun add(left: DoubleVector3D, right: DoubleVector3D): DoubleVector3D =
+    override fun add(left: Vector3D<Float64>, right: Vector3D<Float64>): Float64Vector3D =
         vector(left.x + right.x, left.y + right.y, left.z + right.z)
 
-    override fun scale(a: DoubleVector3D, value: Double): DoubleVector3D =
+    override fun scale(a: Vector3D<Float64>, value: Double): Float64Vector3D =
         vector(a.x * value, a.y * value, a.z * value)
 
-    override fun DoubleVector3D.dot(other: DoubleVector3D): Double =
+    override fun Vector3D<Float64>.dot(other: Vector3D<Float64>): Double =
         x * other.x + y * other.y + z * other.z
 
     /**
      * Compute vector product of [first] and [second]. The basis is assumed to be right-handed.
      */
     public fun vectorProduct(
-        first: DoubleVector3D,
-        second: DoubleVector3D,
-    ): DoubleVector3D {
+        first: Vector3D<Float64>,
+        second: Vector3D<Float64>,
+    ): Float64Vector3D {
         var x = 0.0
         var y = 0.0
         var z = 0.0
@@ -110,11 +113,19 @@ public object Float64Space3D : GeometrySpace<DoubleVector3D>, ScaleOperations<Do
     /**
      * Vector product with the right basis
      */
-    public infix fun DoubleVector3D.cross(other: DoubleVector3D): Vector3D<Double> = vectorProduct(this, other)
+    public infix fun Vector3D<Float64>.cross(other: Vector3D<Float64>): Vector3D<Double> = vectorProduct(this, other)
 
-    public val xAxis: DoubleVector3D = vector(1.0, 0.0, 0.0)
-    public val yAxis: DoubleVector3D = vector(0.0, 1.0, 0.0)
-    public val zAxis: DoubleVector3D = vector(0.0, 0.0, 1.0)
+    public val xAxis: Float64Vector3D = vector(1.0, 0.0, 0.0)
+    public val yAxis: Float64Vector3D = vector(0.0, 1.0, 0.0)
+    public val zAxis: Float64Vector3D = vector(0.0, 0.0, 1.0)
+
+    override val defaultPrecision: Double = 1e-6
+
+    override val bufferFactory: MutableBufferFactory<Vector3D<Float64>> = MutableBufferFactory()
 }
 
+@Suppress("UnusedReceiverParameter")
 public val Float64Field.euclidean3D: Float64Space3D get() = Float64Space3D
+
+
+public val Vector3D<Float64>.r: Double get() = Float64Space3D.norm(this)

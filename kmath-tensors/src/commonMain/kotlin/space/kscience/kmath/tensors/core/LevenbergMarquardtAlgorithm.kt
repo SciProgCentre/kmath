@@ -1,12 +1,11 @@
 /*
- * Copyright 2018-2023 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
 package space.kscience.kmath.tensors.core
 
 import space.kscience.kmath.PerformancePitfall
-import space.kscience.kmath.linear.transpose
 import space.kscience.kmath.nd.*
 import kotlin.math.abs
 import kotlin.math.max
@@ -139,7 +138,7 @@ public fun DoubleTensorAlgebra.levenbergMarquardt(inputData: LMInput): LMResultI
     if (inputData.nargin < 5) {
         weight = fromArray(
             ShapeND(intArrayOf(1, 1)),
-            doubleArrayOf((inputData.realValues.transpose().dot(inputData.realValues)).as1D()[0])
+            doubleArrayOf((inputData.realValues.transposed() dot inputData.realValues).as1D()[0])
         ).as2D()
     }
 
@@ -266,12 +265,12 @@ public fun DoubleTensorAlgebra.levenbergMarquardt(inputData: LMInput): LMResultI
         settings.funcCalls += 1
 
 //        val tmp = deltaY.times(weight)
-        var X2Try = deltaY.as2D().transpose().dot(deltaY.times(weight)) // Chi-squared error criteria
+        var X2Try = deltaY.as2D().transposed() dot deltaY.times(weight) // Chi-squared error criteria
 
         val alpha = 1.0
         if (updateType == 2) { // Quadratic
             // One step of quadratic line update in the h direction for minimum X2
-            val alphaTensor = (jtWdy.transpose() dot h) / ((X2Try - x2) / 2.0 + 2 * (jtWdy.transpose() dot h))
+            val alphaTensor = (jtWdy.transposed() dot h) / ((X2Try - x2) / 2.0 + 2 * (jtWdy.transposed() dot h))
             h = h dot alphaTensor
             pTry = (p + h).as2D() // update only [idx] elements
             pTry = smallestElementComparison(
@@ -289,7 +288,7 @@ public fun DoubleTensorAlgebra.levenbergMarquardt(inputData: LMInput): LMResultI
             ) // residual error using p_try
             settings.funcCalls += 1
 
-            X2Try = deltaY.as2D().transpose() dot deltaY * weight // Chi-squared error criteria
+            X2Try = deltaY.as2D().transposed() dot deltaY * weight // Chi-squared error criteria
         }
 
         val rho = when (updateType) { // Nielsen

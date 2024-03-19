@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -15,6 +15,7 @@ import kotlin.jvm.JvmInline
  */
 @JvmInline
 public value class Float64Buffer(public val array: DoubleArray) : PrimitiveBuffer<Double> {
+
     override val size: Int get() = array.size
 
     override operator fun get(index: Int): Double = array[index]
@@ -25,8 +26,6 @@ public value class Float64Buffer(public val array: DoubleArray) : PrimitiveBuffe
 
     override operator fun iterator(): DoubleIterator = array.iterator()
 
-    override fun copy(): Float64Buffer = Float64Buffer(array.copyOf())
-
     override fun toString(): String = Buffer.toString(this)
 
     public companion object {
@@ -34,6 +33,7 @@ public value class Float64Buffer(public val array: DoubleArray) : PrimitiveBuffe
     }
 }
 
+@Deprecated("Use Float64Buffer instead", ReplaceWith("Float64Buffer"))
 public typealias DoubleBuffer = Float64Buffer
 
 /**

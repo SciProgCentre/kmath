@@ -1,21 +1,29 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
 package space.kscience.kmath.commons.linear
 
 import org.apache.commons.math3.linear.*
+import org.apache.commons.math3.linear.LUDecomposition
+import org.apache.commons.math3.linear.SingularValueDecomposition
+import space.kscience.attributes.SafeType
 import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.linear.*
-import space.kscience.kmath.nd.StructureFeature
+import space.kscience.kmath.linear.CholeskyDecomposition
+import space.kscience.kmath.linear.QRDecomposition
+import space.kscience.kmath.nd.Structure2D
+import space.kscience.kmath.nd.StructureAttribute
+import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.operations.Float64Field
 import space.kscience.kmath.structures.Buffer
-import space.kscience.kmath.structures.Float64Buffer
-import kotlin.reflect.KClass
-import kotlin.reflect.cast
+import space.kscience.kmath.structures.Float64
+import space.kscience.kmath.structures.IntBuffer
+import space.kscience.kmath.structures.asBuffer
 
 public class CMMatrix(public val origin: RealMatrix) : Matrix<Double> {
+
     override val rowNum: Int get() = origin.rowDimension
     override val colNum: Int get() = origin.columnDimension
 
@@ -37,6 +45,8 @@ public fun RealVector.toPoint(): CMVector = CMVector(this)
 
 public object CMLinearSpace : LinearSpace<Double, Float64Field> {
     override val elementAlgebra: Float64Field get() = Float64Field
+
+    override val type: SafeType<Double> get() = DoubleField.type
 
     override fun buildMatrix(
         rows: Int,
@@ -98,49 +108,48 @@ public object CMLinearSpace : LinearSpace<Double, Float64Field> {
     override fun Double.times(v: Point<Double>): CMVector =
         v * this
 
-    @UnstableKMathAPI
-    override fun <F : StructureFeature> computeFeature(structure: Matrix<Double>, type: KClass<out F>): F? {
-        //Return the feature if it is intrinsic to the structure
-        structure.getFeature(type)?.let { return it }
+    override fun <V, A : StructureAttribute<V>> computeAttribute(structure: Structure2D<Double>, attribute: A): V? {
 
         val origin = structure.toCM().origin
 
-        return when (type) {
-            DiagonalFeature::class -> if (origin is DiagonalMatrix) DiagonalFeature else null
+        val raw: Any? = when (attribute) {
+            IsDiagonal -> if (origin is DiagonalMatrix) Unit else null
+            Determinant -> LUDecomposition(origin).determinant
 
-            DeterminantFeature::class, LupDecompositionFeature::class -> object :
-                DeterminantFeature<Double>,
-                LupDecompositionFeature<Double> {
-                private val lup by lazy { LUDecomposition(origin) }
-                override val determinant: Double by lazy { lup.determinant }
-                override val l: Matrix<Double> by lazy<Matrix<Double>> { CMMatrix(lup.l).withFeature(LFeature) }
-                override val u: Matrix<Double> by lazy<Matrix<Double>> { CMMatrix(lup.u).withFeature(UFeature) }
-                override val p: Matrix<Double> by lazy { CMMatrix(lup.p) }
+            LUP -> object : LupDecomposition<Float64> {
+                val lup by lazy { LUDecomposition(origin) }
+                override val pivot: IntBuffer get() = lup.pivot.asBuffer()
+                override val l: Matrix<Float64> get() = lup.l.wrap()
+                override val u: Matrix<Float64> get() = lup.u.wrap()
             }
 
-            CholeskyDecompositionFeature::class -> object : CholeskyDecompositionFeature<Double> {
-                override val l: Matrix<Double> by lazy<Matrix<Double>> {
-                    val cholesky = CholeskyDecomposition(origin)
-                    CMMatrix(cholesky.l).withFeature(LFeature)
-                }
+            Cholesky -> object : CholeskyDecomposition<Float64> {
+                val cmCholesky by lazy { org.apache.commons.math3.linear.CholeskyDecomposition(origin) }
+                override val l: Matrix<Double> get() = cmCholesky.l.wrap()
             }
 
-            QRDecompositionFeature::class -> object : QRDecompositionFeature<Double> {
-                private val qr by lazy { QRDecomposition(origin) }
-                override val q: Matrix<Double> by lazy<Matrix<Double>> { CMMatrix(qr.q).withFeature(OrthogonalFeature) }
-                override val r: Matrix<Double> by lazy<Matrix<Double>> { CMMatrix(qr.r).withFeature(UFeature) }
+            QR -> object : QRDecomposition<Float64> {
+                val cmQr by lazy { org.apache.commons.math3.linear.QRDecomposition(origin) }
+                override val q: Matrix<Float64> get() = cmQr.q.wrap().withAttribute(OrthogonalAttribute)
+                override val r: Matrix<Float64> get() = cmQr.r.wrap().withAttribute(UpperTriangular)
             }
 
-            SingularValueDecompositionFeature::class -> object : SingularValueDecompositionFeature<Double> {
-                private val sv by lazy { SingularValueDecomposition(origin) }
-                override val u: Matrix<Double> by lazy { CMMatrix(sv.u) }
-                override val s: Matrix<Double> by lazy { CMMatrix(sv.s) }
-                override val v: Matrix<Double> by lazy { CMMatrix(sv.v) }
-                override val singularValues: Point<Double> by lazy { Float64Buffer(sv.singularValues) }
+            SVD -> object : space.kscience.kmath.linear.SingularValueDecomposition<Float64> {
+                val cmSvd by lazy { SingularValueDecomposition(origin) }
+
+                override val u: Matrix<Float64> get() = cmSvd.u.wrap()
+                override val s: Matrix<Float64> get() = cmSvd.s.wrap()
+                override val v: Matrix<Float64> get() = cmSvd.v.wrap()
+                override val singularValues: Point<Float64> get() = cmSvd.singularValues.asBuffer()
+
             }
+
             else -> null
-        }?.let(type::cast)
+        }
+        @Suppress("UNCHECKED_CAST")
+        return raw as V?
     }
+
 }
 
 public operator fun CMMatrix.plus(other: CMMatrix): CMMatrix = CMMatrix(origin.add(other.origin))

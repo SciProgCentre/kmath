@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -310,32 +310,26 @@ internal fun DoubleTensorAlgebra.svdHelper(
     }
 }
 
-private fun pythag(a: Double, b: Double): Double {
-    val at: Double = abs(a)
-    val bt: Double = abs(b)
-    val ct: Double
-    val result: Double
-    if (at > bt) {
-        ct = bt / at
-        result = at * sqrt(1.0 + ct * ct)
-    } else if (bt > 0.0) {
-        ct = at / bt
-        result = bt * sqrt(1.0 + ct * ct)
-    } else result = 0.0
-    return result
-}
-
-private fun SIGN(a: Double, b: Double): Double {
-    if (b >= 0.0)
-        return abs(a)
-    else
-        return -abs(a)
-}
-
 internal fun MutableStructure2D<Double>.svdGolubKahanHelper(
     u: MutableStructure2D<Double>, w: BufferedTensor<Double>,
     v: MutableStructure2D<Double>, iterations: Int, epsilon: Double,
 ) {
+    fun pythag(a: Double, b: Double): Double {
+        val at: Double = abs(a)
+        val bt: Double = abs(b)
+        val ct: Double
+        val result: Double
+        if (at > bt) {
+            ct = bt / at
+            result = at * sqrt(1.0 + ct * ct)
+        } else if (bt > 0.0) {
+            ct = at / bt
+            result = bt * sqrt(1.0 + ct * ct)
+        } else result = 0.0
+        return result
+    }
+
+
     val shape = this.shape
     val m = shape.component1()
     val n = shape.component2()
@@ -553,7 +547,7 @@ internal fun MutableStructure2D<Double>.svdGolubKahanHelper(
             h = rv1[k]
             f = ((y - z) * (y + z) + (g - h) * (g + h)) / (2.0 * h * y)
             g = pythag(f, 1.0)
-            f = ((x - z) * (x + z) + h * ((y / (f + SIGN(g, f))) - h)) / x
+            f = ((x - z) * (x + z) + h * ((y / (f + if (f >= 0.0) abs(g) else -abs(g) )) - h)) / x
             c = 1.0
             s = 1.0
 
@@ -563,7 +557,7 @@ internal fun MutableStructure2D<Double>.svdGolubKahanHelper(
                 g = rv1[i]
                 y = wBuffer[wStart + i]
                 h = s * g
-                g = c * g
+                g *= c
                 z = pythag(f, h)
                 rv1[j] = z
                 c = f / z

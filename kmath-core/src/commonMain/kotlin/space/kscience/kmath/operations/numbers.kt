@@ -1,10 +1,10 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 package space.kscience.kmath.operations
 
-import space.kscience.kmath.structures.*
+import space.kscience.kmath.structures.MutableBufferFactory
 import kotlin.math.pow as kpow
 
 
@@ -67,7 +67,7 @@ public interface ExtendedField<T> : ExtendedFieldOps<T>, Field<T>, NumericAlgebr
  */
 @Suppress("EXTENSION_SHADOWED_BY_MEMBER")
 public object Float64Field : ExtendedField<Double>, Norm<Double, Double>, ScaleOperations<Double> {
-    override val bufferFactory: MutableBufferFactory<Double> = MutableBufferFactory(::Float64Buffer)
+    override val bufferFactory: MutableBufferFactory<Double> = MutableBufferFactory()
 
     override val zero: Double get() = 0.0
     override val one: Double get() = 1.0
@@ -129,7 +129,7 @@ public val Double.Companion.algebra: Float64Field get() = Float64Field
  */
 @Suppress("EXTENSION_SHADOWED_BY_MEMBER")
 public object Float32Field : ExtendedField<Float>, Norm<Float, Float> {
-    override val bufferFactory: MutableBufferFactory<Float> = MutableBufferFactory(::Float32Buffer)
+    override val bufferFactory: MutableBufferFactory<Float> = MutableBufferFactory()
 
     override val zero: Float get() = 0.0f
     override val one: Float get() = 1.0f
@@ -187,7 +187,7 @@ public val Float.Companion.algebra: Float32Field get() = Float32Field
  */
 @Suppress("EXTENSION_SHADOWED_BY_MEMBER")
 public object Int32Ring : Ring<Int>, Norm<Int, Int>, NumericAlgebra<Int> {
-    override val bufferFactory: MutableBufferFactory<Int> = MutableBufferFactory(::Int32Buffer)
+    override val bufferFactory: MutableBufferFactory<Int> = MutableBufferFactory()
 
     override val zero: Int get() = 0
     override val one: Int get() = 1
@@ -212,7 +212,7 @@ public val Int.Companion.algebra: Int32Ring get() = Int32Ring
  */
 @Suppress("EXTENSION_SHADOWED_BY_MEMBER")
 public object Int16Ring : Ring<Short>, Norm<Short, Short>, NumericAlgebra<Short> {
-    override val bufferFactory: MutableBufferFactory<Short> = MutableBufferFactory(::Int16Buffer)
+    override val bufferFactory: MutableBufferFactory<Short> = MutableBufferFactory()
 
     override val zero: Short get() = 0
     override val one: Short get() = 1
@@ -237,7 +237,7 @@ public val Short.Companion.algebra: Int16Ring get() = Int16Ring
  */
 @Suppress("EXTENSION_SHADOWED_BY_MEMBER")
 public object Int8Ring : Ring<Byte>, Norm<Byte, Byte>, NumericAlgebra<Byte> {
-    override val bufferFactory: MutableBufferFactory<Byte> = MutableBufferFactory(::Int8Buffer)
+    override val bufferFactory: MutableBufferFactory<Byte> = MutableBufferFactory()
 
     override val zero: Byte get() = 0
     override val one: Byte get() = 1
@@ -262,7 +262,7 @@ public val Byte.Companion.algebra: Int8Ring get() = Int8Ring
  */
 @Suppress("EXTENSION_SHADOWED_BY_MEMBER")
 public object Int64Ring : Ring<Long>, Norm<Long, Long>, NumericAlgebra<Long> {
-    override val bufferFactory: MutableBufferFactory<Long> = MutableBufferFactory(::Int64Buffer)
+    override val bufferFactory: MutableBufferFactory<Long> = MutableBufferFactory()
 
     override val zero: Long get() = 0L
     override val one: Long get() = 1L

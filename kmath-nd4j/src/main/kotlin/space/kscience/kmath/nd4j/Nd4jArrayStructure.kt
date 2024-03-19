@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -31,6 +31,7 @@ public sealed class Nd4jArrayStructure<T> : MutableStructureND<T> {
 }
 
 public data class Nd4jArrayIntStructure(override val ndArray: INDArray) : Nd4jArrayStructure<Int>(), StructureNDOfInt {
+
     override fun elementsIterator(): Iterator<Pair<IntArray, Int>> = ndArray.intIterator()
 
     @OptIn(PerformancePitfall::class)
@@ -47,8 +48,10 @@ public data class Nd4jArrayIntStructure(override val ndArray: INDArray) : Nd4jAr
  */
 public fun INDArray.asIntStructure(): Nd4jArrayIntStructure = Nd4jArrayIntStructure(this)
 
-public data class Nd4jArrayDoubleStructure(override val ndArray: INDArray) : Nd4jArrayStructure<Double>(), StructureNDOfDouble {
+public data class Nd4jArrayDoubleStructure(override val ndArray: INDArray) : Nd4jArrayStructure<Double>(),
+    StructureNDOfDouble {
     override fun elementsIterator(): Iterator<Pair<IntArray, Double>> = ndArray.realIterator()
+
     @OptIn(PerformancePitfall::class)
     override fun get(index: IntArray): Double = ndArray.getDouble(*index)
 
@@ -64,7 +67,9 @@ public data class Nd4jArrayDoubleStructure(override val ndArray: INDArray) : Nd4
 public fun INDArray.asDoubleStructure(): Nd4jArrayStructure<Double> = Nd4jArrayDoubleStructure(this)
 
 public data class Nd4jArrayFloatStructure(override val ndArray: INDArray) : Nd4jArrayStructure<Float>() {
+
     override fun elementsIterator(): Iterator<Pair<IntArray, Float>> = ndArray.floatIterator()
+
     @PerformancePitfall
     override fun get(index: IntArray): Float = ndArray.getFloat(*index)
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -14,6 +14,7 @@ import kotlin.jvm.JvmInline
  */
 @JvmInline
 public value class Int64Buffer(public val array: LongArray) : PrimitiveBuffer<Long> {
+
     override val size: Int get() = array.size
 
     override operator fun get(index: Int): Long = array[index]
@@ -24,8 +25,6 @@ public value class Int64Buffer(public val array: LongArray) : PrimitiveBuffer<Lo
 
     override operator fun iterator(): LongIterator = array.iterator()
 
-    override fun copy(): MutableBuffer<Long> =
-        Int64Buffer(array.copyOf())
 }
 
 public typealias LongBuffer = Int64Buffer

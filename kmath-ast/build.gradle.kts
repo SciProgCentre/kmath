@@ -31,7 +31,7 @@ kscience{
 kotlin {
     js {
         nodejs {
-            testTask {
+            testTask{
                 useMocha().timeout = "0"
             }
         }

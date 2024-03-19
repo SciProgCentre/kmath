@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -7,6 +7,7 @@ package space.kscience.kmath.structures
 
 import space.kscience.kmath.PerformancePitfall
 import space.kscience.kmath.nd.*
+import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.operations.ExtendedField
 import space.kscience.kmath.operations.Float64Field
 import space.kscience.kmath.operations.NumbersAddOps
@@ -50,6 +51,15 @@ class StreamDoubleFieldND(override val shape: ShapeND) : FieldND<Double, Float64
         }.toArray()
 
         return BufferND(strides, array.asBuffer())
+    }
+
+    override fun mutableStructureND(shape: ShapeND, initializer: DoubleField.(IntArray) -> Double): MutableBufferND<Double> {
+        val array = IntStream.range(0, strides.linearSize).parallel().mapToDouble { offset ->
+            val index = strides.index(offset)
+            DoubleField.initializer(index)
+        }.toArray()
+
+        return MutableBufferND(strides, array.asBuffer())
     }
 
     @OptIn(PerformancePitfall::class)

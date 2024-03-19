@@ -1,11 +1,12 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
 package space.kscience.kmath.expressions
 
 import space.kscience.kmath.operations.*
+import space.kscience.kmath.structures.MutableBufferFactory
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
 
@@ -17,29 +18,32 @@ import kotlin.contracts.contract
 public abstract class FunctionalExpressionAlgebra<T, out A : Algebra<T>>(
     public val algebra: A,
 ) : ExpressionAlgebra<T, Expression<T>> {
+    override val bufferFactory: MutableBufferFactory<Expression<T>> = MutableBufferFactory<Expression<T>>()
+
     /**
      * Builds an Expression of constant expression that does not depend on arguments.
      */
-    override fun const(value: T): Expression<T> = Expression { value }
+    override fun const(value: T): Expression<T> = Expression(algebra.type) { value }
 
     /**
      * Builds an Expression to access a variable.
      */
-    override fun bindSymbolOrNull(value: String): Expression<T>? = Expression { arguments ->
+    override fun bindSymbolOrNull(value: String): Expression<T>? = Expression(algebra.type) { arguments ->
         algebra.bindSymbolOrNull(value)
             ?: arguments[StringSymbol(value)]
             ?: error("Symbol '$value' is not supported in $this")
     }
 
-    override fun binaryOperationFunction(operation: String): (left: Expression<T>, right: Expression<T>) -> Expression<T> =
-        { left, right ->
-            Expression { arguments ->
-                algebra.binaryOperationFunction(operation)(left(arguments), right(arguments))
-            }
+    override fun binaryOperationFunction(
+        operation: String,
+    ): (left: Expression<T>, right: Expression<T>) -> Expression<T> = { left, right ->
+        Expression(algebra.type) { arguments ->
+            algebra.binaryOperationFunction(operation)(left(arguments), right(arguments))
         }
+    }
 
     override fun unaryOperationFunction(operation: String): (arg: Expression<T>) -> Expression<T> = { arg ->
-        Expression { arguments -> algebra.unaryOperation(operation, arg(arguments)) }
+        Expression(algebra.type) { arguments -> algebra.unaryOperation(operation, arg(arguments)) }
     }
 }
 
@@ -49,6 +53,7 @@ public abstract class FunctionalExpressionAlgebra<T, out A : Algebra<T>>(
 public open class FunctionalExpressionGroup<T, out A : Group<T>>(
     algebra: A,
 ) : FunctionalExpressionAlgebra<T, A>(algebra), Group<Expression<T>> {
+
     override val zero: Expression<T> get() = const(algebra.zero)
 
     override fun Expression<T>.unaryMinus(): Expression<T> =
@@ -120,7 +125,7 @@ public open class FunctionalExpressionField<T, out A : Field<T>>(
         super<FunctionalExpressionRing>.binaryOperationFunction(operation)
 
     override fun scale(a: Expression<T>, value: Double): Expression<T> = algebra {
-        Expression { args -> a(args) * value }
+        Expression(algebra.type) { args -> a(args) * value }
     }
 
     override fun bindSymbolOrNull(value: String): Expression<T>? =

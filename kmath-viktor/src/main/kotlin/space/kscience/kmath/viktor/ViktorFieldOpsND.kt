@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -17,8 +17,7 @@ import space.kscience.kmath.operations.Float64Field
 import space.kscience.kmath.operations.NumbersAddOps
 import space.kscience.kmath.operations.PowerOperations
 
-@OptIn(UnstableKMathAPI::class, PerformancePitfall::class)
-@Suppress("OVERRIDE_BY_INLINE", "NOTHING_TO_INLINE")
+@OptIn(PerformancePitfall::class)
 public open class ViktorFieldOpsND :
     FieldOpsND<Double, Float64Field>,
     ExtendedFieldOps<StructureND<Double>>,
@@ -27,13 +26,13 @@ public open class ViktorFieldOpsND :
     public val StructureND<Double>.f64Buffer: F64Array
         get() = when (this) {
             is ViktorStructureND -> this.f64Buffer
-            else -> structureND(shape) { this@f64Buffer[it] }.f64Buffer
+            else -> mutableStructureND(shape) { this@f64Buffer[it] }.f64Buffer
         }
 
     override val elementAlgebra: Float64Field get() = Float64Field
 
     @OptIn(UnsafeKMathAPI::class)
-    override fun structureND(shape: ShapeND, initializer: Float64Field.(IntArray) -> Double): ViktorStructureND =
+    override fun mutableStructureND(shape: ShapeND, initializer: Float64Field.(IntArray) -> Double): ViktorStructureND =
         F64Array(*shape.asArray()).apply {
             ColumnStrides(shape).asSequence().forEach { index ->
                 set(value = Float64Field.initializer(index), indices = index)
