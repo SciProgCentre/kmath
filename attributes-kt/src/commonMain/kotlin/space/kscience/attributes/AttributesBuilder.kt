@@ -14,8 +14,6 @@ public class AttributesBuilder<out O> internal constructor(
     private val map: MutableMap<Attribute<*>, Any?>,
 ) : Attributes {
 
-    public constructor() : this(mutableMapOf())
-
     override fun toString(): String = "Attributes(value=${content.entries})"
     override fun equals(other: Any?): Boolean = other is Attributes && Attributes.equals(this, other)
     override fun hashCode(): Int = content.hashCode()
@@ -61,5 +59,9 @@ public class AttributesBuilder<out O> internal constructor(
     public fun build(): Attributes = AttributesImpl(map)
 }
 
-public inline fun <O> Attributes(builder: AttributesBuilder<O>.() -> Unit): Attributes =
-    AttributesBuilder<O>().apply(builder).build()
+/**
+ * Create [Attributes] with a given [builder]
+ * @param O the type for which attributes are built. The type is used only during compilation phase for static extension dispatch
+ */
+public fun <O> Attributes(builder: AttributesBuilder<O>.() -> Unit): Attributes =
+    AttributesBuilder<O>(mutableMapOf()).apply(builder).build()
