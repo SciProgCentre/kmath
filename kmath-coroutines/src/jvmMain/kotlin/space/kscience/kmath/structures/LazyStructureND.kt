@@ -48,13 +48,13 @@ public suspend fun <T> StructureND<T>.await(index: IntArray): T =
  * PENDING would benefit from KEEP-176
  */
 @OptIn(PerformancePitfall::class)
-public inline fun <T, reified R> StructureND<T>.mapAsyncIndexed(
+public inline fun <T, R> StructureND<T>.mapAsyncIndexed(
     scope: CoroutineScope,
     crossinline function: suspend (T, index: IntArray) -> R,
 ): LazyStructureND<R> = LazyStructureND(scope, shape) { index -> function(get(index), index) }
 
 @OptIn(PerformancePitfall::class)
-public inline fun <T, reified R> StructureND<T>.mapAsync(
+public inline fun <T, R> StructureND<T>.mapAsync(
     scope: CoroutineScope,
     crossinline function: suspend (T) -> R,
 ): LazyStructureND<R> = LazyStructureND(scope,  shape) { index -> function(get(index)) }
