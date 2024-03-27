@@ -28,14 +28,14 @@ public final class space/kscience/attributes/Attributes$Companion {
 }
 
 public final class space/kscience/attributes/AttributesBuilder : space/kscience/attributes/Attributes {
-	public fun <init> ()V
 	public final fun add (Lspace/kscience/attributes/SetAttribute;Ljava/lang/Object;)V
 	public final fun build ()Lspace/kscience/attributes/Attributes;
 	public fun equals (Ljava/lang/Object;)Z
-	public final fun from (Lspace/kscience/attributes/Attributes;)V
 	public fun getContent ()Ljava/util/Map;
 	public fun hashCode ()I
 	public final fun invoke (Lspace/kscience/attributes/Attribute;Ljava/lang/Object;)V
+	public final fun put (Lspace/kscience/attributes/Attribute;Ljava/lang/Object;)V
+	public final fun putAll (Lspace/kscience/attributes/Attributes;)V
 	public final fun remove (Lspace/kscience/attributes/SetAttribute;Ljava/lang/Object;)V
 	public final fun set (Lspace/kscience/attributes/Attribute;Ljava/lang/Object;)V
 	public fun toString ()Ljava/lang/String;
@@ -50,7 +50,7 @@ public final class space/kscience/attributes/AttributesKt {
 	public static final fun Attributes (Lspace/kscience/attributes/Attribute;Ljava/lang/Object;)Lspace/kscience/attributes/Attributes;
 	public static final fun getOrDefault (Lspace/kscience/attributes/Attributes;Lspace/kscience/attributes/AttributeWithDefault;)Ljava/lang/Object;
 	public static final fun isEmpty (Lspace/kscience/attributes/Attributes;)Z
-	public static final fun modify (Lspace/kscience/attributes/Attributes;Lkotlin/jvm/functions/Function1;)Lspace/kscience/attributes/Attributes;
+	public static final fun modified (Lspace/kscience/attributes/Attributes;Lkotlin/jvm/functions/Function1;)Lspace/kscience/attributes/Attributes;
 	public static final fun plus (Lspace/kscience/attributes/Attributes;Lspace/kscience/attributes/Attributes;)Lspace/kscience/attributes/Attributes;
 	public static final fun withAttribute (Lspace/kscience/attributes/Attributes;Lspace/kscience/attributes/Attribute;)Lspace/kscience/attributes/Attributes;
 	public static final fun withAttribute (Lspace/kscience/attributes/Attributes;Lspace/kscience/attributes/Attribute;Ljava/lang/Object;)Lspace/kscience/attributes/Attributes;

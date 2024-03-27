@@ -6,10 +6,9 @@ Binding for https://github.com/JetBrains-Research/viktor
 
 ## Artifact:
 
-The Maven coordinates of this project are `space.kscience:kmath-viktor:0.4.0-dev-3`.
+The Maven coordinates of this project are `space.kscience:kmath-viktor:0.4.0`.
 
 **Gradle Kotlin DSL:**
-
 ```kotlin
 repositories {
     maven("https://repo.kotlin.link")
@@ -17,6 +16,6 @@ repositories {
 }
 
 dependencies {
-    implementation("space.kscience:kmath-viktor:0.4.0-dev-3")
+    implementation("space.kscience:kmath-viktor:0.4.0")
 }
 ```

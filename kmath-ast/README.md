@@ -2,17 +2,17 @@
 
 Extensions to MST API: transformations, dynamic compilation and visualization.
 
-- [expression-language](src/commonMain/kotlin/space/kscience/kmath/ast/parser.kt) : Expression language and its parser
-- [mst-jvm-codegen](src/jvmMain/kotlin/space/kscience/kmath/asm/asm.kt) : Dynamic MST to JVM bytecode compiler
-- [mst-js-codegen](src/jsMain/kotlin/space/kscience/kmath/estree/estree.kt) : Dynamic MST to JS compiler
-- [rendering](src/commonMain/kotlin/space/kscience/kmath/ast/rendering/MathRenderer.kt) : Extendable MST rendering
+ - [expression-language](src/commonMain/kotlin/space/kscience/kmath/ast/parser.kt) : Expression language and its parser
+ - [mst-jvm-codegen](src/jvmMain/kotlin/space/kscience/kmath/asm/asm.kt) : Dynamic MST to JVM bytecode compiler
+ - [mst-js-codegen](src/jsMain/kotlin/space/kscience/kmath/estree/estree.kt) : Dynamic MST to JS compiler
+ - [rendering](src/commonMain/kotlin/space/kscience/kmath/ast/rendering/MathRenderer.kt) : Extendable MST rendering
+
 
 ## Artifact:
 
-The Maven coordinates of this project are `space.kscience:kmath-ast:0.4.0-dev-3`.
+The Maven coordinates of this project are `space.kscience:kmath-ast:0.4.0`.
 
 **Gradle Kotlin DSL:**
-
 ```kotlin
 repositories {
     maven("https://repo.kotlin.link")
@@ -20,7 +20,7 @@ repositories {
 }
 
 dependencies {
-    implementation("space.kscience:kmath-ast:0.4.0-dev-3")
+    implementation("space.kscience:kmath-ast:0.4.0")
 }
 ```
 
