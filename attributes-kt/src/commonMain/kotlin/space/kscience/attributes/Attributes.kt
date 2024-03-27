@@ -30,7 +30,15 @@ public interface Attributes {
     override fun hashCode(): Int
 
     public companion object {
-        public val EMPTY: Attributes = MapAttributes(emptyMap())
+        public val EMPTY: Attributes = object : Attributes {
+            override val content: Map<out Attribute<*>, Any?> get() = emptyMap()
+
+            override fun toString(): String = "Attributes.EMPTY"
+
+            override fun equals(other: Any?): Boolean = (other as? Attributes)?.isEmpty() ?: false
+
+            override fun hashCode(): Int = Unit.hashCode()
+        }
 
         public fun equals(a1: Attributes, a2: Attributes): Boolean =
             a1.keys == a2.keys && a1.keys.all { a1[it] == a2[it] }
@@ -43,7 +51,7 @@ internal class MapAttributes(override val content: Map<out Attribute<*>, Any?>) 
     override fun hashCode(): Int = content.hashCode()
 }
 
-public fun Attributes.isEmpty(): Boolean = content.isEmpty()
+public fun Attributes.isEmpty(): Boolean = keys.isEmpty()
 
 /**
  * Get attribute value or default
