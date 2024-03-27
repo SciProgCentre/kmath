@@ -92,7 +92,7 @@ public inline fun <reified T : Any> GaussIntegrator<T>.integrate(
     range: ClosedRange<Double>,
     order: Int = 10,
     intervals: Int = 10,
-    attributesBuilder: AttributesBuilder<UnivariateIntegrand<T>>.() -> Unit = {},
+    noinline attributesBuilder: AttributesBuilder<UnivariateIntegrand<T>>.() -> Unit = {},
     noinline function: (Double) -> T,
 ): UnivariateIntegrand<T> {
     require(range.endInclusive > range.start) { "The range upper bound should be higher than lower bound" }
