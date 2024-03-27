@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -16,7 +16,7 @@ import org.jetbrains.kotlinx.multik.ndarray.data.DataType
 import space.kscience.kmath.UnsafeKMathAPI
 import space.kscience.kmath.nd.*
 import space.kscience.kmath.nd4j.nd4j
-import space.kscience.kmath.operations.DoubleField
+import space.kscience.kmath.operations.Float64Field
 import space.kscience.kmath.tensors.core.DoubleTensor
 import space.kscience.kmath.tensors.core.one
 import space.kscience.kmath.tensors.core.tensorAlgebra
@@ -24,6 +24,16 @@ import space.kscience.kmath.viktor.viktorAlgebra
 
 @State(Scope.Benchmark)
 internal class NDFieldBenchmark {
+
+    private companion object {
+        private const val dim = 1000
+        private const val n = 100
+        private val shape = ShapeND(dim, dim)
+        private val specializedField = Float64Field.ndAlgebra
+        private val genericField = BufferedFieldOpsND(Float64Field)
+        private val nd4jField = Float64Field.nd4j
+        private val viktorField = Float64Field.viktorAlgebra
+    }
 
     @Benchmark
     fun specializedFieldAdd(blackhole: Blackhole) = with(specializedField) {
@@ -82,13 +92,5 @@ internal class NDFieldBenchmark {
 //        blackhole.consume(res)
 //    }
 
-    private companion object {
-        private const val dim = 1000
-        private const val n = 100
-        private val shape = ShapeND(dim, dim)
-        private val specializedField = DoubleField.ndAlgebra
-        private val genericField = BufferedFieldOpsND(DoubleField)
-        private val nd4jField = DoubleField.nd4j
-        private val viktorField = DoubleField.viktorAlgebra
-    }
+
 }

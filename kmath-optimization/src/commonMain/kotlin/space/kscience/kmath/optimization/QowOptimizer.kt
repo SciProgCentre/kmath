@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -9,20 +9,14 @@ import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.expressions.*
 import space.kscience.kmath.linear.*
 import space.kscience.kmath.misc.log
-import space.kscience.kmath.operations.DoubleField
-import space.kscience.kmath.operations.DoubleL2Norm
+import space.kscience.kmath.operations.Float64Field
+import space.kscience.kmath.operations.Float64L2Norm
 import space.kscience.kmath.operations.algebra
-import space.kscience.kmath.structures.DoubleBuffer
+import space.kscience.kmath.structures.Float64Buffer
 import kotlin.math.abs
 
 
-public class QowRuns(public val runs: Int) : OptimizationFeature {
-    init {
-        require(runs >= 1) { "Number of runs must be more than zero" }
-    }
-
-    override fun toString(): String = "QowRuns(runs=$runs)"
-}
+public object QowRuns : OptimizationAttribute<Int>
 
 
 /**
@@ -32,7 +26,7 @@ public class QowRuns(public val runs: Int) : OptimizationFeature {
 @UnstableKMathAPI
 public object QowOptimizer : Optimizer<Double, XYFit> {
 
-    private val linearSpace: LinearSpace<Double, DoubleField> = Double.algebra.linearSpace
+    private val linearSpace: LinearSpace<Double, Float64Field> = Double.algebra.linearSpace
     private val solver: LinearSolver<Double> = linearSpace.lupSolver()
 
     @OptIn(UnstableKMathAPI::class)
@@ -63,13 +57,13 @@ public object QowOptimizer : Optimizer<Double, XYFit> {
          * Array of dispersions in each point
          */
         val dispersion: Point<Double> by lazy {
-            DoubleBuffer(problem.data.size) { d ->
+            Float64Buffer(problem.data.size) { d ->
                 1.0 / problem.weight(d).invoke(allParameters)
             }
         }
 
         val prior: DifferentiableExpression<Double>?
-            get() = problem.getFeature<OptimizationPrior<Double>>()?.withDefaultArgs(allParameters)
+            get() = problem.attributes[OptimizationPrior<Double>()]?.withDefaultArgs(allParameters)
 
         override fun toString(): String = freeParameters.toString()
     }
@@ -148,8 +142,8 @@ public object QowOptimizer : Optimizer<Double, XYFit> {
      * Quasi optimal weights equations values
      */
     private fun QoWeight.getEqValues(theta: Map<Symbol, Double>): Point<Double> {
-        val distances = DoubleBuffer(data.size) { d -> distance(d, theta) }
-        return DoubleBuffer(size) { s ->
+        val distances = Float64Buffer(data.size) { d -> distance(d, theta) }
+        return Float64Buffer(size) { s ->
             val base = (0 until data.size).sumOf { d -> distances[d] * derivs[d, s] / dispersion[d] }
             //Prior probability correction
             prior?.let { prior ->
@@ -176,7 +170,7 @@ public object QowOptimizer : Optimizer<Double, XYFit> {
         fast: Boolean = false,
     ): QoWeight {
 
-        val logger = problem.getFeature<OptimizationLog>()
+        val logger = problem.attributes[OptimizationLog]
 
         var dis: Double //discrepancy value
 
@@ -186,7 +180,7 @@ public object QowOptimizer : Optimizer<Double, XYFit> {
 
         var eqvalues = getEqValues(par) //Values of the weight functions
 
-        dis = DoubleL2Norm.norm(eqvalues) // discrepancy
+        dis = Float64L2Norm.norm(eqvalues) // discrepancy
         logger?.log { "Starting discrepancy is $dis" }
         var i = 0
         var flag = false
@@ -205,7 +199,7 @@ public object QowOptimizer : Optimizer<Double, XYFit> {
             logger?.log { "Parameter values after step are: \n\t$currentSolution" }
 
             eqvalues = getEqValues(currentSolution.freeParameters)
-            val currentDis = DoubleL2Norm.norm(eqvalues)// discrepancy after the step
+            val currentDis = Float64L2Norm.norm(eqvalues)// discrepancy after the step
 
             logger?.log { "The discrepancy after step is: $currentDis." }
 
@@ -231,7 +225,7 @@ public object QowOptimizer : Optimizer<Double, XYFit> {
     }
 
     private fun QoWeight.covariance(): NamedMatrix<Double> {
-        val logger = problem.getFeature<OptimizationLog>()
+        val logger = problem.attributes[OptimizationLog]
 
         logger?.log {
             """
@@ -257,11 +251,11 @@ public object QowOptimizer : Optimizer<Double, XYFit> {
     }
 
     override suspend fun optimize(problem: XYFit): XYFit {
-        val qowRuns = problem.getFeature<QowRuns>()?.runs ?: 2
-        val iterations = problem.getFeature<OptimizationIterations>()?.maxIterations ?: 50
+        val qowRuns = problem.attributes[QowRuns] ?: 2
+        val iterations = problem.attributes[OptimizationIterations] ?: 50
 
-        val freeParameters: Map<Symbol, Double> = problem.getFeature<OptimizationParameters>()?.let { op ->
-            problem.startPoint.filterKeys { it in op.symbols }
+        val freeParameters: Map<Symbol, Double> = problem.attributes[OptimizationParameters]?.let { symbols ->
+            problem.startPoint.filterKeys { it in symbols }
         } ?: problem.startPoint
 
         var qow = QoWeight(problem, freeParameters)
@@ -270,7 +264,10 @@ public object QowOptimizer : Optimizer<Double, XYFit> {
             qow = QoWeight(problem, res.freeParameters)
             res = qow.newtonianRun(maxSteps = iterations)
         }
-        val covariance = res.covariance()
-        return res.problem.withFeature(OptimizationResult(res.freeParameters), OptimizationCovariance(covariance))
+
+        return res.problem.withAttributes {
+            result(res.freeParameters)
+            covariance(res.covariance())
+        }
     }
 }

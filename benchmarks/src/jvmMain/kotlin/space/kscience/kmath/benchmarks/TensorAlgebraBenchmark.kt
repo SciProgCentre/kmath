@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -12,7 +12,7 @@ import kotlinx.benchmark.State
 import space.kscience.kmath.linear.linearSpace
 import space.kscience.kmath.linear.matrix
 import space.kscience.kmath.linear.symmetric
-import space.kscience.kmath.operations.DoubleField
+import space.kscience.kmath.operations.Float64Field
 import space.kscience.kmath.tensors.core.symEigJacobi
 import space.kscience.kmath.tensors.core.symEigSvd
 import space.kscience.kmath.tensors.core.tensorAlgebra
@@ -24,7 +24,7 @@ internal class TensorAlgebraBenchmark {
         private val random = Random(12224)
         private const val dim = 30
 
-        private val matrix = DoubleField.linearSpace.matrix(dim, dim).symmetric { _, _ -> random.nextDouble() }
+        private val matrix = Float64Field.linearSpace.matrix(dim, dim).symmetric { _, _ -> random.nextDouble() }
     }
 
     @Benchmark

@@ -12,7 +12,7 @@ dependencies {
 }
 
 readme {
-    maturity = space.kscience.gradle.Maturity.EXPERIMENTAL
+    maturity = space.kscience.gradle.Maturity.DEPRECATED
     propertyByTemplate("artifact", rootProject.file("docs/templates/ARTIFACT-TEMPLATE.md"))
     feature(id = "nd4jarraystructure") { "NDStructure wrapper for INDArray" }
     feature(id = "nd4jarrayrings") { "Rings over Nd4jArrayStructure of Int and Long" }

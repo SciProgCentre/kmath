@@ -97,6 +97,7 @@ class MINUITFitter : Fitter {
         when (method) {
             MINUIT_MINOS, MINUIT_MINIMIZE -> minuit =
                 MnMinimize(fcn, MINUITUtils.getFitParameters(pars, fitPars), strategy)
+
             MINUIT_SIMPLEX -> minuit = MnSimplex(fcn, MINUITUtils.getFitParameters(pars, fitPars), strategy)
             else -> minuit = MnMigrad(fcn, MINUITUtils.getFitParameters(pars, fitPars), strategy)
         }

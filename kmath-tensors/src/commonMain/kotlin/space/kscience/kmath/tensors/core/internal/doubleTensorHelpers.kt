@@ -1,12 +1,12 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
 package space.kscience.kmath.tensors.core.internal
 
 import space.kscience.kmath.nd.*
-import space.kscience.kmath.structures.DoubleBuffer
+import space.kscience.kmath.structures.Float64Buffer
 import space.kscience.kmath.structures.asBuffer
 import space.kscience.kmath.structures.indices
 import space.kscience.kmath.tensors.core.BroadcastDoubleTensorAlgebra.eye
@@ -22,13 +22,13 @@ import kotlin.math.sqrt
 internal fun MutableStructure2D<Double>.jacobiHelper(
     maxIteration: Int,
     epsilon: Double,
-): Pair<DoubleBuffer, Structure2D<Double>> {
+): Pair<Float64Buffer, Structure2D<Double>> {
     val n = rowNum
     val A_ = copyToTensor()
     val V = eye(n)
-    val D = DoubleBuffer(n) { get(it, it) }
-    val B = DoubleBuffer(n) { get(it, it) }
-    val Z = DoubleBuffer(n) { 0.0 }
+    val D = Float64Buffer(n) { get(it, it) }
+    val B = Float64Buffer(n) { get(it, it) }
+    val Z = Float64Buffer(n) { 0.0 }
 
     // assume that buffered tensor is square matrix
     operator fun DoubleTensor.get(i: Int, j: Int): Double {
@@ -59,8 +59,8 @@ internal fun MutableStructure2D<Double>.jacobiHelper(
     fun jacobiIteration(
         a: DoubleTensor,
         v: DoubleTensor,
-        d: DoubleBuffer,
-        z: DoubleBuffer,
+        d: Float64Buffer,
+        z: Float64Buffer,
     ) {
         for (ip in 0 until n - 1) {
             for (iq in ip + 1 until n) {
@@ -108,9 +108,9 @@ internal fun MutableStructure2D<Double>.jacobiHelper(
     }
 
     fun updateDiagonal(
-        d: DoubleBuffer,
-        z: DoubleBuffer,
-        b: DoubleBuffer,
+        d: Float64Buffer,
+        z: Float64Buffer,
+        b: Float64Buffer,
     ) {
         for (ip in 0 until d.size) {
             b[ip] += z[ip]
@@ -137,7 +137,7 @@ internal fun MutableStructure2D<Double>.jacobiHelper(
 /**
  * Concatenate a list of arrays
  */
-internal fun List<OffsetDoubleBuffer>.concat(): DoubleBuffer {
+internal fun List<OffsetDoubleBuffer>.concat(): Float64Buffer {
     val array = DoubleArray(sumOf { it.size })
     var pointer = 0
     while (pointer < array.size) {

@@ -33,7 +33,7 @@ abstract class ModularFunctionMinimizer {
         toler: Double,
         errorDef: Double,
         useAnalyticalGradient: Boolean,
-        checkGradient: Boolean
+        checkGradient: Boolean,
     ): FunctionMinimum {
         var maxfcn = maxfcn
         val mfcn = MnUserFcn(fcn, errorDef, st.getTransformation())
@@ -64,7 +64,7 @@ abstract class ModularFunctionMinimizer {
         seed: MinimumSeed?,
         strategy: MnStrategy?,
         maxfcn: Int,
-        toler: Double
+        toler: Double,
     ): FunctionMinimum {
         return builder().minimum(mfcn, gc, seed, strategy, maxfcn, toler * mfcn.errorDef())
     }

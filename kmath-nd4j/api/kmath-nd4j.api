@@ -1,0 +1,394 @@
+public final class space/kscience/kmath/nd4j/DoubleNd4jArrayField : space/kscience/kmath/nd4j/DoubleNd4jArrayFieldOps, space/kscience/kmath/nd/FieldND {
+	public synthetic fun <init> ([ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun getShape-IIYLAfE ()[I
+}
+
+public class space/kscience/kmath/nd4j/DoubleNd4jArrayFieldOps : space/kscience/kmath/nd4j/Nd4jArrayExtendedFieldOps {
+	public static final field Companion Lspace/kscience/kmath/nd4j/DoubleNd4jArrayFieldOps$Companion;
+	public fun <init> ()V
+	public fun div (DLspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd4j/Nd4jArrayStructure;
+	public synthetic fun div (Ljava/lang/Object;Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd/StructureND;
+	public fun div (Lspace/kscience/kmath/nd/StructureND;D)Lspace/kscience/kmath/nd4j/Nd4jArrayStructure;
+	public synthetic fun div (Lspace/kscience/kmath/nd/StructureND;Ljava/lang/Object;)Lspace/kscience/kmath/nd/StructureND;
+	public synthetic fun getElementAlgebra ()Lspace/kscience/kmath/operations/Algebra;
+	public fun getElementAlgebra ()Lspace/kscience/kmath/operations/Float64Field;
+	public fun getNdArray (Lspace/kscience/kmath/nd/StructureND;)Lorg/nd4j/linalg/api/ndarray/INDArray;
+	public fun minus (DLspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd4j/Nd4jArrayStructure;
+	public synthetic fun minus (Ljava/lang/Object;Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd/StructureND;
+	public fun minus (Lspace/kscience/kmath/nd/StructureND;D)Lspace/kscience/kmath/nd4j/Nd4jArrayStructure;
+	public synthetic fun minus (Lspace/kscience/kmath/nd/StructureND;Ljava/lang/Object;)Lspace/kscience/kmath/nd/StructureND;
+	public fun plus (Lspace/kscience/kmath/nd/StructureND;D)Lspace/kscience/kmath/nd4j/Nd4jArrayStructure;
+	public synthetic fun plus (Lspace/kscience/kmath/nd/StructureND;Ljava/lang/Object;)Lspace/kscience/kmath/nd/StructureND;
+	public synthetic fun scale (Ljava/lang/Object;D)Ljava/lang/Object;
+	public synthetic fun scale (Lspace/kscience/kmath/nd/StructureND;D)Lspace/kscience/kmath/nd/StructureND;
+	public fun scale (Lspace/kscience/kmath/nd/StructureND;D)Lspace/kscience/kmath/nd4j/Nd4jArrayStructure;
+	public fun times (Lspace/kscience/kmath/nd/StructureND;D)Lspace/kscience/kmath/nd4j/Nd4jArrayStructure;
+	public synthetic fun times (Lspace/kscience/kmath/nd/StructureND;Ljava/lang/Object;)Lspace/kscience/kmath/nd/StructureND;
+	public fun wrap (Lorg/nd4j/linalg/api/ndarray/INDArray;)Lspace/kscience/kmath/nd4j/Nd4jArrayStructure;
+}
+
+public final class space/kscience/kmath/nd4j/DoubleNd4jArrayFieldOps$Companion : space/kscience/kmath/nd4j/DoubleNd4jArrayFieldOps {
+}
+
+public final class space/kscience/kmath/nd4j/DoubleNd4jTensorAlgebra : space/kscience/kmath/nd4j/Nd4jTensorAlgebra {
+	public static final field INSTANCE Lspace/kscience/kmath/nd4j/DoubleNd4jTensorAlgebra;
+	public fun diagonalEmbedding (Lspace/kscience/kmath/nd/StructureND;III)Lspace/kscience/kmath/nd/MutableStructureND;
+	public synthetic fun getElementAlgebra ()Lspace/kscience/kmath/operations/Algebra;
+	public fun getElementAlgebra ()Lspace/kscience/kmath/operations/Float64Field;
+	public fun getNdArray (Lspace/kscience/kmath/nd/StructureND;)Lorg/nd4j/linalg/api/ndarray/INDArray;
+	public fun max (Lspace/kscience/kmath/nd/StructureND;)Ljava/lang/Double;
+	public synthetic fun max (Lspace/kscience/kmath/nd/StructureND;)Ljava/lang/Object;
+	public fun mean (Lspace/kscience/kmath/nd/StructureND;)Ljava/lang/Double;
+	public synthetic fun mean (Lspace/kscience/kmath/nd/StructureND;)Ljava/lang/Object;
+	public fun min (Lspace/kscience/kmath/nd/StructureND;)Ljava/lang/Double;
+	public synthetic fun min (Lspace/kscience/kmath/nd/StructureND;)Ljava/lang/Object;
+	public synthetic fun mutableStructureND-qL90JFI ([ILkotlin/jvm/functions/Function2;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public fun mutableStructureND-qL90JFI ([ILkotlin/jvm/functions/Function2;)Lspace/kscience/kmath/nd4j/Nd4jArrayStructure;
+	public fun std (Lspace/kscience/kmath/nd/StructureND;)Ljava/lang/Double;
+	public synthetic fun std (Lspace/kscience/kmath/nd/StructureND;)Ljava/lang/Object;
+	public fun sum (Lspace/kscience/kmath/nd/StructureND;)Ljava/lang/Double;
+	public synthetic fun sum (Lspace/kscience/kmath/nd/StructureND;)Ljava/lang/Object;
+	public fun valueOrNull (Lspace/kscience/kmath/nd/StructureND;)Ljava/lang/Double;
+	public synthetic fun valueOrNull (Lspace/kscience/kmath/nd/StructureND;)Ljava/lang/Object;
+	public fun variance (Lspace/kscience/kmath/nd/StructureND;)Ljava/lang/Double;
+	public synthetic fun variance (Lspace/kscience/kmath/nd/StructureND;)Ljava/lang/Object;
+	public fun wrap (Lorg/nd4j/linalg/api/ndarray/INDArray;)Lspace/kscience/kmath/nd4j/Nd4jArrayStructure;
+}
+
+public final class space/kscience/kmath/nd4j/FloatNd4jArrayField : space/kscience/kmath/nd4j/FloatNd4jArrayFieldOps, space/kscience/kmath/nd/RingND {
+	public synthetic fun <init> ([ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun getShape-IIYLAfE ()[I
+}
+
+public class space/kscience/kmath/nd4j/FloatNd4jArrayFieldOps : space/kscience/kmath/nd4j/Nd4jArrayExtendedFieldOps {
+	public static final field Companion Lspace/kscience/kmath/nd4j/FloatNd4jArrayFieldOps$Companion;
+	public fun <init> ()V
+	public fun div (FLspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd4j/Nd4jArrayStructure;
+	public synthetic fun div (Ljava/lang/Object;Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd/StructureND;
+	public fun div (Lspace/kscience/kmath/nd/StructureND;F)Lspace/kscience/kmath/nd4j/Nd4jArrayStructure;
+	public synthetic fun div (Lspace/kscience/kmath/nd/StructureND;Ljava/lang/Object;)Lspace/kscience/kmath/nd/StructureND;
+	public synthetic fun getElementAlgebra ()Lspace/kscience/kmath/operations/Algebra;
+	public fun getElementAlgebra ()Lspace/kscience/kmath/operations/Float32Field;
+	public fun getNdArray (Lspace/kscience/kmath/nd/StructureND;)Lorg/nd4j/linalg/api/ndarray/INDArray;
+	public fun minus (FLspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd4j/Nd4jArrayStructure;
+	public synthetic fun minus (Ljava/lang/Object;Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd/StructureND;
+	public fun minus (Lspace/kscience/kmath/nd/StructureND;F)Lspace/kscience/kmath/nd4j/Nd4jArrayStructure;
+	public synthetic fun minus (Lspace/kscience/kmath/nd/StructureND;Ljava/lang/Object;)Lspace/kscience/kmath/nd/StructureND;
+	public fun plus (Lspace/kscience/kmath/nd/StructureND;F)Lspace/kscience/kmath/nd4j/Nd4jArrayStructure;
+	public synthetic fun plus (Lspace/kscience/kmath/nd/StructureND;Ljava/lang/Object;)Lspace/kscience/kmath/nd/StructureND;
+	public synthetic fun scale (Ljava/lang/Object;D)Ljava/lang/Object;
+	public fun scale (Lspace/kscience/kmath/nd/StructureND;D)Lspace/kscience/kmath/nd/StructureND;
+	public fun times (Lspace/kscience/kmath/nd/StructureND;F)Lspace/kscience/kmath/nd4j/Nd4jArrayStructure;
+	public synthetic fun times (Lspace/kscience/kmath/nd/StructureND;Ljava/lang/Object;)Lspace/kscience/kmath/nd/StructureND;
+	public fun wrap (Lorg/nd4j/linalg/api/ndarray/INDArray;)Lspace/kscience/kmath/nd4j/Nd4jArrayStructure;
+}
+
+public final class space/kscience/kmath/nd4j/FloatNd4jArrayFieldOps$Companion : space/kscience/kmath/nd4j/FloatNd4jArrayFieldOps {
+}
+
+public final class space/kscience/kmath/nd4j/IntNd4jArrayRing : space/kscience/kmath/nd4j/IntNd4jArrayRingOps, space/kscience/kmath/nd/RingND {
+	public synthetic fun <init> ([ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun getShape-IIYLAfE ()[I
+}
+
+public class space/kscience/kmath/nd4j/IntNd4jArrayRingOps : space/kscience/kmath/nd4j/Nd4jArrayRingOps {
+	public static final field Companion Lspace/kscience/kmath/nd4j/IntNd4jArrayRingOps$Companion;
+	public fun <init> ()V
+	public synthetic fun getElementAlgebra ()Lspace/kscience/kmath/operations/Algebra;
+	public fun getElementAlgebra ()Lspace/kscience/kmath/operations/Int32Ring;
+	public fun getNdArray (Lspace/kscience/kmath/nd/StructureND;)Lorg/nd4j/linalg/api/ndarray/INDArray;
+	public fun minus (ILspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd4j/Nd4jArrayStructure;
+	public synthetic fun minus (Ljava/lang/Object;Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd/StructureND;
+	public fun minus (Lspace/kscience/kmath/nd/StructureND;I)Lspace/kscience/kmath/nd4j/Nd4jArrayStructure;
+	public synthetic fun minus (Lspace/kscience/kmath/nd/StructureND;Ljava/lang/Object;)Lspace/kscience/kmath/nd/StructureND;
+	public fun plus (Lspace/kscience/kmath/nd/StructureND;I)Lspace/kscience/kmath/nd4j/Nd4jArrayStructure;
+	public synthetic fun plus (Lspace/kscience/kmath/nd/StructureND;Ljava/lang/Object;)Lspace/kscience/kmath/nd/StructureND;
+	public fun times (Lspace/kscience/kmath/nd/StructureND;I)Lspace/kscience/kmath/nd4j/Nd4jArrayStructure;
+	public synthetic fun times (Lspace/kscience/kmath/nd/StructureND;Ljava/lang/Object;)Lspace/kscience/kmath/nd/StructureND;
+	public fun wrap (Lorg/nd4j/linalg/api/ndarray/INDArray;)Lspace/kscience/kmath/nd4j/Nd4jArrayStructure;
+}
+
+public final class space/kscience/kmath/nd4j/IntNd4jArrayRingOps$Companion : space/kscience/kmath/nd4j/IntNd4jArrayRingOps {
+}
+
+public abstract interface class space/kscience/kmath/nd4j/Nd4jArrayAlgebra : space/kscience/kmath/nd/AlgebraND {
+	public abstract fun getNdArray (Lspace/kscience/kmath/nd/StructureND;)Lorg/nd4j/linalg/api/ndarray/INDArray;
+	public synthetic fun map (Lspace/kscience/kmath/nd/StructureND;Lkotlin/jvm/functions/Function2;)Lspace/kscience/kmath/nd/StructureND;
+	public fun map (Lspace/kscience/kmath/nd/StructureND;Lkotlin/jvm/functions/Function2;)Lspace/kscience/kmath/nd4j/Nd4jArrayStructure;
+	public synthetic fun mapIndexed (Lspace/kscience/kmath/nd/StructureND;Lkotlin/jvm/functions/Function3;)Lspace/kscience/kmath/nd/StructureND;
+	public fun mapIndexed (Lspace/kscience/kmath/nd/StructureND;Lkotlin/jvm/functions/Function3;)Lspace/kscience/kmath/nd4j/Nd4jArrayStructure;
+	public synthetic fun mutableStructureND-qL90JFI ([ILkotlin/jvm/functions/Function2;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public fun mutableStructureND-qL90JFI ([ILkotlin/jvm/functions/Function2;)Lspace/kscience/kmath/nd4j/Nd4jArrayStructure;
+	public abstract fun wrap (Lorg/nd4j/linalg/api/ndarray/INDArray;)Lspace/kscience/kmath/nd4j/Nd4jArrayStructure;
+	public synthetic fun zip (Lspace/kscience/kmath/nd/StructureND;Lspace/kscience/kmath/nd/StructureND;Lkotlin/jvm/functions/Function3;)Lspace/kscience/kmath/nd/StructureND;
+	public fun zip (Lspace/kscience/kmath/nd/StructureND;Lspace/kscience/kmath/nd/StructureND;Lkotlin/jvm/functions/Function3;)Lspace/kscience/kmath/nd4j/Nd4jArrayStructure;
+}
+
+public final class space/kscience/kmath/nd4j/Nd4jArrayAlgebraKt {
+	public static final fun getNd4j (Lspace/kscience/kmath/operations/Float32Field;)Lspace/kscience/kmath/nd4j/FloatNd4jArrayFieldOps;
+	public static final fun getNd4j (Lspace/kscience/kmath/operations/Float64Field;)Lspace/kscience/kmath/nd4j/DoubleNd4jArrayFieldOps;
+	public static final fun getNd4j (Lspace/kscience/kmath/operations/Int32Ring;)Lspace/kscience/kmath/nd4j/IntNd4jArrayRingOps;
+	public static final fun nd4j (Lspace/kscience/kmath/operations/Float32Field;I[I)Lspace/kscience/kmath/nd4j/FloatNd4jArrayField;
+	public static final fun nd4j (Lspace/kscience/kmath/operations/Float64Field;I[I)Lspace/kscience/kmath/nd4j/DoubleNd4jArrayField;
+	public static final fun nd4j (Lspace/kscience/kmath/operations/Int32Ring;I[I)Lspace/kscience/kmath/nd4j/IntNd4jArrayRing;
+}
+
+public final class space/kscience/kmath/nd4j/Nd4jArrayDoubleStructure : space/kscience/kmath/nd4j/Nd4jArrayStructure, space/kscience/kmath/nd/StructureNDOfDouble {
+	public fun <init> (Lorg/nd4j/linalg/api/ndarray/INDArray;)V
+	public final fun component1 ()Lorg/nd4j/linalg/api/ndarray/INDArray;
+	public final fun copy (Lorg/nd4j/linalg/api/ndarray/INDArray;)Lspace/kscience/kmath/nd4j/Nd4jArrayDoubleStructure;
+	public static synthetic fun copy$default (Lspace/kscience/kmath/nd4j/Nd4jArrayDoubleStructure;Lorg/nd4j/linalg/api/ndarray/INDArray;ILjava/lang/Object;)Lspace/kscience/kmath/nd4j/Nd4jArrayDoubleStructure;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun get ([I)Ljava/lang/Double;
+	public synthetic fun get ([I)Ljava/lang/Object;
+	public fun getDouble ([I)D
+	public fun getNdArray ()Lorg/nd4j/linalg/api/ndarray/INDArray;
+	public fun hashCode ()I
+	public fun set ([ID)V
+	public synthetic fun set ([ILjava/lang/Object;)V
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract interface class space/kscience/kmath/nd4j/Nd4jArrayExtendedFieldOps : space/kscience/kmath/nd4j/Nd4jArrayField, space/kscience/kmath/operations/ExtendedFieldOps, space/kscience/kmath/operations/PowerOperations {
+	public synthetic fun acos (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun acos (Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd/StructureND;
+	public synthetic fun acosh (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun acosh (Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd/StructureND;
+	public synthetic fun asin (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun asin (Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd/StructureND;
+	public synthetic fun asinh (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun asinh (Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd/StructureND;
+	public synthetic fun atan (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun atan (Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd/StructureND;
+	public synthetic fun atanh (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun atanh (Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd/StructureND;
+	public synthetic fun cos (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun cos (Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd/StructureND;
+	public synthetic fun cosh (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun cosh (Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd/StructureND;
+	public synthetic fun exp (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun exp (Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd/StructureND;
+	public synthetic fun ln (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun ln (Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd/StructureND;
+	public synthetic fun power (Ljava/lang/Object;Ljava/lang/Number;)Ljava/lang/Object;
+	public fun power (Lspace/kscience/kmath/nd/StructureND;Ljava/lang/Number;)Lspace/kscience/kmath/nd/StructureND;
+	public synthetic fun sin (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun sin (Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd/StructureND;
+	public synthetic fun sinh (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun sinh (Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd/StructureND;
+	public synthetic fun sqrt (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun sqrt (Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd/StructureND;
+	public synthetic fun tanh (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun tanh (Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd/StructureND;
+}
+
+public abstract interface class space/kscience/kmath/nd4j/Nd4jArrayField : space/kscience/kmath/nd/FieldOpsND, space/kscience/kmath/nd4j/Nd4jArrayRingOps {
+	public static final field Companion Lspace/kscience/kmath/nd4j/Nd4jArrayField$Companion;
+	public fun div (Ljava/lang/Number;Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd4j/Nd4jArrayStructure;
+	public synthetic fun divide (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+	public synthetic fun divide (Lspace/kscience/kmath/nd/StructureND;Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd/StructureND;
+	public fun divide (Lspace/kscience/kmath/nd/StructureND;Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd4j/Nd4jArrayStructure;
+}
+
+public final class space/kscience/kmath/nd4j/Nd4jArrayField$Companion {
+}
+
+public final class space/kscience/kmath/nd4j/Nd4jArrayFloatStructure : space/kscience/kmath/nd4j/Nd4jArrayStructure {
+	public fun <init> (Lorg/nd4j/linalg/api/ndarray/INDArray;)V
+	public final fun component1 ()Lorg/nd4j/linalg/api/ndarray/INDArray;
+	public final fun copy (Lorg/nd4j/linalg/api/ndarray/INDArray;)Lspace/kscience/kmath/nd4j/Nd4jArrayFloatStructure;
+	public static synthetic fun copy$default (Lspace/kscience/kmath/nd4j/Nd4jArrayFloatStructure;Lorg/nd4j/linalg/api/ndarray/INDArray;ILjava/lang/Object;)Lspace/kscience/kmath/nd4j/Nd4jArrayFloatStructure;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun get ([I)Ljava/lang/Float;
+	public synthetic fun get ([I)Ljava/lang/Object;
+	public fun getNdArray ()Lorg/nd4j/linalg/api/ndarray/INDArray;
+	public fun hashCode ()I
+	public fun set ([IF)V
+	public synthetic fun set ([ILjava/lang/Object;)V
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract interface class space/kscience/kmath/nd4j/Nd4jArrayGroupOps : space/kscience/kmath/nd/GroupOpsND, space/kscience/kmath/nd4j/Nd4jArrayAlgebra {
+	public synthetic fun add (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+	public synthetic fun add (Lspace/kscience/kmath/nd/StructureND;Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd/StructureND;
+	public fun add (Lspace/kscience/kmath/nd/StructureND;Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd4j/Nd4jArrayStructure;
+	public synthetic fun minus (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+	public fun minus (Lspace/kscience/kmath/nd/StructureND;Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd4j/Nd4jArrayStructure;
+	public fun multiply (Lspace/kscience/kmath/nd/StructureND;Ljava/lang/Number;)Lspace/kscience/kmath/nd4j/Nd4jArrayStructure;
+	public synthetic fun unaryMinus (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun unaryMinus (Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd4j/Nd4jArrayStructure;
+}
+
+public final class space/kscience/kmath/nd4j/Nd4jArrayIntStructure : space/kscience/kmath/nd4j/Nd4jArrayStructure, space/kscience/kmath/nd/StructureNDOfInt {
+	public fun <init> (Lorg/nd4j/linalg/api/ndarray/INDArray;)V
+	public final fun component1 ()Lorg/nd4j/linalg/api/ndarray/INDArray;
+	public final fun copy (Lorg/nd4j/linalg/api/ndarray/INDArray;)Lspace/kscience/kmath/nd4j/Nd4jArrayIntStructure;
+	public static synthetic fun copy$default (Lspace/kscience/kmath/nd4j/Nd4jArrayIntStructure;Lorg/nd4j/linalg/api/ndarray/INDArray;ILjava/lang/Object;)Lspace/kscience/kmath/nd4j/Nd4jArrayIntStructure;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun get ([I)Ljava/lang/Integer;
+	public synthetic fun get ([I)Ljava/lang/Object;
+	public fun getInt ([I)I
+	public fun getNdArray ()Lorg/nd4j/linalg/api/ndarray/INDArray;
+	public fun hashCode ()I
+	public fun set ([II)V
+	public synthetic fun set ([ILjava/lang/Object;)V
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract interface class space/kscience/kmath/nd4j/Nd4jArrayRingOps : space/kscience/kmath/nd/RingOpsND, space/kscience/kmath/nd4j/Nd4jArrayGroupOps {
+	public static final field Companion Lspace/kscience/kmath/nd4j/Nd4jArrayRingOps$Companion;
+	public synthetic fun multiply (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+	public synthetic fun multiply (Lspace/kscience/kmath/nd/StructureND;Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd/StructureND;
+	public fun multiply (Lspace/kscience/kmath/nd/StructureND;Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd4j/Nd4jArrayStructure;
+}
+
+public final class space/kscience/kmath/nd4j/Nd4jArrayRingOps$Companion {
+}
+
+public abstract class space/kscience/kmath/nd4j/Nd4jArrayStructure : space/kscience/kmath/nd/MutableStructureND {
+	public fun elements ()Lkotlin/sequences/Sequence;
+	public abstract fun getNdArray ()Lorg/nd4j/linalg/api/ndarray/INDArray;
+	public fun getShape-IIYLAfE ()[I
+}
+
+public final class space/kscience/kmath/nd4j/Nd4jArrayStructureKt {
+	public static final fun asDoubleStructure (Lorg/nd4j/linalg/api/ndarray/INDArray;)Lspace/kscience/kmath/nd4j/Nd4jArrayStructure;
+	public static final fun asFloatStructure (Lorg/nd4j/linalg/api/ndarray/INDArray;)Lspace/kscience/kmath/nd4j/Nd4jArrayStructure;
+	public static final fun asIntStructure (Lorg/nd4j/linalg/api/ndarray/INDArray;)Lspace/kscience/kmath/nd4j/Nd4jArrayIntStructure;
+}
+
+public abstract interface class space/kscience/kmath/nd4j/Nd4jTensorAlgebra : space/kscience/kmath/tensors/api/AnalyticTensorAlgebra {
+	public synthetic fun acos (Ljava/lang/Object;)Ljava/lang/Object;
+	public synthetic fun acos (Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd/StructureND;
+	public fun acos (Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd4j/Nd4jArrayStructure;
+	public synthetic fun acosh (Ljava/lang/Object;)Ljava/lang/Object;
+	public synthetic fun acosh (Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd/StructureND;
+	public fun acosh (Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd4j/Nd4jArrayStructure;
+	public fun argMax (Lspace/kscience/kmath/nd/StructureND;IZ)Lspace/kscience/kmath/nd/MutableStructureND;
+	public fun argMin (Lspace/kscience/kmath/nd/StructureND;IZ)Lspace/kscience/kmath/nd/MutableStructureND;
+	public synthetic fun asin (Ljava/lang/Object;)Ljava/lang/Object;
+	public synthetic fun asin (Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd/StructureND;
+	public fun asin (Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd4j/Nd4jArrayStructure;
+	public synthetic fun asinh (Ljava/lang/Object;)Ljava/lang/Object;
+	public synthetic fun asinh (Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd/StructureND;
+	public fun asinh (Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd4j/Nd4jArrayStructure;
+	public synthetic fun atan (Ljava/lang/Object;)Ljava/lang/Object;
+	public synthetic fun atan (Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public fun atan (Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd4j/Nd4jArrayStructure;
+	public synthetic fun atanh (Ljava/lang/Object;)Ljava/lang/Object;
+	public synthetic fun atanh (Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd/StructureND;
+	public fun atanh (Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd4j/Nd4jArrayStructure;
+	public synthetic fun ceil (Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public fun ceil (Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd4j/Nd4jArrayStructure;
+	public synthetic fun cos (Ljava/lang/Object;)Ljava/lang/Object;
+	public synthetic fun cos (Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd/StructureND;
+	public fun cos (Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd4j/Nd4jArrayStructure;
+	public synthetic fun cosh (Ljava/lang/Object;)Ljava/lang/Object;
+	public synthetic fun cosh (Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd/StructureND;
+	public fun cosh (Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd4j/Nd4jArrayStructure;
+	public fun div (Ljava/lang/Number;Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd4j/Nd4jArrayStructure;
+	public synthetic fun div (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+	public synthetic fun div (Ljava/lang/Object;Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public synthetic fun div (Ljava/lang/Object;Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd/StructureND;
+	public fun div (Lspace/kscience/kmath/nd/StructureND;Ljava/lang/Number;)Lspace/kscience/kmath/nd4j/Nd4jArrayStructure;
+	public synthetic fun div (Lspace/kscience/kmath/nd/StructureND;Ljava/lang/Object;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public synthetic fun div (Lspace/kscience/kmath/nd/StructureND;Ljava/lang/Object;)Lspace/kscience/kmath/nd/StructureND;
+	public synthetic fun div (Lspace/kscience/kmath/nd/StructureND;Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public fun div (Lspace/kscience/kmath/nd/StructureND;Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd4j/Nd4jArrayStructure;
+	public fun divAssign (Lspace/kscience/kmath/nd/MutableStructureND;Ljava/lang/Number;)V
+	public synthetic fun divAssign (Lspace/kscience/kmath/nd/MutableStructureND;Ljava/lang/Object;)V
+	public fun divAssign (Lspace/kscience/kmath/nd/MutableStructureND;Lspace/kscience/kmath/nd/StructureND;)V
+	public synthetic fun dot (Lspace/kscience/kmath/nd/StructureND;Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public fun dot (Lspace/kscience/kmath/nd/StructureND;Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd4j/Nd4jArrayStructure;
+	public synthetic fun exp (Ljava/lang/Object;)Ljava/lang/Object;
+	public synthetic fun exp (Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd/StructureND;
+	public fun exp (Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd4j/Nd4jArrayStructure;
+	public synthetic fun floor (Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public fun floor (Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd4j/Nd4jArrayStructure;
+	public abstract fun getNdArray (Lspace/kscience/kmath/nd/StructureND;)Lorg/nd4j/linalg/api/ndarray/INDArray;
+	public synthetic fun getTensor (Lspace/kscience/kmath/nd/MutableStructureND;I)Lspace/kscience/kmath/nd/MutableStructureND;
+	public fun getTensor (Lspace/kscience/kmath/nd/MutableStructureND;I)Lspace/kscience/kmath/nd4j/Nd4jArrayStructure;
+	public synthetic fun ln (Ljava/lang/Object;)Ljava/lang/Object;
+	public synthetic fun ln (Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd/StructureND;
+	public fun ln (Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd4j/Nd4jArrayStructure;
+	public synthetic fun map (Lspace/kscience/kmath/nd/StructureND;Lkotlin/jvm/functions/Function2;)Lspace/kscience/kmath/nd/StructureND;
+	public fun map (Lspace/kscience/kmath/nd/StructureND;Lkotlin/jvm/functions/Function2;)Lspace/kscience/kmath/nd4j/Nd4jArrayStructure;
+	public synthetic fun mapIndexed (Lspace/kscience/kmath/nd/StructureND;Lkotlin/jvm/functions/Function3;)Lspace/kscience/kmath/nd/StructureND;
+	public fun mapIndexed (Lspace/kscience/kmath/nd/StructureND;Lkotlin/jvm/functions/Function3;)Lspace/kscience/kmath/nd4j/Nd4jArrayStructure;
+	public synthetic fun max (Lspace/kscience/kmath/nd/StructureND;IZ)Lspace/kscience/kmath/nd/MutableStructureND;
+	public fun max (Lspace/kscience/kmath/nd/StructureND;IZ)Lspace/kscience/kmath/nd4j/Nd4jArrayStructure;
+	public fun mean (Lspace/kscience/kmath/nd/StructureND;IZ)Lspace/kscience/kmath/nd/MutableStructureND;
+	public synthetic fun min (Lspace/kscience/kmath/nd/StructureND;IZ)Lspace/kscience/kmath/nd/MutableStructureND;
+	public fun min (Lspace/kscience/kmath/nd/StructureND;IZ)Lspace/kscience/kmath/nd4j/Nd4jArrayStructure;
+	public fun minus (Ljava/lang/Number;Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd4j/Nd4jArrayStructure;
+	public synthetic fun minus (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+	public synthetic fun minus (Ljava/lang/Object;Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public synthetic fun minus (Ljava/lang/Object;Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd/StructureND;
+	public fun minus (Lspace/kscience/kmath/nd/StructureND;Ljava/lang/Number;)Lspace/kscience/kmath/nd4j/Nd4jArrayStructure;
+	public synthetic fun minus (Lspace/kscience/kmath/nd/StructureND;Ljava/lang/Object;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public synthetic fun minus (Lspace/kscience/kmath/nd/StructureND;Ljava/lang/Object;)Lspace/kscience/kmath/nd/StructureND;
+	public synthetic fun minus (Lspace/kscience/kmath/nd/StructureND;Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public fun minus (Lspace/kscience/kmath/nd/StructureND;Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd4j/Nd4jArrayStructure;
+	public fun minusAssign (Lspace/kscience/kmath/nd/MutableStructureND;Ljava/lang/Number;)V
+	public synthetic fun minusAssign (Lspace/kscience/kmath/nd/MutableStructureND;Ljava/lang/Object;)V
+	public fun minusAssign (Lspace/kscience/kmath/nd/MutableStructureND;Lspace/kscience/kmath/nd/StructureND;)V
+	public abstract fun mutableStructureND-qL90JFI ([ILkotlin/jvm/functions/Function2;)Lspace/kscience/kmath/nd4j/Nd4jArrayStructure;
+	public fun plus (Ljava/lang/Number;Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd4j/Nd4jArrayStructure;
+	public synthetic fun plus (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+	public synthetic fun plus (Ljava/lang/Object;Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public synthetic fun plus (Ljava/lang/Object;Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd/StructureND;
+	public fun plus (Lspace/kscience/kmath/nd/StructureND;Ljava/lang/Number;)Lspace/kscience/kmath/nd4j/Nd4jArrayStructure;
+	public synthetic fun plus (Lspace/kscience/kmath/nd/StructureND;Ljava/lang/Object;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public synthetic fun plus (Lspace/kscience/kmath/nd/StructureND;Ljava/lang/Object;)Lspace/kscience/kmath/nd/StructureND;
+	public synthetic fun plus (Lspace/kscience/kmath/nd/StructureND;Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public fun plus (Lspace/kscience/kmath/nd/StructureND;Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd4j/Nd4jArrayStructure;
+	public fun plusAssign (Lspace/kscience/kmath/nd/MutableStructureND;Ljava/lang/Number;)V
+	public synthetic fun plusAssign (Lspace/kscience/kmath/nd/MutableStructureND;Ljava/lang/Object;)V
+	public fun plusAssign (Lspace/kscience/kmath/nd/MutableStructureND;Lspace/kscience/kmath/nd/StructureND;)V
+	public synthetic fun power (Ljava/lang/Object;Ljava/lang/Number;)Ljava/lang/Object;
+	public fun power (Lspace/kscience/kmath/nd/StructureND;Ljava/lang/Number;)Lspace/kscience/kmath/nd/StructureND;
+	public synthetic fun sin (Ljava/lang/Object;)Ljava/lang/Object;
+	public synthetic fun sin (Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd/StructureND;
+	public fun sin (Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd4j/Nd4jArrayStructure;
+	public synthetic fun sinh (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun sinh (Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public synthetic fun sinh (Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd/StructureND;
+	public synthetic fun sqrt (Ljava/lang/Object;)Ljava/lang/Object;
+	public synthetic fun sqrt (Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public fun sqrt (Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd4j/Nd4jArrayStructure;
+	public fun std (Lspace/kscience/kmath/nd/StructureND;IZ)Lspace/kscience/kmath/nd/MutableStructureND;
+	public synthetic fun sum (Lspace/kscience/kmath/nd/StructureND;IZ)Lspace/kscience/kmath/nd/MutableStructureND;
+	public fun sum (Lspace/kscience/kmath/nd/StructureND;IZ)Lspace/kscience/kmath/nd4j/Nd4jArrayStructure;
+	public synthetic fun tan (Ljava/lang/Object;)Ljava/lang/Object;
+	public synthetic fun tan (Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public fun tan (Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd4j/Nd4jArrayStructure;
+	public synthetic fun tanh (Ljava/lang/Object;)Ljava/lang/Object;
+	public synthetic fun tanh (Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public fun tanh (Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd4j/Nd4jArrayStructure;
+	public fun times (Ljava/lang/Number;Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd4j/Nd4jArrayStructure;
+	public synthetic fun times (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+	public synthetic fun times (Ljava/lang/Object;Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public synthetic fun times (Ljava/lang/Object;Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd/StructureND;
+	public fun times (Lspace/kscience/kmath/nd/StructureND;Ljava/lang/Number;)Lspace/kscience/kmath/nd4j/Nd4jArrayStructure;
+	public synthetic fun times (Lspace/kscience/kmath/nd/StructureND;Ljava/lang/Object;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public synthetic fun times (Lspace/kscience/kmath/nd/StructureND;Ljava/lang/Object;)Lspace/kscience/kmath/nd/StructureND;
+	public synthetic fun times (Lspace/kscience/kmath/nd/StructureND;Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public fun times (Lspace/kscience/kmath/nd/StructureND;Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd4j/Nd4jArrayStructure;
+	public fun timesAssign (Lspace/kscience/kmath/nd/MutableStructureND;Ljava/lang/Number;)V
+	public synthetic fun timesAssign (Lspace/kscience/kmath/nd/MutableStructureND;Ljava/lang/Object;)V
+	public fun timesAssign (Lspace/kscience/kmath/nd/MutableStructureND;Lspace/kscience/kmath/nd/StructureND;)V
+	public synthetic fun transposed (Lspace/kscience/kmath/nd/StructureND;II)Lspace/kscience/kmath/nd/MutableStructureND;
+	public fun transposed (Lspace/kscience/kmath/nd/StructureND;II)Lspace/kscience/kmath/nd4j/Nd4jArrayStructure;
+	public synthetic fun unaryMinus (Ljava/lang/Object;)Ljava/lang/Object;
+	public synthetic fun unaryMinus (Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public fun unaryMinus (Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd4j/Nd4jArrayStructure;
+	public fun variance (Lspace/kscience/kmath/nd/StructureND;IZ)Lspace/kscience/kmath/nd/MutableStructureND;
+	public synthetic fun view-waz_sdI (Lspace/kscience/kmath/nd/MutableStructureND;[I)Lspace/kscience/kmath/nd/MutableStructureND;
+	public fun view-waz_sdI (Lspace/kscience/kmath/nd/MutableStructureND;[I)Lspace/kscience/kmath/nd4j/Nd4jArrayStructure;
+	public synthetic fun viewAs (Lspace/kscience/kmath/nd/MutableStructureND;Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public fun viewAs (Lspace/kscience/kmath/nd/MutableStructureND;Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd4j/Nd4jArrayStructure;
+	public abstract fun wrap (Lorg/nd4j/linalg/api/ndarray/INDArray;)Lspace/kscience/kmath/nd4j/Nd4jArrayStructure;
+	public synthetic fun zip (Lspace/kscience/kmath/nd/StructureND;Lspace/kscience/kmath/nd/StructureND;Lkotlin/jvm/functions/Function3;)Lspace/kscience/kmath/nd/StructureND;
+	public fun zip (Lspace/kscience/kmath/nd/StructureND;Lspace/kscience/kmath/nd/StructureND;Lkotlin/jvm/functions/Function3;)Lspace/kscience/kmath/nd4j/Nd4jArrayStructure;
+}
+

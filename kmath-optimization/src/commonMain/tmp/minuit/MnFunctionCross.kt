@@ -28,7 +28,7 @@ internal class MnFunctionCross(
     state: MnUserParameterState,
     fval: Double,
     stra: MnStrategy?,
-    errorDef: Double
+    errorDef: Double,
 ) {
     private val theErrorDef: Double
     private val theFCN: MultiFunction?
@@ -249,10 +249,13 @@ internal class MnFunctionCross(
             }
         }
         do {
-            val parbol: MnParabola = MnParabolaFactory.create(MnParabolaPoint(alsb[0], flsb[0]),
+            val parbol: MnParabola = MnParabolaFactory.create(
+                MnParabolaPoint(alsb[0], flsb[0]),
                 MnParabolaPoint(alsb[1], flsb[1]),
                 MnParabolaPoint(
-                    alsb[2], flsb[2]))
+                    alsb[2], flsb[2]
+                )
+            )
             val coeff1: Double = parbol.c()
             val coeff2: Double = parbol.b()
             val coeff3: Double = parbol.a()

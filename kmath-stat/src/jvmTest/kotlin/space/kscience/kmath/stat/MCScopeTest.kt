@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -21,7 +21,7 @@ internal class MCScopeTest {
         mcScope(1111) {
             val res = Collections.synchronizedSet(HashSet<RandomResult>())
 
-            launch{
+            launch {
                 //println(random)
                 repeat(10) {
                     delay(10)
@@ -68,7 +68,7 @@ internal class MCScopeTest {
     }
 
 
-    @OptIn(DelicateCoroutinesApi::class)
+    @OptIn(DelicateCoroutinesApi::class, ExperimentalCoroutinesApi::class)
     fun compareResult(test: ATest) {
         val res1 = runBlocking(Dispatchers.Default) { test() }
         val res2 = runBlocking(newSingleThreadContext("test")) { test() }

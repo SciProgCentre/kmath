@@ -28,7 +28,7 @@ class ContoursError internal constructor(
     points: List<Range>,
     xmnos: MinosError,
     ymnos: MinosError,
-    nfcn: Int
+    nfcn: Int,
 ) {
     private val theNFcn: Int
     private val thePoints: List<Range> = points

@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -43,7 +43,7 @@ public interface BlockingBufferChain<out T> : BlockingChain<T>, BufferChain<T> {
 public suspend inline fun <reified T : Any> Chain<T>.nextBuffer(size: Int): Buffer<T> = if (this is BufferChain) {
     nextBuffer(size)
 } else {
-    Buffer.auto(size) { next() }
+    Buffer(size) { next() }
 }
 
 public inline fun <reified T : Any> BlockingChain<T>.nextBufferBlocking(
@@ -51,5 +51,5 @@ public inline fun <reified T : Any> BlockingChain<T>.nextBufferBlocking(
 ): Buffer<T> = if (this is BlockingBufferChain) {
     nextBufferBlocking(size)
 } else {
-    Buffer.auto(size) { nextBlocking() }
+    Buffer(size) { nextBlocking() }
 }

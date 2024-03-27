@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -14,7 +14,7 @@ import space.kscience.kmath.complex.ComplexField
 import space.kscience.kmath.complex.complex
 import space.kscience.kmath.operations.invoke
 import space.kscience.kmath.structures.Buffer
-import space.kscience.kmath.structures.DoubleBuffer
+import space.kscience.kmath.structures.Float64Buffer
 import space.kscience.kmath.structures.getDouble
 import space.kscience.kmath.structures.permute
 
@@ -33,7 +33,7 @@ internal class BufferBenchmark {
 
     @Benchmark
     fun doubleBufferReadWrite(blackhole: Blackhole) {
-        val buffer = DoubleBuffer(size) { it.toDouble() }
+        val buffer = Float64Buffer(size) { it.toDouble() }
         var res = 0.0
         (0 until size).forEach {
             res += buffer[it]
@@ -43,7 +43,7 @@ internal class BufferBenchmark {
 
     @Benchmark
     fun bufferViewReadWrite(blackhole: Blackhole) {
-        val buffer = DoubleBuffer(size) { it.toDouble() }.permute(reversedIndices)
+        val buffer = Float64Buffer(size) { it.toDouble() }.permute(reversedIndices)
         var res = 0.0
         (0 until size).forEach {
             res += buffer[it]
@@ -53,7 +53,7 @@ internal class BufferBenchmark {
 
     @Benchmark
     fun bufferViewReadWriteSpecialized(blackhole: Blackhole) {
-        val buffer = DoubleBuffer(size) { it.toDouble() }.permute(reversedIndices)
+        val buffer = Float64Buffer(size) { it.toDouble() }.permute(reversedIndices)
         var res = 0.0
         (0 until size).forEach {
             res += buffer.getDouble(it)
@@ -75,6 +75,6 @@ internal class BufferBenchmark {
 
     private companion object {
         private const val size = 100
-        private val reversedIndices = IntArray(size){it}.apply { reverse() }
+        private val reversedIndices = IntArray(size) { it }.apply { reverse() }
     }
 }

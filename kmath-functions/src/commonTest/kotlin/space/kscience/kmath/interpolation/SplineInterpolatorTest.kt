@@ -1,11 +1,11 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
 package space.kscience.kmath.interpolation
 
-import space.kscience.kmath.operations.DoubleField
+import space.kscience.kmath.operations.Float64Field
 import kotlin.math.PI
 import kotlin.math.sin
 import kotlin.test.Test
@@ -21,7 +21,7 @@ internal class SplineInterpolatorTest {
 
         //val polynomial: PiecewisePolynomial<Double> = DoubleField.splineInterpolator.interpolatePolynomials(data)
 
-        val function = DoubleField.splineInterpolator.interpolate(data, Double.NaN)
+        val function = Float64Field.splineInterpolator.interpolate(data, Double.NaN)
 
         assertEquals(Double.NaN, function(-1.0))
         assertEquals(sin(0.5), function(0.5), 0.1)

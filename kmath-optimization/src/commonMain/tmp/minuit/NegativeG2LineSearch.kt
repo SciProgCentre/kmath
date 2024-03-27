@@ -54,8 +54,10 @@ internal object NegativeG2LineSearch {
                     var step: RealVector = ArrayRealVector(n)
                     step.setEntry(i, dgrad.getStep().getEntry(i) * dgrad.getGradient().getEntry(i))
                     if (abs(dgrad.getGradient().getEntry(i)) > prec.eps2()) {
-                        step.setEntry(i,
-                            step.getEntry(i) * (-1.0 / abs(dgrad.getGradient().getEntry(i))))
+                        step.setEntry(
+                            i,
+                            step.getEntry(i) * (-1.0 / abs(dgrad.getGradient().getEntry(i)))
+                        )
                     }
                     val gdel: Double = step.getEntry(i) * dgrad.getGradient().getEntry(i)
                     val pp: MnParabolaPoint = MnLineSearch.search(fcn, pa, step, gdel, prec)
@@ -69,8 +71,10 @@ internal object NegativeG2LineSearch {
         } while (iter++ < 2 * n && iterate)
         val mat = MnAlgebraicSymMatrix(n)
         for (i in 0 until n) {
-            mat[i, i] = if (abs(dgrad.getGradientDerivative()
-                    .getEntry(i)) > prec.eps2()
+            mat[i, i] = if (abs(
+                    dgrad.getGradientDerivative()
+                        .getEntry(i)
+                ) > prec.eps2()
             ) 1.0 / dgrad.getGradientDerivative().getEntry(i) else 1.0
         }
         val err = MinimumError(mat, 1.0)

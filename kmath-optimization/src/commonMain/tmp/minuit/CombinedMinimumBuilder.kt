@@ -33,7 +33,7 @@ internal class CombinedMinimumBuilder : MinimumBuilder {
         seed: MinimumSeed?,
         strategy: MnStrategy?,
         maxfcn: Int,
-        toler: Double
+        toler: Double,
     ): FunctionMinimum {
         val min: FunctionMinimum = theVMMinimizer.minimize(fcn!!, gc, seed, strategy, maxfcn, toler)
         if (!min.isValid()) {

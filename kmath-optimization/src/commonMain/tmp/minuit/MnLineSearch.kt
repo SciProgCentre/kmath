@@ -28,7 +28,7 @@ internal object MnLineSearch {
         st: MinimumParameters,
         step: RealVector,
         gdel: Double,
-        prec: MnMachinePrecision
+        prec: MnMachinePrecision,
     ): MnParabolaPoint {
         var overal = 1000.0
         var undral = -100.0
@@ -154,7 +154,8 @@ internal object MnLineSearch {
                 val toler9: Double = max(toler8, abs(toler8 * slam))
                 // min. of parabola at one point
                 if (abs(p0.x() - slam) < toler9 || abs(p1.x() - slam) < toler9 || abs(
-                        p2.x() - slam) < toler9
+                        p2.x() - slam
+                    ) < toler9
                 ) {
                     return MnParabolaPoint(xvmin, fvmin)
                 }

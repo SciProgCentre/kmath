@@ -319,10 +319,12 @@ public class QowFit(
      * generateErrors.
      */
     private fun generateErrors(): Matrix<Double> {
-        logger?.log { """
+        logger?.log {
+            """
             Starting errors estimation using quasioptimal weights method. The starting weight is:
                 ${curWeight.theta}
-             """.trimIndent()}
+             """.trimIndent()
+        }
         val curWeight = QoWeight(startingPoint)
 
         val covar = getCovariance(curWeight)

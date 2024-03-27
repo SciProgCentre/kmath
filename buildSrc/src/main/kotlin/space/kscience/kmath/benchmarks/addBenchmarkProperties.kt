@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -54,16 +54,17 @@ fun Project.addBenchmarkProperties() {
         p.extensions.findByType(KScienceReadmeExtension::class.java)?.run {
             benchmarksProject.extensions.findByType(BenchmarksExtension::class.java)?.configurations?.forEach { cfg ->
                 property("benchmark${cfg.name.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }}") {
-                    val launches = benchmarksProject.buildDir.resolve("reports/benchmarks/${cfg.name}")
+                    val launches = benchmarksProject.layout.buildDirectory.dir("reports/benchmarks/${cfg.name}").get()
 
-                    val resDirectory = launches.listFiles()?.maxByOrNull {
+                    val resDirectory = launches.files().maxByOrNull {
                         LocalDateTime.parse(it.name, ISO_DATE_TIME).atZone(ZoneId.systemDefault()).toInstant()
                     }
 
                     if (resDirectory == null || !(resDirectory.resolve("jvm.json")).exists()) {
                         "> **Can't find appropriate benchmark data. Try generating readme files after running benchmarks**."
                     } else {
-                        val reports: List<JmhReport> = jsonMapper.readValue<List<JmhReport>>(resDirectory.resolve("jvm.json"))
+                        val reports: List<JmhReport> =
+                            jsonMapper.readValue<List<JmhReport>>(resDirectory.resolve("jvm.json"))
 
                         buildString {
                             appendLine("<details>")
@@ -76,16 +77,20 @@ fun Project.addBenchmarkProperties() {
                             appendLine("* Run on ${first.vmName} (build ${first.vmVersion}) with Java process:")
                             appendLine()
                             appendLine("```")
-                            appendLine("${first.jvm} ${
-                                first.jvmArgs.joinToString(" ")
-                            }")
+                            appendLine(
+                                "${first.jvm} ${
+                                    first.jvmArgs.joinToString(" ")
+                                }"
+                            )
                             appendLine("```")
 
-                            appendLine("* JMH ${first.jmhVersion} was used in `${first.mode}` mode with ${first.warmupIterations} warmup ${
-                                noun(first.warmupIterations, "iteration", "iterations")
-                            } by ${first.warmupTime} and ${first.measurementIterations} measurement ${
-                                noun(first.measurementIterations, "iteration", "iterations")
-                            } by ${first.measurementTime}.")
+                            appendLine(
+                                "* JMH ${first.jmhVersion} was used in `${first.mode}` mode with ${first.warmupIterations} warmup ${
+                                    noun(first.warmupIterations, "iteration", "iterations")
+                                } by ${first.warmupTime} and ${first.measurementIterations} measurement ${
+                                    noun(first.measurementIterations, "iteration", "iterations")
+                                } by ${first.measurementTime}."
+                            )
 
                             appendLine()
                             appendLine("| Benchmark | Score |")

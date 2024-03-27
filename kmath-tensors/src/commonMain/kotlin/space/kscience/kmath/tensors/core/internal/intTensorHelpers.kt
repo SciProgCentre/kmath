@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -9,7 +9,7 @@ import space.kscience.kmath.nd.ShapeND
 import space.kscience.kmath.nd.first
 import space.kscience.kmath.nd.last
 import space.kscience.kmath.operations.asSequence
-import space.kscience.kmath.structures.IntBuffer
+import space.kscience.kmath.structures.Int32Buffer
 import space.kscience.kmath.structures.VirtualBuffer
 import space.kscience.kmath.structures.asBuffer
 import space.kscience.kmath.structures.indices
@@ -19,7 +19,7 @@ import space.kscience.kmath.tensors.core.OffsetIntBuffer
 /**
  * Concatenate a list of arrays
  */
-internal fun List<OffsetIntBuffer>.concat(): IntBuffer {
+internal fun List<OffsetIntBuffer>.concat(): Int32Buffer {
     val array = IntArray(sumOf { it.size })
     var pointer = 0
     while (pointer < array.size) {
@@ -51,7 +51,7 @@ internal fun IntTensor.vectorSequence(): Sequence<IntTensor> = vectors().asSeque
 
 
 internal val IntTensor.matrices: VirtualBuffer<IntTensor>
-    get(){
+    get() {
         val n = shape.size
         check(n >= 2) { "Expected tensor with 2 or more dimensions, got size $n" }
         val matrixOffset = shape[n - 1] * shape[n - 2]

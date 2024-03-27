@@ -33,7 +33,7 @@ internal class ScanBuilder : MinimumBuilder {
         seed: MinimumSeed,
         stra: MnStrategy?,
         maxfcn: Int,
-        toler: Double
+        toler: Double,
     ): FunctionMinimum {
         val x: RealVector = seed.parameters().vec().copy()
         val upst = MnUserParameterState(seed.state(), mfcn.errorDef(), seed.trafo())

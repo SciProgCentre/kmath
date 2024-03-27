@@ -1,17 +1,20 @@
 plugins {
-    id("space.kscience.gradle.jvm")
+    id("space.kscience.gradle.mpp")
 }
 
 description = "Commons math binding for kmath"
 
-dependencies {
-    api(project(":kmath-core"))
-    api(project(":kmath-complex"))
-    api(project(":kmath-coroutines"))
-    api(project(":kmath-optimization"))
-    api(project(":kmath-stat"))
-    api(project(":kmath-functions"))
-    api("org.apache.commons:commons-math3:3.6.1")
+kscience {
+    jvm()
+    jvmMain {
+        api(projects.kmathCore)
+        api(projects.kmathComplex)
+        api(projects.kmathCoroutines)
+        api(projects.kmathOptimization)
+        api(projects.kmathStat)
+        api(projects.kmathFunctions)
+        api("org.apache.commons:commons-math3:3.6.1")
+    }
 }
 
 readme {

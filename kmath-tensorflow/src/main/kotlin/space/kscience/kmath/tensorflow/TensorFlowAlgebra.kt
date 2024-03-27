@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -41,6 +41,7 @@ public sealed interface TensorFlowTensor<T> : Tensor<T>
  */
 @JvmInline
 public value class TensorFlowArray<T>(public val tensor: NdArray<T>) : Tensor<T> {
+
     override val shape: ShapeND get() = ShapeND(tensor.shape().asArray().toIntArray())
 
     @PerformancePitfall

@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -10,7 +10,7 @@ import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.nd.ShapeND
 import space.kscience.kmath.nd.get
 import space.kscience.kmath.nd.structureND
-import space.kscience.kmath.operations.DoubleField
+import space.kscience.kmath.operations.Float64Field
 import space.kscience.kmath.tensors.core.DoubleTensorAlgebra
 import space.kscience.kmath.tensors.core.DoubleTensorAlgebra.Companion.sum
 import space.kscience.kmath.tensors.core.randomNormal
@@ -20,7 +20,7 @@ import kotlin.test.assertEquals
 class DoubleTensorFlowOps {
     @Test
     fun basicOps() {
-        val res = DoubleField.produceWithTF {
+        val res = Float64Field.produceWithTF {
             val initial = structureND(2, 2) { 1.0 }
 
             initial + (initial * 2.0)
@@ -30,26 +30,26 @@ class DoubleTensorFlowOps {
     }
 
     @Test
-    fun dot(){
+    fun dot() {
         val dim = 1000
 
         val tensor1 = DoubleTensorAlgebra.randomNormal(shape = ShapeND(dim, dim), 12224)
         val tensor2 = DoubleTensorAlgebra.randomNormal(shape = ShapeND(dim, dim), 12225)
 
-        DoubleField.produceWithTF {
+        Float64Field.produceWithTF {
             tensor1 dot tensor2
         }.sum()
     }
 
     @Test
-    fun extensionOps(){
-        val res = DoubleField.produceWithTF {
+    fun extensionOps() {
+        val res = Float64Field.produceWithTF {
             val i = structureND(2, 2) { 0.5 }
 
             sin(i).pow(2) + cos(i).pow(2)
         }
 
-        assertEquals(1.0, res[0,0],0.01)
+        assertEquals(1.0, res[0, 0], 0.01)
     }
 
 

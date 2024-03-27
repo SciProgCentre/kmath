@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -8,12 +8,12 @@
 package space.kscience.kmath.structures
 
 import space.kscience.kmath.complex.*
-import space.kscience.kmath.linear.transpose
+import space.kscience.kmath.linear.transposed
 import space.kscience.kmath.nd.StructureND
 import space.kscience.kmath.nd.as2D
 import space.kscience.kmath.nd.ndAlgebra
 import space.kscience.kmath.nd.structureND
-import space.kscience.kmath.operations.DoubleField
+import space.kscience.kmath.operations.Float64Field
 import space.kscience.kmath.operations.invoke
 import kotlin.system.measureTimeMillis
 
@@ -21,7 +21,7 @@ fun main() {
     val dim = 1000
     val n = 1000
 
-    val realField = DoubleField.ndAlgebra(dim, dim)
+    val realField = Float64Field.ndAlgebra(dim, dim)
     val complexField: ComplexFieldND = ComplexField.ndAlgebra(dim, dim)
 
     val realTime = measureTimeMillis {
@@ -60,7 +60,7 @@ fun complexExample() {
             val sum = matrix + x + 1.0
 
             //Represent the sum as 2d-structure and transpose
-            sum.as2D().transpose()
+            sum.as2D().transposed()
         }
     }
 }

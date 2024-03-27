@@ -1,17 +1,16 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
 package space.kscience.kmath.nd
 
+import space.kscience.attributes.Attributes
 import space.kscience.kmath.PerformancePitfall
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.MutableBuffer
-import space.kscience.kmath.structures.MutableListBuffer
 import space.kscience.kmath.structures.VirtualBuffer
 import kotlin.jvm.JvmInline
-import kotlin.reflect.KClass
 
 /**
  * A structure that is guaranteed to be two-dimensional.
@@ -32,14 +31,14 @@ public interface Structure2D<out T> : StructureND<T> {
     override val shape: ShapeND get() = ShapeND(rowNum, colNum)
 
     /**
-     * The buffer of rows of this structure. It gets elements from the structure dynamically.
+     * The buffer of rows for this structure. It gets elements from the structure dynamically.
      */
     @PerformancePitfall
     public val rows: List<Buffer<T>>
         get() = List(rowNum) { i -> VirtualBuffer(colNum) { j -> get(i, j) } }
 
     /**
-     * The buffer of columns of this structure. It gets elements from the structure dynamically.
+     * The buffer of columns for this structure. It gets elements from the structure dynamically.
      */
     @PerformancePitfall
     public val columns: List<Buffer<T>>
@@ -70,6 +69,25 @@ public interface Structure2D<out T> : StructureND<T> {
 }
 
 /**
+ * A linear accessor for a [MutableStructureND]
+ */
+@OptIn(PerformancePitfall::class)
+public class MutableStructureNDAccessorBuffer<T>(
+    public val structure: MutableStructureND<T>,
+    override val size: Int,
+    private val indexer: (Int) -> IntArray,
+) : MutableBuffer<T> {
+
+    override fun set(index: Int, value: T) {
+        structure[indexer(index)] = value
+    }
+
+    override fun get(index: Int): T = structure[indexer(index)]
+
+    override fun toString(): String = "AccessorBuffer(structure=$structure, size=$size)"
+}
+
+/**
  * Represents mutable [Structure2D].
  */
 public interface MutableStructure2D<T> : Structure2D<T>, MutableStructureND<T> {
@@ -87,14 +105,18 @@ public interface MutableStructure2D<T> : Structure2D<T>, MutableStructureND<T> {
      */
     @PerformancePitfall
     override val rows: List<MutableBuffer<T>>
-        get() = List(rowNum) { i -> MutableListBuffer(colNum) { j -> get(i, j) } }
+        get() = List(rowNum) { i ->
+            MutableStructureNDAccessorBuffer(this, colNum) { j -> intArrayOf(i, j) }
+        }
 
     /**
-     * The buffer of columns of this structure. It gets elements from the structure dynamically.
+     * The buffer of columns for this structure. It gets elements from the structure dynamically.
      */
     @PerformancePitfall
     override val columns: List<MutableBuffer<T>>
-        get() = List(colNum) { j -> MutableListBuffer(rowNum) { i -> get(i, j) } }
+        get() = List(colNum) { j ->
+            MutableStructureNDAccessorBuffer(this, rowNum) { i -> intArrayOf(i, j) }
+        }
 }
 
 /**
@@ -102,6 +124,7 @@ public interface MutableStructure2D<T> : Structure2D<T>, MutableStructureND<T> {
  */
 @JvmInline
 private value class Structure2DWrapper<out T>(val structure: StructureND<T>) : Structure2D<T> {
+
     override val shape: ShapeND get() = structure.shape
 
     override val rowNum: Int get() = shape[0]
@@ -110,7 +133,8 @@ private value class Structure2DWrapper<out T>(val structure: StructureND<T>) : S
     @PerformancePitfall
     override operator fun get(i: Int, j: Int): T = structure[i, j]
 
-    override fun <F : StructureFeature> getFeature(type: KClass<out F>): F? = structure.getFeature(type)
+    override val attributes: Attributes
+        get() = structure.attributes
 
     @PerformancePitfall
     override fun elements(): Sequence<Pair<IntArray, T>> = structure.elements()
@@ -120,6 +144,7 @@ private value class Structure2DWrapper<out T>(val structure: StructureND<T>) : S
  * A 2D wrapper for a mutable nd-structure
  */
 private class MutableStructure2DWrapper<T>(val structure: MutableStructureND<T>) : MutableStructure2D<T> {
+
     override val shape: ShapeND get() = structure.shape
 
     override val rowNum: Int get() = shape[0]

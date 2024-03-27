@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -64,7 +64,7 @@ public fun <C, A> Polynomial<C>.differentiate(
 ): Polynomial<C> where  A : Ring<C>, A : NumericAlgebra<C> = ring {
     Polynomial(
         buildList(max(0, coefficients.size - 1)) {
-            for (deg in 1 .. coefficients.lastIndex) add(number(deg) * coefficients[deg])
+            for (deg in 1..coefficients.lastIndex) add(number(deg) * coefficients[deg])
         }
     )
 }

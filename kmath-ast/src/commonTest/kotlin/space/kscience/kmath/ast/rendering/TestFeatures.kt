@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -17,7 +17,8 @@ internal class TestFeatures {
     fun printNumeric() {
         val num = object : Number() {
             override fun toByte(): Byte = throw UnsupportedOperationException()
-            override fun toChar(): Char = throw UnsupportedOperationException()
+
+            //            override fun toChar(): Char = throw UnsupportedOperationException()
             override fun toDouble(): Double = throw UnsupportedOperationException()
             override fun toFloat(): Float = throw UnsupportedOperationException()
             override fun toInt(): Int = throw UnsupportedOperationException()

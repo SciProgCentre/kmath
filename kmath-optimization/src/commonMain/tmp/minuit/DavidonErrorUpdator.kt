@@ -34,8 +34,10 @@ internal class DavidonErrorUpdator : MinimumErrorUpdator {
         var Vupd: MnAlgebraicSymMatrix =
             MnUtils.sub(MnUtils.div(MnUtils.outerProduct(dx), delgam), MnUtils.div(MnUtils.outerProduct(vg), gvg))
         if (delgam > gvg) {
-            Vupd = MnUtils.add(Vupd,
-                MnUtils.mul(MnUtils.outerProduct(MnUtils.sub(MnUtils.div(dx, delgam), MnUtils.div(vg, gvg))), gvg))
+            Vupd = MnUtils.add(
+                Vupd,
+                MnUtils.mul(MnUtils.outerProduct(MnUtils.sub(MnUtils.div(dx, delgam), MnUtils.div(vg, gvg))), gvg)
+            )
         }
         val sum_upd: Double = MnUtils.absoluteSumOfElements(Vupd)
         Vupd = MnUtils.add(Vupd, V0)

@@ -58,9 +58,11 @@ class MnMigrad
      * @param fcn a [MultiFunction] object.
      * @param par an array of double.
      */
-    constructor(fcn: MultiFunction?, par: DoubleArray, err: DoubleArray, stra: Int) : this(fcn,
+    constructor(fcn: MultiFunction?, par: DoubleArray, err: DoubleArray, stra: Int) : this(
+        fcn,
         MnUserParameterState(par, err),
-        MnStrategy(stra))
+        MnStrategy(stra)
+    )
 
     /**
      * construct from MultiFunction + double[] for parameters and
@@ -81,9 +83,11 @@ class MnMigrad
      * @param fcn a [MultiFunction] object.
      * @param par an array of double.
      */
-    constructor(fcn: MultiFunction?, par: DoubleArray, cov: MnUserCovariance, stra: Int) : this(fcn,
+    constructor(fcn: MultiFunction?, par: DoubleArray, cov: MnUserCovariance, stra: Int) : this(
+        fcn,
         MnUserParameterState(par, cov),
-        MnStrategy(stra))
+        MnStrategy(stra)
+    )
 
     /**
      * construct from MultiFunction + MnUserParameters with default
@@ -101,9 +105,11 @@ class MnMigrad
      * @param par a [hep.dataforge.MINUIT.MnUserParameters] object.
      * @param fcn a [MultiFunction] object.
      */
-    constructor(fcn: MultiFunction?, par: MnUserParameters, stra: Int) : this(fcn,
+    constructor(fcn: MultiFunction?, par: MnUserParameters, stra: Int) : this(
+        fcn,
         MnUserParameterState(par),
-        MnStrategy(stra))
+        MnStrategy(stra)
+    )
 
     /**
      * construct from MultiFunction + MnUserParameters + MnUserCovariance
@@ -113,10 +119,12 @@ class MnMigrad
      * @param par a [hep.dataforge.MINUIT.MnUserParameters] object.
      * @param fcn a [MultiFunction] object.
      */
-    constructor(fcn: MultiFunction?, par: MnUserParameters, cov: MnUserCovariance) : this(fcn,
+    constructor(fcn: MultiFunction?, par: MnUserParameters, cov: MnUserCovariance) : this(
+        fcn,
         par,
         cov,
-        DEFAULT_STRATEGY)
+        DEFAULT_STRATEGY
+    )
 
     /**
      * construct from MultiFunction + MnUserParameters + MnUserCovariance
@@ -126,9 +134,11 @@ class MnMigrad
      * @param fcn a [MultiFunction] object.
      * @param par a [hep.dataforge.MINUIT.MnUserParameters] object.
      */
-    constructor(fcn: MultiFunction?, par: MnUserParameters, cov: MnUserCovariance, stra: Int) : this(fcn,
+    constructor(fcn: MultiFunction?, par: MnUserParameters, cov: MnUserCovariance, stra: Int) : this(
+        fcn,
         MnUserParameterState(par, cov),
-        MnStrategy(stra))
+        MnStrategy(stra)
+    )
 
     override fun minimizer(): ModularFunctionMinimizer {
         return theMinimizer

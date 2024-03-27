@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -31,7 +31,6 @@ public class PermutedMutableStructureND<T>(
     override val shape: ShapeND = origin.shape,
     public val permutation: (IntArray) -> IntArray,
 ) : MutableStructureND<T> {
-
 
     @OptIn(PerformancePitfall::class)
     override fun set(index: IntArray, value: T) {

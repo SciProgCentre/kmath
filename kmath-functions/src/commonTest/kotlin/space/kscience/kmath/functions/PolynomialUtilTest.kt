@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -53,6 +53,7 @@ class PolynomialUtilTest {
             "test 5"
         )
     }
+
     @Test
     fun test_Polynomial_value_Constant() {
         assertEquals(
@@ -85,6 +86,7 @@ class PolynomialUtilTest {
             "test 5"
         )
     }
+
     @Test
     fun test_Polynomial_differentiate() {
         assertEquals(
@@ -94,20 +96,27 @@ class PolynomialUtilTest {
         )
         assertEquals(
             Polynomial(Rational(-8, 3), Rational(8, 9), Rational(15, 7), Rational(-20, 9)),
-            Polynomial(Rational(1, 5), Rational(-8, 3), Rational(4, 9), Rational(5, 7), Rational(-5, 9)).differentiate(RationalField),
+            Polynomial(Rational(1, 5), Rational(-8, 3), Rational(4, 9), Rational(5, 7), Rational(-5, 9)).differentiate(
+                RationalField
+            ),
             "test 2"
         )
         assertEquals(
             Polynomial(Rational(0), Rational(8, 9), Rational(15, 7), Rational(-20, 9)),
-            Polynomial(Rational(0), Rational(0), Rational(4, 9), Rational(5, 7), Rational(-5, 9)).differentiate(RationalField),
+            Polynomial(Rational(0), Rational(0), Rational(4, 9), Rational(5, 7), Rational(-5, 9)).differentiate(
+                RationalField
+            ),
             "test 3"
         )
         assertEquals(
             Polynomial(Rational(-8, 3), Rational(8, 9), Rational(15, 7), Rational(0)),
-            Polynomial(Rational(1, 5), Rational(-8, 3), Rational(4, 9), Rational(5, 7), Rational(0)).differentiate(RationalField),
+            Polynomial(Rational(1, 5), Rational(-8, 3), Rational(4, 9), Rational(5, 7), Rational(0)).differentiate(
+                RationalField
+            ),
             "test 4"
         )
     }
+
     @Test
     fun test_Polynomial_integrate() {
         assertEquals(
@@ -117,17 +126,23 @@ class PolynomialUtilTest {
         )
         assertEquals(
             Polynomial(Rational(0), Rational(1, 5), Rational(-4, 3), Rational(4, 27), Rational(5, 28), Rational(-1, 9)),
-            Polynomial(Rational(1, 5), Rational(-8, 3), Rational(4, 9), Rational(5, 7), Rational(-5, 9)).integrate(RationalField),
+            Polynomial(Rational(1, 5), Rational(-8, 3), Rational(4, 9), Rational(5, 7), Rational(-5, 9)).integrate(
+                RationalField
+            ),
             "test 2"
         )
         assertEquals(
             Polynomial(Rational(0), Rational(0), Rational(0), Rational(4, 27), Rational(5, 28), Rational(-1, 9)),
-            Polynomial(Rational(0), Rational(0), Rational(4, 9), Rational(5, 7), Rational(-5, 9)).integrate(RationalField),
+            Polynomial(Rational(0), Rational(0), Rational(4, 9), Rational(5, 7), Rational(-5, 9)).integrate(
+                RationalField
+            ),
             "test 3"
         )
         assertEquals(
             Polynomial(Rational(0), Rational(1, 5), Rational(-4, 3), Rational(4, 27), Rational(5, 28), Rational(0)),
-            Polynomial(Rational(1, 5), Rational(-8, 3), Rational(4, 9), Rational(5, 7), Rational(0)).integrate(RationalField),
+            Polynomial(Rational(1, 5), Rational(-8, 3), Rational(4, 9), Rational(5, 7), Rational(0)).integrate(
+                RationalField
+            ),
             "test 4"
         )
     }

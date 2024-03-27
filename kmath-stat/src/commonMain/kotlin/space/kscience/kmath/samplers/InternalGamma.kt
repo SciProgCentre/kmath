@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -123,7 +123,7 @@ internal object InternalGamma {
     private fun regularizedGammaP(
         a: Double,
         x: Double,
-        maxIterations: Int = Int.MAX_VALUE
+        maxIterations: Int = Int.MAX_VALUE,
     ): Double = when {
         a.isNaN() || x.isNaN() || a <= 0.0 || x < 0.0 -> Double.NaN
         x == 0.0 -> 0.0
@@ -155,7 +155,7 @@ internal object InternalGamma {
     fun regularizedGammaQ(
         a: Double,
         x: Double,
-        maxIterations: Int = Int.MAX_VALUE
+        maxIterations: Int = Int.MAX_VALUE,
     ): Double = when {
         a.isNaN() || x.isNaN() || a <= 0.0 || x < 0.0 -> Double.NaN
         x == 0.0 -> 1.0

@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -10,13 +10,13 @@ import space.kscience.kmath.nd.BufferedRingOpsND
 import space.kscience.kmath.operations.BigInt.Companion.BASE
 import space.kscience.kmath.operations.BigInt.Companion.BASE_SIZE
 import space.kscience.kmath.structures.Buffer
+import space.kscience.kmath.structures.MutableBufferFactory
 import kotlin.math.log2
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.sign
 
 private typealias Magnitude = UIntArray
-private typealias TBase = ULong
 
 /**
  * Kotlin Multiplatform implementation of Big Integer numbers (KBigInteger).
@@ -26,6 +26,9 @@ private typealias TBase = ULong
  */
 @OptIn(UnstableKMathAPI::class)
 public object BigIntField : Field<BigInt>, NumbersAddOps<BigInt>, ScaleOperations<BigInt> {
+
+    override val bufferFactory: MutableBufferFactory<BigInt> = MutableBufferFactory()
+
     override val zero: BigInt = BigInt.ZERO
     override val one: BigInt = BigInt.ONE
 
@@ -451,10 +454,12 @@ public fun String.parseBigInteger(): BigInt? {
             sign = +1
             1
         }
+
         '-' -> {
             sign = -1
             1
         }
+
         else -> {
             sign = +1
             0
@@ -528,10 +533,10 @@ public fun String.parseBigInteger(): BigInt? {
 public val BigInt.algebra: BigIntField get() = BigIntField
 
 public inline fun BigInt.Companion.buffer(size: Int, initializer: (Int) -> BigInt): Buffer<BigInt> =
-    Buffer.boxing(size, initializer)
+    Buffer(size, initializer)
 
 public inline fun BigInt.Companion.mutableBuffer(size: Int, initializer: (Int) -> BigInt): Buffer<BigInt> =
-    Buffer.boxing(size, initializer)
+    Buffer(size, initializer)
 
 public val BigIntField.nd: BufferedRingOpsND<BigInt, BigIntField>
     get() = BufferedRingOpsND(BufferRingOps(BigIntField))

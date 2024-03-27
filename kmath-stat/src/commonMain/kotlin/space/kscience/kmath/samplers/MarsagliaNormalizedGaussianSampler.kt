@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -7,7 +7,7 @@ package space.kscience.kmath.samplers
 
 import space.kscience.kmath.chains.BlockingDoubleChain
 import space.kscience.kmath.random.RandomGenerator
-import space.kscience.kmath.structures.DoubleBuffer
+import space.kscience.kmath.structures.Float64Buffer
 import kotlin.math.ln
 import kotlin.math.sqrt
 
@@ -59,7 +59,7 @@ public object MarsagliaNormalizedGaussianSampler : NormalizedGaussianSampler {
             }
         }
 
-        override fun nextBufferBlocking(size: Int): DoubleBuffer = DoubleBuffer(size) { nextBlocking() }
+        override fun nextBufferBlocking(size: Int): Float64Buffer = Float64Buffer(size) { nextBlocking() }
 
         override suspend fun fork(): BlockingDoubleChain = sample(generator.fork())
     }

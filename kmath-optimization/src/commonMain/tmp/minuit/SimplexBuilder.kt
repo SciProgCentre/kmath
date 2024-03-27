@@ -31,7 +31,7 @@ internal class SimplexBuilder : MinimumBuilder {
         seed: MinimumSeed,
         strategy: MnStrategy?,
         maxfcn: Int,
-        minedm: Double
+        minedm: Double,
     ): FunctionMinimum {
         val prec: MnMachinePrecision = seed.precision()
         val x: RealVector = seed.parameters().vec().copy()

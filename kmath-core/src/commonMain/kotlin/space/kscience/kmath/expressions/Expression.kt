@@ -1,12 +1,18 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
 package space.kscience.kmath.expressions
 
+import space.kscience.attributes.SafeType
+import space.kscience.attributes.WithType
+import space.kscience.attributes.safeTypeOf
 import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.operations.Algebra
+import space.kscience.kmath.operations.DoubleField
+import space.kscience.kmath.operations.IntRing
+import space.kscience.kmath.operations.LongRing
 import kotlin.jvm.JvmName
 import kotlin.properties.ReadOnlyProperty
 
@@ -15,7 +21,7 @@ import kotlin.properties.ReadOnlyProperty
  *
  * @param T the type this expression takes as argument and returns.
  */
-public fun interface Expression<T> {
+public interface Expression<T> : WithType<T> {
     /**
      * Calls this expression from arguments.
      *
@@ -26,10 +32,25 @@ public fun interface Expression<T> {
 }
 
 /**
+ * Create an expression from a functional block.
+ */
+public fun <T> Expression(type: SafeType<T>, block: (Map<Symbol, T>) -> T): Expression<T> = object : Expression<T> {
+    override fun invoke(arguments: Map<Symbol, T>): T = block(arguments)
+
+    override val type: SafeType<T> = type
+}
+
+public inline fun <reified T> Expression(noinline block: (Map<Symbol, T>) -> T): Expression<T> =
+    Expression(safeTypeOf<T>(), block)
+
+/**
  * Specialization of [Expression] for [Double] allowing better performance because of using array.
  */
 @UnstableKMathAPI
 public interface DoubleExpression : Expression<Double> {
+
+    override val type: SafeType<Double> get() = DoubleField.type
+
     /**
      * The indexer of this expression's arguments that should be used to build array for [invoke].
      *
@@ -49,7 +70,7 @@ public interface DoubleExpression : Expression<Double> {
      */
     public operator fun invoke(arguments: DoubleArray): Double
 
-    public companion object{
+    public companion object {
         internal val EMPTY_DOUBLE_ARRAY = DoubleArray(0)
     }
 }
@@ -59,6 +80,9 @@ public interface DoubleExpression : Expression<Double> {
  */
 @UnstableKMathAPI
 public interface IntExpression : Expression<Int> {
+
+    override val type: SafeType<Int> get() = IntRing.type
+
     /**
      * The indexer of this expression's arguments that should be used to build array for [invoke].
      *
@@ -78,7 +102,7 @@ public interface IntExpression : Expression<Int> {
      */
     public operator fun invoke(arguments: IntArray): Int
 
-    public companion object{
+    public companion object {
         internal val EMPTY_INT_ARRAY = IntArray(0)
     }
 }
@@ -88,6 +112,9 @@ public interface IntExpression : Expression<Int> {
  */
 @UnstableKMathAPI
 public interface LongExpression : Expression<Long> {
+
+    override val type: SafeType<Long> get() = LongRing.type
+
     /**
      * The indexer of this expression's arguments that should be used to build array for [invoke].
      *
@@ -107,7 +134,7 @@ public interface LongExpression : Expression<Long> {
      */
     public operator fun invoke(arguments: LongArray): Long
 
-    public companion object{
+    public companion object {
         internal val EMPTY_LONG_ARRAY = LongArray(0)
     }
 }
@@ -156,7 +183,6 @@ public operator fun <T> Expression<T>.invoke(vararg pairs: Pair<String, T>): T =
         })
     }
 )
-
 
 
 /**

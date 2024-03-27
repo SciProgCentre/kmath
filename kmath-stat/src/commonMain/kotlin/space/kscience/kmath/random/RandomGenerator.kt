@@ -1,11 +1,11 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
 package space.kscience.kmath.random
 
-import space.kscience.kmath.structures.DoubleBuffer
+import space.kscience.kmath.structures.Float64Buffer
 import kotlin.random.Random
 
 /**
@@ -25,7 +25,7 @@ public interface RandomGenerator {
     /**
      * A chunk of doubles of given [size].
      */
-    public fun nextDoubleBuffer(size: Int): DoubleBuffer = DoubleBuffer(size) { nextDouble() }
+    public fun nextDoubleBuffer(size: Int): Float64Buffer = Float64Buffer(size) { nextDouble() }
 
     /**
      * Gets the next random `Int` from the random number generator.

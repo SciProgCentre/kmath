@@ -1,11 +1,13 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
 package space.kscience.kmath.structures
 
-import kotlin.reflect.KClass
+import space.kscience.attributes.SafeType
+import space.kscience.attributes.safeTypeOf
+import kotlin.reflect.typeOf
 
 /**
  * A generic mutable random-access structure for both primitives and objects.
@@ -13,88 +15,103 @@ import kotlin.reflect.KClass
  * @param T the type of elements contained in the buffer.
  */
 public interface MutableBuffer<T> : Buffer<T> {
+
     /**
      * Sets the array element at the specified [index] to the specified [value].
      */
     public operator fun set(index: Int, value: T)
 
-    /**
-     * Returns a shallow copy of the buffer.
-     */
-    public fun copy(): MutableBuffer<T>
 
     public companion object {
         /**
-         * Creates a [DoubleBuffer] with the specified [size], where each element is calculated by calling the specified
+         * Creates a [Float64Buffer] with the specified [size], where each element is calculated by calling the specified
          * [initializer] function.
          */
-        public inline fun double(size: Int, initializer: (Int) -> Double): DoubleBuffer =
-            DoubleBuffer(size, initializer)
+        public inline fun double(size: Int, initializer: (Int) -> Double): Float64Buffer =
+            Float64Buffer(size, initializer)
 
         /**
-         * Creates a [ShortBuffer] with the specified [size], where each element is calculated by calling the specified
+         * Creates a [Int16Buffer] with the specified [size], where each element is calculated by calling the specified
          * [initializer] function.
          */
-        public inline fun short(size: Int, initializer: (Int) -> Short): ShortBuffer =
-            ShortBuffer(size, initializer)
+        public inline fun short(size: Int, initializer: (Int) -> Short): Int16Buffer =
+            Int16Buffer(size, initializer)
 
         /**
-         * Creates a [IntBuffer] with the specified [size], where each element is calculated by calling the specified
+         * Creates a [Int32Buffer] with the specified [size], where each element is calculated by calling the specified
          * [initializer] function.
          */
-        public inline fun int(size: Int, initializer: (Int) -> Int): IntBuffer =
-            IntBuffer(size, initializer)
+        public inline fun int(size: Int, initializer: (Int) -> Int): Int32Buffer =
+            Int32Buffer(size, initializer)
 
         /**
-         * Creates a [LongBuffer] with the specified [size], where each element is calculated by calling the specified
+         * Creates a [Int64Buffer] with the specified [size], where each element is calculated by calling the specified
          * [initializer] function.
          */
-        public inline fun long(size: Int, initializer: (Int) -> Long): LongBuffer =
-            LongBuffer(size, initializer)
+        public inline fun long(size: Int, initializer: (Int) -> Long): Int64Buffer =
+            Int64Buffer(size, initializer)
 
 
         /**
-         * Creates a [FloatBuffer] with the specified [size], where each element is calculated by calling the specified
+         * Creates a [Float32Buffer] with the specified [size], where each element is calculated by calling the specified
          * [initializer] function.
          */
-        public inline fun float(size: Int, initializer: (Int) -> Float): FloatBuffer =
-            FloatBuffer(size, initializer)
-
-
-        /**
-         * Create a boxing mutable buffer of given type
-         */
-        public inline fun <T> boxing(size: Int, initializer: (Int) -> T): MutableBuffer<T> =
-            MutableListBuffer(MutableList(size, initializer))
-
-        /**
-         * Creates a [MutableBuffer] of given [type]. If the type is primitive, specialized buffers are used
-         * ([IntBuffer], [DoubleBuffer], etc.), [ListBuffer] is returned otherwise.
-         *
-         * The [size] is specified, and each element is calculated by calling the specified [initializer] function.
-         */
-        @Suppress("UNCHECKED_CAST")
-        public inline fun <T : Any> auto(type: KClass<out T>, size: Int, initializer: (Int) -> T): MutableBuffer<T> =
-            when (type) {
-                Double::class -> double(size) { initializer(it) as Double } as MutableBuffer<T>
-                Short::class -> short(size) { initializer(it) as Short } as MutableBuffer<T>
-                Int::class -> int(size) { initializer(it) as Int } as MutableBuffer<T>
-                Float::class -> float(size) { initializer(it) as Float } as MutableBuffer<T>
-                Long::class -> long(size) { initializer(it) as Long } as MutableBuffer<T>
-                else -> boxing(size, initializer)
-            }
-
-        /**
-         * Creates a [MutableBuffer] of given type [T]. If the type is primitive, specialized buffers are used
-         * ([IntBuffer], [DoubleBuffer], etc.), [ListBuffer] is returned otherwise.
-         *
-         * The [size] is specified, and each element is calculated by calling the specified [initializer] function.
-         */
-        @Suppress("UNCHECKED_CAST")
-        public inline fun <reified T : Any> auto(size: Int, initializer: (Int) -> T): MutableBuffer<T> =
-            auto(T::class, size, initializer)
+        public inline fun float(size: Int, initializer: (Int) -> Float): Float32Buffer =
+            Float32Buffer(size, initializer)
     }
 }
 
 
-public sealed interface PrimitiveBuffer<T>: MutableBuffer<T>
+/**
+ * Returns a shallow copy of the buffer.
+ */
+public fun <T> Buffer<T>.copy(bufferFactory: BufferFactory<T>): Buffer<T> = if (this is ArrayBuffer) {
+    ArrayBuffer(array.copyOf())
+} else {
+    bufferFactory(size, ::get)
+}
+
+/**
+ * Returns a mutable shallow copy of the buffer.
+ */
+public fun <T> Buffer<T>.mutableCopy(bufferFactory: MutableBufferFactory<T>): MutableBuffer<T> =
+    if (this is ArrayBuffer) {
+        ArrayBuffer(array.copyOf())
+    } else {
+        bufferFactory(size, ::get)
+    }
+
+
+/**
+ * Creates a [MutableBuffer] of given [type]. If the type is primitive, specialized buffers are used
+ * ([Int32Buffer], [Float64Buffer], etc.), [ListBuffer] is returned otherwise.
+ *
+ * The [size] is specified, and each element is calculated by calling the specified [initializer] function.
+ */
+@Suppress("UNCHECKED_CAST")
+public inline fun <T> MutableBuffer(
+    type: SafeType<T>,
+    size: Int,
+    initializer: (Int) -> T,
+): MutableBuffer<T> = when (type.kType) {
+    typeOf<Int8>() -> Int8Buffer(size) { initializer(it) as Int8 } as MutableBuffer<T>
+    typeOf<Int16>() -> MutableBuffer.short(size) { initializer(it) as Int16 } as MutableBuffer<T>
+    typeOf<Int32>() -> MutableBuffer.int(size) { initializer(it) as Int32 } as MutableBuffer<T>
+    typeOf<Int64>() -> MutableBuffer.long(size) { initializer(it) as Int64 } as MutableBuffer<T>
+    typeOf<Float>() -> MutableBuffer.float(size) { initializer(it) as Float } as MutableBuffer<T>
+    typeOf<Double>() -> MutableBuffer.double(size) { initializer(it) as Double } as MutableBuffer<T>
+    //TODO add unsigned types
+    else -> MutableListBuffer(MutableList(size, initializer))
+}
+
+/**
+ * Creates a [MutableBuffer] of given type [T]. If the type is primitive, specialized buffers are used
+ * ([Int32Buffer], [Float64Buffer], etc.), [ListBuffer] is returned otherwise.
+ *
+ * The [size] is specified, and each element is calculated by calling the specified [initializer] function.
+ */
+public inline fun <reified T> MutableBuffer(size: Int, initializer: (Int) -> T): MutableBuffer<T> =
+    MutableBuffer(safeTypeOf<T>(), size, initializer)
+
+
+public sealed interface PrimitiveBuffer<T> : MutableBuffer<T>

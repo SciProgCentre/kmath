@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -91,6 +91,6 @@ internal typealias Extract<T, U> = Any
 internal external interface PromiseLike<T> {
     fun then(
         onfulfilled: ((value: T) -> Any?)? = definedExternally,
-        onrejected: ((reason: Any) -> Any?)? = definedExternally
+        onrejected: ((reason: Any) -> Any?)? = definedExternally,
     ): PromiseLike<dynamic /* TResult1 | TResult2 */>
 }

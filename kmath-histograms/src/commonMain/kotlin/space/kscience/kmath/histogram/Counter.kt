@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -7,7 +7,7 @@ package space.kscience.kmath.histogram
 
 import kotlinx.atomicfu.atomic
 import kotlinx.atomicfu.getAndUpdate
-import space.kscience.kmath.operations.DoubleField
+import space.kscience.kmath.operations.Float64Field
 import space.kscience.kmath.operations.Group
 
 /**
@@ -18,8 +18,8 @@ public interface Counter<T : Any> {
     public val value: T
 
     public companion object {
-        public fun ofDouble(): ObjectCounter<Double> = ObjectCounter(DoubleField)
-        public fun <T: Any> of(group: Group<T>): ObjectCounter<T> = ObjectCounter(group)
+        public fun ofDouble(): ObjectCounter<Double> = ObjectCounter(Float64Field)
+        public fun <T : Any> of(group: Group<T>): ObjectCounter<T> = ObjectCounter(group)
     }
 }
 

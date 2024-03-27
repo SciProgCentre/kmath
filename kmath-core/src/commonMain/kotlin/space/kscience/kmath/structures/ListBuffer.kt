@@ -1,11 +1,9 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
 package space.kscience.kmath.structures
-
-import kotlin.jvm.JvmInline
 
 /**
  * [Buffer] implementation over [List].
@@ -14,8 +12,6 @@ import kotlin.jvm.JvmInline
  * @property list The underlying list.
  */
 public class ListBuffer<T>(public val list: List<T>) : Buffer<T> {
-
-    public constructor(size: Int, initializer: (Int) -> T) : this(List(size, initializer))
 
     override val size: Int get() = list.size
 
@@ -37,10 +33,7 @@ public fun <T> List<T>.asBuffer(): ListBuffer<T> = ListBuffer(this)
  * @param T the type of elements contained in the buffer.
  * @property list The underlying list.
  */
-@JvmInline
-public value class MutableListBuffer<T>(public val list: MutableList<T>) : MutableBuffer<T> {
-
-    public constructor(size: Int, initializer: (Int) -> T) : this(MutableList(size, initializer))
+public class MutableListBuffer<T>(public val list: MutableList<T>) : MutableBuffer<T> {
 
     override val size: Int get() = list.size
 
@@ -51,8 +44,10 @@ public value class MutableListBuffer<T>(public val list: MutableList<T>) : Mutab
     }
 
     override operator fun iterator(): Iterator<T> = list.iterator()
-    override fun copy(): MutableBuffer<T> = MutableListBuffer(ArrayList(list))
+
+    override fun toString(): String = Buffer.toString(this)
 }
+
 
 /**
  * Returns an [MutableListBuffer] that wraps the original list.

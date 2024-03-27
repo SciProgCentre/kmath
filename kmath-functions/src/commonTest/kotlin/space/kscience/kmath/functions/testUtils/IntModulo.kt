@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -9,6 +9,7 @@ package space.kscience.kmath.functions.testUtils
 
 import space.kscience.kmath.operations.Ring
 import space.kscience.kmath.operations.ScaleOperations
+import space.kscience.kmath.structures.MutableBufferFactory
 
 
 class IntModulo {
@@ -36,6 +37,7 @@ class IntModulo {
             modulus,
             toCheckInput = false
         )
+
     operator fun plus(other: IntModulo): IntModulo {
         require(modulus == other.modulus) { "can not add two residue different modulo" }
         return IntModulo(
@@ -44,12 +46,14 @@ class IntModulo {
             toCheckInput = false
         )
     }
+
     operator fun plus(other: Int): IntModulo =
         IntModulo(
             (residue + other) % modulus,
             modulus,
             toCheckInput = false
         )
+
     operator fun minus(other: IntModulo): IntModulo {
         require(modulus == other.modulus) { "can not subtract two residue different modulo" }
         return IntModulo(
@@ -58,12 +62,14 @@ class IntModulo {
             toCheckInput = false
         )
     }
+
     operator fun minus(other: Int): IntModulo =
         IntModulo(
             (residue - other) % modulus,
             modulus,
             toCheckInput = false
         )
+
     operator fun times(other: IntModulo): IntModulo {
         require(modulus == other.modulus) { "can not multiply two residue different modulo" }
         return IntModulo(
@@ -72,12 +78,14 @@ class IntModulo {
             toCheckInput = false
         )
     }
+
     operator fun times(other: Int): IntModulo =
         IntModulo(
             (residue * other) % modulus,
             modulus,
             toCheckInput = false
         )
+
     operator fun div(other: IntModulo): IntModulo {
         require(modulus == other.modulus) { "can not divide two residue different modulo" }
         val (reciprocalCandidate, gcdOfOtherResidueAndModulus) = bezoutIdentityWithGCD(other.residue, modulus)
@@ -88,6 +96,7 @@ class IntModulo {
             toCheckInput = false
         )
     }
+
     operator fun div(other: Int): IntModulo {
         val (reciprocalCandidate, gcdOfOtherResidueAndModulus) = bezoutIdentityWithGCD(other, modulus)
         require(gcdOfOtherResidueAndModulus == 1) { "can not divide to residue that has non-trivial GCD with modulo" }
@@ -97,6 +106,7 @@ class IntModulo {
             toCheckInput = false
         )
     }
+
     override fun equals(other: Any?): Boolean =
         when (other) {
             is IntModulo -> residue == other.residue && modulus == other.modulus
@@ -109,14 +119,16 @@ class IntModulo {
 }
 
 @Suppress("EXTENSION_SHADOWED_BY_MEMBER", "OVERRIDE_BY_INLINE")
-class IntModuloRing : Ring<IntModulo>, ScaleOperations<IntModulo> {
+class IntModuloRing(modulus: Int) : Ring<IntModulo>, ScaleOperations<IntModulo> {
 
     val modulus: Int
 
-    constructor(modulus: Int) {
+    init {
         require(modulus != 0) { "modulus can not be zero" }
         this.modulus = if (modulus < 0) -modulus else modulus
     }
+
+    override val bufferFactory: MutableBufferFactory<IntModulo> = MutableBufferFactory()
 
     override inline val zero: IntModulo get() = IntModulo(0, modulus, toCheckInput = false)
     override inline val one: IntModulo get() = IntModulo(1, modulus, toCheckInput = false)

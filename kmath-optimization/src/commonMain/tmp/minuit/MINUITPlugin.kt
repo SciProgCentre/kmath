@@ -13,10 +13,12 @@ import hep.dataforge.context.*
  * @author Darksnake
  * @version $Id: $Id
  */
-@PluginDef(group = "hep.dataforge",
+@PluginDef(
+    group = "hep.dataforge",
     name = "MINUIT",
     dependsOn = ["hep.dataforge:fitting"],
-    info = "The MINUIT fitter engine for DataForge fitting")
+    info = "The MINUIT fitter engine for DataForge fitting"
+)
 class MINUITPlugin : BasicPlugin() {
     fun attach(@NotNull context: Context?) {
         super.attach(context)

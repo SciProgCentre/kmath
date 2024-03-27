@@ -10,5 +10,5 @@ dependencies {
 }
 
 readme {
-    maturity = space.kscience.gradle.Maturity.DEVELOPMENT
+    maturity = space.kscience.gradle.Maturity.DEPRECATED
 }

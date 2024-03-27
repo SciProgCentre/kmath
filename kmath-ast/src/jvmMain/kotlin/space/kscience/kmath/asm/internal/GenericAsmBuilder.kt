@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -13,9 +13,6 @@ import space.kscience.kmath.expressions.*
 import java.lang.invoke.MethodHandles
 import java.lang.invoke.MethodType
 import java.nio.file.Paths
-import java.util.stream.Collectors.toMap
-import kotlin.contracts.InvocationKind
-import kotlin.contracts.contract
 import kotlin.io.path.writeBytes
 
 /**
@@ -283,7 +280,6 @@ internal class GenericAsmBuilder<T>(
     fun loadVariable(name: Symbol): Unit = invokeMethodVisitor.load(2 + argumentsLocals.indexOf(name), tType)
 
     inline fun buildCall(function: Function<T>, parameters: GenericAsmBuilder<T>.() -> Unit) {
-        contract { callsInPlace(parameters, InvocationKind.EXACTLY_ONCE) }
         val `interface` = function.javaClass.interfaces.first { Function::class.java in it.interfaces }
 
         val arity = `interface`.methods.find { it.name == "invoke" }?.parameterCount

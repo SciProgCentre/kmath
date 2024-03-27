@@ -11,18 +11,22 @@ analog to Python's NumPy library. Later we found that kotlin is much more flexib
 architecture designs. In contrast to `numpy` and `scipy` it is modular and has a lightweight core. The `numpy`-like
 experience could be achieved with [kmath-for-real](/kmath-for-real) extension module.
 
-[Documentation site (**WIP**)](https://SciProgCentre.github.io/kmath/)
+[Documentation site](https://SciProgCentre.github.io/kmath/)
 
 ## Publications and talks
 
 * [A conceptual article about context-oriented design](https://proandroiddev.com/an-introduction-context-oriented-programming-in-kotlin-2e79d316b0a2)
 * [Another article about context-oriented design](https://proandroiddev.com/diving-deeper-into-context-oriented-programming-in-kotlin-3ecb4ec38814)
 * [ACAT 2019 conference paper](https://aip.scitation.org/doi/abs/10.1063/1.5130103)
+* [A talk at KotlinConf 2019 about using kotlin for science](https://youtu.be/LI_5TZ7tnOE?si=4LknX41gl_YeUbIe)
+* [A talk on architecture at Joker-2021 (in Russian)](https://youtu.be/1bZ2doHiRRM?si=9w953ro9yu98X_KJ)
+* [The same talk in English](https://youtu.be/yP5DIc2fVwQ?si=louZzQ1dcXV6gP10)
+* [A seminar on tensor API](https://youtu.be/0H99wUs0xTM?si=6c__04jrByFQtVpo)
 
 # Goal
 
-* Provide a flexible and powerful API to work with mathematics abstractions in Kotlin-multiplatform (JVM, JS and Native)
-  .
+* Provide a flexible and powerful API to work with mathematics abstractions in Kotlin-multiplatform (JVM, JS, Native and
+  Wasm).
 * Provide basic multiplatform implementations for those abstractions (without significant performance optimization).
 * Provide bindings and wrappers with those abstractions for popular optimized platform libraries.
 
@@ -59,22 +63,24 @@ ${modules}
 KMath is developed as a multi-platform library, which means that most of the interfaces are declared in the
 [common source sets](/kmath-core/src/commonMain) and implemented there wherever it is possible. In some cases, features
 are delegated to platform-specific implementations even if they could be provided in the common module for performance
-reasons. Currently, the Kotlin/JVM is the primary platform, however Kotlin/Native and Kotlin/JS contributions and
+reasons. Currently, Kotlin/JVM is the primary platform, however, Kotlin/Native and Kotlin/JS contributions and
 feedback are also welcome.
 
 ## Performance
 
-Calculation performance is one of major goals of KMath in the future, but in some cases it is impossible to achieve both
+Calculation of performance is one of the major goals of KMath in the future, but in some cases it is impossible to
+achieve both
 performance and flexibility.
 
-We expect to focus on creating convenient universal API first and then work on increasing performance for specific
+We expect to focus on creating a convenient universal API first and then work on increasing performance for specific
 cases. We expect the worst KMath benchmarks will perform better than native Python, but worse than optimized
-native/SciPy (mostly due to boxing operations on primitive numbers). The best performance of optimized parts could be better than SciPy.
+native/SciPy (mostly due to boxing operations on primitive numbers). The best performance of optimized parts could be
+better than SciPy.
 
 ## Requirements
 
-KMath currently relies on JDK 11 for compilation and execution of Kotlin-JVM part. We recommend to use GraalVM-CE 11 for
-execution to get better performance.
+KMath currently relies on JDK 11 for compilation and execution of Kotlin-JVM part. We recommend using GraalVM-CE or
+Oracle GraalVM for execution to get better performance.
 
 ### Repositories
 
@@ -94,11 +100,10 @@ dependencies {
 }
 ```
 
-Gradle `6.0+` is required for multiplatform artifacts.
-
 ## Contributing
 
-The project requires a lot of additional work. The most important thing we need is a feedback about what features are
+The project requires a lot of additional work. The most important thing we need is feedback about what features are
 required the most. Feel free to create feature requests. We are also welcome to code contributions, especially in issues
-marked with
-[waiting for a hero](https://github.com/mipt-npm/kmath/labels/waiting%20for%20a%20hero) label.
+marked
+with [good first issue](hhttps://github.com/SciProgCentre/kmath/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22)
+label.

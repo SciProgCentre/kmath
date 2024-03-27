@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -9,7 +9,7 @@ import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.linear.Point
 import space.kscience.kmath.nd.Structure2D
 import space.kscience.kmath.structures.BufferFactory
-import space.kscience.kmath.structures.DoubleBuffer
+import space.kscience.kmath.structures.Float64Buffer
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
 import kotlin.jvm.JvmInline
@@ -62,8 +62,8 @@ public interface SymbolIndexer {
     public fun <T> Map<Symbol, T>.toPoint(bufferFactory: BufferFactory<T>): Point<T> =
         bufferFactory(symbols.size) { getValue(symbols[it]) }
 
-    public fun Map<Symbol, Double>.toPoint(): DoubleBuffer =
-        DoubleBuffer(symbols.size) { getValue(symbols[it]) }
+    public fun Map<Symbol, Double>.toPoint(): Float64Buffer =
+        Float64Buffer(symbols.size) { getValue(symbols[it]) }
 
 
     public fun Map<Symbol, Double>.toDoubleArray(): DoubleArray = DoubleArray(symbols.size) { getValue(symbols[it]) }

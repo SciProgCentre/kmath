@@ -9,19 +9,8 @@ Common linear algebra operations on tensors.
 
 ## Artifact:
 
-The Maven coordinates of this project are `space.kscience:kmath-tensors:0.4.0-dev-1`.
+The Maven coordinates of this project are `space.kscience:kmath-tensors:0.4.0`.
 
-**Gradle Groovy:**
-```groovy
-repositories {
-    maven { url 'https://repo.kotlin.link' }
-    mavenCentral()
-}
-
-dependencies {
-    implementation 'space.kscience:kmath-tensors:0.4.0-dev-1'
-}
-```
 **Gradle Kotlin DSL:**
 ```kotlin
 repositories {
@@ -30,6 +19,6 @@ repositories {
 }
 
 dependencies {
-    implementation("space.kscience:kmath-tensors:0.4.0-dev-1")
+    implementation("space.kscience:kmath-tensors:0.4.0")
 }
 ```

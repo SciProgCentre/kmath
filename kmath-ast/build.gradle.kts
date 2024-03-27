@@ -2,7 +2,7 @@ plugins {
     id("space.kscience.gradle.mpp")
 }
 
-kscience{
+kscience {
     jvm()
     js()
     native()
@@ -22,7 +22,7 @@ kscience{
         implementation(npm("js-base64", "3.6.1"))
     }
 
-    dependencies(jvmMain){
+    dependencies(jvmMain) {
         implementation("org.ow2.asm:asm-commons:9.2")
     }
 

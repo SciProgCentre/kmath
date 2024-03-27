@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -43,7 +43,7 @@ public interface Memory {
 /**
  * The interface to read primitive types in this memory.
  */
-public interface MemoryReader: AutoCloseable {
+public interface MemoryReader : AutoCloseable {
     /**
      * The underlying memory.
      */
@@ -96,7 +96,7 @@ public inline fun <R> Memory.read(block: MemoryReader.() -> R): R {
 /**
  * The interface to write primitive types into this memory.
  */
-public interface MemoryWriter: AutoCloseable {
+public interface MemoryWriter : AutoCloseable {
     /**
      * The underlying memory.
      */

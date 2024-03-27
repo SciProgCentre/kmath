@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -7,8 +7,9 @@ package space.kscience.kmath.symja
 
 import org.matheclipse.core.eval.ExprEvaluator
 import org.matheclipse.core.expression.F
-import space.kscience.kmath.expressions.SpecialDifferentiableExpression
+import space.kscience.attributes.SafeType
 import space.kscience.kmath.expressions.MST
+import space.kscience.kmath.expressions.SpecialDifferentiableExpression
 import space.kscience.kmath.expressions.Symbol
 import space.kscience.kmath.expressions.interpret
 import space.kscience.kmath.operations.NumericAlgebra
@@ -30,6 +31,8 @@ public class SymjaExpression<T : Number, A : NumericAlgebra<T>>(
     public val mst: MST,
     public val evaluator: ExprEvaluator = DEFAULT_EVALUATOR,
 ) : SpecialDifferentiableExpression<T, SymjaExpression<T, A>> {
+    override val type: SafeType<T> get() = algebra.type
+
     override fun invoke(arguments: Map<Symbol, T>): T = mst.interpret(algebra, arguments)
 
     override fun derivativeOrNull(symbols: List<Symbol>): SymjaExpression<T, A> = SymjaExpression(

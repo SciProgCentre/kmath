@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -9,8 +9,8 @@ import space.kscience.kmath.expressions.MstField
 import space.kscience.kmath.expressions.MstRing
 import space.kscience.kmath.expressions.Symbol.Companion.x
 import space.kscience.kmath.expressions.interpret
-import space.kscience.kmath.operations.DoubleField
-import space.kscience.kmath.operations.IntRing
+import space.kscience.kmath.operations.Float64Field
+import space.kscience.kmath.operations.Int32Ring
 import space.kscience.kmath.operations.invoke
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -32,8 +32,8 @@ internal class TestCompilerConsistencyWithInterpreter {
         }
 
         assertEquals(
-            mst.interpret(IntRing, x to 3),
-            mst.compile(IntRing, x to 3),
+            mst.interpret(Int32Ring, x to 3),
+            mst.compile(Int32Ring, x to 3),
         )
     }
 
@@ -48,8 +48,8 @@ internal class TestCompilerConsistencyWithInterpreter {
         }
 
         assertEquals(
-            mst.interpret(DoubleField, x to 2.0),
-            mst.compile(DoubleField, x to 2.0),
+            mst.interpret(Float64Field, x to 2.0),
+            mst.compile(Float64Field, x to 2.0),
         )
     }
 }

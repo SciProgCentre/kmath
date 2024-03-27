@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -10,6 +10,7 @@ import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.expressions.Symbol
 import space.kscience.kmath.nd.Structure2D
 import space.kscience.kmath.structures.Buffer
+import space.kscience.kmath.structures.VirtualBuffer
 import kotlin.math.max
 
 /**
@@ -33,7 +34,10 @@ public interface XYColumnarData<out T, out X : T, out Y : T> : ColumnarData<T> {
         else -> null
     }
 
-    public companion object{
+    public companion object {
+        /**
+         * Create data form two buffers (zero-copy)
+         */
         @UnstableKMathAPI
         public fun <T, X : T, Y : T> of(x: Buffer<X>, y: Buffer<Y>): XYColumnarData<T, X, Y> {
             require(x.size == y.size) { "Buffer size mismatch. x buffer size is ${x.size}, y buffer size is ${y.size}" }
@@ -41,6 +45,26 @@ public interface XYColumnarData<out T, out X : T, out Y : T> : ColumnarData<T> {
                 override val size: Int = x.size
                 override val x: Buffer<X> = x
                 override val y: Buffer<Y> = y
+            }
+        }
+
+        /**
+         * Create two-column data from a list of row-objects (zero-copy)
+         */
+        @UnstableKMathAPI
+        public inline fun <I, T, reified X : T, reified Y : T> ofList(
+            list: List<I>,
+            noinline xConverter: (I) -> X,
+            noinline yConverter: (I) -> Y,
+        ): XYColumnarData<T, X, Y> = object : XYColumnarData<T, X, Y> {
+            override val size: Int get() = list.size
+
+            override val x: Buffer<X> = VirtualBuffer(list.size) {
+                xConverter(list[it])
+            }
+
+            override val y: Buffer<Y> = VirtualBuffer(list.size) {
+                yConverter(list[it])
             }
         }
     }
@@ -56,9 +80,10 @@ public fun <T> ColumnarData<T>.asXYData(
     ySymbol: Symbol,
 ): XYColumnarData<T, T, T> = object : XYColumnarData<T, T, T> {
     init {
-        requireNotNull(this@asXYData[xSymbol]){"The column with name $xSymbol is not present in $this"}
-        requireNotNull(this@asXYData[ySymbol]){"The column with name $ySymbol is not present in $this"}
+        requireNotNull(this@asXYData[xSymbol]) { "The column with name $xSymbol is not present in $this" }
+        requireNotNull(this@asXYData[ySymbol]) { "The column with name $ySymbol is not present in $this" }
     }
+
     override val size: Int get() = this@asXYData.size
     override val x: Buffer<T> get() = this@asXYData[xSymbol]!!
     override val y: Buffer<T> get() = this@asXYData[ySymbol]!!

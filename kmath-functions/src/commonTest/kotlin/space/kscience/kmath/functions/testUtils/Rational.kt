@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -10,6 +10,7 @@ package space.kscience.kmath.functions.testUtils
 import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.operations.Field
 import space.kscience.kmath.operations.NumbersAddOps
+import space.kscience.kmath.structures.MutableBufferFactory
 
 @Suppress("NAME_SHADOWING")
 class Rational {
@@ -56,18 +57,21 @@ class Rational {
             toCheckInput = false
         )
     }
+
     operator fun plus(other: Int): Rational =
         Rational(
             numerator + denominator * other.toLong(),
             denominator,
             toCheckInput = false
         )
+
     operator fun plus(other: Long): Rational =
         Rational(
             numerator + denominator * other,
             denominator,
             toCheckInput = false
         )
+
     operator fun minus(other: Rational): Rational {
         val denominatorsGcd = gcd(denominator, other.denominator)
         val dividedThisDenominator = denominator / denominatorsGcd
@@ -80,18 +84,21 @@ class Rational {
             toCheckInput = false
         )
     }
+
     operator fun minus(other: Int): Rational =
         Rational(
             numerator - denominator * other.toLong(),
             denominator,
             toCheckInput = false
         )
+
     operator fun minus(other: Long): Rational =
         Rational(
             numerator - denominator * other,
             denominator,
             toCheckInput = false
         )
+
     operator fun times(other: Rational): Rational {
         val thisDenominatorAndOtherNumeratorGcd = gcd(denominator, other.numerator)
         val otherDenominatorAndThisNumeratorGcd = gcd(other.denominator, numerator)
@@ -101,6 +108,7 @@ class Rational {
             toCheckInput = false
         )
     }
+
     operator fun times(other: Int): Rational {
         val other = other.toLong()
         val denominatorAndOtherGcd = gcd(denominator, other)
@@ -110,6 +118,7 @@ class Rational {
             toCheckInput = false
         )
     }
+
     operator fun times(other: Long): Rational {
         val denominatorAndOtherGcd = gcd(denominator, other)
         return Rational(
@@ -118,6 +127,7 @@ class Rational {
             toCheckInput = false
         )
     }
+
     operator fun div(other: Rational): Rational {
         val denominatorsGcd = gcd(denominator, other.denominator)
         val numeratorsGcd = gcd(numerator, other.numerator)
@@ -126,6 +136,7 @@ class Rational {
             (denominator / denominatorsGcd) * (other.numerator / numeratorsGcd)
         )
     }
+
     operator fun div(other: Int): Rational {
         val other = other.toLong()
         val numeratorAndOtherGcd = gcd(numerator, other)
@@ -135,6 +146,7 @@ class Rational {
             toCheckInput = false
         )
     }
+
     operator fun div(other: Long): Rational {
         val numeratorAndOtherGcd = gcd(numerator, other)
         return Rational(
@@ -143,6 +155,7 @@ class Rational {
             toCheckInput = false
         )
     }
+
     override fun equals(other: Any?): Boolean =
         when (other) {
             is Rational -> numerator == other.numerator && denominator == other.denominator
@@ -159,6 +172,7 @@ class Rational {
 @Suppress("EXTENSION_SHADOWED_BY_MEMBER", "OVERRIDE_BY_INLINE")
 @OptIn(UnstableKMathAPI::class)
 object RationalField : Field<Rational>, NumbersAddOps<Rational> {
+    override val bufferFactory: MutableBufferFactory<Rational> = MutableBufferFactory()
     override inline val zero: Rational get() = Rational.ZERO
     override inline val one: Rational get() = Rational.ONE
 

@@ -21,6 +21,7 @@ dependencyResolutionManagement {
 
 include(
     ":test-utils",
+    ":attributes-kt",
     ":kmath-memory",
     ":kmath-complex",
     ":kmath-core",

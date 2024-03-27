@@ -17,4 +17,4 @@ own `MemoryBuffer.create()` factory).
 ## Buffer performance
 
 One should avoid using default boxing buffer wherever it is possible. Try to use primitive buffers or memory buffers
-instead  .
+instead .

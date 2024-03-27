@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -34,10 +34,10 @@ public open class BufferND<out T>(
 /**
  * Create a generic [BufferND] using provided [initializer]
  */
-public fun <T> BufferND(
+public inline fun <reified T> BufferND(
     shape: ShapeND,
-    bufferFactory: BufferFactory<T> = BufferFactory.boxing(),
-    initializer: (IntArray) -> T,
+    bufferFactory: BufferFactory<T> = BufferFactory<T>(),
+    crossinline initializer: (IntArray) -> T,
 ): BufferND<T> {
     val strides = Strides(shape)
     return BufferND(strides, bufferFactory(strides.linearSize) { initializer(strides.index(it)) })
@@ -84,10 +84,10 @@ public open class MutableBufferND<T>(
 /**
  * Create a generic [BufferND] using provided [initializer]
  */
-public fun <T> MutableBufferND(
+public inline fun <reified T> MutableBufferND(
     shape: ShapeND,
-    bufferFactory: MutableBufferFactory<T> = MutableBufferFactory.boxing(),
-    initializer: (IntArray) -> T,
+    bufferFactory: MutableBufferFactory<T> = MutableBufferFactory(),
+    crossinline initializer: (IntArray) -> T,
 ): MutableBufferND<T> {
     val strides = Strides(shape)
     return MutableBufferND(strides, bufferFactory(strides.linearSize) { initializer(strides.index(it)) })

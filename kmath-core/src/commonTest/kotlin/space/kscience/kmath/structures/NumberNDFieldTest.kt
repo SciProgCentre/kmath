@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -11,7 +11,7 @@ import space.kscience.kmath.nd.StructureND
 import space.kscience.kmath.nd.get
 import space.kscience.kmath.nd.ndAlgebra
 import space.kscience.kmath.nd.structureND
-import space.kscience.kmath.operations.DoubleField
+import space.kscience.kmath.operations.Float64Field
 import space.kscience.kmath.operations.Norm
 import space.kscience.kmath.operations.algebra
 import space.kscience.kmath.operations.invoke
@@ -25,7 +25,7 @@ import kotlin.test.assertEquals
 @OptIn(PerformancePitfall::class)
 @Suppress("UNUSED_VARIABLE")
 class NumberNDFieldTest {
-    val algebra = DoubleField.ndAlgebra
+    val algebra = Float64Field.ndAlgebra
     val array1 = algebra.structureND(3, 3) { (i, j) -> (i + j).toDouble() }
     val array2 = algebra.structureND(3, 3) { (i, j) -> (i - j).toDouble() }
 
@@ -94,7 +94,7 @@ class NumberNDFieldTest {
     @Test
     fun testInternalContext() {
         algebra {
-            (DoubleField.ndAlgebra(array1.shape)) { with(L2Norm) { 1 + norm(array1) + exp(array2) } }
+            (Float64Field.ndAlgebra(array1.shape)) { with(L2Norm) { 1 + norm(array1) + exp(array2) } }
         }
     }
 }

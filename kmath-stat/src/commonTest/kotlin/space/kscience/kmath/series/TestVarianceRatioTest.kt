@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2023 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -32,7 +32,7 @@ class TestVarianceRatioTest {
     @Test
     fun volatileData() {
         with(Double.algebra.bufferAlgebra.seriesAlgebra()) {
-            val volatileData = series(10) { sin(PI * it + PI/2) + 1.0}
+            val volatileData = series(10) { sin(PI * it + PI / 2) + 1.0 }
             val resultHomo = varianceRatioTest(volatileData, 2)
             assertEquals(0.0, resultHomo.varianceRatio, 1e-6)
             // homoscedastic zScore
@@ -48,7 +48,7 @@ class TestVarianceRatioTest {
     @Test
     fun negativeData() {
         with(Double.algebra.bufferAlgebra.seriesAlgebra()) {
-            val negativeData = series(10) { sin(it * 1.2)}
+            val negativeData = series(10) { sin(it * 1.2) }
             val resultHomo = varianceRatioTest(negativeData, 3)
             assertEquals(1.240031, resultHomo.varianceRatio, 1e-6)
             // homoscedastic zScore

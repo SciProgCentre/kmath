@@ -41,7 +41,7 @@ internal class VariableMetricBuilder : MinimumBuilder {
         seed: MinimumSeed,
         strategy: MnStrategy,
         maxfcn: Int,
-        edmval: Double
+        edmval: Double,
     ): FunctionMinimum {
         val min: FunctionMinimum = minimum(fcn, gc, seed, maxfcn, edmval)
         if (strategy.strategy() === 2 || strategy.strategy() === 1 && min.error().dcovar() > 0.05) {

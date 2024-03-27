@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -8,7 +8,6 @@ package space.kscience.kmath.tensors.core
 import space.kscience.kmath.PerformancePitfall
 import space.kscience.kmath.nd.MutableStructure1D
 import space.kscience.kmath.nd.ShapeND
-import space.kscience.kmath.structures.MutableBuffer
 
 public class DoubleTensor1D(
     source: OffsetDoubleBuffer,
@@ -29,8 +28,6 @@ public class DoubleTensor1D(
     override fun set(index: Int, value: Double) {
         source[index] = value
     }
-
-    override fun copy(): MutableBuffer<Double> = source.copy()
 
     @PerformancePitfall
     override fun elements(): Sequence<Pair<IntArray, Double>> = super<MutableStructure1D>.elements()

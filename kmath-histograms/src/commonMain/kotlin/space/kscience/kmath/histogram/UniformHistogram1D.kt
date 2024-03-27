@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -12,6 +12,7 @@ import space.kscience.kmath.operations.Ring
 import space.kscience.kmath.operations.ScaleOperations
 import space.kscience.kmath.operations.invoke
 import space.kscience.kmath.structures.Buffer
+import space.kscience.kmath.structures.MutableBufferFactory
 import kotlin.math.floor
 
 @OptIn(UnstableKMathAPI::class)
@@ -45,6 +46,8 @@ public class UniformHistogram1DGroup<V : Any, A>(
     public val binSize: Double,
     public val startPoint: Double = 0.0,
 ) : Group<Histogram1D<Double, V>>, ScaleOperations<Histogram1D<Double, V>> where A : Ring<V>, A : ScaleOperations<V> {
+
+    override val bufferFactory: MutableBufferFactory<Histogram1D<Double, V>> = MutableBufferFactory()
 
     override val zero: UniformHistogram1D<V> = UniformHistogram1D(this, emptyMap())
 

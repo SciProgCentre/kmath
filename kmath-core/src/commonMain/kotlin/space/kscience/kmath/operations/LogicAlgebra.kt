@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -7,7 +7,7 @@ package space.kscience.kmath.operations
 
 import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.expressions.Symbol
-import space.kscience.kmath.expressions.symbol
+import space.kscience.kmath.structures.MutableBufferFactory
 
 /**
  * An algebra for generic boolean logic
@@ -61,8 +61,8 @@ public interface LogicAlgebra<T : Any> : Algebra<T> {
 
 
     public companion object {
-        public val TRUE: Symbol by symbol
-        public val FALSE: Symbol by symbol
+        public val TRUE: Symbol = Symbol("TRUE")//by symbol
+        public val FALSE: Symbol = Symbol("FALSE")// by symbol
     }
 }
 
@@ -72,6 +72,8 @@ public interface LogicAlgebra<T : Any> : Algebra<T> {
 @UnstableKMathAPI
 @Suppress("EXTENSION_SHADOWED_BY_MEMBER")
 public object BooleanAlgebra : LogicAlgebra<Boolean> {
+
+    override val bufferFactory: MutableBufferFactory<Boolean> get() = MutableBufferFactory()
 
     override fun const(boolean: Boolean): Boolean = boolean
 

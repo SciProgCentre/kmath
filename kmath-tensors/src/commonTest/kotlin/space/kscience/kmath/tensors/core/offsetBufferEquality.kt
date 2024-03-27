@@ -1,18 +1,18 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
 package space.kscience.kmath.tensors.core
 
 import space.kscience.kmath.structures.Buffer
-import space.kscience.kmath.structures.DoubleBuffer
+import space.kscience.kmath.structures.Float64Buffer
 import space.kscience.kmath.structures.indices
 import kotlin.jvm.JvmName
 
 
 /**
- * Simplified [DoubleBuffer] to array comparison
+ * Simplified [Float64Buffer] to array comparison
  */
 public fun OffsetDoubleBuffer.contentEquals(vararg doubles: Double): Boolean = indices.all { get(it) == doubles[it] }
 

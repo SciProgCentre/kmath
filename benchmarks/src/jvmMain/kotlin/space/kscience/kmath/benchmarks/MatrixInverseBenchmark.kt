@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -15,6 +15,7 @@ import space.kscience.kmath.ejml.EjmlLinearSpaceDDRM
 import space.kscience.kmath.linear.invoke
 import space.kscience.kmath.linear.linearSpace
 import space.kscience.kmath.linear.lupSolver
+import space.kscience.kmath.linear.parallel
 import space.kscience.kmath.operations.algebra
 import kotlin.random.Random
 
@@ -38,16 +39,19 @@ internal class MatrixInverseBenchmark {
     }
 
     @Benchmark
-    fun cmLUPInversion(blackhole: Blackhole) {
-        CMLinearSpace {
-            blackhole.consume(lupSolver().inverse(matrix))
-        }
+    fun kmathParallelLupInversion(blackhole: Blackhole) {
+        blackhole.consume(Double.algebra.linearSpace.parallel.lupSolver().inverse(matrix))
     }
 
     @Benchmark
-    fun ejmlInverse(blackhole: Blackhole) {
-        EjmlLinearSpaceDDRM {
-            blackhole.consume(matrix.toEjml().inverse())
-        }
+    fun cmLUPInversion(blackhole: Blackhole) = CMLinearSpace {
+        blackhole.consume(lupSolver().inverse(matrix))
     }
+
+
+    @Benchmark
+    fun ejmlInverse(blackhole: Blackhole) = EjmlLinearSpaceDDRM {
+        blackhole.consume(matrix.toEjml().inverted())
+    }
+
 }

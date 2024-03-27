@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -11,7 +11,7 @@ package space.kscience.kmath.linear
  *
  * @param T the type of items.
  */
-public interface LinearSolver<T : Any> {
+public interface LinearSolver<T> {
     /**
      * Solve a dot x = b matrix equation and return x
      */

@@ -1,13 +1,13 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
 package space.kscience.kmath.integration
 
 import space.kscience.kmath.UnstableKMathAPI
-import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.operations.Field
+import space.kscience.kmath.operations.Float64Field
 import space.kscience.kmath.operations.invoke
 import space.kscience.kmath.operations.sum
 
@@ -44,17 +44,23 @@ public class SimpsonIntegrator<T : Any>(
         return res
     }
 
-    override fun process(integrand: UnivariateIntegrand<T>): UnivariateIntegrand<T> {
-        val ranges = integrand.getFeature<UnivariateIntegrandRanges>()
+    override fun integrate(integrand: UnivariateIntegrand<T>): UnivariateIntegrand<T> {
+        val ranges = integrand[UnivariateIntegrandRanges]
         return if (ranges != null) {
             val res = algebra.sum(ranges.ranges.map { integrateRange(integrand, it.first, it.second) })
-            integrand + IntegrandValue(res) + IntegrandCallsPerformed(integrand.calls + ranges.ranges.sumOf { it.second })
+            integrand.withAttributes {
+                IntegrandValue(res)
+                IntegrandCallsPerformed(integrand.calls + ranges.ranges.sumOf { it.second })
+            }
         } else {
-            val numPoints = integrand.getFeature<IntegrandMaxCalls>()?.maxCalls ?: 100
+            val numPoints = integrand[IntegrandMaxCalls] ?: 100
             require(numPoints >= 4) { "Simpson integrator requires at least 4 nodes" }
-            val range = integrand.getFeature<IntegrationRange>()?.range ?: 0.0..1.0
+            val range = integrand[IntegrationRange] ?: 0.0..1.0
             val res = integrateRange(integrand, range, numPoints)
-            integrand + IntegrandValue(res) + IntegrandCallsPerformed(integrand.calls + numPoints)
+            integrand.withAttributes {
+                IntegrandValue(res)
+                IntegrandCallsPerformed(integrand.calls + numPoints)
+            }
         }
     }
 }
@@ -90,19 +96,25 @@ public object DoubleSimpsonIntegrator : UnivariateIntegrator<Double> {
         return res
     }
 
-    override fun process(integrand: UnivariateIntegrand<Double>): UnivariateIntegrand<Double> {
-        val ranges = integrand.getFeature<UnivariateIntegrandRanges>()
+    override fun integrate(integrand: UnivariateIntegrand<Double>): UnivariateIntegrand<Double> {
+        val ranges = integrand[UnivariateIntegrandRanges]
         return if (ranges != null) {
             val res = ranges.ranges.sumOf { integrateRange(integrand, it.first, it.second) }
-            integrand + IntegrandValue(res) + IntegrandCallsPerformed(integrand.calls + ranges.ranges.sumOf { it.second })
+            integrand.withAttributes {
+                IntegrandValue(res)
+                IntegrandCallsPerformed(integrand.calls + ranges.ranges.sumOf { it.second })
+            }
         } else {
-            val numPoints = integrand.getFeature<IntegrandMaxCalls>()?.maxCalls ?: 100
+            val numPoints = integrand[IntegrandMaxCalls] ?: 100
             require(numPoints >= 4) { "Simpson integrator requires at least 4 nodes" }
-            val range = integrand.getFeature<IntegrationRange>()?.range ?: 0.0..1.0
+            val range = integrand[IntegrationRange] ?: 0.0..1.0
             val res = integrateRange(integrand, range, numPoints)
-            integrand + IntegrandValue(res) + IntegrandCallsPerformed(integrand.calls + numPoints)
+            integrand.withAttributes {
+                IntegrandValue(res)
+                IntegrandCallsPerformed(integrand.calls + numPoints)
+            }
         }
     }
 }
 
-public val DoubleField.simpsonIntegrator: DoubleSimpsonIntegrator get() = DoubleSimpsonIntegrator
+public val Float64Field.simpsonIntegrator: DoubleSimpsonIntegrator get() = DoubleSimpsonIntegrator
