@@ -75,6 +75,6 @@ internal class BufferBenchmark {
 
     private companion object {
         private const val size = 100
-        private val reversedIndices = IntArray(size){it}.apply { reverse() }
+        private val reversedIndices = IntArray(size) { it }.apply { reverse() }
     }
 }

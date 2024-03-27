@@ -12,11 +12,11 @@ import org.jetbrains.kotlinx.multik.ndarray.data.DataType
 import space.kscience.kmath.operations.Int16Ring
 
 public class MultikShortAlgebra(
-    multikEngine: Engine
+    multikEngine: Engine,
 ) : MultikTensorAlgebra<Short, Int16Ring>(multikEngine) {
     override val elementAlgebra: Int16Ring get() = Int16Ring
     override val dataType: DataType get() = DataType.ShortDataType
-    override fun scalar(value: Short): MultikTensor<Short>  = Multik.ndarrayOf(value).wrap()
+    override fun scalar(value: Short): MultikTensor<Short> = Multik.ndarrayOf(value).wrap()
 }
 
 //public val Short.Companion.multikAlgebra: MultikTensorAlgebra<Short, ShortRing> get() = MultikShortAlgebra

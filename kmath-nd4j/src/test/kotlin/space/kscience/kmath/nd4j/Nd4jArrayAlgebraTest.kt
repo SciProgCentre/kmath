@@ -57,7 +57,7 @@ internal class Nd4jArrayAlgebraTest {
     }
 
     @Test
-    fun testSin() = Float64Field.nd4j{
+    fun testSin() = Float64Field.nd4j {
         val initial = structureND(2, 2) { (i, j) -> if (i == j) PI / 2 else 0.0 }
         val transformed = sin(initial)
         val expected = structureND(2, 2) { (i, j) -> if (i == j) 1.0 else 0.0 }

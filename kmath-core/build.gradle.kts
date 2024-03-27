@@ -2,7 +2,7 @@ plugins {
     id("space.kscience.gradle.mpp")
 }
 
-kscience{
+kscience {
     jvm()
     js()
     native()
@@ -73,8 +73,8 @@ readme {
     ) { "Automatic differentiation" }
 
     feature(
-        id="Parallel linear algebra"
-    ){
+        id = "Parallel linear algebra"
+    ) {
         """
             Parallel implementation for `LinearAlgebra`
         """.trimIndent()

@@ -161,7 +161,7 @@ class MnHesse {
         fcn: MultiFunction?,
         par: MnUserParameters,
         cov: MnUserCovariance,
-        maxcalls: Int
+        maxcalls: Int,
     ): MnUserParameterState {
         return calculate(fcn, MnUserParameterState(par, cov), maxcalls)
     }
@@ -186,10 +186,12 @@ class MnHesse {
         val gc = Numerical2PGradientCalculator(mfcn, state.getTransformation(), theStrategy)
         val par = MinimumParameters(x, amin)
         val gra: FunctionGradient = gc.gradient(par)
-        val tmp: MinimumState = calculate(mfcn,
+        val tmp: MinimumState = calculate(
+            mfcn,
             MinimumState(par, MinimumError(MnAlgebraicSymMatrix(n), 1.0), gra, state.edm(), state.nfcn()),
             state.getTransformation(),
-            maxcalls)
+            maxcalls
+        )
         return MnUserParameterState(tmp, errDef, state.getTransformation())
     }
 
@@ -326,11 +328,13 @@ class MnHesse {
                 MINUITPlugin.logStatic("MnHesse: matrix is invalid!")
                 MINUITPlugin.logStatic("MnHesse: matrix is not pos. def.!")
                 MINUITPlugin.logStatic("MnHesse: matrix was forced pos. def.")
-                return MinimumState(st.parameters(),
+                return MinimumState(
+                    st.parameters(),
                     MinimumError(vhmat, MnMadePosDef()),
                     gr,
                     st.edm(),
-                    mfcn.numOfCalls())
+                    mfcn.numOfCalls()
+                )
             }
 
             //calculate edm
@@ -346,11 +350,13 @@ class MnHesse {
                 vhmat[j, j] = if (tmp < prec.eps2()) 1.0 else tmp
                 j++
             }
-            MinimumState(st.parameters(),
+            MinimumState(
+                st.parameters(),
                 MinimumError(vhmat, MnHesseFailed()),
                 st.gradient(),
                 st.edm(),
-                st.nfcn() + mfcn.numOfCalls())
+                st.nfcn() + mfcn.numOfCalls()
+            )
         }
     }
 

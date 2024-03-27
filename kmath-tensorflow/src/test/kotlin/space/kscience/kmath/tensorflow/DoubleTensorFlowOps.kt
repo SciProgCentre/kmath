@@ -30,7 +30,7 @@ class DoubleTensorFlowOps {
     }
 
     @Test
-    fun dot(){
+    fun dot() {
         val dim = 1000
 
         val tensor1 = DoubleTensorAlgebra.randomNormal(shape = ShapeND(dim, dim), 12224)
@@ -42,14 +42,14 @@ class DoubleTensorFlowOps {
     }
 
     @Test
-    fun extensionOps(){
+    fun extensionOps() {
         val res = Float64Field.produceWithTF {
             val i = structureND(2, 2) { 0.5 }
 
             sin(i).pow(2) + cos(i).pow(2)
         }
 
-        assertEquals(1.0, res[0,0],0.01)
+        assertEquals(1.0, res[0, 0], 0.01)
     }
 
 

@@ -113,9 +113,11 @@ class MnContours(fcn: MultiFunction?, min: FunctionMinimum?, stra: MnStrategy?) 
             return ContoursError(px, py, result, mex, mey, nfcn)
         }
         val ey: Range = mey.range()
-        val migrad = MnMigrad(theFCN,
+        val migrad = MnMigrad(
+            theFCN,
             theMinimum!!.userState().copy(),
-            MnStrategy(max(0, theStrategy!!.strategy() - 1)))
+            MnStrategy(max(0, theStrategy!!.strategy() - 1))
+        )
         migrad.fix(px)
         migrad.setValue(px, valx + ex.getSecond())
         val exy_up: FunctionMinimum = migrad.minimize()
@@ -131,9 +133,11 @@ class MnContours(fcn: MultiFunction?, min: FunctionMinimum?, stra: MnStrategy?) 
             MINUITPlugin.logStatic("MnContours is unable to find lower y value for x parameter $px.")
             return ContoursError(px, py, result, mex, mey, nfcn)
         }
-        val migrad1 = MnMigrad(theFCN,
+        val migrad1 = MnMigrad(
+            theFCN,
             theMinimum!!.userState().copy(),
-            MnStrategy(max(0, theStrategy!!.strategy() - 1)))
+            MnStrategy(max(0, theStrategy!!.strategy() - 1))
+        )
         migrad1.fix(py)
         migrad1.setValue(py, valy + ey.getSecond())
         val eyx_up: FunctionMinimum = migrad1.minimize()

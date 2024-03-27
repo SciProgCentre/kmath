@@ -41,7 +41,7 @@ public object Float64ParallelLinearSpace : LinearSpace<Double, Float64Field> {
     }
 
     override fun buildVector(size: Int, initializer: Float64Field.(Int) -> Double): Float64Buffer =
-        IntStream.range(0, size).parallel().mapToDouble{ Float64Field.initializer(it) }.toArray().asBuffer()
+        IntStream.range(0, size).parallel().mapToDouble { Float64Field.initializer(it) }.toArray().asBuffer()
 
     override fun Matrix<Double>.unaryMinus(): Matrix<Double> = Floa64FieldOpsND {
         asND().map { -it }.as2D()

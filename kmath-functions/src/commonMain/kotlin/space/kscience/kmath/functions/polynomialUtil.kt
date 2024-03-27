@@ -64,7 +64,7 @@ public fun <C, A> Polynomial<C>.differentiate(
 ): Polynomial<C> where  A : Ring<C>, A : NumericAlgebra<C> = ring {
     Polynomial(
         buildList(max(0, coefficients.size - 1)) {
-            for (deg in 1 .. coefficients.lastIndex) add(number(deg) * coefficients[deg])
+            for (deg in 1..coefficients.lastIndex) add(number(deg) * coefficients[deg])
         }
     )
 }

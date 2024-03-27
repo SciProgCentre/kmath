@@ -39,7 +39,7 @@ public fun Buffer.Companion.withFixedStep(range: ClosedFloatingPointRange<Double
         else -> return Float64Buffer(range.start)
     }
     val numberOfPoints = floor(normalizedRange.length / step).toInt() + 1
-    return Float64Buffer(numberOfPoints) { normalizedRange.start + step * it  }
+    return Float64Buffer(numberOfPoints) { normalizedRange.start + step * it }
 }
 
 /**

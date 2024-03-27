@@ -57,18 +57,21 @@ class Rational {
             toCheckInput = false
         )
     }
+
     operator fun plus(other: Int): Rational =
         Rational(
             numerator + denominator * other.toLong(),
             denominator,
             toCheckInput = false
         )
+
     operator fun plus(other: Long): Rational =
         Rational(
             numerator + denominator * other,
             denominator,
             toCheckInput = false
         )
+
     operator fun minus(other: Rational): Rational {
         val denominatorsGcd = gcd(denominator, other.denominator)
         val dividedThisDenominator = denominator / denominatorsGcd
@@ -81,18 +84,21 @@ class Rational {
             toCheckInput = false
         )
     }
+
     operator fun minus(other: Int): Rational =
         Rational(
             numerator - denominator * other.toLong(),
             denominator,
             toCheckInput = false
         )
+
     operator fun minus(other: Long): Rational =
         Rational(
             numerator - denominator * other,
             denominator,
             toCheckInput = false
         )
+
     operator fun times(other: Rational): Rational {
         val thisDenominatorAndOtherNumeratorGcd = gcd(denominator, other.numerator)
         val otherDenominatorAndThisNumeratorGcd = gcd(other.denominator, numerator)
@@ -102,6 +108,7 @@ class Rational {
             toCheckInput = false
         )
     }
+
     operator fun times(other: Int): Rational {
         val other = other.toLong()
         val denominatorAndOtherGcd = gcd(denominator, other)
@@ -111,6 +118,7 @@ class Rational {
             toCheckInput = false
         )
     }
+
     operator fun times(other: Long): Rational {
         val denominatorAndOtherGcd = gcd(denominator, other)
         return Rational(
@@ -119,6 +127,7 @@ class Rational {
             toCheckInput = false
         )
     }
+
     operator fun div(other: Rational): Rational {
         val denominatorsGcd = gcd(denominator, other.denominator)
         val numeratorsGcd = gcd(numerator, other.numerator)
@@ -127,6 +136,7 @@ class Rational {
             (denominator / denominatorsGcd) * (other.numerator / numeratorsGcd)
         )
     }
+
     operator fun div(other: Int): Rational {
         val other = other.toLong()
         val numeratorAndOtherGcd = gcd(numerator, other)
@@ -136,6 +146,7 @@ class Rational {
             toCheckInput = false
         )
     }
+
     operator fun div(other: Long): Rational {
         val numeratorAndOtherGcd = gcd(numerator, other)
         return Rational(
@@ -144,6 +155,7 @@ class Rational {
             toCheckInput = false
         )
     }
+
     override fun equals(other: Any?): Boolean =
         when (other) {
             is Rational -> numerator == other.numerator && denominator == other.denominator

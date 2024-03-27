@@ -73,7 +73,7 @@ internal class OptimizeTest {
         val result: FunctionOptimization<Double> = chi2.optimizeWith(
             CMOptimizer,
             mapOf(a to 1.5, b to 0.9, c to 1.0),
-        ){
+        ) {
             FunctionOptimizationTarget(OptimizationDirection.MINIMIZE)
         }
         println(result)

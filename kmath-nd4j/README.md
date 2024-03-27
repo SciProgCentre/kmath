@@ -2,16 +2,16 @@
 
 ND4J based implementations of KMath abstractions.
 
- - [nd4jarraystructure](#) : NDStructure wrapper for INDArray
- - [nd4jarrayrings](#) : Rings over Nd4jArrayStructure of Int and Long
- - [nd4jarrayfields](#) : Fields over Nd4jArrayStructure of Float and Double
-
+- [nd4jarraystructure](#) : NDStructure wrapper for INDArray
+- [nd4jarrayrings](#) : Rings over Nd4jArrayStructure of Int and Long
+- [nd4jarrayfields](#) : Fields over Nd4jArrayStructure of Float and Double
 
 ## Artifact:
 
 The Maven coordinates of this project are `space.kscience:kmath-nd4j:0.4.0-dev-3`.
 
 **Gradle Kotlin DSL:**
+
 ```kotlin
 repositories {
     maven("https://repo.kotlin.link")

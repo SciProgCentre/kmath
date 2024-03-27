@@ -25,6 +25,7 @@ public class LazyStructureND<out T>(
     }
 
     public suspend fun await(index: IntArray): T = async(index).await()
+
     @PerformancePitfall
     override operator fun get(index: IntArray): T = runBlocking { async(index).await() }
 
@@ -57,4 +58,4 @@ public inline fun <T, R> StructureND<T>.mapAsyncIndexed(
 public inline fun <T, R> StructureND<T>.mapAsync(
     scope: CoroutineScope,
     crossinline function: suspend (T) -> R,
-): LazyStructureND<R> = LazyStructureND(scope,  shape) { index -> function(get(index)) }
+): LazyStructureND<R> = LazyStructureND(scope, shape) { index -> function(get(index)) }

@@ -65,7 +65,7 @@ ksciencePublish {
         useApache2Licence()
         useSPCTeam()
     }
-    repository("spc","https://maven.sciprog.center/kscience")
+    repository("spc", "https://maven.sciprog.center/kscience")
     sonatype("https://oss.sonatype.org")
 }
 

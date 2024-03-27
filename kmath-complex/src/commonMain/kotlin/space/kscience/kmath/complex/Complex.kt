@@ -148,8 +148,8 @@ public object ComplexField :
         exp(pow * ln(arg))
     }
 
-    public fun power(arg: Complex, pow: Complex): Complex = if(arg == zero || arg == (-0.0).toComplex()){
-        if(pow == zero){
+    public fun power(arg: Complex, pow: Complex): Complex = if (arg == zero || arg == (-0.0).toComplex()) {
+        if (pow == zero) {
             one
         } else {
             zero

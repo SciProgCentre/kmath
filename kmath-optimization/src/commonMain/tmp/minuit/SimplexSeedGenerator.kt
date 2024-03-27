@@ -41,8 +41,10 @@ internal class SimplexSeedGenerator : MinimumSeedGenerator {
         val mat = MnAlgebraicSymMatrix(n)
         val dcovar = 1.0
         for (i in 0 until n) {
-            mat[i, i] = if (abs(dgrad.getGradientDerivative()
-                    .getEntry(i)) > prec.eps2()
+            mat[i, i] = if (abs(
+                    dgrad.getGradientDerivative()
+                        .getEntry(i)
+                ) > prec.eps2()
             ) 1.0 / dgrad.getGradientDerivative().getEntry(i) else 1.0
         }
         val err = MinimumError(mat, dcovar)

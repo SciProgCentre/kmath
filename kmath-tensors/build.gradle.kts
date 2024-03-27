@@ -2,11 +2,11 @@ plugins {
     id("space.kscience.gradle.mpp")
 }
 
-kscience{
+kscience {
     jvm()
     js {
         browser {
-            testTask{
+            testTask {
                 useMocha().timeout = "0"
             }
         }
@@ -29,8 +29,8 @@ kotlin.sourceSets {
         }
     }
 
-    commonTest{
-        dependencies{
+    commonTest {
+        dependencies {
             implementation(projects.testUtils)
         }
     }

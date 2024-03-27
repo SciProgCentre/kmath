@@ -34,7 +34,7 @@ public fun interface Sampler<out T : Any> {
 public fun <T : Any> Sampler<T>.sampleBuffer(
     generator: RandomGenerator,
     size: Int,
-    bufferFactory: BufferFactory<T>
+    bufferFactory: BufferFactory<T>,
 ): Chain<Buffer<T>> {
     require(size > 1)
     //creating temporary storage once
@@ -59,7 +59,7 @@ public suspend fun <T : Any> Sampler<T>.next(generator: RandomGenerator): T = sa
  * Generates [size] samples and chunks them into some buffers.
  */
 @JvmName("sampleRealBuffer")
-public inline fun <reified T:Any> Sampler<T>.sampleBuffer(generator: RandomGenerator, size: Int): Chain<Buffer<T>> =
+public inline fun <reified T : Any> Sampler<T>.sampleBuffer(generator: RandomGenerator, size: Int): Chain<Buffer<T>> =
     sampleBuffer(generator, size, BufferFactory())
 
 

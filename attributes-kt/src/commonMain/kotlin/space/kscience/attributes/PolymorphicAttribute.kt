@@ -22,7 +22,8 @@ public abstract class PolymorphicAttribute<T>(public val type: SafeType<T>) : At
  * Get a polymorphic attribute using attribute factory
  */
 @UnstableAttributesAPI
-public operator fun <T> Attributes.get(attributeKeyBuilder: () -> PolymorphicAttribute<T>): T? = get(attributeKeyBuilder())
+public operator fun <T> Attributes.get(attributeKeyBuilder: () -> PolymorphicAttribute<T>): T? =
+    get(attributeKeyBuilder())
 
 /**
  * Set a polymorphic attribute using its factory

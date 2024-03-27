@@ -25,7 +25,8 @@ experience could be achieved with [kmath-for-real](/kmath-for-real) extension mo
 
 # Goal
 
-* Provide a flexible and powerful API to work with mathematics abstractions in Kotlin-multiplatform (JVM, JS, Native and Wasm).
+* Provide a flexible and powerful API to work with mathematics abstractions in Kotlin-multiplatform (JVM, JS, Native and
+  Wasm).
 * Provide basic multiplatform implementations for those abstractions (without significant performance optimization).
 * Provide bindings and wrappers with those abstractions for popular optimized platform libraries.
 
@@ -67,16 +68,19 @@ feedback are also welcome.
 
 ## Performance
 
-Calculation of performance is one of the major goals of KMath in the future, but in some cases it is impossible to achieve both
+Calculation of performance is one of the major goals of KMath in the future, but in some cases it is impossible to
+achieve both
 performance and flexibility.
 
 We expect to focus on creating a convenient universal API first and then work on increasing performance for specific
 cases. We expect the worst KMath benchmarks will perform better than native Python, but worse than optimized
-native/SciPy (mostly due to boxing operations on primitive numbers). The best performance of optimized parts could be better than SciPy.
+native/SciPy (mostly due to boxing operations on primitive numbers). The best performance of optimized parts could be
+better than SciPy.
 
 ## Requirements
 
-KMath currently relies on JDK 11 for compilation and execution of Kotlin-JVM part. We recommend using GraalVM-CE or Oracle GraalVM for execution to get better performance.
+KMath currently relies on JDK 11 for compilation and execution of Kotlin-JVM part. We recommend using GraalVM-CE or
+Oracle GraalVM for execution to get better performance.
 
 ### Repositories
 
@@ -99,4 +103,7 @@ dependencies {
 ## Contributing
 
 The project requires a lot of additional work. The most important thing we need is feedback about what features are
-required the most. Feel free to create feature requests. We are also welcome to code contributions, especially in issues marked with [good first issue](hhttps://github.com/SciProgCentre/kmath/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22) label.
+required the most. Feel free to create feature requests. We are also welcome to code contributions, especially in issues
+marked
+with [good first issue](hhttps://github.com/SciProgCentre/kmath/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22)
+label.

@@ -67,7 +67,7 @@ kotlin {
 }
 
 tasks.withType<KotlinJvmCompile> {
-    compilerOptions{
+    compilerOptions {
         freeCompilerArgs.addAll("-Xjvm-default=all", "-Xopt-in=kotlin.RequiresOptIn", "-Xlambdas=indy")
     }
 }

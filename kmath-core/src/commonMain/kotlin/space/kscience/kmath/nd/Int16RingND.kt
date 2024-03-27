@@ -18,12 +18,11 @@ public sealed class Int16RingOpsND : BufferedRingOpsND<Short, Int16Ring>(Int16Ri
 
 @OptIn(UnstableKMathAPI::class)
 public class Int16RingND(
-    override val shape: ShapeND
+    override val shape: ShapeND,
 ) : Int16RingOpsND(), RingND<Short, Int16Ring>, NumbersAddOps<StructureND<Short>> {
 
     override fun number(value: Number): BufferND<Short> {
-        val short
-        = value.toShort() // minimize conversions
+        val short = value.toShort() // minimize conversions
         return structureND(shape) { short }
     }
 }

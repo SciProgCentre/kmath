@@ -225,7 +225,8 @@ public open class DoubleNd4jArrayFieldOps : Nd4jArrayExtendedFieldOps<Double, Fl
 
 public val Float64Field.nd4j: DoubleNd4jArrayFieldOps get() = DoubleNd4jArrayFieldOps
 
-public class DoubleNd4jArrayField(override val shape: ShapeND) : DoubleNd4jArrayFieldOps(), FieldND<Double, Float64Field>
+public class DoubleNd4jArrayField(override val shape: ShapeND) : DoubleNd4jArrayFieldOps(),
+    FieldND<Double, Float64Field>
 
 public fun Float64Field.nd4j(shapeFirst: Int, vararg shapeRest: Int): DoubleNd4jArrayField =
     DoubleNd4jArrayField(ShapeND(shapeFirst, * shapeRest))

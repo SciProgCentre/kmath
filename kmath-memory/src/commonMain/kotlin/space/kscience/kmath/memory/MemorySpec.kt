@@ -12,7 +12,7 @@ import space.kscience.attributes.WithType
  *
  * @param T the type of object this spec manages.
  */
-public interface MemorySpec<T : Any>: WithType<T> {
+public interface MemorySpec<T : Any> : WithType<T> {
 
     /**
      * Size of [T] in bytes after serialization.

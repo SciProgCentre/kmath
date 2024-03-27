@@ -9,6 +9,7 @@ Commons math binding for kmath
 The Maven coordinates of this project are `space.kscience:kmath-commons:0.4.0-dev-3`.
 
 **Gradle Kotlin DSL:**
+
 ```kotlin
 repositories {
     maven("https://repo.kotlin.link")

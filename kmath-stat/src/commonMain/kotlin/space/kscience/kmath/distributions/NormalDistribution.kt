@@ -6,11 +6,12 @@
 package space.kscience.kmath.distributions
 
 import space.kscience.kmath.chains.BlockingDoubleChain
-import space.kscience.kmath.chains.Chain
 import space.kscience.kmath.operations.Float64Field.pow
 import space.kscience.kmath.random.RandomGenerator
-import space.kscience.kmath.samplers.*
+import space.kscience.kmath.samplers.GaussianSampler
 import space.kscience.kmath.samplers.InternalErf
+import space.kscience.kmath.samplers.NormalizedGaussianSampler
+import space.kscience.kmath.samplers.ZigguratNormalizedGaussianSampler
 import kotlin.math.*
 
 /**

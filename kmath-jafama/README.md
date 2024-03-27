@@ -2,14 +2,14 @@
 
 Integration with [Jafama](https://github.com/jeffhain/jafama).
 
- - [jafama-double](src/main/kotlin/space/kscience/kmath/jafama/) : Double ExtendedField implementations based on Jafama
-
+- [jafama-double](src/main/kotlin/space/kscience/kmath/jafama/) : Double ExtendedField implementations based on Jafama
 
 ## Artifact:
 
 The Maven coordinates of this project are `space.kscience:kmath-jafama:0.4.0-dev-3`.
 
 **Gradle Kotlin DSL:**
+
 ```kotlin
 repositories {
     maven("https://repo.kotlin.link")
@@ -39,6 +39,7 @@ fun main() {
 
 ## Performance
 
-According to KMath benchmarks on GraalVM, Jafama functions are slower than JDK math; however, there are indications that on Hotspot Jafama is a bit faster.
+According to KMath benchmarks on GraalVM, Jafama functions are slower than JDK math; however, there are indications that
+on Hotspot Jafama is a bit faster.
 
 > **Can't find appropriate benchmark data. Try generating readme files after running benchmarks**.

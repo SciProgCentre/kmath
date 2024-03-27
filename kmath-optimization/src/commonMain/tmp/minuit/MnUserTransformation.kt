@@ -112,9 +112,11 @@ class MnUserTransformation {
         val parm: MinuitParameter = theParameters[theExtOfInt[i]]
         if (parm.hasLimits()) {
             dd = if (parm.hasUpperLimit() && parm.hasLowerLimit()) {
-                theDoubleLimTrafo.dInt2Ext(`val`,
+                theDoubleLimTrafo.dInt2Ext(
+                    `val`,
                     parm.upperLimit(),
-                    parm.lowerLimit())
+                    parm.lowerLimit()
+                )
             } else if (parm.hasUpperLimit() && !parm.hasLowerLimit()) {
                 theUpperLimTrafo.dInt2Ext(`val`, parm.upperLimit())
             } else {
@@ -145,18 +147,24 @@ class MnUserTransformation {
         val parm: MinuitParameter = theParameters[i]
         return if (parm.hasLimits()) {
             if (parm.hasUpperLimit() && parm.hasLowerLimit()) {
-                theDoubleLimTrafo.ext2int(`val`,
+                theDoubleLimTrafo.ext2int(
+                    `val`,
                     parm.upperLimit(),
                     parm.lowerLimit(),
-                    precision())
+                    precision()
+                )
             } else if (parm.hasUpperLimit() && !parm.hasLowerLimit()) {
-                theUpperLimTrafo.ext2int(`val`,
+                theUpperLimTrafo.ext2int(
+                    `val`,
                     parm.upperLimit(),
-                    precision())
+                    precision()
+                )
             } else {
-                theLowerLimTrafo.ext2int(`val`,
+                theLowerLimTrafo.ext2int(
+                    `val`,
                     parm.lowerLimit(),
-                    precision())
+                    precision()
+                )
             }
         } else `val`
     }
@@ -196,9 +204,11 @@ class MnUserTransformation {
         val parm: MinuitParameter = theParameters[theExtOfInt[i]]
         return if (parm.hasLimits()) {
             if (parm.hasUpperLimit() && parm.hasLowerLimit()) {
-                theDoubleLimTrafo.int2ext(`val`,
+                theDoubleLimTrafo.int2ext(
+                    `val`,
                     parm.upperLimit(),
-                    parm.lowerLimit())
+                    parm.lowerLimit()
+                )
             } else if (parm.hasUpperLimit() && !parm.hasLowerLimit()) {
                 theUpperLimTrafo.int2ext(`val`, parm.upperLimit())
             } else {

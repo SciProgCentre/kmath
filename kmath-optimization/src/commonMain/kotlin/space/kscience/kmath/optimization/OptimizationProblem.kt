@@ -35,7 +35,7 @@ public class OptimizationCovariance<T> : OptimizationAttribute<NamedMatrix<T>>,
     PolymorphicAttribute<NamedMatrix<T>>(safeTypeOf())
 
 public fun <T> AttributesBuilder<OptimizationProblem<T>>.covariance(covariance: NamedMatrix<T>) {
-    set(OptimizationCovariance(),covariance)
+    set(OptimizationCovariance(), covariance)
 }
 
 

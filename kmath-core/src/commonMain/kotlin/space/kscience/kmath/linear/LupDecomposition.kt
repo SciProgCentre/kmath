@@ -83,7 +83,7 @@ internal fun <T : Comparable<T>> LinearSpace<T, Ring<T>>.abs(value: T): T =
 public fun <T : Comparable<T>> Field<T>.lup(
     matrix: Matrix<T>,
     checkSingular: (T) -> Boolean,
-): GenericLupDecomposition<T>  {
+): GenericLupDecomposition<T> {
     require(matrix.rowNum == matrix.colNum) { "LU decomposition supports only square matrices" }
     val m = matrix.colNum
     val pivot = IntArray(matrix.rowNum)
@@ -110,7 +110,7 @@ public fun <T : Comparable<T>> Field<T>.lup(
         // upper
         for (row in 0 until col) {
             var sum = lu[row, col]
-            for (i in 0 until row){
+            for (i in 0 until row) {
                 sum -= lu[row, i] * lu[i, col]
             }
             lu[row, col] = sum
@@ -122,7 +122,7 @@ public fun <T : Comparable<T>> Field<T>.lup(
 
         for (row in col until m) {
             var sum = lu[row, col]
-            for (i in 0 until col){
+            for (i in 0 until col) {
                 sum -= lu[row, i] * lu[i, col]
             }
             lu[row, col] = sum
@@ -226,7 +226,7 @@ private fun <T> Field<T>.solve(
 public fun <T : Comparable<T>> LinearSpace<T, Field<T>>.lupSolver(
     singularityCheck: (T) -> Boolean,
 ): LinearSolver<T> = object : LinearSolver<T> {
-    override fun solve(a: Matrix<T>, b: Matrix<T>): Matrix<T>  = elementAlgebra{
+    override fun solve(a: Matrix<T>, b: Matrix<T>): Matrix<T> = elementAlgebra {
         // Use existing decomposition if it is provided by matrix or linear space itself
         val decomposition = a.getOrComputeAttribute(LUP) ?: lup(a, singularityCheck)
         return solve(decomposition, b)

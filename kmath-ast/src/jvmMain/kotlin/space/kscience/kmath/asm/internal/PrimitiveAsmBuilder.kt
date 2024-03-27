@@ -332,7 +332,7 @@ internal sealed class PrimitiveAsmBuilder<T : Number, out E : Expression<T>>(
     private fun visitVariables(
         node: TypedMst<T>,
         arrayMode: Boolean,
-        alreadyLoaded: MutableList<Symbol> = mutableListOf()
+        alreadyLoaded: MutableList<Symbol> = mutableListOf(),
     ): Unit = when (node) {
         is TypedMst.Variable -> if (node.symbol !in alreadyLoaded) {
             alreadyLoaded += node.symbol

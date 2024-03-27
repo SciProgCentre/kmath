@@ -51,7 +51,7 @@ internal fun IntTensor.vectorSequence(): Sequence<IntTensor> = vectors().asSeque
 
 
 internal val IntTensor.matrices: VirtualBuffer<IntTensor>
-    get(){
+    get() {
         val n = shape.size
         check(n >= 2) { "Expected tensor with 2 or more dimensions, got size $n" }
         val matrixOffset = shape[n - 1] * shape[n - 2]

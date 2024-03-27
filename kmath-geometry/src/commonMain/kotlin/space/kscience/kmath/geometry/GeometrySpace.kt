@@ -14,7 +14,7 @@ import space.kscience.kmath.operations.ScaleOperations
  * @param V the type of vector object
  * @param D the type of distance
  */
-public interface GeometrySpace<V : Any, D: Comparable<D>> : Group<V>, ScaleOperations<V>, Norm<V, D> {
+public interface GeometrySpace<V : Any, D : Comparable<D>> : Group<V>, ScaleOperations<V>, Norm<V, D> {
     /**
      * L2 distance
      */

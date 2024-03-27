@@ -254,14 +254,16 @@ abstract class MnApplication {
         if (maxfcn == 0) {
             maxfcn = 200 + 100 * npar + 5 * npar * npar
         }
-        val min: FunctionMinimum = minimizer().minimize(theFCN,
+        val min: FunctionMinimum = minimizer().minimize(
+            theFCN,
             theState,
             theStrategy,
             maxfcn,
             toler,
             theErrorDef,
             useAnalyticalDerivatives,
-            checkAnalyticalDerivatives)
+            checkAnalyticalDerivatives
+        )
         theNumCall += min.nfcn()
         theState = min.userState()
         return min

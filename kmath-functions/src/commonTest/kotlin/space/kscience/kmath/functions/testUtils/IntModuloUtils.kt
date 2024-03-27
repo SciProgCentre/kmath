@@ -11,6 +11,7 @@ import space.kscience.kmath.functions.PolynomialSpace
 
 fun PolynomialSpace<IntModulo, IntModuloRing>.Polynomial(vararg coefs: Int): Polynomial<IntModulo> =
     Polynomial(coefs.map { IntModulo(it, ring.modulus) })
+
 fun IntModuloRing.Polynomial(vararg coefs: Int): Polynomial<IntModulo> =
     Polynomial(coefs.map { IntModulo(it, modulus) })
 

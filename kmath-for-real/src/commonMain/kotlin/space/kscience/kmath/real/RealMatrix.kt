@@ -48,7 +48,7 @@ public fun Sequence<DoubleArray>.toMatrix(): RealMatrix = toList().let {
 }
 
 public fun RealMatrix.repeatStackVertical(n: Int): RealMatrix =
-    VirtualMatrix( rowNum * n, colNum) { row, col ->
+    VirtualMatrix(rowNum * n, colNum) { row, col ->
         get(if (row == 0) 0 else row % rowNum, col)
     }
 

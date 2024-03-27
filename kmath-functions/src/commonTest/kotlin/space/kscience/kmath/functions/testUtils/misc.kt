@@ -14,13 +14,41 @@ internal tailrec fun gcd(a: Long, b: Long): Long = if (a == 0L) abs(b) else gcd(
 
 internal fun bezoutIdentityWithGCD(a: Int, b: Int): BezoutIdentityWithGCD<Int> =
     when {
-        a < 0 && b < 0 -> with(bezoutIdentityWithGCDInternalLogic(-a, -b, 1, 0, 0, 1)) { BezoutIdentityWithGCD(-first, -second, gcd) }
-        a < 0 -> with(bezoutIdentityWithGCDInternalLogic(-a, b, 1, 0, 0, 1)) { BezoutIdentityWithGCD(-first, second, gcd) }
-        b < 0 -> with(bezoutIdentityWithGCDInternalLogic(a, -b, 1, 0, 0, 1)) { BezoutIdentityWithGCD(first, -second, gcd) }
+        a < 0 && b < 0 -> with(bezoutIdentityWithGCDInternalLogic(-a, -b, 1, 0, 0, 1)) {
+            BezoutIdentityWithGCD(
+                -first,
+                -second,
+                gcd
+            )
+        }
+
+        a < 0 -> with(bezoutIdentityWithGCDInternalLogic(-a, b, 1, 0, 0, 1)) {
+            BezoutIdentityWithGCD(
+                -first,
+                second,
+                gcd
+            )
+        }
+
+        b < 0 -> with(bezoutIdentityWithGCDInternalLogic(a, -b, 1, 0, 0, 1)) {
+            BezoutIdentityWithGCD(
+                first,
+                -second,
+                gcd
+            )
+        }
+
         else -> bezoutIdentityWithGCDInternalLogic(a, b, 1, 0, 0, 1)
     }
 
-internal tailrec fun bezoutIdentityWithGCDInternalLogic(a: Int, b: Int, m1: Int, m2: Int, m3: Int, m4: Int): BezoutIdentityWithGCD<Int> =
+internal tailrec fun bezoutIdentityWithGCDInternalLogic(
+    a: Int,
+    b: Int,
+    m1: Int,
+    m2: Int,
+    m3: Int,
+    m4: Int,
+): BezoutIdentityWithGCD<Int> =
     if (b == 0) BezoutIdentityWithGCD(m1, m3, a)
     else {
         val quotient = a / b

@@ -64,7 +64,7 @@ public suspend fun Optimizer<Double, FunctionOptimization<Double>>.maximumLogLik
             FunctionOptimizationTarget(OptimizationDirection.MAXIMIZE)
         }
     )
-    return XYFit(problem.data,problem.model, result.attributes)
+    return XYFit(problem.data, problem.model, result.attributes)
 }
 
 @UnstableKMathAPI

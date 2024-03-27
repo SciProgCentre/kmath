@@ -84,7 +84,7 @@ public expect fun Number.isInteger(): Boolean
  *
  * @param T the type of this structure element
  */
-public interface PowerOperations<T>: Algebra<T> {
+public interface PowerOperations<T> : Algebra<T> {
 
     /**
      * Raises [arg] to a power if possible (negative number could not be raised to a fractional power).

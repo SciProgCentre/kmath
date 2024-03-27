@@ -6,6 +6,7 @@
 package space.kscience.kmath.expressions
 
 import space.kscience.kmath.UnstableKMathAPI
+
 // Only kmath-core is needed.
 
 // Let's declare some variables
@@ -51,7 +52,7 @@ fun main() {
     // >>> 0.0
 
     // But in case you forgot to specify bound symbol's value, exception is thrown:
-    println( runCatching { someExpression(z to 4.0) } )
+    println(runCatching { someExpression(z to 4.0) })
     // >>> Failure(java.lang.IllegalStateException: Symbol 'x' is not supported in ...)
 
     // The reason is that the expression is evaluated lazily,

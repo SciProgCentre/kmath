@@ -19,14 +19,14 @@ import kotlin.test.assertTrue
 class ParallelMatrixTest {
 
     @Test
-    fun testTranspose() =  Float64Field.linearSpace.parallel{
+    fun testTranspose() = Float64Field.linearSpace.parallel {
         val matrix = one(3, 3)
         val transposed = matrix.transposed()
         assertTrue { StructureND.contentEquals(matrix, transposed) }
     }
 
     @Test
-    fun testBuilder() = Float64Field.linearSpace.parallel{
+    fun testBuilder() = Float64Field.linearSpace.parallel {
         val matrix = matrix(2, 3)(
             1.0, 0.0, 0.0,
             0.0, 1.0, 2.0
@@ -36,7 +36,7 @@ class ParallelMatrixTest {
     }
 
     @Test
-    fun testMatrixExtension() = Float64Field.linearSpace.parallel{
+    fun testMatrixExtension() = Float64Field.linearSpace.parallel {
         val transitionMatrix: Matrix<Double> = VirtualMatrix(6, 6) { row, col ->
             when {
                 col == 0 -> .50
@@ -49,7 +49,7 @@ class ParallelMatrixTest {
         infix fun Matrix<Double>.pow(power: Int): Matrix<Double> {
             var res = this
             repeat(power - 1) {
-                res =  res dot this@pow
+                res = res dot this@pow
             }
             return res
         }

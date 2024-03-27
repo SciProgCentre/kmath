@@ -20,18 +20,18 @@ class MemoryTest {
         val memory = Memory.allocate(memorySize)
         memory.write {
             for (i in 0 until (memory.size / 4)) {
-                writeInt(i*4, data[i])
+                writeInt(i * 4, data[i])
             }
         }
 
         val result = memory.read {
             buildList {
                 for (i in 0 until (memory.size / 4)) {
-                    add(readInt(i*4))
+                    add(readInt(i * 4))
                 }
             }
         }
 
-        assertEquals(data,result)
+        assertEquals(data, result)
     }
 }

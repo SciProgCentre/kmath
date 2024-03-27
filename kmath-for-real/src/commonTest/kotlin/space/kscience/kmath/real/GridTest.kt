@@ -20,9 +20,9 @@ class GridTest {
     }
 
     @Test
-    fun testIterateGrid(){
+    fun testIterateGrid() {
         var res = 0.0
-        for(d in 0.0..1.0 step 0.2){
+        for (d in 0.0..1.0 step 0.2) {
             res = d
         }
         assertEquals(1.0, res)

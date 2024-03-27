@@ -294,12 +294,14 @@ object MnPrint {
             os.println(me.upperState())
         }
         os.println("# ext. ||   name    || value@min ||  negative || positive  ")
-        os.printf("%4d||%10s||%10g||%10g||%10g\n",
+        os.printf(
+            "%4d||%10s||%10g||%10g||%10g\n",
             me.parameter(),
             me.lowerState().name(me.parameter()),
             me.min(),
             me.lower(),
-            me.upper())
+            me.upper()
+        )
         os.println()
     }
 

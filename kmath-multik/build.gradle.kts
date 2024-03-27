@@ -11,16 +11,16 @@ kscience {
     js()
 }
 
-kotlin{
-    sourceSets{
-        commonMain{
-            dependencies{
+kotlin {
+    sourceSets {
+        commonMain {
+            dependencies {
                 api(projects.kmathTensors)
                 api("org.jetbrains.kotlinx:multik-core:$multikVersion")
             }
         }
-        commonTest{
-            dependencies{
+        commonTest {
+            dependencies {
                 api("org.jetbrains.kotlinx:multik-default:$multikVersion")
             }
         }

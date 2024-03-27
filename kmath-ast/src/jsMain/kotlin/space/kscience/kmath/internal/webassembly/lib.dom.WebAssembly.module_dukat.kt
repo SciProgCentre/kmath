@@ -15,11 +15,11 @@
 
 package space.kscience.kmath.internal.webassembly
 
-import space.kscience.kmath.internal.tsstdlib.PromiseLike
 import org.khronos.webgl.ArrayBuffer
 import org.khronos.webgl.ArrayBufferView
 import org.khronos.webgl.Uint8Array
 import org.w3c.fetch.Response
+import space.kscience.kmath.internal.tsstdlib.PromiseLike
 import kotlin.js.Promise
 
 @Suppress("NESTED_CLASS_IN_EXTERNAL_INTERFACE")

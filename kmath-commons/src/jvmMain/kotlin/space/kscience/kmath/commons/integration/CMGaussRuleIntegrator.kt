@@ -35,11 +35,13 @@ public class CMGaussRuleIntegrator(
                 range.start,
                 range.endInclusive
             )
+
             GaussRule.LEGENDREHP -> factory.legendreHighPrecision(
                 numpoints,
                 range.start,
                 range.endInclusive
             )
+
             GaussRule.UNIFORM -> GaussIntegrator(
                 getUniformRule(
                     range.start,
@@ -80,7 +82,7 @@ public class CMGaussRuleIntegrator(
             type: GaussRule = GaussRule.LEGENDRE,
             function: (Double) -> Double,
         ): Double = CMGaussRuleIntegrator(numPoints, type).integrate(
-            UnivariateIntegrand({IntegrationRange(range)},function)
+            UnivariateIntegrand({ IntegrationRange(range) }, function)
         ).value
     }
 }

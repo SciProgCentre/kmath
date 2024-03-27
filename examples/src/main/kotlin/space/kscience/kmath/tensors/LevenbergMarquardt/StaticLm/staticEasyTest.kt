@@ -18,7 +18,8 @@ import kotlin.math.roundToInt
 
 fun main() {
     val startedData = getStartDataForFuncEasy()
-    val inputData = LMInput(::funcEasyForLm,
+    val inputData = LMInput(
+        ::funcEasyForLm,
         DoubleTensorAlgebra.ones(ShapeND(intArrayOf(4, 1))).as2D(),
         startedData.t,
         startedData.y_dat,
@@ -31,7 +32,8 @@ fun main() {
         doubleArrayOf(startedData.opts[6], startedData.opts[7], startedData.opts[8]),
         startedData.opts[9].toInt(),
         10,
-        startedData.example_number)
+        startedData.example_number
+    )
 
     val result = DoubleTensorAlgebra.levenbergMarquardt(inputData)
 
@@ -43,7 +45,7 @@ fun main() {
     println()
 
     println("Y true and y received:")
-    var y_hat_after =  funcDifficultForLm(startedData.t, result.resultParameters, startedData.example_number)
+    var y_hat_after = funcDifficultForLm(startedData.t, result.resultParameters, startedData.example_number)
     for (i in 0 until startedData.y_dat.shape.component1()) {
         val x = (startedData.y_dat[i, 0] * 10000).roundToInt() / 10000.0
         val y = (y_hat_after[i, 0] * 10000).roundToInt() / 10000.0

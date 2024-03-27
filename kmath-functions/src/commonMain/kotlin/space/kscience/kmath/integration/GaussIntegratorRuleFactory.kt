@@ -16,7 +16,7 @@ import kotlin.native.concurrent.ThreadLocal
 public interface GaussIntegratorRuleFactory {
     public fun build(numPoints: Int): Pair<Buffer<Double>, Buffer<Double>>
 
-    public companion object: IntegrandAttribute<GaussIntegratorRuleFactory>{
+    public companion object : IntegrandAttribute<GaussIntegratorRuleFactory> {
         public fun double(numPoints: Int, range: ClosedRange<Double>): Pair<Buffer<Double>, Buffer<Double>> =
             GaussLegendreRuleFactory.build(numPoints, range)
     }

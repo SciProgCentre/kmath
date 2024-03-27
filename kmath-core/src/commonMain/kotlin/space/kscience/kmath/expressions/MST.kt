@@ -58,6 +58,7 @@ public fun <T> MST.interpret(algebra: Algebra<T>, arguments: Map<Symbol, T>): T 
             this.operation,
             algebra.number(this.value.value),
         )
+
         else -> algebra.unaryOperationFunction(this.operation)(this.value.interpret(algebra, arguments))
     }
 

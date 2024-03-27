@@ -90,15 +90,15 @@ public interface AnalyticTensorAlgebra<T, A : Field<T>> :
     //For information: https://pytorch.org/docs/stable/generated/torch.floor.html#torch.floor
     public fun floor(structureND: StructureND<T>): Tensor<T>
 
-    override fun sin(arg: StructureND<T>): StructureND<T> 
+    override fun sin(arg: StructureND<T>): StructureND<T>
 
-    override fun cos(arg: StructureND<T>): StructureND<T> 
+    override fun cos(arg: StructureND<T>): StructureND<T>
 
     override fun asin(arg: StructureND<T>): StructureND<T>
 
     override fun acos(arg: StructureND<T>): StructureND<T>
 
-    override fun exp(arg: StructureND<T>): StructureND<T> 
+    override fun exp(arg: StructureND<T>): StructureND<T>
 
     override fun ln(arg: StructureND<T>): StructureND<T>
 

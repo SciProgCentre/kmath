@@ -547,7 +547,7 @@ internal fun MutableStructure2D<Double>.svdGolubKahanHelper(
             h = rv1[k]
             f = ((y - z) * (y + z) + (g - h) * (g + h)) / (2.0 * h * y)
             g = pythag(f, 1.0)
-            f = ((x - z) * (x + z) + h * ((y / (f + if (f >= 0.0) abs(g) else -abs(g) )) - h)) / x
+            f = ((x - z) * (x + z) + h * ((y / (f + if (f >= 0.0) abs(g) else -abs(g))) - h)) / x
             c = 1.0
             s = 1.0
 

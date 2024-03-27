@@ -17,7 +17,8 @@ internal class TestFeatures {
     fun printNumeric() {
         val num = object : Number() {
             override fun toByte(): Byte = throw UnsupportedOperationException()
-//            override fun toChar(): Char = throw UnsupportedOperationException()
+
+            //            override fun toChar(): Char = throw UnsupportedOperationException()
             override fun toDouble(): Double = throw UnsupportedOperationException()
             override fun toFloat(): Float = throw UnsupportedOperationException()
             override fun toInt(): Int = throw UnsupportedOperationException()

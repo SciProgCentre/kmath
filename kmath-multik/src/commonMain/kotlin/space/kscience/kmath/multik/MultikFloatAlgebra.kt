@@ -12,7 +12,7 @@ import org.jetbrains.kotlinx.multik.ndarray.data.DataType
 import space.kscience.kmath.operations.Float32Field
 
 public class MultikFloatAlgebra(
-    multikEngine: Engine
+    multikEngine: Engine,
 ) : MultikDivisionTensorAlgebra<Float, Float32Field>(multikEngine) {
     override val elementAlgebra: Float32Field get() = Float32Field
     override val dataType: DataType get() = DataType.FloatDataType

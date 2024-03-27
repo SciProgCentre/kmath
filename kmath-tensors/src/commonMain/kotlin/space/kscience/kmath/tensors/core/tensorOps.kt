@@ -214,7 +214,7 @@ public fun DoubleTensorAlgebra.svd(
 
 public fun DoubleTensorAlgebra.svdGolubKahan(
     structureND: StructureND<Double>,
-    iterations: Int = 30, epsilon: Double = 1e-10
+    iterations: Int = 30, epsilon: Double = 1e-10,
 ): Triple<DoubleTensor, DoubleTensor, DoubleTensor> {
     val size = structureND.dimension
     val commonShape = structureND.shape.slice(0 until size - 2)
@@ -235,8 +235,10 @@ public fun DoubleTensorAlgebra.svdGolubKahan(
             matrix.shape,
             matrix.source.view(0, matrixSize).copy()
         )
-        curMatrix.as2D().svdGolubKahanHelper(uTensors[index].as2D(), sTensorVectors[index], vTensors[index].as2D(),
-            iterations, epsilon)
+        curMatrix.as2D().svdGolubKahanHelper(
+            uTensors[index].as2D(), sTensorVectors[index], vTensors[index].as2D(),
+            iterations, epsilon
+        )
     }
 
     return Triple(uTensor, sTensor, vTensor)

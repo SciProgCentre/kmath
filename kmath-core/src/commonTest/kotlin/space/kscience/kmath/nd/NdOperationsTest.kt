@@ -18,7 +18,7 @@ class NdOperationsTest {
 
         println(StructureND.toString(structure))
 
-        val rolled = structure.roll(0,-1)
+        val rolled = structure.roll(0, -1)
 
         println(StructureND.toString(rolled))
 

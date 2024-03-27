@@ -2,7 +2,7 @@ plugins {
     id("space.kscience.gradle.mpp")
 }
 
-kscience{
+kscience {
     jvm()
     js()
     native()
@@ -10,7 +10,7 @@ kscience{
 
     useContextReceivers()
     useSerialization()
-    dependencies{
+    dependencies {
         api(projects.kmath.kmathComplex)
     }
 

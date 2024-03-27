@@ -81,8 +81,10 @@ internal class TestMathML {
 
     @Test
     fun radicalWithIndex() =
-        testMathML(RadicalWithIndexSyntax("", SymbolSyntax("x"), SymbolSyntax("y")),
-            "<mroot><mrow><mi>y</mi></mrow><mrow><mi>x</mi></mrow></mroot>")
+        testMathML(
+            RadicalWithIndexSyntax("", SymbolSyntax("x"), SymbolSyntax("y")),
+            "<mroot><mrow><mi>y</mi></mrow><mrow><mi>x</mi></mrow></mroot>"
+        )
 
     @Test
     fun multiplication() {

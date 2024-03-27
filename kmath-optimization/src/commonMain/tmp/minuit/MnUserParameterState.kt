@@ -194,10 +194,14 @@ class MnUserParameterState {
                 fix(ipar.name())
             } else if (ipar.hasLimits()) {
                 val i: Int = trafo.intOfExt(ipar.number())
-                val err: Double = if (st.hasCovariance()) sqrt(2.0 * up * st.error().invHessian()[i, i]) else st.parameters().dirin().getEntry(i)
-                add(ipar.name(),
+                val err: Double =
+                    if (st.hasCovariance()) sqrt(2.0 * up * st.error().invHessian()[i, i]) else st.parameters().dirin()
+                        .getEntry(i)
+                add(
+                    ipar.name(),
                     trafo.int2ext(i, st.vec().getEntry(i)),
-                    trafo.int2extError(i, st.vec().getEntry(i), err))
+                    trafo.int2extError(i, st.vec().getEntry(i), err)
+                )
                 if (ipar.hasLowerLimit() && ipar.hasUpperLimit()) {
                     setLimits(ipar.name(), ipar.lowerLimit(), ipar.upperLimit())
                 } else if (ipar.hasLowerLimit() && !ipar.hasUpperLimit()) {
@@ -207,7 +211,9 @@ class MnUserParameterState {
                 }
             } else {
                 val i: Int = trafo.intOfExt(ipar.number())
-                val err: Double = if (st.hasCovariance()) sqrt(2.0 * up * st.error().invHessian()[i, i]) else st.parameters().dirin().getEntry(i)
+                val err: Double =
+                    if (st.hasCovariance()) sqrt(2.0 * up * st.error().invHessian()[i, i]) else st.parameters().dirin()
+                        .getEntry(i)
                 add(ipar.name(), st.vec().getEntry(i), err)
             }
         }

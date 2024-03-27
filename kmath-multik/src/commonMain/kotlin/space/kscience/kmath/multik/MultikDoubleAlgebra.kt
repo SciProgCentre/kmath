@@ -16,20 +16,22 @@ import space.kscience.kmath.operations.Float64Field
 import space.kscience.kmath.operations.TrigonometricOperations
 
 public class MultikDoubleAlgebra(
-    multikEngine: Engine
+    multikEngine: Engine,
 ) : MultikDivisionTensorAlgebra<Double, Float64Field>(multikEngine),
     TrigonometricOperations<StructureND<Double>>, ExponentialOperations<StructureND<Double>> {
     override val elementAlgebra: Float64Field get() = Float64Field
     override val dataType: DataType get() = DataType.DoubleDataType
 
-    override fun sin(arg: StructureND<Double>): MultikTensor<Double> = multikMath.mathEx.sin(arg.asMultik().array).wrap()
+    override fun sin(arg: StructureND<Double>): MultikTensor<Double> =
+        multikMath.mathEx.sin(arg.asMultik().array).wrap()
 
-    override fun cos(arg: StructureND<Double>): MultikTensor<Double> = multikMath.mathEx.cos(arg.asMultik().array).wrap()
+    override fun cos(arg: StructureND<Double>): MultikTensor<Double> =
+        multikMath.mathEx.cos(arg.asMultik().array).wrap()
 
     override fun tan(arg: StructureND<Double>): MultikTensor<Double> = sin(arg) / cos(arg)
 
     @PerformancePitfall
-    override fun asin(arg: StructureND<Double>): MultikTensor<Double>  = arg.map { asin(it) }
+    override fun asin(arg: StructureND<Double>): MultikTensor<Double> = arg.map { asin(it) }
 
     @PerformancePitfall
     override fun acos(arg: StructureND<Double>): MultikTensor<Double> = arg.map { acos(it) }
@@ -37,7 +39,8 @@ public class MultikDoubleAlgebra(
     @PerformancePitfall
     override fun atan(arg: StructureND<Double>): MultikTensor<Double> = arg.map { atan(it) }
 
-    override fun exp(arg: StructureND<Double>): MultikTensor<Double> = multikMath.mathEx.exp(arg.asMultik().array).wrap()
+    override fun exp(arg: StructureND<Double>): MultikTensor<Double> =
+        multikMath.mathEx.exp(arg.asMultik().array).wrap()
 
     override fun ln(arg: StructureND<Double>): MultikTensor<Double> = multikMath.mathEx.log(arg.asMultik().array).wrap()
 
@@ -60,7 +63,7 @@ public class MultikDoubleAlgebra(
     @PerformancePitfall
     override fun atanh(arg: StructureND<Double>): MultikTensor<Double> = arg.map { atanh(it) }
 
-    override fun scalar(value: Double): MultikTensor<Double>  = Multik.ndarrayOf(value).wrap()
+    override fun scalar(value: Double): MultikTensor<Double> = Multik.ndarrayOf(value).wrap()
 }
 
 //public val Double.Companion.multikAlgebra: MultikTensorAlgebra<Double, DoubleField> get() = MultikDoubleAlgebra
