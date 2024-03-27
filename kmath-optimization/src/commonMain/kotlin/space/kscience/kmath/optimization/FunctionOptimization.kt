@@ -65,7 +65,7 @@ public fun <T> FunctionOptimization<T>.withAttributes(
     modifier: AttributesBuilder<FunctionOptimization<T>>.() -> Unit,
 ): FunctionOptimization<T> = FunctionOptimization(
     expression,
-    attributes.modify(modifier),
+    attributes.modified(modifier),
 )
 
 /**

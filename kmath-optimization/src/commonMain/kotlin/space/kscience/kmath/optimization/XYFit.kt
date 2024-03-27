@@ -108,7 +108,7 @@ public fun XYOptimization(
 
 public fun XYFit.withAttributes(
     modifier: AttributesBuilder<XYFit>.() -> Unit,
-): XYFit = XYFit(data, model, attributes.modify(modifier), pointToCurveDistance, pointWeight, xSymbol)
+): XYFit = XYFit(data, model, attributes.modified(modifier), pointToCurveDistance, pointWeight, xSymbol)
 
 public suspend fun XYColumnarData<Double, Double, Double>.fitWith(
     optimizer: Optimizer<Double, XYFit>,
@@ -123,7 +123,7 @@ public suspend fun XYColumnarData<Double, Double, Double>.fitWith(
     val problem = XYFit(
         this,
         modelExpression,
-        attributes.modify<XYFit> {
+        attributes.modified<XYFit> {
             set(OptimizationStartPoint(), startingPoint)
             if (!hasAny<OptimizationLog>()) {
                 set(OptimizationLog, Loggable.console)
