@@ -224,11 +224,7 @@ public inline fun <T : Any, F : Field<T>> SimpleAutoDiffField<T, F>.const(block:
 public fun <T : Any, F : Field<T>> F.simpleAutoDiff(
     bindings: Map<Symbol, T>,
     body: SimpleAutoDiffField<T, F>.() -> AutoDiffValue<T>,
-): DerivationResult<T> {
-    contract { callsInPlace(body, InvocationKind.EXACTLY_ONCE) }
-
-    return SimpleAutoDiffField(this, bindings).differentiate(body)
-}
+): DerivationResult<T> = SimpleAutoDiffField(this, bindings).differentiate(body)
 
 public fun <T : Any, F : Field<T>> F.simpleAutoDiff(
     vararg bindings: Pair<Symbol, T>,
