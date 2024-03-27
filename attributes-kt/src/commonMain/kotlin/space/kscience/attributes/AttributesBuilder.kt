@@ -6,13 +6,14 @@
 package space.kscience.attributes
 
 /**
- * A safe builder for [Attributes]
+ * A builder for [Attributes].
+ * The builder is not thread safe
  *
  * @param O type marker of an owner object, for which these attributes are made
  */
-public class AttributesBuilder<out O> internal constructor(
-    private val map: MutableMap<Attribute<*>, Any?>,
-) : Attributes {
+public class AttributesBuilder<out O> internal constructor() : Attributes {
+
+    private val map = mutableMapOf<Attribute<*>, Any?>()
 
     override fun toString(): String = "Attributes(value=${content.entries})"
     override fun equals(other: Any?): Boolean = other is Attributes && Attributes.equals(this, other)
@@ -56,7 +57,7 @@ public class AttributesBuilder<out O> internal constructor(
         map[this] = currentSet - attrValue
     }
 
-    public fun build(): Attributes = AttributesImpl(map)
+    public fun build(): Attributes = MapAttributes(map)
 }
 
 /**
@@ -64,4 +65,4 @@ public class AttributesBuilder<out O> internal constructor(
  * @param O the type for which attributes are built. The type is used only during compilation phase for static extension dispatch
  */
 public fun <O> Attributes(builder: AttributesBuilder<O>.() -> Unit): Attributes =
-    AttributesBuilder<O>(mutableMapOf()).apply(builder).build()
+    AttributesBuilder<O>().apply(builder).build()
