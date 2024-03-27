@@ -24,7 +24,7 @@ public val <T> OptimizationProblem<T>.startPoint: Map<Symbol, T>
     get() = attributes[OptimizationStartPoint()] ?: error("Starting point not defined in $this")
 
 public fun <T> AttributesBuilder<OptimizationProblem<T>>.startAt(startingPoint: Map<Symbol, T>) {
-    set(::OptimizationStartPoint, startingPoint)
+    set(OptimizationStartPoint(), startingPoint)
 }
 
 
