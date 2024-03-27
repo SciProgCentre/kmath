@@ -34,13 +34,18 @@ public class AttributesBuilder<out O> internal constructor(
         set(this, value)
     }
 
-    public fun from(attributes: Attributes) {
+    public infix fun <V> Attribute<V>.put(value: V?) {
+        set(this, value)
+    }
+
+    /**
+     * Put all attributes for given [attributes]
+     */
+    public fun putAll(attributes: Attributes) {
         map.putAll(attributes.content)
     }
 
-    public fun <V> SetAttribute<V>.add(
-        attrValue: V,
-    ) {
+    public infix fun <V> SetAttribute<V>.add(attrValue: V) {
         val currentSet: Set<V> = get(this) ?: emptySet()
         map[this] = currentSet + attrValue
     }
@@ -48,9 +53,7 @@ public class AttributesBuilder<out O> internal constructor(
     /**
      * Remove an element from [SetAttribute]
      */
-    public fun <V> SetAttribute<V>.remove(
-        attrValue: V,
-    ) {
+    public infix fun <V> SetAttribute<V>.remove(attrValue: V) {
         val currentSet: Set<V> = get(this) ?: emptySet()
         map[this] = currentSet - attrValue
     }

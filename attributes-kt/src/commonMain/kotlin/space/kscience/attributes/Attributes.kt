@@ -84,7 +84,7 @@ public fun <A : Attribute<Unit>> Attributes.withAttribute(attribute: A): Attribu
  * Create a new [Attributes] by modifying the current one
  */
 public fun <T> Attributes.modify(block: AttributesBuilder<T>.() -> Unit): Attributes = Attributes<T> {
-    from(this@modify)
+    putAll(this@modify)
     block()
 }
 
