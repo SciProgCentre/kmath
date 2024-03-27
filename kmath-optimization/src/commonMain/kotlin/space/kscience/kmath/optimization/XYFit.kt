@@ -124,7 +124,7 @@ public suspend fun XYColumnarData<Double, Double, Double>.fitWith(
         this,
         modelExpression,
         attributes.modify<XYFit> {
-            set(::OptimizationStartPoint, startingPoint)
+            set(OptimizationStartPoint(), startingPoint)
             if (!hasAny<OptimizationLog>()) {
                 set(OptimizationLog, Loggable.console)
             }

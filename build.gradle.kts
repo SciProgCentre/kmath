@@ -6,6 +6,8 @@ plugins {
     id("org.jetbrains.kotlinx.kover") version "0.7.6"
 }
 
+val attributesVersion by extra("0.1.0")
+
 allprojects {
     repositories {
         maven("https://repo.kotlin.link")
