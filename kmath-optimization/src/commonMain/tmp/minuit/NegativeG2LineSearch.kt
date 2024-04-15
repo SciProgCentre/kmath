@@ -71,10 +71,7 @@ internal object NegativeG2LineSearch {
         } while (iter++ < 2 * n && iterate)
         val mat = MnAlgebraicSymMatrix(n)
         for (i in 0 until n) {
-            mat[i, i] = if (abs(
-                    dgrad.getGradientDerivative()
-                        .getEntry(i)
-                ) > prec.eps2()
+            mat[i, i] = if (abs(dgrad.getGradientDerivative().getEntry(i)) > prec.eps2()
             ) 1.0 / dgrad.getGradientDerivative().getEntry(i) else 1.0
         }
         val err = MinimumError(mat, 1.0)

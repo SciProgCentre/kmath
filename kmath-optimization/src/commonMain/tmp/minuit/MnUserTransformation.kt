@@ -64,12 +64,12 @@ class MnUserTransformation {
      * @param err
      * @param val
      */
-    fun add(name: String, `val`: Double, err: Double) {
+    fun add(name: String, value: Double, err: Double) {
         require(!nameMap.containsKey(name)) { "duplicate name: $name" }
         nameMap[name] = theParameters.size
         theExtOfInt.add(theParameters.size)
-        theCache.add(`val`)
-        theParameters.add(MinuitParameter(theParameters.size, name, `val`, err))
+        theCache.add(value)
+        theParameters.add(MinuitParameter(theParameters.size, name, value, err))
     }
 
     /**
@@ -77,12 +77,12 @@ class MnUserTransformation {
      * @param up
      * @param low
      */
-    fun add(name: String, `val`: Double, err: Double, low: Double, up: Double) {
+    fun add(name: String, value: Double, err: Double, low: Double, up: Double) {
         require(!nameMap.containsKey(name)) { "duplicate name: $name" }
         nameMap[name] = theParameters.size
         theExtOfInt.add(theParameters.size)
-        theCache.add(`val`)
-        theParameters.add(MinuitParameter(theParameters.size, name, `val`, err, low, up))
+        theCache.add(value)
+        theParameters.add(MinuitParameter(theParameters.size, name, value, err, low, up))
     }
 
     /**
@@ -90,11 +90,11 @@ class MnUserTransformation {
      * @param name
      * @param val
      */
-    fun add(name: String, `val`: Double) {
+    fun add(name: String, value: Double) {
         require(!nameMap.containsKey(name)) { "duplicate name: $name" }
         nameMap[name] = theParameters.size
-        theCache.add(`val`)
-        theParameters.add(MinuitParameter(theParameters.size, name, `val`))
+        theCache.add(value)
+        theParameters.add(MinuitParameter(theParameters.size, name, value))
     }
 
     /**
@@ -107,20 +107,20 @@ class MnUserTransformation {
         return MnUserTransformation(this)
     }
 
-    fun dInt2Ext(i: Int, `val`: Double): Double {
+    fun dInt2Ext(i: Int, value: Double): Double {
         var dd = 1.0
         val parm: MinuitParameter = theParameters[theExtOfInt[i]]
         if (parm.hasLimits()) {
             dd = if (parm.hasUpperLimit() && parm.hasLowerLimit()) {
                 theDoubleLimTrafo.dInt2Ext(
-                    `val`,
+                    value,
                     parm.upperLimit(),
                     parm.lowerLimit()
                 )
             } else if (parm.hasUpperLimit() && !parm.hasLowerLimit()) {
-                theUpperLimTrafo.dInt2Ext(`val`, parm.upperLimit())
+                theUpperLimTrafo.dInt2Ext(value, parm.upperLimit())
             } else {
-                theLowerLimTrafo.dInt2Ext(`val`, parm.lowerLimit())
+                theLowerLimTrafo.dInt2Ext(value, parm.lowerLimit())
             }
         }
         return dd
@@ -143,30 +143,30 @@ class MnUserTransformation {
         return result
     }
 
-    fun ext2int(i: Int, `val`: Double): Double {
+    fun ext2int(i: Int, value: Double): Double {
         val parm: MinuitParameter = theParameters[i]
         return if (parm.hasLimits()) {
             if (parm.hasUpperLimit() && parm.hasLowerLimit()) {
                 theDoubleLimTrafo.ext2int(
-                    `val`,
+                    value,
                     parm.upperLimit(),
                     parm.lowerLimit(),
                     precision()
                 )
             } else if (parm.hasUpperLimit() && !parm.hasLowerLimit()) {
                 theUpperLimTrafo.ext2int(
-                    `val`,
+                    value,
                     parm.upperLimit(),
                     precision()
                 )
             } else {
                 theLowerLimTrafo.ext2int(
-                    `val`,
+                    value,
                     parm.lowerLimit(),
                     precision()
                 )
             }
-        } else `val`
+        } else value
     }
 
     fun extOfInt(internal: Int): Int {
@@ -200,21 +200,21 @@ class MnUserTransformation {
         return nameMap[name]!!
     }
 
-    fun int2ext(i: Int, `val`: Double): Double {
+    fun int2ext(i: Int, value: Double): Double {
         val parm: MinuitParameter = theParameters[theExtOfInt[i]]
         return if (parm.hasLimits()) {
             if (parm.hasUpperLimit() && parm.hasLowerLimit()) {
                 theDoubleLimTrafo.int2ext(
-                    `val`,
+                    value,
                     parm.upperLimit(),
                     parm.lowerLimit()
                 )
             } else if (parm.hasUpperLimit() && !parm.hasLowerLimit()) {
-                theUpperLimTrafo.int2ext(`val`, parm.upperLimit())
+                theUpperLimTrafo.int2ext(value, parm.upperLimit())
             } else {
-                theLowerLimTrafo.int2ext(`val`, parm.lowerLimit())
+                theLowerLimTrafo.int2ext(value, parm.lowerLimit())
             }
-        } else `val`
+        } else value
     }
 
     fun int2extCovariance(vec: RealVector, cov: MnAlgebraicSymMatrix): MnUserCovariance {
@@ -235,13 +235,13 @@ class MnUserTransformation {
         return result
     }
 
-    fun int2extError(i: Int, `val`: Double, err: Double): Double {
+    fun int2extError(i: Int, value: Double, err: Double): Double {
         var dx = err
         val parm: MinuitParameter = theParameters[theExtOfInt[i]]
         if (parm.hasLimits()) {
-            val ui = int2ext(i, `val`)
-            var du1 = int2ext(i, `val` + dx) - ui
-            val du2 = int2ext(i, `val` - dx) - ui
+            val ui = int2ext(i, value)
+            var du1 = int2ext(i, value + dx) - ui
+            val du2 = int2ext(i, value - dx) - ui
             if (parm.hasUpperLimit() && parm.hasLowerLimit()) {
                 if (dx > 1.0) {
                     du1 = parm.upperLimit() - parm.lowerLimit()
@@ -354,13 +354,13 @@ class MnUserTransformation {
         setUpperLimit(index(name), up)
     }
 
-    fun setValue(index: Int, `val`: Double) {
-        theParameters[index].setValue(`val`)
-        theCache[index] = `val`
+    fun setValue(index: Int, value: Double) {
+        theParameters[index].setValue(value)
+        theCache[index] = value
     }
 
-    fun setValue(name: String?, `val`: Double) {
-        setValue(index(name), `val`)
+    fun setValue(name: String?, value: Double) {
+        setValue(index(name), value)
     }
 
     fun transform(pstates: RealVector): ArrayRealVector {

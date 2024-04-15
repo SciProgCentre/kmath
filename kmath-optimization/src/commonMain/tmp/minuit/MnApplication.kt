@@ -77,8 +77,8 @@ abstract class MnApplication {
      * @param val a double.
      * @param name a [String] object.
      */
-    fun add(name: String, `val`: Double, err: Double) {
-        theState.add(name, `val`, err)
+    fun add(name: String, value: Double, err: Double) {
+        theState.add(name, value, err)
     }
 
     /**
@@ -90,8 +90,8 @@ abstract class MnApplication {
      * @param val a double.
      * @param err a double.
      */
-    fun add(name: String, `val`: Double, err: Double, low: Double, up: Double) {
-        theState.add(name, `val`, err, low, up)
+    fun add(name: String, value: Double, err: Double, low: Double, up: Double) {
+        theState.add(name, value, err, low, up)
     }
 
     /**
@@ -100,8 +100,8 @@ abstract class MnApplication {
      * @param name a [String] object.
      * @param val a double.
      */
-    fun add(name: String, `val`: Double) {
-        theState.add(name, `val`)
+    fun add(name: String, value: Double) {
+        theState.add(name, value)
     }
 
     /**
@@ -471,8 +471,8 @@ abstract class MnApplication {
      * @param index a int.
      * @param val a double.
      */
-    fun setValue(index: Int, `val`: Double) {
-        theState.setValue(index, `val`)
+    fun setValue(index: Int, value: Double) {
+        theState.setValue(index, value)
     }
 
     /**
@@ -482,8 +482,8 @@ abstract class MnApplication {
      * @param name a [String] object.
      * @param val a double.
      */
-    fun setValue(name: String?, `val`: Double) {
-        theState.setValue(name, `val`)
+    fun setValue(name: String?, value: Double) {
+        theState.setValue(name, value)
     }
 
     /**

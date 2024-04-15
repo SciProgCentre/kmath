@@ -38,9 +38,9 @@ class MinuitParameter {
      * @param name a [String] object.
      * @param val a double.
      */
-    constructor(num: Int, name: String, `val`: Double) {
+    constructor(num: Int, name: String, value: Double) {
         theNum = num
-        theValue = `val`
+        theValue = value
         theConst = true
         theName = name
     }
@@ -53,9 +53,9 @@ class MinuitParameter {
      * @param val a double.
      * @param err a double.
      */
-    constructor(num: Int, name: String, `val`: Double, err: Double) {
+    constructor(num: Int, name: String, value: Double, err: Double) {
         theNum = num
-        theValue = `val`
+        theValue = value
         theError = err
         theName = name
     }
@@ -70,9 +70,9 @@ class MinuitParameter {
      * @param min a double.
      * @param max a double.
      */
-    constructor(num: Int, name: String, `val`: Double, err: Double, min: Double, max: Double) {
+    constructor(num: Int, name: String, value: Double, err: Double, min: Double, max: Double) {
         theNum = num
-        theValue = `val`
+        theValue = value
         theError = err
         theLoLimit = min
         theUpLimit = max
@@ -288,8 +288,8 @@ class MinuitParameter {
      *
      * @param val a double.
      */
-    fun setValue(`val`: Double) {
-        theValue = `val`
+    fun setValue(value: Double) {
+        theValue = value
     }
 
     /**

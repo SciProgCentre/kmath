@@ -235,9 +235,9 @@ class MnUserParameterState {
      * @param val a double.
      * @param name a [String] object.
      */
-    fun add(name: String, `val`: Double, err: Double) {
-        theParameters.add(name, `val`, err)
-        theIntParameters.add(`val`)
+    fun add(name: String, value: Double, err: Double) {
+        theParameters.add(name, value, err)
+        theIntParameters.add(value)
         theCovarianceValid = false
         theGCCValid = false
         theValid = true
@@ -252,10 +252,10 @@ class MnUserParameterState {
      * @param err a double.
      * @param up a double.
      */
-    fun add(name: String, `val`: Double, err: Double, low: Double, up: Double) {
-        theParameters.add(name, `val`, err, low, up)
+    fun add(name: String, value: Double, err: Double, low: Double, up: Double) {
+        theParameters.add(name, value, err, low, up)
         theCovarianceValid = false
-        theIntParameters.add(ext2int(index(name), `val`))
+        theIntParameters.add(ext2int(index(name), value))
         theGCCValid = false
         theValid = true
     }
@@ -266,8 +266,8 @@ class MnUserParameterState {
      * @param name a [String] object.
      * @param val a double.
      */
-    fun add(name: String, `val`: Double) {
-        theParameters.add(name, `val`)
+    fun add(name: String, value: Double) {
+        theParameters.add(name, value)
         theValid = true
     }
 
@@ -331,8 +331,8 @@ class MnUserParameterState {
         return theParameters.errors()
     }
 
-    fun ext2int(i: Int, `val`: Double): Double {
-        return theParameters.trafo().ext2int(i, `val`)
+    fun ext2int(i: Int, value: Double): Double {
+        return theParameters.trafo().ext2int(i, value)
     }
 
     /**
@@ -426,8 +426,8 @@ class MnUserParameterState {
     }
 
     // transformation internal <-> external
-    fun int2ext(i: Int, `val`: Double): Double {
-        return theParameters.trafo().int2ext(i, `val`)
+    fun int2ext(i: Int, value: Double): Double {
+        return theParameters.trafo().int2ext(i, value)
     }
 
     fun intCovariance(): MnUserCovariance {
@@ -700,14 +700,14 @@ class MnUserParameterState {
      * @param e a int.
      * @param val a double.
      */
-    fun setValue(e: Int, `val`: Double) {
-        theParameters.setValue(e, `val`)
+    fun setValue(e: Int, value: Double) {
+        theParameters.setValue(e, value)
         if (!parameter(e).isFixed() && !parameter(e).isConst()) {
             val i = intOfExt(e)
             if (parameter(e).hasLimits()) {
-                theIntParameters[i] = ext2int(e, `val`)
+                theIntParameters[i] = ext2int(e, value)
             } else {
-                theIntParameters[i] = `val`
+                theIntParameters[i] = value
             }
         }
     }
@@ -719,8 +719,8 @@ class MnUserParameterState {
      * @param name a [String] object.
      * @param val a double.
      */
-    fun setValue(name: String?, `val`: Double) {
-        setValue(index(name), `val`)
+    fun setValue(name: String?, value: Double) {
+        setValue(index(name), value)
     }
 
     /** {@inheritDoc}  */
