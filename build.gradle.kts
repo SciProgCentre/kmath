@@ -6,7 +6,7 @@ plugins {
     id("org.jetbrains.kotlinx.kover") version "0.7.6"
 }
 
-val attributesVersion by extra("0.1.0")
+val attributesVersion by extra("0.2.0")
 
 allprojects {
     repositories {
