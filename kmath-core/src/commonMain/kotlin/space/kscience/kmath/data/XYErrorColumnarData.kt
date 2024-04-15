@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -27,7 +27,7 @@ public interface XYErrorColumnarData<T, out X : T, out Y : T> : XYColumnarData<T
 
     public companion object {
         public fun <T, X : T, Y : T> of(
-            x: Buffer<X>, y: Buffer<Y>, yErr: Buffer<Y>
+            x: Buffer<X>, y: Buffer<Y>, yErr: Buffer<Y>,
         ): XYErrorColumnarData<T, X, Y> {
             require(x.size == y.size) { "Buffer size mismatch. x buffer size is ${x.size}, y buffer size is ${y.size}" }
             require(y.size == yErr.size) { "Buffer size mismatch. y buffer size is ${x.size}, yErr buffer size is ${y.size}" }

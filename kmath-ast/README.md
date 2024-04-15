@@ -10,19 +10,8 @@ Extensions to MST API: transformations, dynamic compilation and visualization.
 
 ## Artifact:
 
-The Maven coordinates of this project are `space.kscience:kmath-ast:0.4.0-dev-1`.
+The Maven coordinates of this project are `space.kscience:kmath-ast:0.4.0`.
 
-**Gradle Groovy:**
-```groovy
-repositories {
-    maven { url 'https://repo.kotlin.link' }
-    mavenCentral()
-}
-
-dependencies {
-    implementation 'space.kscience:kmath-ast:0.4.0-dev-1'
-}
-```
 **Gradle Kotlin DSL:**
 ```kotlin
 repositories {
@@ -31,27 +20,33 @@ repositories {
 }
 
 dependencies {
-    implementation("space.kscience:kmath-ast:0.4.0-dev-1")
+    implementation("space.kscience:kmath-ast:0.4.0")
 }
 ```
 
 ## Parsing expressions
 
-In this module there is a parser from human-readable strings like `"x^3-x+3"` (in the more specific [grammar](reference/ArithmeticsEvaluator.g4)) to MST instances.
+In this module there is a parser from human-readable strings like `"x^3-x+3"` (in the more
+specific [grammar](reference/ArithmeticsEvaluator.g4)) to MST instances.
 
 Supported literals:
+
 1. Constants and variables (consist of latin letters, digits and underscores, can't start with digit): `x`, `_Abc2`.
 2. Numbers: `123`, `1.02`, `1e10`, `1e-10`, `1.0e+3`&mdash;all parsed either as `kotlin.Long` or `kotlin.Double`.
 
 Supported binary operators (from the highest precedence to the lowest one):
+
 1. `^`
 2. `*`, `/`
 3. `+`, `-`
 
 Supported unary operator:
+
 1. `-`, e.&nbsp;g. `-x`
 
-Arbitrary unary and binary functions are also supported: names consist of latin letters, digits and underscores, can't start with digit. Examples:
+Arbitrary unary and binary functions are also supported: names consist of latin letters, digits and underscores, can't
+start with digit. Examples:
+
 1. `sin(x)`
 2. `add(x, y)`
 
@@ -116,12 +111,15 @@ public final class CompiledExpression_-386104628_0 implements DoubleExpression {
 }
 ```
 
-Setting JVM system property `space.kscience.kmath.ast.dump.generated.classes` to `1` makes the translator dump class files to program's working directory, so they can be reviewed manually.
+Setting JVM system property `space.kscience.kmath.ast.dump.generated.classes` to `1` makes the translator dump class
+files to program's working directory, so they can be reviewed manually.
 
 #### Limitations
 
-- The same classes may be generated and loaded twice, so it is recommended to cache compiled expressions to avoid class loading overhead.
-- This API is not supported by non-dynamic JVM implementations like TeaVM or GraalVM Native Image because they may not support class loaders.
+- The same classes may be generated and loaded twice, so it is recommended to cache compiled expressions to avoid class
+  loading overhead.
+- This API is not supported by non-dynamic JVM implementations like TeaVM or GraalVM Native Image because they may not
+  support class loaders.
 
 ### On JS
 
@@ -199,7 +197,8 @@ public fun main() {
 
 Result LaTeX:
 
-$$\operatorname{exp}\\,\left(\sqrt{x}\right)-\frac{\frac{\operatorname{arcsin}\\,\left(2\\,x\right)}{2\times10^{10}+x^{3}}}{12}+x^{2/3}$$
+$$\operatorname{exp}\\,\left(\sqrt{x}\right)-\frac{\frac{\operatorname{arcsin}\\,\left(2\\,x\right)
+}{2\times10^{10}+x^{3}}}{12}+x^{2/3}$$
 
 Result MathML (can be used with MathJax or other renderers):
 

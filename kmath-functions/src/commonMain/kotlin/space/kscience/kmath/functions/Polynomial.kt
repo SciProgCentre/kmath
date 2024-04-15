@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -10,6 +10,7 @@ package space.kscience.kmath.functions
 import space.kscience.kmath.operations.Ring
 import space.kscience.kmath.operations.ScaleOperations
 import space.kscience.kmath.operations.invoke
+import space.kscience.kmath.structures.MutableBufferFactory
 import kotlin.math.max
 import kotlin.math.min
 
@@ -48,7 +49,7 @@ public data class Polynomial<out C>(
      *
      * @usesMathJax
      */
-    public val coefficients: List<C>
+    public val coefficients: List<C>,
 ) {
     override fun toString(): String = "Polynomial$coefficients"
 }
@@ -62,16 +63,15 @@ public data class Polynomial<out C>(
  * @param ring underlying ring of constants of type [A].
  */
 public open class PolynomialSpace<C, A>(
-    /**
-     * Underlying ring of constants. Its operations on constants are used by local operations on constants and polynomials.
-     */
     public val ring: A,
 ) : Ring<Polynomial<C>>, ScaleOperations<Polynomial<C>> where A : Ring<C>, A : ScaleOperations<C> {
+    override val bufferFactory: MutableBufferFactory<Polynomial<C>> get() = MutableBufferFactory()
 
     /**
      * Instance of zero constant (zero of the underlying ring).
      */
     public val constantZero: C get() = ring.zero
+
     /**
      * Instance of unit constant (unit of the underlying ring).
      */
@@ -95,6 +95,7 @@ public open class PolynomialSpace<C, A>(
                 )
             }
         }
+
     /**
      * Returns difference between the constant represented as a polynomial and the polynomial.
      */
@@ -115,6 +116,7 @@ public open class PolynomialSpace<C, A>(
                 )
             }
         }
+
     /**
      * Returns product of the constant represented as a polynomial and the polynomial.
      */
@@ -147,6 +149,7 @@ public open class PolynomialSpace<C, A>(
                 )
             }
         }
+
     /**
      * Returns difference between the constant represented as a polynomial and the polynomial.
      */
@@ -165,6 +168,7 @@ public open class PolynomialSpace<C, A>(
                 )
             }
         }
+
     /**
      * Returns product of the constant represented as a polynomial and the polynomial.
      */
@@ -183,6 +187,7 @@ public open class PolynomialSpace<C, A>(
      * Converts the constant [value] to polynomial.
      */
     public fun number(value: C): Polynomial<C> = Polynomial(listOf(value))
+
     /**
      * Converts the constant to polynomial.
      */
@@ -194,6 +199,7 @@ public open class PolynomialSpace<C, A>(
     public override operator fun Polynomial<C>.unaryMinus(): Polynomial<C> = ring {
         Polynomial(coefficients.map { -it })
     }
+
     /**
      * Returns sum of the polynomials.
      */
@@ -210,6 +216,7 @@ public open class PolynomialSpace<C, A>(
             }
         )
     }
+
     /**
      * Returns difference of the polynomials.
      */
@@ -226,6 +233,7 @@ public open class PolynomialSpace<C, A>(
             }
         )
     }
+
     /**
      * Returns product of the polynomials.
      */
@@ -245,6 +253,7 @@ public open class PolynomialSpace<C, A>(
      * Instance of zero polynomial (zero of the polynomial ring).
      */
     override val zero: Polynomial<C> = Polynomial(emptyList())
+
     /**
      * Instance of unit polynomial (unit of the polynomial ring).
      */

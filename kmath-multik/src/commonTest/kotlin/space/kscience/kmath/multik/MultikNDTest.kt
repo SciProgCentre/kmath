@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -10,7 +10,7 @@ import space.kscience.kmath.PerformancePitfall
 import space.kscience.kmath.nd.ShapeND
 import space.kscience.kmath.nd.StructureND
 import space.kscience.kmath.nd.one
-import space.kscience.kmath.operations.DoubleField
+import space.kscience.kmath.operations.Float64Field
 import space.kscience.kmath.tensors.core.DoubleTensorAlgebra
 import space.kscience.kmath.tensors.core.randomNormal
 import space.kscience.kmath.tensors.core.tensorAlgebra
@@ -37,7 +37,7 @@ internal class MultikNDTest {
             tensor1 dot tensor2
         }
 
-        val defaultResult = with(DoubleField.tensorAlgebra) {
+        val defaultResult = with(Float64Field.tensorAlgebra) {
             tensor1 dot tensor2
         }
 

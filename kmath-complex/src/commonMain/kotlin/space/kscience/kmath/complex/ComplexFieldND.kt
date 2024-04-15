@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -19,7 +19,8 @@ import kotlin.contracts.contract
  */
 @OptIn(UnstableKMathAPI::class)
 public sealed class ComplexFieldOpsND : BufferedFieldOpsND<Complex, ComplexField>(ComplexField.bufferAlgebra),
-    ScaleOperations<StructureND<Complex>>, ExtendedFieldOps<StructureND<Complex>>, PowerOperations<StructureND<Complex>> {
+    ScaleOperations<StructureND<Complex>>, ExtendedFieldOps<StructureND<Complex>>,
+    PowerOperations<StructureND<Complex>> {
 
     @OptIn(PerformancePitfall::class)
     override fun StructureND<Complex>.toBufferND(): BufferND<Complex> = when (this) {
@@ -53,7 +54,7 @@ public sealed class ComplexFieldOpsND : BufferedFieldOpsND<Complex, ComplexField
     override fun atanh(arg: StructureND<Complex>): BufferND<Complex> = mapInline(arg.toBufferND()) { atanh(it) }
 
     override fun power(arg: StructureND<Complex>, pow: Number): StructureND<Complex> =
-        mapInline(arg.toBufferND()) { power(it,pow) }
+        mapInline(arg.toBufferND()) { power(it, pow) }
 
     public companion object : ComplexFieldOpsND()
 }

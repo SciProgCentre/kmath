@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -7,6 +7,8 @@
 
 package space.kscience.kmath.interpolation
 
+import space.kscience.attributes.SafeType
+import space.kscience.attributes.WithType
 import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.data.XYColumnarData
 import space.kscience.kmath.functions.PiecewisePolynomial
@@ -26,8 +28,10 @@ public fun interface Interpolator<T, in X : T, Y : T> {
 /**
  * And interpolator returning [PiecewisePolynomial] function
  */
-public interface PolynomialInterpolator<T : Comparable<T>> : Interpolator<T, T, T> {
+public interface PolynomialInterpolator<T : Comparable<T>> : Interpolator<T, T, T>, WithType<T> {
     public val algebra: Ring<T>
+
+    override val type: SafeType<T> get() = algebra.type
 
     public fun getDefaultValue(): T = error("Out of bounds")
 

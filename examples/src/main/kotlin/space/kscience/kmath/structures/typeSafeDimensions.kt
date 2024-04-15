@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -15,7 +15,7 @@ private fun DMatrixContext<Double, *>.simple() {
     val m2 = produce<D3, D2> { i, j -> (i + j).toDouble() }
 
     //Dimension-safe addition
-    m1.transpose() + m2
+    m1.transposed() + m2
 }
 
 private object D5 : Dimension {

@@ -1,12 +1,13 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
 package space.kscience.kmath.operations
 
 import space.kscience.kmath.structures.Buffer
-import space.kscience.kmath.structures.BufferFactory
+import space.kscience.kmath.structures.MutableBuffer
+import space.kscience.kmath.structures.MutableBufferFactory
 
 public interface WithSize {
     public val size: Int
@@ -17,7 +18,10 @@ public interface WithSize {
  */
 public interface BufferAlgebra<T, out A : Algebra<T>> : Algebra<Buffer<T>> {
     public val elementAlgebra: A
-    public val elementBufferFactory: BufferFactory<T> get() = elementAlgebra.bufferFactory
+
+    public val elementBufferFactory: MutableBufferFactory<T> get() = elementAlgebra.bufferFactory
+
+    override val bufferFactory: MutableBufferFactory<Buffer<T>> get() = MutableBufferFactory()
 
     public fun buffer(size: Int, vararg elements: T): Buffer<T> {
         require(elements.size == size) { "Expected $size elements but found ${elements.size}" }
@@ -73,13 +77,11 @@ private inline fun <T, A : Algebra<T>> BufferAlgebra<T, A>.zipInline(
     return elementBufferFactory(l.size) { elementAlgebra.block(l[it], r[it]) }
 }
 
-public fun <T> BufferAlgebra<T, *>.buffer(size: Int, initializer: (Int) -> T): Buffer<T> {
-    return elementBufferFactory(size, initializer)
-}
+public fun <T> BufferAlgebra<T, *>.buffer(size: Int, initializer: (Int) -> T): MutableBuffer<T> =
+    elementBufferFactory(size, initializer)
 
-public fun <T, A> A.buffer(initializer: (Int) -> T): Buffer<T> where A : BufferAlgebra<T, *>, A : WithSize {
-    return elementBufferFactory(size, initializer)
-}
+public fun <T, A> A.buffer(initializer: (Int) -> T): MutableBuffer<T> where A : BufferAlgebra<T, *>, A : WithSize =
+    elementBufferFactory(size, initializer)
 
 public fun <T, A : TrigonometricOperations<T>> BufferAlgebra<T, A>.sin(arg: Buffer<T>): Buffer<T> =
     mapInline(arg) { sin(it) }
@@ -142,11 +144,11 @@ public open class BufferRingOps<T, A : Ring<T>>(
         super<BufferAlgebra>.binaryOperationFunction(operation)
 }
 
-public val IntRing.bufferAlgebra: BufferRingOps<Int, IntRing>
-    get() = BufferRingOps(IntRing)
+public val Int32Ring.bufferAlgebra: BufferRingOps<Int, Int32Ring>
+    get() = BufferRingOps(Int32Ring)
 
-public val ShortRing.bufferAlgebra: BufferRingOps<Short, ShortRing>
-    get() = BufferRingOps(ShortRing)
+public val Int16Ring.bufferAlgebra: BufferRingOps<Short, Int16Ring>
+    get() = BufferRingOps(Int16Ring)
 
 public open class BufferFieldOps<T, A : Field<T>>(
     elementAlgebra: A,

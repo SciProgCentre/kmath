@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -7,6 +7,8 @@
 
 package space.kscience.kmath.nd
 
+import space.kscience.attributes.SafeType
+import space.kscience.attributes.safeTypeOf
 import space.kscience.kmath.PerformancePitfall
 import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.operations.*
@@ -16,15 +18,19 @@ public interface BufferAlgebraND<T, out A : Algebra<T>> : AlgebraND<T, A> {
     public val bufferAlgebra: BufferAlgebra<T, A>
     override val elementAlgebra: A get() = bufferAlgebra.elementAlgebra
 
-    override fun structureND(shape: ShapeND, initializer: A.(IntArray) -> T): BufferND<T> {
+    //TODO change AlgebraND contract to include this
+    override fun mutableStructureND(shape: ShapeND, initializer: A.(IntArray) -> T): MutableBufferND<T> {
         val indexer = indexerBuilder(shape)
-        return BufferND(
+        return MutableBufferND(
             indexer,
             bufferAlgebra.buffer(indexer.linearSize) { offset ->
                 elementAlgebra.initializer(indexer.index(offset))
             }
         )
     }
+
+    override fun structureND(shape: ShapeND, initializer: A.(IntArray) -> T): BufferND<T> =
+        mutableStructureND(shape, initializer)
 
     @OptIn(PerformancePitfall::class)
     public fun StructureND<T>.toBufferND(): BufferND<T> = when (this) {
@@ -101,6 +107,9 @@ public open class BufferedGroupNDOps<T, out A : Group<T>>(
     override val bufferAlgebra: BufferAlgebra<T, A>,
     override val indexerBuilder: (ShapeND) -> ShapeIndexer = BufferAlgebraND.defaultIndexerBuilder,
 ) : GroupOpsND<T, A>, BufferAlgebraND<T, A> {
+
+    override val type: SafeType<StructureND<T>> get() = safeTypeOf<StructureND<T>>()
+
     override fun StructureND<T>.unaryMinus(): StructureND<T> = map { -it }
 }
 
@@ -132,6 +141,11 @@ public fun <T, A : Algebra<T>> BufferAlgebraND<T, A>.structureND(
     vararg shape: Int,
     initializer: A.(IntArray) -> T,
 ): BufferND<T> = structureND(ShapeND(shape), initializer)
+
+public fun <T, A : Algebra<T>> BufferAlgebraND<T, A>.mutableStructureND(
+    vararg shape: Int,
+    initializer: A.(IntArray) -> T,
+): MutableBufferND<T> = mutableStructureND(ShapeND(shape), initializer)
 
 public fun <T, EA : Algebra<T>, A> A.structureND(
     initializer: EA.(IntArray) -> T,

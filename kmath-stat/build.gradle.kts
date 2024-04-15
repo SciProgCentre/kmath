@@ -2,10 +2,11 @@ plugins {
     id("space.kscience.gradle.mpp")
 }
 
-kscience{
+kscience {
     jvm()
     js()
     native()
+    wasm()
 }
 
 kotlin.sourceSets {

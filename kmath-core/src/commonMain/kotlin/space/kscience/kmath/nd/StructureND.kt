@@ -1,23 +1,22 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
 package space.kscience.kmath.nd
 
+import space.kscience.attributes.Attribute
+import space.kscience.attributes.AttributeContainer
+import space.kscience.attributes.Attributes
+import space.kscience.attributes.SafeType
 import space.kscience.kmath.PerformancePitfall
 import space.kscience.kmath.linear.LinearSpace
-import space.kscience.kmath.misc.Feature
-import space.kscience.kmath.misc.Featured
 import space.kscience.kmath.operations.Ring
 import space.kscience.kmath.operations.invoke
 import space.kscience.kmath.structures.Buffer
-import space.kscience.kmath.structures.BufferFactory
-import kotlin.jvm.JvmName
 import kotlin.math.abs
-import kotlin.reflect.KClass
 
-public interface StructureFeature : Feature<StructureFeature>
+public interface StructureAttribute<T> : Attribute<T>
 
 /**
  * Represents n-dimensional structure i.e., multidimensional container of items of the same type and size. The number
@@ -28,9 +27,9 @@ public interface StructureFeature : Feature<StructureFeature>
  *
  * @param T the type of items.
  */
-public interface StructureND<out T> : Featured<StructureFeature>, WithShape {
+public interface StructureND<out T> : AttributeContainer, WithShape {
     /**
-     * The shape of structure i.e., non-empty sequence of non-negative integers that specify sizes of dimensions of
+     * The shape of structure i.e., non-empty sequence of non-negative integers that specify sizes of dimensions for
      * this structure.
      */
     override val shape: ShapeND
@@ -57,11 +56,7 @@ public interface StructureND<out T> : Featured<StructureFeature>, WithShape {
     @PerformancePitfall
     public fun elements(): Sequence<Pair<IntArray, T>> = indices.asSequence().map { it to get(it) }
 
-    /**
-     * Feature is some additional structure information that allows to access it special properties or hints.
-     * If the feature is not present, `null` is returned.
-     */
-    override fun <F : StructureFeature> getFeature(type: KClass<out F>): F? = null
+    override val attributes: Attributes get() = Attributes.EMPTY
 
     public companion object {
         /**
@@ -121,56 +116,52 @@ public interface StructureND<out T> : Featured<StructureFeature>, WithShape {
             return "$className(shape=${structure.shape}, buffer=$bufferRepr)"
         }
 
-        /**
-         * Creates a NDStructure with explicit buffer factory.
-         *
-         * Strides should be reused if possible.
-         */
-        public fun <T> buffered(
-            strides: Strides,
-            bufferFactory: BufferFactory<T> = BufferFactory.boxing(),
-            initializer: (IntArray) -> T,
-        ): BufferND<T> = BufferND(strides, bufferFactory(strides.linearSize) { i -> initializer(strides.index(i)) })
-
-        /**
-         * Inline create NDStructure with non-boxing buffer implementation if it is possible
-         */
-        public inline fun <reified T : Any> auto(
-            strides: Strides,
-            crossinline initializer: (IntArray) -> T,
-        ): BufferND<T> = BufferND(strides, Buffer.auto(strides.linearSize) { i -> initializer(strides.index(i)) })
-
-        public inline fun <T : Any> auto(
-            type: KClass<T>,
-            strides: Strides,
-            crossinline initializer: (IntArray) -> T,
-        ): BufferND<T> = BufferND(strides, Buffer.auto(type, strides.linearSize) { i -> initializer(strides.index(i)) })
-
-        public fun <T> buffered(
-            shape: ShapeND,
-            bufferFactory: BufferFactory<T> = BufferFactory.boxing(),
-            initializer: (IntArray) -> T,
-        ): BufferND<T> = buffered(ColumnStrides(shape), bufferFactory, initializer)
-
-        public inline fun <reified T : Any> auto(
-            shape: ShapeND,
-            crossinline initializer: (IntArray) -> T,
-        ): BufferND<T> = auto(ColumnStrides(shape), initializer)
-
-        @JvmName("autoVarArg")
-        public inline fun <reified T : Any> auto(
-            vararg shape: Int,
-            crossinline initializer: (IntArray) -> T,
-        ): BufferND<T> =
-            auto(ColumnStrides(ShapeND(shape)), initializer)
-
-        public inline fun <T : Any> auto(
-            type: KClass<T>,
-            vararg shape: Int,
-            crossinline initializer: (IntArray) -> T,
-        ): BufferND<T> = auto(type, ColumnStrides(ShapeND(shape)), initializer)
     }
 }
+
+
+/**
+ * Creates a NDStructure with explicit buffer factory.
+ *
+ * Strides should be reused if possible.
+ */
+public fun <T> BufferND(
+    type: SafeType<T>,
+    strides: Strides,
+    initializer: (IntArray) -> T,
+): BufferND<T> = BufferND(strides, Buffer(type, strides.linearSize) { i -> initializer(strides.index(i)) })
+
+
+public fun <T> BufferND(
+    type: SafeType<T>,
+    shape: ShapeND,
+    initializer: (IntArray) -> T,
+): BufferND<T> = BufferND(type, ColumnStrides(shape), initializer)
+
+/**
+ * Inline create NDStructure with non-boxing buffer implementation if it is possible
+ */
+public inline fun <reified T : Any> BufferND(
+    strides: Strides,
+    crossinline initializer: (IntArray) -> T,
+): BufferND<T> = BufferND(strides, Buffer(strides.linearSize) { i -> initializer(strides.index(i)) })
+
+public inline fun <reified T : Any> BufferND(
+    shape: ShapeND,
+    crossinline initializer: (IntArray) -> T,
+): BufferND<T> = BufferND(ColumnStrides(shape), initializer)
+
+public inline fun <reified T : Any> BufferND(
+    vararg shape: Int,
+    crossinline initializer: (IntArray) -> T,
+): BufferND<T> = BufferND(ColumnStrides(ShapeND(shape)), initializer)
+
+public fun <T : Any> BufferND(
+    type: SafeType<T>,
+    vararg shape: Int,
+    initializer: (IntArray) -> T,
+): BufferND<T> = BufferND(type, ColumnStrides(ShapeND(shape)), initializer)
+
 
 /**
  * Indicates whether some [StructureND] is equal to another one.

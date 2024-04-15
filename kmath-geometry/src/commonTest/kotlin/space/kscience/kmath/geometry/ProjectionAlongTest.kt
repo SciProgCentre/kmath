@@ -1,17 +1,19 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
 package space.kscience.kmath.geometry
 
+import space.kscience.kmath.geometry.euclidean2d.Float64Space2D
+import space.kscience.kmath.geometry.euclidean3d.Float64Space3D
 import kotlin.test.Test
 import kotlin.test.assertTrue
 
 internal class ProjectionAlongTest {
     @Test
     fun projectionIntoYEqualsX() {
-        with(Euclidean2DSpace) {
+        with(Float64Space2D) {
             val normal = vector(-2.0, 2.0)
             val base = vector(2.3, 2.3)
 
@@ -26,7 +28,7 @@ internal class ProjectionAlongTest {
 
     @Test
     fun projectionOntoLine() {
-        with(Euclidean2DSpace) {
+        with(Float64Space2D) {
             val a = 5.0
             val b = -3.0
             val c = -15.0
@@ -42,11 +44,11 @@ internal class ProjectionAlongTest {
     }
 
     @Test
-    fun projectOntoPlane() = with(Euclidean3DSpace){
+    fun projectOntoPlane() = with(Float64Space3D) {
         val normal = vector(1.0, 3.5, 0.07)
         val base = vector(2.0, -0.0037, 11.1111)
 
-        with(Euclidean3DSpace) {
+        with(Float64Space3D) {
             val testDomain = (-10.0..10.0).generateList(0.43)
             for (x in testDomain) {
                 for (y in testDomain) {

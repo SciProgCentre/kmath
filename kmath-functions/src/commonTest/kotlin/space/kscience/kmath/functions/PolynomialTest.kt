@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -8,7 +8,8 @@
 package space.kscience.kmath.functions
 
 import space.kscience.kmath.functions.testUtils.*
-import kotlin.test.*
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
 
 class PolynomialTest {
@@ -52,6 +53,7 @@ class PolynomialTest {
             )
         }
     }
+
     @Test
     fun test_Polynomial_Constant_minus() {
         RationalField.polynomialSpace {
@@ -92,6 +94,7 @@ class PolynomialTest {
             )
         }
     }
+
     @Test
     fun test_Polynomial_Constant_times() {
         IntModuloRing(35).polynomialSpace {
@@ -107,6 +110,7 @@ class PolynomialTest {
             )
         }
     }
+
     @Test
     fun test_Constant_Polynomial_plus() {
         RationalField.polynomialSpace {
@@ -147,6 +151,7 @@ class PolynomialTest {
             )
         }
     }
+
     @Test
     fun test_Constant_Polynomial_minus() {
         RationalField.polynomialSpace {
@@ -187,6 +192,7 @@ class PolynomialTest {
             )
         }
     }
+
     @Test
     fun test_Constant_Polynomial_times() {
         IntModuloRing(35).polynomialSpace {
@@ -202,6 +208,7 @@ class PolynomialTest {
             )
         }
     }
+
     @Test
     fun test_Polynomial_unaryMinus() {
         RationalField.polynomialSpace {
@@ -217,6 +224,7 @@ class PolynomialTest {
             )
         }
     }
+
     @Test
     fun test_Polynomial_Polynomial_plus() {
         RationalField.polynomialSpace {
@@ -250,6 +258,7 @@ class PolynomialTest {
             )
         }
     }
+
     @Test
     fun test_Polynomial_Polynomial_minus() {
         RationalField.polynomialSpace {
@@ -283,6 +292,7 @@ class PolynomialTest {
             )
         }
     }
+
     @Test
     fun test_Polynomial_Polynomial_times() {
         IntModuloRing(35).polynomialSpace {

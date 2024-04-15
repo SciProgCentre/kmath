@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -116,6 +116,7 @@ internal fun broadcastOuterTensors(vararg tensors: DoubleTensor): List<DoubleTen
 
             for (linearIndex in 0 until n) {
                 val totalMultiIndex = outerTensor.indices.index(linearIndex)
+
                 @OptIn(UnsafeKMathAPI::class)
                 var curMultiIndex = tensor.shape.slice(0..tensor.shape.size - 3).asArray()
                 curMultiIndex = IntArray(totalMultiIndex.size - curMultiIndex.size) { 1 } + curMultiIndex

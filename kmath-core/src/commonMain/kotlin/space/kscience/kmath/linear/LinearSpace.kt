@@ -1,20 +1,17 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
 package space.kscience.kmath.linear
 
+import space.kscience.attributes.*
 import space.kscience.kmath.UnstableKMathAPI
-import space.kscience.kmath.nd.MutableStructure2D
-import space.kscience.kmath.nd.Structure2D
-import space.kscience.kmath.nd.StructureFeature
-import space.kscience.kmath.nd.as1D
+import space.kscience.kmath.nd.*
 import space.kscience.kmath.operations.BufferRingOps
 import space.kscience.kmath.operations.Ring
 import space.kscience.kmath.operations.invoke
 import space.kscience.kmath.structures.Buffer
-import kotlin.reflect.KClass
 
 /**
  * Alias for [Structure2D] with more familiar name.
@@ -37,8 +34,10 @@ public typealias Point<T> = Buffer<T>
  * @param T the type of items in the matrices.
  * @param A the type of ring over [T].
  */
-public interface LinearSpace<T, out A : Ring<T>> {
+public interface LinearSpace<T, out A : Ring<T>> : MatrixScope<T> {
     public val elementAlgebra: A
+
+    override val type: SafeType<T> get() = elementAlgebra.type
 
     /**
      * Produces a matrix with this context and given dimensions.
@@ -167,16 +166,36 @@ public interface LinearSpace<T, out A : Ring<T>> {
     public operator fun T.times(v: Point<T>): Point<T> = v * this
 
     /**
-     * Compute a feature of the structure in this scope. Structure features take precedence other context features.
+     * Compute an [attribute] value for given [structure]. Return null if the attribute could not be computed.
+     */
+    public fun <V, A : StructureAttribute<V>> computeAttribute(structure: Structure2D<T>, attribute: A): V? = null
+
+    @UnstableKMathAPI
+    public fun <V, A : StructureAttribute<V>> Structure2D<T>.getOrComputeAttribute(attribute: A): V? {
+        return attributes[attribute] ?: computeAttribute(this, attribute)
+    }
+
+    /**
+     * If the structure holds given [attribute] return itself. Otherwise, return a new [Matrix] that contains a computed attribute.
      *
-     * @param F the type of feature.
-     * @param structure the structure.
-     * @param type the [KClass] instance of [F].
-     * @return a feature object or `null` if it isn't present.
+     * This method is used to compute and cache attribute inside the structure. If one needs an attribute only once,
+     * better use [StructureND.getOrComputeAttribute].
      */
     @UnstableKMathAPI
-    public fun <F : StructureFeature> computeFeature(structure: Matrix<T>, type: KClass<out F>): F? =
-        structure.getFeature(type)
+    public fun <V : Any, A : StructureAttribute<V>> Matrix<T>.withComputedAttribute(
+        attribute: A,
+    ): Matrix<T>? {
+        return if (attributes[attribute] != null) {
+            this
+        } else {
+            val value = computeAttribute(this, attribute) ?: return null
+            if (this is MatrixWrapper) {
+                MatrixWrapper(this, attributes.withAttribute(attribute, value))
+            } else {
+                MatrixWrapper(this, Attributes(attribute, value))
+            }
+        }
+    }
 
     public companion object {
 
@@ -184,22 +203,11 @@ public interface LinearSpace<T, out A : Ring<T>> {
          * A structured matrix with custom buffer
          */
         public fun <T : Any, A : Ring<T>> buffered(
-            algebra: A
+            algebra: A,
         ): LinearSpace<T, A> = BufferedLinearSpace(BufferRingOps(algebra))
 
     }
 }
-
-/**
- * Get a feature of the structure in this scope. Structure features take precedence other context features.
- *
- * @param T the type of items in the matrices.
- * @param F the type of feature.
- * @return a feature object or `null` if it isn't present.
- */
-@UnstableKMathAPI
-public inline fun <T : Any, reified F : StructureFeature> LinearSpace<T, *>.computeFeature(structure: Matrix<T>): F? =
-    computeFeature(structure, F::class)
 
 
 public inline operator fun <LS : LinearSpace<*, *>, R> LS.invoke(block: LS.() -> R): R = run(block)
@@ -208,7 +216,7 @@ public inline operator fun <LS : LinearSpace<*, *>, R> LS.invoke(block: LS.() ->
 /**
  * Convert matrix to vector if it is possible.
  */
-public fun <T : Any> Matrix<T>.asVector(): Point<T> =
+public fun <T> Matrix<T>.asVector(): Point<T> =
     if (this.colNum == 1) as1D()
     else error("Can't convert matrix with more than one column to vector")
 
@@ -219,4 +227,4 @@ public fun <T : Any> Matrix<T>.asVector(): Point<T> =
  * @receiver a buffer.
  * @return the new matrix.
  */
-public fun <T : Any> Point<T>.asMatrix(): VirtualMatrix<T> = VirtualMatrix(size, 1) { i, _ -> get(i) }
+public fun <T> Point<T>.asMatrix(): VirtualMatrix<T> = VirtualMatrix(size, 1) { i, _ -> get(i) }

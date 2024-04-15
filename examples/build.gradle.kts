@@ -52,7 +52,7 @@ dependencies {
 
     implementation("org.slf4j:slf4j-simple:1.7.32")
     // plotting
-    implementation("space.kscience:plotlykt-server:0.5.0")
+    implementation("space.kscience:plotlykt-server:0.7.0")
 }
 
 kotlin {
@@ -67,8 +67,8 @@ kotlin {
 }
 
 tasks.withType<KotlinJvmCompile> {
-    kotlinOptions {
-        freeCompilerArgs = freeCompilerArgs + "-Xjvm-default=all" + "-Xopt-in=kotlin.RequiresOptIn" + "-Xlambdas=indy"
+    compilerOptions {
+        freeCompilerArgs.addAll("-Xjvm-default=all", "-Xopt-in=kotlin.RequiresOptIn", "-Xlambdas=indy")
     }
 }
 

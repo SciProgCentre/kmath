@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -7,7 +7,7 @@ package space.kscience.kmath.functions
 
 import space.kscience.kmath.interpolation.interpolatePolynomials
 import space.kscience.kmath.interpolation.splineInterpolator
-import space.kscience.kmath.operations.DoubleField
+import space.kscience.kmath.operations.Float64Field
 import space.kscience.kmath.real.map
 import space.kscience.kmath.real.step
 import space.kscience.plotly.Plotly
@@ -28,9 +28,9 @@ fun main() {
     val xs = 0.0..100.0 step 0.5
     val ys = xs.map(function)
 
-    val polynomial: PiecewisePolynomial<Double> = DoubleField.splineInterpolator.interpolatePolynomials(xs, ys)
+    val polynomial: PiecewisePolynomial<Double> = Float64Field.splineInterpolator.interpolatePolynomials(xs, ys)
 
-    val polyFunction = polynomial.asFunction(DoubleField, 0.0)
+    val polyFunction = polynomial.asFunction(Float64Field, 0.0)
 
     Plotly.plot {
         scatter {

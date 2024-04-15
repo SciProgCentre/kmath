@@ -1,16 +1,13 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
 package space.kscience.kmath.ejml
 
 import space.kscience.kmath.UnstableKMathAPI
-import space.kscience.kmath.linear.InverseMatrixFeature
-import space.kscience.kmath.linear.LinearSpace
-import space.kscience.kmath.linear.Matrix
-import space.kscience.kmath.linear.Point
-import space.kscience.kmath.nd.Structure2D
+import space.kscience.kmath.linear.*
+import space.kscience.kmath.operations.Float64Field
 import space.kscience.kmath.operations.Ring
 
 /**
@@ -40,8 +37,7 @@ public abstract class EjmlLinearSpace<T : Any, out A : Ring<T>, out M : org.ejml
 
     public abstract override fun buildVector(size: Int, initializer: A.(Int) -> T): EjmlVector<T, M>
 
-    @Suppress("UNCHECKED_CAST")
     @UnstableKMathAPI
-    public fun EjmlMatrix<T, *>.inverse(): Structure2D<Double> =
-        computeFeature(this, InverseMatrixFeature::class)?.inverse as Structure2D<Double>
+    public fun EjmlMatrix<T, *>.inverted(): Matrix<Double> =
+        computeAttribute(this, Float64Field.linearSpace.Inverted)!!
 }

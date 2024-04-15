@@ -1,9 +1,11 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
 package space.kscience.kmath.memory
+
+import kotlin.experimental.ExperimentalNativeApi
 
 @PublishedApi
 internal class NativeMemory(
@@ -26,6 +28,7 @@ internal class NativeMemory(
         return NativeMemory(copy)
     }
 
+    @OptIn(ExperimentalNativeApi::class)
     private val reader: MemoryReader = object : MemoryReader {
         override val memory: Memory get() = this@NativeMemory
 
@@ -48,6 +51,7 @@ internal class NativeMemory(
 
     override fun reader(): MemoryReader = reader
 
+    @OptIn(ExperimentalNativeApi::class)
     private val writer: MemoryWriter = object : MemoryWriter {
         override val memory: Memory get() = this@NativeMemory
 

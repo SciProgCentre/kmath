@@ -1,11 +1,12 @@
 /*
- * Copyright 2018-2023 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
 package space.kscience.kmath.expressions
 
 import space.kscience.kmath.UnstableKMathAPI
+
 // Only kmath-core is needed.
 
 // Let's declare some variables
@@ -51,7 +52,7 @@ fun main() {
     // >>> 0.0
 
     // But in case you forgot to specify bound symbol's value, exception is thrown:
-    println( runCatching { someExpression(z to 4.0) } )
+    println(runCatching { someExpression(z to 4.0) })
     // >>> Failure(java.lang.IllegalStateException: Symbol 'x' is not supported in ...)
 
     // The reason is that the expression is evaluated lazily,

@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -17,6 +17,7 @@ public class LazyStructureND<out T>(
     override val shape: ShapeND,
     public val function: suspend (IntArray) -> T,
 ) : StructureND<T> {
+
     private val cache: MutableMap<IntArray, Deferred<T>> = HashMap()
 
     public fun async(index: IntArray): Deferred<T> = cache.getOrPut(index) {
@@ -24,6 +25,7 @@ public class LazyStructureND<out T>(
     }
 
     public suspend fun await(index: IntArray): T = async(index).await()
+
     @PerformancePitfall
     override operator fun get(index: IntArray): T = runBlocking { async(index).await() }
 

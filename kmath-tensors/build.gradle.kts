@@ -2,10 +2,17 @@ plugins {
     id("space.kscience.gradle.mpp")
 }
 
-kscience{
+kscience {
     jvm()
-    js()
+    js {
+        browser {
+            testTask {
+                useMocha().timeout = "0"
+            }
+        }
+    }
     native()
+    wasm()
 
     dependencies {
         api(projects.kmathCore)
@@ -22,8 +29,8 @@ kotlin.sourceSets {
         }
     }
 
-    commonTest{
-        dependencies{
+    commonTest {
+        dependencies {
             implementation(projects.testUtils)
         }
     }

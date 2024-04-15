@@ -14,7 +14,7 @@ repositories {
 }
 
 readme {
-    maturity = space.kscience.gradle.Maturity.PROTOTYPE
+    maturity = space.kscience.gradle.Maturity.DEPRECATED
     propertyByTemplate("artifact", rootProject.file("docs/templates/ARTIFACT-TEMPLATE.md"))
 
     feature("jafama-double", "src/main/kotlin/space/kscience/kmath/jafama/") {

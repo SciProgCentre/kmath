@@ -1,48 +1,63 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
 package space.kscience.kmath.structures
 
+import space.kscience.attributes.SafeType
+import space.kscience.attributes.WithType
+import space.kscience.attributes.safeTypeOf
 import space.kscience.kmath.operations.WithSize
 import space.kscience.kmath.operations.asSequence
-import kotlin.jvm.JvmInline
-import kotlin.reflect.KClass
+import kotlin.reflect.typeOf
 
 /**
  * Function that produces [Buffer] from its size and function that supplies values.
  *
  * @param T the type of buffer.
  */
-public fun interface BufferFactory<T> {
+public interface BufferFactory<T> : WithType<T> {
+
     public operator fun invoke(size: Int, builder: (Int) -> T): Buffer<T>
-
-    public companion object{
-        public inline fun <reified T : Any> auto(): BufferFactory<T> =
-            BufferFactory(Buffer.Companion::auto)
-
-        public fun <T> boxing(): BufferFactory<T> =
-            BufferFactory(Buffer.Companion::boxing)
-    }
 }
+
+/**
+ * Create a [BufferFactory] for given [type], using primitive storage if possible
+ */
+public fun <T> BufferFactory(type: SafeType<T>): BufferFactory<T> = object : BufferFactory<T> {
+    override val type: SafeType<T> = type
+    override fun invoke(size: Int, builder: (Int) -> T): Buffer<T> = Buffer(type, size, builder)
+}
+
+/**
+ * Create [BufferFactory] using the reified type
+ */
+public inline fun <reified T> BufferFactory(): BufferFactory<T> = BufferFactory(safeTypeOf())
 
 /**
  * Function that produces [MutableBuffer] from its size and function that supplies values.
  *
  * @param T the type of buffer.
  */
-public fun interface MutableBufferFactory<T> : BufferFactory<T> {
+public interface MutableBufferFactory<T> : BufferFactory<T> {
     override fun invoke(size: Int, builder: (Int) -> T): MutableBuffer<T>
 
-    public companion object {
-        public inline fun <reified T : Any> auto(): MutableBufferFactory<T> =
-            MutableBufferFactory(MutableBuffer.Companion::auto)
-
-        public fun <T> boxing(): MutableBufferFactory<T> =
-            MutableBufferFactory(MutableBuffer.Companion::boxing)
-    }
+    public companion object
 }
+
+/**
+ * Create a [MutableBufferFactory] for given [type], using primitive storage if possible
+ */
+public fun <T> MutableBufferFactory(type: SafeType<T>): MutableBufferFactory<T> = object : MutableBufferFactory<T> {
+    override val type: SafeType<T> = type
+    override fun invoke(size: Int, builder: (Int) -> T): MutableBuffer<T> = MutableBuffer(type, size, builder)
+}
+
+/**
+ * Create [BufferFactory] using the reified type
+ */
+public inline fun <reified T> MutableBufferFactory(): MutableBufferFactory<T> = MutableBufferFactory(safeTypeOf())
 
 /**
  * A generic read-only random-access structure for both primitives and objects.
@@ -58,7 +73,7 @@ public interface Buffer<out T> : WithSize {
     override val size: Int
 
     /**
-     * Gets element at given index.
+     * Gets an element at given index.
      */
     public operator fun get(index: Int): T
 
@@ -85,38 +100,46 @@ public interface Buffer<out T> : WithSize {
             return true
         }
 
-        /**
-         * Creates a [ListBuffer] of given type [T] with given [size]. Each element is calculated by calling the
-         * specified [initializer] function.
-         */
-        public inline fun <T> boxing(size: Int, initializer: (Int) -> T): Buffer<T> =
-            List(size, initializer).asBuffer()
+    }
+}
 
-        /**
-         * Creates a [Buffer] of given [type]. If the type is primitive, specialized buffers are used ([IntBuffer],
-         * [DoubleBuffer], etc.), [ListBuffer] is returned otherwise.
-         *
-         * The [size] is specified, and each element is calculated by calling the specified [initializer] function.
-         */
-        @Suppress("UNCHECKED_CAST")
-        public inline fun <T : Any> auto(type: KClass<T>, size: Int, initializer: (Int) -> T): Buffer<T> =
-            when (type) {
-                Double::class -> MutableBuffer.double(size) { initializer(it) as Double } as Buffer<T>
-                Short::class -> MutableBuffer.short(size) { initializer(it) as Short } as Buffer<T>
-                Int::class -> MutableBuffer.int(size) { initializer(it) as Int } as Buffer<T>
-                Long::class -> MutableBuffer.long(size) { initializer(it) as Long } as Buffer<T>
-                Float::class -> MutableBuffer.float(size) { initializer(it) as Float } as Buffer<T>
-                else -> boxing(size, initializer)
-            }
+/**
+ * Creates a [Buffer] of given [type]. If the type is primitive, specialized buffers are used ([Int32Buffer],
+ * [Float64Buffer], etc.), [ListBuffer] is returned otherwise.
+ *
+ * The [size] is specified, and each element is calculated by calling the specified [initializer] function.
+ */
+@Suppress("UNCHECKED_CAST", "DuplicatedCode")
+public fun <T> Buffer(
+    type: SafeType<T>,
+    size: Int,
+    initializer: (Int) -> T,
+): Buffer<T> = when (type.kType) {
+    typeOf<Double>() -> MutableBuffer.double(size) { initializer(it) as Double } as Buffer<T>
+    typeOf<Short>() -> MutableBuffer.short(size) { initializer(it) as Short } as Buffer<T>
+    typeOf<Int>() -> MutableBuffer.int(size) { initializer(it) as Int } as Buffer<T>
+    typeOf<Long>() -> MutableBuffer.long(size) { initializer(it) as Long } as Buffer<T>
+    typeOf<Float>() -> MutableBuffer.float(size) { initializer(it) as Float } as Buffer<T>
+    else -> List(size, initializer).asBuffer()
+}
 
-        /**
-         * Creates a [Buffer] of given type [T]. If the type is primitive, specialized buffers are used ([IntBuffer],
-         * [DoubleBuffer], etc.), [ListBuffer] is returned otherwise.
-         *
-         * The [size] is specified, and each element is calculated by calling the specified [initializer] function.
-         */
-        public inline fun <reified T : Any> auto(size: Int, initializer: (Int) -> T): Buffer<T> =
-            auto(T::class, size, initializer)
+/**
+ * Creates a [Buffer] of given type [T]. If the type is primitive, specialized buffers are used ([Int32Buffer],
+ * [Float64Buffer], etc.), [ListBuffer] is returned otherwise.
+ *
+ * The [size] is specified, and each element is calculated by calling the specified [initializer] function.
+ */
+@Suppress("UNCHECKED_CAST", "DuplicatedCode")
+public inline fun <reified T> Buffer(size: Int, initializer: (Int) -> T): Buffer<T> {
+    //code duplication here because we want to inline initializers
+    val type = safeTypeOf<T>()
+    return when (type.kType) {
+        typeOf<Double>() -> MutableBuffer.double(size) { initializer(it) as Double } as Buffer<T>
+        typeOf<Short>() -> MutableBuffer.short(size) { initializer(it) as Short } as Buffer<T>
+        typeOf<Int>() -> MutableBuffer.int(size) { initializer(it) as Int } as Buffer<T>
+        typeOf<Long>() -> MutableBuffer.long(size) { initializer(it) as Long } as Buffer<T>
+        typeOf<Float>() -> MutableBuffer.float(size) { initializer(it) as Float } as Buffer<T>
+        else -> List(size, initializer).asBuffer()
     }
 }
 
@@ -143,27 +166,15 @@ public fun <T> Buffer<T>.last(): T {
 }
 
 /**
- * Immutable wrapper for [MutableBuffer].
- *
- * @param T the type of elements contained in the buffer.
- * @property buffer The underlying buffer.
- */
-@JvmInline
-public value class ReadOnlyBuffer<T>(public val buffer: MutableBuffer<T>) : Buffer<T> {
-    override val size: Int get() = buffer.size
-
-    override operator fun get(index: Int): T = buffer[index]
-
-    override operator fun iterator(): Iterator<T> = buffer.iterator()
-}
-
-/**
  * A buffer with content calculated on-demand. The calculated content is not stored, so it is recalculated on each call.
- * Useful when one needs single element from the buffer.
+ * Useful when one needs a single element from the buffer.
  *
  * @param T the type of elements provided by the buffer.
  */
-public class VirtualBuffer<out T>(override val size: Int, private val generator: (Int) -> T) : Buffer<T> {
+public class VirtualBuffer<out T>(
+    override val size: Int,
+    private val generator: (Int) -> T,
+) : Buffer<T> {
     override operator fun get(index: Int): T {
         if (index < 0 || index >= size) throw IndexOutOfBoundsException("Expected index from 0 to ${size - 1}, but found $index")
         return generator(index)
@@ -173,8 +184,3 @@ public class VirtualBuffer<out T>(override val size: Int, private val generator:
 
     override fun toString(): String = Buffer.toString(this)
 }
-
-/**
- * Convert this buffer to read-only buffer.
- */
-public fun <T> Buffer<T>.asReadOnly(): Buffer<T> = if (this is MutableBuffer) ReadOnlyBuffer(this) else this

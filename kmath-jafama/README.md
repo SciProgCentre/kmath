@@ -7,19 +7,8 @@ Integration with [Jafama](https://github.com/jeffhain/jafama).
 
 ## Artifact:
 
-The Maven coordinates of this project are `space.kscience:kmath-jafama:0.4.0-dev-1`.
+The Maven coordinates of this project are `space.kscience:kmath-jafama:0.4.0`.
 
-**Gradle Groovy:**
-```groovy
-repositories {
-    maven { url 'https://repo.kotlin.link' }
-    mavenCentral()
-}
-
-dependencies {
-    implementation 'space.kscience:kmath-jafama:0.4.0-dev-1'
-}
-```
 **Gradle Kotlin DSL:**
 ```kotlin
 repositories {
@@ -28,7 +17,7 @@ repositories {
 }
 
 dependencies {
-    implementation("space.kscience:kmath-jafama:0.4.0-dev-1")
+    implementation("space.kscience:kmath-jafama:0.4.0")
 }
 ```
 
@@ -50,6 +39,7 @@ fun main() {
 
 ## Performance
 
-According to KMath benchmarks on GraalVM, Jafama functions are slower than JDK math; however, there are indications that on Hotspot Jafama is a bit faster.
+According to KMath benchmarks on GraalVM, Jafama functions are slower than JDK math; however, there are indications that
+on Hotspot Jafama is a bit faster.
 
 > **Can't find appropriate benchmark data. Try generating readme files after running benchmarks**.

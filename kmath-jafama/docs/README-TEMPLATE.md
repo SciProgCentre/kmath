@@ -24,6 +24,7 @@ fun main() {
 
 ## Performance
 
-According to KMath benchmarks on GraalVM, Jafama functions are slower than JDK math; however, there are indications that on Hotspot Jafama is a bit faster.
+According to KMath benchmarks on GraalVM, Jafama functions are slower than JDK math; however, there are indications that
+on Hotspot Jafama is a bit faster.
 
 ${benchmarkJafamaDouble}

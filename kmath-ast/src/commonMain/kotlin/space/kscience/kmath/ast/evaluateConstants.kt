@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -16,6 +16,7 @@ import space.kscience.kmath.operations.bindSymbolOrNull
  */
 public fun <T> MST.evaluateConstants(algebra: Algebra<T>): TypedMst<T> = when (this) {
     is MST.Numeric -> TypedMst.Constant(
+        algebra.type,
         (algebra as? NumericAlgebra<T>)?.number(value) ?: error("Numeric nodes are not supported by $algebra"),
         value,
     )
@@ -27,7 +28,7 @@ public fun <T> MST.evaluateConstants(algebra: Algebra<T>): TypedMst<T> = when (t
                 arg.value,
             )
 
-            TypedMst.Constant(value, if (value is Number) value else null)
+            TypedMst.Constant(algebra.type, value, if (value is Number) value else null)
         }
 
         else -> TypedMst.Unary(operation, algebra.unaryOperationFunction(operation), arg)
@@ -59,7 +60,7 @@ public fun <T> MST.evaluateConstants(algebra: Algebra<T>): TypedMst<T> = when (t
                     )
                 }
 
-                TypedMst.Constant(value, if (value is Number) value else null)
+                TypedMst.Constant(algebra.type, value, if (value is Number) value else null)
             }
 
             algebra is NumericAlgebra && left is TypedMst.Constant && left.number != null -> TypedMst.Binary(
@@ -84,8 +85,8 @@ public fun <T> MST.evaluateConstants(algebra: Algebra<T>): TypedMst<T> = when (t
         val boundSymbol = algebra.bindSymbolOrNull(this)
 
         if (boundSymbol != null)
-            TypedMst.Constant(boundSymbol, if (boundSymbol is Number) boundSymbol else null)
+            TypedMst.Constant(algebra.type, boundSymbol, if (boundSymbol is Number) boundSymbol else null)
         else
-            TypedMst.Variable(this)
+            TypedMst.Variable(algebra.type, this)
     }
 }

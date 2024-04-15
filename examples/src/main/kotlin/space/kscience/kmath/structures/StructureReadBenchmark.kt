@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -16,7 +16,7 @@ import kotlin.system.measureTimeMillis
 fun main() {
     val n = 6000
     val array = DoubleArray(n * n) { 1.0 }
-    val buffer = DoubleBuffer(array)
+    val buffer = Float64Buffer(array)
     val strides = ColumnStrides(ShapeND(n, n))
     val structure = BufferND(strides, buffer)
 

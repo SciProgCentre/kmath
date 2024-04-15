@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -99,9 +99,10 @@ public fun <T> Iterable<T>.sumWith(group: Group<T>): T = group.sum(this)
  * @param group tha algebra that provides addition
  * @param extractor the (inline) lambda function to extract value
  */
-public inline fun <T, R> Iterable<T>.sumWithGroupOf(group: Group<R>, extractor: (T) -> R): R = this.fold(group.zero) { left: R, right: T ->
-    group.add(left, extractor(right))
-}
+public inline fun <T, R> Iterable<T>.sumWithGroupOf(group: Group<R>, extractor: (T) -> R): R =
+    this.fold(group.zero) { left: R, right: T ->
+        group.add(left, extractor(right))
+    }
 
 /**
  * Returns the sum of all elements in the sequence in provided space.

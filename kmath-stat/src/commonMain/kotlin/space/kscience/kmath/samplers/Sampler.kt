@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -12,8 +12,6 @@ import space.kscience.kmath.chains.combine
 import space.kscience.kmath.random.RandomGenerator
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.BufferFactory
-import space.kscience.kmath.structures.DoubleBuffer
-import space.kscience.kmath.structures.IntBuffer
 import kotlin.jvm.JvmName
 
 /**
@@ -36,7 +34,7 @@ public fun interface Sampler<out T : Any> {
 public fun <T : Any> Sampler<T>.sampleBuffer(
     generator: RandomGenerator,
     size: Int,
-    bufferFactory: BufferFactory<T> = BufferFactory.boxing(),
+    bufferFactory: BufferFactory<T>,
 ): Chain<Buffer<T>> {
     require(size > 1)
     //creating temporary storage once
@@ -58,18 +56,11 @@ public fun <T : Any> Sampler<T>.sampleBuffer(
 public suspend fun <T : Any> Sampler<T>.next(generator: RandomGenerator): T = sample(generator).first()
 
 /**
- * Generates [size] real samples and chunks them into some buffers.
+ * Generates [size] samples and chunks them into some buffers.
  */
 @JvmName("sampleRealBuffer")
-public fun Sampler<Double>.sampleBuffer(generator: RandomGenerator, size: Int): Chain<Buffer<Double>> =
-    sampleBuffer(generator, size, ::DoubleBuffer)
-
-/**
- * Generates [size] integer samples and chunks them into some buffers.
- */
-@JvmName("sampleIntBuffer")
-public fun Sampler<Int>.sampleBuffer(generator: RandomGenerator, size: Int): Chain<Buffer<Int>> =
-    sampleBuffer(generator, size, ::IntBuffer)
+public inline fun <reified T : Any> Sampler<T>.sampleBuffer(generator: RandomGenerator, size: Int): Chain<Buffer<T>> =
+    sampleBuffer(generator, size, BufferFactory())
 
 
 /**

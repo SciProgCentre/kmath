@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -15,6 +15,7 @@ public class IntTensorFlowOutput(
     graph: Graph,
     output: Output<TInt32>,
 ) : TensorFlowOutput<Int, TInt32>(graph, output) {
+
     override fun org.tensorflow.Tensor.actualizeTensor(): NdArray<Int> = this as TInt32
 }
 
@@ -22,5 +23,6 @@ public class LongTensorFlowOutput(
     graph: Graph,
     output: Output<TInt64>,
 ) : TensorFlowOutput<Long, TInt64>(graph, output) {
+
     override fun org.tensorflow.Tensor.actualizeTensor(): NdArray<Long> = this as TInt64
 }

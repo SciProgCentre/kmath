@@ -1,11 +1,12 @@
-import space.kscience.gradle.isInDevelopment
 import space.kscience.gradle.useApache2Licence
 import space.kscience.gradle.useSPCTeam
 
 plugins {
     id("space.kscience.gradle.project")
-    id("org.jetbrains.kotlinx.kover") version "0.6.0"
+    id("org.jetbrains.kotlinx.kover") version "0.7.6"
 }
+
+val attributesVersion by extra("0.2.0")
 
 allprojects {
     repositories {
@@ -15,7 +16,7 @@ allprojects {
     }
 
     group = "space.kscience"
-    version = "0.3.1"
+    version = "0.4.0"
 }
 
 subprojects {
@@ -35,7 +36,7 @@ subprojects {
                     localDirectory.set(kotlinDir)
 
                     remoteUrl.set(
-                        java.net.URL("https://github.com/SciProgCentre/kmath/tree/master/${this@subprojects.name}/$kotlinDirPath")
+                        uri("https://github.com/SciProgCentre/kmath/tree/master/${this@subprojects.name}/$kotlinDirPath").toURL()
                     )
                 }
 
@@ -64,17 +65,10 @@ ksciencePublish {
         useApache2Licence()
         useSPCTeam()
     }
-    github("kmath", "SciProgCentre")
-    space(
-        if (isInDevelopment) {
-            "https://maven.pkg.jetbrains.space/spc/p/sci/dev"
-        } else {
-            "https://maven.pkg.jetbrains.space/spc/p/sci/maven"
-        }
-    )
-    sonatype()
+    repository("spc", "https://maven.sciprog.center/kscience")
+    sonatype("https://oss.sonatype.org")
 }
 
 apiValidation.nonPublicMarkers.add("space.kscience.kmath.UnstableKMathAPI")
 
-val multikVersion by extra("0.2.0")
+val multikVersion by extra("0.2.3")

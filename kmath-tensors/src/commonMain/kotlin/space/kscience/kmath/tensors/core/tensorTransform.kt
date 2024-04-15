@@ -1,12 +1,12 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
 package space.kscience.kmath.tensors.core
 
 import space.kscience.kmath.nd.*
-import space.kscience.kmath.structures.DoubleBuffer
+import space.kscience.kmath.structures.Float64Buffer
 import space.kscience.kmath.structures.asBuffer
 import space.kscience.kmath.tensors.api.Tensor
 
@@ -16,8 +16,8 @@ import space.kscience.kmath.tensors.api.Tensor
  */
 public fun StructureND<Double>.copyToTensor(): DoubleTensor = if (this is DoubleTensor) {
     DoubleTensor(shape, source.copy())
-} else if (this is DoubleBufferND && indices is RowStrides) {
-    DoubleTensor(shape, buffer.copy())
+} else if (this is Float64BufferND && indices is RowStrides) {
+    DoubleTensor(shape, buffer.array.copyOf().asBuffer())
 } else {
     DoubleTensor(
         shape,
@@ -29,7 +29,7 @@ public fun StructureND<Int>.toDoubleTensor(): DoubleTensor {
     return if (this is IntTensor) {
         DoubleTensor(
             shape,
-            DoubleBuffer(linearSize) { source[it].toDouble() }
+            Float64Buffer(linearSize) { source[it].toDouble() }
         )
     } else {
         val tensor = DoubleTensorAlgebra.zeroesLike(this)
@@ -45,7 +45,7 @@ public fun StructureND<Int>.toDoubleTensor(): DoubleTensor {
  */
 public fun StructureND<Double>.asDoubleTensor(): DoubleTensor = if (this is DoubleTensor) {
     this
-} else if (this is DoubleBufferND && indices is RowStrides) {
+} else if (this is Float64BufferND && indices is RowStrides) {
     DoubleTensor(shape, buffer)
 } else {
     copyToTensor()

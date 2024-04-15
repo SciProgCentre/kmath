@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 package space.kscience.kmath.domains
@@ -7,7 +7,7 @@ package space.kscience.kmath.domains
 import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.linear.Point
 import space.kscience.kmath.structures.Buffer
-import space.kscience.kmath.structures.DoubleBuffer
+import space.kscience.kmath.structures.Float64Buffer
 import space.kscience.kmath.structures.indices
 
 /**
@@ -15,7 +15,7 @@ import space.kscience.kmath.structures.indices
  * and a [Buffer] of upper boundaries. Upper should be greater or equals than lower.
  */
 @UnstableKMathAPI
-public class HyperSquareDomain(public val lower: Buffer<Double>, public val upper: Buffer<Double>) : DoubleDomain {
+public class HyperSquareDomain(public val lower: Buffer<Double>, public val upper: Buffer<Double>) : Float64Domain {
     init {
         require(lower.size == upper.size) {
             "Domain borders size mismatch. Lower borders size is ${lower.size}, but upper borders size is ${upper.size}."
@@ -27,7 +27,7 @@ public class HyperSquareDomain(public val lower: Buffer<Double>, public val uppe
 
     override val dimension: Int get() = lower.size
 
-    public val center: DoubleBuffer get() = DoubleBuffer(dimension) { (lower[it] + upper[it]) / 2.0 }
+    public val center: Float64Buffer get() = Float64Buffer(dimension) { (lower[it] + upper[it]) / 2.0 }
 
     override operator fun contains(point: Point<Double>): Boolean = point.indices.all { i ->
         point[i] in lower[i]..upper[i]

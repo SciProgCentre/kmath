@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -86,7 +86,7 @@ internal sealed class WasmBuilder<T : Number, out E : Expression<T>>(
 
 @UnstableKMathAPI
 internal class DoubleWasmBuilder(target: TypedMst<Double>) :
-    WasmBuilder<Double, DoubleExpression>(f64, DoubleField, target) {
+    WasmBuilder<Double, DoubleExpression>(f64, Float64Field, target) {
     override val instance by lazy {
         object : DoubleExpression {
             override val indexer = SimpleSymbolIndexer(keys)
@@ -131,7 +131,7 @@ internal class DoubleWasmBuilder(target: TypedMst<Double>) :
 }
 
 @UnstableKMathAPI
-internal class IntWasmBuilder(target: TypedMst<Int>) : WasmBuilder<Int, IntExpression>(i32, IntRing, target) {
+internal class IntWasmBuilder(target: TypedMst<Int>) : WasmBuilder<Int, IntExpression>(i32, Int32Ring, target) {
     override val instance by lazy {
         object : IntExpression {
             override val indexer = SimpleSymbolIndexer(keys)

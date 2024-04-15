@@ -10,7 +10,7 @@ plugins {
 description = "Symja integration module"
 
 dependencies {
-    api("org.matheclipse:matheclipse-core:2.0.0-SNAPSHOT") {
+    api("org.matheclipse:matheclipse-core:2.0.0") {
         // Incorrect transitive dependencies
         exclude("org.apfloat", "apfloat")
         exclude("org.hipparchus", "hipparchus-clustering")

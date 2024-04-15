@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -15,7 +15,7 @@ import space.kscience.kmath.coroutines.mapParallel
 import space.kscience.kmath.structures.Buffer
 
 /**
- * A function, that transforms a buffer of random quantities to some resulting value
+ * A function that transforms a buffer of random quantities to some resulting value
  */
 public fun interface Statistic<in T, out R> {
     public suspend fun evaluate(data: Buffer<T>): R
@@ -67,7 +67,7 @@ private fun <T, I, R> ComposableStatistic<T, I, R>.flowIntermediate(
 
 
 /**
- * Perform a streaming statistical analysis on a chunked data. The computation of inner representation is done in parallel
+ * Perform a streaming statistical analysis on chunked data. The computation of inner representation is done in parallel
  * if [dispatcher] allows it.
  *
  * The resulting flow contains values that include the whole previous statistics, not only the last chunk.

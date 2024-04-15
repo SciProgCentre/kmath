@@ -1,13 +1,16 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
 package space.kscience.kmath.expressions
 
+import space.kscience.attributes.SafeType
+import space.kscience.attributes.WithType
 import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.linear.Point
 import space.kscience.kmath.operations.*
+import space.kscience.kmath.structures.MutableBufferFactory
 import space.kscience.kmath.structures.asBuffer
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
@@ -30,9 +33,10 @@ public open class AutoDiffValue<out T>(public val value: T)
  */
 public class DerivationResult<T : Any>(
     public val value: T,
+    override val type: SafeType<T>,
     private val derivativeValues: Map<String, T>,
     public val context: Field<T>,
-) {
+) : WithType<T> {
     /**
      * Returns derivative of [variable] or returns [Ring.zero] in [context].
      */
@@ -53,15 +57,19 @@ public fun <T : Any> DerivationResult<T>.grad(vararg variables: Symbol): Point<T
 }
 
 /**
- * Represents field in context of which functions can be derived.
+ * Represents field. Function derivatives could be computed in this field
  */
 @OptIn(UnstableKMathAPI::class)
 public open class SimpleAutoDiffField<T : Any, F : Field<T>>(
-    public val context: F,
+    public val algebra: F,
     bindings: Map<Symbol, T>,
 ) : Field<AutoDiffValue<T>>, ExpressionAlgebra<T, AutoDiffValue<T>>, NumbersAddOps<AutoDiffValue<T>> {
-    override val zero: AutoDiffValue<T> get() = const(context.zero)
-    override val one: AutoDiffValue<T> get() = const(context.one)
+
+    override val bufferFactory: MutableBufferFactory<AutoDiffValue<T>> = MutableBufferFactory<AutoDiffValue<T>>()
+
+    override val zero: AutoDiffValue<T> get() = const(algebra.zero)
+
+    override val one: AutoDiffValue<T> get() = const(algebra.one)
 
     // this stack contains pairs of blocks and values to apply them to
     private var stack: Array<Any?> = arrayOfNulls<Any?>(8)
@@ -69,7 +77,7 @@ public open class SimpleAutoDiffField<T : Any, F : Field<T>>(
     private val derivatives: MutableMap<AutoDiffValue<T>, T> = hashMapOf()
 
     private val bindings: Map<String, AutoDiffVariableWithDerivative<T>> = bindings.entries.associate {
-        it.key.identity to AutoDiffVariableWithDerivative(it.key.identity, it.value, context.zero)
+        it.key.identity to AutoDiffVariableWithDerivative(it.key.identity, it.value, algebra.zero)
     }
 
     /**
@@ -92,7 +100,7 @@ public open class SimpleAutoDiffField<T : Any, F : Field<T>>(
     override fun bindSymbolOrNull(value: String): AutoDiffValue<T>? = bindings[value]
 
     private fun getDerivative(variable: AutoDiffValue<T>): T =
-        (variable as? AutoDiffVariableWithDerivative)?.d ?: derivatives[variable] ?: context.zero
+        (variable as? AutoDiffVariableWithDerivative)?.d ?: derivatives[variable] ?: algebra.zero
 
     private fun setDerivative(variable: AutoDiffValue<T>, value: T) {
         if (variable is AutoDiffVariableWithDerivative) variable.d = value else derivatives[variable] = value
@@ -103,7 +111,7 @@ public open class SimpleAutoDiffField<T : Any, F : Field<T>>(
         while (sp > 0) {
             val value = stack[--sp]
             val block = stack[--sp] as F.(Any?) -> Unit
-            context.block(value)
+            algebra.block(value)
         }
     }
 
@@ -130,7 +138,6 @@ public open class SimpleAutoDiffField<T : Any, F : Field<T>>(
      * }
      * ```
      */
-    @Suppress("UNCHECKED_CAST")
     public fun <R> derive(value: R, block: F.(R) -> Unit): R {
         // save block to stack for backward pass
         if (sp >= stack.size) stack = stack.copyOf(stack.size * 2)
@@ -142,9 +149,9 @@ public open class SimpleAutoDiffField<T : Any, F : Field<T>>(
 
     internal fun differentiate(function: SimpleAutoDiffField<T, F>.() -> AutoDiffValue<T>): DerivationResult<T> {
         val result = function()
-        result.d = context.one // computing derivative w.r.t result
+        result.d = algebra.one // computing derivative w.r.t result
         runBackwardPass()
-        return DerivationResult(result.value, bindings.mapValues { it.value.d }, context)
+        return DerivationResult(result.value, algebra.type, bindings.mapValues { it.value.d }, algebra)
     }
 
 //    // Overloads for Double constants
@@ -194,7 +201,7 @@ public open class SimpleAutoDiffField<T : Any, F : Field<T>>(
 
 public inline fun <T : Any, F : Field<T>> SimpleAutoDiffField<T, F>.const(block: F.() -> T): AutoDiffValue<T> {
     contract { callsInPlace(block, InvocationKind.EXACTLY_ONCE) }
-    return const(context.block())
+    return const(algebra.block())
 }
 
 
@@ -217,11 +224,7 @@ public inline fun <T : Any, F : Field<T>> SimpleAutoDiffField<T, F>.const(block:
 public fun <T : Any, F : Field<T>> F.simpleAutoDiff(
     bindings: Map<Symbol, T>,
     body: SimpleAutoDiffField<T, F>.() -> AutoDiffValue<T>,
-): DerivationResult<T> {
-    contract { callsInPlace(body, InvocationKind.EXACTLY_ONCE) }
-
-    return SimpleAutoDiffField(this, bindings).differentiate(body)
-}
+): DerivationResult<T> = SimpleAutoDiffField(this, bindings).differentiate(body)
 
 public fun <T : Any, F : Field<T>> F.simpleAutoDiff(
     vararg bindings: Pair<Symbol, T>,
@@ -236,12 +239,15 @@ public class SimpleAutoDiffExpression<T : Any, F : Field<T>>(
     public val field: F,
     public val function: SimpleAutoDiffField<T, F>.() -> AutoDiffValue<T>,
 ) : FirstDerivativeExpression<T>() {
+
+    override val type: SafeType<T> get() = this.field.type
+
     override operator fun invoke(arguments: Map<Symbol, T>): T {
         //val bindings = arguments.entries.map { it.key.bind(it.value) }
         return SimpleAutoDiffField(field, arguments).function().value
     }
 
-    override fun derivativeOrNull(symbol: Symbol): Expression<T> = Expression { arguments ->
+    override fun derivativeOrNull(symbol: Symbol): Expression<T> = Expression(type) { arguments ->
         //val bindings = arguments.entries.map { it.key.bind(it.value) }
         val derivationResult = SimpleAutoDiffField(field, arguments).differentiate(function)
         derivationResult.derivative(symbol)

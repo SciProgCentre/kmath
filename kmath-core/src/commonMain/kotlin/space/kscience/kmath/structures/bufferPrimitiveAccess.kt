@@ -1,3 +1,8 @@
+/*
+ * Copyright 2018-2024 KMath contributors.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ */
+
 package space.kscience.kmath.structures
 
 import space.kscience.kmath.UnstableKMathAPI
@@ -13,7 +18,7 @@ public fun Buffer<Double>.getDouble(index: Int): Double = if (this is BufferView
     } else {
         get(index)
     }
-} else if (this is DoubleBuffer) {
+} else if (this is Float64Buffer) {
     array[index]
 } else {
     get(index)
@@ -30,7 +35,7 @@ public fun Buffer<Int>.getInt(index: Int): Int = if (this is BufferView) {
     } else {
         get(index)
     }
-} else if (this is IntBuffer) {
+} else if (this is Int32Buffer) {
     array[index]
 } else {
     get(index)

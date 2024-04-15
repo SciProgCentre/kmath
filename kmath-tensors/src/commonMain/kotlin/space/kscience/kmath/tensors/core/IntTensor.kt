@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -13,7 +13,7 @@ import space.kscience.kmath.structures.*
  * Default [BufferedTensor] implementation for [Int] values
  */
 public class OffsetIntBuffer(
-    private val source: IntBuffer,
+    private val source: Int32Buffer,
     private val offset: Int,
     override val size: Int,
 ) : MutableBuffer<Int> {
@@ -34,7 +34,7 @@ public class OffsetIntBuffer(
     /**
      * Copy only a part of buffer that belongs to this tensor
      */
-    override fun copy(): IntBuffer = source.array.copyOfRange(offset, offset + size).asBuffer()
+    public fun copy(): Int32Buffer = source.array.copyOfRange(offset, offset + size).asBuffer()
 
     override fun iterator(): Iterator<Int> = iterator {
         for (i in indices) {
@@ -53,15 +53,15 @@ public fun OffsetIntBuffer.slice(range: IntRange): OffsetIntBuffer = view(range.
 /**
  * Map only operable content of the offset buffer
  */
-public inline fun OffsetIntBuffer.map(operation: (Int) -> Int): IntBuffer =
-    IntBuffer(size) { operation(get(it)) }
+public inline fun OffsetIntBuffer.map(operation: (Int) -> Int): Int32Buffer =
+    Int32Buffer(size) { operation(get(it)) }
 
 public inline fun OffsetIntBuffer.zip(
     other: OffsetIntBuffer,
     operation: (l: Int, r: Int) -> Int,
-): IntBuffer {
+): Int32Buffer {
     require(size == other.size) { "The sizes of zipped buffers must be the same" }
-    return IntBuffer(size) { operation(get(it), other[it]) }
+    return Int32Buffer(size) { operation(get(it), other[it]) }
 }
 
 /**
@@ -83,7 +83,8 @@ public class IntTensor(
         require(linearSize == source.size) { "Source buffer size must be equal tensor size" }
     }
 
-    public constructor(shape: ShapeND, buffer: IntBuffer) : this(shape, OffsetIntBuffer(buffer, 0, buffer.size))
+
+    public constructor(shape: ShapeND, buffer: Int32Buffer) : this(shape, OffsetIntBuffer(buffer, 0, buffer.size))
 
     @OptIn(PerformancePitfall::class)
     override fun get(index: IntArray): Int = this.source[indices.offset(index)]

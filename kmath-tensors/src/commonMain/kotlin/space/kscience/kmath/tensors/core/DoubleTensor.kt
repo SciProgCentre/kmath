@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -13,7 +13,7 @@ import space.kscience.kmath.structures.*
 import space.kscience.kmath.tensors.core.internal.toPrettyString
 
 public class OffsetDoubleBuffer(
-    override val origin: DoubleBuffer,
+    override val origin: Float64Buffer,
     private val offset: Int,
     override val size: Int,
 ) : MutableBuffer<Double>, BufferView<Double> {
@@ -34,7 +34,7 @@ public class OffsetDoubleBuffer(
     /**
      * Copy only a part of buffer that belongs to this [OffsetDoubleBuffer]
      */
-    override fun copy(): DoubleBuffer = origin.array.copyOfRange(offset, offset + size).asBuffer()
+    public fun copy(): Float64Buffer = origin.array.copyOfRange(offset, offset + size).asBuffer()
 
     override fun iterator(): Iterator<Double> = iterator {
         for (i in indices) {
@@ -60,15 +60,15 @@ public fun OffsetDoubleBuffer.slice(range: IntRange): OffsetDoubleBuffer = view(
 /**
  * Map only operable content of the offset buffer
  */
-public inline fun OffsetDoubleBuffer.map(operation: (Double) -> Double): DoubleBuffer =
-    DoubleBuffer(size) { operation(get(it)) }
+public inline fun OffsetDoubleBuffer.map(operation: (Double) -> Double): Float64Buffer =
+    Float64Buffer(size) { operation(get(it)) }
 
 public inline fun OffsetDoubleBuffer.zip(
     other: OffsetDoubleBuffer,
     operation: (l: Double, r: Double) -> Double,
-): DoubleBuffer {
+): Float64Buffer {
     require(size == other.size) { "The sizes of zipped buffers must be the same" }
-    return DoubleBuffer(size) { operation(get(it), other[it]) }
+    return Float64Buffer(size) { operation(get(it), other[it]) }
 }
 
 /**
@@ -92,7 +92,7 @@ public open class DoubleTensor(
         require(linearSize == source.size) { "Source buffer size must be equal tensor size" }
     }
 
-    public constructor(shape: ShapeND, buffer: DoubleBuffer) : this(shape, OffsetDoubleBuffer(buffer, 0, buffer.size))
+    public constructor(shape: ShapeND, buffer: Float64Buffer) : this(shape, OffsetDoubleBuffer(buffer, 0, buffer.size))
 
 
     @OptIn(PerformancePitfall::class)

@@ -11,23 +11,13 @@ objects to the expression by providing a context. Expressions can be used for a 
 performance calculations to code generation.
  - [domains](src/commonMain/kotlin/space/kscience/kmath/domains) : Domains
  - [autodiff](src/commonMain/kotlin/space/kscience/kmath/expressions/SimpleAutoDiff.kt) : Automatic differentiation
+ - [Parallel linear algebra](#) : Parallel implementation for `LinearAlgebra`
 
 
 ## Artifact:
 
-The Maven coordinates of this project are `space.kscience:kmath-core:0.4.0-dev-1`.
+The Maven coordinates of this project are `space.kscience:kmath-core:0.4.0`.
 
-**Gradle Groovy:**
-```groovy
-repositories {
-    maven { url 'https://repo.kotlin.link' }
-    mavenCentral()
-}
-
-dependencies {
-    implementation 'space.kscience:kmath-core:0.4.0-dev-1'
-}
-```
 **Gradle Kotlin DSL:**
 ```kotlin
 repositories {
@@ -36,6 +26,6 @@ repositories {
 }
 
 dependencies {
-    implementation("space.kscience:kmath-core:0.4.0-dev-1")
+    implementation("space.kscience:kmath-core:0.4.0")
 }
 ```

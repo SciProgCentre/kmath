@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -37,11 +37,13 @@ public class UniformHistogramGroupND<V : Any, A : Field<V>>(
         require(!lower.indices.any { upper[it] - lower[it] < 0 }) { "Range for one of axis is not strictly positive" }
     }
 
+    override val bufferFactory: MutableBufferFactory<HistogramND<Double, HyperSquareDomain, V>> = MutableBufferFactory()
+
     public val dimension: Int get() = lower.size
 
     override val shape: ShapeND = ShapeND(IntArray(binNums.size) { binNums[it] + 2 })
 
-    private val binSize = DoubleBuffer(dimension) { (upper[it] - lower[it]) / binNums[it] }
+    private val binSize = Float64Buffer(dimension) { (upper[it] - lower[it]) / binNums[it] }
 
     /**
      * Get internal [StructureND] bin index for given axis
@@ -87,7 +89,7 @@ public class UniformHistogramGroupND<V : Any, A : Field<V>>(
         builder: HistogramBuilder<Double, V>.() -> Unit,
     ): HistogramND<Double, HyperSquareDomain, V> {
         val ndCounter: BufferND<ObjectCounter<V>> =
-            StructureND.buffered(shape) { Counter.of(valueAlgebraND.elementAlgebra) }
+            BufferND(shape) { Counter.of(valueAlgebraND.elementAlgebra) }
         val hBuilder = object : HistogramBuilder<Double, V> {
             override val defaultValue: V get() = valueAlgebraND.elementAlgebra.one
 
@@ -97,7 +99,8 @@ public class UniformHistogramGroupND<V : Any, A : Field<V>>(
             }
         }
         hBuilder.apply(builder)
-        val values: BufferND<V> = BufferND(ndCounter.indices, ndCounter.buffer.mapToBuffer(valueBufferFactory) { it.value })
+        val values: BufferND<V> =
+            BufferND(ndCounter.indices, ndCounter.buffer.mapToBuffer(valueBufferFactory) { it.value })
 
         return HistogramND(this, values)
     }
@@ -128,8 +131,7 @@ public fun <V : Any, A : Field<V>> Histogram.Companion.uniformNDFromRanges(
 
 public fun Histogram.Companion.uniformDoubleNDFromRanges(
     vararg ranges: ClosedFloatingPointRange<Double>,
-): UniformHistogramGroupND<Double, DoubleField> =
-    uniformNDFromRanges(DoubleFieldOpsND, *ranges, bufferFactory = ::DoubleBuffer)
+): UniformHistogramGroupND<Double, Float64Field> = uniformNDFromRanges(Floa64FieldOpsND, *ranges)
 
 
 /**
@@ -147,21 +149,18 @@ public fun <V : Any, A : Field<V>> Histogram.Companion.uniformNDFromRanges(
     bufferFactory: BufferFactory<V> = valueAlgebraND.elementAlgebra.bufferFactory,
 ): UniformHistogramGroupND<V, A> = UniformHistogramGroupND(
     valueAlgebraND,
-    ListBuffer(
-        ranges
-            .map(Pair<ClosedFloatingPointRange<Double>, Int>::first)
-            .map(ClosedFloatingPointRange<Double>::start)
-    ),
-    ListBuffer(
-        ranges
-            .map(Pair<ClosedFloatingPointRange<Double>, Int>::first)
-            .map(ClosedFloatingPointRange<Double>::endInclusive)
-    ),
+    ranges
+        .map(Pair<ClosedFloatingPointRange<Double>, Int>::first)
+        .map(ClosedFloatingPointRange<Double>::start)
+        .asBuffer(),
+    ranges
+        .map(Pair<ClosedFloatingPointRange<Double>, Int>::first)
+        .map(ClosedFloatingPointRange<Double>::endInclusive)
+        .asBuffer(),
     ranges.map(Pair<ClosedFloatingPointRange<Double>, Int>::second).toIntArray(),
     valueBufferFactory = bufferFactory
 )
 
 public fun Histogram.Companion.uniformDoubleNDFromRanges(
     vararg ranges: Pair<ClosedFloatingPointRange<Double>, Int>,
-): UniformHistogramGroupND<Double, DoubleField> =
-    uniformNDFromRanges(DoubleFieldOpsND, *ranges, bufferFactory = ::DoubleBuffer)
+): UniformHistogramGroupND<Double, Float64Field> = uniformNDFromRanges(Floa64FieldOpsND, *ranges)

@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 KMath contributors.
+ * Copyright 2018-2024 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -8,22 +8,22 @@ package space.kscience.kmath.tensors.core.internal
 import space.kscience.kmath.PerformancePitfall
 import space.kscience.kmath.nd.asList
 import space.kscience.kmath.nd.last
-import space.kscience.kmath.operations.DoubleBufferOps.Companion.map
+import space.kscience.kmath.operations.Float64BufferOps.Companion.map
 import space.kscience.kmath.random.RandomGenerator
 import space.kscience.kmath.samplers.GaussianSampler
-import space.kscience.kmath.structures.DoubleBuffer
+import space.kscience.kmath.structures.Float64Buffer
 import space.kscience.kmath.tensors.core.BufferedTensor
 import space.kscience.kmath.tensors.core.DoubleTensor
 import kotlin.math.*
 
-internal fun DoubleBuffer.Companion.randomNormals(n: Int, seed: Long): DoubleBuffer {
+internal fun Float64Buffer.Companion.randomNormals(n: Int, seed: Long): Float64Buffer {
     val distribution = GaussianSampler(0.0, 1.0)
     val generator = RandomGenerator.default(seed)
     return distribution.sample(generator).nextBufferBlocking(n)
 }
 
-internal fun DoubleBuffer.Companion.randomUnitVector(n: Int, seed: Long): DoubleBuffer {
-    val unnorm: DoubleBuffer = randomNormals(n, seed)
+internal fun Float64Buffer.Companion.randomUnitVector(n: Int, seed: Long): Float64Buffer {
+    val unnorm: Float64Buffer = randomNormals(n, seed)
     val norm = sqrt(unnorm.array.sumOf { it * it })
     return unnorm.map { it / norm }
 }

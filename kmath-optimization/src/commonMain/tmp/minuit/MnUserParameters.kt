@@ -65,8 +65,8 @@ class MnUserParameters {
      * @param val a double.
      * @param name a [String] object.
      */
-    fun add(name: String, `val`: Double, err: Double) {
-        theTransformation.add(name, `val`, err)
+    fun add(name: String, value: Double, err: Double) {
+        theTransformation.add(name, value, err)
     }
 
     /**
@@ -78,8 +78,8 @@ class MnUserParameters {
      * @param val a double.
      * @param err a double.
      */
-    fun add(name: String, `val`: Double, err: Double, low: Double, up: Double) {
-        theTransformation.add(name, `val`, err, low, up)
+    fun add(name: String, value: Double, err: Double, low: Double, up: Double) {
+        theTransformation.add(name, value, err, low, up)
     }
 
     /**
@@ -88,8 +88,8 @@ class MnUserParameters {
      * @param name a [String] object.
      * @param val a double.
      */
-    fun add(name: String, `val`: Double) {
-        theTransformation.add(name, `val`)
+    fun add(name: String, value: Double) {
+        theTransformation.add(name, value)
     }
 
     /**
@@ -344,8 +344,8 @@ class MnUserParameters {
      * @param index a int.
      * @param val a double.
      */
-    fun setValue(index: Int, `val`: Double) {
-        theTransformation.setValue(index, `val`)
+    fun setValue(index: Int, value: Double) {
+        theTransformation.setValue(index, value)
     }
 
     /**
@@ -355,8 +355,8 @@ class MnUserParameters {
      * @param name a [String] object.
      * @param val a double.
      */
-    fun setValue(name: String?, `val`: Double) {
-        theTransformation.setValue(name, `val`)
+    fun setValue(name: String?, value: Double) {
+        theTransformation.setValue(name, value)
     }
 
     /** {@inheritDoc}  */
