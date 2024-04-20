@@ -21,7 +21,7 @@ internal class MCScopeTest {
         mcScope(1111) {
             val res = Collections.synchronizedSet(HashSet<RandomResult>())
 
-            launch{
+            launch {
                 //println(random)
                 repeat(10) {
                     delay(10)

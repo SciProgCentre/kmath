@@ -35,7 +35,7 @@ public sealed class IntRingOpsND : BufferedRingOpsND<Int, Int32Ring>(Int32Ring.b
 
 @OptIn(UnstableKMathAPI::class)
 public class IntRingND(
-    override val shape: ShapeND
+    override val shape: ShapeND,
 ) : IntRingOpsND(), RingND<Int, Int32Ring>, NumbersAddOps<StructureND<Int>> {
 
     override fun number(value: Number): BufferND<Int> {

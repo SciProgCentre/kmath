@@ -37,6 +37,7 @@ class IntModulo {
             modulus,
             toCheckInput = false
         )
+
     operator fun plus(other: IntModulo): IntModulo {
         require(modulus == other.modulus) { "can not add two residue different modulo" }
         return IntModulo(
@@ -45,12 +46,14 @@ class IntModulo {
             toCheckInput = false
         )
     }
+
     operator fun plus(other: Int): IntModulo =
         IntModulo(
             (residue + other) % modulus,
             modulus,
             toCheckInput = false
         )
+
     operator fun minus(other: IntModulo): IntModulo {
         require(modulus == other.modulus) { "can not subtract two residue different modulo" }
         return IntModulo(
@@ -59,12 +62,14 @@ class IntModulo {
             toCheckInput = false
         )
     }
+
     operator fun minus(other: Int): IntModulo =
         IntModulo(
             (residue - other) % modulus,
             modulus,
             toCheckInput = false
         )
+
     operator fun times(other: IntModulo): IntModulo {
         require(modulus == other.modulus) { "can not multiply two residue different modulo" }
         return IntModulo(
@@ -73,12 +78,14 @@ class IntModulo {
             toCheckInput = false
         )
     }
+
     operator fun times(other: Int): IntModulo =
         IntModulo(
             (residue * other) % modulus,
             modulus,
             toCheckInput = false
         )
+
     operator fun div(other: IntModulo): IntModulo {
         require(modulus == other.modulus) { "can not divide two residue different modulo" }
         val (reciprocalCandidate, gcdOfOtherResidueAndModulus) = bezoutIdentityWithGCD(other.residue, modulus)
@@ -89,6 +96,7 @@ class IntModulo {
             toCheckInput = false
         )
     }
+
     operator fun div(other: Int): IntModulo {
         val (reciprocalCandidate, gcdOfOtherResidueAndModulus) = bezoutIdentityWithGCD(other, modulus)
         require(gcdOfOtherResidueAndModulus == 1) { "can not divide to residue that has non-trivial GCD with modulo" }
@@ -98,6 +106,7 @@ class IntModulo {
             toCheckInput = false
         )
     }
+
     override fun equals(other: Any?): Boolean =
         when (other) {
             is IntModulo -> residue == other.residue && modulus == other.modulus

@@ -13,7 +13,7 @@ import space.kscience.kmath.structures.indices
  * Arithmetic mean
  */
 public class Mean<T>(
-    private val field: Field<T>
+    private val field: Field<T>,
 ) : ComposableStatistic<T, Pair<T, Int>, T>, BlockingStatistic<T, T> {
 
     override fun evaluateBlocking(data: Buffer<T>): T = with(field) {
@@ -38,7 +38,7 @@ public class Mean<T>(
         with(field) { first.first + second.first } to (first.second + second.second)
 
     override suspend fun toResult(intermediate: Pair<T, Int>): T = with(field) {
-        intermediate.first/ intermediate.second
+        intermediate.first / intermediate.second
     }
 
     public companion object {

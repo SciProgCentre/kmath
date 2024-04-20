@@ -32,4 +32,4 @@ public value class ArrayBuffer<T>(internal val array: Array<T>) : MutableBuffer<
 /**
  * Returns an [ArrayBuffer] that wraps the original array.
  */
-public fun <T> Array<T>.asBuffer(): ArrayBuffer<T> = ArrayBuffer( this)
+public fun <T> Array<T>.asBuffer(): ArrayBuffer<T> = ArrayBuffer(this)

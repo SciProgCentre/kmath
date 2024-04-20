@@ -13,8 +13,6 @@ import space.kscience.kmath.jafama.JafamaDoubleField
 import space.kscience.kmath.jafama.StrictJafamaDoubleField
 import space.kscience.kmath.operations.Float64Field
 import space.kscience.kmath.operations.invoke
-import kotlin.contracts.InvocationKind
-import kotlin.contracts.contract
 import kotlin.random.Random
 
 @State(Scope.Benchmark)
@@ -36,7 +34,6 @@ internal class JafamaBenchmark {
 }
 
 private inline fun invokeBenchmarks(blackhole: Blackhole, expr: (Double) -> Double) {
-    contract { callsInPlace(expr, InvocationKind.AT_LEAST_ONCE) }
     val rng = Random(0)
     repeat(1000000) { blackhole.consume(expr(rng.nextDouble())) }
 }

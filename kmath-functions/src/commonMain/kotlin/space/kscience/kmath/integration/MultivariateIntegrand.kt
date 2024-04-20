@@ -26,9 +26,9 @@ public fun <T, A : Any> MultivariateIntegrand<T>.withAttribute(
 
 public fun <T> MultivariateIntegrand<T>.withAttributes(
     block: AttributesBuilder<MultivariateIntegrand<T>>.() -> Unit,
-): MultivariateIntegrand<T> = withAttributes(attributes.modify(block))
+): MultivariateIntegrand<T> = withAttributes(attributes.modified(block))
 
 public inline fun <reified T : Any> MultivariateIntegrand(
-    attributeBuilder: AttributesBuilder<MultivariateIntegrand<T>>.() -> Unit,
+    noinline attributeBuilder: AttributesBuilder<MultivariateIntegrand<T>>.() -> Unit,
     noinline function: (Point<T>) -> T,
 ): MultivariateIntegrand<T> = MultivariateIntegrand(safeTypeOf<T>(), Attributes(attributeBuilder), function)

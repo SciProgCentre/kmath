@@ -116,6 +116,7 @@ internal fun broadcastOuterTensors(vararg tensors: DoubleTensor): List<DoubleTen
 
             for (linearIndex in 0 until n) {
                 val totalMultiIndex = outerTensor.indices.index(linearIndex)
+
                 @OptIn(UnsafeKMathAPI::class)
                 var curMultiIndex = tensor.shape.slice(0..tensor.shape.size - 3).asArray()
                 curMultiIndex = IntArray(totalMultiIndex.size - curMultiIndex.size) { 1 } + curMultiIndex

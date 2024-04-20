@@ -19,7 +19,7 @@ import space.kscience.kmath.structures.indices
  * [GaussLegendreRuleFactory].
  * * [IntegrationRange]&mdash;the univariate range of integration. By default, uses `0..1` interval.
  * * [IntegrandMaxCalls]&mdash;the maximum number of function calls during integration. For non-iterative rules, always
- *  use the maximum number of points. By default, uses 10 points.
+ * use the maximum number of points. By default, uses 10 points.
  * * [UnivariateIntegrandRanges]&mdash;set of ranges and number of points per range. Defaults to given
  * [IntegrationRange] and [IntegrandMaxCalls].
  */
@@ -92,7 +92,7 @@ public inline fun <reified T : Any> GaussIntegrator<T>.integrate(
     range: ClosedRange<Double>,
     order: Int = 10,
     intervals: Int = 10,
-    attributesBuilder: AttributesBuilder<UnivariateIntegrand<T>>.() -> Unit = {},
+    noinline attributesBuilder: AttributesBuilder<UnivariateIntegrand<T>>.() -> Unit = {},
     noinline function: (Double) -> T,
 ): UnivariateIntegrand<T> {
     require(range.endInclusive > range.start) { "The range upper bound should be higher than lower bound" }

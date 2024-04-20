@@ -182,7 +182,7 @@ public interface LinearSpace<T, out A : Ring<T>> : MatrixScope<T> {
      * better use [StructureND.getOrComputeAttribute].
      */
     @UnstableKMathAPI
-    public fun <V : Any, A : StructureAttribute<V>> Matrix<T>.compute(
+    public fun <V : Any, A : StructureAttribute<V>> Matrix<T>.withComputedAttribute(
         attribute: A,
     ): Matrix<T>? {
         return if (attributes[attribute] != null) {

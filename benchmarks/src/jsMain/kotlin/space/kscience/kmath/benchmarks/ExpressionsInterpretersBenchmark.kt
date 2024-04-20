@@ -94,6 +94,7 @@ class ExpressionsInterpretersBenchmark {
         }
 
         private val mst = node.toExpression(Float64Field)
+
         @OptIn(UnstableKMathAPI::class)
         private val wasm = node.wasmCompileToExpression(Float64Field)
         private val estree = node.estreeCompileToExpression(Float64Field)

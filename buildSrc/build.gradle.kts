@@ -24,8 +24,8 @@ dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.14.+")
 }
 
-kotlin{
-    jvmToolchain{
+kotlin {
+    jvmToolchain {
         languageVersion.set(JavaLanguageVersion.of(11))
     }
     sourceSets.all {

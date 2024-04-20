@@ -23,8 +23,8 @@ public interface Integrand<T> : AttributeContainer {
 
 public operator fun <T> Integrand<*>.get(attribute: Attribute<T>): T? = attributes[attribute]
 
-public sealed class IntegrandValue<T> private constructor(): IntegrandAttribute<T>{
-    public companion object: IntegrandValue<Any?>(){
+public sealed class IntegrandValue<T> private constructor() : IntegrandAttribute<T> {
+    public companion object : IntegrandValue<Any?>() {
         @Suppress("UNCHECKED_CAST")
         public fun <T> forType(): IntegrandValue<T> = this as IntegrandValue<T>
     }

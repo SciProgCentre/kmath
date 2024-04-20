@@ -48,7 +48,7 @@ internal external fun createType(types: Array<Type>): Type
 
 internal external fun expandType(type: Type): Array<Type>
 
-internal external enum class  ExpressionIds {
+internal external enum class ExpressionIds {
     Invalid,
     Block,
     If,
@@ -1652,27 +1652,27 @@ internal open external class Module {
     open fun `if`(
         condition: ExpressionRef,
         ifTrue: ExpressionRef,
-        ifFalse: ExpressionRef = definedExternally
+        ifFalse: ExpressionRef = definedExternally,
     ): ExpressionRef
 
     open fun loop(label: String, body: ExpressionRef): ExpressionRef
     open fun br(
         label: String,
         condition: ExpressionRef = definedExternally,
-        value: ExpressionRef = definedExternally
+        value: ExpressionRef = definedExternally,
     ): ExpressionRef
 
     open fun br_if(
         label: String,
         condition: ExpressionRef = definedExternally,
-        value: ExpressionRef = definedExternally
+        value: ExpressionRef = definedExternally,
     ): ExpressionRef
 
     open fun switch(
         labels: Array<String>,
         defaultLabel: String,
         condition: ExpressionRef,
-        value: ExpressionRef = definedExternally
+        value: ExpressionRef = definedExternally,
     ): ExpressionRef
 
     open fun call(name: String, operands: Array<ExpressionRef>, returnType: Type): ExpressionRef
@@ -1681,14 +1681,14 @@ internal open external class Module {
         target: ExpressionRef,
         operands: Array<ExpressionRef>,
         params: Type,
-        results: Type
+        results: Type,
     ): ExpressionRef
 
     open fun return_call_indirect(
         target: ExpressionRef,
         operands: Array<ExpressionRef>,
         params: Type,
-        results: Type
+        results: Type,
     ): ExpressionRef
 
     open var local: `T$2`
@@ -1726,7 +1726,7 @@ internal open external class Module {
         condition: ExpressionRef,
         ifTrue: ExpressionRef,
         ifFalse: ExpressionRef,
-        type: Type = definedExternally
+        type: Type = definedExternally,
     ): ExpressionRef
 
     open fun drop(value: ExpressionRef): ExpressionRef
@@ -1750,7 +1750,7 @@ internal open external class Module {
         externalModuleName: String,
         externalBaseName: String,
         params: Type,
-        results: Type
+        results: Type,
     )
 
     open fun addTableImport(internalName: String, externalModuleName: String, externalBaseName: String)
@@ -1759,7 +1759,7 @@ internal open external class Module {
         internalName: String,
         externalModuleName: String,
         externalBaseName: String,
-        globalType: Type
+        globalType: Type,
     )
 
     open fun addEventImport(
@@ -1768,7 +1768,7 @@ internal open external class Module {
         externalBaseName: String,
         attribute: Number,
         params: Type,
-        results: Type
+        results: Type,
     )
 
     open fun addFunctionExport(internalName: String, externalName: String): ExportRef
@@ -1782,7 +1782,7 @@ internal open external class Module {
         initial: Number,
         maximum: Number,
         funcNames: Array<Number>,
-        offset: ExpressionRef = definedExternally
+        offset: ExpressionRef = definedExternally,
     )
 
     open fun getFunctionTable(): `T$26`
@@ -1792,7 +1792,7 @@ internal open external class Module {
         exportName: String? = definedExternally,
         segments: Array<MemorySegment>? = definedExternally,
         flags: Array<Number>? = definedExternally,
-        shared: Boolean = definedExternally
+        shared: Boolean = definedExternally,
     )
 
     open fun getNumMemorySegments(): Number
@@ -1823,7 +1823,7 @@ internal open external class Module {
         expr: ExpressionRef,
         fileIndex: Number,
         lineNumber: Number,
-        columnNumber: Number
+        columnNumber: Number,
     )
 
     open fun copyExpression(expr: ExpressionRef): ExpressionRef
@@ -2227,7 +2227,7 @@ internal open external class Relooper(module: Module) {
         from: RelooperBlockRef,
         to: RelooperBlockRef,
         indexes: Array<Number>,
-        code: ExpressionRef
+        code: ExpressionRef,
     )
 
     open fun renderAndDispose(entry: RelooperBlockRef, labelHelper: Number): ExpressionRef

@@ -17,4 +17,5 @@ public fun Float64Buffer.contentEquals(vararg doubles: Double): Boolean = array.
 public infix fun Float64Buffer.contentEquals(otherArray: DoubleArray): Boolean = array.contentEquals(otherArray)
 
 @JvmName("contentEqualsBuffer")
-public infix fun Float64Buffer.contentEquals(otherBuffer: Float64Buffer): Boolean = array.contentEquals(otherBuffer.array)
+public infix fun Float64Buffer.contentEquals(otherBuffer: Float64Buffer): Boolean =
+    array.contentEquals(otherBuffer.array)

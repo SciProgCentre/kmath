@@ -251,7 +251,12 @@ public abstract class MultikTensorAlgebra<T, A : Ring<T>>(
             TODO("Not implemented for broadcasting")
         }
 
-    override fun diagonalEmbedding(diagonalEntries: StructureND<T>, offset: Int, dim1: Int, dim2: Int): MultikTensor<T> {
+    override fun diagonalEmbedding(
+        diagonalEntries: StructureND<T>,
+        offset: Int,
+        dim1: Int,
+        dim2: Int,
+    ): MultikTensor<T> {
 
         TODO("Diagonal embedding not implemented")
     }

@@ -18,14 +18,14 @@ class TreeHistogramTest {
 
     @Test
     fun normalFill() {
-        val random  = Random(123)
+        val random = Random(123)
         val histogram = Histogram.custom1D(Float64Field, 0.0..1.0 step 0.1).produce {
             repeat(100_000) {
                 putValue(random.nextDouble())
             }
         }
 
-        assertTrue { histogram.bins.count() > 8}
+        assertTrue { histogram.bins.count() > 8 }
         assertEquals(100_000, histogram.bins.sumOf { it.binValue }.toInt())
     }
 }

@@ -252,7 +252,7 @@ public open class IntTensorAlgebra : TensorAlgebra<Int, Int32Ring> {
 
     override fun StructureND<Int>.transposed(i: Int, j: Int): Tensor<Int> {
         val actualI = if (i >= 0) i else shape.size + i
-        val actualJ = if(j>=0) j else shape.size + j
+        val actualJ = if (j >= 0) j else shape.size + j
         return asIntTensor().permute(
             shape.transposed(actualI, actualJ)
         ) { originIndex ->

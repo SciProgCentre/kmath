@@ -15,6 +15,7 @@ import space.kscience.kmath.tensors.core.DoubleTensorAlgebra
 import space.kscience.kmath.tensors.core.LMInput
 import space.kscience.kmath.tensors.core.levenbergMarquardt
 import kotlin.math.roundToInt
+
 fun main() {
     val NData = 100
     var t_example = DoubleTensorAlgebra.ones(ShapeND(intArrayOf(NData, 1))).as2D()
@@ -30,7 +31,7 @@ fun main() {
 
     val exampleNumber = 1
 
-    var y_hat =  funcMiddleForLm(t_example, p_example, exampleNumber)
+    var y_hat = funcMiddleForLm(t_example, p_example, exampleNumber)
 
     var p_init = DoubleTensorAlgebra.zeros(ShapeND(intArrayOf(Nparams, 1))).as2D()
     for (i in 0 until Nparams) {
@@ -49,7 +50,8 @@ fun main() {
     p_min = p_min.div(1.0 / 50.0)
     val opts = doubleArrayOf(3.0, 7000.0, 1e-5, 1e-5, 1e-5, 1e-5, 1e-5, 11.0, 9.0, 1.0)
 
-    val inputData = LMInput(::funcMiddleForLm,
+    val inputData = LMInput(
+        ::funcMiddleForLm,
         p_init.as2D(),
         t,
         y_dat,
@@ -62,7 +64,8 @@ fun main() {
         doubleArrayOf(opts[6], opts[7], opts[8]),
         opts[9].toInt(),
         10,
-        1)
+        1
+    )
 
     val result = DoubleTensorAlgebra.levenbergMarquardt(inputData)
 
@@ -74,7 +77,7 @@ fun main() {
     println()
 
 
-    var y_hat_after =  funcMiddleForLm(t_example, result.resultParameters, exampleNumber)
+    var y_hat_after = funcMiddleForLm(t_example, result.resultParameters, exampleNumber)
     for (i in 0 until y_hat.shape.component1()) {
         val x = (y_hat[i, 0] * 10000).roundToInt() / 10000.0
         val y = (y_hat_after[i, 0] * 10000).roundToInt() / 10000.0

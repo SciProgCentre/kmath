@@ -43,7 +43,7 @@ public object CMOptimizerData : SetAttribute<SymbolIndexer.() -> OptimizationDat
  * Specify Commons-maths optimization data.
  */
 public fun AttributesBuilder<FunctionOptimization<Double>>.cmOptimizationData(data: SymbolIndexer.() -> OptimizationData) {
-    CMOptimizerData.add(data)
+    CMOptimizerData add data
 }
 
 public fun AttributesBuilder<FunctionOptimization<Double>>.simplexSteps(vararg steps: Pair<Symbol, Double>) {

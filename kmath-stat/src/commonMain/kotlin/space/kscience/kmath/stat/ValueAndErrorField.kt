@@ -85,7 +85,7 @@ public object ValueAndErrorField : Field<ValueAndError> {
         ): MutableBuffer<ValueAndError> {
             val values: DoubleArray = DoubleArray(size)
             val ds = DoubleArray(size)
-            repeat(size){
+            repeat(size) {
                 val (v, d) = builder(it)
                 values[it] = v
                 ds[it] = d

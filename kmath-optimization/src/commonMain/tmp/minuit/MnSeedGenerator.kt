@@ -51,16 +51,10 @@ internal class MnSeedGenerator : MinimumSeedGenerator {
                     val calculated: Double = hgrd.getFirst().getGradient().getEntry(i)
                     val delta: Double = hgrd.getSecond().getEntry(i)
                     if (abs(calculated - provided) > delta) {
-                        MINUITPlugin.logStatic(""
-                                + "gradient discrepancy of external parameter \"%d\" "
-                                + "(internal parameter \"%d\") too large. Expected: \"%f\", provided: \"%f\"",
-                            st.getTransformation().extOfInt(i), i, provided, calculated)
-
-//                        
-//                        MINUITPlugin.logStatic("gradient discrepancy of external parameter "
-//                                + st.getTransformation().extOfInt(i) 
-//                                + " (internal parameter " + i + ") too large.");
-//                        good = false;
+                        MINUITPlugin.logStatic(
+                            """gradient discrepancy of external parameter "%d" (internal parameter "%d") too large. Expected: "%f", provided: "%f"""",
+                            st.getTransformation().extOfInt(i), i, provided, calculated
+                        )
                     }
                 }
                 if (!good) {
@@ -82,8 +76,7 @@ internal class MnSeedGenerator : MinimumSeedGenerator {
             dcovar = 0.0
         } else {
             for (i in 0 until n) {
-                mat[i, i] = if (abs(dgrad.getGradientDerivative()
-                        .getEntry(i)) > prec.eps2()
+                mat[i, i] = if (abs(dgrad.getGradientDerivative().getEntry(i)) > prec.eps2()
                 ) 1.0 / dgrad.getGradientDerivative().getEntry(i) else 1.0
             }
         }

@@ -16,7 +16,7 @@ import space.kscience.kmath.structures.Float64Buffer
 import kotlin.math.abs
 
 
-public object QowRuns: OptimizationAttribute<Int>
+public object QowRuns : OptimizationAttribute<Int>
 
 
 /**

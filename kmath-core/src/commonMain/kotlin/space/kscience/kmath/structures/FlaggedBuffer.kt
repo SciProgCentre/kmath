@@ -55,7 +55,7 @@ public fun FlaggedBuffer<*>.isMissing(index: Int): Boolean = hasFlag(index, Valu
  */
 public class FlaggedDoubleBuffer(
     public val values: DoubleArray,
-    public val flags: ByteArray
+    public val flags: ByteArray,
 ) : FlaggedBuffer<Double?>, Buffer<Double?> {
 
     init {

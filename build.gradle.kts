@@ -6,6 +6,8 @@ plugins {
     id("org.jetbrains.kotlinx.kover") version "0.7.6"
 }
 
+val attributesVersion by extra("0.2.0")
+
 allprojects {
     repositories {
         maven("https://repo.kotlin.link")
@@ -63,7 +65,7 @@ ksciencePublish {
         useApache2Licence()
         useSPCTeam()
     }
-    repository("spc","https://maven.sciprog.center/kscience")
+    repository("spc", "https://maven.sciprog.center/kscience")
     sonatype("https://oss.sonatype.org")
 }
 

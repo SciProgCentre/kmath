@@ -46,11 +46,15 @@ class FunctionMinimum {
     internal constructor(seed: MinimumSeed, up: Double) {
         theSeed = seed
         theStates = ArrayList()
-        theStates.add(MinimumState(seed.parameters(),
-            seed.error(),
-            seed.gradient(),
-            seed.parameters().fval(),
-            seed.nfcn()))
+        theStates.add(
+            MinimumState(
+                seed.parameters(),
+                seed.error(),
+                seed.gradient(),
+                seed.parameters().fval(),
+                seed.nfcn()
+            )
+        )
         theErrorDef = up
         theUserState = MnUserParameterState()
     }

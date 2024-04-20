@@ -5,14 +5,15 @@
 
 package space.kscience.kmath.tensors.LevenbergMarquardt.StreamingLm
 
-import space.kscience.kmath.nd.*
-import space.kscience.kmath.tensors.LevenbergMarquardt.*
+import space.kscience.kmath.nd.component1
+import space.kscience.kmath.tensors.LevenbergMarquardt.funcDifficultForLm
+import space.kscience.kmath.tensors.LevenbergMarquardt.getStartDataForFuncDifficult
 import kotlin.math.roundToInt
 
-suspend fun main(){
+suspend fun main() {
     val startData = getStartDataForFuncDifficult()
     // Создание потока:
-    val lmFlow = streamLm(::funcDifficultForLm, startData, 0,  100)
+    val lmFlow = streamLm(::funcDifficultForLm, startData, 0, 100)
     var initialTime = System.currentTimeMillis()
     var lastTime: Long
     val launches = mutableListOf<Long>()

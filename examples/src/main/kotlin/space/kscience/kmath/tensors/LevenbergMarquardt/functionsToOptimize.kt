@@ -18,7 +18,7 @@ import space.kscience.kmath.tensors.core.DoubleTensorAlgebra.Companion.pow
 import space.kscience.kmath.tensors.core.DoubleTensorAlgebra.Companion.times
 import space.kscience.kmath.tensors.core.asDoubleTensor
 
-public data class StartDataLm (
+public data class StartDataLm(
     var lm_matx_y_dat: MutableStructure2D<Double>,
     var example_number: Int,
     var p_init: MutableStructure2D<Double>,
@@ -29,10 +29,14 @@ public data class StartDataLm (
     var p_min: MutableStructure2D<Double>,
     var p_max: MutableStructure2D<Double>,
     var consts: MutableStructure2D<Double>,
-    var opts: DoubleArray
+    var opts: DoubleArray,
 )
 
-fun funcEasyForLm(t: MutableStructure2D<Double>, p: MutableStructure2D<Double>, exampleNumber: Int): MutableStructure2D<Double> {
+fun funcEasyForLm(
+    t: MutableStructure2D<Double>,
+    p: MutableStructure2D<Double>,
+    exampleNumber: Int,
+): MutableStructure2D<Double> {
     val m = t.shape.component1()
     var y_hat = DoubleTensorAlgebra.zeros(ShapeND(intArrayOf(m, 1)))
 
@@ -40,15 +44,13 @@ fun funcEasyForLm(t: MutableStructure2D<Double>, p: MutableStructure2D<Double>, 
         y_hat = DoubleTensorAlgebra.exp((t.times(-1.0 / p[1, 0]))).times(p[0, 0]) + t.times(p[2, 0]).times(
             DoubleTensorAlgebra.exp((t.times(-1.0 / p[3, 0])))
         )
-    }
-    else if (exampleNumber == 2) {
+    } else if (exampleNumber == 2) {
         val mt = t.max()
         y_hat = (t.times(1.0 / mt)).times(p[0, 0]) +
                 (t.times(1.0 / mt)).pow(2).times(p[1, 0]) +
                 (t.times(1.0 / mt)).pow(3).times(p[2, 0]) +
                 (t.times(1.0 / mt)).pow(4).times(p[3, 0])
-    }
-    else if (exampleNumber == 3) {
+    } else if (exampleNumber == 3) {
         y_hat = DoubleTensorAlgebra.exp((t.times(-1.0 / p[1, 0])))
             .times(p[0, 0]) + DoubleTensorAlgebra.sin((t.times(1.0 / p[3, 0]))).times(p[2, 0])
     }
@@ -56,32 +58,40 @@ fun funcEasyForLm(t: MutableStructure2D<Double>, p: MutableStructure2D<Double>, 
     return y_hat.as2D()
 }
 
-fun funcMiddleForLm(t: MutableStructure2D<Double>, p: MutableStructure2D<Double>, exampleNumber: Int): MutableStructure2D<Double> {
+fun funcMiddleForLm(
+    t: MutableStructure2D<Double>,
+    p: MutableStructure2D<Double>,
+    exampleNumber: Int,
+): MutableStructure2D<Double> {
     val m = t.shape.component1()
-    var y_hat = DoubleTensorAlgebra.zeros(ShapeND(intArrayOf (m, 1)))
+    var y_hat = DoubleTensorAlgebra.zeros(ShapeND(intArrayOf(m, 1)))
 
     val mt = t.max()
-    for(i in 0 until p.shape.component1()){
+    for (i in 0 until p.shape.component1()) {
         y_hat += (t.times(1.0 / mt)).times(p[i, 0])
     }
 
-    for(i in 0 until 5){
+    for (i in 0 until 5) {
         y_hat = funcEasyForLm(y_hat.as2D(), p, exampleNumber).asDoubleTensor()
     }
 
     return y_hat.as2D()
 }
 
-fun funcDifficultForLm(t: MutableStructure2D<Double>, p: MutableStructure2D<Double>, exampleNumber: Int): MutableStructure2D<Double> {
+fun funcDifficultForLm(
+    t: MutableStructure2D<Double>,
+    p: MutableStructure2D<Double>,
+    exampleNumber: Int,
+): MutableStructure2D<Double> {
     val m = t.shape.component1()
-    var y_hat = DoubleTensorAlgebra.zeros(ShapeND(intArrayOf (m, 1)))
+    var y_hat = DoubleTensorAlgebra.zeros(ShapeND(intArrayOf(m, 1)))
 
     val mt = t.max()
-    for(i in 0 until p.shape.component1()){
-        y_hat = y_hat.plus( (t.times(1.0 / mt)).times(p[i, 0]) )
+    for (i in 0 until p.shape.component1()) {
+        y_hat = y_hat.plus((t.times(1.0 / mt)).times(p[i, 0]))
     }
 
-    for(i in 0 until 4){
+    for (i in 0 until 4) {
         y_hat = funcEasyForLm((y_hat.as2D() + t).as2D(), p, exampleNumber).asDoubleTensor()
     }
 
@@ -89,7 +99,7 @@ fun funcDifficultForLm(t: MutableStructure2D<Double>, p: MutableStructure2D<Doub
 }
 
 
-fun getStartDataForFuncDifficult(): StartDataLm  {
+fun getStartDataForFuncDifficult(): StartDataLm {
     val NData = 200
     var t_example = DoubleTensorAlgebra.ones(ShapeND(intArrayOf(NData, 1))).as2D()
     for (i in 0 until NData) {
@@ -104,7 +114,7 @@ fun getStartDataForFuncDifficult(): StartDataLm  {
 
     val exampleNumber = 1
 
-    var y_hat =  funcDifficultForLm(t_example, p_example, exampleNumber)
+    var y_hat = funcDifficultForLm(t_example, p_example, exampleNumber)
 
     var p_init = DoubleTensorAlgebra.zeros(ShapeND(intArrayOf(Nparams, 1))).as2D()
     for (i in 0 until Nparams) {
@@ -129,7 +139,7 @@ fun getStartDataForFuncDifficult(): StartDataLm  {
     return StartDataLm(y_dat, 1, p_init, t, y_dat, weight, dp, p_min.as2D(), p_max.as2D(), consts, opts)
 }
 
-fun getStartDataForFuncMiddle(): StartDataLm  {
+fun getStartDataForFuncMiddle(): StartDataLm {
     val NData = 100
     var t_example = DoubleTensorAlgebra.ones(ShapeND(intArrayOf(NData, 1))).as2D()
     for (i in 0 until NData) {
@@ -144,7 +154,7 @@ fun getStartDataForFuncMiddle(): StartDataLm  {
 
     val exampleNumber = 1
 
-    var y_hat =  funcMiddleForLm(t_example, p_example, exampleNumber)
+    var y_hat = funcMiddleForLm(t_example, p_example, exampleNumber)
 
     var p_init = DoubleTensorAlgebra.zeros(ShapeND(intArrayOf(Nparams, 1))).as2D()
     for (i in 0 until Nparams) {

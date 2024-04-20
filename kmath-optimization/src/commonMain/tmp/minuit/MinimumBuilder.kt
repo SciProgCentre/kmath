@@ -40,6 +40,6 @@ interface MinimumBuilder {
         seed: MinimumSeed?,
         strategy: MnStrategy?,
         maxfcn: Int,
-        toler: Double
+        toler: Double,
     ): FunctionMinimum
 }

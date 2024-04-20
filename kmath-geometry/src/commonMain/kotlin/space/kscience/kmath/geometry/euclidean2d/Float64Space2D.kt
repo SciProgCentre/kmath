@@ -27,7 +27,6 @@ public typealias Float64Vector2D = Vector2D<Float64>
 public typealias DoubleVector2D = Float64Vector2D
 
 
-
 /**
  * 2D Euclidean space
  */

@@ -68,7 +68,7 @@ public sealed interface TypedMst<T> : WithType<T> {
     ) : TypedMst<T> {
 
         init {
-            require(left.type==right.type){"Left and right expressions must be of the same type"}
+            require(left.type == right.type) { "Left and right expressions must be of the same type" }
         }
 
         override val type: SafeType<T> get() = left.type

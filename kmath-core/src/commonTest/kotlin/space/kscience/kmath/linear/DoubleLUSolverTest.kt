@@ -21,14 +21,14 @@ fun <T : Any> assertMatrixEquals(expected: StructureND<T>, actual: StructureND<T
 class DoubleLUSolverTest {
 
     @Test
-    fun testInvertOne() = Double.algebra.linearSpace.run{
+    fun testInvertOne() = Double.algebra.linearSpace.run {
         val matrix = one(2, 2)
         val inverted = lupSolver().inverse(matrix)
         assertMatrixEquals(matrix, inverted)
     }
 
     @Test
-    fun testDecomposition() = with(Double.algebra.linearSpace){
+    fun testDecomposition() = with(Double.algebra.linearSpace) {
         val matrix = matrix(2, 2)(
             3.0, 1.0,
             2.0, 3.0
@@ -43,7 +43,7 @@ class DoubleLUSolverTest {
     }
 
     @Test
-    fun testInvert()  = Double.algebra.linearSpace.run{
+    fun testInvert() = Double.algebra.linearSpace.run {
         val matrix = matrix(2, 2)(
             3.0, 1.0,
             1.0, 3.0

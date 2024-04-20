@@ -37,7 +37,8 @@ public typealias FloatBuffer = Float32Buffer
  * The function [init] is called for each array element sequentially starting from the first one.
  * It should return the value for a buffer element given its index.
  */
-public inline fun Float32Buffer(size: Int, init: (Int) -> Float): Float32Buffer = Float32Buffer(FloatArray(size) { init(it) })
+public inline fun Float32Buffer(size: Int, init: (Int) -> Float): Float32Buffer =
+    Float32Buffer(FloatArray(size) { init(it) })
 
 /**
  * Returns a new [Float32Buffer] of given elements.

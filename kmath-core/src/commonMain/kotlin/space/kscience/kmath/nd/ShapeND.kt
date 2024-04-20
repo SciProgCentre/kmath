@@ -68,6 +68,9 @@ public operator fun ShapeND.component3(): Int = get(2)
  */
 public fun ShapeND.toArray(): IntArray = array.copyOf()
 
+/**
+ * Provide internal content of [ShapeND]. Must not be modified.
+ */
 @UnsafeKMathAPI
 public fun ShapeND.asArray(): IntArray = array
 

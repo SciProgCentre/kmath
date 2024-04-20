@@ -20,7 +20,7 @@ public enum class OptimizationDirection {
     MINIMIZE
 }
 
-public object FunctionOptimizationTarget: OptimizationAttribute<OptimizationDirection>
+public object FunctionOptimizationTarget : OptimizationAttribute<OptimizationDirection>
 
 public class FunctionOptimization<T>(
     public val expression: DifferentiableExpression<T>,
@@ -47,7 +47,7 @@ public class FunctionOptimization<T>(
         return result
     }
 
-    override fun toString(): String = "FunctionOptimization(features=$attributes)"
+    override fun toString(): String = "FunctionOptimization(attributes=$attributes)"
 
     public companion object
 }
@@ -65,7 +65,7 @@ public fun <T> FunctionOptimization<T>.withAttributes(
     modifier: AttributesBuilder<FunctionOptimization<T>>.() -> Unit,
 ): FunctionOptimization<T> = FunctionOptimization(
     expression,
-    attributes.modify(modifier),
+    attributes.modified(modifier),
 )
 
 /**
@@ -76,7 +76,7 @@ public suspend fun <T> DifferentiableExpression<T>.optimizeWith(
     startingPoint: Map<Symbol, T>,
     modifier: AttributesBuilder<FunctionOptimization<T>>.() -> Unit = {},
 ): FunctionOptimization<T> {
-    val problem = FunctionOptimization(this){
+    val problem = FunctionOptimization(this) {
         startAt(startingPoint)
         modifier()
     }

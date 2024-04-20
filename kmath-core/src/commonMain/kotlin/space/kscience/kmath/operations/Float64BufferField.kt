@@ -33,7 +33,7 @@ public class Float64BufferField(public val size: Int) : ExtendedField<Buffer<Dou
         arg.map { it.pow(pow.toInt()) }
     } else {
         arg.map {
-            if(it<0) throw IllegalArgumentException("Negative argument $it could not be raised to the fractional power")
+            if (it < 0) throw IllegalArgumentException("Negative argument $it could not be raised to the fractional power")
             it.pow(pow.toDouble())
         }
     }

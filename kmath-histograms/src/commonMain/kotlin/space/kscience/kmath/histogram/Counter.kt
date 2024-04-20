@@ -19,7 +19,7 @@ public interface Counter<T : Any> {
 
     public companion object {
         public fun ofDouble(): ObjectCounter<Double> = ObjectCounter(Float64Field)
-        public fun <T: Any> of(group: Group<T>): ObjectCounter<T> = ObjectCounter(group)
+        public fun <T : Any> of(group: Group<T>): ObjectCounter<T> = ObjectCounter(group)
     }
 }
 

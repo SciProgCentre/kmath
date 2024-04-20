@@ -6,7 +6,7 @@ Commons math binding for kmath
 
 ## Artifact:
 
-The Maven coordinates of this project are `space.kscience:kmath-commons:0.4.0-dev-3`.
+The Maven coordinates of this project are `space.kscience:kmath-commons:0.4.0`.
 
 **Gradle Kotlin DSL:**
 ```kotlin
@@ -16,6 +16,6 @@ repositories {
 }
 
 dependencies {
-    implementation("space.kscience:kmath-commons:0.4.0-dev-3")
+    implementation("space.kscience:kmath-commons:0.4.0")
 }
 ```

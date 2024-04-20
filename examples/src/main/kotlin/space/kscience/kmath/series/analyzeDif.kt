@@ -44,10 +44,10 @@ fun main() = with(Double.seriesAlgebra()) {
 
     Plotly.page {
         h1 { +"This is my plot" }
-        p{
+        p {
             +"Kolmogorov-smirnov test for s1 and s2: ${kmTest.value}"
         }
-        plot{
+        plot {
             plotSeries("s1", s1)
             plotSeries("s2", s2)
             plotSeries("s3", s3)

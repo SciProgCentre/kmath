@@ -426,11 +426,13 @@ public class InverseTrigonometricOperations(operations: Collection<String>?) : U
          * The default instance configured with [TrigonometricOperations.ACOS_OPERATION],
          * [TrigonometricOperations.ASIN_OPERATION], [TrigonometricOperations.ATAN_OPERATION].
          */
-        public val Default: InverseTrigonometricOperations = InverseTrigonometricOperations(setOf(
-            TrigonometricOperations.ACOS_OPERATION,
-            TrigonometricOperations.ASIN_OPERATION,
-            TrigonometricOperations.ATAN_OPERATION,
-        ))
+        public val Default: InverseTrigonometricOperations = InverseTrigonometricOperations(
+            setOf(
+                TrigonometricOperations.ACOS_OPERATION,
+                TrigonometricOperations.ASIN_OPERATION,
+                TrigonometricOperations.ATAN_OPERATION,
+            )
+        )
     }
 }
 
@@ -452,10 +454,12 @@ public class InverseHyperbolicOperations(operations: Collection<String>?) : Unar
          * The default instance configured with [ExponentialOperations.ACOSH_OPERATION],
          * [ExponentialOperations.ASINH_OPERATION], and [ExponentialOperations.ATANH_OPERATION].
          */
-        public val Default: InverseHyperbolicOperations = InverseHyperbolicOperations(setOf(
-            ExponentialOperations.ACOSH_OPERATION,
-            ExponentialOperations.ASINH_OPERATION,
-            ExponentialOperations.ATANH_OPERATION,
-        ))
+        public val Default: InverseHyperbolicOperations = InverseHyperbolicOperations(
+            setOf(
+                ExponentialOperations.ACOSH_OPERATION,
+                ExponentialOperations.ASINH_OPERATION,
+                ExponentialOperations.ATANH_OPERATION,
+            )
+        )
     }
 }

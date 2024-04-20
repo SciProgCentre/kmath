@@ -6,18 +6,23 @@
 package space.kscience.kmath.tensors.LevenbergMarquardt.StreamingLm
 
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.*
-import space.kscience.kmath.nd.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import space.kscience.kmath.nd.MutableStructure2D
+import space.kscience.kmath.nd.ShapeND
+import space.kscience.kmath.nd.as2D
+import space.kscience.kmath.nd.component1
 import space.kscience.kmath.tensors.LevenbergMarquardt.StartDataLm
 import space.kscience.kmath.tensors.core.BroadcastDoubleTensorAlgebra.zeros
 import space.kscience.kmath.tensors.core.DoubleTensorAlgebra
 import space.kscience.kmath.tensors.core.LMInput
 import space.kscience.kmath.tensors.core.levenbergMarquardt
 import kotlin.random.Random
-import kotlin.reflect.KFunction3
 
-fun streamLm(lm_func: (MutableStructure2D<Double>, MutableStructure2D<Double>, Int) -> (MutableStructure2D<Double>),
-             startData: StartDataLm, launchFrequencyInMs: Long, numberOfLaunches: Int): Flow<MutableStructure2D<Double>> = flow{
+fun streamLm(
+    lm_func: (MutableStructure2D<Double>, MutableStructure2D<Double>, Int) -> (MutableStructure2D<Double>),
+    startData: StartDataLm, launchFrequencyInMs: Long, numberOfLaunches: Int,
+): Flow<MutableStructure2D<Double>> = flow {
 
     var example_number = startData.example_number
     var p_init = startData.p_init
@@ -32,7 +37,8 @@ fun streamLm(lm_func: (MutableStructure2D<Double>, MutableStructure2D<Double>, I
     var steps = numberOfLaunches
     val isEndless = (steps <= 0)
 
-    val inputData = LMInput(lm_func,
+    val inputData = LMInput(
+        lm_func,
         p_init,
         t,
         y_dat,
@@ -45,7 +51,8 @@ fun streamLm(lm_func: (MutableStructure2D<Double>, MutableStructure2D<Double>, I
         doubleArrayOf(opts[6], opts[7], opts[8]),
         opts[9].toInt(),
         10,
-        example_number)
+        example_number
+    )
 
     while (isEndless || steps > 0) {
         val result = DoubleTensorAlgebra.levenbergMarquardt(inputData)
@@ -57,7 +64,7 @@ fun streamLm(lm_func: (MutableStructure2D<Double>, MutableStructure2D<Double>, I
     }
 }
 
-fun generateNewYDat(y_dat: MutableStructure2D<Double>, delta: Double): MutableStructure2D<Double>{
+fun generateNewYDat(y_dat: MutableStructure2D<Double>, delta: Double): MutableStructure2D<Double> {
     val n = y_dat.shape.component1()
     val y_dat_new = zeros(ShapeND(intArrayOf(n, 1))).as2D()
     for (i in 0 until n) {

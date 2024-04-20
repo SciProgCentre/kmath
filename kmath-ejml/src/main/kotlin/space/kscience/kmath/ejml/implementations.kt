@@ -674,15 +674,17 @@ public object EjmlLinearSpaceDSCC : EjmlLinearSpace<Double, Float64Field, DMatri
 
         val raw: Any? = when (attribute) {
             Inverted -> {
-                val res = DMatrixRMaj(origin.numRows,origin.numCols)
-                CommonOps_DSCC.invert(origin,res)
+                val res = DMatrixRMaj(origin.numRows, origin.numCols)
+                CommonOps_DSCC.invert(origin, res)
                 res.wrapMatrix()
             }
 
             Determinant -> CommonOps_DSCC.det(origin)
 
             QR -> object : QRDecomposition<Double> {
-                val ejmlQr by lazy { DecompositionFactory_DSCC.qr(FillReducing.NONE).apply { decompose(origin.copy()) } }
+                val ejmlQr by lazy {
+                    DecompositionFactory_DSCC.qr(FillReducing.NONE).apply { decompose(origin.copy()) }
+                }
                 override val q: Matrix<Double> get() = ejmlQr.getQ(null, false).wrapMatrix()
                 override val r: Matrix<Double> get() = ejmlQr.getR(null, false).wrapMatrix()
             }
@@ -895,15 +897,17 @@ public object EjmlLinearSpaceFSCC : EjmlLinearSpace<Float, Float32Field, FMatrix
 
         val raw: Any? = when (attribute) {
             Inverted -> {
-                val res = FMatrixRMaj(origin.numRows,origin.numCols)
-                CommonOps_FSCC.invert(origin,res)
+                val res = FMatrixRMaj(origin.numRows, origin.numCols)
+                CommonOps_FSCC.invert(origin, res)
                 res.wrapMatrix()
             }
 
             Determinant -> CommonOps_FSCC.det(origin)
 
             QR -> object : QRDecomposition<Float32> {
-                val ejmlQr by lazy { DecompositionFactory_FSCC.qr(FillReducing.NONE).apply { decompose(origin.copy()) } }
+                val ejmlQr by lazy {
+                    DecompositionFactory_FSCC.qr(FillReducing.NONE).apply { decompose(origin.copy()) }
+                }
                 override val q: Matrix<Float32> get() = ejmlQr.getQ(null, false).wrapMatrix()
                 override val r: Matrix<Float32> get() = ejmlQr.getR(null, false).wrapMatrix()
             }

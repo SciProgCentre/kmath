@@ -25,7 +25,7 @@ class GaussIntegralTest {
     @Test
     fun gaussUniform() {
         val res = Float64Field.gaussIntegrator.integrate(35.0..100.0) { x ->
-            if(x in 30.0..50.0){
+            if (x in 30.0..50.0) {
                 1.0
             } else {
                 0.0

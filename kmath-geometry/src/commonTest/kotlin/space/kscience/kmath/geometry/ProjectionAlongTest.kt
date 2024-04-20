@@ -44,7 +44,7 @@ internal class ProjectionAlongTest {
     }
 
     @Test
-    fun projectOntoPlane() = with(Float64Space3D){
+    fun projectOntoPlane() = with(Float64Space3D) {
         val normal = vector(1.0, 3.5, 0.07)
         val base = vector(2.0, -0.0037, 11.1111)
 

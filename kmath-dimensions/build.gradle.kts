@@ -2,13 +2,13 @@ plugins {
     id("space.kscience.gradle.mpp")
 }
 
-kscience{
+kscience {
     jvm()
     js()
     native()
     wasm()
 
-    dependencies{
+    dependencies {
         api(projects.kmathCore)
     }
 

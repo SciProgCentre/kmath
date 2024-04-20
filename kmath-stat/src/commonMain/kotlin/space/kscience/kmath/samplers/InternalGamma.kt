@@ -123,7 +123,7 @@ internal object InternalGamma {
     private fun regularizedGammaP(
         a: Double,
         x: Double,
-        maxIterations: Int = Int.MAX_VALUE
+        maxIterations: Int = Int.MAX_VALUE,
     ): Double = when {
         a.isNaN() || x.isNaN() || a <= 0.0 || x < 0.0 -> Double.NaN
         x == 0.0 -> 0.0
@@ -155,7 +155,7 @@ internal object InternalGamma {
     fun regularizedGammaQ(
         a: Double,
         x: Double,
-        maxIterations: Int = Int.MAX_VALUE
+        maxIterations: Int = Int.MAX_VALUE,
     ): Double = when {
         a.isNaN() || x.isNaN() || a <= 0.0 || x < 0.0 -> Double.NaN
         x == 0.0 -> 1.0

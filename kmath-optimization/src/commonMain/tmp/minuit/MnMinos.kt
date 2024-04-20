@@ -106,8 +106,8 @@ class MnMinos(fcn: MultiFunction?, min: FunctionMinimum?, stra: MnStrategy?) {
         val para = intArrayOf(par)
         val upar: MnUserParameterState = theMinimum!!.userState().copy()
         val err: Double = upar.error(par)
-        val `val`: Double = upar.value(par) - err
-        val xmid = doubleArrayOf(`val`)
+        val value: Double = upar.value(par) - err
+        val xmid = doubleArrayOf(value)
         val xdir = doubleArrayOf(-err)
         val ind: Int = upar.intOfExt(par)
         val m: MnAlgebraicSymMatrix = theMinimum!!.error().matrix()
@@ -121,7 +121,7 @@ class MnMinos(fcn: MultiFunction?, min: FunctionMinimum?, stra: MnStrategy?) {
             upar.setValue(ext, upar.value(ext) - xdev)
         }
         upar.fix(par)
-        upar.setValue(par, `val`)
+        upar.setValue(par, value)
         val toler = 0.1
         val cross = MnFunctionCross(theFCN, upar, theMinimum!!.fval(), theStrategy, errDef)
         val aopt: MnCross = cross.cross(para, xmid, xdir, toler, maxcalls)
@@ -330,8 +330,8 @@ class MnMinos(fcn: MultiFunction?, min: FunctionMinimum?, stra: MnStrategy?) {
         val para = intArrayOf(par)
         val upar: MnUserParameterState = theMinimum!!.userState().copy()
         val err: Double = upar.error(par)
-        val `val`: Double = upar.value(par) + err
-        val xmid = doubleArrayOf(`val`)
+        val value: Double = upar.value(par) + err
+        val xmid = doubleArrayOf(value)
         val xdir = doubleArrayOf(err)
         val ind: Int = upar.intOfExt(par)
         val m: MnAlgebraicSymMatrix = theMinimum!!.error().matrix()
@@ -345,7 +345,7 @@ class MnMinos(fcn: MultiFunction?, min: FunctionMinimum?, stra: MnStrategy?) {
             upar.setValue(ext, upar.value(ext) + xdev)
         }
         upar.fix(par)
-        upar.setValue(par, `val`)
+        upar.setValue(par, value)
         val toler = 0.1
         val cross = MnFunctionCross(theFCN, upar, theMinimum!!.fval(), theStrategy, errDef)
         val aopt: MnCross = cross.cross(para, xmid, xdir, toler, maxcalls)

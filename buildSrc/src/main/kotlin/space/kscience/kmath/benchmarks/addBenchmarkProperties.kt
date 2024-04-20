@@ -63,7 +63,8 @@ fun Project.addBenchmarkProperties() {
                     if (resDirectory == null || !(resDirectory.resolve("jvm.json")).exists()) {
                         "> **Can't find appropriate benchmark data. Try generating readme files after running benchmarks**."
                     } else {
-                        val reports: List<JmhReport> = jsonMapper.readValue<List<JmhReport>>(resDirectory.resolve("jvm.json"))
+                        val reports: List<JmhReport> =
+                            jsonMapper.readValue<List<JmhReport>>(resDirectory.resolve("jvm.json"))
 
                         buildString {
                             appendLine("<details>")
@@ -76,16 +77,20 @@ fun Project.addBenchmarkProperties() {
                             appendLine("* Run on ${first.vmName} (build ${first.vmVersion}) with Java process:")
                             appendLine()
                             appendLine("```")
-                            appendLine("${first.jvm} ${
-                                first.jvmArgs.joinToString(" ")
-                            }")
+                            appendLine(
+                                "${first.jvm} ${
+                                    first.jvmArgs.joinToString(" ")
+                                }"
+                            )
                             appendLine("```")
 
-                            appendLine("* JMH ${first.jmhVersion} was used in `${first.mode}` mode with ${first.warmupIterations} warmup ${
-                                noun(first.warmupIterations, "iteration", "iterations")
-                            } by ${first.warmupTime} and ${first.measurementIterations} measurement ${
-                                noun(first.measurementIterations, "iteration", "iterations")
-                            } by ${first.measurementTime}.")
+                            appendLine(
+                                "* JMH ${first.jmhVersion} was used in `${first.mode}` mode with ${first.warmupIterations} warmup ${
+                                    noun(first.warmupIterations, "iteration", "iterations")
+                                } by ${first.warmupTime} and ${first.measurementIterations} measurement ${
+                                    noun(first.measurementIterations, "iteration", "iterations")
+                                } by ${first.measurementTime}."
+                            )
 
                             appendLine()
                             appendLine("| Benchmark | Score |")

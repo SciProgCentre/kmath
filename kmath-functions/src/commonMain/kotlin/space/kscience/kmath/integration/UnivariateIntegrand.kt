@@ -27,10 +27,10 @@ public fun <T, A : Any> UnivariateIntegrand<T>.withAttribute(
 
 public fun <T> UnivariateIntegrand<T>.withAttributes(
     block: AttributesBuilder<UnivariateIntegrand<T>>.() -> Unit,
-): UnivariateIntegrand<T> = withAttributes(attributes.modify(block))
+): UnivariateIntegrand<T> = withAttributes(attributes.modified(block))
 
 public inline fun <reified T : Any> UnivariateIntegrand(
-    attributeBuilder: AttributesBuilder<UnivariateIntegrand<T>>.() -> Unit,
+    noinline attributeBuilder: AttributesBuilder<UnivariateIntegrand<T>>.() -> Unit,
     noinline function: (Double) -> T,
 ): UnivariateIntegrand<T> = UnivariateIntegrand(safeTypeOf(), Attributes(attributeBuilder), function)
 
@@ -68,7 +68,7 @@ public fun AttributesBuilder<UnivariateIntegrand<*>>.integrationNodes(vararg nod
  */
 @UnstableKMathAPI
 public inline fun <reified T : Any> UnivariateIntegrator<T>.integrate(
-    attributesBuilder: AttributesBuilder<UnivariateIntegrand<T>>.() -> Unit,
+    noinline attributesBuilder: AttributesBuilder<UnivariateIntegrand<T>>.() -> Unit,
     noinline function: (Double) -> T,
 ): UnivariateIntegrand<T> = integrate(UnivariateIntegrand(attributesBuilder, function))
 
@@ -79,7 +79,7 @@ public inline fun <reified T : Any> UnivariateIntegrator<T>.integrate(
 @UnstableKMathAPI
 public inline fun <reified T : Any> UnivariateIntegrator<T>.integrate(
     range: ClosedRange<Double>,
-    attributeBuilder: AttributesBuilder<UnivariateIntegrand<T>>.() -> Unit = {},
+    noinline attributeBuilder: AttributesBuilder<UnivariateIntegrand<T>>.() -> Unit = {},
     noinline function: (Double) -> T,
 ): UnivariateIntegrand<T> {
 

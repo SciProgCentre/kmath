@@ -90,7 +90,7 @@ public fun Float64Space3D.rotate(
 /**
  * Rotate a [Float64] vector in 3D space with a rotation matrix
  */
-public fun Float64Space3D.rotate(vector: Float64Vector3D, matrix: Matrix<Double>):  Vector3D<Float64> {
+public fun Float64Space3D.rotate(vector: Float64Vector3D, matrix: Matrix<Double>): Vector3D<Float64> {
     require(matrix.colNum == 3 && matrix.rowNum == 3) { "Square 3x3 rotation matrix is required" }
     return with(linearSpace) { (matrix dot vector).asVector3D() }
 }

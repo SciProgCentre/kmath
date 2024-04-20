@@ -8,7 +8,6 @@ package space.kscience.kmath.operations
 import space.kscience.kmath.commons.linear.CMLinearSpace
 import space.kscience.kmath.linear.matrix
 import space.kscience.kmath.nd.Float64BufferND
-import space.kscience.kmath.nd.ShapeND
 import space.kscience.kmath.nd.Structure2D
 import space.kscience.kmath.nd.mutableStructureND
 import space.kscience.kmath.nd.ndAlgebra

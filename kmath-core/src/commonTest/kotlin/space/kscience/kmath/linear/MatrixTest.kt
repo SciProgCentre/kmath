@@ -50,7 +50,7 @@ class MatrixTest {
         infix fun Matrix<Double>.pow(power: Int): Matrix<Double> {
             var res = this
             repeat(power - 1) {
-                res =  res dot this@pow
+                res = res dot this@pow
             }
             return res
         }

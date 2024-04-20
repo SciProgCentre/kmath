@@ -34,7 +34,7 @@ job("Publish") {
             api.space().projects.automation.deployments.start(
                 project = api.projectIdentifier(),
                 targetIdentifier = TargetIdentifier.Key(projectName),
-                version = version+revisionSuffix,
+                version = version + revisionSuffix,
                 // automatically update deployment status based on the status of a job
                 syncWithAutomationJob = true
             )

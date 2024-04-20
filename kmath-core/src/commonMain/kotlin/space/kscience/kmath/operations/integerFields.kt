@@ -34,7 +34,7 @@ public object Int16Field : Field<Int16>, Norm<Int16, Int16>, NumericAlgebra<Int1
     override fun multiply(left: Int16, right: Int16): Int16 = (left * right).toShort()
     override fun norm(arg: Int16): Int16 = abs(arg)
 
-    override fun scale(a: Int16, value: Double): Int16 = (a*value).roundToInt().toShort()
+    override fun scale(a: Int16, value: Double): Int16 = (a * value).roundToInt().toShort()
 
     override fun divide(left: Int16, right: Int16): Int16 = (left / right).toShort()
 
@@ -58,7 +58,7 @@ public object Int32Field : Field<Int32>, Norm<Int32, Int32>, NumericAlgebra<Int3
     override fun multiply(left: Int, right: Int): Int = left * right
     override fun norm(arg: Int): Int = abs(arg)
 
-    override fun scale(a: Int, value: Double): Int = (a*value).roundToInt()
+    override fun scale(a: Int, value: Double): Int = (a * value).roundToInt()
 
     override fun divide(left: Int, right: Int): Int = left / right
 
@@ -81,7 +81,7 @@ public object Int64Field : Field<Int64>, Norm<Int64, Int64>, NumericAlgebra<Int6
     override fun multiply(left: Int64, right: Int64): Int64 = left * right
     override fun norm(arg: Int64): Int64 = abs(arg)
 
-    override fun scale(a: Int64, value: Double): Int64 = (a*value).roundToLong()
+    override fun scale(a: Int64, value: Double): Int64 = (a * value).roundToLong()
 
     override fun divide(left: Int64, right: Int64): Int64 = left / right
 

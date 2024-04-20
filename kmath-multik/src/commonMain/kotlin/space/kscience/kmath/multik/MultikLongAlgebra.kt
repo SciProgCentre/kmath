@@ -12,12 +12,12 @@ import org.jetbrains.kotlinx.multik.ndarray.data.DataType
 import space.kscience.kmath.operations.Int64Ring
 
 public class MultikLongAlgebra(
-    multikEngine: Engine
+    multikEngine: Engine,
 ) : MultikTensorAlgebra<Long, Int64Ring>(multikEngine) {
     override val elementAlgebra: Int64Ring get() = Int64Ring
     override val dataType: DataType get() = DataType.LongDataType
 
-    override fun scalar(value: Long): MultikTensor<Long>  = Multik.ndarrayOf(value).wrap()
+    override fun scalar(value: Long): MultikTensor<Long> = Multik.ndarrayOf(value).wrap()
 }
 
 

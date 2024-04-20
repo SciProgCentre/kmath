@@ -25,7 +25,8 @@ public class RandomChain<out R>(
 /**
  * Create a generic random chain with provided [generator]
  */
-public fun <R> RandomGenerator.chain(generator: suspend RandomGenerator.() -> R): RandomChain<R> = RandomChain(this, generator)
+public fun <R> RandomGenerator.chain(generator: suspend RandomGenerator.() -> R): RandomChain<R> =
+    RandomChain(this, generator)
 
 /**
  * A type-specific double chunk random chain

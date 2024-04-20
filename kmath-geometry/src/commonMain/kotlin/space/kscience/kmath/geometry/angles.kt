@@ -30,7 +30,7 @@ public sealed interface Angle : Comparable<Angle> {
     public operator fun div(other: Angle): Double
     public operator fun unaryMinus(): Angle
 
-    public companion object: Group<Angle> {
+    public companion object : Group<Angle> {
         override val zero: Radians = Radians(0.0)
         public val pi: Radians = Radians(PI)
         public val piTimes2: Radians = Radians(PI * 2)

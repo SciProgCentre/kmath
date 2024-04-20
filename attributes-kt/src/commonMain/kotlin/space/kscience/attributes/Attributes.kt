@@ -30,20 +30,28 @@ public interface Attributes {
     override fun hashCode(): Int
 
     public companion object {
-        public val EMPTY: Attributes = AttributesImpl(emptyMap())
+        public val EMPTY: Attributes = object : Attributes {
+            override val content: Map<out Attribute<*>, Any?> get() = emptyMap()
+
+            override fun toString(): String = "Attributes.EMPTY"
+
+            override fun equals(other: Any?): Boolean = (other as? Attributes)?.isEmpty() ?: false
+
+            override fun hashCode(): Int = Unit.hashCode()
+        }
 
         public fun equals(a1: Attributes, a2: Attributes): Boolean =
             a1.keys == a2.keys && a1.keys.all { a1[it] == a2[it] }
     }
 }
 
-internal class AttributesImpl(override val content: Map<out Attribute<*>, Any?>) : Attributes {
+internal class MapAttributes(override val content: Map<out Attribute<*>, Any?>) : Attributes {
     override fun toString(): String = "Attributes(value=${content.entries})"
     override fun equals(other: Any?): Boolean = other is Attributes && Attributes.equals(this, other)
     override fun hashCode(): Int = content.hashCode()
 }
 
-public fun Attributes.isEmpty(): Boolean = content.isEmpty()
+public fun Attributes.isEmpty(): Boolean = keys.isEmpty()
 
 /**
  * Get attribute value or default
@@ -75,7 +83,7 @@ public inline fun <reified A : FlagAttribute> Attributes.hasFlag(): Boolean =
 public fun <T, A : Attribute<T>> Attributes.withAttribute(
     attribute: A,
     attrValue: T,
-): Attributes = AttributesImpl(content + (attribute to attrValue))
+): Attributes = MapAttributes(content + (attribute to attrValue))
 
 public fun <A : Attribute<Unit>> Attributes.withAttribute(attribute: A): Attributes =
     withAttribute(attribute, Unit)
@@ -83,15 +91,15 @@ public fun <A : Attribute<Unit>> Attributes.withAttribute(attribute: A): Attribu
 /**
  * Create a new [Attributes] by modifying the current one
  */
-public fun <T> Attributes.modify(block: AttributesBuilder<T>.() -> Unit): Attributes = Attributes<T> {
-    from(this@modify)
+public fun <O> Attributes.modified(block: AttributesBuilder<O>.() -> Unit): Attributes = Attributes<O> {
+    putAll(this@modified)
     block()
 }
 
 /**
  * Create new [Attributes] by removing [attribute] key
  */
-public fun Attributes.withoutAttribute(attribute: Attribute<*>): Attributes = AttributesImpl(content.minus(attribute))
+public fun Attributes.withoutAttribute(attribute: Attribute<*>): Attributes = MapAttributes(content.minus(attribute))
 
 /**
  * Add an element to a [SetAttribute]
@@ -101,7 +109,7 @@ public fun <T, A : SetAttribute<T>> Attributes.withAttributeElement(
     attrValue: T,
 ): Attributes {
     val currentSet: Set<T> = get(attribute) ?: emptySet()
-    return AttributesImpl(
+    return MapAttributes(
         content + (attribute to (currentSet + attrValue))
     )
 }
@@ -114,7 +122,7 @@ public fun <T, A : SetAttribute<T>> Attributes.withoutAttributeElement(
     attrValue: T,
 ): Attributes {
     val currentSet: Set<T> = get(attribute) ?: emptySet()
-    return AttributesImpl(content + (attribute to (currentSet - attrValue)))
+    return MapAttributes(content + (attribute to (currentSet - attrValue)))
 }
 
 /**
@@ -123,13 +131,13 @@ public fun <T, A : SetAttribute<T>> Attributes.withoutAttributeElement(
 public fun <T, A : Attribute<T>> Attributes(
     attribute: A,
     attrValue: T,
-): Attributes = AttributesImpl(mapOf(attribute to attrValue))
+): Attributes = MapAttributes(mapOf(attribute to attrValue))
 
 /**
  * Create Attributes with a single [Unit] valued attribute
  */
 public fun <A : Attribute<Unit>> Attributes(
     attribute: A,
-): Attributes = AttributesImpl(mapOf(attribute to Unit))
+): Attributes = MapAttributes(mapOf(attribute to Unit))
 
-public operator fun Attributes.plus(other: Attributes): Attributes = AttributesImpl(content + other.content)
+public operator fun Attributes.plus(other: Attributes): Attributes = MapAttributes(content + other.content)

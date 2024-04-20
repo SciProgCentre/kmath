@@ -91,7 +91,7 @@ public inline fun <reified T : Any> MST.compile(algebra: Algebra<T>, vararg argu
  * @author Iaroslav Postovalov
  */
 @UnstableKMathAPI
-public fun MST.compileToExpression(algebra: Int32Ring): IntExpression  {
+public fun MST.compileToExpression(algebra: Int32Ring): IntExpression {
     val typed = evaluateConstants(algebra)
 
     return if (typed is TypedMst.Constant) object : IntExpression {

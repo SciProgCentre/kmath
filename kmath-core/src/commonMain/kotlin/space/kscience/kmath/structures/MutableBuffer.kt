@@ -14,7 +14,7 @@ import kotlin.reflect.typeOf
  *
  * @param T the type of elements contained in the buffer.
  */
-public interface MutableBuffer<T> : Buffer<T>{
+public interface MutableBuffer<T> : Buffer<T> {
 
     /**
      * Sets the array element at the specified [index] to the specified [value].
@@ -65,20 +65,21 @@ public interface MutableBuffer<T> : Buffer<T>{
 /**
  * Returns a shallow copy of the buffer.
  */
-public fun <T> Buffer<T>.copy(bufferFactory: BufferFactory<T>): Buffer<T> =if(this is ArrayBuffer){
+public fun <T> Buffer<T>.copy(bufferFactory: BufferFactory<T>): Buffer<T> = if (this is ArrayBuffer) {
     ArrayBuffer(array.copyOf())
-}else{
-    bufferFactory(size,::get)
+} else {
+    bufferFactory(size, ::get)
 }
 
 /**
  * Returns a mutable shallow copy of the buffer.
  */
-public fun <T> Buffer<T>.mutableCopy(bufferFactory: MutableBufferFactory<T>): MutableBuffer<T> =if(this is ArrayBuffer){
-    ArrayBuffer(array.copyOf())
-}else{
-    bufferFactory(size,::get)
-}
+public fun <T> Buffer<T>.mutableCopy(bufferFactory: MutableBufferFactory<T>): MutableBuffer<T> =
+    if (this is ArrayBuffer) {
+        ArrayBuffer(array.copyOf())
+    } else {
+        bufferFactory(size, ::get)
+    }
 
 
 /**

@@ -454,10 +454,12 @@ public fun String.parseBigInteger(): BigInt? {
             sign = +1
             1
         }
+
         '-' -> {
             sign = -1
             1
         }
+
         else -> {
             sign = +1
             0

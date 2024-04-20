@@ -3,7 +3,7 @@ plugins {
     `maven-publish`
 }
 
-version = "0.1.0"
+version = rootProject.extra.get("attributesVersion").toString()
 
 kscience {
     jvm()

@@ -77,7 +77,8 @@
 - Major refactor of tensors (only minor API changes)
 - Kotlin 1.8.20
 - `LazyStructure` `deffered` -> `async` to comply with coroutines code style
-- Default `dot` operation in tensor algebra no longer support broadcasting. Instead `matmul` operation is added to `DoubleTensorAlgebra`.
+- Default `dot` operation in tensor algebra no longer support broadcasting. Instead `matmul` operation is added
+  to `DoubleTensorAlgebra`.
 - Multik went MPP
 
 ### Removed
@@ -236,9 +237,11 @@
 - MST to JVM bytecode translator (https://github.com/mipt-npm/kmath/pull/94)
 - FloatBuffer (specialized MutableBuffer over FloatArray)
 - FlaggedBuffer to associate primitive numbers buffer with flags (to mark values infinite or missing, etc.)
-- Specialized builder functions for all primitive buffers like `IntBuffer(25) { it + 1 }` (https://github.com/mipt-npm/kmath/pull/125)
+- Specialized builder functions for all primitive buffers
+  like `IntBuffer(25) { it + 1 }` (https://github.com/mipt-npm/kmath/pull/125)
 - Interface `NumericAlgebra` where `number` operation is available to convert numbers to algebraic elements
-- Inverse trigonometric functions support in ExtendedField (`asin`, `acos`, `atan`) (https://github.com/mipt-npm/kmath/pull/114)
+- Inverse trigonometric functions support in
+  ExtendedField (`asin`, `acos`, `atan`) (https://github.com/mipt-npm/kmath/pull/114)
 - New space extensions: `average` and `averageWith`
 - Local coding conventions
 - Geometric Domains API in `kmath-core`
@@ -251,7 +254,8 @@
 - `readAsMemory` now has `throws IOException` in JVM signature.
 - Several functions taking functional types were made `inline`.
 - Several functions taking functional types now have `callsInPlace` contracts.
-- BigInteger and BigDecimal algebra: JBigDecimalField has companion object with default math context; minor optimizations
+- BigInteger and BigDecimal algebra: JBigDecimalField has companion object with default math context; minor
+  optimizations
 - `power(T, Int)` extension function has preconditions and supports `Field<T>`
 - Memory objects have more preconditions (overflow checking)
 - `tg` function is renamed to `tan` (https://github.com/mipt-npm/kmath/pull/114)

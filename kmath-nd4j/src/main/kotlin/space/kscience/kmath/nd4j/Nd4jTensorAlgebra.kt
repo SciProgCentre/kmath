@@ -144,7 +144,9 @@ public sealed interface Nd4jTensorAlgebra<T : Number, A : Field<T>> : AnalyticTe
     override fun atanh(arg: StructureND<T>): Nd4jArrayStructure<T> = Transforms.atanh(arg.ndArray).wrap()
     override fun power(arg: StructureND<T>, pow: Number): StructureND<T> = Transforms.pow(arg.ndArray, pow).wrap()
     override fun ceil(arg: StructureND<T>): Nd4jArrayStructure<T> = Transforms.ceil(arg.ndArray).wrap()
-    override fun floor(structureND: StructureND<T>): Nd4jArrayStructure<T> = Transforms.floor(structureND.ndArray).wrap()
+    override fun floor(structureND: StructureND<T>): Nd4jArrayStructure<T> =
+        Transforms.floor(structureND.ndArray).wrap()
+
     override fun std(structureND: StructureND<T>, dim: Int, keepDim: Boolean): Tensor<T> =
         structureND.ndArray.std(true, keepDim, dim).wrap()
 
@@ -178,7 +180,10 @@ public object DoubleNd4jTensorAlgebra : Nd4jTensorAlgebra<Double, Float64Field> 
     override fun INDArray.wrap(): Nd4jArrayStructure<Double> = asDoubleStructure()
 
     @OptIn(UnsafeKMathAPI::class)
-    override fun mutableStructureND(shape: ShapeND, initializer: Float64Field.(IntArray) -> Double): Nd4jArrayStructure<Double> {
+    override fun mutableStructureND(
+        shape: ShapeND,
+        initializer: Float64Field.(IntArray) -> Double,
+    ): Nd4jArrayStructure<Double> {
         val array: INDArray = Nd4j.zeros(*shape.asArray())
         val indices = ColumnStrides(shape)
         indices.asSequence().forEach { index ->

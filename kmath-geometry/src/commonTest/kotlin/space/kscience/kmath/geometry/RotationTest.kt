@@ -27,7 +27,7 @@ class RotationTest {
     }
 
     @Test
-    fun matrixConversion() = with(QuaternionAlgebra){
+    fun matrixConversion() = with(QuaternionAlgebra) {
 
         val q = Quaternion(1.0, 2.0, -3.0, 4.0).normalized()
 
@@ -45,9 +45,9 @@ class RotationTest {
 
             val reconstructed = Quaternion.fromEuler(angles, ro)
 
-            if( reconstructed.w>0) {
+            if (reconstructed.w > 0) {
                 assertBufferEquals(q, reconstructed)
-            } else{
+            } else {
                 assertBufferEquals(q, -reconstructed)
             }
         }
