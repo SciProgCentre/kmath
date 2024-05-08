@@ -11,19 +11,30 @@ import kotlin.jvm.JvmInline
 /**
  * A read-only ND shape
  */
-@JvmInline
-public value class ShapeND(@PublishedApi internal val array: IntArray) {
+public class ShapeND(@PublishedApi internal val array: IntArray) {
     public val size: Int get() = array.size
     public operator fun get(index: Int): Int = array[index]
     override fun toString(): String = array.contentToString()
+    override fun hashCode(): Int = array.contentHashCode()
+    override fun equals(other: Any?): Boolean = other is ShapeND && array.contentEquals(other.array)
 }
 
 public inline fun ShapeND.forEach(block: (value: Int) -> Unit): Unit = array.forEach(block)
 
 public inline fun ShapeND.forEachIndexed(block: (index: Int, value: Int) -> Unit): Unit = array.forEachIndexed(block)
 
+@Deprecated(
+    message = "ShapeND is made a usual class with correct `equals`. Use it instead of the `contentEquals`.",
+    replaceWith = ReplaceWith("this == other"),
+    level = DeprecationLevel.WARNING,
+)
 public infix fun ShapeND.contentEquals(other: ShapeND): Boolean = array.contentEquals(other.array)
 
+@Deprecated(
+    message = "ShapeND is made a usual class with correct `hashCode`. Use it instead of the `contentHashCode`.",
+    replaceWith = ReplaceWith("this.hashCode()"),
+    level = DeprecationLevel.WARNING,
+)
 public fun ShapeND.contentHashCode(): Int = array.contentHashCode()
 
 public val ShapeND.indices: IntRange get() = array.indices

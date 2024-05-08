@@ -106,10 +106,10 @@ public class ColumnStrides(override val shape: ShapeND) : Strides() {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other !is ColumnStrides) return false
-        return shape.contentEquals(other.shape)
+        return shape == other.shape
     }
 
-    override fun hashCode(): Int = shape.contentHashCode()
+    override fun hashCode(): Int = shape.hashCode()
 
 
     public companion object
@@ -156,10 +156,10 @@ public class RowStrides(override val shape: ShapeND) : Strides() {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other !is RowStrides) return false
-        return shape.contentEquals(other.shape)
+        return shape == other.shape
     }
 
-    override fun hashCode(): Int = shape.contentHashCode()
+    override fun hashCode(): Int = shape.hashCode()
 
     public companion object
 

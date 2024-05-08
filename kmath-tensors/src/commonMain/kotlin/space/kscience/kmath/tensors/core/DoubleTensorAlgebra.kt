@@ -95,7 +95,7 @@ public open class DoubleTensorAlgebra :
 
     override fun StructureND<Double>.valueOrNull(): Double? {
         val dt = asDoubleTensor()
-        return if (dt.shape contentEquals ShapeND(1)) dt.source[0] else null
+        return if (dt.shape == ShapeND(1)) dt.source[0] else null
     }
 
     override fun StructureND<Double>.value(): Double = valueOrNull()

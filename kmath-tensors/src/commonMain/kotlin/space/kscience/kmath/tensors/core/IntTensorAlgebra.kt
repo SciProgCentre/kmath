@@ -89,7 +89,7 @@ public open class IntTensorAlgebra : TensorAlgebra<Int, Int32Ring> {
 
     override fun StructureND<Int>.valueOrNull(): Int? {
         val dt = asIntTensor()
-        return if (dt.shape contentEquals ShapeND(1)) dt.source[0] else null
+        return if (dt.shape == ShapeND(1)) dt.source[0] else null
     }
 
     override fun StructureND<Int>.value(): Int = valueOrNull()
@@ -387,7 +387,7 @@ public open class IntTensorAlgebra : TensorAlgebra<Int, Int32Ring> {
     public fun stack(tensors: List<Tensor<Int>>): IntTensor {
         check(tensors.isNotEmpty()) { "List must have at least 1 element" }
         val shape = tensors[0].shape
-        check(tensors.all { it.shape contentEquals shape }) { "Tensors must have same shapes" }
+        check(tensors.all { it.shape == shape }) { "Tensors must have same shapes" }
         val resShape = ShapeND(tensors.size) + shape
 //        val resBuffer: List<Int> = tensors.flatMap {
 //            it.asIntTensor().source.array.drop(it.asIntTensor().bufferStart)

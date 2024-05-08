@@ -67,7 +67,7 @@ public open class ViktorFieldOpsND :
         right: StructureND<Double>,
         transform: Float64Field.(Double, Double) -> Double,
     ): ViktorStructureND {
-        require(left.shape.contentEquals(right.shape))
+        require(left.shape == right.shape)
         return F64Array(*left.shape.asArray()).apply {
             ColumnStrides(left.shape).asSequence().forEach { index ->
                 set(value = Float64Field.transform(left[index], right[index]), indices = index)

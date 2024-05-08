@@ -49,7 +49,7 @@ public sealed interface Nd4jTensorAlgebra<T : Number, A : Field<T>> : AnalyticTe
 
     @OptIn(PerformancePitfall::class)
     override fun zip(left: StructureND<T>, right: StructureND<T>, transform: A.(T, T) -> T): Nd4jArrayStructure<T> {
-        require(left.shape.contentEquals(right.shape))
+        require(left.shape == right.shape)
         return mutableStructureND(left.shape) { index -> elementAlgebra.transform(left[index], right[index]) }
     }
 
@@ -203,7 +203,7 @@ public object DoubleNd4jTensorAlgebra : Nd4jTensorAlgebra<Double, Float64Field> 
         }
 
     override fun StructureND<Double>.valueOrNull(): Double? =
-        if (shape contentEquals ShapeND(1)) ndArray.getDouble(0) else null
+        if (shape == ShapeND(1)) ndArray.getDouble(0) else null
 
     // TODO rewrite
     override fun diagonalEmbedding(

@@ -6,7 +6,6 @@
 package space.kscience.kmath.tensors.core
 
 import space.kscience.kmath.nd.ShapeND
-import space.kscience.kmath.nd.contentEquals
 import space.kscience.kmath.operations.invoke
 import space.kscience.kmath.tensors.core.internal.svd1d
 import kotlin.math.abs
@@ -113,8 +112,8 @@ internal class TestDoubleLinearOpsTensorAlgebra {
 
         val (q, r) = qr(tensor)
 
-        assertTrue { q.shape contentEquals shape }
-        assertTrue { r.shape contentEquals shape }
+        assertEquals(q.shape, shape)
+        assertEquals(r.shape, shape)
 
         assertTrue((q matmul r).eq(tensor))
 
@@ -133,9 +132,9 @@ internal class TestDoubleLinearOpsTensorAlgebra {
 
         val (p, l, u) = lu(tensor)
 
-        assertTrue { p.shape contentEquals shape }
-        assertTrue { l.shape contentEquals shape }
-        assertTrue { u.shape contentEquals shape }
+        assertEquals(p.shape, shape)
+        assertEquals(l.shape, shape)
+        assertEquals(u.shape, shape)
 
         assertTrue((p matmul tensor).eq(l matmul u))
     }
@@ -157,7 +156,7 @@ internal class TestDoubleLinearOpsTensorAlgebra {
 
         val res = svd1d(tensor2)
 
-        assertTrue(res.shape contentEquals ShapeND(2))
+        assertEquals(res.shape, ShapeND(2))
         assertTrue { abs(abs(res.source[0]) - 0.386) < 0.01 }
         assertTrue { abs(abs(res.source[1]) - 0.922) < 0.01 }
     }
