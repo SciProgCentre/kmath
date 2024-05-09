@@ -35,7 +35,7 @@ class StreamDoubleFieldND(override val shape: ShapeND) : FieldND<Double, Float64
     @OptIn(PerformancePitfall::class)
     private val StructureND<Double>.buffer: Float64Buffer
         get() = when {
-            !shape.contentEquals(this@StreamDoubleFieldND.shape) -> throw ShapeMismatchException(
+            shape != this@StreamDoubleFieldND.shape -> throw ShapeMismatchException(
                 this@StreamDoubleFieldND.shape,
                 shape
             )

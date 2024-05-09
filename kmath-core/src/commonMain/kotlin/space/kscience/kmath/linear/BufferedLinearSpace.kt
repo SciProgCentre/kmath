@@ -32,12 +32,12 @@ public class BufferedLinearSpace<T, out A : Ring<T>>(
     }
 
     override fun Matrix<T>.plus(other: Matrix<T>): Matrix<T> = ndAlgebra {
-        require(shape.contentEquals(other.shape)) { "Shape mismatch on Matrix::plus. Expected $shape but found ${other.shape}" }
+        require(shape == other.shape) { "Shape mismatch on Matrix::plus. Expected $shape but found ${other.shape}" }
         asND().plus(other.asND()).as2D()
     }
 
     override fun Matrix<T>.minus(other: Matrix<T>): Matrix<T> = ndAlgebra {
-        require(shape.contentEquals(other.shape)) { "Shape mismatch on Matrix::minus. Expected $shape but found ${other.shape}" }
+        require(shape == other.shape) { "Shape mismatch on Matrix::minus. Expected $shape but found ${other.shape}" }
         asND().minus(other.asND()).as2D()
     }
 

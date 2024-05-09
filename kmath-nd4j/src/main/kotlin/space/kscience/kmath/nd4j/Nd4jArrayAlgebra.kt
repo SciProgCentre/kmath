@@ -63,7 +63,7 @@ public sealed interface Nd4jArrayAlgebra<T, out C : Algebra<T>> : AlgebraND<T, C
         right: StructureND<T>,
         transform: C.(T, T) -> T,
     ): Nd4jArrayStructure<T> {
-        require(left.shape.contentEquals(right.shape)) { "Can't zip tow structures of shape ${left.shape} and ${right.shape}" }
+        require(left.shape == right.shape) { "Can't zip tow structures of shape ${left.shape} and ${right.shape}" }
         val new = Nd4j.create(*left.shape.asArray()).wrap()
         new.indicesIterator().forEach { idx -> new[idx] = elementAlgebra.transform(left[idx], right[idx]) }
         return new

@@ -6,7 +6,6 @@
 package space.kscience.kmath.tensors
 
 import space.kscience.kmath.nd.ShapeND
-import space.kscience.kmath.nd.contentEquals
 import space.kscience.kmath.operations.asIterable
 import space.kscience.kmath.operations.invoke
 import space.kscience.kmath.tensors.core.*
@@ -94,7 +93,7 @@ class Dense(
 
 // simple accuracy equal to the proportion of correct answers
 fun accuracy(yPred: DoubleTensor, yTrue: DoubleTensor): Double {
-    check(yPred.shape contentEquals yTrue.shape)
+    check(yPred.shape == yTrue.shape)
     val n = yPred.shape[0]
     var correctCnt = 0
     for (i in 0 until n) {

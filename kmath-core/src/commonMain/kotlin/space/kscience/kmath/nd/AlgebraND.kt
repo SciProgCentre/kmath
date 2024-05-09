@@ -55,7 +55,7 @@ public interface AlgebraND<T, out C : Algebra<T>> : Algebra<StructureND<T>> {
      */
     @PerformancePitfall("Very slow on remote execution algebras")
     public fun zip(left: StructureND<T>, right: StructureND<T>, transform: C.(T, T) -> T): StructureND<T> {
-        require(left.shape.contentEquals(right.shape)) {
+        require(left.shape == right.shape) {
             "Expected left and right of the same shape, but left - ${left.shape} and right - ${right.shape}"
         }
         return structureND(left.shape) { index ->

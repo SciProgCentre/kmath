@@ -6,7 +6,6 @@
 package space.kscience.kmath.tensors
 
 import space.kscience.kmath.nd.ShapeND
-import space.kscience.kmath.nd.contentEquals
 import space.kscience.kmath.operations.invoke
 import space.kscience.kmath.tensors.core.DoubleTensor
 import space.kscience.kmath.tensors.core.DoubleTensorAlgebra
@@ -62,7 +61,7 @@ fun main() {
         // figure out MSE of approximation
         fun mse(yTrue: DoubleTensor, yPred: DoubleTensor): Double {
             require(yTrue.shape.size == 1)
-            require(yTrue.shape contentEquals yPred.shape)
+            require(yTrue.shape == yPred.shape)
 
             val diff = yTrue - yPred
             return sqrt(diff.dot(diff)).value()

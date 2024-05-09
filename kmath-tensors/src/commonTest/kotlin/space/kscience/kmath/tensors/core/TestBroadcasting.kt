@@ -6,29 +6,31 @@
 package space.kscience.kmath.tensors.core
 
 import space.kscience.kmath.nd.ShapeND
-import space.kscience.kmath.nd.contentEquals
 import space.kscience.kmath.operations.invoke
 import space.kscience.kmath.tensors.core.internal.broadcastOuterTensors
 import space.kscience.kmath.tensors.core.internal.broadcastShapes
 import space.kscience.kmath.tensors.core.internal.broadcastTensors
 import space.kscience.kmath.tensors.core.internal.broadcastTo
 import kotlin.test.Test
+import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 internal class TestBroadcasting {
 
     @Test
     fun testBroadcastShapes() = DoubleTensorAlgebra {
-        assertTrue(
+        assertEquals(
             broadcastShapes(
                 listOf(ShapeND(2, 3), ShapeND(1, 3), ShapeND(1, 1, 1))
-            ) contentEquals ShapeND(1, 2, 3)
+            ),
+            ShapeND(1, 2, 3)
         )
 
-        assertTrue(
+        assertEquals(
             broadcastShapes(
                 listOf(ShapeND(6, 7), ShapeND(5, 6, 1), ShapeND(7), ShapeND(5, 1, 7))
-            ) contentEquals ShapeND(5, 6, 7)
+            ),
+            ShapeND(5, 6, 7)
         )
     }
 
@@ -38,7 +40,7 @@ internal class TestBroadcasting {
         val tensor2 = fromArray(ShapeND(1, 3), doubleArrayOf(10.0, 20.0, 30.0))
 
         val res = broadcastTo(tensor2, tensor1.shape)
-        assertTrue(res.shape contentEquals ShapeND(2, 3))
+        assertTrue(res.shape == ShapeND(2, 3))
         assertTrue(res.source contentEquals doubleArrayOf(10.0, 20.0, 30.0, 10.0, 20.0, 30.0))
     }
 
@@ -50,9 +52,9 @@ internal class TestBroadcasting {
 
         val res = broadcastTensors(tensor1, tensor2, tensor3)
 
-        assertTrue(res[0].shape contentEquals ShapeND(1, 2, 3))
-        assertTrue(res[1].shape contentEquals ShapeND(1, 2, 3))
-        assertTrue(res[2].shape contentEquals ShapeND(1, 2, 3))
+        assertEquals(res[0].shape, ShapeND(1, 2, 3))
+        assertEquals(res[1].shape, ShapeND(1, 2, 3))
+        assertEquals(res[2].shape, ShapeND(1, 2, 3))
 
         assertTrue(res[0].source contentEquals doubleArrayOf(1.0, 2.0, 3.0, 4.0, 5.0, 6.0))
         assertTrue(res[1].source contentEquals doubleArrayOf(10.0, 20.0, 30.0, 10.0, 20.0, 30.0))
@@ -67,9 +69,9 @@ internal class TestBroadcasting {
 
         val res = broadcastOuterTensors(tensor1, tensor2, tensor3)
 
-        assertTrue(res[0].shape contentEquals ShapeND(1, 2, 3))
-        assertTrue(res[1].shape contentEquals ShapeND(1, 1, 3))
-        assertTrue(res[2].shape contentEquals ShapeND(1, 1, 1))
+        assertEquals(res[0].shape, ShapeND(1, 2, 3))
+        assertEquals(res[1].shape, ShapeND(1, 1, 3))
+        assertEquals(res[2].shape, ShapeND(1, 1, 1))
 
         assertTrue(res[0].source contentEquals doubleArrayOf(1.0, 2.0, 3.0, 4.0, 5.0, 6.0))
         assertTrue(res[1].source contentEquals doubleArrayOf(10.0, 20.0, 30.0))
@@ -84,9 +86,9 @@ internal class TestBroadcasting {
 
         val res = broadcastOuterTensors(tensor1, tensor2, tensor3)
 
-        assertTrue(res[0].shape contentEquals ShapeND(4, 2, 5, 3, 2, 3))
-        assertTrue(res[1].shape contentEquals ShapeND(4, 2, 5, 3, 3, 3))
-        assertTrue(res[2].shape contentEquals ShapeND(4, 2, 5, 3, 1, 1))
+        assertEquals(res[0].shape, ShapeND(4, 2, 5, 3, 2, 3))
+        assertEquals(res[1].shape, ShapeND(4, 2, 5, 3, 3, 3))
+        assertEquals(res[2].shape, ShapeND(4, 2, 5, 3, 1, 1))
     }
 
     @Test
@@ -99,16 +101,16 @@ internal class TestBroadcasting {
         val tensor31 = tensor3 - tensor1
         val tensor32 = tensor3 - tensor2
 
-        assertTrue(tensor21.shape contentEquals ShapeND(2, 3))
+        assertEquals(tensor21.shape, ShapeND(2, 3))
         assertTrue(tensor21.source contentEquals doubleArrayOf(9.0, 18.0, 27.0, 6.0, 15.0, 24.0))
 
-        assertTrue(tensor31.shape contentEquals ShapeND(1, 2, 3))
+        assertEquals(tensor31.shape, ShapeND(1, 2, 3))
         assertTrue(
             tensor31.source
                     contentEquals doubleArrayOf(499.0, 498.0, 497.0, 496.0, 495.0, 494.0)
         )
 
-        assertTrue(tensor32.shape contentEquals ShapeND(1, 1, 3))
+        assertEquals(tensor32.shape, ShapeND(1, 1, 3))
         assertTrue(tensor32.source contentEquals doubleArrayOf(490.0, 480.0, 470.0))
     }
 

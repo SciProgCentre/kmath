@@ -7,7 +7,6 @@ package space.kscience.kmath.tensors.core.internal
 
 import space.kscience.kmath.nd.ShapeND
 import space.kscience.kmath.nd.StructureND
-import space.kscience.kmath.nd.contentEquals
 import space.kscience.kmath.nd.linearSize
 import space.kscience.kmath.tensors.api.Tensor
 import space.kscience.kmath.tensors.core.DoubleTensor
@@ -32,7 +31,7 @@ internal fun checkBufferShapeConsistency(shape: ShapeND, buffer: DoubleArray) =
 
 @PublishedApi
 internal fun <T> checkShapesCompatible(a: StructureND<T>, b: StructureND<T>): Unit =
-    check(a.shape contentEquals b.shape) {
+    check(a.shape == b.shape) {
         "Incompatible shapes ${a.shape} and ${b.shape} "
     }
 

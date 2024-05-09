@@ -23,7 +23,6 @@ import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.nd.ShapeND
 import space.kscience.kmath.nd.StructureND
 import space.kscience.kmath.nd.asArray
-import space.kscience.kmath.nd.contentEquals
 import space.kscience.kmath.operations.Ring
 import space.kscience.kmath.tensors.api.Tensor
 import space.kscience.kmath.tensors.api.TensorAlgebra
@@ -105,7 +104,7 @@ public abstract class TensorFlowAlgebra<T, TT : TNumber, A : Ring<T>> internal c
     protected abstract fun const(value: T): Constant<TT>
 
     @OptIn(PerformancePitfall::class)
-    override fun StructureND<T>.valueOrNull(): T? = if (shape contentEquals ShapeND(1))
+    override fun StructureND<T>.valueOrNull(): T? = if (shape == ShapeND(1))
         get(intArrayOf(0)) else null
 
     /**

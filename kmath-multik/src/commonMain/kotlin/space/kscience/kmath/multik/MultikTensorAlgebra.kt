@@ -92,7 +92,7 @@ public abstract class MultikTensorAlgebra<T, A : Ring<T>>(
 
     @OptIn(PerformancePitfall::class)
     override fun zip(left: StructureND<T>, right: StructureND<T>, transform: A.(T, T) -> T): MultikTensor<T> {
-        require(left.shape.contentEquals(right.shape)) { "ND array shape mismatch" } //TODO replace by ShapeMismatchException
+        require(left.shape == right.shape) { "ND array shape mismatch" } //TODO replace by ShapeMismatchException
         val leftArray = left.asMultik().array
         val rightArray = right.asMultik().array
         val data = initMemoryView<T>(leftArray.size, dataType)
@@ -124,7 +124,7 @@ public abstract class MultikTensorAlgebra<T, A : Ring<T>>(
     public fun MutableMultiArray<T, *>.wrap(): MultikTensor<T> = MultikTensor(this.asDNArray())
 
     @OptIn(PerformancePitfall::class)
-    override fun StructureND<T>.valueOrNull(): T? = if (shape contentEquals ShapeND(1)) {
+    override fun StructureND<T>.valueOrNull(): T? = if (shape == ShapeND(1)) {
         get(intArrayOf(0))
     } else null
 
@@ -224,7 +224,7 @@ public abstract class MultikTensorAlgebra<T, A : Ring<T>>(
         }
 
         val mt = asMultik().array
-        return if (ShapeND(mt.shape).contentEquals(shape)) {
+        return if (ShapeND(mt.shape) == shape) {
             mt
         } else {
             @OptIn(UnsafeKMathAPI::class)

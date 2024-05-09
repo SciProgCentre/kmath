@@ -6,7 +6,8 @@
 package space.kscience.kmath.tensors.core
 
 
-import space.kscience.kmath.nd.*
+import space.kscience.kmath.nd.ShapeND
+import space.kscience.kmath.nd.get
 import space.kscience.kmath.operations.invoke
 import space.kscience.kmath.testutils.assertBufferEquals
 import kotlin.test.Test
@@ -43,7 +44,7 @@ internal class TestDoubleTensorAlgebra {
         val res = tensor.transposed(0, 0)
 
         assertTrue(res.asDoubleTensor().source contentEquals doubleArrayOf(0.0))
-        assertTrue(res.shape contentEquals ShapeND(1))
+        assertEquals(res.shape, ShapeND(1))
     }
 
     @Test
@@ -52,7 +53,7 @@ internal class TestDoubleTensorAlgebra {
         val res = tensor.transposed(1, 0)
 
         assertTrue(res.asDoubleTensor().source contentEquals doubleArrayOf(1.0, 3.0, 5.0, 2.0, 4.0, 6.0))
-        assertTrue(res.shape contentEquals ShapeND(2, 3))
+        assertEquals(res.shape, ShapeND(2, 3))
     }
 
     @Test
@@ -62,9 +63,9 @@ internal class TestDoubleTensorAlgebra {
         val res02 = tensor.transposed(-3, 2)
         val res12 = tensor.transposed()
 
-        assertTrue(res01.shape contentEquals ShapeND(2, 1, 3))
-        assertTrue(res02.shape contentEquals ShapeND(3, 2, 1))
-        assertTrue(res12.shape contentEquals ShapeND(1, 3, 2))
+        assertEquals(res01.shape, ShapeND(2, 1, 3))
+        assertEquals(res02.shape, ShapeND(3, 2, 1))
+        assertEquals(res12.shape, ShapeND(1, 3, 2))
 
         assertTrue(res01.asDoubleTensor().source contentEquals doubleArrayOf(1.0, 2.0, 3.0, 4.0, 5.0, 6.0))
         assertTrue(res02.asDoubleTensor().source contentEquals doubleArrayOf(1.0, 4.0, 2.0, 5.0, 3.0, 6.0))
@@ -114,19 +115,19 @@ internal class TestDoubleTensorAlgebra {
 
         val res12 = tensor1.dot(tensor2)
         assertTrue(res12.source contentEquals doubleArrayOf(140.0, 320.0))
-        assertTrue(res12.shape contentEquals ShapeND(2))
+        assertEquals(res12.shape, ShapeND(2))
 
         val res32 = tensor3.matmul(tensor2)
         assertTrue(res32.source contentEquals doubleArrayOf(-140.0))
-        assertTrue(res32.shape contentEquals ShapeND(1, 1))
+        assertEquals(res32.shape, ShapeND(1, 1))
 
         val res22 = tensor2.dot(tensor2)
         assertTrue(res22.source contentEquals doubleArrayOf(1400.0))
-        assertTrue(res22.shape contentEquals ShapeND(1))
+        assertEquals(res22.shape, ShapeND(1))
 
         val res11 = tensor1.dot(tensor11)
         assertTrue(res11.source contentEquals doubleArrayOf(22.0, 28.0, 49.0, 64.0))
-        assertTrue(res11.shape contentEquals ShapeND(2, 2))
+        assertEquals(res11.shape, ShapeND(2, 2))
 
         val res45 = tensor4.matmul(tensor5)
         assertTrue(
@@ -135,7 +136,7 @@ internal class TestDoubleTensorAlgebra {
                 468.0, 501.0, 534.0, 594.0, 636.0, 678.0, 720.0, 771.0, 822.0
             )
         )
-        assertTrue(res45.shape contentEquals ShapeND(2, 3, 3))
+        assertEquals(res45.shape, ShapeND(2, 3, 3))
     }
 
     @Test
@@ -144,35 +145,35 @@ internal class TestDoubleTensorAlgebra {
         val tensor2 = fromArray(ShapeND(2, 3), doubleArrayOf(1.0, 2.0, 3.0, 4.0, 5.0, 6.0))
         val tensor3 = zeros(ShapeND(2, 3, 4, 5))
 
-        assertTrue(
-            diagonalEmbedding(tensor3, 0, 3, 4).shape contentEquals
-                    ShapeND(2, 3, 4, 5, 5)
+        assertEquals(
+            diagonalEmbedding(tensor3, 0, 3, 4).shape,
+            ShapeND(2, 3, 4, 5, 5)
         )
-        assertTrue(
-            diagonalEmbedding(tensor3, 1, 3, 4).shape contentEquals
-                    ShapeND(2, 3, 4, 6, 6)
+        assertEquals(
+            diagonalEmbedding(tensor3, 1, 3, 4).shape,
+            ShapeND(2, 3, 4, 6, 6)
         )
-        assertTrue(
-            diagonalEmbedding(tensor3, 2, 0, 3).shape contentEquals
-                    ShapeND(7, 2, 3, 7, 4)
+        assertEquals(
+            diagonalEmbedding(tensor3, 2, 0, 3).shape,
+            ShapeND(7, 2, 3, 7, 4)
         )
 
         val diagonal1 = diagonalEmbedding(tensor1, 0, 1, 0)
-        assertTrue(diagonal1.shape contentEquals ShapeND(3, 3))
+        assertEquals(diagonal1.shape, ShapeND(3, 3))
         assertTrue(
             diagonal1.source contentEquals
                     doubleArrayOf(10.0, 0.0, 0.0, 0.0, 20.0, 0.0, 0.0, 0.0, 30.0)
         )
 
         val diagonal1Offset = diagonalEmbedding(tensor1, 1, 1, 0)
-        assertTrue(diagonal1Offset.shape contentEquals ShapeND(4, 4))
+        assertEquals(diagonal1Offset.shape, ShapeND(4, 4))
         assertTrue(
             diagonal1Offset.source contentEquals
                     doubleArrayOf(0.0, 0.0, 0.0, 0.0, 10.0, 0.0, 0.0, 0.0, 0.0, 20.0, 0.0, 0.0, 0.0, 0.0, 30.0, 0.0)
         )
 
         val diagonal2 = diagonalEmbedding(tensor2, 1, 0, 2)
-        assertTrue(diagonal2.shape contentEquals ShapeND(4, 2, 4))
+        assertEquals(diagonal2.shape, ShapeND(4, 2, 4))
         assertTrue(
             diagonal2.source contentEquals
                     doubleArrayOf(
@@ -202,7 +203,7 @@ internal class TestDoubleTensorAlgebra {
         val l = tensor.getTensor(0).map { it + 1.0 }
         val r = tensor.getTensor(1).map { it - 1.0 }
         val res = l + r
-        assertTrue { ShapeND(5, 5) contentEquals res.shape }
+        assertEquals(ShapeND(5, 5), res.shape)
         assertEquals(2.0, res[4, 4])
     }
 }

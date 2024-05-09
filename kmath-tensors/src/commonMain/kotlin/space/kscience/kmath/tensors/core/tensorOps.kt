@@ -47,7 +47,7 @@ public fun DoubleTensorAlgebra.randomNormalLike(structure: WithShape, seed: Long
 public fun stack(tensors: List<Tensor<Double>>): DoubleTensor {
     check(tensors.isNotEmpty()) { "List must have at least 1 element" }
     val shape = tensors[0].shape
-    check(tensors.all { it.shape contentEquals shape }) { "Tensors must have same shapes" }
+    check(tensors.all { it.shape == shape }) { "Tensors must have same shapes" }
     val resShape = ShapeND(tensors.size) + shape
 //        val resBuffer: List<Double> = tensors.flatMap {
 //            it.asDoubleTensor().source.array.drop(it.asDoubleTensor().bufferStart)
@@ -91,7 +91,7 @@ public fun DoubleTensorAlgebra.luPivot(
 ): Triple<DoubleTensor, DoubleTensor, DoubleTensor> {
     checkSquareMatrix(luTensor.shape)
     check(
-        luTensor.shape.first(luTensor.shape.size - 2) contentEquals pivotsTensor.shape.first(pivotsTensor.shape.size - 1) ||
+        luTensor.shape.first(luTensor.shape.size - 2) == pivotsTensor.shape.first(pivotsTensor.shape.size - 1) ||
                 luTensor.shape.last() == pivotsTensor.shape.last() - 1
     ) { "Inappropriate shapes of input tensors" }
 
