@@ -13,36 +13,38 @@ import space.kscience.kmath.structures.Float64Buffer
 import kotlin.math.*
 
 /**
- * [Metropolis–Hastings algorithm](https://en.wikipedia.org/wiki/Metropolis%E2%80%93Hastings_algorithm) for sampling
+ * [Metropolis–Hastings algorithm](https://en.wikipedia.org/wiki/Metropolis-Hastings_algorithm) for sampling
  * target distribution [targetDist].
+ *
+ * The normal distribution is used as the proposal function.
  *
  *      params:
  *          - targetDist: function close to the density of the sampled distribution;
- *          - initialState: initial value of the chain of sampled values.
+ *          - initialState: initial value of the chain of sampled values;
+ *          - proposalStd: standard deviation of the proposal function.
  */
 public class MetropolisHastingsSampler(
     public val targetDist: (arg : Double) -> Double,
     public val initialState : Double = 0.0,
+    public val proposalStd : Double = 1.0,
 ) : BlockingDoubleSampler {
     override fun sample(generator: RandomGenerator): BlockingDoubleChain = object : BlockingDoubleChain {
         var currentState = initialState
-        fun proposalDist(arg : Double) = NormalDistribution(arg, 0.01)
+        fun proposalDist(arg : Double) = NormalDistribution(arg, proposalStd)
 
         override fun nextBufferBlocking(size: Int): Float64Buffer {
             val acceptanceProb = generator.nextDoubleBuffer(size)
 
             return Float64Buffer(size) {index ->
-                val newState = proposalDist(currentState).sample(RandomGenerator.default(0)).nextBufferBlocking(5).get(4)
-                val firstComp = targetDist(newState) / targetDist(currentState)
-                val secondComp = proposalDist(newState).probability(currentState) / proposalDist(currentState).probability(newState)
-                val acceptanceRatio = min(1.0, firstComp * secondComp)
+                val newState = proposalDist(currentState).sample(generator).nextBufferBlocking(1).get(0)
+                val acceptanceRatio = min(1.0, targetDist(newState) / targetDist(currentState))
 
                 currentState = if (acceptanceProb[index] <= acceptanceRatio) newState else currentState
                 currentState
             }
         }
 
-        override suspend fun fork(): BlockingDoubleChain = BoxMullerSampler.sample(generator.fork())
+        override suspend fun fork(): BlockingDoubleChain = sample(generator.fork())
     }
 
 }
