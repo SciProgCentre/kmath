@@ -26,10 +26,8 @@ dependencies {
 }
 
 kotlin {
-    jvmToolchain {
-        languageVersion.set(JavaLanguageVersion.of(11))
-    }
-    sourceSets.all {
-        languageSettings.optIn("kotlin.OptIn")
+    jvmToolchain(11)
+    compilerOptions {
+        optIn.add("kotlin.OptIn")
     }
 }

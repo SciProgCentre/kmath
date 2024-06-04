@@ -6,13 +6,11 @@
 package space.kscience.kmath.nd
 
 import space.kscience.kmath.UnsafeKMathAPI
-import kotlin.jvm.JvmInline
 
 /**
  * A read-only ND shape
  */
-@JvmInline
-public value class ShapeND(@PublishedApi internal val array: IntArray) {
+public class ShapeND(@PublishedApi internal val array: IntArray) {
     public val size: Int get() = array.size
     public operator fun get(index: Int): Int = array[index]
     override fun toString(): String = array.contentToString()

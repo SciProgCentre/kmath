@@ -1,6 +1,5 @@
 @file:Suppress("UNUSED_VARIABLE")
 
-import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
 import space.kscience.kmath.benchmarks.addBenchmarkProperties
 
 plugins {
@@ -152,18 +151,12 @@ benchmark {
     }
 }
 
-kotlin.sourceSets.all {
-    with(languageSettings) {
-        optIn("kotlin.contracts.ExperimentalContracts")
-        optIn("kotlin.ExperimentalUnsignedTypes")
-        optIn("space.kscience.kmath.UnstableKMathAPI")
-    }
-}
-
-tasks.withType<KotlinJvmCompile> {
-    kotlinOptions {
-        jvmTarget = "11"
-        freeCompilerArgs = freeCompilerArgs + "-Xjvm-default=all" + "-Xlambdas=indy"
+kotlin {
+    jvmToolchain(11)
+    compilerOptions {
+        optIn.addAll(
+            "space.kscience.kmath.UnstableKMathAPI"
+        )
     }
 }
 
