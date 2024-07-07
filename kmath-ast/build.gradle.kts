@@ -4,7 +4,20 @@ plugins {
 
 kscience {
     jvm()
-    js()
+    js{
+        nodejs {
+            testTask {
+                useMocha().timeout = "0"
+            }
+        }
+
+        browser {
+            useCommonJs()
+            testTask {
+                useMocha().timeout = "0"
+            }
+        }
+    }
     native()
 
     dependencies {
@@ -18,7 +31,7 @@ kscience {
 
     dependencies(jsMain) {
         implementation(npm("astring", "1.7.5"))
-        implementation(npm("binaryen", "101.0.0"))
+        implementation(npm("binaryen", "117.0.0"))
         implementation(npm("js-base64", "3.6.1"))
     }
 
@@ -29,19 +42,6 @@ kscience {
 }
 
 kotlin {
-    js {
-        nodejs {
-            testTask {
-                useMocha().timeout = "0"
-            }
-        }
-
-        browser {
-            testTask {
-                useMocha().timeout = "0"
-            }
-        }
-    }
 
     sourceSets {
         filter { it.name.contains("test", true) }

@@ -80,7 +80,7 @@ benchmark {
     // Setup configurations
     targets {
         register("jvm")
-//        register("js")
+        register("js")
     }
 
     fun kotlinx.benchmark.gradle.BenchmarkConfiguration.commonConfiguration() {
