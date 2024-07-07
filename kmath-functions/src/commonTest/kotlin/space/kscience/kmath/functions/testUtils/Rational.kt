@@ -159,7 +159,7 @@ class Rational {
     override fun equals(other: Any?): Boolean =
         when (other) {
             is Rational -> numerator == other.numerator && denominator == other.denominator
-            is Int -> numerator == other && denominator == 1L
+            is Int -> numerator == other.toLong() && denominator == 1L
             is Long -> numerator == other && denominator == 1L
             else -> false
         }

@@ -6,7 +6,6 @@
 package space.kscience.kmath.nd
 
 import space.kscience.kmath.UnsafeKMathAPI
-import kotlin.jvm.JvmInline
 
 /**
  * A read-only ND shape

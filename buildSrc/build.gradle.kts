@@ -1,4 +1,5 @@
 plugins {
+    kotlin("jvm") version "1.9.23"
     `kotlin-dsl`
     `version-catalog`
 }
@@ -25,10 +26,8 @@ dependencies {
 }
 
 kotlin {
-    jvmToolchain {
-        languageVersion.set(JavaLanguageVersion.of(11))
-    }
-    sourceSets.all {
-        languageSettings.optIn("kotlin.OptIn")
+    jvmToolchain(11)
+    compilerOptions {
+        optIn.add("kotlin.OptIn")
     }
 }

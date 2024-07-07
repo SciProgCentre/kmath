@@ -12,8 +12,6 @@ import space.kscience.kmath.expressions.Symbol
 import space.kscience.kmath.operations.Algebra
 import space.kscience.kmath.operations.Float64Field
 import space.kscience.kmath.operations.Int32Ring
-import kotlin.contracts.InvocationKind
-import kotlin.contracts.contract
 import space.kscience.kmath.asm.compile as asmCompile
 import space.kscience.kmath.asm.compileToExpression as asmCompileToExpression
 
@@ -43,7 +41,6 @@ private object PrimitiveAsmCompilerTestContext : CompilerTestContext {
 
 
 internal actual inline fun runCompilerTest(action: CompilerTestContext.() -> Unit) {
-    contract { callsInPlace(action, InvocationKind.EXACTLY_ONCE) }
     action(GenericAsmCompilerTestContext)
     action(PrimitiveAsmCompilerTestContext)
 }
