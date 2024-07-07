@@ -140,4 +140,8 @@ public fun <A : Attribute<Unit>> Attributes(
     attribute: A,
 ): Attributes = MapAttributes(mapOf(attribute to Unit))
 
-public operator fun Attributes.plus(other: Attributes): Attributes = MapAttributes(content + other.content)
+public operator fun Attributes.plus(other: Attributes): Attributes = when{
+    isEmpty() -> other
+    other.isEmpty() -> this
+    else -> MapAttributes(content + other.content)
+}
