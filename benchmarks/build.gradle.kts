@@ -1,5 +1,6 @@
 @file:Suppress("UNUSED_VARIABLE")
 
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
 import space.kscience.kmath.benchmarks.addBenchmarkProperties
 
@@ -161,9 +162,9 @@ kotlin.sourceSets.all {
 }
 
 tasks.withType<KotlinJvmCompile> {
-    kotlinOptions {
-        jvmTarget = "11"
-        freeCompilerArgs = freeCompilerArgs + "-Xjvm-default=all" + "-Xlambdas=indy"
+    compilerOptions {
+        jvmTarget.set(JvmTarget.JVM_11)
+        freeCompilerArgs.addAll("-Xjvm-default=all", "-Xlambdas=indy")
     }
 }
 
