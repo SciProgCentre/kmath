@@ -5,46 +5,72 @@
 
 package space.kscience.kmath.samplers
 
-import space.kscience.kmath.chains.BlockingDoubleChain
-import space.kscience.kmath.distributions.Distribution1D
-import space.kscience.kmath.distributions.NormalDistribution
+import space.kscience.kmath.chains.Chain
+import space.kscience.kmath.chains.StatefulChain
+import space.kscience.kmath.operations.Group
+import space.kscience.kmath.operations.algebra
 import space.kscience.kmath.random.RandomGenerator
-import space.kscience.kmath.structures.Float64Buffer
-import kotlin.math.*
+import space.kscience.kmath.stat.Sampler
+import space.kscience.kmath.structures.Float64
 
 /**
  * [Metropolis–Hastings algorithm](https://en.wikipedia.org/wiki/Metropolis-Hastings_algorithm) for sampling
- * target distribution [targetDist].
+ * target distribution [targetPdf].
  *
- * The normal distribution is used as the proposal function.
- *
- *      params:
- *          - targetDist: function close to the density of the sampled distribution;
- *          - initialState: initial value of the chain of sampled values;
- *          - proposalStd: standard deviation of the proposal function.
+ * @param stepSampler a sampler for proposal point (offset to previous point)
  */
-public class MetropolisHastingsSampler(
-    public val targetDist: (arg : Double) -> Double,
-    public val initialState : Double = 0.0,
-    public val proposalStd : Double = 1.0,
-) : BlockingDoubleSampler {
-    override fun sample(generator: RandomGenerator): BlockingDoubleChain = object : BlockingDoubleChain {
-        var currentState = initialState
-        fun proposalDist(arg : Double) = NormalDistribution(arg, proposalStd)
+public class MetropolisHastingsSampler<T>(
+    public val algebra: Group<T>,
+    public val startPoint: T,
+    public val stepSampler: Sampler<T>,
+    public val targetPdf: suspend (T) -> Float64,
+) : Sampler<T> {
 
-        override fun nextBufferBlocking(size: Int): Float64Buffer {
-            val acceptanceProb = generator.nextDoubleBuffer(size)
+    //TODO consider API for conditional step probability
 
-            return Float64Buffer(size) {index ->
-                val newState = proposalDist(currentState).sample(generator).nextBufferBlocking(1).get(0)
-                val acceptanceRatio = min(1.0, targetDist(newState) / targetDist(currentState))
-
-                currentState = if (acceptanceProb[index] <= acceptanceRatio) newState else currentState
-                currentState
+    override fun sample(generator: RandomGenerator): Chain<T> = StatefulChain<Chain<T>, T>(
+        state = stepSampler.sample(generator),
+        seed = { startPoint },
+        forkState = Chain<T>::fork
+    ) { previousPoint: T ->
+        val proposalPoint = with(algebra) { previousPoint + next() }
+        val ratio = targetPdf(proposalPoint) / targetPdf(previousPoint)
+        if (ratio >= 1.0) {
+            proposalPoint
+        } else {
+            val acceptanceProbability = generator.nextDouble()
+            if (acceptanceProbability <= ratio) {
+                proposalPoint
+            } else {
+                previousPoint
             }
         }
-
-        override suspend fun fork(): BlockingDoubleChain = sample(generator.fork())
     }
 
+
+    public companion object {
+
+        /**
+         * A Metropolis-Hastings sampler for univariate [Float64] values
+         */
+        public fun univariate(
+            startPoint: Float64,
+            stepSampler: Sampler<Float64>,
+            targetPdf: suspend (Float64) -> Float64,
+        ): MetropolisHastingsSampler<Double> = MetropolisHastingsSampler(
+            algebra = Float64.algebra,
+            startPoint = startPoint,
+            stepSampler = stepSampler,
+            targetPdf = targetPdf
+        )
+
+        /**
+         * A Metropolis-Hastings sampler for univariate [Float64] values with normal step distribution
+         */
+        public fun univariateNormal(
+            startPoint: Float64,
+            stepSigma: Float64,
+            targetPdf: suspend (Float64) -> Float64,
+        ): MetropolisHastingsSampler<Double> = univariate(startPoint, GaussianSampler(0.0, stepSigma), targetPdf)
+    }
 }

@@ -17,7 +17,7 @@ import kotlin.jvm.JvmName
 /**
  * Sampler that generates chains of values of type [T].
  */
-public fun interface Sampler<out T : Any> {
+public fun interface Sampler<out T> {
     /**
      * Generates a chain of samples.
      *

@@ -3,6 +3,7 @@
 ## Unreleased
 
 ### Added
+- Metropolis-Hastings sampler
 
 ### Changed
 

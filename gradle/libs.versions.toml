@@ -1,0 +1,9 @@
+[versions]
+
+commons-rng = "1.6"
+
+
+[libraries]
+
+commons-rng-simple = {module ="org.apache.commons:commons-rng-simple", version.ref = "commons-rng"}
+commons-rng-sampling = {module ="org.apache.commons:commons-rng-sampling", version.ref = "commons-rng"}

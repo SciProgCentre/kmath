@@ -40,13 +40,13 @@ public interface BlockingBufferChain<out T> : BlockingChain<T>, BufferChain<T> {
 }
 
 
-public suspend inline fun <reified T : Any> Chain<T>.nextBuffer(size: Int): Buffer<T> = if (this is BufferChain) {
+public suspend inline fun <reified T> Chain<T>.nextBuffer(size: Int): Buffer<T> = if (this is BufferChain) {
     nextBuffer(size)
 } else {
     Buffer(size) { next() }
 }
 
-public inline fun <reified T : Any> BlockingChain<T>.nextBufferBlocking(
+public inline fun <reified T> BlockingChain<T>.nextBufferBlocking(
     size: Int,
 ): Buffer<T> = if (this is BlockingBufferChain) {
     nextBufferBlocking(size)

@@ -4,73 +4,96 @@
  */
 
 package space.kscience.kmath.samplers
+
+import kotlinx.coroutines.test.runTest
+import space.kscience.kmath.chains.discard
+import space.kscience.kmath.chains.nextBuffer
 import space.kscience.kmath.distributions.NormalDistribution
 import space.kscience.kmath.operations.Float64Field
-import space.kscience.kmath.random.DefaultGenerator
+import space.kscience.kmath.random.RandomGenerator
 import space.kscience.kmath.stat.invoke
 import space.kscience.kmath.stat.mean
+import kotlin.math.PI
 import kotlin.math.exp
 import kotlin.math.pow
+import kotlin.math.sqrt
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class TestMetropolisHastingsSampler {
 
+    data class TestSetup(val mean: Double, val startPoint: Double, val sigma: Double = 0.5)
+
+    val sample = 1e6.toInt()
+    val burnIn = sample / 5
+
     @Test
-    fun samplingNormalTest() {
-        fun normalDist1(arg : Double) = NormalDistribution(0.5, 1.0).probability(arg)
-        var sampler = MetropolisHastingsSampler(::normalDist1, proposalStd = 1.0)
-        var sampledValues = sampler.sample(DefaultGenerator()).nextBufferBlocking(1_000_000)
+    fun samplingNormalTest() = runTest {
+        val generator = RandomGenerator.default(1)
 
-         assertEquals(0.5, Float64Field.mean(sampledValues), 1e-2)
+        listOf(
+            TestSetup(0.5, 0.0),
+            TestSetup(68.13, 60.0),
+        ).forEach {
+            val distribution = NormalDistribution(it.mean, 1.0)
+            val sampler = MetropolisHastingsSampler
+                .univariateNormal(it.startPoint, it.sigma, distribution::probability)
+            val sampledValues = sampler.sample(generator).discard(burnIn).nextBuffer(sample)
 
-        fun normalDist2(arg : Double) = NormalDistribution(68.13, 1.0).probability(arg)
-        sampler = MetropolisHastingsSampler(::normalDist2, initialState = 63.0, proposalStd = 1.0)
-        sampledValues = sampler.sample(DefaultGenerator()).nextBufferBlocking(1_000_000)
-
-        assertEquals(68.13, Float64Field.mean(sampledValues), 1e-2)
+            assertEquals(it.mean, Float64Field.mean(sampledValues), 1e-2)
+        }
     }
 
     @Test
-    fun samplingExponentialTest() {
-        fun expDist(arg : Double, param : Double) : Double {
-            if (arg < 0.0) { return 0.0 }
-            return param * exp(-param * arg)
+    fun samplingExponentialTest() = runTest {
+        val generator = RandomGenerator.default(1)
+
+        fun expDist(lambda: Double, arg: Double): Double = if (arg <= 0.0) 0.0 else lambda * exp(-arg * lambda)
+
+        listOf(
+            TestSetup(0.5, 2.0),
+            TestSetup(2.0, 1.0)
+        ).forEach { setup ->
+            val sampler = MetropolisHastingsSampler.univariateNormal(setup.startPoint, setup.sigma) {
+                expDist(setup.mean, it)
+            }
+            val sampledValues = sampler.sample(generator).discard(burnIn).nextBuffer(sample)
+
+            assertEquals(1.0 / setup.mean, Float64Field.mean(sampledValues), 1e-2)
         }
-
-        fun expDist1(arg : Double) = expDist(arg, 0.5)
-        var sampler = MetropolisHastingsSampler(::expDist1, initialState = 2.0, proposalStd = 1.0)
-        var sampledValues = sampler.sample(DefaultGenerator()).nextBufferBlocking(1_000_000)
-
-        assertEquals(2.0, Float64Field.mean(sampledValues), 1e-2)
-
-        fun expDist2(arg : Double) = expDist(arg, 2.0)
-        sampler = MetropolisHastingsSampler(::expDist2, initialState = 9.0, proposalStd = 1.0)
-        sampledValues = sampler.sample(DefaultGenerator()).nextBufferBlocking(1_000_000)
-
-        assertEquals(0.5, Float64Field.mean(sampledValues), 1e-2)
-
     }
 
     @Test
-    fun samplingRayleighTest() {
-        fun rayleighDist(arg : Double, sigma : Double) : Double {
-            if (arg < 0.0) { return 0.0 }
-
-            val expArg = (arg / sigma).pow(2)
-            return arg * exp(-expArg / 2.0) / sigma.pow(2)
+    fun samplingRayleighTest() = runTest {
+        val generator = RandomGenerator.default(1)
+        fun rayleighDist(sigma: Double, arg: Double): Double = if (arg < 0.0) {
+            0.0
+        } else {
+            arg * exp(-(arg / sigma).pow(2) / 2.0) / sigma.pow(2)
         }
 
-        fun rayleighDist1(arg : Double) = rayleighDist(arg, 1.0)
-        var sampler = MetropolisHastingsSampler(::rayleighDist1, initialState = 2.0, proposalStd = 1.0)
-        var sampledValues = sampler.sample(DefaultGenerator()).nextBufferBlocking(1_000_000)
+        listOf(
+            TestSetup(0.5, 1.0),
+            TestSetup(2.0, 1.0)
+        ).forEach { setup ->
+            val sampler = MetropolisHastingsSampler.univariateNormal(setup.startPoint, setup.sigma) {
+                rayleighDist(setup.mean, it)
+            }
+            val sampledValues = sampler.sample(generator).discard(burnIn).nextBuffer(sample)
 
-        assertEquals(1.25, Float64Field.mean(sampledValues), 1e-2)
-
-        fun rayleighDist2(arg : Double) = rayleighDist(arg, 2.0)
-        sampler = MetropolisHastingsSampler(::rayleighDist2, proposalStd = 1.0)
-        sampledValues = sampler.sample(DefaultGenerator()).nextBufferBlocking(10_000_000)
-
-        assertEquals(2.5, Float64Field.mean(sampledValues), 1e-2)
+            assertEquals(setup.mean * sqrt(PI / 2), Float64Field.mean(sampledValues), 1e-2)
+        }
+//
+//        fun rayleighDist1(arg: Double) = rayleighDist(arg, 1.0)
+//        var sampler = MetropolisHastingsSampler(::rayleighDist1, initialPoint = 2.0, proposalStd = 1.0)
+//        var sampledValues = sampler.sample(DefaultGenerator()).nextBufferBlocking(1_000_000)
+//
+//        assertEquals(1.25, Float64Field.mean(sampledValues), 1e-2)
+//
+//        fun rayleighDist2(arg: Double) = rayleighDist(arg, 2.0)
+//        sampler = MetropolisHastingsSampler(::rayleighDist2, proposalStd = 1.0)
+//        sampledValues = sampler.sample(DefaultGenerator()).nextBufferBlocking(10_000_000)
+//
+//        assertEquals(2.5, Float64Field.mean(sampledValues), 1e-2)
     }
 }
