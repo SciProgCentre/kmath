@@ -1,9 +1,12 @@
 [versions]
 
 commons-rng = "1.6"
-
+multik = "0.2.3"
 
 [libraries]
 
-commons-rng-simple = {module ="org.apache.commons:commons-rng-simple", version.ref = "commons-rng"}
-commons-rng-sampling = {module ="org.apache.commons:commons-rng-sampling", version.ref = "commons-rng"}
+commons-rng-simple = { module = "org.apache.commons:commons-rng-simple", version.ref = "commons-rng" }
+commons-rng-sampling = { module = "org.apache.commons:commons-rng-sampling", version.ref = "commons-rng" }
+
+multik-core = { module = "org.jetbrains.kotlinx:multik-core", version.ref = "multik" }
+multik-default = { module = "org.jetbrains.kotlinx:multik-default", version.ref = "multik" }

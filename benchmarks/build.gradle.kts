@@ -15,8 +15,6 @@ repositories {
     mavenCentral()
 }
 
-val multikVersion: String by rootProject.extra
-
 kotlin {
     jvm()
 
@@ -45,7 +43,7 @@ kotlin {
                 implementation(project(":kmath-for-real"))
                 implementation(project(":kmath-tensors"))
                 implementation(project(":kmath-multik"))
-                implementation("org.jetbrains.kotlinx:multik-default:$multikVersion")
+                implementation(libs.multik.default)
                 implementation(spclibs.kotlinx.benchmark.runtime)
             }
         }
