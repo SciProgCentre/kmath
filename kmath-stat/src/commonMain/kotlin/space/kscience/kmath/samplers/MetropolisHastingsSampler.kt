@@ -21,7 +21,7 @@ import space.kscience.kmath.structures.Float64
  */
 public class MetropolisHastingsSampler<T>(
     public val algebra: Group<T>,
-    public val startPoint: T,
+    public val startPoint: suspend (RandomGenerator) ->T,
     public val stepSampler: Sampler<T>,
     public val targetPdf: suspend (T) -> Float64,
 ) : Sampler<T> {
@@ -30,7 +30,7 @@ public class MetropolisHastingsSampler<T>(
 
     override fun sample(generator: RandomGenerator): Chain<T> = StatefulChain<Chain<T>, T>(
         state = stepSampler.sample(generator),
-        seed = { startPoint },
+        seed = { startPoint(generator) },
         forkState = Chain<T>::fork
     ) { previousPoint: T ->
         val proposalPoint = with(algebra) { previousPoint + next() }
@@ -59,7 +59,7 @@ public class MetropolisHastingsSampler<T>(
             targetPdf: suspend (Float64) -> Float64,
         ): MetropolisHastingsSampler<Double> = MetropolisHastingsSampler(
             algebra = Float64.algebra,
-            startPoint = startPoint,
+            startPoint = {startPoint},
             stepSampler = stepSampler,
             targetPdf = targetPdf
         )

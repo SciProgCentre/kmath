@@ -5,10 +5,7 @@ plugins {
 val ejmlVerision = "0.43.1"
 
 dependencies {
-    api("org.ejml:ejml-ddense:$ejmlVerision")
-    api("org.ejml:ejml-fdense:$ejmlVerision")
-    api("org.ejml:ejml-dsparse:$ejmlVerision")
-    api("org.ejml:ejml-fsparse:$ejmlVerision")
+    api("org.ejml:ejml-all:$ejmlVerision")
     api(projects.kmathCore)
 }
 

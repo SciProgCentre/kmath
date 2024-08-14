@@ -27,7 +27,7 @@ public data class Float64Circle2D(
     override val radius: Float64,
 ) : Circle2D<Double>
 
-public fun Circle2D(center: Vector2D<Float64>, radius: Double): Circle2D<Double> = Float64Circle2D(
+public fun Circle2D(center: Vector2D<Float64>, radius: Double): Float64Circle2D = Float64Circle2D(
     center as? Float64Vector2D ?: Float64Vector2D(center.x, center.y),
     radius
 )

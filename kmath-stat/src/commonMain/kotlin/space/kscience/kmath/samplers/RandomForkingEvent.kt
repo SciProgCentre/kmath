@@ -7,13 +7,8 @@
 
 package space.kscience.kmath.samplers
 
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Deferred
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.async
+import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.isActive
-import kotlinx.coroutines.launch
 import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.chains.Chain
 import space.kscience.kmath.operations.Group
@@ -28,6 +23,7 @@ public data class RandomForkingSample<T>(
     val value: Deferred<T>,
     val generation: Int,
     val energy: Float64,
+    val generator: RandomGenerator,
     val stepChain: Chain<T>
 )
 
@@ -38,11 +34,11 @@ public data class RandomForkingSample<T>(
 public class RandomForkingSampler<T : Any>(
     private val scope: CoroutineScope,
     private val initialValue: suspend (RandomGenerator) -> T,
-    private val makeStep: suspend RandomGenerator.(T) -> List<T>
+    private val makeStep: suspend (T) -> List<T>
 ) : Sampler<T?> {
 
     override fun sample(generator: RandomGenerator): Chain<T?> =
-        buildChain(scope, initial = { initialValue(generator) }) { generator.makeStep(it) }
+        buildChain(scope, initial = { initialValue(generator) }) { makeStep(it) }
 
     public companion object {
         private suspend fun <T> Channel<T>.receiveEvents(
@@ -95,13 +91,14 @@ public class RandomForkingSampler<T : Any>(
             stepScaleRule: suspend (Float64) -> Float64 = { 1.0 },
             targetPdf: suspend (T) -> Float64,
         ): RandomForkingSampler<RandomForkingSample<T>> where A : Group<T>, A : ScaleOperations<T> =
-            RandomForkingSampler<RandomForkingSample<T>>(
+            RandomForkingSampler(
                 scope = scope,
                 initialValue = { generator ->
                     RandomForkingSample<T>(
                         value = scope.async { startPoint(generator) },
                         generation = 0,
                         energy = initialEnergy,
+                        generator = generator,
                         stepChain = stepSampler.sample(generator)
                     )
                 }
@@ -111,14 +108,14 @@ public class RandomForkingSampler<T : Any>(
                     RandomForkingSample<T>(
                         value = scope.async<T> {
                             val proposalPoint = with(algebra) {
-                                value + previousSample.stepChain.next() * stepScaleRule(previousSample.energy)
+                                value + previousSample.stepChain.next() * stepScaleRule(energy)
                             }
                             val ratio = targetPdf(proposalPoint) / targetPdf(value)
 
                             if (ratio >= 1.0) {
                                 proposalPoint
                             } else {
-                                val acceptanceProbability = nextDouble()
+                                val acceptanceProbability = previousSample.generator.nextDouble()
                                 if (acceptanceProbability <= ratio) {
                                     proposalPoint
                                 } else {
@@ -127,7 +124,8 @@ public class RandomForkingSampler<T : Any>(
                             }
                         },
                         generation = previousSample.generation + 1,
-                        energy = 0.0,
+                        energy = energy,
+                        generator = previousSample.generator,
                         stepChain = previousSample.stepChain
                     )
                 }

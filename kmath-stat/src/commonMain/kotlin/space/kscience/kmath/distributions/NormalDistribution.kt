@@ -9,10 +9,23 @@ import space.kscience.kmath.chains.BlockingDoubleChain
 import space.kscience.kmath.operations.Float64Field.pow
 import space.kscience.kmath.random.RandomGenerator
 import space.kscience.kmath.samplers.GaussianSampler
-import space.kscience.kmath.samplers.InternalErf
+import space.kscience.kmath.samplers.InternalGamma
 import space.kscience.kmath.samplers.NormalizedGaussianSampler
 import space.kscience.kmath.samplers.ZigguratNormalizedGaussianSampler
 import kotlin.math.*
+
+
+/**
+ * Based on Commons Math implementation.
+ * See [https://commons.apache.org/proper/commons-math/javadocs/api-3.3/org/apache/commons/math3/special/Erf.html].
+ */
+internal object InternalErf {
+    fun erfc(x: Double): Double {
+        if (abs(x) > 40) return if (x > 0) 0.0 else 2.0
+        val ret = InternalGamma.regularizedGammaQ(0.5, x * x, 10000)
+        return if (x < 0) 2 - ret else ret
+    }
+}
 
 /**
  * Implements [Distribution1D] for the normal (gaussian) distribution.

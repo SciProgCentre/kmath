@@ -85,4 +85,7 @@ class TestMetropolisHastingsSampler {
             assertEquals(setup.mean * sqrt(PI / 2), Float64Field.mean(sampledValues), 1e-2)
         }
     }
+
+
+
 }
