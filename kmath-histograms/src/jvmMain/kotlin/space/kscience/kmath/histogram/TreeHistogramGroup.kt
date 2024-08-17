@@ -17,7 +17,7 @@ import space.kscience.kmath.operations.ScaleOperations
 import space.kscience.kmath.structures.*
 import java.util.*
 
-private fun <B : ClosedRange<Double>> TreeMap<Double, B>.getBin(value: Double): B? {
+private fun <B : ClosedRange<Float64>> TreeMap<Double, B>.getBin(value: Double): B? {
     // check ceiling entry and return it if it is what needed
     val ceil = ceilingEntry(value)?.value
     if (ceil != null && value in ceil) return ceil
@@ -53,7 +53,7 @@ public class TreeHistogramGroup<V : Any, A>(
     override val bufferFactory: MutableBufferFactory<TreeHistogram<V>> = MutableBufferFactory()
 
     internal inner class DomainCounter(val domain: DoubleDomain1D, val counter: Counter<V> = Counter.of(valueAlgebra)) :
-        ClosedRange<Double> by domain.range
+        ClosedRange<Float64> by domain.range
 
     @PublishedApi
     internal inner class TreeHistogramBuilder : Histogram1DBuilder<Double, V> {
@@ -153,7 +153,7 @@ public class TreeHistogramGroup<V : Any, A>(
  */
 public fun <V : Any, A> Histogram.Companion.custom1D(
     valueAlgebra: A,
-    borders: Buffer<Double>,
+    borders: Buffer<Float64>,
 ): TreeHistogramGroup<V, A> where A : Ring<V>, A : ScaleOperations<V> {
     val sorted = borders.sorted()
 

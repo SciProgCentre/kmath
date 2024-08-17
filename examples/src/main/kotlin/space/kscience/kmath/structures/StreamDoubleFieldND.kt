@@ -19,21 +19,21 @@ import java.util.stream.IntStream
  * execution.
  */
 class StreamDoubleFieldND(override val shape: ShapeND) : FieldND<Double, Float64Field>,
-    NumbersAddOps<StructureND<Double>>,
-    ExtendedField<StructureND<Double>> {
+    NumbersAddOps<StructureND<Float64>>,
+    ExtendedField<StructureND<Float64>> {
 
     private val strides = ColumnStrides(shape)
     override val elementAlgebra: Float64Field get() = Float64Field
-    override val zero: BufferND<Double> by lazy { structureND(shape) { zero } }
-    override val one: BufferND<Double> by lazy { structureND(shape) { one } }
+    override val zero: BufferND<Float64> by lazy { structureND(shape) { zero } }
+    override val one: BufferND<Float64> by lazy { structureND(shape) { one } }
 
-    override fun number(value: Number): BufferND<Double> {
+    override fun number(value: Number): BufferND<Float64> {
         val d = value.toDouble() // minimize conversions
         return structureND(shape) { d }
     }
 
     @OptIn(PerformancePitfall::class)
-    private val StructureND<Double>.buffer: Float64Buffer
+    private val StructureND<Float64>.buffer: Float64Buffer
         get() = when {
             shape != this@StreamDoubleFieldND.shape -> throw ShapeMismatchException(
                 this@StreamDoubleFieldND.shape,
@@ -44,7 +44,7 @@ class StreamDoubleFieldND(override val shape: ShapeND) : FieldND<Double, Float64
             else -> Float64Buffer(strides.linearSize) { offset -> get(strides.index(offset)) }
         }
 
-    override fun structureND(shape: ShapeND, initializer: Float64Field.(IntArray) -> Double): BufferND<Double> {
+    override fun structureND(shape: ShapeND, initializer: Float64Field.(IntArray) -> Double): BufferND<Float64> {
         val array = IntStream.range(0, strides.linearSize).parallel().mapToDouble { offset ->
             val index = strides.index(offset)
             Float64Field.initializer(index)
@@ -56,7 +56,7 @@ class StreamDoubleFieldND(override val shape: ShapeND) : FieldND<Double, Float64
     override fun mutableStructureND(
         shape: ShapeND,
         initializer: DoubleField.(IntArray) -> Double,
-    ): MutableBufferND<Double> {
+    ): MutableBufferND<Float64> {
         val array = IntStream.range(0, strides.linearSize).parallel().mapToDouble { offset ->
             val index = strides.index(offset)
             DoubleField.initializer(index)
@@ -66,17 +66,17 @@ class StreamDoubleFieldND(override val shape: ShapeND) : FieldND<Double, Float64
     }
 
     @OptIn(PerformancePitfall::class)
-    override fun StructureND<Double>.map(
+    override fun StructureND<Float64>.map(
         transform: Float64Field.(Double) -> Double,
-    ): BufferND<Double> {
+    ): BufferND<Float64> {
         val array = Arrays.stream(buffer.array).parallel().map { Float64Field.transform(it) }.toArray()
         return BufferND(strides, array.asBuffer())
     }
 
     @OptIn(PerformancePitfall::class)
-    override fun StructureND<Double>.mapIndexed(
+    override fun StructureND<Float64>.mapIndexed(
         transform: Float64Field.(index: IntArray, Double) -> Double,
-    ): BufferND<Double> {
+    ): BufferND<Float64> {
         val array = IntStream.range(0, strides.linearSize).parallel().mapToDouble { offset ->
             Float64Field.transform(
                 strides.index(offset),
@@ -89,39 +89,39 @@ class StreamDoubleFieldND(override val shape: ShapeND) : FieldND<Double, Float64
 
     @OptIn(PerformancePitfall::class)
     override fun zip(
-        left: StructureND<Double>,
-        right: StructureND<Double>,
+        left: StructureND<Float64>,
+        right: StructureND<Float64>,
         transform: Float64Field.(Double, Double) -> Double,
-    ): BufferND<Double> {
+    ): BufferND<Float64> {
         val array = IntStream.range(0, strides.linearSize).parallel().mapToDouble { offset ->
             Float64Field.transform(left.buffer.array[offset], right.buffer.array[offset])
         }.toArray()
         return BufferND(strides, array.asBuffer())
     }
 
-    override fun StructureND<Double>.unaryMinus(): StructureND<Double> = map { -it }
+    override fun StructureND<Float64>.unaryMinus(): StructureND<Float64> = map { -it }
 
-    override fun scale(a: StructureND<Double>, value: Double): StructureND<Double> = a.map { it * value }
+    override fun scale(a: StructureND<Float64>, value: Double): StructureND<Float64> = a.map { it * value }
 
-    override fun power(arg: StructureND<Double>, pow: Number): BufferND<Double> = arg.map { power(it, pow) }
+    override fun power(arg: StructureND<Float64>, pow: Number): BufferND<Float64> = arg.map { power(it, pow) }
 
-    override fun exp(arg: StructureND<Double>): BufferND<Double> = arg.map { exp(it) }
+    override fun exp(arg: StructureND<Float64>): BufferND<Float64> = arg.map { exp(it) }
 
-    override fun ln(arg: StructureND<Double>): BufferND<Double> = arg.map { ln(it) }
+    override fun ln(arg: StructureND<Float64>): BufferND<Float64> = arg.map { ln(it) }
 
-    override fun sin(arg: StructureND<Double>): BufferND<Double> = arg.map { sin(it) }
-    override fun cos(arg: StructureND<Double>): BufferND<Double> = arg.map { cos(it) }
-    override fun tan(arg: StructureND<Double>): BufferND<Double> = arg.map { tan(it) }
-    override fun asin(arg: StructureND<Double>): BufferND<Double> = arg.map { asin(it) }
-    override fun acos(arg: StructureND<Double>): BufferND<Double> = arg.map { acos(it) }
-    override fun atan(arg: StructureND<Double>): BufferND<Double> = arg.map { atan(it) }
+    override fun sin(arg: StructureND<Float64>): BufferND<Float64> = arg.map { sin(it) }
+    override fun cos(arg: StructureND<Float64>): BufferND<Float64> = arg.map { cos(it) }
+    override fun tan(arg: StructureND<Float64>): BufferND<Float64> = arg.map { tan(it) }
+    override fun asin(arg: StructureND<Float64>): BufferND<Float64> = arg.map { asin(it) }
+    override fun acos(arg: StructureND<Float64>): BufferND<Float64> = arg.map { acos(it) }
+    override fun atan(arg: StructureND<Float64>): BufferND<Float64> = arg.map { atan(it) }
 
-    override fun sinh(arg: StructureND<Double>): BufferND<Double> = arg.map { sinh(it) }
-    override fun cosh(arg: StructureND<Double>): BufferND<Double> = arg.map { cosh(it) }
-    override fun tanh(arg: StructureND<Double>): BufferND<Double> = arg.map { tanh(it) }
-    override fun asinh(arg: StructureND<Double>): BufferND<Double> = arg.map { asinh(it) }
-    override fun acosh(arg: StructureND<Double>): BufferND<Double> = arg.map { acosh(it) }
-    override fun atanh(arg: StructureND<Double>): BufferND<Double> = arg.map { atanh(it) }
+    override fun sinh(arg: StructureND<Float64>): BufferND<Float64> = arg.map { sinh(it) }
+    override fun cosh(arg: StructureND<Float64>): BufferND<Float64> = arg.map { cosh(it) }
+    override fun tanh(arg: StructureND<Float64>): BufferND<Float64> = arg.map { tanh(it) }
+    override fun asinh(arg: StructureND<Float64>): BufferND<Float64> = arg.map { asinh(it) }
+    override fun acosh(arg: StructureND<Float64>): BufferND<Float64> = arg.map { acosh(it) }
+    override fun atanh(arg: StructureND<Float64>): BufferND<Float64> = arg.map { atanh(it) }
 }
 
 fun Float64Field.ndStreaming(vararg shape: Int): StreamDoubleFieldND = StreamDoubleFieldND(ShapeND(shape))

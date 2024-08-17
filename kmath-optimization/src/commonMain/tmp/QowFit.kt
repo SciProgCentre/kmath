@@ -27,28 +27,28 @@ private typealias ParamSet = Map<Symbol, Double>
 public class QowFit(
     override val symbols: List<Symbol>,
     private val space: LinearSpace<Double, DoubleField>,
-    private val solver: LinearSolver<Double>,
-) : XYOptimization<Double>, SymbolIndexer {
+    private val solver: LinearSolver<Float64>,
+) : XYOptimization<Float64>, SymbolIndexer {
 
     private var logger: FitLogger? = null
 
     private var startingPoint: Map<Symbol, Double> = TODO()
-    private var covariance: Matrix<Double>? = TODO()
-    private val prior: DifferentiableExpression<Double, Expression<Double>>? = TODO()
+    private var covariance: Matrix<Float64>? = TODO()
+    private val prior: DifferentiableExpression<Double, Expression<Float64>>? = TODO()
     private var data: XYErrorColumnarData<Double, Double, Double> = TODO()
-    private var model: DifferentiableExpression<Double, Expression<Double>> = TODO()
+    private var model: DifferentiableExpression<Double, Expression<Float64>> = TODO()
 
     private val features = HashSet<OptimizationFeature>()
 
-    override fun update(result: OptimizationResult<Double>) {
+    override fun update(result: OptimizationResult<Float64>) {
         TODO("Not yet implemented")
     }
 
-    override val algebra: Field<Double>
+    override val algebra: Field<Float64>
         get() = TODO("Not yet implemented")
 
     override fun data(
-        dataSet: ColumnarData<Double>,
+        dataSet: ColumnarData<Float64>,
         xSymbol: Symbol,
         ySymbol: Symbol,
         xErrSymbol: Symbol?,
@@ -82,14 +82,14 @@ public class QowFit(
      */
     private fun getDispersion(i: Int, parameters: Map<Symbol, Double>): Double = data.yErr[i].pow(2)
 
-    private fun getCovariance(weight: QoWeight): Matrix<Double> = solver.inverse(getEqDerivValues(weight))
+    private fun getCovariance(weight: QoWeight): Matrix<Float64> = solver.inverse(getEqDerivValues(weight))
 
     /**
      * Теоретическая ковариация весовых функций.
      *
      * D(\phi)=E(\phi_k(\theta_0) \phi_l(\theta_0))= disDeriv_k * disDeriv_l /sigma^2
      */
-    private fun covarF(weight: QoWeight): Matrix<Double> = space.buildSymmetricMatrix(symbols.size) { k, l ->
+    private fun covarF(weight: QoWeight): Matrix<Float64> = space.buildSymmetricMatrix(symbols.size) { k, l ->
         (0 until data.size).sumOf { i -> weight.derivs[k, i] * weight.derivs[l, i] / weight.dispersion[i] }
     }
 
@@ -103,7 +103,7 @@ public class QowFit(
      * @param weight
      * @return
      */
-    private fun covarFExp(weight: QoWeight, theta: Map<Symbol, Double>): Matrix<Double> = space.run {
+    private fun covarFExp(weight: QoWeight, theta: Map<Symbol, Double>): Matrix<Float64> = space.run {
         /*
          * Важно! Если не делать предварителього вычисления этих производных, то
          * количество вызывов функции будет dim^2 вместо dim Первый индекс -
@@ -129,7 +129,7 @@ public class QowFit(
      */
     private fun getEqDerivValues(
         weight: QoWeight, theta: Map<Symbol, Double> = weight.theta,
-    ): Matrix<Double> = space.run {
+    ): Matrix<Float64> = space.run {
         val fitDim = symbols.size
         //Возвращает производную k-того Eq по l-тому параметру
         val res = Array(fitDim) { DoubleArray(fitDim) }
@@ -162,7 +162,7 @@ public class QowFit(
      * @param weight
      * @return
      */
-    private fun getEqValues(weight: QoWeight, theta: Map<Symbol, Double> = weight.theta): Point<Double> {
+    private fun getEqValues(weight: QoWeight, theta: Map<Symbol, Double> = weight.theta): Point<Float64> {
         val distances = DoubleBuffer(data.size) { i -> distance(i, theta) }
 
         return DoubleBuffer(symbols.size) { k ->
@@ -190,7 +190,7 @@ public class QowFit(
         /**
          * Derivatives of the spectrum over parameters. First index in the point number, second one - index of parameter
          */
-        val derivs: Matrix<Double> by lazy {
+        val derivs: Matrix<Float64> by lazy {
             space.buildMatrix(data.size, symbols.size) { i, k ->
                 distanceDerivative(symbols[k], i, theta)
             }
@@ -199,7 +199,7 @@ public class QowFit(
         /**
          * Array of dispersions in each point
          */
-        val dispersion: Point<Double> by lazy {
+        val dispersion: Point<Float64> by lazy {
             DoubleBuffer(data.size) { i -> getDispersion(i, theta) }
         }
 
@@ -208,7 +208,7 @@ public class QowFit(
     private fun newtonianStep(
         weight: QoWeight,
         par: Map<Symbol, Double>,
-        eqvalues: Point<Double>,
+        eqvalues: Point<Float64>,
     ): Map<Symbol, Double> = space.run {
         val start = par.toPoint()
         val invJacob = solver.inverse(getEqDerivValues(weight, par))
@@ -318,7 +318,7 @@ public class QowFit(
     /**
      * generateErrors.
      */
-    private fun generateErrors(): Matrix<Double> {
+    private fun generateErrors(): Matrix<Float64> {
         logger?.log {
             """
             Starting errors estimation using quasioptimal weights method. The starting weight is:
@@ -340,7 +340,7 @@ public class QowFit(
     }
 
 
-    override suspend fun optimize(): OptimizationResult<Double> {
+    override suspend fun optimize(): OptimizationResult<Float64> {
         val curWeight = QoWeight(startingPoint)
         logger?.log {
             """

@@ -10,12 +10,13 @@ import space.kscience.kmath.expressions.MST
 import space.kscience.kmath.expressions.Symbol
 import space.kscience.kmath.operations.Float64Field
 import space.kscience.kmath.operations.Int32Ring
+import space.kscience.kmath.structures.Float64
 
 internal interface CompilerTestContext {
     fun MST.compileToExpression(algebra: Int32Ring): Expression<Int>
     fun MST.compile(algebra: Int32Ring, arguments: Map<Symbol, Int>): Int
     fun MST.compile(algebra: Int32Ring, vararg arguments: Pair<Symbol, Int>): Int = compile(algebra, mapOf(*arguments))
-    fun MST.compileToExpression(algebra: Float64Field): Expression<Double>
+    fun MST.compileToExpression(algebra: Float64Field): Expression<Float64>
     fun MST.compile(algebra: Float64Field, arguments: Map<Symbol, Double>): Double
 
     fun MST.compile(algebra: Float64Field, vararg arguments: Pair<Symbol, Double>): Double =

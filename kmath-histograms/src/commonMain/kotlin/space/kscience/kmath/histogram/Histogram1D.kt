@@ -11,6 +11,7 @@ import space.kscience.kmath.domains.center
 import space.kscience.kmath.linear.Point
 import space.kscience.kmath.operations.asSequence
 import space.kscience.kmath.structures.Buffer
+import space.kscience.kmath.structures.Float64
 
 
 /**
@@ -49,7 +50,7 @@ public interface Histogram1DBuilder<in T : Any, V : Any> : HistogramBuilder<T, V
 }
 
 @UnstableKMathAPI
-public fun Histogram1DBuilder<Double, *>.fill(items: Iterable<Double>): Unit =
+public fun Histogram1DBuilder<Double, *>.fill(items: Iterable<Float64>): Unit =
     items.forEach(this::putValue)
 
 @UnstableKMathAPI

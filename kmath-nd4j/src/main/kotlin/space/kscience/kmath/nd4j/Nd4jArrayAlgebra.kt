@@ -15,6 +15,7 @@ import space.kscience.kmath.UnsafeKMathAPI
 import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.nd.*
 import space.kscience.kmath.operations.*
+import space.kscience.kmath.structures.Float64
 
 /**
  * Represents [AlgebraND] over [Nd4jArrayAlgebra].
@@ -193,31 +194,31 @@ public sealed interface Nd4jArrayExtendedFieldOps<T, out F : ExtendedField<T>> :
 public open class DoubleNd4jArrayFieldOps : Nd4jArrayExtendedFieldOps<Double, Float64Field> {
     override val elementAlgebra: Float64Field get() = Float64Field
 
-    override fun INDArray.wrap(): Nd4jArrayStructure<Double> = asDoubleStructure()
+    override fun INDArray.wrap(): Nd4jArrayStructure<Float64> = asDoubleStructure()
 
     @OptIn(PerformancePitfall::class, UnsafeKMathAPI::class)
-    override val StructureND<Double>.ndArray: INDArray
+    override val StructureND<Float64>.ndArray: INDArray
         get() = when (this) {
-            is Nd4jArrayStructure<Double> -> ndArray
+            is Nd4jArrayStructure<Float64> -> ndArray
             else -> Nd4j.zeros(*shape.asArray()).also {
                 elements().forEach { (idx, value) -> it.putScalar(idx, value) }
             }
         }
 
-    override fun scale(a: StructureND<Double>, value: Double): Nd4jArrayStructure<Double> = a.ndArray.mul(value).wrap()
+    override fun scale(a: StructureND<Float64>, value: Double): Nd4jArrayStructure<Float64> = a.ndArray.mul(value).wrap()
 
-    override operator fun StructureND<Double>.div(arg: Double): Nd4jArrayStructure<Double> = ndArray.div(arg).wrap()
+    override operator fun StructureND<Float64>.div(arg: Double): Nd4jArrayStructure<Float64> = ndArray.div(arg).wrap()
 
-    override operator fun StructureND<Double>.plus(arg: Double): Nd4jArrayStructure<Double> = ndArray.add(arg).wrap()
+    override operator fun StructureND<Float64>.plus(arg: Double): Nd4jArrayStructure<Float64> = ndArray.add(arg).wrap()
 
-    override operator fun StructureND<Double>.minus(arg: Double): Nd4jArrayStructure<Double> = ndArray.sub(arg).wrap()
+    override operator fun StructureND<Float64>.minus(arg: Double): Nd4jArrayStructure<Float64> = ndArray.sub(arg).wrap()
 
-    override operator fun StructureND<Double>.times(arg: Double): Nd4jArrayStructure<Double> = ndArray.mul(arg).wrap()
+    override operator fun StructureND<Float64>.times(arg: Double): Nd4jArrayStructure<Float64> = ndArray.mul(arg).wrap()
 
-    override operator fun Double.div(arg: StructureND<Double>): Nd4jArrayStructure<Double> =
+    override operator fun Double.div(arg: StructureND<Float64>): Nd4jArrayStructure<Float64> =
         arg.ndArray.rdiv(this).wrap()
 
-    override operator fun Double.minus(arg: StructureND<Double>): Nd4jArrayStructure<Double> =
+    override operator fun Double.minus(arg: StructureND<Float64>): Nd4jArrayStructure<Float64> =
         arg.ndArray.rsub(this).wrap()
 
     public companion object : DoubleNd4jArrayFieldOps()

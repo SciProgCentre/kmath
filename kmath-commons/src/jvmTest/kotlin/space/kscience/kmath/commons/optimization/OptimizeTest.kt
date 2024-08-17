@@ -18,6 +18,7 @@ import space.kscience.kmath.operations.Float64Field
 import space.kscience.kmath.optimization.*
 import space.kscience.kmath.random.RandomGenerator
 import space.kscience.kmath.stat.chiSquaredExpression
+import space.kscience.kmath.structures.Float64
 import space.kscience.kmath.structures.Float64Buffer
 import space.kscience.kmath.structures.asBuffer
 import kotlin.test.Test
@@ -70,7 +71,7 @@ internal class OptimizeTest {
             bindSymbol(a) * arg.pow(2) + bindSymbol(b) * arg + cWithDefault
         }
 
-        val result: FunctionOptimization<Double> = chi2.optimizeWith(
+        val result: FunctionOptimization<Float64> = chi2.optimizeWith(
             CMOptimizer,
             mapOf(a to 1.5, b to 0.9, c to 1.0),
         ) {

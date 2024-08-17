@@ -7,6 +7,7 @@ package space.kscience.kmath.domains
 
 import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.linear.Point
+import space.kscience.kmath.structures.Float64
 
 @UnstableKMathAPI
 public abstract class Domain1D<T : Comparable<T>>(public val range: ClosedRange<T>) : Domain<T> {
@@ -22,8 +23,8 @@ public abstract class Domain1D<T : Comparable<T>>(public val range: ClosedRange<
 
 @UnstableKMathAPI
 public class DoubleDomain1D(
-    @Suppress("CanBeParameter") public val doubleRange: ClosedFloatingPointRange<Double>,
-) : Domain1D<Double>(doubleRange), Float64Domain {
+    @Suppress("CanBeParameter") public val doubleRange: ClosedFloatingPointRange<Float64>,
+) : Domain1D<Float64>(doubleRange), Float64Domain {
     override fun getLowerBound(num: Int): Double {
         require(num == 0)
         return range.start
@@ -55,5 +56,5 @@ public class DoubleDomain1D(
 }
 
 @UnstableKMathAPI
-public val Domain1D<Double>.center: Double
+public val Domain1D<Float64>.center: Double
     get() = (range.endInclusive + range.start) / 2

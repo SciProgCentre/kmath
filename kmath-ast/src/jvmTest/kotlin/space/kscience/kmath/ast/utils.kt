@@ -12,6 +12,7 @@ import space.kscience.kmath.expressions.Symbol
 import space.kscience.kmath.operations.Algebra
 import space.kscience.kmath.operations.Float64Field
 import space.kscience.kmath.operations.Int32Ring
+import space.kscience.kmath.structures.Float64
 import space.kscience.kmath.asm.compile as asmCompile
 import space.kscience.kmath.asm.compileToExpression as asmCompileToExpression
 
@@ -22,18 +23,18 @@ private object GenericAsmCompilerTestContext : CompilerTestContext {
     override fun MST.compile(algebra: Int32Ring, arguments: Map<Symbol, Int>): Int =
         asmCompile(algebra as Algebra<Int>, arguments)
 
-    override fun MST.compileToExpression(algebra: Float64Field): Expression<Double> =
-        asmCompileToExpression(algebra as Algebra<Double>)
+    override fun MST.compileToExpression(algebra: Float64Field): Expression<Float64> =
+        asmCompileToExpression(algebra as Algebra<Float64>)
 
     override fun MST.compile(algebra: Float64Field, arguments: Map<Symbol, Double>): Double =
-        asmCompile(algebra as Algebra<Double>, arguments)
+        asmCompile(algebra as Algebra<Float64>, arguments)
 }
 
 @OptIn(UnstableKMathAPI::class)
 private object PrimitiveAsmCompilerTestContext : CompilerTestContext {
     override fun MST.compileToExpression(algebra: Int32Ring): Expression<Int> = asmCompileToExpression(algebra)
     override fun MST.compile(algebra: Int32Ring, arguments: Map<Symbol, Int>): Int = asmCompile(algebra, arguments)
-    override fun MST.compileToExpression(algebra: Float64Field): Expression<Double> = asmCompileToExpression(algebra)
+    override fun MST.compileToExpression(algebra: Float64Field): Expression<Float64> = asmCompileToExpression(algebra)
 
     override fun MST.compile(algebra: Float64Field, arguments: Map<Symbol, Double>): Double =
         asmCompile(algebra, arguments)

@@ -11,6 +11,7 @@ import space.kscience.kmath.expressions.ExpressionAlgebra
 import space.kscience.kmath.operations.ExtendedField
 import space.kscience.kmath.operations.asIterable
 import space.kscience.kmath.structures.Buffer
+import space.kscience.kmath.structures.Float64
 import space.kscience.kmath.structures.indices
 import kotlin.jvm.JvmName
 
@@ -48,11 +49,11 @@ public fun <T : Comparable<T>, I : Any, A> AutoDiffProcessor<T, I, A>.chiSquared
 }
 
 public fun <I : Any, A> AutoDiffProcessor<Double, I, A>.chiSquaredExpression(
-    x: Buffer<Double>,
-    y: Buffer<Double>,
-    yErr: Buffer<Double>,
+    x: Buffer<Float64>,
+    y: Buffer<Float64>,
+    yErr: Buffer<Float64>,
     model: A.(I) -> I,
-): DifferentiableExpression<Double> where A : ExtendedField<I>, A : ExpressionAlgebra<Double, I> {
+): DifferentiableExpression<Float64> where A : ExtendedField<I>, A : ExpressionAlgebra<Double, I> {
     require(yErr.asIterable().all { it > 0.0 }) { "All errors must be strictly positive" }
     return chiSquaredExpression<Double, I, A>(x, y, yErr, model)
 }

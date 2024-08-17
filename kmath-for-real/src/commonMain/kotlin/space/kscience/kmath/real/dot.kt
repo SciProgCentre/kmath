@@ -8,11 +8,12 @@ package space.kscience.kmath.real
 import space.kscience.kmath.linear.Matrix
 import space.kscience.kmath.linear.linearSpace
 import space.kscience.kmath.operations.algebra
+import space.kscience.kmath.structures.Float64
 
 
 /**
  * Optimized dot product for real matrices
  */
-public infix fun Matrix<Double>.dot(other: Matrix<Double>): Matrix<Double> = Double.algebra.linearSpace.run {
+public infix fun Matrix<Float64>.dot(other: Matrix<Float64>): Matrix<Float64> = Double.algebra.linearSpace.run {
     this@dot dot other
 }

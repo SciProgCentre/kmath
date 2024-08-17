@@ -8,16 +8,17 @@ package space.kscience.kmath.integration
 import space.kscience.kmath.operations.Float64Field
 import space.kscience.kmath.operations.mapToBuffer
 import space.kscience.kmath.structures.Buffer
+import space.kscience.kmath.structures.Float64
 import space.kscience.kmath.structures.Float64Buffer
 import space.kscience.kmath.structures.asBuffer
 import kotlin.math.ulp
 import kotlin.native.concurrent.ThreadLocal
 
 public interface GaussIntegratorRuleFactory {
-    public fun build(numPoints: Int): Pair<Buffer<Double>, Buffer<Double>>
+    public fun build(numPoints: Int): Pair<Buffer<Float64>, Buffer<Float64>>
 
     public companion object : IntegrandAttribute<GaussIntegratorRuleFactory> {
-        public fun double(numPoints: Int, range: ClosedRange<Double>): Pair<Buffer<Double>, Buffer<Double>> =
+        public fun double(numPoints: Int, range: ClosedRange<Float64>): Pair<Buffer<Float64>, Buffer<Float64>> =
             GaussLegendreRuleFactory.build(numPoints, range)
     }
 }
@@ -28,9 +29,9 @@ public interface GaussIntegratorRuleFactory {
  */
 public fun GaussIntegratorRuleFactory.build(
     numPoints: Int,
-    range: ClosedRange<Double>,
-): Pair<Buffer<Double>, Buffer<Double>> {
-    val normalized: Pair<Buffer<Double>, Buffer<Double>> = build(numPoints)
+    range: ClosedRange<Float64>,
+): Pair<Buffer<Float64>, Buffer<Float64>> {
+    val normalized: Pair<Buffer<Float64>, Buffer<Float64>> = build(numPoints)
     val length = range.endInclusive - range.start
 
     val points = normalized.first.mapToBuffer(Float64Field.bufferFactory) {
@@ -55,13 +56,13 @@ public fun GaussIntegratorRuleFactory.build(
 @ThreadLocal
 public object GaussLegendreRuleFactory : GaussIntegratorRuleFactory {
 
-    private val cache = HashMap<Int, Pair<Buffer<Double>, Buffer<Double>>>()
+    private val cache = HashMap<Int, Pair<Buffer<Float64>, Buffer<Float64>>>()
 
-    private fun getOrBuildRule(numPoints: Int): Pair<Buffer<Double>, Buffer<Double>> =
+    private fun getOrBuildRule(numPoints: Int): Pair<Buffer<Float64>, Buffer<Float64>> =
         cache.getOrPut(numPoints) { buildRule(numPoints) }
 
 
-    private fun buildRule(numPoints: Int): Pair<Buffer<Double>, Buffer<Double>> {
+    private fun buildRule(numPoints: Int): Pair<Buffer<Float64>, Buffer<Float64>> {
         if (numPoints == 1) {
             // Break recursion.
             return Pair(
@@ -73,7 +74,7 @@ public object GaussLegendreRuleFactory : GaussIntegratorRuleFactory {
         // Get previous rule.
         // If it has not been computed, yet it will trigger a recursive call
         // to this method.
-        val previousPoints: Buffer<Double> = getOrBuildRule(numPoints - 1).first
+        val previousPoints: Buffer<Float64> = getOrBuildRule(numPoints - 1).first
 
         // Compute next rule.
         val points = DoubleArray(numPoints)
@@ -162,7 +163,7 @@ public object GaussLegendreRuleFactory : GaussIntegratorRuleFactory {
         return Pair(points.asBuffer(), weights.asBuffer())
     }
 
-    override fun build(numPoints: Int): Pair<Buffer<Double>, Buffer<Double>> = getOrBuildRule(numPoints)
+    override fun build(numPoints: Int): Pair<Buffer<Float64>, Buffer<Float64>> = getOrBuildRule(numPoints)
 
     override fun toString(): String = "GaussLegendreRule"
 }

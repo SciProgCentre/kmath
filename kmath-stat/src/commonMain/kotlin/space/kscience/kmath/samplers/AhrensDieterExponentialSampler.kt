@@ -8,6 +8,7 @@ package space.kscience.kmath.samplers
 import space.kscience.kmath.chains.BlockingDoubleChain
 import space.kscience.kmath.random.RandomGenerator
 import space.kscience.kmath.stat.Sampler
+import space.kscience.kmath.structures.Float64
 import space.kscience.kmath.structures.Float64Buffer
 import kotlin.math.ln
 import kotlin.math.pow
@@ -18,7 +19,7 @@ import kotlin.math.pow
  * Based on Commons RNG implementation.
  * See [https://commons.apache.org/proper/commons-rng/commons-rng-sampling/apidocs/org/apache/commons/rng/sampling/distribution/AhrensDieterExponentialSampler.html].
  */
-public class AhrensDieterExponentialSampler(public val mean: Double) : Sampler<Double> {
+public class AhrensDieterExponentialSampler(public val mean: Double) : Sampler<Float64> {
 
     init {
         require(mean > 0) { "mean is not strictly positive: $mean" }

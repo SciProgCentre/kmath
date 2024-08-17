@@ -7,6 +7,7 @@ package space.kscience.kmath.functions
 
 import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.operations.*
+import space.kscience.kmath.structures.Float64
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
 import kotlin.math.max
@@ -31,7 +32,7 @@ public inline fun <C, A, R> A.polynomialSpace(block: PolynomialSpace<C, A>.() ->
 /**
  * Evaluates value of [this] Double polynomial on provided Double argument.
  */
-public fun Polynomial<Double>.value(arg: Double): Double =
+public fun Polynomial<Float64>.value(arg: Double): Double =
     coefficients.reduceIndexedOrNull { index, acc, c ->
         acc + c * arg.pow(index)
     } ?: .0

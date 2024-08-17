@@ -17,6 +17,7 @@ import space.kscience.kmath.UnsafeKMathAPI
 import space.kscience.kmath.nd.*
 import space.kscience.kmath.nd4j.nd4j
 import space.kscience.kmath.operations.Float64Field
+import space.kscience.kmath.structures.Float64
 import space.kscience.kmath.tensors.core.DoubleTensor
 import space.kscience.kmath.tensors.core.one
 import space.kscience.kmath.tensors.core.tensorAlgebra
@@ -37,28 +38,28 @@ internal class NDFieldBenchmark {
 
     @Benchmark
     fun specializedFieldAdd(blackhole: Blackhole) = with(specializedField) {
-        var res: StructureND<Double> = one(shape)
+        var res: StructureND<Float64> = one(shape)
         repeat(n) { res += 1.0 }
         blackhole.consume(res)
     }
 
     @Benchmark
     fun boxingFieldAdd(blackhole: Blackhole) = with(genericField) {
-        var res: StructureND<Double> = one(shape)
+        var res: StructureND<Float64> = one(shape)
         repeat(n) { res += 1.0 }
         blackhole.consume(res)
     }
 
     @Benchmark
     fun multikAdd(blackhole: Blackhole) = with(multikAlgebra) {
-        var res: StructureND<Double> = one(shape)
+        var res: StructureND<Float64> = one(shape)
         repeat(n) { res += 1.0 }
         blackhole.consume(res)
     }
 
     @Benchmark
     fun viktorAdd(blackhole: Blackhole) = with(viktorField) {
-        var res: StructureND<Double> = one(shape)
+        var res: StructureND<Float64> = one(shape)
         repeat(n) { res += 1.0 }
         blackhole.consume(res)
     }
@@ -87,7 +88,7 @@ internal class NDFieldBenchmark {
 
 //    @Benchmark
 //    fun nd4jAdd(blackhole: Blackhole) = with(nd4jField) {
-//        var res: StructureND<Double> = one(dim, dim)
+//        var res: StructureND<Float64> = one(dim, dim)
 //        repeat(n) { res += 1.0 }
 //        blackhole.consume(res)
 //    }

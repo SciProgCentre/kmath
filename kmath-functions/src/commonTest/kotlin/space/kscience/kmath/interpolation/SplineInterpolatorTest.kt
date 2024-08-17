@@ -19,7 +19,7 @@ internal class SplineInterpolatorTest {
             x to sin(x)
         }
 
-        //val polynomial: PiecewisePolynomial<Double> = DoubleField.splineInterpolator.interpolatePolynomials(data)
+        //val polynomial: PiecewisePolynomial<Float64> = DoubleField.splineInterpolator.interpolatePolynomials(data)
 
         val function = Float64Field.splineInterpolator.interpolate(data, Double.NaN)
 

@@ -10,6 +10,7 @@ import space.kscience.kmath.operations.Field
 import space.kscience.kmath.operations.Float64Field
 import space.kscience.kmath.operations.invoke
 import space.kscience.kmath.operations.sum
+import space.kscience.kmath.structures.Float64
 
 /**
  * Use double pass Simpson rule integration with a fixed number of points.
@@ -24,7 +25,7 @@ public class SimpsonIntegrator<T : Any>(
 ) : UnivariateIntegrator<T> {
 
     private fun integrateRange(
-        integrand: UnivariateIntegrand<T>, range: ClosedRange<Double>, numPoints: Int,
+        integrand: UnivariateIntegrand<T>, range: ClosedRange<Float64>, numPoints: Int,
     ): T = algebra {
         val h: Double = (range.endInclusive - range.start) / (numPoints - 1)
         val values: List<T> = List(numPoints) { i ->
@@ -75,9 +76,9 @@ public val <T : Any> Field<T>.simpsonIntegrator: SimpsonIntegrator<T> get() = Si
  * * [IntegrandMaxCalls]&mdash;the maximum number of function calls during integration. For non-iterative rules, always uses
  * the maximum number of points. By default, uses 10 points.
  */
-public object DoubleSimpsonIntegrator : UnivariateIntegrator<Double> {
+public object DoubleSimpsonIntegrator : UnivariateIntegrator<Float64> {
     private fun integrateRange(
-        integrand: UnivariateIntegrand<Double>, range: ClosedRange<Double>, numPoints: Int,
+        integrand: UnivariateIntegrand<Float64>, range: ClosedRange<Float64>, numPoints: Int,
     ): Double {
         val h: Double = (range.endInclusive - range.start) / (numPoints - 1)
         val values = DoubleArray(numPoints) { i ->
@@ -96,7 +97,7 @@ public object DoubleSimpsonIntegrator : UnivariateIntegrator<Double> {
         return res
     }
 
-    override fun integrate(integrand: UnivariateIntegrand<Double>): UnivariateIntegrand<Double> {
+    override fun integrate(integrand: UnivariateIntegrand<Float64>): UnivariateIntegrand<Float64> {
         val ranges = integrand[UnivariateIntegrandRanges]
         return if (ranges != null) {
             val res = ranges.ranges.sumOf { integrateRange(integrand, it.first, it.second) }

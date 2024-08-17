@@ -11,7 +11,7 @@ import space.kscience.kmath.operations.algebra
 
 @OptIn(PerformancePitfall::class)
 fun main(): Unit = with(Double.algebra.ndAlgebra) {
-    val structure: MutableStructure2D<Double> = mutableStructureND(ShapeND(2, 2)) { (i, j) ->
+    val structure: MutableStructure2D<Float64> = mutableStructureND(ShapeND(2, 2)) { (i, j) ->
         i.toDouble() + j.toDouble()
     }.as2D()
 

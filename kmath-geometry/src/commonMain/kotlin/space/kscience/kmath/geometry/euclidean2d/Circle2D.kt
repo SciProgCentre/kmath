@@ -25,7 +25,7 @@ public val Circle2D<*>.circumference: Double get() = radius * 2 * PI
 public data class Float64Circle2D(
     @Serializable(Float64Space2D.VectorSerializer::class) override val center: Float64Vector2D,
     override val radius: Float64,
-) : Circle2D<Double>
+) : Circle2D<Float64>
 
 public fun Circle2D(center: Vector2D<Float64>, radius: Double): Float64Circle2D = Float64Circle2D(
     center as? Float64Vector2D ?: Float64Vector2D(center.x, center.y),

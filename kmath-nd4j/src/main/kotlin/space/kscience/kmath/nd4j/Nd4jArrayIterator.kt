@@ -7,6 +7,7 @@ package space.kscience.kmath.nd4j
 
 import org.nd4j.linalg.api.ndarray.INDArray
 import org.nd4j.linalg.api.shape.Shape
+import space.kscience.kmath.structures.Float64
 
 private class Nd4jArrayIndicesIterator(private val iterateOver: INDArray) : Iterator<IntArray> {
     private var i: Int = 0
@@ -42,7 +43,7 @@ private sealed class Nd4jArrayIteratorBase<out T>(protected val iterateOver: IND
     }
 }
 
-private class Nd4jArrayDoubleIterator(iterateOver: INDArray) : Nd4jArrayIteratorBase<Double>(iterateOver) {
+private class Nd4jArrayDoubleIterator(iterateOver: INDArray) : Nd4jArrayIteratorBase<Float64>(iterateOver) {
     override fun getSingle(indices: LongArray): Double = iterateOver.getDouble(*indices)
 }
 

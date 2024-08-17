@@ -6,6 +6,7 @@
 package space.kscience.kmath.integration
 
 import space.kscience.attributes.*
+import space.kscience.kmath.structures.Float64
 
 public interface IntegrandAttribute<T> : Attribute<T>
 
@@ -44,9 +45,9 @@ public inline val <reified T : Any> Integrand<T>.valueOrNull: T? get() = attribu
  */
 public inline val <reified T : Any> Integrand<T>.value: T get() = valueOrNull ?: error("No value in the integrand")
 
-public object IntegrandRelativeAccuracy : IntegrandAttribute<Double>
+public object IntegrandRelativeAccuracy : IntegrandAttribute<Float64>
 
-public object IntegrandAbsoluteAccuracy : IntegrandAttribute<Double>
+public object IntegrandAbsoluteAccuracy : IntegrandAttribute<Float64>
 
 public object IntegrandCallsPerformed : IntegrandAttribute<Int>
 

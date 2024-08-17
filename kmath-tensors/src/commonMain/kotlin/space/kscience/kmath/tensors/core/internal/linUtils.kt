@@ -7,10 +7,7 @@ package space.kscience.kmath.tensors.core.internal
 
 import space.kscience.kmath.nd.*
 import space.kscience.kmath.operations.invoke
-import space.kscience.kmath.structures.Float64Buffer
-import space.kscience.kmath.structures.Int32Buffer
-import space.kscience.kmath.structures.asBuffer
-import space.kscience.kmath.structures.indices
+import space.kscience.kmath.structures.*
 import space.kscience.kmath.tensors.core.*
 import kotlin.math.abs
 import kotlin.math.max
@@ -18,9 +15,9 @@ import kotlin.math.min
 import kotlin.math.sqrt
 
 internal fun dotTo(
-    a: BufferedTensor<Double>,
-    b: BufferedTensor<Double>,
-    res: BufferedTensor<Double>,
+    a: BufferedTensor<Float64>,
+    b: BufferedTensor<Float64>,
+    res: BufferedTensor<Float64>,
     l: Int, m: Int, n: Int,
 ) {
     val aBuffer = a.source
@@ -39,7 +36,7 @@ internal fun dotTo(
 }
 
 internal fun luHelper(
-    lu: MutableStructure2D<Double>,
+    lu: MutableStructure2D<Float64>,
     pivots: MutableStructure1D<Int>,
     epsilon: Double,
 ): Boolean {
@@ -102,7 +99,7 @@ internal fun <T> StructureND<T>.setUpPivots(): IntTensor {
 }
 
 internal fun DoubleTensorAlgebra.computeLU(
-    tensor: StructureND<Double>,
+    tensor: StructureND<Float64>,
     epsilon: Double,
 ): Pair<DoubleTensor, IntTensor>? {
 
@@ -118,7 +115,7 @@ internal fun DoubleTensorAlgebra.computeLU(
 }
 
 internal fun pivInit(
-    p: MutableStructure2D<Double>,
+    p: MutableStructure2D<Float64>,
     pivot: MutableStructure1D<Int>,
     n: Int,
 ) {
@@ -128,9 +125,9 @@ internal fun pivInit(
 }
 
 internal fun luPivotHelper(
-    l: MutableStructure2D<Double>,
-    u: MutableStructure2D<Double>,
-    lu: MutableStructure2D<Double>,
+    l: MutableStructure2D<Float64>,
+    u: MutableStructure2D<Float64>,
+    lu: MutableStructure2D<Float64>,
     n: Int,
 ) {
     for (i in 0 until n) {
@@ -149,8 +146,8 @@ internal fun luPivotHelper(
 }
 
 internal fun choleskyHelper(
-    a: MutableStructure2D<Double>,
-    l: MutableStructure2D<Double>,
+    a: MutableStructure2D<Float64>,
+    l: MutableStructure2D<Float64>,
     n: Int,
 ) {
     for (i in 0 until n) {
@@ -169,7 +166,7 @@ internal fun choleskyHelper(
     }
 }
 
-internal fun luMatrixDet(lu: MutableStructure2D<Double>, pivots: MutableStructure1D<Int>): Double {
+internal fun luMatrixDet(lu: MutableStructure2D<Float64>, pivots: MutableStructure1D<Int>): Double {
     if (lu[0, 0] == 0.0) {
         return 0.0
     }
@@ -179,9 +176,9 @@ internal fun luMatrixDet(lu: MutableStructure2D<Double>, pivots: MutableStructur
 }
 
 internal fun luMatrixInv(
-    lu: MutableStructure2D<Double>,
+    lu: MutableStructure2D<Float64>,
     pivots: MutableStructure1D<Int>,
-    invMatrix: MutableStructure2D<Double>,
+    invMatrix: MutableStructure2D<Float64>,
 ) {
     val m = lu.shape[0]
 
@@ -208,7 +205,7 @@ internal fun luMatrixInv(
 internal fun DoubleTensorAlgebra.qrHelper(
     matrix: DoubleTensor,
     q: DoubleTensor,
-    r: MutableStructure2D<Double>,
+    r: MutableStructure2D<Float64>,
 ) {
     checkSquareMatrix(matrix.shape)
     val n = matrix.shape[0]
@@ -261,7 +258,7 @@ internal fun DoubleTensorAlgebra.svd1d(a: DoubleTensor, epsilon: Double = 1e-10)
 
 internal fun DoubleTensorAlgebra.svdHelper(
     matrix: DoubleTensor,
-    USV: Triple<BufferedTensor<Double>, BufferedTensor<Double>, BufferedTensor<Double>>,
+    USV: Triple<BufferedTensor<Float64>, BufferedTensor<Float64>, BufferedTensor<Float64>>,
     m: Int, n: Int, epsilon: Double,
 ) {
     val res = ArrayList<Triple<Double, DoubleTensor, DoubleTensor>>(0)
@@ -310,9 +307,9 @@ internal fun DoubleTensorAlgebra.svdHelper(
     }
 }
 
-internal fun MutableStructure2D<Double>.svdGolubKahanHelper(
-    u: MutableStructure2D<Double>, w: BufferedTensor<Double>,
-    v: MutableStructure2D<Double>, iterations: Int, epsilon: Double,
+internal fun MutableStructure2D<Float64>.svdGolubKahanHelper(
+    u: MutableStructure2D<Float64>, w: BufferedTensor<Float64>,
+    v: MutableStructure2D<Float64>, iterations: Int, epsilon: Double,
 ) {
     fun pythag(a: Double, b: Double): Double {
         val at: Double = abs(a)

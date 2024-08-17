@@ -9,6 +9,7 @@ import org.apache.commons.math3.linear.*
 import space.kscience.kmath.linear.LinearSolver
 import space.kscience.kmath.linear.Matrix
 import space.kscience.kmath.linear.Point
+import space.kscience.kmath.structures.Float64
 
 public enum class CMDecomposition {
     LUP,
@@ -19,7 +20,7 @@ public enum class CMDecomposition {
 }
 
 private fun CMLinearSpace.solver(
-    a: Matrix<Double>,
+    a: Matrix<Float64>,
     decomposition: CMDecomposition = CMDecomposition.LUP,
 ): DecompositionSolver = when (decomposition) {
     CMDecomposition.LUP -> LUDecomposition(a.toCM().origin).solver
@@ -30,31 +31,31 @@ private fun CMLinearSpace.solver(
 }
 
 public fun CMLinearSpace.solve(
-    a: Matrix<Double>,
-    b: Matrix<Double>,
+    a: Matrix<Float64>,
+    b: Matrix<Float64>,
     decomposition: CMDecomposition = CMDecomposition.LUP,
 ): CMMatrix = solver(a, decomposition).solve(b.toCM().origin).wrap()
 
 public fun CMLinearSpace.solve(
-    a: Matrix<Double>,
-    b: Point<Double>,
+    a: Matrix<Float64>,
+    b: Point<Float64>,
     decomposition: CMDecomposition = CMDecomposition.LUP,
 ): CMVector = solver(a, decomposition).solve(b.toCM().origin).toPoint()
 
 public fun CMLinearSpace.inverse(
-    a: Matrix<Double>,
+    a: Matrix<Float64>,
     decomposition: CMDecomposition = CMDecomposition.LUP,
 ): CMMatrix = solver(a, decomposition).inverse.wrap()
 
 
-public fun CMLinearSpace.solver(decomposition: CMDecomposition): LinearSolver<Double> = object : LinearSolver<Double> {
-    override fun solve(a: Matrix<Double>, b: Matrix<Double>): Matrix<Double> =
+public fun CMLinearSpace.solver(decomposition: CMDecomposition): LinearSolver<Float64> = object : LinearSolver<Float64> {
+    override fun solve(a: Matrix<Float64>, b: Matrix<Float64>): Matrix<Float64> =
         solver(a, decomposition).solve(b.toCM().origin).wrap()
 
-    override fun solve(a: Matrix<Double>, b: Point<Double>): Point<Double> =
+    override fun solve(a: Matrix<Float64>, b: Point<Float64>): Point<Float64> =
         solver(a, decomposition).solve(b.toCM().origin).toPoint()
 
-    override fun inverse(matrix: Matrix<Double>): Matrix<Double> = solver(matrix, decomposition).inverse.wrap()
+    override fun inverse(matrix: Matrix<Float64>): Matrix<Float64> = solver(matrix, decomposition).inverse.wrap()
 }
 
-public fun CMLinearSpace.lupSolver(): LinearSolver<Double> = solver((CMDecomposition.LUP))
+public fun CMLinearSpace.lupSolver(): LinearSolver<Float64> = solver((CMDecomposition.LUP))

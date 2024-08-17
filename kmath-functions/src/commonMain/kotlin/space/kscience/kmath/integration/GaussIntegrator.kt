@@ -8,6 +8,7 @@ import space.kscience.attributes.AttributesBuilder
 import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.operations.Field
 import space.kscience.kmath.structures.Buffer
+import space.kscience.kmath.structures.Float64
 import space.kscience.kmath.structures.asBuffer
 import space.kscience.kmath.structures.indices
 
@@ -27,7 +28,7 @@ public class GaussIntegrator<T : Any>(
     public val algebra: Field<T>,
 ) : UnivariateIntegrator<T> {
 
-    private fun buildRule(integrand: UnivariateIntegrand<T>): Pair<Buffer<Double>, Buffer<Double>> {
+    private fun buildRule(integrand: UnivariateIntegrand<T>): Pair<Buffer<Float64>, Buffer<Float64>> {
         val factory = integrand[GaussIntegratorRuleFactory] ?: GaussLegendreRuleFactory
         val predefinedRanges = integrand[UnivariateIntegrandRanges]
         if (predefinedRanges == null || predefinedRanges.ranges.isEmpty()) {
@@ -89,7 +90,7 @@ public val <T : Any> Field<T>.gaussIntegrator: GaussIntegrator<T> get() = GaussI
  */
 @UnstableKMathAPI
 public inline fun <reified T : Any> GaussIntegrator<T>.integrate(
-    range: ClosedRange<Double>,
+    range: ClosedRange<Float64>,
     order: Int = 10,
     intervals: Int = 10,
     noinline attributesBuilder: AttributesBuilder<UnivariateIntegrand<T>>.() -> Unit = {},

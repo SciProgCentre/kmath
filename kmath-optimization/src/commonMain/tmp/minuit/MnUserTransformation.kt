@@ -27,7 +27,7 @@ import org.apache.commons.math3.linear.ArrayRealVector
  */
 class MnUserTransformation {
     private val nameMap: MutableMap<String?, Int> = HashMap()
-    private var theCache: MutableList<Double>
+    private var theCache: MutableList<Float64>
     private var theExtOfInt: MutableList<Int>
     private var theParameters: MutableList<MinuitParameter>
     private var thePrecision: MnMachinePrecision
@@ -36,7 +36,7 @@ class MnUserTransformation {
         thePrecision = MnMachinePrecision()
         theParameters = java.util.ArrayList<MinuitParameter>()
         theExtOfInt = java.util.ArrayList<Int>()
-        theCache = java.util.ArrayList<Double>(0)
+        theCache = java.util.ArrayList<Float64>(0)
     }
 
     private constructor(other: MnUserTransformation) {
@@ -46,14 +46,14 @@ class MnUserTransformation {
             theParameters.add(par.copy())
         }
         theExtOfInt = java.util.ArrayList<Int>(other.theExtOfInt)
-        theCache = java.util.ArrayList<Double>(other.theCache)
+        theCache = java.util.ArrayList<Float64>(other.theCache)
     }
 
     constructor(par: DoubleArray, err: DoubleArray) {
         thePrecision = MnMachinePrecision()
         theParameters = java.util.ArrayList<MinuitParameter>(par.size)
         theExtOfInt = java.util.ArrayList<Int>(par.size)
-        theCache = java.util.ArrayList<Double>(par.size)
+        theCache = java.util.ArrayList<Float64>(par.size)
         for (i in par.indices) {
             add("p$i", par[i], err[i])
         }

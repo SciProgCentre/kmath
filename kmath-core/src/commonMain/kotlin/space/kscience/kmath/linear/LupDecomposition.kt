@@ -163,9 +163,9 @@ public fun <T : Comparable<T>> Field<T>.lup(
 
 
 public fun Field<Float64>.lup(
-    matrix: Matrix<Double>,
+    matrix: Matrix<Float64>,
     singularityThreshold: Double = 1e-11,
-): GenericLupDecomposition<Double> = lup(matrix) { it < singularityThreshold }
+): GenericLupDecomposition<Float64> = lup(matrix) { it < singularityThreshold }
 
 private fun <T> Field<T>.solve(
     lup: LupDecomposition<T>,
@@ -235,5 +235,5 @@ public fun <T : Comparable<T>> LinearSpace<T, Field<T>>.lupSolver(
     override fun inverse(matrix: Matrix<T>): Matrix<T> = solve(matrix, one(matrix.rowNum, matrix.colNum))
 }
 
-public fun LinearSpace<Double, Float64Field>.lupSolver(singularityThreshold: Double = 1e-11): LinearSolver<Double> =
+public fun LinearSpace<Double, Float64Field>.lupSolver(singularityThreshold: Double = 1e-11): LinearSolver<Float64> =
     lupSolver { it < singularityThreshold }

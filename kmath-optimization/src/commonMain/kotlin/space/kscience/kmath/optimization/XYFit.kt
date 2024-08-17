@@ -16,26 +16,27 @@ import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.operations.ExtendedField
 import space.kscience.kmath.operations.Float64Field
 import space.kscience.kmath.operations.bindSymbol
+import space.kscience.kmath.structures.Float64
 import kotlin.math.pow
 
 /**
  * Specify the way to compute distance from point to the curve as DifferentiableExpression
  */
 public interface PointToCurveDistance {
-    public fun distance(problem: XYFit, index: Int): DifferentiableExpression<Double>
+    public fun distance(problem: XYFit, index: Int): DifferentiableExpression<Float64>
 
     public companion object : OptimizationAttribute<PointToCurveDistance> {
         public val byY: PointToCurveDistance = object : PointToCurveDistance {
-            override fun distance(problem: XYFit, index: Int): DifferentiableExpression<Double> {
+            override fun distance(problem: XYFit, index: Int): DifferentiableExpression<Float64> {
                 val x = problem.data.x[index]
                 val y = problem.data.y[index]
 
-                return object : DifferentiableExpression<Double> {
-                    override val type: SafeType<Double> get() = DoubleField.type
+                return object : DifferentiableExpression<Float64> {
+                    override val type: SafeType<Float64> get() = DoubleField.type
 
                     override fun derivativeOrNull(
                         symbols: List<Symbol>,
-                    ): Expression<Double>? = problem.model.derivativeOrNull(symbols)?.let { derivExpression ->
+                    ): Expression<Float64>? = problem.model.derivativeOrNull(symbols)?.let { derivExpression ->
                         Expression(DoubleField.type) { arguments ->
                             derivExpression.invoke(arguments + (Symbol.x to x))
                         }
@@ -56,19 +57,19 @@ public interface PointToCurveDistance {
  * By default, uses Dispersion^-1
  */
 public interface PointWeight {
-    public fun weight(problem: XYFit, index: Int): DifferentiableExpression<Double>
+    public fun weight(problem: XYFit, index: Int): DifferentiableExpression<Float64>
 
     public companion object : OptimizationAttribute<PointWeight> {
         public fun bySigma(sigmaSymbol: Symbol): PointWeight = object : PointWeight {
-            override fun weight(problem: XYFit, index: Int): DifferentiableExpression<Double> =
-                object : DifferentiableExpression<Double> {
-                    override val type: SafeType<Double> get() = DoubleField.type
+            override fun weight(problem: XYFit, index: Int): DifferentiableExpression<Float64> =
+                object : DifferentiableExpression<Float64> {
+                    override val type: SafeType<Float64> get() = DoubleField.type
 
                     override fun invoke(arguments: Map<Symbol, Double>): Double {
                         return problem.data[sigmaSymbol]?.get(index)?.pow(-2) ?: 1.0
                     }
 
-                    override fun derivativeOrNull(symbols: List<Symbol>): Expression<Double> =
+                    override fun derivativeOrNull(symbols: List<Symbol>): Expression<Float64> =
                         Expression(DoubleField.type) { 0.0 }
                 }
 
@@ -85,24 +86,24 @@ public interface PointWeight {
  */
 public class XYFit(
     public val data: XYColumnarData<Double, Double, Double>,
-    public val model: DifferentiableExpression<Double>,
+    public val model: DifferentiableExpression<Float64>,
     override val attributes: Attributes,
     internal val pointToCurveDistance: PointToCurveDistance = PointToCurveDistance.byY,
     internal val pointWeight: PointWeight = PointWeight.byYSigma,
     public val xSymbol: Symbol = Symbol.x,
-) : OptimizationProblem<Double> {
+) : OptimizationProblem<Float64> {
 
-    override val type: SafeType<Double> get() = Float64Field.type
+    override val type: SafeType<Float64> get() = Float64Field.type
 
-    public fun distance(index: Int): DifferentiableExpression<Double> = pointToCurveDistance.distance(this, index)
+    public fun distance(index: Int): DifferentiableExpression<Float64> = pointToCurveDistance.distance(this, index)
 
-    public fun weight(index: Int): DifferentiableExpression<Double> = pointWeight.weight(this, index)
+    public fun weight(index: Int): DifferentiableExpression<Float64> = pointWeight.weight(this, index)
 }
 
 
 public fun XYOptimization(
     data: XYColumnarData<Double, Double, Double>,
-    model: DifferentiableExpression<Double>,
+    model: DifferentiableExpression<Float64>,
     builder: AttributesBuilder<XYFit>.() -> Unit,
 ): XYFit = XYFit(data, model, Attributes(builder))
 
@@ -112,7 +113,7 @@ public fun XYFit.withAttributes(
 
 public suspend fun XYColumnarData<Double, Double, Double>.fitWith(
     optimizer: Optimizer<Double, XYFit>,
-    modelExpression: DifferentiableExpression<Double>,
+    modelExpression: DifferentiableExpression<Float64>,
     startingPoint: Map<Symbol, Double>,
     attributes: Attributes = Attributes.EMPTY,
     xSymbol: Symbol = Symbol.x,
@@ -149,7 +150,7 @@ public suspend fun <I : Any, A> XYColumnarData<Double, Double, Double>.fitWith(
     pointWeight: PointWeight = PointWeight.byYSigma,
     model: A.(I) -> I,
 ): XYFit where A : ExtendedField<I>, A : ExpressionAlgebra<Double, I> {
-    val modelExpression: DifferentiableExpression<Double> = processor.differentiate {
+    val modelExpression: DifferentiableExpression<Float64> = processor.differentiate {
         val x = bindSymbol(xSymbol)
         model(x)
     }

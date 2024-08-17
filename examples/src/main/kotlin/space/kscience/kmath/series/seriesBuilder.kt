@@ -6,10 +6,7 @@
 package space.kscience.kmath.series
 
 
-import space.kscience.kmath.structures.Buffer
-import space.kscience.kmath.structures.Float64Buffer
-import space.kscience.kmath.structures.asBuffer
-import space.kscience.kmath.structures.toDoubleArray
+import space.kscience.kmath.structures.*
 import space.kscience.plotly.*
 import space.kscience.plotly.models.Scatter
 import space.kscience.plotly.models.ScatterMode
@@ -22,7 +19,7 @@ fun main(): Unit = with(Double.seriesAlgebra()) {
     val arrayOfRandoms = DoubleArray(20) { random.nextDouble() }
 
     val series1: Float64Buffer = arrayOfRandoms.asBuffer()
-    val series2: Series<Double> = series1.moveBy(3)
+    val series2: Series<Float64> = series1.moveBy(3)
 
     val res = series2 - series1
 
@@ -30,7 +27,7 @@ fun main(): Unit = with(Double.seriesAlgebra()) {
 
     println(res)
 
-    fun Plot.series(name: String, buffer: Buffer<Double>, block: Scatter.() -> Unit = {}) {
+    fun Plot.series(name: String, buffer: Buffer<Float64>, block: Scatter.() -> Unit = {}) {
         scatter {
             this.name = name
             x.numbers = buffer.offsetIndices

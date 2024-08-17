@@ -17,6 +17,7 @@ import space.kscience.kmath.chains.BlockingDoubleChain
 import space.kscience.kmath.operations.Group
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.BufferFactory
+import space.kscience.kmath.structures.Float64
 import space.kscience.kmath.structures.Float64Buffer
 
 /**
@@ -56,7 +57,7 @@ public fun <T> Flow<T>.chunked(bufferSize: Int, bufferFactory: BufferFactory<T>)
 /**
  * Specialized flow chunker for real buffer
  */
-public fun Flow<Double>.chunked(bufferSize: Int): Flow<Float64Buffer> = flow {
+public fun Flow<Float64>.chunked(bufferSize: Int): Flow<Float64Buffer> = flow {
     require(bufferSize > 0) { "Resulting chunk size must be more than zero" }
 
     if (this@chunked is BlockingDoubleChain) {

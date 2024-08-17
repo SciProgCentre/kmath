@@ -10,6 +10,7 @@ import org.apache.commons.math3.analysis.integration.SimpsonIntegrator
 import space.kscience.attributes.Attributes
 import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.integration.*
+import space.kscience.kmath.structures.Float64
 import org.apache.commons.math3.analysis.integration.UnivariateIntegrator as CMUnivariateIntegrator
 
 /**
@@ -17,10 +18,10 @@ import org.apache.commons.math3.analysis.integration.UnivariateIntegrator as CMU
  */
 public class CMIntegrator(
     private val defaultMaxCalls: Int = 200,
-    public val integratorBuilder: (Integrand<Double>) -> CMUnivariateIntegrator,
-) : UnivariateIntegrator<Double> {
+    public val integratorBuilder: (Integrand<Float64>) -> CMUnivariateIntegrator,
+) : UnivariateIntegrator<Float64> {
 
-    override fun integrate(integrand: UnivariateIntegrand<Double>): UnivariateIntegrand<Double> {
+    override fun integrate(integrand: UnivariateIntegrand<Float64>): UnivariateIntegrand<Float64> {
         val integrator = integratorBuilder(integrand)
         val maxCalls = integrand[IntegrandMaxCalls] ?: defaultMaxCalls
         val remainingCalls = maxCalls - integrand.calls

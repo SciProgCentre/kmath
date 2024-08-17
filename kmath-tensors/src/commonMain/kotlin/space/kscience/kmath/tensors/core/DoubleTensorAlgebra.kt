@@ -44,7 +44,7 @@ public open class DoubleTensorAlgebra :
      * @return the resulting tensor after applying the function.
      */
     @Suppress("OVERRIDE_BY_INLINE")
-    final override inline fun StructureND<Double>.map(transform: Float64Field.(Double) -> Double): DoubleTensor {
+    final override inline fun StructureND<Float64>.map(transform: Float64Field.(Double) -> Double): DoubleTensor {
         val tensor = asDoubleTensor()
         //TODO remove additional copy
         val array = Float64Buffer(tensor.source.size) { Float64Field.transform(tensor.source[it]) }
@@ -54,7 +54,7 @@ public open class DoubleTensorAlgebra :
         )
     }
 
-    public inline fun Tensor<Double>.mapInPlace(operation: (Double) -> Double) {
+    public inline fun Tensor<Float64>.mapInPlace(operation: (Double) -> Double) {
         if (this is DoubleTensor) {
             source.mapInPlace(operation)
         } else {
@@ -62,20 +62,20 @@ public open class DoubleTensorAlgebra :
         }
     }
 
-    public inline fun Tensor<Double>.mapIndexedInPlace(operation: Float64Field.(IntArray, Double) -> Double) {
+    public inline fun Tensor<Float64>.mapIndexedInPlace(operation: Float64Field.(IntArray, Double) -> Double) {
         indices.forEach { set(it, Float64Field.operation(it, get(it))) }
     }
 
     @Suppress("OVERRIDE_BY_INLINE")
-    final override inline fun StructureND<Double>.mapIndexed(transform: Float64Field.(index: IntArray, Double) -> Double): DoubleTensor {
+    final override inline fun StructureND<Float64>.mapIndexed(transform: Float64Field.(index: IntArray, Double) -> Double): DoubleTensor {
         return copyToTensor().apply { mapIndexedInPlace(transform) }
     }
 
 
     @Suppress("OVERRIDE_BY_INLINE")
     final override inline fun zip(
-        left: StructureND<Double>,
-        right: StructureND<Double>,
+        left: StructureND<Float64>,
+        right: StructureND<Float64>,
         transform: Float64Field.(Double, Double) -> Double,
     ): DoubleTensor {
         checkShapesCompatible(left, right)
@@ -89,19 +89,19 @@ public open class DoubleTensorAlgebra :
     }
 
 
-    public inline fun StructureND<Double>.reduceElements(transform: (Float64Buffer) -> Double): Double =
+    public inline fun StructureND<Float64>.reduceElements(transform: (Float64Buffer) -> Double): Double =
         transform(asDoubleTensor().source.copy())
     //TODO Add read-only DoubleBuffer wrapper. To avoid protective copy
 
-    override fun StructureND<Double>.valueOrNull(): Double? {
+    override fun StructureND<Float64>.valueOrNull(): Double? {
         val dt = asDoubleTensor()
         return if (dt.shape == ShapeND(1)) dt.source[0] else null
     }
 
-    override fun StructureND<Double>.value(): Double = valueOrNull()
+    override fun StructureND<Float64>.value(): Double = valueOrNull()
         ?: throw IllegalArgumentException("The tensor shape is $shape, but value method is allowed only for shape [1]")
 
-    public fun fromBuffer(shape: ShapeND, buffer: Buffer<Double>): DoubleTensor {
+    public fun fromBuffer(shape: ShapeND, buffer: Buffer<Float64>): DoubleTensor {
         checkNotEmptyShape(shape)
         check(buffer.size > 0) { "Illegal empty buffer provided" }
         check(buffer.size == shape.linearSize) {
@@ -133,7 +133,7 @@ public open class DoubleTensorAlgebra :
             RowStrides(shape).asSequence().map { Float64Field.initializer(it) }.toMutableList().toDoubleArray()
         )
 
-    override fun Tensor<Double>.getTensor(i: Int): DoubleTensor {
+    override fun Tensor<Float64>.getTensor(i: Int): DoubleTensor {
         val dt = asDoubleTensor()
         val lastShape = shape.last(shape.size - 1)
         val newShape: ShapeND = if (lastShape.isNotEmpty()) lastShape else ShapeND(1)
@@ -214,71 +214,71 @@ public open class DoubleTensorAlgebra :
         return res
     }
 
-    override fun Double.plus(arg: StructureND<Double>): DoubleTensor = arg.map { this@plus + it }
+    override fun Double.plus(arg: StructureND<Float64>): DoubleTensor = arg.map { this@plus + it }
 
-    override fun StructureND<Double>.plus(arg: Double): DoubleTensor = map { it + arg }
+    override fun StructureND<Float64>.plus(arg: Double): DoubleTensor = map { it + arg }
 
-    override fun StructureND<Double>.plus(arg: StructureND<Double>): DoubleTensor = zip(this, arg) { l, r -> l + r }
+    override fun StructureND<Float64>.plus(arg: StructureND<Float64>): DoubleTensor = zip(this, arg) { l, r -> l + r }
 
-    override fun Tensor<Double>.plusAssign(value: Double) {
+    override fun Tensor<Float64>.plusAssign(value: Double) {
         mapInPlace { it + value }
     }
 
-    override fun Tensor<Double>.plusAssign(arg: StructureND<Double>) {
+    override fun Tensor<Float64>.plusAssign(arg: StructureND<Float64>) {
         checkShapesCompatible(asDoubleTensor(), arg.asDoubleTensor())
         mapIndexedInPlace { index, value ->
             value + arg[index]
         }
     }
 
-    override fun Double.minus(arg: StructureND<Double>): DoubleTensor = arg.map { this@minus - it }
+    override fun Double.minus(arg: StructureND<Float64>): DoubleTensor = arg.map { this@minus - it }
 
-    override fun StructureND<Double>.minus(arg: Double): DoubleTensor = map { it - arg }
+    override fun StructureND<Float64>.minus(arg: Double): DoubleTensor = map { it - arg }
 
-    override fun StructureND<Double>.minus(arg: StructureND<Double>): DoubleTensor = zip(this, arg) { l, r -> l - r }
+    override fun StructureND<Float64>.minus(arg: StructureND<Float64>): DoubleTensor = zip(this, arg) { l, r -> l - r }
 
-    override fun Tensor<Double>.minusAssign(value: Double) {
+    override fun Tensor<Float64>.minusAssign(value: Double) {
         mapInPlace { it - value }
     }
 
-    override fun Tensor<Double>.minusAssign(arg: StructureND<Double>) {
+    override fun Tensor<Float64>.minusAssign(arg: StructureND<Float64>) {
         checkShapesCompatible(this, arg)
         mapIndexedInPlace { index, value -> value - arg.getDouble(index) }
     }
 
-    override fun Double.times(arg: StructureND<Double>): DoubleTensor = arg.map { this@times * it }
+    override fun Double.times(arg: StructureND<Float64>): DoubleTensor = arg.map { this@times * it }
 
-    override fun StructureND<Double>.times(arg: Double): DoubleTensor = arg * asDoubleTensor()
+    override fun StructureND<Float64>.times(arg: Double): DoubleTensor = arg * asDoubleTensor()
 
-    override fun StructureND<Double>.times(arg: StructureND<Double>): DoubleTensor = zip(this, arg) { l, r -> l * r }
+    override fun StructureND<Float64>.times(arg: StructureND<Float64>): DoubleTensor = zip(this, arg) { l, r -> l * r }
 
-    override fun Tensor<Double>.timesAssign(value: Double) {
+    override fun Tensor<Float64>.timesAssign(value: Double) {
         mapInPlace { it * value }
     }
 
-    override fun Tensor<Double>.timesAssign(arg: StructureND<Double>) {
+    override fun Tensor<Float64>.timesAssign(arg: StructureND<Float64>) {
         checkShapesCompatible(this, arg)
         mapIndexedInPlace { index, value -> value * arg[index] }
     }
 
-    override fun Double.div(arg: StructureND<Double>): DoubleTensor = arg.map { this@div / it }
+    override fun Double.div(arg: StructureND<Float64>): DoubleTensor = arg.map { this@div / it }
 
-    override fun StructureND<Double>.div(arg: Double): DoubleTensor = map { it / arg }
+    override fun StructureND<Float64>.div(arg: Double): DoubleTensor = map { it / arg }
 
-    override fun StructureND<Double>.div(arg: StructureND<Double>): DoubleTensor = zip(this, arg) { l, r -> l / r }
+    override fun StructureND<Float64>.div(arg: StructureND<Float64>): DoubleTensor = zip(this, arg) { l, r -> l / r }
 
-    override fun Tensor<Double>.divAssign(value: Double) {
+    override fun Tensor<Float64>.divAssign(value: Double) {
         mapInPlace { it / value }
     }
 
-    override fun Tensor<Double>.divAssign(arg: StructureND<Double>) {
+    override fun Tensor<Float64>.divAssign(arg: StructureND<Float64>) {
         checkShapesCompatible(asDoubleTensor(), arg)
         mapIndexedInPlace { index, value -> value / arg[index] }
     }
 
-    override fun StructureND<Double>.unaryMinus(): DoubleTensor = map { -it }
+    override fun StructureND<Float64>.unaryMinus(): DoubleTensor = map { -it }
 
-    override fun StructureND<Double>.transposed(i: Int, j: Int): Tensor<Double> {
+    override fun StructureND<Float64>.transposed(i: Int, j: Int): Tensor<Float64> {
         val actualI = if (i >= 0) i else shape.size + i
         val actualJ = if (j >= 0) j else shape.size + j
         return asDoubleTensor().permute(
@@ -315,12 +315,12 @@ public open class DoubleTensorAlgebra :
 //        return resTensor
     }
 
-    override fun Tensor<Double>.view(shape: ShapeND): DoubleTensor {
+    override fun Tensor<Float64>.view(shape: ShapeND): DoubleTensor {
         checkView(asDoubleTensor(), shape)
         return DoubleTensor(shape, asDoubleTensor().source)
     }
 
-    override fun Tensor<Double>.viewAs(other: StructureND<Double>): DoubleTensor =
+    override fun Tensor<Float64>.viewAs(other: StructureND<Float64>): DoubleTensor =
         view(other.shape)
 
     /**
@@ -352,7 +352,7 @@ public open class DoubleTensorAlgebra :
      * @param other tensor to be multiplied.
      * @return a mathematical product of two tensors.
      */
-    public infix fun StructureND<Double>.matmul(other: StructureND<Double>): DoubleTensor {
+    public infix fun StructureND<Float64>.matmul(other: StructureND<Float64>): DoubleTensor {
         if (shape.size == 1 && other.shape.size == 1) {
             return DoubleTensor(ShapeND(1), Float64Buffer(times(other).sum()))
         }
@@ -412,13 +412,13 @@ public open class DoubleTensorAlgebra :
         }
     }
 
-    override fun StructureND<Double>.dot(other: StructureND<Double>): DoubleTensor {
+    override fun StructureND<Float64>.dot(other: StructureND<Float64>): DoubleTensor {
         return if (dimension in 0..2 && other.dimension in 0..2) this.matmul(other)
         else error("Only vectors and matrices are allowed in non-broadcasting dot operation")
     }
 
     override fun diagonalEmbedding(
-        diagonalEntries: StructureND<Double>,
+        diagonalEntries: StructureND<Float64>,
         offset: Int,
         dim1: Int,
         dim2: Int,
@@ -476,7 +476,7 @@ public open class DoubleTensorAlgebra :
      * @param epsilon permissible error when comparing two Double values.
      * @return true if two tensors have the same shape and elements, false otherwise.
      */
-    public fun Tensor<Double>.eq(other: Tensor<Double>, epsilon: Double): Boolean =
+    public fun Tensor<Float64>.eq(other: Tensor<Float64>, epsilon: Double): Boolean =
         asDoubleTensor().eq(other) { x, y -> abs(x - y) < epsilon }
 
     /**
@@ -486,10 +486,10 @@ public open class DoubleTensorAlgebra :
      * @param other the tensor to compare with `input` tensor.
      * @return true if two tensors have the same shape and elements, false otherwise.
      */
-    public infix fun Tensor<Double>.eq(other: Tensor<Double>): Boolean = eq(other, 1e-5)
+    public infix fun Tensor<Float64>.eq(other: Tensor<Float64>): Boolean = eq(other, 1e-5)
 
-    private fun Tensor<Double>.eq(
-        other: Tensor<Double>,
+    private fun Tensor<Float64>.eq(
+        other: Tensor<Float64>,
         eqFunction: (Double, Double) -> Boolean,
     ): Boolean {
         //TODO optimize tensor conversion
@@ -512,10 +512,10 @@ public open class DoubleTensorAlgebra :
      * @param indices the [IntArray] of 1-dimensional indices
      * @return tensor with rows corresponding to row by [indices]
      */
-    public fun Tensor<Double>.rowsByIndices(indices: IntArray): DoubleTensor = stack(indices.map { getTensor(it) })
+    public fun Tensor<Float64>.rowsByIndices(indices: IntArray): DoubleTensor = stack(indices.map { getTensor(it) })
 
 
-    private inline fun StructureND<Double>.foldDimToDouble(
+    private inline fun StructureND<Float64>.foldDimToDouble(
         dim: Int,
         keepDim: Boolean,
         foldFunction: (DoubleArray) -> Double,
@@ -543,7 +543,7 @@ public open class DoubleTensorAlgebra :
         return resTensor
     }
 
-    private inline fun StructureND<Double>.foldDimToInt(
+    private inline fun StructureND<Float64>.foldDimToInt(
         dim: Int,
         keepDim: Boolean,
         foldFunction: (DoubleArray) -> Int,
@@ -571,46 +571,46 @@ public open class DoubleTensorAlgebra :
     }
 
 
-    override fun StructureND<Double>.sum(): Double = reduceElements { it.array.sum() }
+    override fun StructureND<Float64>.sum(): Double = reduceElements { it.array.sum() }
 
-    override fun StructureND<Double>.sum(dim: Int, keepDim: Boolean): DoubleTensor =
+    override fun StructureND<Float64>.sum(dim: Int, keepDim: Boolean): DoubleTensor =
         foldDimToDouble(dim, keepDim) { x -> x.sum() }
 
-    override fun StructureND<Double>.min(): Double = reduceElements { it.array.min() }
+    override fun StructureND<Float64>.min(): Double = reduceElements { it.array.min() }
 
-    override fun StructureND<Double>.min(dim: Int, keepDim: Boolean): DoubleTensor =
+    override fun StructureND<Float64>.min(dim: Int, keepDim: Boolean): DoubleTensor =
         foldDimToDouble(dim, keepDim) { x -> x.minOrNull()!! }
 
-    override fun StructureND<Double>.argMin(dim: Int, keepDim: Boolean): Tensor<Int> = foldDimToInt(dim, keepDim) { x ->
+    override fun StructureND<Float64>.argMin(dim: Int, keepDim: Boolean): Tensor<Int> = foldDimToInt(dim, keepDim) { x ->
         x.withIndex().minBy { it.value }.index
     }
 
-    override fun StructureND<Double>.max(): Double = reduceElements { it.array.max() }
+    override fun StructureND<Float64>.max(): Double = reduceElements { it.array.max() }
 
-    override fun StructureND<Double>.max(dim: Int, keepDim: Boolean): DoubleTensor =
+    override fun StructureND<Float64>.max(dim: Int, keepDim: Boolean): DoubleTensor =
         foldDimToDouble(dim, keepDim) { x -> x.maxOrNull()!! }
 
 
-    override fun StructureND<Double>.argMax(dim: Int, keepDim: Boolean): IntTensor =
+    override fun StructureND<Float64>.argMax(dim: Int, keepDim: Boolean): IntTensor =
         foldDimToInt(dim, keepDim) { x ->
             x.withIndex().maxBy { it.value }.index
         }
 
 
-    override fun mean(structureND: StructureND<Double>): Double = structureND.sum() / structureND.indices.linearSize
+    override fun mean(structureND: StructureND<Float64>): Double = structureND.sum() / structureND.indices.linearSize
 
-    override fun mean(structureND: StructureND<Double>, dim: Int, keepDim: Boolean): Tensor<Double> =
+    override fun mean(structureND: StructureND<Float64>, dim: Int, keepDim: Boolean): Tensor<Float64> =
         structureND.foldDimToDouble(dim, keepDim) { arr ->
             check(dim < structureND.dimension) { "Dimension $dim out of range ${structureND.dimension}" }
             arr.sum() / structureND.shape[dim]
         }
 
-    override fun std(structureND: StructureND<Double>): Double = structureND.reduceElements { arr ->
+    override fun std(structureND: StructureND<Float64>): Double = structureND.reduceElements { arr ->
         val mean = arr.array.sum() / structureND.indices.linearSize
         sqrt(arr.array.sumOf { (it - mean) * (it - mean) } / (structureND.indices.linearSize - 1))
     }
 
-    override fun std(structureND: StructureND<Double>, dim: Int, keepDim: Boolean): Tensor<Double> =
+    override fun std(structureND: StructureND<Float64>, dim: Int, keepDim: Boolean): Tensor<Float64> =
         structureND.foldDimToDouble(
             dim,
             keepDim
@@ -620,13 +620,13 @@ public open class DoubleTensorAlgebra :
             sqrt(arr.sumOf { (it - mean) * (it - mean) } / (structureND.shape[dim] - 1))
         }
 
-    override fun variance(structureND: StructureND<Double>): Double = structureND.reduceElements { arr ->
+    override fun variance(structureND: StructureND<Float64>): Double = structureND.reduceElements { arr ->
         val linearSize = structureND.indices.linearSize
         val mean = arr.array.sum() / linearSize
         arr.array.sumOf { (it - mean) * (it - mean) } / (linearSize - 1)
     }
 
-    override fun variance(structureND: StructureND<Double>, dim: Int, keepDim: Boolean): Tensor<Double> =
+    override fun variance(structureND: StructureND<Float64>, dim: Int, keepDim: Boolean): Tensor<Float64> =
         structureND.foldDimToDouble(
             dim,
             keepDim
@@ -637,56 +637,56 @@ public open class DoubleTensorAlgebra :
         }
 
 
-    override fun exp(arg: StructureND<Double>): DoubleTensor = arg.map { this.exp(it) }
+    override fun exp(arg: StructureND<Float64>): DoubleTensor = arg.map { this.exp(it) }
 
-    override fun ln(arg: StructureND<Double>): DoubleTensor = arg.map { this.ln(it) }
+    override fun ln(arg: StructureND<Float64>): DoubleTensor = arg.map { this.ln(it) }
 
-    override fun sqrt(arg: StructureND<Double>): DoubleTensor = arg.map { this.sqrt(it) }
+    override fun sqrt(arg: StructureND<Float64>): DoubleTensor = arg.map { this.sqrt(it) }
 
-    override fun cos(arg: StructureND<Double>): DoubleTensor = arg.map { this.cos(it) }
+    override fun cos(arg: StructureND<Float64>): DoubleTensor = arg.map { this.cos(it) }
 
-    override fun acos(arg: StructureND<Double>): DoubleTensor = arg.map { this.acos(it) }
+    override fun acos(arg: StructureND<Float64>): DoubleTensor = arg.map { this.acos(it) }
 
-    override fun cosh(arg: StructureND<Double>): DoubleTensor = arg.map { this.cosh(it) }
+    override fun cosh(arg: StructureND<Float64>): DoubleTensor = arg.map { this.cosh(it) }
 
-    override fun acosh(arg: StructureND<Double>): DoubleTensor = arg.map { this.acosh(it) }
+    override fun acosh(arg: StructureND<Float64>): DoubleTensor = arg.map { this.acosh(it) }
 
-    override fun sin(arg: StructureND<Double>): DoubleTensor = arg.map { this.sin(it) }
+    override fun sin(arg: StructureND<Float64>): DoubleTensor = arg.map { this.sin(it) }
 
-    override fun asin(arg: StructureND<Double>): DoubleTensor = arg.map { this.asin(it) }
+    override fun asin(arg: StructureND<Float64>): DoubleTensor = arg.map { this.asin(it) }
 
-    override fun sinh(arg: StructureND<Double>): DoubleTensor = arg.map { this.sinh(it) }
+    override fun sinh(arg: StructureND<Float64>): DoubleTensor = arg.map { this.sinh(it) }
 
-    override fun asinh(arg: StructureND<Double>): DoubleTensor = arg.map { this.asinh(it) }
+    override fun asinh(arg: StructureND<Float64>): DoubleTensor = arg.map { this.asinh(it) }
 
-    override fun tan(arg: StructureND<Double>): DoubleTensor = arg.map { this.tan(it) }
+    override fun tan(arg: StructureND<Float64>): DoubleTensor = arg.map { this.tan(it) }
 
-    override fun atan(arg: StructureND<Double>): DoubleTensor = arg.map { this.atan(it) }
+    override fun atan(arg: StructureND<Float64>): DoubleTensor = arg.map { this.atan(it) }
 
-    override fun tanh(arg: StructureND<Double>): DoubleTensor = arg.map { this.tanh(it) }
+    override fun tanh(arg: StructureND<Float64>): DoubleTensor = arg.map { this.tanh(it) }
 
-    override fun atanh(arg: StructureND<Double>): DoubleTensor = arg.map { this.atanh(it) }
+    override fun atanh(arg: StructureND<Float64>): DoubleTensor = arg.map { this.atanh(it) }
 
-    override fun power(arg: StructureND<Double>, pow: Number): StructureND<Double> = if (pow is Int) {
+    override fun power(arg: StructureND<Float64>, pow: Number): StructureND<Float64> = if (pow is Int) {
         arg.map { it.pow(pow) }
     } else {
         arg.map { it.pow(pow.toDouble()) }
     }
 
-    override fun ceil(arg: StructureND<Double>): DoubleTensor = arg.map { ceil(it) }
+    override fun ceil(arg: StructureND<Float64>): DoubleTensor = arg.map { ceil(it) }
 
-    override fun floor(structureND: StructureND<Double>): DoubleTensor = structureND.map { floor(it) }
+    override fun floor(structureND: StructureND<Float64>): DoubleTensor = structureND.map { floor(it) }
 
-    override fun StructureND<Double>.inv(): DoubleTensor = invLU(this, 1e-9)
+    override fun StructureND<Float64>.inv(): DoubleTensor = invLU(this, 1e-9)
 
-    override fun StructureND<Double>.det(): DoubleTensor = detLU(this, 1e-9)
+    override fun StructureND<Float64>.det(): DoubleTensor = detLU(this, 1e-9)
 
-    override fun lu(structureND: StructureND<Double>): Triple<DoubleTensor, DoubleTensor, DoubleTensor> =
+    override fun lu(structureND: StructureND<Float64>): Triple<DoubleTensor, DoubleTensor, DoubleTensor> =
         lu(structureND, 1e-9)
 
-    override fun cholesky(structureND: StructureND<Double>): DoubleTensor = cholesky(structureND, 1e-6)
+    override fun cholesky(structureND: StructureND<Float64>): DoubleTensor = cholesky(structureND, 1e-6)
 
-    override fun qr(structureND: StructureND<Double>): Pair<DoubleTensor, DoubleTensor> {
+    override fun qr(structureND: StructureND<Float64>): Pair<DoubleTensor, DoubleTensor> {
         checkSquareMatrix(structureND.shape)
         val qTensor = zeroesLike(structureND)
         val rTensor = zeroesLike(structureND)
@@ -705,14 +705,14 @@ public open class DoubleTensorAlgebra :
     }
 
     override fun svd(
-        structureND: StructureND<Double>,
-    ): Triple<StructureND<Double>, StructureND<Double>, StructureND<Double>> =
+        structureND: StructureND<Float64>,
+    ): Triple<StructureND<Float64>, StructureND<Float64>, StructureND<Float64>> =
         svdGolubKahan(structureND = structureND, epsilon = 1e-10)
 
-    override fun symEig(structureND: StructureND<Double>): Pair<DoubleTensor, DoubleTensor> =
+    override fun symEig(structureND: StructureND<Float64>): Pair<DoubleTensor, DoubleTensor> =
         symEigJacobi(structureND = structureND, maxIteration = 50, epsilon = 1e-15)
 
-    override fun solve(a: MutableStructure2D<Double>, b: MutableStructure2D<Double>): MutableStructure2D<Double> {
+    override fun solve(a: MutableStructure2D<Float64>, b: MutableStructure2D<Float64>): MutableStructure2D<Float64> {
         val aSvd = DoubleTensorAlgebra.svd(a)
         val s = BroadcastDoubleTensorAlgebra.diagonalEmbedding(aSvd.second.map { 1.0 / it })
         val aInverse = aSvd.third.dot(s).dot(aSvd.first.transposed())

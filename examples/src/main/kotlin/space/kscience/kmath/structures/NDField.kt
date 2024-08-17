@@ -45,35 +45,35 @@ fun main() {
 
     measureAndPrint("Boxing addition") {
         genericField {
-            var res: StructureND<Double> = one(shape)
+            var res: StructureND<Float64> = one(shape)
             repeat(n) { res += 1.0 }
         }
     }
 
     measureAndPrint("Specialized addition") {
         doubleField {
-            var res: StructureND<Double> = one(shape)
+            var res: StructureND<Float64> = one(shape)
             repeat(n) { res += 1.0 }
         }
     }
 
     measureAndPrint("Nd4j specialized addition") {
         nd4jField {
-            var res: StructureND<Double> = one(shape)
+            var res: StructureND<Float64> = one(shape)
             repeat(n) { res += 1.0 }
         }
     }
 
     measureAndPrint("Viktor addition") {
         viktorField {
-            var res: StructureND<Double> = one
+            var res: StructureND<Float64> = one
             repeat(n) { res += 1.0 }
         }
     }
 
     measureAndPrint("Parallel stream addition") {
         parallelField {
-            var res: StructureND<Double> = one
+            var res: StructureND<Float64> = one
             repeat(n) { res += 1.0 }
         }
     }

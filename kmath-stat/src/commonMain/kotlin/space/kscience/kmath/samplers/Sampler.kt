@@ -12,6 +12,7 @@ import space.kscience.kmath.chains.combine
 import space.kscience.kmath.random.RandomGenerator
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.BufferFactory
+import space.kscience.kmath.structures.Float64
 import kotlin.jvm.JvmName
 
 /**
@@ -66,7 +67,7 @@ public inline fun <reified T : Any> Sampler<T>.sampleBuffer(generator: RandomGen
 /**
  * Samples a [Buffer] of values from this [Sampler].
  */
-public suspend fun Sampler<Double>.nextBuffer(generator: RandomGenerator, size: Int): Buffer<Double> =
+public suspend fun Sampler<Float64>.nextBuffer(generator: RandomGenerator, size: Int): Buffer<Float64> =
     sampleBuffer(generator, size).first()
 
 //TODO add `context(RandomGenerator) Sampler.nextBuffer

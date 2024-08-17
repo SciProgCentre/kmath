@@ -15,6 +15,7 @@ import space.kscience.kmath.nd.StructureND
 import space.kscience.kmath.nd.ndAlgebra
 import space.kscience.kmath.nd.one
 import space.kscience.kmath.operations.Float64Field
+import space.kscience.kmath.structures.Float64
 import space.kscience.kmath.viktor.ViktorFieldND
 
 @State(Scope.Benchmark)
@@ -23,7 +24,7 @@ internal class ViktorBenchmark {
     @Benchmark
     fun doubleFieldAddition(blackhole: Blackhole) {
         with(doubleField) {
-            var res: StructureND<Double> = one(shape)
+            var res: StructureND<Float64> = one(shape)
             repeat(n) { res += 1.0 }
             blackhole.consume(res)
         }

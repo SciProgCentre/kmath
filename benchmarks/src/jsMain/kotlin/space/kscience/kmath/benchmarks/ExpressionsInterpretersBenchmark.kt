@@ -14,6 +14,7 @@ import space.kscience.kmath.expressions.*
 import space.kscience.kmath.operations.Float64Field
 import space.kscience.kmath.operations.bindSymbol
 import space.kscience.kmath.operations.invoke
+import space.kscience.kmath.structures.Float64
 import kotlin.math.sin
 import kotlin.random.Random
 import space.kscience.kmath.estree.compileToExpression as estreeCompileToExpression
@@ -67,7 +68,7 @@ class ExpressionsInterpretersBenchmark {
         blackhole.consume(sum)
     }
 
-    private fun invokeAndSum(expr: Expression<Double>, blackhole: Blackhole) {
+    private fun invokeAndSum(expr: Expression<Float64>, blackhole: Blackhole) {
         val random = Random(0)
         var sum = 0.0
         val m = HashMap<Symbol, Double>()
@@ -99,7 +100,7 @@ class ExpressionsInterpretersBenchmark {
         private val wasm = node.wasmCompileToExpression(Float64Field)
         private val estree = node.estreeCompileToExpression(Float64Field)
 
-        private val raw = Expression<Double> { args ->
+        private val raw = Expression<Float64> { args ->
             val x = args.getValue(x)
             x * 2.0 + 2.0 / x - 16.0 / sin(x)
         }

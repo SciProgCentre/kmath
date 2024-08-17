@@ -17,6 +17,7 @@ import space.kscience.kmath.linear.*
 import space.kscience.kmath.nd.StructureND
 import space.kscience.kmath.nd.toArray
 import space.kscience.kmath.operations.algebra
+import space.kscience.kmath.structures.Float64
 import kotlin.random.Random
 import kotlin.random.asJavaRandom
 import kotlin.test.*
@@ -63,7 +64,7 @@ internal class EjmlMatrixTest {
         val w = EjmlDoubleMatrix(m)
         val det: Double = w.getOrComputeAttribute(Determinant) ?: fail()
         assertEquals(CommonOps_DDRM.det(m), det)
-        val lup: LupDecomposition<Double> = w.getOrComputeAttribute(LUP) ?: fail()
+        val lup: LupDecomposition<Float64> = w.getOrComputeAttribute(LUP) ?: fail()
 
         val ludecompositionF64 = DecompositionFactory_DDRM.lu(m.numRows, m.numCols)
             .also { it.decompose(m.copy()) }
@@ -103,5 +104,12 @@ internal class EjmlMatrixTest {
         println(StructureND.toString(res))
 
         assertTrue { StructureND.contentEquals(one(dim, dim), res, 1e-3) }
+    }
+
+    @Test
+    fun eigenValueDecomposition() = EjmlLinearSpaceDDRM {
+        val matrix = EjmlDoubleMatrix(randomMatrix)
+        val eigen = matrix.getOrComputeAttribute(EIG) ?: fail()
+        assertMatrixEquals(matrix, eigen.v dot eigen.d dot eigen.v.transposed())
     }
 }

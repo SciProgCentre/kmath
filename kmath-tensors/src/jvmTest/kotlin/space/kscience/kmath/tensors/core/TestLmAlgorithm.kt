@@ -8,6 +8,7 @@ package space.kscience.kmath.tensors.core
 import space.kscience.kmath.PerformancePitfall
 import space.kscience.kmath.nd.*
 import space.kscience.kmath.operations.invoke
+import space.kscience.kmath.structures.Float64
 import space.kscience.kmath.structures.Float64Buffer
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -16,10 +17,10 @@ import kotlin.test.assertEquals
 class TestLmAlgorithm {
     companion object {
         fun funcEasyForLm(
-            t: MutableStructure2D<Double>,
-            p: MutableStructure2D<Double>,
+            t: MutableStructure2D<Float64>,
+            p: MutableStructure2D<Float64>,
             exampleNumber: Int,
-        ): MutableStructure2D<Double> = with(DoubleTensorAlgebra) {
+        ): MutableStructure2D<Float64> = with(DoubleTensorAlgebra) {
             val m = t.shape.component1()
             val yHat = when (exampleNumber) {
                 1 -> exp((t * (-1.0 / p[1, 0]))) * p[0, 0] + (t * p[2, 0]) * exp((t * (-1.0 / p[3, 0])))
@@ -42,10 +43,10 @@ class TestLmAlgorithm {
         }
 
         fun funcMiddleForLm(
-            t: MutableStructure2D<Double>,
-            p: MutableStructure2D<Double>,
+            t: MutableStructure2D<Float64>,
+            p: MutableStructure2D<Float64>,
             exampleNumber: Int,
-        ): MutableStructure2D<Double> = with(DoubleTensorAlgebra) {
+        ): MutableStructure2D<Float64> = with(DoubleTensorAlgebra) {
             val m = t.shape.component1()
             var yHat = zeros(ShapeND(intArrayOf(m, 1)))
 
@@ -62,10 +63,10 @@ class TestLmAlgorithm {
         }
 
         fun funcDifficultForLm(
-            t: MutableStructure2D<Double>,
-            p: MutableStructure2D<Double>,
+            t: MutableStructure2D<Float64>,
+            p: MutableStructure2D<Float64>,
             exampleNumber: Int,
-        ): MutableStructure2D<Double> = with(DoubleTensorAlgebra) {
+        ): MutableStructure2D<Float64> = with(DoubleTensorAlgebra) {
             val m = t.shape.component1()
             var yHat = zeros(ShapeND(intArrayOf(m, 1)))
 

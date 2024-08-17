@@ -5,6 +5,7 @@
 package space.kscience.kmath.domains
 
 import space.kscience.kmath.UnstableKMathAPI
+import space.kscience.kmath.structures.Float64
 
 /**
  * n-dimensional volume
@@ -12,7 +13,7 @@ import space.kscience.kmath.UnstableKMathAPI
  * @author Alexander Nozik
  */
 @UnstableKMathAPI
-public interface Float64Domain : Domain<Double> {
+public interface Float64Domain : Domain<Float64> {
     /**
      * Global lower edge
      * @param num axis number

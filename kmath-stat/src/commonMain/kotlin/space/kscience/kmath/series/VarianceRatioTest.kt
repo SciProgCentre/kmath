@@ -8,6 +8,7 @@ package space.kscience.kmath.series
 import space.kscience.kmath.distributions.NormalDistribution
 import space.kscience.kmath.operations.Float64Field.pow
 import space.kscience.kmath.operations.fold
+import space.kscience.kmath.structures.Float64
 import kotlin.math.absoluteValue
 
 
@@ -31,7 +32,7 @@ public data class VarianceRatioTestResult(
  * 	@author https://github.com/mrFendel
  */
 public fun SeriesAlgebra<Double, *, *, *>.varianceRatioTest(
-    series: Series<Double>,
+    series: Series<Float64>,
     shift: Int,
     homoscedastic: Boolean = true,
 ): VarianceRatioTestResult {

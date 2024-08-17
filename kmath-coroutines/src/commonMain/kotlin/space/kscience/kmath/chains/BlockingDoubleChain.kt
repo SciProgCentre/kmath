@@ -5,12 +5,13 @@
 
 package space.kscience.kmath.chains
 
+import space.kscience.kmath.structures.Float64
 import space.kscience.kmath.structures.Float64Buffer
 
 /**
  * Chunked, specialized chain for double values, which supports blocking [nextBlocking] operation
  */
-public interface BlockingDoubleChain : BlockingBufferChain<Double> {
+public interface BlockingDoubleChain : BlockingBufferChain<Float64> {
 
     /**
      * Returns an [DoubleArray] chunk of [size] values of [next].

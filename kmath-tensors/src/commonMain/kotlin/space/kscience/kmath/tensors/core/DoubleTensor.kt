@@ -16,7 +16,7 @@ public class OffsetDoubleBuffer(
     override val origin: Float64Buffer,
     private val offset: Int,
     override val size: Int,
-) : MutableBuffer<Double>, BufferView<Double> {
+) : MutableBuffer<Float64>, BufferView<Float64> {
 
     init {
         require(offset >= 0) { "Offset must be non-negative" }
@@ -36,7 +36,7 @@ public class OffsetDoubleBuffer(
      */
     public fun copy(): Float64Buffer = origin.array.copyOfRange(offset, offset + size).asBuffer()
 
-    override fun iterator(): Iterator<Double> = iterator {
+    override fun iterator(): Iterator<Float64> = iterator {
         for (i in indices) {
             yield(get(i))
         }
@@ -86,7 +86,7 @@ public inline fun OffsetDoubleBuffer.mapInPlace(operation: (Double) -> Double) {
 public open class DoubleTensor(
     shape: ShapeND,
     final override val source: OffsetDoubleBuffer,
-) : BufferedTensor<Double>(shape), MutableStructureNDOfDouble {
+) : BufferedTensor<Float64>(shape), MutableStructureNDOfDouble {
 
     init {
         require(linearSize == source.size) { "Source buffer size must be equal tensor size" }

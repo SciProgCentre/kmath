@@ -5,8 +5,9 @@ plugins {
 val ejmlVerision = "0.43.1"
 
 dependencies {
-    api("org.ejml:ejml-all:$ejmlVerision")
     api(projects.kmathCore)
+    api(projects.kmathComplex)
+    api("org.ejml:ejml-all:$ejmlVerision")
 }
 
 readme {

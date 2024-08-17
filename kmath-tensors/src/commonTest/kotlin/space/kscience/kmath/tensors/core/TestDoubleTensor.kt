@@ -8,6 +8,7 @@ package space.kscience.kmath.tensors.core
 import space.kscience.kmath.PerformancePitfall
 import space.kscience.kmath.nd.*
 import space.kscience.kmath.operations.invoke
+import space.kscience.kmath.structures.Float64
 import space.kscience.kmath.structures.Float64Buffer
 import space.kscience.kmath.structures.toDoubleArray
 import space.kscience.kmath.tensors.core.internal.matrixSequence
@@ -68,7 +69,7 @@ internal class TestDoubleTensor {
         val doubleArray = Float64Buffer(1.0, 2.0, 3.0)
 
         // create ND buffers, no data is copied
-        val ndArray: MutableBufferND<Double> = Float64BufferND(ColumnStrides(ShapeND(3)), doubleArray)
+        val ndArray: MutableBufferND<Float64> = Float64BufferND(ColumnStrides(ShapeND(3)), doubleArray)
 
         // map to tensors
         val tensorArray = ndArray.asDoubleTensor() // Data is copied because of strides change.

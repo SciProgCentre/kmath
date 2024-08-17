@@ -8,10 +8,11 @@ package space.kscience.kmath.tensors.core
 import space.kscience.kmath.PerformancePitfall
 import space.kscience.kmath.nd.MutableStructure1D
 import space.kscience.kmath.nd.ShapeND
+import space.kscience.kmath.structures.Float64
 
 public class DoubleTensor1D(
     source: OffsetDoubleBuffer,
-) : DoubleTensor(ShapeND(source.size), source), MutableStructure1D<Double> {
+) : DoubleTensor(ShapeND(source.size), source), MutableStructure1D<Float64> {
 
     @PerformancePitfall
     override fun get(index: IntArray): Double = super<MutableStructure1D>.get(index)

@@ -37,7 +37,7 @@ private suspend fun runKMathChained(): Duration {
 }
 
 private fun runCMDirect(): Duration {
-    val rng = RandomSource.create(RandomSource.MT, 123L)
+    val rng = RandomSource.MT.create(123L)
 
     val sampler = CMGaussianSampler.of(
         BoxMullerNormalizedGaussianSampler.of(rng),

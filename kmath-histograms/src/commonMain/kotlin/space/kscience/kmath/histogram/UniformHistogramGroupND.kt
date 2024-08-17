@@ -24,8 +24,8 @@ public typealias HyperSquareBin<V> = DomainBin<Double, HyperSquareDomain, V>
  */
 public class UniformHistogramGroupND<V : Any, A : Field<V>>(
     override val valueAlgebraND: FieldOpsND<V, A>,
-    private val lower: Buffer<Double>,
-    private val upper: Buffer<Double>,
+    private val lower: Buffer<Float64>,
+    private val upper: Buffer<Float64>,
     private val binNums: IntArray = IntArray(lower.size) { 20 },
     private val valueBufferFactory: BufferFactory<V> = valueAlgebraND.elementAlgebra.bufferFactory,
 ) : HistogramGroupND<Double, HyperSquareDomain, V> {
@@ -54,7 +54,7 @@ public class UniformHistogramGroupND<V : Any, A : Field<V>>(
         else -> floor((value - lower[axis]) / binSize[axis]).toInt()
     }
 
-    override fun getIndexOrNull(point: Buffer<Double>): IntArray = IntArray(dimension) {
+    override fun getIndexOrNull(point: Buffer<Float64>): IntArray = IntArray(dimension) {
         getIndex(it, point[it])
     }
 
@@ -93,7 +93,7 @@ public class UniformHistogramGroupND<V : Any, A : Field<V>>(
         val hBuilder = object : HistogramBuilder<Double, V> {
             override val defaultValue: V get() = valueAlgebraND.elementAlgebra.one
 
-            override fun putValue(point: Point<Double>, value: V) = with(valueAlgebraND.elementAlgebra) {
+            override fun putValue(point: Point<Float64>, value: V) = with(valueAlgebraND.elementAlgebra) {
                 val index = getIndexOrNull(point)
                 ndCounter[index].add(value)
             }
@@ -120,17 +120,17 @@ public class UniformHistogramGroupND<V : Any, A : Field<V>>(
  */
 public fun <V : Any, A : Field<V>> Histogram.Companion.uniformNDFromRanges(
     valueAlgebraND: FieldOpsND<V, A>,
-    vararg ranges: ClosedFloatingPointRange<Double>,
+    vararg ranges: ClosedFloatingPointRange<Float64>,
     bufferFactory: BufferFactory<V> = valueAlgebraND.elementAlgebra.bufferFactory,
 ): UniformHistogramGroupND<V, A> = UniformHistogramGroupND(
     valueAlgebraND,
-    ranges.map(ClosedFloatingPointRange<Double>::start).asBuffer(),
-    ranges.map(ClosedFloatingPointRange<Double>::endInclusive).asBuffer(),
+    ranges.map(ClosedFloatingPointRange<Float64>::start).asBuffer(),
+    ranges.map(ClosedFloatingPointRange<Float64>::endInclusive).asBuffer(),
     valueBufferFactory = bufferFactory
 )
 
 public fun Histogram.Companion.uniformDoubleNDFromRanges(
-    vararg ranges: ClosedFloatingPointRange<Double>,
+    vararg ranges: ClosedFloatingPointRange<Float64>,
 ): UniformHistogramGroupND<Double, Float64Field> = uniformNDFromRanges(Floa64FieldOpsND, *ranges)
 
 
@@ -145,22 +145,22 @@ public fun Histogram.Companion.uniformDoubleNDFromRanges(
  */
 public fun <V : Any, A : Field<V>> Histogram.Companion.uniformNDFromRanges(
     valueAlgebraND: FieldOpsND<V, A>,
-    vararg ranges: Pair<ClosedFloatingPointRange<Double>, Int>,
+    vararg ranges: Pair<ClosedFloatingPointRange<Float64>, Int>,
     bufferFactory: BufferFactory<V> = valueAlgebraND.elementAlgebra.bufferFactory,
 ): UniformHistogramGroupND<V, A> = UniformHistogramGroupND(
     valueAlgebraND,
     ranges
-        .map(Pair<ClosedFloatingPointRange<Double>, Int>::first)
-        .map(ClosedFloatingPointRange<Double>::start)
+        .map(Pair<ClosedFloatingPointRange<Float64>, Int>::first)
+        .map(ClosedFloatingPointRange<Float64>::start)
         .asBuffer(),
     ranges
-        .map(Pair<ClosedFloatingPointRange<Double>, Int>::first)
-        .map(ClosedFloatingPointRange<Double>::endInclusive)
+        .map(Pair<ClosedFloatingPointRange<Float64>, Int>::first)
+        .map(ClosedFloatingPointRange<Float64>::endInclusive)
         .asBuffer(),
-    ranges.map(Pair<ClosedFloatingPointRange<Double>, Int>::second).toIntArray(),
+    ranges.map(Pair<ClosedFloatingPointRange<Float64>, Int>::second).toIntArray(),
     valueBufferFactory = bufferFactory
 )
 
 public fun Histogram.Companion.uniformDoubleNDFromRanges(
-    vararg ranges: Pair<ClosedFloatingPointRange<Double>, Int>,
+    vararg ranges: Pair<ClosedFloatingPointRange<Float64>, Int>,
 ): UniformHistogramGroupND<Double, Float64Field> = uniformNDFromRanges(Floa64FieldOpsND, *ranges)

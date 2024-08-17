@@ -30,7 +30,7 @@ public fun <T> MutableBuffer.Companion.parallel(
         .asBuffer() as MutableBuffer<T>
 
     typeOf<Float>() -> Float32Buffer(size) { initializer(it) as Float } as MutableBuffer<T>
-    typeOf<Double>() -> IntStream.range(0, size).parallel().mapToDouble { initializer(it) as Float64 }.toArray()
+    typeOf<Float64>() -> IntStream.range(0, size).parallel().mapToDouble { initializer(it) as Float64 }.toArray()
         .asBuffer() as MutableBuffer<T>
     //TODO add unsigned types
     else -> IntStream.range(0, size).parallel().mapToObj { initializer(it) }.collect(Collectors.toList<T>())

@@ -14,6 +14,7 @@ import space.kscience.kmath.interpolation.SplineInterpolator
 import space.kscience.kmath.interpolation.interpolatePolynomials
 import space.kscience.kmath.operations.*
 import space.kscience.kmath.structures.Buffer
+import space.kscience.kmath.structures.Float64
 import space.kscience.kmath.structures.Float64Buffer
 import space.kscience.kmath.structures.MutableBufferFactory
 
@@ -59,7 +60,7 @@ public class SplineIntegrator<T : Comparable<T>>(
 
         val interpolator: PolynomialInterpolator<T> = SplineInterpolator(algebra, bufferFactory)
 
-        val nodes: Buffer<Double> = integrand[UnivariateIntegrationNodes] ?: run {
+        val nodes: Buffer<Float64> = integrand[UnivariateIntegrationNodes] ?: run {
             val numPoints = integrand[IntegrandMaxCalls] ?: 100
             val step = (range.endInclusive - range.start) / (numPoints - 1)
             Float64Buffer(numPoints) { i -> range.start + i * step }
@@ -85,12 +86,12 @@ public class SplineIntegrator<T : Comparable<T>>(
  * uses the maximum number of points. By default, uses 10 points.
  */
 @UnstableKMathAPI
-public object DoubleSplineIntegrator : UnivariateIntegrator<Double> {
-    override fun integrate(integrand: UnivariateIntegrand<Double>): UnivariateIntegrand<Double> {
+public object DoubleSplineIntegrator : UnivariateIntegrator<Float64> {
+    override fun integrate(integrand: UnivariateIntegrand<Float64>): UnivariateIntegrand<Float64> {
         val range = integrand[IntegrationRange] ?: 0.0..1.0
-        val interpolator: PolynomialInterpolator<Double> = SplineInterpolator(Float64Field, Float64Field.bufferFactory)
+        val interpolator: PolynomialInterpolator<Float64> = SplineInterpolator(Float64Field, Float64Field.bufferFactory)
 
-        val nodes: Buffer<Double> = integrand[UnivariateIntegrationNodes] ?: run {
+        val nodes: Buffer<Float64> = integrand[UnivariateIntegrationNodes] ?: run {
             val numPoints = integrand[IntegrandMaxCalls] ?: 100
             val step = (range.endInclusive - range.start) / (numPoints - 1)
             Float64Buffer(numPoints) { i -> range.start + i * step }
@@ -108,5 +109,5 @@ public object DoubleSplineIntegrator : UnivariateIntegrator<Double> {
 
 @Suppress("unused")
 @UnstableKMathAPI
-public inline val Float64Field.splineIntegrator: UnivariateIntegrator<Double>
+public inline val Float64Field.splineIntegrator: UnivariateIntegrator<Float64>
     get() = DoubleSplineIntegrator

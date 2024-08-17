@@ -7,11 +7,12 @@ package space.kscience.kmath.viktor
 
 import org.jetbrains.bio.viktor.F64FlatArray
 import space.kscience.kmath.structures.Buffer
+import space.kscience.kmath.structures.Float64
 import space.kscience.kmath.structures.MutableBuffer
 
 @Suppress("NOTHING_TO_INLINE", "OVERRIDE_BY_INLINE")
 @JvmInline
-public value class ViktorBuffer(public val flatArray: F64FlatArray) : MutableBuffer<Double> {
+public value class ViktorBuffer(public val flatArray: F64FlatArray) : MutableBuffer<Float64> {
 
     override val size: Int
         get() = flatArray.length
@@ -22,7 +23,7 @@ public value class ViktorBuffer(public val flatArray: F64FlatArray) : MutableBuf
         flatArray[index] = value
     }
 
-    override operator fun iterator(): Iterator<Double> = flatArray.data.iterator()
+    override operator fun iterator(): Iterator<Float64> = flatArray.data.iterator()
 
     override fun toString(): String = Buffer.toString(this)
 }

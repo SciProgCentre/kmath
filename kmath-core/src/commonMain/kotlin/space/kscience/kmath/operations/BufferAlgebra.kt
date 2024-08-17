@@ -6,6 +6,7 @@
 package space.kscience.kmath.operations
 
 import space.kscience.kmath.structures.Buffer
+import space.kscience.kmath.structures.Float64
 import space.kscience.kmath.structures.MutableBuffer
 import space.kscience.kmath.structures.MutableBufferFactory
 
@@ -182,7 +183,7 @@ public fun <T, A : Field<T>> BufferFieldOps<T, A>.withSize(size: Int): BufferFie
 
 //Double buffer specialization
 
-public fun BufferField<Double, *>.buffer(vararg elements: Number): Buffer<Double> {
+public fun BufferField<Double, *>.buffer(vararg elements: Number): Buffer<Float64> {
     require(elements.size == size) { "Expected $size elements but found ${elements.size}" }
     return elementBufferFactory(size) { elements[it].toDouble() }
 }

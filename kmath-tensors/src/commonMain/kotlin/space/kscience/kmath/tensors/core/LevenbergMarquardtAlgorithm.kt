@@ -7,6 +7,7 @@ package space.kscience.kmath.tensors.core
 
 import space.kscience.kmath.PerformancePitfall
 import space.kscience.kmath.nd.*
+import space.kscience.kmath.structures.Float64
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
@@ -49,7 +50,7 @@ public data class LMResultInfo(
     var funcCalls: Int,
     var resultChiSq: Double,
     var resultLambda: Double,
-    var resultParameters: MutableStructure2D<Double>,
+    var resultParameters: MutableStructure2D<Float64>,
     var typeOfConvergence: TypeOfConvergence,
 )
 
@@ -82,14 +83,14 @@ public data class LMResultInfo(
  *  exampleNumber: a parameter for a function with which you can choose its behavior.
  */
 public data class LMInput(
-    var func: (MutableStructure2D<Double>, MutableStructure2D<Double>, Int) -> (MutableStructure2D<Double>),
-    var startParameters: MutableStructure2D<Double>,
-    var independentVariables: MutableStructure2D<Double>,
-    var realValues: MutableStructure2D<Double>,
+    var func: (MutableStructure2D<Float64>, MutableStructure2D<Float64>, Int) -> (MutableStructure2D<Float64>),
+    var startParameters: MutableStructure2D<Float64>,
+    var independentVariables: MutableStructure2D<Float64>,
+    var realValues: MutableStructure2D<Float64>,
     var weight: Double,
-    var pDelta: MutableStructure2D<Double>,
-    var minParameters: MutableStructure2D<Double>,
-    var maxParameters: MutableStructure2D<Double>,
+    var pDelta: MutableStructure2D<Float64>,
+    var minParameters: MutableStructure2D<Float64>,
+    var maxParameters: MutableStructure2D<Float64>,
     var maxIterations: Int,
     var epsilons: DoubleArray,
     var lambdas: DoubleArray,
@@ -408,7 +409,7 @@ private data class LMSettings(
 )
 
 /* matrix -> column of all elements */
-private fun makeColumn(tensor: MutableStructure2D<Double>): MutableStructure2D<Double> {
+private fun makeColumn(tensor: MutableStructure2D<Float64>): MutableStructure2D<Float64> {
     val shape = intArrayOf(tensor.shape.component1() * tensor.shape.component2(), 1)
     val buffer = DoubleArray(tensor.shape.component1() * tensor.shape.component2())
     for (i in 0 until tensor.shape.component1()) {
@@ -420,11 +421,11 @@ private fun makeColumn(tensor: MutableStructure2D<Double>): MutableStructure2D<D
 }
 
 /* column length */
-private fun length(column: MutableStructure2D<Double>): Int {
+private fun length(column: MutableStructure2D<Float64>): Int {
     return column.shape.component1()
 }
 
-private fun MutableStructure2D<Double>.abs() {
+private fun MutableStructure2D<Float64>.abs() {
     for (i in 0 until this.shape[0]) {
         for (j in 0 until this.shape[1]) {
             this[i, j] = abs(this[i, j])
@@ -432,7 +433,7 @@ private fun MutableStructure2D<Double>.abs() {
     }
 }
 
-private fun abs(input: MutableStructure2D<Double>): MutableStructure2D<Double> {
+private fun abs(input: MutableStructure2D<Float64>): MutableStructure2D<Float64> {
     val tensor = BroadcastDoubleTensorAlgebra.ones(
         ShapeND(
             intArrayOf(
@@ -449,7 +450,7 @@ private fun abs(input: MutableStructure2D<Double>): MutableStructure2D<Double> {
     return tensor
 }
 
-private fun makeColumnFromDiagonal(input: MutableStructure2D<Double>): MutableStructure2D<Double> {
+private fun makeColumnFromDiagonal(input: MutableStructure2D<Float64>): MutableStructure2D<Float64> {
     val tensor = BroadcastDoubleTensorAlgebra.ones(ShapeND(intArrayOf(input.shape.component1(), 1))).as2D()
     for (i in 0 until tensor.shape.component1()) {
         tensor[i, 0] = input[i, i]
@@ -457,7 +458,7 @@ private fun makeColumnFromDiagonal(input: MutableStructure2D<Double>): MutableSt
     return tensor
 }
 
-private fun makeMatrixWithDiagonal(column: MutableStructure2D<Double>): MutableStructure2D<Double> {
+private fun makeMatrixWithDiagonal(column: MutableStructure2D<Float64>): MutableStructure2D<Float64> {
     val size = column.shape.component1()
     val tensor = BroadcastDoubleTensorAlgebra.zeros(ShapeND(intArrayOf(size, size))).as2D()
     for (i in 0 until size) {
@@ -466,15 +467,15 @@ private fun makeMatrixWithDiagonal(column: MutableStructure2D<Double>): MutableS
     return tensor
 }
 
-private fun lmEye(size: Int): MutableStructure2D<Double> {
+private fun lmEye(size: Int): MutableStructure2D<Float64> {
     val column = BroadcastDoubleTensorAlgebra.ones(ShapeND(intArrayOf(size, 1))).as2D()
     return makeMatrixWithDiagonal(column)
 }
 
 private fun largestElementComparison(
-    a: MutableStructure2D<Double>,
-    b: MutableStructure2D<Double>,
-): MutableStructure2D<Double> {
+    a: MutableStructure2D<Float64>,
+    b: MutableStructure2D<Float64>,
+): MutableStructure2D<Float64> {
     val aSizeX = a.shape.component1()
     val aSizeY = a.shape.component2()
     val bSizeX = b.shape.component1()
@@ -496,9 +497,9 @@ private fun largestElementComparison(
 }
 
 private fun smallestElementComparison(
-    a: MutableStructure2D<Double>,
-    b: MutableStructure2D<Double>,
-): MutableStructure2D<Double> {
+    a: MutableStructure2D<Float64>,
+    b: MutableStructure2D<Float64>,
+): MutableStructure2D<Float64> {
     val aSizeX = a.shape.component1()
     val aSizeY = a.shape.component2()
     val bSizeX = b.shape.component1()
@@ -520,10 +521,10 @@ private fun smallestElementComparison(
 }
 
 private fun getZeroIndices(
-    column: MutableStructure2D<Double>,
+    column: MutableStructure2D<Float64>,
     epsilon: Double = 0.000001,
-): MutableStructure2D<Double>? {
-    var idx = emptyArray<Double>()
+): MutableStructure2D<Float64>? {
+    var idx = emptyArray<Float64>()
     for (i in 0 until column.shape.component1()) {
         if (abs(column[i, 0]) > epsilon) {
             idx += (i + 1.0)
@@ -536,26 +537,26 @@ private fun getZeroIndices(
 }
 
 private fun evaluateFunction(
-    func: (MutableStructure2D<Double>, MutableStructure2D<Double>, Int) -> MutableStructure2D<Double>,
-    t: MutableStructure2D<Double>, p: MutableStructure2D<Double>, exampleNumber: Int,
+    func: (MutableStructure2D<Float64>, MutableStructure2D<Float64>, Int) -> MutableStructure2D<Float64>,
+    t: MutableStructure2D<Float64>, p: MutableStructure2D<Float64>, exampleNumber: Int,
 )
-        : MutableStructure2D<Double> {
+        : MutableStructure2D<Float64> {
     return func(t, p, exampleNumber)
 }
 
 private fun lmMatx(
-    func: (MutableStructure2D<Double>, MutableStructure2D<Double>, Int) -> MutableStructure2D<Double>,
-    t: MutableStructure2D<Double>,
-    pOld: MutableStructure2D<Double>,
-    yOld: MutableStructure2D<Double>,
+    func: (MutableStructure2D<Float64>, MutableStructure2D<Float64>, Int) -> MutableStructure2D<Float64>,
+    t: MutableStructure2D<Float64>,
+    pOld: MutableStructure2D<Float64>,
+    yOld: MutableStructure2D<Float64>,
     dX2: Int,
-    JInput: MutableStructure2D<Double>,
-    p: MutableStructure2D<Double>,
-    yDat: MutableStructure2D<Double>,
-    weight: MutableStructure2D<Double>,
-    dp: MutableStructure2D<Double>,
+    JInput: MutableStructure2D<Float64>,
+    p: MutableStructure2D<Float64>,
+    yDat: MutableStructure2D<Float64>,
+    weight: MutableStructure2D<Float64>,
+    dp: MutableStructure2D<Float64>,
     settings: LMSettings,
-): Array<MutableStructure2D<Double>> = with(DoubleTensorAlgebra) {
+): Array<MutableStructure2D<Float64>> = with(DoubleTensorAlgebra) {
     // default: dp = 0.001
     val Npar = length(p) // number of parameters
 
@@ -581,9 +582,9 @@ private fun lmMatx(
 }
 
 private fun lmBroydenJ(
-    pOld: MutableStructure2D<Double>, yOld: MutableStructure2D<Double>, JInput: MutableStructure2D<Double>,
-    p: MutableStructure2D<Double>, y: MutableStructure2D<Double>,
-): MutableStructure2D<Double> = with(DoubleTensorAlgebra) {
+    pOld: MutableStructure2D<Float64>, yOld: MutableStructure2D<Float64>, JInput: MutableStructure2D<Float64>,
+    p: MutableStructure2D<Float64>, y: MutableStructure2D<Float64>,
+): MutableStructure2D<Float64> = with(DoubleTensorAlgebra) {
     var J = JInput.copyToTensor()
 
     val h = p.minus(pOld)
@@ -595,13 +596,13 @@ private fun lmBroydenJ(
 
 @OptIn(PerformancePitfall::class)
 private fun lmFdJ(
-    func: (MutableStructure2D<Double>, MutableStructure2D<Double>, exampleNumber: Int) -> MutableStructure2D<Double>,
-    t: MutableStructure2D<Double>,
-    p: MutableStructure2D<Double>,
-    y: MutableStructure2D<Double>,
-    dp: MutableStructure2D<Double>,
+    func: (MutableStructure2D<Float64>, MutableStructure2D<Float64>, exampleNumber: Int) -> MutableStructure2D<Float64>,
+    t: MutableStructure2D<Float64>,
+    p: MutableStructure2D<Float64>,
+    y: MutableStructure2D<Float64>,
+    dp: MutableStructure2D<Float64>,
     settings: LMSettings,
-): MutableStructure2D<Double> = with(DoubleTensorAlgebra) {
+): MutableStructure2D<Float64> = with(DoubleTensorAlgebra) {
     // default: dp = 0.001 * ones(1,n)
 
     val m = length(y) // number of data points

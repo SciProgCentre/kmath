@@ -8,8 +8,9 @@ package space.kscience.kmath.samplers
 import space.kscience.kmath.chains.BlockingDoubleChain
 import space.kscience.kmath.random.RandomGenerator
 import space.kscience.kmath.stat.Sampler
+import space.kscience.kmath.structures.Float64
 
-public interface BlockingDoubleSampler : Sampler<Double> {
+public interface BlockingDoubleSampler : Sampler<Float64> {
     override fun sample(generator: RandomGenerator): BlockingDoubleChain
 }
 

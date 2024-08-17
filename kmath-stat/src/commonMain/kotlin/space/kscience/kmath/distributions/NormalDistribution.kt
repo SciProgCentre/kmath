@@ -12,6 +12,7 @@ import space.kscience.kmath.samplers.GaussianSampler
 import space.kscience.kmath.samplers.InternalGamma
 import space.kscience.kmath.samplers.NormalizedGaussianSampler
 import space.kscience.kmath.samplers.ZigguratNormalizedGaussianSampler
+import space.kscience.kmath.structures.Float64
 import kotlin.math.*
 
 
@@ -30,7 +31,7 @@ internal object InternalErf {
 /**
  * Implements [Distribution1D] for the normal (gaussian) distribution.
  */
-public class NormalDistribution(public val sampler: GaussianSampler) : Distribution1D<Double> {
+public class NormalDistribution(public val sampler: GaussianSampler) : Distribution1D<Float64> {
 
     override fun probability(arg: Double): Double {
         val x1 = (arg - sampler.mean) / sampler.standardDeviation

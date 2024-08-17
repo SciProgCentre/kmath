@@ -14,6 +14,7 @@ import space.kscience.kmath.operations.toList
 import space.kscience.kmath.stat.KMComparisonResult
 import space.kscience.kmath.stat.ksComparisonStatistic
 import space.kscience.kmath.structures.Buffer
+import space.kscience.kmath.structures.Float64
 import space.kscience.kmath.structures.slice
 import space.kscience.plotly.*
 import kotlin.math.PI
@@ -24,7 +25,7 @@ fun Double.Companion.seriesAlgebra() = Double.algebra.bufferAlgebra.seriesAlgebr
 fun main() = with(Double.seriesAlgebra()) {
 
 
-    fun Plot.plotSeries(name: String, buffer: Buffer<Double>) {
+    fun Plot.plotSeries(name: String, buffer: Buffer<Float64>) {
         scatter {
             this.name = name
             x.numbers = buffer.labels
@@ -37,10 +38,10 @@ fun main() = with(Double.seriesAlgebra()) {
 
     val s2 = s1.slice(20..50).moveTo(40)
 
-    val s3: Buffer<Double> = s1.zip(s2) { l, r -> l + r } //s1 + s2
+    val s3: Buffer<Float64> = s1.zip(s2) { l, r -> l + r } //s1 + s2
     val s4 = s3.map { ln(it) }
 
-    val kmTest: KMComparisonResult<Double> = ksComparisonStatistic(s1, s2)
+    val kmTest: KMComparisonResult<Float64> = ksComparisonStatistic(s1, s2)
 
     Plotly.page {
         h1 { +"This is my plot" }

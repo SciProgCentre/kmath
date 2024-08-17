@@ -6,9 +6,13 @@
 package space.kscience.kmath.ejml
 
 import space.kscience.kmath.UnstableKMathAPI
-import space.kscience.kmath.linear.*
-import space.kscience.kmath.operations.Float64Field
+import space.kscience.kmath.linear.Inverted
+import space.kscience.kmath.linear.LinearSpace
+import space.kscience.kmath.linear.Matrix
+import space.kscience.kmath.linear.Point
+import space.kscience.kmath.nd.Structure2D
 import space.kscience.kmath.operations.Ring
+import space.kscience.kmath.structures.Float64
 
 /**
  * [LinearSpace] implementation specialized for a certain EJML type.
@@ -38,6 +42,6 @@ public abstract class EjmlLinearSpace<T : Any, out A : Ring<T>, out M : org.ejml
     public abstract override fun buildVector(size: Int, initializer: A.(Int) -> T): EjmlVector<T, M>
 
     @UnstableKMathAPI
-    public fun EjmlMatrix<T, *>.inverted(): Matrix<Double> =
-        computeAttribute(this, Float64Field.linearSpace.Inverted)!!
+    public fun Structure2D<T>.inverted(): Matrix<Float64> =
+        computeAttribute(this, Inverted()) ?: error("Can't invert matrix")
 }

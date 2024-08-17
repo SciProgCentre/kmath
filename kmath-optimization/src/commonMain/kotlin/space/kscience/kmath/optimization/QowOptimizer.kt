@@ -12,6 +12,7 @@ import space.kscience.kmath.misc.log
 import space.kscience.kmath.operations.Float64Field
 import space.kscience.kmath.operations.Float64L2Norm
 import space.kscience.kmath.operations.algebra
+import space.kscience.kmath.structures.Float64
 import space.kscience.kmath.structures.Float64Buffer
 import kotlin.math.abs
 
@@ -27,7 +28,7 @@ public object QowRuns : OptimizationAttribute<Int>
 public object QowOptimizer : Optimizer<Double, XYFit> {
 
     private val linearSpace: LinearSpace<Double, Float64Field> = Double.algebra.linearSpace
-    private val solver: LinearSolver<Double> = linearSpace.lupSolver()
+    private val solver: LinearSolver<Float64> = linearSpace.lupSolver()
 
     @OptIn(UnstableKMathAPI::class)
     private class QoWeight(
@@ -47,7 +48,7 @@ public object QowOptimizer : Optimizer<Double, XYFit> {
         /**
          * Derivatives of the spectrum over parameters. First index in the point number, second one - index of parameter
          */
-        val derivs: Matrix<Double> by lazy {
+        val derivs: Matrix<Float64> by lazy {
             linearSpace.buildMatrix(problem.data.size, symbols.size) { d, s ->
                 problem.distance(d).derivative(symbols[s]).invoke(allParameters)
             }
@@ -56,14 +57,14 @@ public object QowOptimizer : Optimizer<Double, XYFit> {
         /**
          * Array of dispersions in each point
          */
-        val dispersion: Point<Double> by lazy {
+        val dispersion: Point<Float64> by lazy {
             Float64Buffer(problem.data.size) { d ->
                 1.0 / problem.weight(d).invoke(allParameters)
             }
         }
 
-        val prior: DifferentiableExpression<Double>?
-            get() = problem.attributes[OptimizationPrior<Double>()]?.withDefaultArgs(allParameters)
+        val prior: DifferentiableExpression<Float64>?
+            get() = problem.attributes[OptimizationPrior<Float64>()]?.withDefaultArgs(allParameters)
 
         override fun toString(): String = freeParameters.toString()
     }
@@ -86,7 +87,7 @@ public object QowOptimizer : Optimizer<Double, XYFit> {
      *
      * D(\phi)=E(\phi_k(\theta_0) \phi_l(\theta_0))= disDeriv_k * disDeriv_l /sigma^2
      */
-    private fun QoWeight.covarF(): Matrix<Double> =
+    private fun QoWeight.covarF(): Matrix<Float64> =
         linearSpace.matrix(size, size).symmetric { s1, s2 ->
             (0 until data.size).sumOf { d -> derivs[d, s1] * derivs[d, s2] / dispersion[d] }
         }
@@ -95,7 +96,7 @@ public object QowOptimizer : Optimizer<Double, XYFit> {
      * Experimental covariance Eq (22) from
      * http://arxiv.org/abs/physics/0604127
      */
-    private fun QoWeight.covarFExp(theta: Map<Symbol, Double>): Matrix<Double> =
+    private fun QoWeight.covarFExp(theta: Map<Symbol, Double>): Matrix<Float64> =
         with(linearSpace) {
             /*
              * Важно! Если не делать предварителього вычисления этих производных, то
@@ -116,7 +117,7 @@ public object QowOptimizer : Optimizer<Double, XYFit> {
      */
     private fun QoWeight.getEqDerivValues(
         theta: Map<Symbol, Double> = freeParameters,
-    ): Matrix<Double> = with(linearSpace) {
+    ): Matrix<Float64> = with(linearSpace) {
         //Derivative of k Eq over l parameter
         val sderiv = buildMatrix(data.size, size) { d, s ->
             distanceDerivative(symbols[s], d, theta)
@@ -141,7 +142,7 @@ public object QowOptimizer : Optimizer<Double, XYFit> {
     /**
      * Quasi optimal weights equations values
      */
-    private fun QoWeight.getEqValues(theta: Map<Symbol, Double>): Point<Double> {
+    private fun QoWeight.getEqValues(theta: Map<Symbol, Double>): Point<Float64> {
         val distances = Float64Buffer(data.size) { d -> distance(d, theta) }
         return Float64Buffer(size) { s ->
             val base = (0 until data.size).sumOf { d -> distances[d] * derivs[d, s] / dispersion[d] }
@@ -155,7 +156,7 @@ public object QowOptimizer : Optimizer<Double, XYFit> {
 
     private fun QoWeight.newtonianStep(
         theta: Map<Symbol, Double>,
-        eqValues: Point<Double>,
+        eqValues: Point<Float64>,
     ): QoWeight = linearSpace {
         val start = theta.toPoint()
         val invJacob = solver.inverse(getEqDerivValues(theta))
@@ -224,7 +225,7 @@ public object QowOptimizer : Optimizer<Double, XYFit> {
         return QoWeight(problem, par)
     }
 
-    private fun QoWeight.covariance(): NamedMatrix<Double> {
+    private fun QoWeight.covariance(): NamedMatrix<Float64> {
         val logger = problem.attributes[OptimizationLog]
 
         logger?.log {

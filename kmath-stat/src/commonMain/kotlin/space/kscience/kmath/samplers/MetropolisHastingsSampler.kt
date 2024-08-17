@@ -57,7 +57,7 @@ public class MetropolisHastingsSampler<T>(
             startPoint: Float64,
             stepSampler: Sampler<Float64>,
             targetPdf: suspend (Float64) -> Float64,
-        ): MetropolisHastingsSampler<Double> = MetropolisHastingsSampler(
+        ): MetropolisHastingsSampler<Float64> = MetropolisHastingsSampler(
             algebra = Float64.algebra,
             startPoint = {startPoint},
             stepSampler = stepSampler,
@@ -71,6 +71,6 @@ public class MetropolisHastingsSampler<T>(
             startPoint: Float64,
             stepSigma: Float64,
             targetPdf: suspend (Float64) -> Float64,
-        ): MetropolisHastingsSampler<Double> = univariate(startPoint, GaussianSampler(0.0, stepSigma), targetPdf)
+        ): MetropolisHastingsSampler<Float64> = univariate(startPoint, GaussianSampler(0.0, stepSigma), targetPdf)
     }
 }

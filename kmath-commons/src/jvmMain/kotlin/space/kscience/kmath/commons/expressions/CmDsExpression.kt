@@ -14,6 +14,7 @@ import space.kscience.kmath.expressions.*
 import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.operations.ExtendedField
 import space.kscience.kmath.operations.NumbersAddOps
+import space.kscience.kmath.structures.Float64
 import space.kscience.kmath.structures.MutableBufferFactory
 
 /**
@@ -132,9 +133,9 @@ public object CmDsProcessor : AutoDiffProcessor<Double, DerivativeStructure, CmD
 @Deprecated("Use generic DSAlgebra from the core")
 public class CmDsExpression(
     public val function: CmDsField.() -> DerivativeStructure,
-) : DifferentiableExpression<Double> {
+) : DifferentiableExpression<Float64> {
 
-    override val type: SafeType<Double> get() = DoubleField.type
+    override val type: SafeType<Float64> get() = DoubleField.type
 
     override operator fun invoke(arguments: Map<Symbol, Double>): Double =
         CmDsField(0, arguments).function().value
@@ -142,7 +143,7 @@ public class CmDsExpression(
     /**
      * Get the derivative expression with given orders
      */
-    override fun derivativeOrNull(symbols: List<Symbol>): Expression<Double> = Expression(type) { arguments ->
+    override fun derivativeOrNull(symbols: List<Symbol>): Expression<Float64> = Expression(type) { arguments ->
         with(CmDsField(symbols.size, arguments)) { function().derivative(symbols) }
     }
 }

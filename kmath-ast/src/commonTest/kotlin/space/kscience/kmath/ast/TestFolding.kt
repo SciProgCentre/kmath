@@ -9,6 +9,7 @@ import space.kscience.kmath.operations.Float64Field
 import space.kscience.kmath.operations.Int32Ring
 import space.kscience.kmath.operations.Int8Ring
 import space.kscience.kmath.operations.pi
+import space.kscience.kmath.structures.Float64
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.fail
@@ -41,7 +42,7 @@ internal class TestFolding {
     @Test
     fun foldSymbol() = assertEquals(
         Float64Field.pi,
-        ("pi".parseMath().evaluateConstants(Float64Field) as? TypedMst.Constant<Double> ?: fail()).value,
+        ("pi".parseMath().evaluateConstants(Float64Field) as? TypedMst.Constant<Float64> ?: fail()).value,
     )
 
     @Test

@@ -14,6 +14,7 @@ import space.kscience.kmath.linear.LinearSpace
 import space.kscience.kmath.operations.Ring
 import space.kscience.kmath.operations.invoke
 import space.kscience.kmath.structures.Buffer
+import space.kscience.kmath.structures.Float64
 import kotlin.math.abs
 
 public interface StructureAttribute<T> : Attribute<T>
@@ -76,8 +77,8 @@ public interface StructureND<out T> : AttributeContainer, WithShape {
 
         @PerformancePitfall
         public fun contentEquals(
-            st1: StructureND<Double>,
-            st2: StructureND<Double>,
+            st1: StructureND<Float64>,
+            st2: StructureND<Float64>,
             tolerance: Double = 1e-11,
         ): Boolean {
             if (st1 === st2) return true
@@ -210,7 +211,7 @@ public fun <T : Comparable<T>> LinearSpace<T, Ring<T>>.contentEquals(
 @PerformancePitfall
 public operator fun <T> StructureND<T>.get(vararg index: Int): T = get(index)
 
-public operator fun StructureND<Double>.get(vararg index: Int): Double = getDouble(index)
+public operator fun StructureND<Float64>.get(vararg index: Int): Double = getDouble(index)
 
 public operator fun StructureND<Int>.get(vararg index: Int): Int = getInt(index)
 

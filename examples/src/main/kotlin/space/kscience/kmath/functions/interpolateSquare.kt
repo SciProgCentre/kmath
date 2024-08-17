@@ -10,6 +10,7 @@ import space.kscience.kmath.interpolation.splineInterpolator
 import space.kscience.kmath.operations.Float64Field
 import space.kscience.kmath.real.map
 import space.kscience.kmath.real.step
+import space.kscience.kmath.structures.Float64
 import space.kscience.plotly.Plotly
 import space.kscience.plotly.UnstablePlotlyAPI
 import space.kscience.plotly.makeFile
@@ -18,7 +19,7 @@ import space.kscience.plotly.scatter
 
 @OptIn(UnstablePlotlyAPI::class)
 fun main() {
-    val function: Function1D<Double> = { x ->
+    val function: Function1D<Float64> = { x ->
         if (x in 30.0..50.0) {
             1.0
         } else {
@@ -28,7 +29,7 @@ fun main() {
     val xs = 0.0..100.0 step 0.5
     val ys = xs.map(function)
 
-    val polynomial: PiecewisePolynomial<Double> = Float64Field.splineInterpolator.interpolatePolynomials(xs, ys)
+    val polynomial: PiecewisePolynomial<Float64> = Float64Field.splineInterpolator.interpolatePolynomials(xs, ys)
 
     val polyFunction = polynomial.asFunction(Float64Field, 0.0)
 

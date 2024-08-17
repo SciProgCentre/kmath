@@ -12,6 +12,7 @@ import space.kscience.attributes.SafeType
 import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.linear.*
 import space.kscience.kmath.linear.CholeskyDecomposition
+import space.kscience.kmath.linear.EigenDecomposition
 import space.kscience.kmath.linear.QRDecomposition
 import space.kscience.kmath.nd.Structure2D
 import space.kscience.kmath.nd.StructureAttribute
@@ -22,7 +23,7 @@ import space.kscience.kmath.structures.Float64
 import space.kscience.kmath.structures.IntBuffer
 import space.kscience.kmath.structures.asBuffer
 
-public class CMMatrix(public val origin: RealMatrix) : Matrix<Double> {
+public class CMMatrix(public val origin: RealMatrix) : Matrix<Float64> {
 
     override val rowNum: Int get() = origin.rowDimension
     override val colNum: Int get() = origin.columnDimension
@@ -31,12 +32,12 @@ public class CMMatrix(public val origin: RealMatrix) : Matrix<Double> {
 }
 
 @JvmInline
-public value class CMVector(public val origin: RealVector) : Point<Double> {
+public value class CMVector(public val origin: RealVector) : Point<Float64> {
     override val size: Int get() = origin.dimension
 
     override operator fun get(index: Int): Double = origin.getEntry(index)
 
-    override operator fun iterator(): Iterator<Double> = origin.toArray().iterator()
+    override operator fun iterator(): Iterator<Float64> = origin.toArray().iterator()
 
     override fun toString(): String = Buffer.toString(this)
 }
@@ -46,7 +47,7 @@ public fun RealVector.toPoint(): CMVector = CMVector(this)
 public object CMLinearSpace : LinearSpace<Double, Float64Field> {
     override val elementAlgebra: Float64Field get() = Float64Field
 
-    override val type: SafeType<Double> get() = DoubleField.type
+    override val type: SafeType<Float64> get() = DoubleField.type
 
     override fun buildMatrix(
         rows: Int,
@@ -58,7 +59,7 @@ public object CMLinearSpace : LinearSpace<Double, Float64Field> {
     }
 
     @OptIn(UnstableKMathAPI::class)
-    public fun Matrix<Double>.toCM(): CMMatrix = when (val matrix = origin) {
+    public fun Matrix<Float64>.toCM(): CMMatrix = when (val matrix = origin) {
         is CMMatrix -> matrix
         else -> {
             //TODO add feature analysis
@@ -67,7 +68,7 @@ public object CMLinearSpace : LinearSpace<Double, Float64Field> {
         }
     }
 
-    public fun Point<Double>.toCM(): CMVector = if (this is CMVector) this else {
+    public fun Point<Float64>.toCM(): CMVector = if (this is CMVector) this else {
         val array = DoubleArray(size) { this[it] }
         ArrayRealVector(array).wrap()
     }
@@ -75,40 +76,40 @@ public object CMLinearSpace : LinearSpace<Double, Float64Field> {
     internal fun RealMatrix.wrap(): CMMatrix = CMMatrix(this)
     internal fun RealVector.wrap(): CMVector = CMVector(this)
 
-    override fun buildVector(size: Int, initializer: Float64Field.(Int) -> Double): Point<Double> =
+    override fun buildVector(size: Int, initializer: Float64Field.(Int) -> Double): Point<Float64> =
         ArrayRealVector(DoubleArray(size) { Float64Field.initializer(it) }).wrap()
 
-    override fun Matrix<Double>.plus(other: Matrix<Double>): CMMatrix =
+    override fun Matrix<Float64>.plus(other: Matrix<Float64>): CMMatrix =
         toCM().origin.add(other.toCM().origin).wrap()
 
-    override fun Point<Double>.plus(other: Point<Double>): CMVector =
+    override fun Point<Float64>.plus(other: Point<Float64>): CMVector =
         toCM().origin.add(other.toCM().origin).wrap()
 
-    override fun Point<Double>.minus(other: Point<Double>): CMVector =
+    override fun Point<Float64>.minus(other: Point<Float64>): CMVector =
         toCM().origin.subtract(other.toCM().origin).wrap()
 
-    override fun Matrix<Double>.dot(other: Matrix<Double>): CMMatrix =
+    override fun Matrix<Float64>.dot(other: Matrix<Float64>): CMMatrix =
         toCM().origin.multiply(other.toCM().origin).wrap()
 
-    override fun Matrix<Double>.dot(vector: Point<Double>): CMVector =
+    override fun Matrix<Float64>.dot(vector: Point<Float64>): CMVector =
         toCM().origin.preMultiply(vector.toCM().origin).wrap()
 
-    override operator fun Matrix<Double>.minus(other: Matrix<Double>): CMMatrix =
+    override operator fun Matrix<Float64>.minus(other: Matrix<Float64>): CMMatrix =
         toCM().origin.subtract(other.toCM().origin).wrap()
 
-    override operator fun Matrix<Double>.times(value: Double): CMMatrix =
+    override operator fun Matrix<Float64>.times(value: Double): CMMatrix =
         toCM().origin.scalarMultiply(value).wrap()
 
-    override fun Double.times(m: Matrix<Double>): CMMatrix =
+    override fun Double.times(m: Matrix<Float64>): CMMatrix =
         m * this
 
-    override fun Point<Double>.times(value: Double): CMVector =
+    override fun Point<Float64>.times(value: Double): CMVector =
         toCM().origin.mapMultiply(value).wrap()
 
-    override fun Double.times(v: Point<Double>): CMVector =
+    override fun Double.times(v: Point<Float64>): CMVector =
         v * this
 
-    override fun <V, A : StructureAttribute<V>> computeAttribute(structure: Structure2D<Double>, attribute: A): V? {
+    override fun <V, A : StructureAttribute<V>> computeAttribute(structure: Structure2D<Float64>, attribute: A): V? {
 
         val origin = structure.toCM().origin
 
@@ -125,7 +126,7 @@ public object CMLinearSpace : LinearSpace<Double, Float64Field> {
 
             Cholesky -> object : CholeskyDecomposition<Float64> {
                 val cmCholesky by lazy { org.apache.commons.math3.linear.CholeskyDecomposition(origin) }
-                override val l: Matrix<Double> get() = cmCholesky.l.wrap()
+                override val l: Matrix<Float64> get() = cmCholesky.l.wrap()
             }
 
             QR -> object : QRDecomposition<Float64> {
@@ -142,6 +143,13 @@ public object CMLinearSpace : LinearSpace<Double, Float64Field> {
                 override val v: Matrix<Float64> get() = cmSvd.v.wrap()
                 override val singularValues: Point<Float64> get() = cmSvd.singularValues.asBuffer()
 
+            }
+
+            EIG -> object : EigenDecomposition<Float64> {
+                val cmEigen by lazy { org.apache.commons.math3.linear.EigenDecomposition(origin) }
+
+                override val v: Matrix<Float64> get() = cmEigen.v.wrap()
+                override val d: Matrix<Float64> get() = cmEigen.d.wrap()
             }
 
             else -> null

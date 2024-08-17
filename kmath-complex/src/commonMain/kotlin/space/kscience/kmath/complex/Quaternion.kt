@@ -11,6 +11,7 @@ import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.memory.*
 import space.kscience.kmath.operations.*
 import space.kscience.kmath.structures.Buffer
+import space.kscience.kmath.structures.Float64
 import space.kscience.kmath.structures.MutableBuffer
 import space.kscience.kmath.structures.MutableBufferFactory
 import kotlin.math.*
@@ -28,7 +29,7 @@ public class Quaternion(
     public val x: Double,
     public val y: Double,
     public val z: Double,
-) : Buffer<Double> {
+) : Buffer<Float64> {
     init {
         require(!w.isNaN()) { "w-component of quaternion is not-a-number" }
         require(!x.isNaN()) { "x-component of quaternion is not-a-number" }
@@ -51,7 +52,7 @@ public class Quaternion(
         else -> error("Index $index out of bounds [0,3]")
     }
 
-    override fun iterator(): Iterator<Double> = listOf(w, x, y, z).iterator()
+    override fun iterator(): Iterator<Float64> = listOf(w, x, y, z).iterator()
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

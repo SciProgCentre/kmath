@@ -6,10 +6,11 @@ package space.kscience.kmath.domains
 
 import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.linear.Point
+import space.kscience.kmath.structures.Float64
 
 @UnstableKMathAPI
 public class UnconstrainedDomain(override val dimension: Int) : Float64Domain {
-    override operator fun contains(point: Point<Double>): Boolean = true
+    override operator fun contains(point: Point<Float64>): Boolean = true
 
     override fun getLowerBound(num: Int): Double = Double.NEGATIVE_INFINITY
 

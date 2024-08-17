@@ -90,7 +90,7 @@ public fun Float64Space3D.rotate(
 /**
  * Rotate a [Float64] vector in 3D space with a rotation matrix
  */
-public fun Float64Space3D.rotate(vector: Float64Vector3D, matrix: Matrix<Double>): Vector3D<Float64> {
+public fun Float64Space3D.rotate(vector: Float64Vector3D, matrix: Matrix<Float64>): Vector3D<Float64> {
     require(matrix.colNum == 3 && matrix.rowNum == 3) { "Square 3x3 rotation matrix is required" }
     return with(linearSpace) { (matrix dot vector).asVector3D() }
 }
@@ -101,7 +101,7 @@ public fun Float64Space3D.rotate(vector: Float64Vector3D, matrix: Matrix<Double>
 @OptIn(UnstableKMathAPI::class)
 public fun Quaternion.toRotationMatrix(
     linearSpace: LinearSpace<Double, *> = Float64Field.linearSpace,
-): Matrix<Double> {
+): Matrix<Float64> {
     val s = QuaternionAlgebra.norm(this).pow(-2)
     return linearSpace.matrix(3, 3)(
         1.0 - 2 * s * (y * y + z * z), 2 * s * (x * y - z * w), 2 * s * (x * z + y * w),
@@ -115,7 +115,7 @@ public fun Quaternion.toRotationMatrix(
  *
  * taken from https://www.euclideanspace.com/maths/geometry/rotations/conversions/matrixToQuaternion/
  */
-public fun Quaternion.Companion.fromRotationMatrix(matrix: Matrix<Double>): Quaternion {
+public fun Quaternion.Companion.fromRotationMatrix(matrix: Matrix<Float64>): Quaternion {
     require(matrix.colNum == 3 && matrix.rowNum == 3) { "Rotation matrix should be 3x3 but is ${matrix.rowNum}x${matrix.colNum}" }
     val trace = matrix[0, 0] + matrix[1, 1] + matrix[2, 2]
 
@@ -256,7 +256,7 @@ public fun Quaternion.Companion.fromEuler(
  * Based on https://github.com/mrdoob/three.js/blob/master/src/math/Euler.js
  */
 public fun AngleVector.Companion.fromRotationMatrix(
-    matrix: Matrix<Double>,
+    matrix: Matrix<Float64>,
     rotationOrder: RotationOrder,
     gimbaldLockThreshold: Double = 0.9999999,
 ): AngleVector = when (rotationOrder) {

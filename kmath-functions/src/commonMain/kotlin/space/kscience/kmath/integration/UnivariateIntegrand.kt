@@ -8,6 +8,7 @@ package space.kscience.kmath.integration
 import space.kscience.attributes.*
 import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.structures.Buffer
+import space.kscience.kmath.structures.Float64
 import space.kscience.kmath.structures.Float64Buffer
 
 public class UnivariateIntegrand<T>(
@@ -36,15 +37,15 @@ public inline fun <reified T : Any> UnivariateIntegrand(
 
 public typealias UnivariateIntegrator<T> = Integrator<T, UnivariateIntegrand<T>>
 
-public object IntegrationRange : IntegrandAttribute<ClosedRange<Double>>
+public object IntegrationRange : IntegrandAttribute<ClosedRange<Float64>>
 
 
 /**
  * Set of univariate integration ranges. First components correspond to the ranges themselves, second components to
  * the number of integration nodes per range.
  */
-public class UnivariateIntegrandRanges(public val ranges: List<Pair<ClosedRange<Double>, Int>>) {
-    public constructor(vararg pairs: Pair<ClosedRange<Double>, Int>) : this(pairs.toList())
+public class UnivariateIntegrandRanges(public val ranges: List<Pair<ClosedRange<Float64>, Int>>) {
+    public constructor(vararg pairs: Pair<ClosedRange<Float64>, Int>) : this(pairs.toList())
 
     override fun toString(): String {
         val rangesString = ranges.joinToString(separator = ",") { (range, points) ->
@@ -56,7 +57,7 @@ public class UnivariateIntegrandRanges(public val ranges: List<Pair<ClosedRange<
     public companion object : IntegrandAttribute<UnivariateIntegrandRanges>
 }
 
-public object UnivariateIntegrationNodes : IntegrandAttribute<Buffer<Double>>
+public object UnivariateIntegrationNodes : IntegrandAttribute<Buffer<Float64>>
 
 public fun AttributesBuilder<UnivariateIntegrand<*>>.integrationNodes(vararg nodes: Double) {
     UnivariateIntegrationNodes(Float64Buffer(nodes))
@@ -78,7 +79,7 @@ public inline fun <reified T : Any> UnivariateIntegrator<T>.integrate(
  */
 @UnstableKMathAPI
 public inline fun <reified T : Any> UnivariateIntegrator<T>.integrate(
-    range: ClosedRange<Double>,
+    range: ClosedRange<Float64>,
     noinline attributeBuilder: AttributesBuilder<UnivariateIntegrand<T>>.() -> Unit = {},
     noinline function: (Double) -> T,
 ): UnivariateIntegrand<T> {

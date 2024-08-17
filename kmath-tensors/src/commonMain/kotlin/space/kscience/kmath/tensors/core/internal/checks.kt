@@ -8,6 +8,7 @@ package space.kscience.kmath.tensors.core.internal
 import space.kscience.kmath.nd.ShapeND
 import space.kscience.kmath.nd.StructureND
 import space.kscience.kmath.nd.linearSize
+import space.kscience.kmath.structures.Float64
 import space.kscience.kmath.tensors.api.Tensor
 import space.kscience.kmath.tensors.core.DoubleTensor
 import space.kscience.kmath.tensors.core.DoubleTensorAlgebra
@@ -54,7 +55,7 @@ internal fun checkSquareMatrix(shape: ShapeND) {
 }
 
 internal fun DoubleTensorAlgebra.checkSymmetric(
-    tensor: Tensor<Double>, epsilon: Double = 1e-6,
+    tensor: Tensor<Float64>, epsilon: Double = 1e-6,
 ) = check(tensor.eq(tensor.transposed(), epsilon)) {
     "Tensor is not symmetric about the last 2 dimensions at precision $epsilon"
 }

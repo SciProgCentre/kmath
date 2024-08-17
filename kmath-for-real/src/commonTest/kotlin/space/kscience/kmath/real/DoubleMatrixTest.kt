@@ -170,7 +170,7 @@ internal class DoubleMatrixTest {
         assertEquals(matrix1.average(), 1.375)
     }
 
-//    fun printMatrix(m: Matrix<Double>) {
+//    fun printMatrix(m: Matrix<Float64>) {
 //        for (row in 0 until m.shape[0]) {
 //            for (col in 0 until m.shape[1]) {
 //                print(m[row, col])

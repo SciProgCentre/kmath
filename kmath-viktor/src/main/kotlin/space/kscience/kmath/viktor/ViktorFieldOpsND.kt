@@ -16,14 +16,15 @@ import space.kscience.kmath.operations.ExtendedFieldOps
 import space.kscience.kmath.operations.Float64Field
 import space.kscience.kmath.operations.NumbersAddOps
 import space.kscience.kmath.operations.PowerOperations
+import space.kscience.kmath.structures.Float64
 
 @OptIn(PerformancePitfall::class)
 public open class ViktorFieldOpsND :
     FieldOpsND<Double, Float64Field>,
-    ExtendedFieldOps<StructureND<Double>>,
-    PowerOperations<StructureND<Double>> {
+    ExtendedFieldOps<StructureND<Float64>>,
+    PowerOperations<StructureND<Float64>> {
 
-    public val StructureND<Double>.f64Buffer: F64Array
+    public val StructureND<Float64>.f64Buffer: F64Array
         get() = when (this) {
             is ViktorStructureND -> this.f64Buffer
             else -> mutableStructureND(shape) { this@f64Buffer[it] }.f64Buffer
@@ -39,11 +40,11 @@ public open class ViktorFieldOpsND :
             }
         }.asStructure()
 
-    override fun StructureND<Double>.unaryMinus(): StructureND<Double> = -1 * this
+    override fun StructureND<Float64>.unaryMinus(): StructureND<Float64> = -1 * this
 
     @OptIn(UnsafeKMathAPI::class)
     @PerformancePitfall
-    override fun StructureND<Double>.map(transform: Float64Field.(Double) -> Double): ViktorStructureND =
+    override fun StructureND<Float64>.map(transform: Float64Field.(Double) -> Double): ViktorStructureND =
         F64Array(*shape.asArray()).apply {
             ColumnStrides(ShapeND(shape)).asSequence().forEach { index ->
                 set(value = Float64Field.transform(this@map[index]), indices = index)
@@ -52,7 +53,7 @@ public open class ViktorFieldOpsND :
 
     @OptIn(UnsafeKMathAPI::class)
     @PerformancePitfall
-    override fun StructureND<Double>.mapIndexed(
+    override fun StructureND<Float64>.mapIndexed(
         transform: Float64Field.(index: IntArray, Double) -> Double,
     ): ViktorStructureND = F64Array(*shape.asArray()).apply {
         ColumnStrides(ShapeND(shape)).asSequence().forEach { index ->
@@ -63,8 +64,8 @@ public open class ViktorFieldOpsND :
     @OptIn(UnsafeKMathAPI::class)
     @PerformancePitfall
     override fun zip(
-        left: StructureND<Double>,
-        right: StructureND<Double>,
+        left: StructureND<Float64>,
+        right: StructureND<Float64>,
         transform: Float64Field.(Double, Double) -> Double,
     ): ViktorStructureND {
         require(left.shape == right.shape)
@@ -75,46 +76,46 @@ public open class ViktorFieldOpsND :
         }.asStructure()
     }
 
-    override fun add(left: StructureND<Double>, right: StructureND<Double>): ViktorStructureND =
+    override fun add(left: StructureND<Float64>, right: StructureND<Float64>): ViktorStructureND =
         (left.f64Buffer + right.f64Buffer).asStructure()
 
-    override fun scale(a: StructureND<Double>, value: Double): ViktorStructureND =
+    override fun scale(a: StructureND<Float64>, value: Double): ViktorStructureND =
         (a.f64Buffer * value).asStructure()
 
-    override fun StructureND<Double>.plus(arg: StructureND<Double>): ViktorStructureND =
+    override fun StructureND<Float64>.plus(arg: StructureND<Float64>): ViktorStructureND =
         (f64Buffer + arg.f64Buffer).asStructure()
 
-    override fun StructureND<Double>.minus(arg: StructureND<Double>): ViktorStructureND =
+    override fun StructureND<Float64>.minus(arg: StructureND<Float64>): ViktorStructureND =
         (f64Buffer - arg.f64Buffer).asStructure()
 
-    override fun StructureND<Double>.times(k: Number): ViktorStructureND =
+    override fun StructureND<Float64>.times(k: Number): ViktorStructureND =
         (f64Buffer * k.toDouble()).asStructure()
 
-    override fun StructureND<Double>.plus(arg: Double): ViktorStructureND =
+    override fun StructureND<Float64>.plus(arg: Double): ViktorStructureND =
         (f64Buffer.plus(arg)).asStructure()
 
-    override fun sin(arg: StructureND<Double>): ViktorStructureND = arg.map { sin(it) }
-    override fun cos(arg: StructureND<Double>): ViktorStructureND = arg.map { cos(it) }
-    override fun tan(arg: StructureND<Double>): ViktorStructureND = arg.map { tan(it) }
-    override fun asin(arg: StructureND<Double>): ViktorStructureND = arg.map { asin(it) }
-    override fun acos(arg: StructureND<Double>): ViktorStructureND = arg.map { acos(it) }
-    override fun atan(arg: StructureND<Double>): ViktorStructureND = arg.map { atan(it) }
+    override fun sin(arg: StructureND<Float64>): ViktorStructureND = arg.map { sin(it) }
+    override fun cos(arg: StructureND<Float64>): ViktorStructureND = arg.map { cos(it) }
+    override fun tan(arg: StructureND<Float64>): ViktorStructureND = arg.map { tan(it) }
+    override fun asin(arg: StructureND<Float64>): ViktorStructureND = arg.map { asin(it) }
+    override fun acos(arg: StructureND<Float64>): ViktorStructureND = arg.map { acos(it) }
+    override fun atan(arg: StructureND<Float64>): ViktorStructureND = arg.map { atan(it) }
 
-    override fun power(arg: StructureND<Double>, pow: Number): ViktorStructureND = arg.map { it.pow(pow) }
+    override fun power(arg: StructureND<Float64>, pow: Number): ViktorStructureND = arg.map { it.pow(pow) }
 
-    override fun exp(arg: StructureND<Double>): ViktorStructureND = arg.f64Buffer.exp().asStructure()
+    override fun exp(arg: StructureND<Float64>): ViktorStructureND = arg.f64Buffer.exp().asStructure()
 
-    override fun ln(arg: StructureND<Double>): ViktorStructureND = arg.f64Buffer.log().asStructure()
+    override fun ln(arg: StructureND<Float64>): ViktorStructureND = arg.f64Buffer.log().asStructure()
 
-    override fun sinh(arg: StructureND<Double>): ViktorStructureND = arg.map { sinh(it) }
+    override fun sinh(arg: StructureND<Float64>): ViktorStructureND = arg.map { sinh(it) }
 
-    override fun cosh(arg: StructureND<Double>): ViktorStructureND = arg.map { cosh(it) }
+    override fun cosh(arg: StructureND<Float64>): ViktorStructureND = arg.map { cosh(it) }
 
-    override fun asinh(arg: StructureND<Double>): ViktorStructureND = arg.map { asinh(it) }
+    override fun asinh(arg: StructureND<Float64>): ViktorStructureND = arg.map { asinh(it) }
 
-    override fun acosh(arg: StructureND<Double>): ViktorStructureND = arg.map { acosh(it) }
+    override fun acosh(arg: StructureND<Float64>): ViktorStructureND = arg.map { acosh(it) }
 
-    override fun atanh(arg: StructureND<Double>): ViktorStructureND = arg.map { atanh(it) }
+    override fun atanh(arg: StructureND<Float64>): ViktorStructureND = arg.map { atanh(it) }
 
     public companion object : ViktorFieldOpsND()
 }
@@ -124,7 +125,7 @@ public val Float64Field.viktorAlgebra: ViktorFieldOpsND get() = ViktorFieldOpsND
 @OptIn(UnstableKMathAPI::class)
 public open class ViktorFieldND(
     private val shapeAsArray: IntArray,
-) : ViktorFieldOpsND(), FieldND<Double, Float64Field>, NumbersAddOps<StructureND<Double>> {
+) : ViktorFieldOpsND(), FieldND<Double, Float64Field>, NumbersAddOps<StructureND<Float64>> {
 
     override val shape: ShapeND = ShapeND(shapeAsArray)
 

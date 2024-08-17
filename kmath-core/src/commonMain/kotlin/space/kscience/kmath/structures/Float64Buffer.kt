@@ -14,7 +14,7 @@ import kotlin.jvm.JvmInline
  * @property array the underlying array.
  */
 @JvmInline
-public value class Float64Buffer(public val array: DoubleArray) : PrimitiveBuffer<Double> {
+public value class Float64Buffer(public val array: DoubleArray) : PrimitiveBuffer<Float64> {
 
     override val size: Int get() = array.size
 
@@ -54,7 +54,7 @@ public fun Float64Buffer(vararg doubles: Double): Float64Buffer = Float64Buffer(
 /**
  * Returns a new [DoubleArray] containing all the elements of this [Buffer].
  */
-public fun Buffer<Double>.toDoubleArray(): DoubleArray = when (this) {
+public fun Buffer<Float64>.toDoubleArray(): DoubleArray = when (this) {
     is Float64Buffer -> array
     else -> DoubleArray(size, ::get)
 }
@@ -62,7 +62,7 @@ public fun Buffer<Double>.toDoubleArray(): DoubleArray = when (this) {
 /**
  * Represent this buffer as [Float64Buffer]. Does not guarantee that changes in the original buffer are reflected on this buffer.
  */
-public fun Buffer<Double>.toFloat64Buffer(): Float64Buffer = when (this) {
+public fun Buffer<Float64>.toFloat64Buffer(): Float64Buffer = when (this) {
     is Float64Buffer -> this
     else -> DoubleArray(size, ::get).asBuffer()
 }
@@ -79,5 +79,5 @@ public fun DoubleArray.asBuffer(): Float64Buffer = Float64Buffer(this)
 public fun interface Float64BufferTransform : BufferTransform<Double, Double> {
     public fun transform(arg: Float64Buffer): Float64Buffer
 
-    override fun transform(arg: Buffer<Double>): Float64Buffer = arg.toFloat64Buffer()
+    override fun transform(arg: Buffer<Float64>): Float64Buffer = arg.toFloat64Buffer()
 }
