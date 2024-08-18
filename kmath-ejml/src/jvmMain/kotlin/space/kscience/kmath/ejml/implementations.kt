@@ -278,8 +278,8 @@ public object EjmlLinearSpaceDDRM : EjmlLinearSpace<Double, Float64Field, DMatri
                     }
 
                     override val v: Matrix<Float64> by lazy {
-                        val eigenvectors = List(origin.numRows) { cmEigen.getEigenVector(it) }
-                        buildMatrix(origin.numRows, origin.numCols) { row, column ->
+                        val eigenvectors = List(origin.numRows) { cmEigen.getEigenVector(it) }.filterNotNull()
+                        buildMatrix(eigenvectors.size, origin.numCols) { row, column ->
                             eigenvectors[row][column]
                         }
                     }

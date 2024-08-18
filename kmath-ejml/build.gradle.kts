@@ -1,13 +1,20 @@
 plugins {
-    id("space.kscience.gradle.jvm")
+    id("space.kscience.gradle.mpp")
 }
 
 val ejmlVerision = "0.43.1"
 
-dependencies {
-    api(projects.kmathCore)
-    api(projects.kmathComplex)
-    api("org.ejml:ejml-all:$ejmlVerision")
+kscience {
+    jvm()
+    jvmMain {
+        api(projects.kmathCore)
+        api(projects.kmathComplex)
+        api("org.ejml:ejml-all:$ejmlVerision")
+    }
+
+    jvmTest {
+        implementation(projects.testUtils)
+    }
 }
 
 readme {
@@ -29,11 +36,3 @@ readme {
         ref = "src/main/kotlin/space/kscience/kmath/ejml/EjmlLinearSpace.kt"
     ) { "LinearSpace implementations." }
 }
-
-//kotlin.sourceSets.main {
-//    val codegen by tasks.creating {
-//        ejmlCodegen(kotlin.srcDirs.first().absolutePath + "/space/kscience/kmath/ejml/_generated.kt")
-//    }
-//
-//    kotlin.srcDirs(files().builtBy(codegen))
-//}

@@ -5,6 +5,8 @@
 
 package space.kscience.kmath.testutils
 
+import space.kscience.kmath.PerformancePitfall
+import space.kscience.kmath.nd.StructureND
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.Float64
 import space.kscience.kmath.structures.indices
@@ -15,6 +17,14 @@ public fun assertBufferEquals(expected: Buffer<Float64>, result: Buffer<Float64>
     if (expected.size != result.size) {
         fail("Expected size is ${expected.size}, but the result size is ${result.size}")
     }
+    expected.indices.forEach {
+        assertEquals(expected[it], result[it], tolerance)
+    }
+}
+
+@OptIn(PerformancePitfall::class)
+public fun assertStructureEquals(expected: StructureND<Float64>, result: StructureND<Float64>, tolerance: Double = 1e-4) {
+    assertEquals(expected.shape, result.shape, "Structure shape mismatch")
     expected.indices.forEach {
         assertEquals(expected[it], result[it], tolerance)
     }

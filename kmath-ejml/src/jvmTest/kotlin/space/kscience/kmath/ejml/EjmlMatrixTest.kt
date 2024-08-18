@@ -18,12 +18,15 @@ import space.kscience.kmath.nd.StructureND
 import space.kscience.kmath.nd.toArray
 import space.kscience.kmath.operations.algebra
 import space.kscience.kmath.structures.Float64
+import space.kscience.kmath.testutils.assertStructureEquals
 import kotlin.random.Random
 import kotlin.random.asJavaRandom
 import kotlin.test.*
 
 internal fun <T : Any> assertMatrixEquals(expected: StructureND<T>, actual: StructureND<T>) {
-    assertTrue { StructureND.contentEquals(expected, actual) }
+    expected.elements().forEach { (index, value) ->
+        assertEquals(value, actual[index], "Structure element with index ${index.toList()} should be equal to $value but is ${actual[index]}")
+    }
 }
 
 @OptIn(UnstableKMathAPI::class)
@@ -108,8 +111,12 @@ internal class EjmlMatrixTest {
 
     @Test
     fun eigenValueDecomposition() = EjmlLinearSpaceDDRM {
-        val matrix = EjmlDoubleMatrix(randomMatrix)
+        val dim = 46
+        val u = buildMatrix(dim, dim) { i, j -> if (i <= j) random.nextDouble() else 0.0 }
+        val matrix = buildMatrix(dim, dim) { row, col ->
+            if (row >= col) u[row, col] else u[col, row]
+        }
         val eigen = matrix.getOrComputeAttribute(EIG) ?: fail()
-        assertMatrixEquals(matrix, eigen.v dot eigen.d dot eigen.v.transposed())
+        assertStructureEquals(matrix, eigen.v dot eigen.d dot eigen.v.transposed())
     }
 }

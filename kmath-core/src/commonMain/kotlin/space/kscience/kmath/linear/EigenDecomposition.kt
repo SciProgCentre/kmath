@@ -7,6 +7,7 @@ package space.kscience.kmath.linear
 
 import space.kscience.attributes.PolymorphicAttribute
 import space.kscience.attributes.safeTypeOf
+import space.kscience.kmath.UnstableKMathAPI
 
 public interface EigenDecomposition<T> {
     /**
@@ -24,5 +25,6 @@ public class EigenDecompositionAttribute<T> :
     PolymorphicAttribute<EigenDecomposition<T>>(safeTypeOf()),
     MatrixAttribute<EigenDecomposition<T>>
 
+@UnstableKMathAPI
 public val <T> MatrixScope<T>.EIG: EigenDecompositionAttribute<T>
     get() = EigenDecompositionAttribute()
