@@ -109,6 +109,7 @@ public object CMLinearSpace : LinearSpace<Double, Float64Field> {
     override fun Double.times(v: Point<Float64>): CMVector =
         v * this
 
+    @OptIn(UnstableKMathAPI::class)
     override fun <V, A : StructureAttribute<V>> computeAttribute(structure: Structure2D<Float64>, attribute: A): V? {
 
         val origin = structure.toCM().origin

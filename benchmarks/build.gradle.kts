@@ -1,11 +1,18 @@
-@file:Suppress("UNUSED_VARIABLE")
-
-import space.kscience.kmath.benchmarks.addBenchmarkProperties
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.fasterxml.jackson.module.kotlin.readValue
+import kotlinx.benchmark.gradle.BenchmarksExtension
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
+import java.time.format.DateTimeFormatterBuilder
+import java.time.format.SignStyle
+import java.time.temporal.ChronoField.*
+import java.util.*
 
 plugins {
     kotlin("multiplatform")
     alias(spclibs.plugins.kotlin.plugin.allopen)
-    id("org.jetbrains.kotlinx.benchmark")
+    alias(spclibs.plugins.kotlinx.benchmark)
 }
 
 allOpen.annotation("org.openjdk.jmh.annotations.State")
@@ -158,8 +165,141 @@ kotlin {
     }
 }
 
-readme {
-    maturity = space.kscience.gradle.Maturity.EXPERIMENTAL
+
+private data class JmhReport(
+    val jmhVersion: String,
+    val benchmark: String,
+    val mode: String,
+    val threads: Int,
+    val forks: Int,
+    val jvm: String,
+    val jvmArgs: List<String>,
+    val jdkVersion: String,
+    val vmName: String,
+    val vmVersion: String,
+    val warmupIterations: Int,
+    val warmupTime: String,
+    val warmupBatchSize: Int,
+    val measurementIterations: Int,
+    val measurementTime: String,
+    val measurementBatchSize: Int,
+    val params: Map<String, String> = emptyMap(),
+    val primaryMetric: PrimaryMetric,
+    val secondaryMetrics: Map<String, SecondaryMetric>,
+) {
+    interface Metric {
+        val score: Double
+        val scoreError: Double
+        val scoreConfidence: List<Double>
+        val scorePercentiles: Map<Double, Double>
+        val scoreUnit: String
+    }
+
+    data class PrimaryMetric(
+        override val score: Double,
+        override val scoreError: Double,
+        override val scoreConfidence: List<Double>,
+        override val scorePercentiles: Map<Double, Double>,
+        override val scoreUnit: String,
+        val rawDataHistogram: List<List<List<List<Double>>>>? = null,
+        val rawData: List<List<Double>>? = null,
+    ) : Metric
+
+    data class SecondaryMetric(
+        override val score: Double,
+        override val scoreError: Double,
+        override val scoreConfidence: List<Double>,
+        override val scorePercentiles: Map<Double, Double>,
+        override val scoreUnit: String,
+        val rawData: List<List<Double>>,
+    ) : Metric
 }
 
-addBenchmarkProperties()
+readme {
+    maturity = space.kscience.gradle.Maturity.EXPERIMENTAL
+
+    val jsonMapper = jacksonObjectMapper()
+
+
+    val ISO_DATE_TIME: DateTimeFormatter = DateTimeFormatterBuilder().run {
+        parseCaseInsensitive()
+        appendValue(YEAR, 4, 10, SignStyle.EXCEEDS_PAD)
+        appendLiteral('-')
+        appendValue(MONTH_OF_YEAR, 2)
+        appendLiteral('-')
+        appendValue(DAY_OF_MONTH, 2)
+        appendLiteral('T')
+        appendValue(HOUR_OF_DAY, 2)
+        appendLiteral('.')
+        appendValue(MINUTE_OF_HOUR, 2)
+        optionalStart()
+        appendLiteral('.')
+        appendValue(SECOND_OF_MINUTE, 2)
+        optionalStart()
+        appendFraction(NANO_OF_SECOND, 0, 9, true)
+        optionalStart()
+        appendOffsetId()
+        optionalStart()
+        appendLiteral('[')
+        parseCaseSensitive()
+        appendZoneRegionId()
+        appendLiteral(']')
+        toFormatter()
+    }
+
+    fun noun(number: Number, singular: String, plural: String) = if (number.toLong() == 1L) singular else plural
+
+    extensions.findByType(BenchmarksExtension::class.java)?.configurations?.forEach { cfg ->
+        property("benchmark${cfg.name.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }}") {
+            val launches = layout.buildDirectory.dir("reports/benchmarks/${cfg.name}").get()
+
+            val resDirectory = launches.files().maxByOrNull {
+                LocalDateTime.parse(it.name, ISO_DATE_TIME).atZone(ZoneId.systemDefault()).toInstant()
+            }
+
+            if (resDirectory == null || !(resDirectory.resolve("jvm.json")).exists()) {
+                "> **Can't find appropriate benchmark data. Try generating readme files after running benchmarks**."
+            } else {
+                val reports: List<JmhReport> =
+                    jsonMapper.readValue<List<JmhReport>>(resDirectory.resolve("jvm.json"))
+
+                buildString {
+                    appendLine("<details>")
+                    appendLine("<summary>")
+                    appendLine("Report for benchmark configuration <code>${cfg.name}</code>")
+                    appendLine("</summary>")
+                    appendLine()
+                    val first = reports.first()
+
+                    appendLine("* Run on ${first.vmName} (build ${first.vmVersion}) with Java process:")
+                    appendLine()
+                    appendLine("```")
+                    appendLine(
+                        "${first.jvm} ${
+                            first.jvmArgs.joinToString(" ")
+                        }"
+                    )
+                    appendLine("```")
+
+                    appendLine(
+                        "* JMH ${first.jmhVersion} was used in `${first.mode}` mode with ${first.warmupIterations} warmup ${
+                            noun(first.warmupIterations, "iteration", "iterations")
+                        } by ${first.warmupTime} and ${first.measurementIterations} measurement ${
+                            noun(first.measurementIterations, "iteration", "iterations")
+                        } by ${first.measurementTime}."
+                    )
+
+                    appendLine()
+                    appendLine("| Benchmark | Score |")
+                    appendLine("|:---------:|:-----:|")
+
+                    reports.forEach { report ->
+                        appendLine("|`${report.benchmark}`|${report.primaryMetric.score} &plusmn; ${report.primaryMetric.scoreError} ${report.primaryMetric.scoreUnit}|")
+                    }
+
+                    appendLine("</details>")
+                }
+            }
+        }
+    }
+}

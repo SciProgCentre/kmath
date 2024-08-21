@@ -10,3 +10,5 @@ commons-rng-sampling = { module = "org.apache.commons:commons-rng-sampling", ver
 
 multik-core = { module = "org.jetbrains.kotlinx:multik-core", version.ref = "multik" }
 multik-default = { module = "org.jetbrains.kotlinx:multik-default", version.ref = "multik" }
+
+[plugins]

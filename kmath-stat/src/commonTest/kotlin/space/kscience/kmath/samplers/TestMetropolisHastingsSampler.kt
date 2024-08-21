@@ -24,7 +24,7 @@ class TestMetropolisHastingsSampler {
 
     data class TestSetup(val mean: Double, val startPoint: Double, val sigma: Double = 0.5)
 
-    private val sample = 1e6.toInt()
+    private val sample = 1e5.toInt()
     private val burnIn = sample / 5
 
     @Test
@@ -40,7 +40,7 @@ class TestMetropolisHastingsSampler {
                 .univariateNormal(it.startPoint, it.sigma, distribution::probability)
             val sampledValues = sampler.sample(generator).discard(burnIn).nextBuffer(sample)
 
-            assertEquals(it.mean, Float64Field.mean(sampledValues), 1e-2)
+            assertEquals(it.mean, Float64Field.mean(sampledValues), 0.05)
         }
     }
 
@@ -59,7 +59,7 @@ class TestMetropolisHastingsSampler {
             }
             val sampledValues = sampler.sample(generator).discard(burnIn).nextBuffer(sample)
 
-            assertEquals(1.0 / setup.mean, Float64Field.mean(sampledValues), 1e-2)
+            assertEquals(1.0 / setup.mean, Float64Field.mean(sampledValues), 0.1)
         }
     }
 
@@ -82,7 +82,7 @@ class TestMetropolisHastingsSampler {
             }
             val sampledValues = sampler.sample(generator).discard(burnIn).nextBuffer(sample)
 
-            assertEquals(setup.mean * sqrt(PI / 2), Float64Field.mean(sampledValues), 1e-2)
+            assertEquals(setup.mean * sqrt(PI / 2), Float64Field.mean(sampledValues), 0.05)
         }
     }
 

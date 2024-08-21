@@ -21,6 +21,7 @@ import org.ejml.sparse.csc.factory.DecompositionFactory_DSCC
 import org.ejml.sparse.csc.factory.DecompositionFactory_FSCC
 import space.kscience.attributes.SafeType
 import space.kscience.attributes.safeTypeOf
+import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.complex.Complex
 import space.kscience.kmath.linear.*
 import space.kscience.kmath.linear.Matrix
@@ -216,6 +217,7 @@ public object EjmlLinearSpaceDDRM : EjmlLinearSpace<Double, Float64Field, DMatri
 
     override fun Double.times(v: Point<Float64>): EjmlDoubleVector<DMatrixRMaj> = v * this
 
+    @OptIn(UnstableKMathAPI::class)
     override fun <V, A : StructureAttribute<V>> computeAttribute(structure: Structure2D<Float64>, attribute: A): V? {
         val origin: DMatrixRMaj = structure.toEjml().origin
 

@@ -2,7 +2,7 @@ import space.kscience.gradle.useApache2Licence
 import space.kscience.gradle.useSPCTeam
 
 plugins {
-    id("space.kscience.gradle.project")
+    alias(spclibs.plugins.kscience.project)
     alias(spclibs.plugins.kotlinx.kover)
 }
 
