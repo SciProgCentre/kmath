@@ -474,6 +474,7 @@ public object EjmlLinearSpaceFDRM : EjmlLinearSpace<Float, Float32Field, FMatrix
 
     override fun Float.times(v: Point<Float>): EjmlFloatVector<FMatrixRMaj> = v * this
 
+    @OptIn(UnstableKMathAPI::class)
     override fun <V, A : StructureAttribute<V>> computeAttribute(structure: Structure2D<Float32>, attribute: A): V? {
         val origin = structure.toEjml().origin
 

@@ -9,6 +9,7 @@ import space.kscience.attributes.PolymorphicAttribute
 import space.kscience.attributes.safeTypeOf
 import space.kscience.kmath.UnstableKMathAPI
 
+@UnstableKMathAPI
 public interface EigenDecomposition<T> {
     /**
      * Eigenvector matrix.
@@ -21,6 +22,7 @@ public interface EigenDecomposition<T> {
     public val d: Matrix<T>
 }
 
+@UnstableKMathAPI
 public class EigenDecompositionAttribute<T> :
     PolymorphicAttribute<EigenDecomposition<T>>(safeTypeOf()),
     MatrixAttribute<EigenDecomposition<T>>
