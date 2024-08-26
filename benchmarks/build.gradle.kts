@@ -3,10 +3,6 @@ import com.fasterxml.jackson.module.kotlin.readValue
 import kotlinx.benchmark.gradle.BenchmarksExtension
 import java.time.LocalDateTime
 import java.time.ZoneId
-import java.time.format.DateTimeFormatter
-import java.time.format.DateTimeFormatterBuilder
-import java.time.format.SignStyle
-import java.time.temporal.ChronoField.*
 import java.util.*
 
 plugins {
@@ -220,41 +216,20 @@ readme {
 
     val jsonMapper = jacksonObjectMapper()
 
-
-    val ISO_DATE_TIME: DateTimeFormatter = DateTimeFormatterBuilder().run {
-        parseCaseInsensitive()
-        appendValue(YEAR, 4, 10, SignStyle.EXCEEDS_PAD)
-        appendLiteral('-')
-        appendValue(MONTH_OF_YEAR, 2)
-        appendLiteral('-')
-        appendValue(DAY_OF_MONTH, 2)
-        appendLiteral('T')
-        appendValue(HOUR_OF_DAY, 2)
-        appendLiteral('.')
-        appendValue(MINUTE_OF_HOUR, 2)
-        optionalStart()
-        appendLiteral('.')
-        appendValue(SECOND_OF_MINUTE, 2)
-        optionalStart()
-        appendFraction(NANO_OF_SECOND, 0, 9, true)
-        optionalStart()
-        appendOffsetId()
-        optionalStart()
-        appendLiteral('[')
-        parseCaseSensitive()
-        appendZoneRegionId()
-        appendLiteral(']')
-        toFormatter()
-    }
-
     fun noun(number: Number, singular: String, plural: String) = if (number.toLong() == 1L) singular else plural
 
     extensions.findByType(BenchmarksExtension::class.java)?.configurations?.forEach { cfg ->
-        property("benchmark${cfg.name.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }}") {
-            val launches = layout.buildDirectory.dir("reports/benchmarks/${cfg.name}").get()
+        val propertyName =
+            "benchmark${cfg.name.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }}"
 
-            val resDirectory = launches.files().maxByOrNull {
-                LocalDateTime.parse(it.name, ISO_DATE_TIME).atZone(ZoneId.systemDefault()).toInstant()
+        logger.info("Processing benchmark data from benchmark ${cfg.name} into readme property $propertyName")
+
+        val launches = layout.buildDirectory.dir("reports/benchmarks/${cfg.name}").get().asFile
+        if (!launches.exists()) return@forEach
+
+        property(propertyName) {
+            val resDirectory = launches.listFiles()?.maxByOrNull {
+                LocalDateTime.parse(it.name).atZone(ZoneId.systemDefault()).toInstant()
             }
 
             if (resDirectory == null || !(resDirectory.resolve("jvm.json")).exists()) {
@@ -264,10 +239,7 @@ readme {
                     jsonMapper.readValue<List<JmhReport>>(resDirectory.resolve("jvm.json"))
 
                 buildString {
-                    appendLine("<details>")
-                    appendLine("<summary>")
-                    appendLine("Report for benchmark configuration <code>${cfg.name}</code>")
-                    appendLine("</summary>")
+                    appendLine("## Report for benchmark configuration <code>${cfg.name}</code>")
                     appendLine()
                     val first = reports.first()
 
@@ -289,15 +261,19 @@ readme {
                         } by ${first.measurementTime}."
                     )
 
-                    appendLine()
-                    appendLine("| Benchmark | Score |")
-                    appendLine("|:---------:|:-----:|")
+                    reports.groupBy { it.benchmark.substringBeforeLast(".") }.forEach { (cl, compare) ->
+                        appendLine("### [${cl.substringAfterLast(".")}](src/jvmMain/kotlin/${cl.replace(".","/")}.kt)")
+                        appendLine()
+                        appendLine("| Benchmark | Score |")
+                        appendLine("|:---------:|:-----:|")
+                        compare.forEach { report ->
+                            val benchmarkName = report.benchmark.substringAfterLast(".")
+                            val score = String.format("%.2G", report.primaryMetric.score)
+                            val error = String.format("%.2G", report.primaryMetric.scoreError)
 
-                    reports.forEach { report ->
-                        appendLine("|`${report.benchmark}`|${report.primaryMetric.score} &plusmn; ${report.primaryMetric.scoreError} ${report.primaryMetric.scoreUnit}|")
+                            appendLine("|`$benchmarkName`|$score &plusmn; $error ${report.primaryMetric.scoreUnit}|")
+                        }
                     }
-
-                    appendLine("</details>")
                 }
             }
         }

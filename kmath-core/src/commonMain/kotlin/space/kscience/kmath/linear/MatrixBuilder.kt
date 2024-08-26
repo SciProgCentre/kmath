@@ -67,13 +67,14 @@ public fun <T : Any, A : Ring<T>> MatrixBuilder<T, A>.symmetric(
 ): Matrix<T> {
     require(columns == rows) { "In order to build symmetric matrix, number of rows $rows should be equal to number of columns $columns" }
     return with(BufferAccessor2D<T?>(rows, rows, MutableBufferFactory(type))) {
-        val cache = factory(rows * rows) { null }
+        val cache = HashMap<IntArray, T>()
         linearSpace.buildMatrix(rows, rows) { i, j ->
-            val cached = cache[i, j]
+            val index = intArrayOf(i, j)
+            val cached = cache[index]
             if (cached == null) {
                 val value = if (i <= j) builder(i, j) else builder(j, i)
-                cache[i, j] = value
-                cache[j, i] = value
+                cache[index] = value
+                cache[index] = value
                 value
             } else {
                 cached
