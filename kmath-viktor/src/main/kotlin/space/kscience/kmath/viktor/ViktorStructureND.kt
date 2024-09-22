@@ -10,9 +10,10 @@ import space.kscience.kmath.PerformancePitfall
 import space.kscience.kmath.nd.ColumnStrides
 import space.kscience.kmath.nd.MutableStructureND
 import space.kscience.kmath.nd.ShapeND
+import space.kscience.kmath.structures.Float64
 
 @Suppress("OVERRIDE_BY_INLINE", "NOTHING_TO_INLINE")
-public class ViktorStructureND(public val f64Buffer: F64Array) : MutableStructureND<Double> {
+public class ViktorStructureND(public val f64Buffer: F64Array) : MutableStructureND<Float64> {
     override val shape: ShapeND get() = ShapeND(f64Buffer.shape)
 
     @OptIn(PerformancePitfall::class)

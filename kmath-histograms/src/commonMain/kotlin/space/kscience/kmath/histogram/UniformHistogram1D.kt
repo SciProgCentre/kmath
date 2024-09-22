@@ -12,6 +12,7 @@ import space.kscience.kmath.operations.Ring
 import space.kscience.kmath.operations.ScaleOperations
 import space.kscience.kmath.operations.invoke
 import space.kscience.kmath.structures.Buffer
+import space.kscience.kmath.structures.Float64
 import space.kscience.kmath.structures.MutableBufferFactory
 import kotlin.math.floor
 
@@ -137,7 +138,7 @@ public fun <V : Any, A> Histogram.Companion.uniform1D(
 
 @UnstableKMathAPI
 public fun <V : Any> UniformHistogram1DGroup<V, *>.produce(
-    buffer: Buffer<Double>,
+    buffer: Buffer<Float64>,
 ): UniformHistogram1D<V> = produce { fill(buffer) }
 
 /**

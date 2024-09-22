@@ -14,56 +14,57 @@ import space.kscience.kmath.nd.StructureND
 import space.kscience.kmath.operations.ExponentialOperations
 import space.kscience.kmath.operations.Float64Field
 import space.kscience.kmath.operations.TrigonometricOperations
+import space.kscience.kmath.structures.Float64
 
 public class MultikDoubleAlgebra(
     multikEngine: Engine,
 ) : MultikDivisionTensorAlgebra<Double, Float64Field>(multikEngine),
-    TrigonometricOperations<StructureND<Double>>, ExponentialOperations<StructureND<Double>> {
+    TrigonometricOperations<StructureND<Float64>>, ExponentialOperations<StructureND<Float64>> {
     override val elementAlgebra: Float64Field get() = Float64Field
     override val dataType: DataType get() = DataType.DoubleDataType
 
-    override fun sin(arg: StructureND<Double>): MultikTensor<Double> =
+    override fun sin(arg: StructureND<Float64>): MultikTensor<Float64> =
         multikMath.mathEx.sin(arg.asMultik().array).wrap()
 
-    override fun cos(arg: StructureND<Double>): MultikTensor<Double> =
+    override fun cos(arg: StructureND<Float64>): MultikTensor<Float64> =
         multikMath.mathEx.cos(arg.asMultik().array).wrap()
 
-    override fun tan(arg: StructureND<Double>): MultikTensor<Double> = sin(arg) / cos(arg)
+    override fun tan(arg: StructureND<Float64>): MultikTensor<Float64> = sin(arg) / cos(arg)
 
     @PerformancePitfall
-    override fun asin(arg: StructureND<Double>): MultikTensor<Double> = arg.map { asin(it) }
+    override fun asin(arg: StructureND<Float64>): MultikTensor<Float64> = arg.map { asin(it) }
 
     @PerformancePitfall
-    override fun acos(arg: StructureND<Double>): MultikTensor<Double> = arg.map { acos(it) }
+    override fun acos(arg: StructureND<Float64>): MultikTensor<Float64> = arg.map { acos(it) }
 
     @PerformancePitfall
-    override fun atan(arg: StructureND<Double>): MultikTensor<Double> = arg.map { atan(it) }
+    override fun atan(arg: StructureND<Float64>): MultikTensor<Float64> = arg.map { atan(it) }
 
-    override fun exp(arg: StructureND<Double>): MultikTensor<Double> =
+    override fun exp(arg: StructureND<Float64>): MultikTensor<Float64> =
         multikMath.mathEx.exp(arg.asMultik().array).wrap()
 
-    override fun ln(arg: StructureND<Double>): MultikTensor<Double> = multikMath.mathEx.log(arg.asMultik().array).wrap()
+    override fun ln(arg: StructureND<Float64>): MultikTensor<Float64> = multikMath.mathEx.log(arg.asMultik().array).wrap()
 
-    override fun sinh(arg: StructureND<Double>): MultikTensor<Double> = (exp(arg) - exp(-arg)) / 2.0
+    override fun sinh(arg: StructureND<Float64>): MultikTensor<Float64> = (exp(arg) - exp(-arg)) / 2.0
 
-    override fun cosh(arg: StructureND<Double>): MultikTensor<Double> = (exp(arg) + exp(-arg)) / 2.0
+    override fun cosh(arg: StructureND<Float64>): MultikTensor<Float64> = (exp(arg) + exp(-arg)) / 2.0
 
-    override fun tanh(arg: StructureND<Double>): MultikTensor<Double> {
+    override fun tanh(arg: StructureND<Float64>): MultikTensor<Float64> {
         val expPlus = exp(arg)
         val expMinus = exp(-arg)
         return (expPlus - expMinus) / (expPlus + expMinus)
     }
 
     @PerformancePitfall
-    override fun asinh(arg: StructureND<Double>): MultikTensor<Double> = arg.map { asinh(it) }
+    override fun asinh(arg: StructureND<Float64>): MultikTensor<Float64> = arg.map { asinh(it) }
 
     @PerformancePitfall
-    override fun acosh(arg: StructureND<Double>): MultikTensor<Double> = arg.map { acosh(it) }
+    override fun acosh(arg: StructureND<Float64>): MultikTensor<Float64> = arg.map { acosh(it) }
 
     @PerformancePitfall
-    override fun atanh(arg: StructureND<Double>): MultikTensor<Double> = arg.map { atanh(it) }
+    override fun atanh(arg: StructureND<Float64>): MultikTensor<Float64> = arg.map { atanh(it) }
 
-    override fun scalar(value: Double): MultikTensor<Double> = Multik.ndarrayOf(value).wrap()
+    override fun scalar(value: Double): MultikTensor<Float64> = Multik.ndarrayOf(value).wrap()
 }
 
 //public val Double.Companion.multikAlgebra: MultikTensorAlgebra<Double, DoubleField> get() = MultikDoubleAlgebra

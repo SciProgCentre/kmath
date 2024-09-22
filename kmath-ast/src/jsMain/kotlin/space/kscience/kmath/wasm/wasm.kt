@@ -13,6 +13,7 @@ import space.kscience.kmath.ast.evaluateConstants
 import space.kscience.kmath.expressions.*
 import space.kscience.kmath.operations.Float64Field
 import space.kscience.kmath.operations.Int32Ring
+import space.kscience.kmath.structures.Float64
 import space.kscience.kmath.wasm.internal.DoubleWasmBuilder
 import space.kscience.kmath.wasm.internal.IntWasmBuilder
 
@@ -58,7 +59,7 @@ public fun MST.compile(algebra: Int32Ring, vararg arguments: Pair<Symbol, Int>):
  * @author Iaroslav Postovalov
  */
 @UnstableKMathAPI
-public fun MST.compileToExpression(algebra: Float64Field): Expression<Double> {
+public fun MST.compileToExpression(algebra: Float64Field): Expression<Float64> {
     val typed = evaluateConstants(algebra)
 
     return if (typed is TypedMst.Constant) object : DoubleExpression {

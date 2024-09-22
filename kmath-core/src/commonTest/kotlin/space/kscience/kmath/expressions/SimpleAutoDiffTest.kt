@@ -8,6 +8,7 @@ package space.kscience.kmath.expressions
 import space.kscience.kmath.operations.Float64Field
 import space.kscience.kmath.operations.bindSymbol
 import space.kscience.kmath.structures.Buffer
+import space.kscience.kmath.structures.Float64
 import space.kscience.kmath.structures.asBuffer
 import kotlin.math.E
 import kotlin.math.PI
@@ -21,18 +22,18 @@ internal class SimpleAutoDiffTest {
 
     fun dx(
         xBinding: Pair<Symbol, Double>,
-        body: SimpleAutoDiffField<Double, Float64Field>.(x: AutoDiffValue<Double>) -> AutoDiffValue<Double>,
-    ): DerivationResult<Double> = Float64Field.simpleAutoDiff(xBinding) { body(bindSymbol(xBinding.first)) }
+        body: SimpleAutoDiffField<Double, Float64Field>.(x: AutoDiffValue<Float64>) -> AutoDiffValue<Float64>,
+    ): DerivationResult<Float64> = Float64Field.simpleAutoDiff(xBinding) { body(bindSymbol(xBinding.first)) }
 
     fun dxy(
         xBinding: Pair<Symbol, Double>,
         yBinding: Pair<Symbol, Double>,
-        body: SimpleAutoDiffField<Double, Float64Field>.(x: AutoDiffValue<Double>, y: AutoDiffValue<Double>) -> AutoDiffValue<Double>,
-    ): DerivationResult<Double> = Float64Field.simpleAutoDiff(xBinding, yBinding) {
+        body: SimpleAutoDiffField<Double, Float64Field>.(x: AutoDiffValue<Float64>, y: AutoDiffValue<Float64>) -> AutoDiffValue<Float64>,
+    ): DerivationResult<Float64> = Float64Field.simpleAutoDiff(xBinding, yBinding) {
         body(bindSymbol(xBinding.first), bindSymbol(yBinding.first))
     }
 
-    fun diff(block: SimpleAutoDiffField<Double, Float64Field>.() -> AutoDiffValue<Double>): SimpleAutoDiffExpression<Double, Float64Field> {
+    fun diff(block: SimpleAutoDiffField<Double, Float64Field>.() -> AutoDiffValue<Float64>): SimpleAutoDiffExpression<Double, Float64Field> {
         return SimpleAutoDiffExpression(Float64Field, block)
     }
 

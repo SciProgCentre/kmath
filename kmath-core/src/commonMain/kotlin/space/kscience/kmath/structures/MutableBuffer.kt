@@ -99,7 +99,7 @@ public inline fun <T> MutableBuffer(
     typeOf<Int32>() -> MutableBuffer.int(size) { initializer(it) as Int32 } as MutableBuffer<T>
     typeOf<Int64>() -> MutableBuffer.long(size) { initializer(it) as Int64 } as MutableBuffer<T>
     typeOf<Float>() -> MutableBuffer.float(size) { initializer(it) as Float } as MutableBuffer<T>
-    typeOf<Double>() -> MutableBuffer.double(size) { initializer(it) as Double } as MutableBuffer<T>
+    typeOf<Float64>() -> MutableBuffer.double(size) { initializer(it) as Double } as MutableBuffer<T>
     //TODO add unsigned types
     else -> MutableListBuffer(MutableList(size, initializer))
 }

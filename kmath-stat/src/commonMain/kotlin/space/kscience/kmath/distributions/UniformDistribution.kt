@@ -8,13 +8,14 @@ package space.kscience.kmath.distributions
 import space.kscience.kmath.chains.Chain
 import space.kscience.kmath.chains.SimpleChain
 import space.kscience.kmath.random.RandomGenerator
+import space.kscience.kmath.structures.Float64
 
-public class UniformDistribution(public val range: ClosedFloatingPointRange<Double>) : Distribution1D<Double> {
+public class UniformDistribution(public val range: ClosedFloatingPointRange<Float64>) : Distribution1D<Float64> {
     private val length: Double = range.endInclusive - range.start
 
     override fun probability(arg: Double): Double = if (arg in range) 1.0 / length else 0.0
 
-    override fun sample(generator: RandomGenerator): Chain<Double> =
+    override fun sample(generator: RandomGenerator): Chain<Float64> =
         SimpleChain { range.start + generator.nextDouble() * length }
 
     override fun cumulative(arg: Double): Double = when {
@@ -24,5 +25,5 @@ public class UniformDistribution(public val range: ClosedFloatingPointRange<Doub
     }
 }
 
-public fun Distribution.Companion.uniform(range: ClosedFloatingPointRange<Double>): UniformDistribution =
+public fun Distribution.Companion.uniform(range: ClosedFloatingPointRange<Float64>): UniformDistribution =
     UniformDistribution(range)

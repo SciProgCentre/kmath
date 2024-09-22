@@ -9,6 +9,7 @@ import kotlinx.atomicfu.atomic
 import kotlinx.atomicfu.getAndUpdate
 import space.kscience.kmath.operations.Float64Field
 import space.kscience.kmath.operations.Group
+import space.kscience.kmath.structures.Float64
 
 /**
  * Common representation for atomic counters
@@ -18,7 +19,7 @@ public interface Counter<T : Any> {
     public val value: T
 
     public companion object {
-        public fun ofDouble(): ObjectCounter<Double> = ObjectCounter(Float64Field)
+        public fun ofDouble(): ObjectCounter<Float64> = ObjectCounter(Float64Field)
         public fun <T : Any> of(group: Group<T>): ObjectCounter<T> = ObjectCounter(group)
     }
 }

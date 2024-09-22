@@ -14,43 +14,43 @@ import kotlin.math.sqrt
 /**
  * [ExtendedFieldOps] over [Float64Buffer].
  */
-public abstract class Float64BufferOps : BufferAlgebra<Double, Float64Field>, ExtendedFieldOps<Buffer<Double>>,
-    Norm<Buffer<Double>, Double> {
+public abstract class Float64BufferOps : BufferAlgebra<Double, Float64Field>, ExtendedFieldOps<Buffer<Float64>>,
+    Norm<Buffer<Float64>, Double> {
 
     override val elementAlgebra: Float64Field get() = Float64Field
 
-    override val elementBufferFactory: MutableBufferFactory<Double> get() = elementAlgebra.bufferFactory
+    override val elementBufferFactory: MutableBufferFactory<Float64> get() = elementAlgebra.bufferFactory
 
     @Suppress("OVERRIDE_BY_INLINE")
     @OptIn(UnstableKMathAPI::class)
-    final override inline fun Buffer<Double>.map(block: Float64Field.(Double) -> Double): Float64Buffer =
+    final override inline fun Buffer<Float64>.map(block: Float64Field.(Double) -> Double): Float64Buffer =
         DoubleArray(size) { Float64Field.block(getDouble(it)) }.asBuffer()
 
 
     @OptIn(UnstableKMathAPI::class)
     @Suppress("OVERRIDE_BY_INLINE")
-    final override inline fun Buffer<Double>.mapIndexed(block: Float64Field.(index: Int, arg: Double) -> Double): Float64Buffer =
+    final override inline fun Buffer<Float64>.mapIndexed(block: Float64Field.(index: Int, arg: Double) -> Double): Float64Buffer =
         Float64Buffer(size) { Float64Field.block(it, getDouble(it)) }
 
     @OptIn(UnstableKMathAPI::class)
     @Suppress("OVERRIDE_BY_INLINE")
-    final override inline fun Buffer<Double>.zip(
-        other: Buffer<Double>,
+    final override inline fun Buffer<Float64>.zip(
+        other: Buffer<Float64>,
         block: Float64Field.(left: Double, right: Double) -> Double,
     ): Float64Buffer {
         require(size == other.size) { "Incompatible buffer sizes. left: ${size}, right: ${other.size}" }
         return Float64Buffer(size) { Float64Field.block(getDouble(it), other.getDouble(it)) }
     }
 
-    override fun unaryOperationFunction(operation: String): (arg: Buffer<Double>) -> Buffer<Double> =
+    override fun unaryOperationFunction(operation: String): (arg: Buffer<Float64>) -> Buffer<Float64> =
         super<ExtendedFieldOps>.unaryOperationFunction(operation)
 
-    override fun binaryOperationFunction(operation: String): (left: Buffer<Double>, right: Buffer<Double>) -> Buffer<Double> =
+    override fun binaryOperationFunction(operation: String): (left: Buffer<Float64>, right: Buffer<Float64>) -> Buffer<Float64> =
         super<ExtendedFieldOps>.binaryOperationFunction(operation)
 
-    override fun Buffer<Double>.unaryMinus(): Float64Buffer = map { -it }
+    override fun Buffer<Float64>.unaryMinus(): Float64Buffer = map { -it }
 
-    override fun add(left: Buffer<Double>, right: Buffer<Double>): Float64Buffer {
+    override fun add(left: Buffer<Float64>, right: Buffer<Float64>): Float64Buffer {
         require(right.size == left.size) {
             "The size of the first buffer ${left.size} should be the same as for second one: ${right.size} "
         }
@@ -62,9 +62,9 @@ public abstract class Float64BufferOps : BufferAlgebra<Double, Float64Field>, Ex
         } else Float64Buffer(DoubleArray(left.size) { left[it] + right[it] })
     }
 
-    override fun Buffer<Double>.plus(arg: Buffer<Double>): Float64Buffer = add(this, arg)
+    override fun Buffer<Float64>.plus(arg: Buffer<Float64>): Float64Buffer = add(this, arg)
 
-    override fun Buffer<Double>.minus(arg: Buffer<Double>): Float64Buffer {
+    override fun Buffer<Float64>.minus(arg: Buffer<Float64>): Float64Buffer {
         require(arg.size == this.size) {
             "The size of the first buffer ${this.size} should be the same as for second one: ${arg.size} "
         }
@@ -77,7 +77,7 @@ public abstract class Float64BufferOps : BufferAlgebra<Double, Float64Field>, Ex
     }
 
     //
-//    override fun multiply(a: Buffer<Double>, k: Number): RealBuffer {
+//    override fun multiply(a: Buffer<Float64>, k: Number): RealBuffer {
 //        val kValue = k.toDouble()
 //
 //        return if (a is RealBuffer) {
@@ -86,7 +86,7 @@ public abstract class Float64BufferOps : BufferAlgebra<Double, Float64Field>, Ex
 //        } else RealBuffer(DoubleArray(a.size) { a[it] * kValue })
 //    }
 //
-//    override fun divide(a: Buffer<Double>, k: Number): RealBuffer {
+//    override fun divide(a: Buffer<Float64>, k: Number): RealBuffer {
 //        val kValue = k.toDouble()
 //
 //        return if (a is RealBuffer) {
@@ -96,7 +96,7 @@ public abstract class Float64BufferOps : BufferAlgebra<Double, Float64Field>, Ex
 //    }
 
     @UnstableKMathAPI
-    override fun multiply(left: Buffer<Double>, right: Buffer<Double>): Float64Buffer {
+    override fun multiply(left: Buffer<Float64>, right: Buffer<Float64>): Float64Buffer {
         require(right.size == left.size) {
             "The size of the first buffer ${left.size} should be the same as for second one: ${right.size} "
         }
@@ -108,7 +108,7 @@ public abstract class Float64BufferOps : BufferAlgebra<Double, Float64Field>, Ex
         } else Float64Buffer(DoubleArray(left.size) { left[it] * right[it] })
     }
 
-    override fun divide(left: Buffer<Double>, right: Buffer<Double>): Float64Buffer {
+    override fun divide(left: Buffer<Float64>, right: Buffer<Float64>): Float64Buffer {
         require(right.size == left.size) {
             "The size of the first buffer ${left.size} should be the same as for second one: ${right.size} "
         }
@@ -120,39 +120,39 @@ public abstract class Float64BufferOps : BufferAlgebra<Double, Float64Field>, Ex
         } else Float64Buffer(DoubleArray(left.size) { left[it] / right[it] })
     }
 
-    override fun sin(arg: Buffer<Double>): Float64Buffer = arg.map { sin(it) }
+    override fun sin(arg: Buffer<Float64>): Float64Buffer = arg.map { sin(it) }
 
-    override fun cos(arg: Buffer<Double>): Float64Buffer = arg.map { cos(it) }
+    override fun cos(arg: Buffer<Float64>): Float64Buffer = arg.map { cos(it) }
 
-    override fun tan(arg: Buffer<Double>): Float64Buffer = arg.map { tan(it) }
+    override fun tan(arg: Buffer<Float64>): Float64Buffer = arg.map { tan(it) }
 
-    override fun asin(arg: Buffer<Double>): Float64Buffer = arg.map { asin(it) }
+    override fun asin(arg: Buffer<Float64>): Float64Buffer = arg.map { asin(it) }
 
-    override fun acos(arg: Buffer<Double>): Float64Buffer = arg.map { acos(it) }
+    override fun acos(arg: Buffer<Float64>): Float64Buffer = arg.map { acos(it) }
 
-    override fun atan(arg: Buffer<Double>): Float64Buffer = arg.map { atan(it) }
+    override fun atan(arg: Buffer<Float64>): Float64Buffer = arg.map { atan(it) }
 
-    override fun sinh(arg: Buffer<Double>): Float64Buffer = arg.map { sinh(it) }
+    override fun sinh(arg: Buffer<Float64>): Float64Buffer = arg.map { sinh(it) }
 
-    override fun cosh(arg: Buffer<Double>): Float64Buffer = arg.map { cosh(it) }
+    override fun cosh(arg: Buffer<Float64>): Float64Buffer = arg.map { cosh(it) }
 
-    override fun tanh(arg: Buffer<Double>): Float64Buffer = arg.map { tanh(it) }
+    override fun tanh(arg: Buffer<Float64>): Float64Buffer = arg.map { tanh(it) }
 
-    override fun asinh(arg: Buffer<Double>): Float64Buffer = arg.map { asinh(it) }
+    override fun asinh(arg: Buffer<Float64>): Float64Buffer = arg.map { asinh(it) }
 
-    override fun acosh(arg: Buffer<Double>): Float64Buffer = arg.map { acosh(it) }
+    override fun acosh(arg: Buffer<Float64>): Float64Buffer = arg.map { acosh(it) }
 
-    override fun atanh(arg: Buffer<Double>): Float64Buffer = arg.map { atanh(it) }
+    override fun atanh(arg: Buffer<Float64>): Float64Buffer = arg.map { atanh(it) }
 
-    override fun exp(arg: Buffer<Double>): Float64Buffer = arg.map { exp(it) }
+    override fun exp(arg: Buffer<Float64>): Float64Buffer = arg.map { exp(it) }
 
-    override fun ln(arg: Buffer<Double>): Float64Buffer = arg.map { ln(it) }
+    override fun ln(arg: Buffer<Float64>): Float64Buffer = arg.map { ln(it) }
 
-    override fun norm(arg: Buffer<Double>): Double = Float64L2Norm.norm(arg)
+    override fun norm(arg: Buffer<Float64>): Double = Float64L2Norm.norm(arg)
 
-    override fun scale(a: Buffer<Double>, value: Double): Float64Buffer = a.map { it * value }
+    override fun scale(a: Buffer<Float64>, value: Double): Float64Buffer = a.map { it * value }
 
-    override fun power(arg: Buffer<Double>, pow: Number): Buffer<Double> = if (pow is Int) {
+    override fun power(arg: Buffer<Float64>, pow: Number): Buffer<Float64> = if (pow is Int) {
         arg.map { it.pow(pow) }
     } else {
         arg.map { it.pow(pow.toDouble()) }
@@ -161,11 +161,11 @@ public abstract class Float64BufferOps : BufferAlgebra<Double, Float64Field>, Ex
     public companion object : Float64BufferOps()
 }
 
-public object Float64L2Norm : Norm<Point<Double>, Double> {
-    override fun norm(arg: Point<Double>): Double = sqrt(arg.fold(0.0) { acc: Double, d: Double -> acc + d.pow(2) })
+public object Float64L2Norm : Norm<Point<Float64>, Double> {
+    override fun norm(arg: Point<Float64>): Double = sqrt(arg.fold(0.0) { acc: Double, d: Double -> acc + d.pow(2) })
 }
 
-public fun Float64BufferOps.sum(buffer: Buffer<Double>): Double = buffer.reduce(Double::plus)
+public fun Float64BufferOps.sum(buffer: Buffer<Float64>): Double = buffer.reduce(Double::plus)
 
 /**
  * Sum of elements using given [conversion]
@@ -173,7 +173,7 @@ public fun Float64BufferOps.sum(buffer: Buffer<Double>): Double = buffer.reduce(
 public inline fun <T> Float64BufferOps.sumOf(buffer: Buffer<T>, conversion: (T) -> Double): Double =
     buffer.fold(0.0) { acc, value -> acc + conversion(value) }
 
-public fun Float64BufferOps.average(buffer: Buffer<Double>): Double = sum(buffer) / buffer.size
+public fun Float64BufferOps.average(buffer: Buffer<Float64>): Double = sum(buffer) / buffer.size
 
 /**
  * Average of elements using given [conversion]
@@ -181,14 +181,14 @@ public fun Float64BufferOps.average(buffer: Buffer<Double>): Double = sum(buffer
 public inline fun <T> Float64BufferOps.averageOf(buffer: Buffer<T>, conversion: (T) -> Double): Double =
     sumOf(buffer, conversion) / buffer.size
 
-public fun Float64BufferOps.dispersion(buffer: Buffer<Double>): Double {
+public fun Float64BufferOps.dispersion(buffer: Buffer<Float64>): Double {
     val av = average(buffer)
     return buffer.fold(0.0) { acc, value -> acc + (value - av).pow(2) } / buffer.size
 }
 
-public fun Float64BufferOps.std(buffer: Buffer<Double>): Double = sqrt(dispersion(buffer))
+public fun Float64BufferOps.std(buffer: Buffer<Float64>): Double = sqrt(dispersion(buffer))
 
-public fun Float64BufferOps.covariance(x: Buffer<Double>, y: Buffer<Double>): Double {
+public fun Float64BufferOps.covariance(x: Buffer<Float64>, y: Buffer<Float64>): Double {
     require(x.size == y.size) { "Expected buffers of the same size, but x.size == ${x.size} and y.size == ${y.size}" }
     val xMean = average(x)
     val yMean = average(y)

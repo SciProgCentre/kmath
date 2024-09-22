@@ -31,7 +31,7 @@ The code to run this looks like:
 
 ```kotlin
     specializedField.run {
-        var res: NDBuffer<Double> = one
+        var res: NDBuffer<Float64> = one
         repeat(n) {
             res += 1.0
         }
@@ -103,7 +103,7 @@ The boxing field produced by
 
 ```kotlin
     genericField.run {
-        var res: NDBuffer<Double> = one
+        var res: NDBuffer<Float64> = one
         repeat(n) {
             res += 1.0
         }

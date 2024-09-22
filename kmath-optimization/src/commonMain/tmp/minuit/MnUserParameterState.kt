@@ -33,7 +33,7 @@ class MnUserParameterState {
     private var theGCCValid = false
     private var theGlobalCC: MnGlobalCorrelationCoeff? = null
     private var theIntCovariance: MnUserCovariance
-    private var theIntParameters: MutableList<Double>
+    private var theIntParameters: MutableList<Float64>
     private var theNFcn = 0
     private var theParameters: MnUserParameters
     private var theValid: Boolean
@@ -43,7 +43,7 @@ class MnUserParameterState {
         theCovarianceValid = false
         theParameters = MnUserParameters()
         theCovariance = MnUserCovariance()
-        theIntParameters = java.util.ArrayList<Double>()
+        theIntParameters = java.util.ArrayList<Float64>()
         theIntCovariance = MnUserCovariance()
     }
 
@@ -57,7 +57,7 @@ class MnUserParameterState {
         theParameters = other.theParameters.copy()
         theCovariance = other.theCovariance
         theGlobalCC = other.theGlobalCC
-        theIntParameters = java.util.ArrayList<Double>(other.theIntParameters)
+        theIntParameters = java.util.ArrayList<Float64>(other.theIntParameters)
         theIntCovariance = other.theIntCovariance.copy()
     }
 
@@ -71,7 +71,7 @@ class MnUserParameterState {
         theParameters = MnUserParameters(par, err)
         theCovariance = MnUserCovariance()
         theGlobalCC = MnGlobalCorrelationCoeff()
-        theIntParameters = java.util.ArrayList<Double>(par.size)
+        theIntParameters = java.util.ArrayList<Float64>(par.size)
         for (i in par.indices) {
             theIntParameters.add(par[i])
         }
@@ -108,7 +108,7 @@ class MnUserParameterState {
         theCovarianceValid = true
         theCovariance = MnUserCovariance(cov, nrow)
         theGlobalCC = MnGlobalCorrelationCoeff()
-        theIntParameters = java.util.ArrayList<Double>(par.size)
+        theIntParameters = java.util.ArrayList<Float64>(par.size)
         theIntCovariance = MnUserCovariance(cov, nrow)
         val err = DoubleArray(par.size)
         for (i in par.indices) {
@@ -125,7 +125,7 @@ class MnUserParameterState {
         theCovarianceValid = true
         theCovariance = cov
         theGlobalCC = MnGlobalCorrelationCoeff()
-        theIntParameters = java.util.ArrayList<Double>(par.size)
+        theIntParameters = java.util.ArrayList<Float64>(par.size)
         theIntCovariance = cov.copy()
         require(!(theCovariance.nrow() !== variableParameters())) { "Bad covariance size" }
         val err = DoubleArray(par.size)
@@ -143,7 +143,7 @@ class MnUserParameterState {
         theParameters = par
         theCovariance = cov
         theGlobalCC = MnGlobalCorrelationCoeff()
-        theIntParameters = java.util.ArrayList<Double>()
+        theIntParameters = java.util.ArrayList<Float64>()
         theIntCovariance = cov.copy()
         theIntCovariance.scale(0.5)
         val i = 0
@@ -175,7 +175,7 @@ class MnUserParameterState {
         theParameters = MnUserParameters()
         theCovariance = MnUserCovariance()
         theGlobalCC = MnGlobalCorrelationCoeff()
-        theIntParameters = java.util.ArrayList<Double>()
+        theIntParameters = java.util.ArrayList<Float64>()
         theIntCovariance = MnUserCovariance()
         for (ipar in trafo.parameters()) {
             if (ipar.isConst()) {
@@ -442,7 +442,7 @@ class MnUserParameterState {
      * Minuit internal representation
      * @return
      */
-    fun intParameters(): List<Double> {
+    fun intParameters(): List<Float64> {
         return theIntParameters
     }
 

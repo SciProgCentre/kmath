@@ -9,6 +9,7 @@ import space.kscience.kmath.PerformancePitfall
 import space.kscience.kmath.nd.MutableStructure2D
 import space.kscience.kmath.nd.ShapeND
 import space.kscience.kmath.nd.linearSize
+import space.kscience.kmath.structures.Float64
 import space.kscience.kmath.structures.PermutedMutableBuffer
 import space.kscience.kmath.structures.permute
 
@@ -16,7 +17,7 @@ public class DoubleTensor2D(
     override val rowNum: Int,
     override val colNum: Int,
     source: OffsetDoubleBuffer,
-) : DoubleTensor(ShapeND(rowNum, colNum), source), MutableStructure2D<Double> {
+) : DoubleTensor(ShapeND(rowNum, colNum), source), MutableStructure2D<Float64> {
 
     override fun get(i: Int, j: Int): Double = source[i * colNum + j]
 
@@ -35,7 +36,7 @@ public class DoubleTensor2D(
 
 
     @OptIn(PerformancePitfall::class)
-    override val columns: List<PermutedMutableBuffer<Double>>
+    override val columns: List<PermutedMutableBuffer<Float64>>
         get() = List(colNum) { j ->
             val indices = IntArray(rowNum) { i -> j + i * colNum }
             source.permute(indices)

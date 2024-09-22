@@ -6,6 +6,7 @@
 package space.kscience.kmath.expressions
 
 import space.kscience.kmath.operations.*
+import space.kscience.kmath.structures.Float64
 import space.kscience.kmath.structures.MutableBufferFactory
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
@@ -197,5 +198,5 @@ public inline fun <T, A : ExtendedField<T>> A.expressionInExtendedField(
 ): Expression<T> = FunctionalExpressionExtendedField(this).block()
 
 public inline fun Float64Field.expression(
-    block: FunctionalExpressionExtendedField<Double, Float64Field>.() -> Expression<Double>,
-): Expression<Double> = FunctionalExpressionExtendedField(this).block()
+    block: FunctionalExpressionExtendedField<Double, Float64Field>.() -> Expression<Float64>,
+): Expression<Float64> = FunctionalExpressionExtendedField(this).block()

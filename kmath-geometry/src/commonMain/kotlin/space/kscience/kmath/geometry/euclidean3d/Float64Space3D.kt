@@ -113,7 +113,7 @@ public object Float64Space3D : GeometrySpace<Vector3D<Float64>, Double> {
     /**
      * Vector product with the right basis
      */
-    public infix fun Vector3D<Float64>.cross(other: Vector3D<Float64>): Vector3D<Double> = vectorProduct(this, other)
+    public infix fun Vector3D<Float64>.cross(other: Vector3D<Float64>): Vector3D<Float64> = vectorProduct(this, other)
 
     public val xAxis: Float64Vector3D = vector(1.0, 0.0, 0.0)
     public val yAxis: Float64Vector3D = vector(0.0, 1.0, 0.0)

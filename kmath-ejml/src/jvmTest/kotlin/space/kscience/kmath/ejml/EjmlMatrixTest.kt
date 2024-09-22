@@ -17,12 +17,16 @@ import space.kscience.kmath.linear.*
 import space.kscience.kmath.nd.StructureND
 import space.kscience.kmath.nd.toArray
 import space.kscience.kmath.operations.algebra
+import space.kscience.kmath.structures.Float64
+import space.kscience.kmath.testutils.assertStructureEquals
 import kotlin.random.Random
 import kotlin.random.asJavaRandom
 import kotlin.test.*
 
 internal fun <T : Any> assertMatrixEquals(expected: StructureND<T>, actual: StructureND<T>) {
-    assertTrue { StructureND.contentEquals(expected, actual) }
+    expected.elements().forEach { (index, value) ->
+        assertEquals(value, actual[index], "Structure element with index ${index.toList()} should be equal to $value but is ${actual[index]}")
+    }
 }
 
 @OptIn(UnstableKMathAPI::class)
@@ -63,7 +67,7 @@ internal class EjmlMatrixTest {
         val w = EjmlDoubleMatrix(m)
         val det: Double = w.getOrComputeAttribute(Determinant) ?: fail()
         assertEquals(CommonOps_DDRM.det(m), det)
-        val lup: LupDecomposition<Double> = w.getOrComputeAttribute(LUP) ?: fail()
+        val lup: LupDecomposition<Float64> = w.getOrComputeAttribute(LUP) ?: fail()
 
         val ludecompositionF64 = DecompositionFactory_DDRM.lu(m.numRows, m.numCols)
             .also { it.decompose(m.copy()) }
@@ -103,5 +107,16 @@ internal class EjmlMatrixTest {
         println(StructureND.toString(res))
 
         assertTrue { StructureND.contentEquals(one(dim, dim), res, 1e-3) }
+    }
+
+    @Test
+    fun eigenValueDecomposition() = EjmlLinearSpaceDDRM {
+        val dim = 46
+        val u = buildMatrix(dim, dim) { i, j -> if (i <= j) random.nextDouble() else 0.0 }
+        val matrix = buildMatrix(dim, dim) { row, col ->
+            if (row >= col) u[row, col] else u[col, row]
+        }
+        val eigen = matrix.getOrComputeAttribute(EIG) ?: fail()
+        assertStructureEquals(matrix, eigen.v dot eigen.d dot eigen.v.transposed())
     }
 }

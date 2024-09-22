@@ -7,6 +7,7 @@ package space.kscience.kmath.commons.integration
 import org.apache.commons.math3.analysis.integration.gauss.GaussIntegrator
 import org.apache.commons.math3.analysis.integration.gauss.GaussIntegratorFactory
 import space.kscience.kmath.integration.*
+import space.kscience.kmath.structures.Float64
 
 /**
  * A simple one-pass integrator based on Gauss rule
@@ -14,9 +15,9 @@ import space.kscience.kmath.integration.*
 public class CMGaussRuleIntegrator(
     private val numpoints: Int,
     private var type: GaussRule = GaussRule.LEGENDRE,
-) : UnivariateIntegrator<Double> {
+) : UnivariateIntegrator<Float64> {
 
-    override fun integrate(integrand: UnivariateIntegrand<Double>): UnivariateIntegrand<Double> {
+    override fun integrate(integrand: UnivariateIntegrand<Float64>): UnivariateIntegrand<Float64> {
         val range = integrand[IntegrationRange]
             ?: error("Integration range is not provided")
         val integrator: GaussIntegrator = getIntegrator(range)
@@ -28,7 +29,7 @@ public class CMGaussRuleIntegrator(
         }
     }
 
-    private fun getIntegrator(range: ClosedRange<Double>): GaussIntegrator {
+    private fun getIntegrator(range: ClosedRange<Float64>): GaussIntegrator {
         return when (type) {
             GaussRule.LEGENDRE -> factory.legendre(
                 numpoints,
@@ -77,7 +78,7 @@ public class CMGaussRuleIntegrator(
         private val factory: GaussIntegratorFactory = GaussIntegratorFactory()
 
         public fun integrate(
-            range: ClosedRange<Double>,
+            range: ClosedRange<Float64>,
             numPoints: Int = 100,
             type: GaussRule = GaussRule.LEGENDRE,
             function: (Double) -> Double,

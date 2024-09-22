@@ -8,6 +8,7 @@ package space.kscience.kmath.misc
 import space.kscience.kmath.operations.Ring
 import space.kscience.kmath.operations.invoke
 import space.kscience.kmath.structures.Buffer
+import space.kscience.kmath.structures.Float64
 import kotlin.jvm.JvmName
 
 /**
@@ -47,7 +48,7 @@ public fun <T> Iterable<T>.cumulativeSum(ring: Ring<T>): Iterable<T> =
     ring { cumulative(zero) { element: T, sum: T -> sum + element } }
 
 @JvmName("cumulativeSumOfDouble")
-public fun Iterable<Double>.cumulativeSum(): Iterable<Double> = cumulative(0.0) { element, sum -> sum + element }
+public fun Iterable<Float64>.cumulativeSum(): Iterable<Float64> = cumulative(0.0) { element, sum -> sum + element }
 
 @JvmName("cumulativeSumOfInt")
 public fun Iterable<Int>.cumulativeSum(): Iterable<Int> = cumulative(0) { element, sum -> sum + element }
@@ -59,7 +60,7 @@ public fun <T> Sequence<T>.cumulativeSum(ring: Ring<T>): Sequence<T> =
     ring { cumulative(zero) { element: T, sum: T -> sum + element } }
 
 @JvmName("cumulativeSumOfDouble")
-public fun Sequence<Double>.cumulativeSum(): Sequence<Double> = cumulative(0.0) { element, sum -> sum + element }
+public fun Sequence<Float64>.cumulativeSum(): Sequence<Float64> = cumulative(0.0) { element, sum -> sum + element }
 
 @JvmName("cumulativeSumOfInt")
 public fun Sequence<Int>.cumulativeSum(): Sequence<Int> = cumulative(0) { element, sum -> sum + element }
@@ -71,7 +72,7 @@ public fun <T> List<T>.cumulativeSum(group: Ring<T>): List<T> =
     group { cumulative(zero) { element: T, sum: T -> sum + element } }
 
 @JvmName("cumulativeSumOfDouble")
-public fun List<Double>.cumulativeSum(): List<Double> = cumulative(0.0) { element, sum -> sum + element }
+public fun List<Float64>.cumulativeSum(): List<Float64> = cumulative(0.0) { element, sum -> sum + element }
 
 @JvmName("cumulativeSumOfInt")
 public fun List<Int>.cumulativeSum(): List<Int> = cumulative(0) { element, sum -> sum + element }

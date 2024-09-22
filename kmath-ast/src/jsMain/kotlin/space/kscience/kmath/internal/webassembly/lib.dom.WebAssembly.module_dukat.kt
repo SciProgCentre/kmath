@@ -6,10 +6,6 @@
 @file:JsQualifier("WebAssembly")
 
 @file:Suppress(
-    "INTERFACE_WITH_SUPERCLASS",
-    "OVERRIDING_FINAL_MEMBER",
-    "RETURN_TYPE_MISMATCH_ON_OVERRIDE",
-    "NO_EXPLICIT_VISIBILITY_IN_API_MODE_WARNING",
     "ClassName",
 )
 
@@ -22,78 +18,34 @@ import org.w3c.fetch.Response
 import space.kscience.kmath.internal.tsstdlib.PromiseLike
 import kotlin.js.Promise
 
-@Suppress("NESTED_CLASS_IN_EXTERNAL_INTERFACE")
-internal external interface CompileError {
-    companion object {
-        var prototype: CompileError
-    }
-}
+internal external interface CompileError 
 
-@Suppress("NESTED_CLASS_IN_EXTERNAL_INTERFACE")
 internal external interface Global {
     var value: Any
     fun valueOf(): Any
-
-    companion object {
-        var prototype: Global
-    }
 }
 
-@Suppress("NESTED_CLASS_IN_EXTERNAL_INTERFACE")
 @JsName("Instance")
 internal external interface Instance1 {
     var exports: Exports
-
-    companion object {
-        var prototype: Instance
-    }
 }
 
-@Suppress("NESTED_CLASS_IN_EXTERNAL_INTERFACE")
-internal external interface LinkError {
-    companion object {
-        var prototype: LinkError
-    }
-}
+internal external interface LinkError
 
-@Suppress("NESTED_CLASS_IN_EXTERNAL_INTERFACE")
 internal external interface Memory {
     var buffer: ArrayBuffer
     fun grow(delta: Number): Number
-
-    companion object {
-        var prototype: Memory
-    }
 }
 
-@Suppress("NESTED_CLASS_IN_EXTERNAL_INTERFACE")
-@JsName("Module")
-internal external interface Module1 {
-    companion object {
-        var prototype: Module
-        fun customSections(moduleObject: Module, sectionName: String): Array<ArrayBuffer>
-        fun exports(moduleObject: Module): Array<ModuleExportDescriptor>
-        fun imports(moduleObject: Module): Array<ModuleImportDescriptor>
-    }
-}
 
-@Suppress("NESTED_CLASS_IN_EXTERNAL_INTERFACE")
-internal external interface RuntimeError {
-    companion object {
-        var prototype: RuntimeError
-    }
-}
+internal external interface RuntimeError
 
-@Suppress("NESTED_CLASS_IN_EXTERNAL_INTERFACE")
+
 internal external interface Table {
     var length: Number
     fun get(index: Number): Function<*>?
     fun grow(delta: Number): Number
     fun set(index: Number, value: Function<*>?)
-
-    companion object {
-        var prototype: Table
-    }
 }
 
 internal external interface GlobalDescriptor {

@@ -1,13 +1,14 @@
-@file:Suppress("UNUSED_VARIABLE")
-
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
-import space.kscience.kmath.benchmarks.addBenchmarkProperties
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.fasterxml.jackson.module.kotlin.readValue
+import kotlinx.benchmark.gradle.BenchmarksExtension
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.util.*
 
 plugins {
     kotlin("multiplatform")
     alias(spclibs.plugins.kotlin.plugin.allopen)
-    id("org.jetbrains.kotlinx.benchmark")
+    alias(spclibs.plugins.kotlinx.benchmark)
 }
 
 allOpen.annotation("org.openjdk.jmh.annotations.State")
@@ -16,8 +17,6 @@ sourceSets.register("benchmarks")
 repositories {
     mavenCentral()
 }
-
-val multikVersion: String by rootProject.extra
 
 kotlin {
     jvm()
@@ -47,7 +46,7 @@ kotlin {
                 implementation(project(":kmath-for-real"))
                 implementation(project(":kmath-tensors"))
                 implementation(project(":kmath-multik"))
-                implementation("org.jetbrains.kotlinx:multik-default:$multikVersion")
+                implementation(libs.multik.default)
                 implementation(spclibs.kotlinx.benchmark.runtime)
             }
         }
@@ -153,23 +152,130 @@ benchmark {
     }
 }
 
-kotlin.sourceSets.all {
-    with(languageSettings) {
-        optIn("kotlin.contracts.ExperimentalContracts")
-        optIn("kotlin.ExperimentalUnsignedTypes")
-        optIn("space.kscience.kmath.UnstableKMathAPI")
+kotlin {
+    jvmToolchain(11)
+    compilerOptions {
+        optIn.addAll(
+            "space.kscience.kmath.UnstableKMathAPI"
+        )
     }
 }
 
-tasks.withType<KotlinJvmCompile> {
-    compilerOptions {
-        jvmTarget.set(JvmTarget.JVM_11)
-        freeCompilerArgs.addAll("-Xjvm-default=all", "-Xlambdas=indy")
+
+private data class JmhReport(
+    val jmhVersion: String,
+    val benchmark: String,
+    val mode: String,
+    val threads: Int,
+    val forks: Int,
+    val jvm: String,
+    val jvmArgs: List<String>,
+    val jdkVersion: String,
+    val vmName: String,
+    val vmVersion: String,
+    val warmupIterations: Int,
+    val warmupTime: String,
+    val warmupBatchSize: Int,
+    val measurementIterations: Int,
+    val measurementTime: String,
+    val measurementBatchSize: Int,
+    val params: Map<String, String> = emptyMap(),
+    val primaryMetric: PrimaryMetric,
+    val secondaryMetrics: Map<String, SecondaryMetric>,
+) {
+    interface Metric {
+        val score: Double
+        val scoreError: Double
+        val scoreConfidence: List<Double>
+        val scorePercentiles: Map<Double, Double>
+        val scoreUnit: String
     }
+
+    data class PrimaryMetric(
+        override val score: Double,
+        override val scoreError: Double,
+        override val scoreConfidence: List<Double>,
+        override val scorePercentiles: Map<Double, Double>,
+        override val scoreUnit: String,
+        val rawDataHistogram: List<List<List<List<Double>>>>? = null,
+        val rawData: List<List<Double>>? = null,
+    ) : Metric
+
+    data class SecondaryMetric(
+        override val score: Double,
+        override val scoreError: Double,
+        override val scoreConfidence: List<Double>,
+        override val scorePercentiles: Map<Double, Double>,
+        override val scoreUnit: String,
+        val rawData: List<List<Double>>,
+    ) : Metric
 }
 
 readme {
     maturity = space.kscience.gradle.Maturity.EXPERIMENTAL
-}
 
-addBenchmarkProperties()
+    val jsonMapper = jacksonObjectMapper()
+
+    fun noun(number: Number, singular: String, plural: String) = if (number.toLong() == 1L) singular else plural
+
+    extensions.findByType(BenchmarksExtension::class.java)?.configurations?.forEach { cfg ->
+        val propertyName =
+            "benchmark${cfg.name.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }}"
+
+        logger.info("Processing benchmark data from benchmark ${cfg.name} into readme property $propertyName")
+
+        val launches = layout.buildDirectory.dir("reports/benchmarks/${cfg.name}").get().asFile
+        if (!launches.exists()) return@forEach
+
+        property(propertyName) {
+            val resDirectory = launches.listFiles()?.maxByOrNull {
+                LocalDateTime.parse(it.name).atZone(ZoneId.systemDefault()).toInstant()
+            }
+
+            if (resDirectory == null || !(resDirectory.resolve("jvm.json")).exists()) {
+                "> **Can't find appropriate benchmark data. Try generating readme files after running benchmarks**."
+            } else {
+                val reports: List<JmhReport> =
+                    jsonMapper.readValue<List<JmhReport>>(resDirectory.resolve("jvm.json"))
+
+                buildString {
+                    appendLine("## Report for benchmark configuration <code>${cfg.name}</code>")
+                    appendLine()
+                    val first = reports.first()
+
+                    appendLine("* Run on ${first.vmName} (build ${first.vmVersion}) with Java process:")
+                    appendLine()
+                    appendLine("```")
+                    appendLine(
+                        "${first.jvm} ${
+                            first.jvmArgs.joinToString(" ")
+                        }"
+                    )
+                    appendLine("```")
+
+                    appendLine(
+                        "* JMH ${first.jmhVersion} was used in `${first.mode}` mode with ${first.warmupIterations} warmup ${
+                            noun(first.warmupIterations, "iteration", "iterations")
+                        } by ${first.warmupTime} and ${first.measurementIterations} measurement ${
+                            noun(first.measurementIterations, "iteration", "iterations")
+                        } by ${first.measurementTime}."
+                    )
+
+                    reports.groupBy { it.benchmark.substringBeforeLast(".") }.forEach { (cl, compare) ->
+                        appendLine("### [${cl.substringAfterLast(".")}](src/jvmMain/kotlin/${cl.replace(".","/")}.kt)")
+                        appendLine()
+                        appendLine("| Benchmark | Score |")
+                        appendLine("|:---------:|:-----:|")
+                        compare.forEach { report ->
+                            val benchmarkName = report.benchmark.substringAfterLast(".")
+                            val score = String.format("%.2G", report.primaryMetric.score)
+                            val error = String.format("%.2G", report.primaryMetric.scoreError)
+
+                            appendLine("|`$benchmarkName`|$score &plusmn; $error ${report.primaryMetric.scoreUnit}|")
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

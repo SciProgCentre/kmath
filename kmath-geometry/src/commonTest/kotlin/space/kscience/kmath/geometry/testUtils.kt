@@ -9,15 +9,15 @@ import space.kscience.kmath.structures.Float64
 import kotlin.math.abs
 import kotlin.test.assertEquals
 
-fun ClosedRange<Double>.generateList(step: Double): List<Double> = generateSequence(start) { previous ->
+fun ClosedRange<Float64>.generateList(step: Double): List<Float64> = generateSequence(start) { previous ->
     if (previous == Double.POSITIVE_INFINITY) return@generateSequence null
     val next = previous + step
     if (next > endInclusive) null else next
 }.toList()
 
 fun grid(
-    xRange: ClosedRange<Double>,
-    yRange: ClosedRange<Double>,
+    xRange: ClosedRange<Float64>,
+    yRange: ClosedRange<Float64>,
     step: Double,
 ): List<Pair<Double, Double>> {
     val xs = xRange.generateList(step)

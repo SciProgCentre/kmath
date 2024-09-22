@@ -6,18 +6,19 @@
 package space.kscience.kmath.linear
 
 import space.kscience.kmath.real.*
+import space.kscience.kmath.structures.Float64
 import space.kscience.kmath.structures.Float64Buffer
 
 fun main() {
     val x0 = DoubleVector(0.0, 0.0, 0.0)
     val sigma = DoubleVector(1.0, 1.0, 1.0)
 
-    val gaussian: (Point<Double>) -> Double = { x ->
+    val gaussian: (Point<Float64>) -> Double = { x ->
         require(x.size == x0.size)
         kotlin.math.exp(-((x - x0) / sigma).square().sum())
     }
 
-    fun ((Point<Double>) -> Double).grad(x: Point<Double>): Point<Double> {
+    fun ((Point<Float64>) -> Double).grad(x: Point<Float64>): Point<Float64> {
         require(x.size == x0.size)
         return Float64Buffer(x.size) { i ->
             val h = sigma[i] / 5

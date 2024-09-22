@@ -2,8 +2,8 @@ import space.kscience.gradle.useApache2Licence
 import space.kscience.gradle.useSPCTeam
 
 plugins {
-    id("space.kscience.gradle.project")
-    id("org.jetbrains.kotlinx.kover") version "0.7.6"
+    alias(spclibs.plugins.kscience.project)
+    alias(spclibs.plugins.kotlinx.kover)
 }
 
 val attributesVersion by extra("0.2.0")
@@ -70,5 +70,3 @@ ksciencePublish {
 }
 
 apiValidation.nonPublicMarkers.add("space.kscience.kmath.UnstableKMathAPI")
-
-val multikVersion by extra("0.2.3")

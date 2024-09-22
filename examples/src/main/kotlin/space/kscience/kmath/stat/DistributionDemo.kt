@@ -10,13 +10,14 @@ import space.kscience.kmath.chains.Chain
 import space.kscience.kmath.chains.combineWithState
 import space.kscience.kmath.distributions.NormalDistribution
 import space.kscience.kmath.random.RandomGenerator
+import space.kscience.kmath.structures.Float64
 
 private data class AveragingChainState(var num: Int = 0, var value: Double = 0.0)
 
 /**
  * Averaging.
  */
-private fun Chain<Double>.mean(): Chain<Double> = combineWithState(AveragingChainState(), { it.copy() }) { chain ->
+private fun Chain<Float64>.mean(): Chain<Float64> = combineWithState(AveragingChainState(), { it.copy() }) { chain ->
     val next = chain.next()
     num++
     value += next

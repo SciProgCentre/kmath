@@ -8,6 +8,7 @@ package space.kscience.kmath.nd
 import space.kscience.kmath.PerformancePitfall
 import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.operations.*
+import space.kscience.kmath.structures.Float64
 import space.kscience.kmath.structures.Float64Buffer
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
@@ -20,7 +21,7 @@ import kotlin.math.pow as kpow
 public class Float64BufferND(
     indexes: ShapeIndexer,
     override val buffer: Float64Buffer,
-) : MutableBufferND<Double>(indexes, buffer), MutableStructureNDOfDouble {
+) : MutableBufferND<Float64>(indexes, buffer), MutableStructureNDOfDouble {
 
     override fun getDouble(index: IntArray): Double = buffer[indices.offset(index)]
 
@@ -30,11 +31,11 @@ public class Float64BufferND(
 }
 
 
-public sealed class Floa64FieldOpsND : BufferedFieldOpsND<Double, Float64Field>(Float64Field.bufferAlgebra),
-    ScaleOperations<StructureND<Double>>, ExtendedFieldOps<StructureND<Double>> {
+public sealed class Floa64FieldOpsND : BufferedFieldOpsND<Float64, Float64Field>(Float64Field.bufferAlgebra),
+    ScaleOperations<StructureND<Float64>>, ExtendedFieldOps<StructureND<Float64>> {
 
     @OptIn(PerformancePitfall::class)
-    override fun StructureND<Double>.toBufferND(): Float64BufferND = when (this) {
+    override fun StructureND<Float64>.toBufferND(): Float64BufferND = when (this) {
         is Float64BufferND -> this
         else -> {
             val indexer = indexerBuilder(shape)
@@ -64,16 +65,16 @@ public sealed class Floa64FieldOpsND : BufferedFieldOpsND<Double, Float64Field>(
     }
 
     @OptIn(PerformancePitfall::class)
-    override fun StructureND<Double>.map(transform: Float64Field.(Double) -> Double): BufferND<Double> =
+    override fun StructureND<Float64>.map(transform: Float64Field.(Double) -> Double): BufferND<Float64> =
         mapInline(toBufferND()) { Float64Field.transform(it) }
 
 
     @OptIn(PerformancePitfall::class)
     override fun zip(
-        left: StructureND<Double>,
-        right: StructureND<Double>,
+        left: StructureND<Float64>,
+        right: StructureND<Float64>,
         transform: Float64Field.(Double, Double) -> Double,
-    ): BufferND<Double> = zipInline(left.toBufferND(), right.toBufferND()) { l, r -> Float64Field.transform(l, r) }
+    ): BufferND<Float64> = zipInline(left.toBufferND(), right.toBufferND()) { l, r -> Float64Field.transform(l, r) }
 
     override fun mutableStructureND(shape: ShapeND, initializer: Float64Field.(IntArray) -> Double): Float64BufferND {
         val indexer = indexerBuilder(shape)
@@ -85,102 +86,102 @@ public sealed class Floa64FieldOpsND : BufferedFieldOpsND<Double, Float64Field>(
         )
     }
 
-    override fun add(left: StructureND<Double>, right: StructureND<Double>): Float64BufferND =
+    override fun add(left: StructureND<Float64>, right: StructureND<Float64>): Float64BufferND =
         zipInline(left.toBufferND(), right.toBufferND()) { l, r -> l + r }
 
-    override fun multiply(left: StructureND<Double>, right: StructureND<Double>): Float64BufferND =
+    override fun multiply(left: StructureND<Float64>, right: StructureND<Float64>): Float64BufferND =
         zipInline(left.toBufferND(), right.toBufferND()) { l, r -> l * r }
 
-    override fun StructureND<Double>.unaryMinus(): Float64BufferND = mapInline(toBufferND()) { -it }
+    override fun StructureND<Float64>.unaryMinus(): Float64BufferND = mapInline(toBufferND()) { -it }
 
-    override fun StructureND<Double>.div(arg: StructureND<Double>): Float64BufferND =
+    override fun StructureND<Float64>.div(arg: StructureND<Float64>): Float64BufferND =
         zipInline(toBufferND(), arg.toBufferND()) { l, r -> l / r }
 
-    override fun divide(left: StructureND<Double>, right: StructureND<Double>): Float64BufferND =
+    override fun divide(left: StructureND<Float64>, right: StructureND<Float64>): Float64BufferND =
         zipInline(left.toBufferND(), right.toBufferND()) { l: Double, r: Double -> l / r }
 
-    override fun StructureND<Double>.div(arg: Double): Float64BufferND =
+    override fun StructureND<Float64>.div(arg: Double): Float64BufferND =
         mapInline(toBufferND()) { it / arg }
 
-    override fun Double.div(arg: StructureND<Double>): Float64BufferND =
+    override fun Double.div(arg: StructureND<Float64>): Float64BufferND =
         mapInline(arg.toBufferND()) { this / it }
 
-    override fun StructureND<Double>.unaryPlus(): Float64BufferND = toBufferND()
+    override fun StructureND<Float64>.unaryPlus(): Float64BufferND = toBufferND()
 
-    override fun StructureND<Double>.plus(arg: StructureND<Double>): Float64BufferND =
+    override fun StructureND<Float64>.plus(arg: StructureND<Float64>): Float64BufferND =
         zipInline(toBufferND(), arg.toBufferND()) { l: Double, r: Double -> l + r }
 
-    override fun StructureND<Double>.minus(arg: StructureND<Double>): Float64BufferND =
+    override fun StructureND<Float64>.minus(arg: StructureND<Float64>): Float64BufferND =
         zipInline(toBufferND(), arg.toBufferND()) { l: Double, r: Double -> l - r }
 
-    override fun StructureND<Double>.times(arg: StructureND<Double>): Float64BufferND =
+    override fun StructureND<Float64>.times(arg: StructureND<Float64>): Float64BufferND =
         zipInline(toBufferND(), arg.toBufferND()) { l: Double, r: Double -> l * r }
 
-    override fun StructureND<Double>.times(k: Number): Float64BufferND =
+    override fun StructureND<Float64>.times(k: Number): Float64BufferND =
         mapInline(toBufferND()) { it * k.toDouble() }
 
-    override fun StructureND<Double>.div(k: Number): Float64BufferND =
+    override fun StructureND<Float64>.div(k: Number): Float64BufferND =
         mapInline(toBufferND()) { it / k.toDouble() }
 
-    override fun Number.times(arg: StructureND<Double>): Float64BufferND = arg * this
+    override fun Number.times(arg: StructureND<Float64>): Float64BufferND = arg * this
 
-    override fun StructureND<Double>.plus(arg: Double): Float64BufferND = mapInline(toBufferND()) { it + arg }
+    override fun StructureND<Float64>.plus(arg: Double): Float64BufferND = mapInline(toBufferND()) { it + arg }
 
-    override fun StructureND<Double>.minus(arg: Double): StructureND<Double> = mapInline(toBufferND()) { it - arg }
+    override fun StructureND<Float64>.minus(arg: Double): StructureND<Float64> = mapInline(toBufferND()) { it - arg }
 
-    override fun Double.plus(arg: StructureND<Double>): StructureND<Double> = arg + this
+    override fun Double.plus(arg: StructureND<Float64>): StructureND<Float64> = arg + this
 
-    override fun Double.minus(arg: StructureND<Double>): StructureND<Double> = mapInline(arg.toBufferND()) { this - it }
+    override fun Double.minus(arg: StructureND<Float64>): StructureND<Float64> = mapInline(arg.toBufferND()) { this - it }
 
-    override fun scale(a: StructureND<Double>, value: Double): Float64BufferND =
+    override fun scale(a: StructureND<Float64>, value: Double): Float64BufferND =
         mapInline(a.toBufferND()) { it * value }
 
-    override fun exp(arg: StructureND<Double>): Float64BufferND =
+    override fun exp(arg: StructureND<Float64>): Float64BufferND =
         mapInline(arg.toBufferND()) { kotlin.math.exp(it) }
 
-    override fun ln(arg: StructureND<Double>): Float64BufferND =
+    override fun ln(arg: StructureND<Float64>): Float64BufferND =
         mapInline(arg.toBufferND()) { kotlin.math.ln(it) }
 
-    override fun sin(arg: StructureND<Double>): Float64BufferND =
+    override fun sin(arg: StructureND<Float64>): Float64BufferND =
         mapInline(arg.toBufferND()) { kotlin.math.sin(it) }
 
-    override fun cos(arg: StructureND<Double>): Float64BufferND =
+    override fun cos(arg: StructureND<Float64>): Float64BufferND =
         mapInline(arg.toBufferND()) { kotlin.math.cos(it) }
 
-    override fun tan(arg: StructureND<Double>): Float64BufferND =
+    override fun tan(arg: StructureND<Float64>): Float64BufferND =
         mapInline(arg.toBufferND()) { kotlin.math.tan(it) }
 
-    override fun asin(arg: StructureND<Double>): Float64BufferND =
+    override fun asin(arg: StructureND<Float64>): Float64BufferND =
         mapInline(arg.toBufferND()) { kotlin.math.asin(it) }
 
-    override fun acos(arg: StructureND<Double>): Float64BufferND =
+    override fun acos(arg: StructureND<Float64>): Float64BufferND =
         mapInline(arg.toBufferND()) { kotlin.math.acos(it) }
 
-    override fun atan(arg: StructureND<Double>): Float64BufferND =
+    override fun atan(arg: StructureND<Float64>): Float64BufferND =
         mapInline(arg.toBufferND()) { kotlin.math.atan(it) }
 
-    override fun sinh(arg: StructureND<Double>): Float64BufferND =
+    override fun sinh(arg: StructureND<Float64>): Float64BufferND =
         mapInline(arg.toBufferND()) { kotlin.math.sinh(it) }
 
-    override fun cosh(arg: StructureND<Double>): Float64BufferND =
+    override fun cosh(arg: StructureND<Float64>): Float64BufferND =
         mapInline(arg.toBufferND()) { kotlin.math.cosh(it) }
 
-    override fun tanh(arg: StructureND<Double>): Float64BufferND =
+    override fun tanh(arg: StructureND<Float64>): Float64BufferND =
         mapInline(arg.toBufferND()) { kotlin.math.tanh(it) }
 
-    override fun asinh(arg: StructureND<Double>): Float64BufferND =
+    override fun asinh(arg: StructureND<Float64>): Float64BufferND =
         mapInline(arg.toBufferND()) { kotlin.math.asinh(it) }
 
-    override fun acosh(arg: StructureND<Double>): Float64BufferND =
+    override fun acosh(arg: StructureND<Float64>): Float64BufferND =
         mapInline(arg.toBufferND()) { kotlin.math.acosh(it) }
 
-    override fun atanh(arg: StructureND<Double>): Float64BufferND =
+    override fun atanh(arg: StructureND<Float64>): Float64BufferND =
         mapInline(arg.toBufferND()) { kotlin.math.atanh(it) }
 
     override fun power(
-        arg: StructureND<Double>,
+        arg: StructureND<Float64>,
         pow: Number,
-    ): StructureND<Double> = if (pow is Int) {
+    ): StructureND<Float64> = if (pow is Int) {
         mapInline(arg.toBufferND()) { it.pow(pow) }
     } else {
         mapInline(arg.toBufferND()) { it.pow(pow.toDouble()) }
@@ -191,18 +192,18 @@ public sealed class Floa64FieldOpsND : BufferedFieldOpsND<Double, Float64Field>(
 
 @OptIn(UnstableKMathAPI::class)
 public class Float64FieldND(override val shape: ShapeND) :
-    Floa64FieldOpsND(), FieldND<Double, Float64Field>, NumbersAddOps<StructureND<Double>>,
-    ExtendedField<StructureND<Double>> {
+    Floa64FieldOpsND(), FieldND<Double, Float64Field>, NumbersAddOps<StructureND<Float64>>,
+    ExtendedField<StructureND<Float64>> {
 
-    override fun power(arg: StructureND<Double>, pow: UInt): Float64BufferND = mapInline(arg.toBufferND()) {
+    override fun power(arg: StructureND<Float64>, pow: UInt): Float64BufferND = mapInline(arg.toBufferND()) {
         it.kpow(pow.toInt())
     }
 
-    override fun power(arg: StructureND<Double>, pow: Int): Float64BufferND = mapInline(arg.toBufferND()) {
+    override fun power(arg: StructureND<Float64>, pow: Int): Float64BufferND = mapInline(arg.toBufferND()) {
         it.kpow(pow)
     }
 
-    override fun power(arg: StructureND<Double>, pow: Number): Float64BufferND = if (pow.isInteger()) {
+    override fun power(arg: StructureND<Float64>, pow: Number): Float64BufferND = if (pow.isInteger()) {
         power(arg, pow.toInt())
     } else {
         val dpow = pow.toDouble()
@@ -212,17 +213,17 @@ public class Float64FieldND(override val shape: ShapeND) :
         }
     }
 
-    override fun sinh(arg: StructureND<Double>): Float64BufferND = super<Floa64FieldOpsND>.sinh(arg)
+    override fun sinh(arg: StructureND<Float64>): Float64BufferND = super<Floa64FieldOpsND>.sinh(arg)
 
-    override fun cosh(arg: StructureND<Double>): Float64BufferND = super<Floa64FieldOpsND>.cosh(arg)
+    override fun cosh(arg: StructureND<Float64>): Float64BufferND = super<Floa64FieldOpsND>.cosh(arg)
 
-    override fun tanh(arg: StructureND<Double>): Float64BufferND = super<Floa64FieldOpsND>.tan(arg)
+    override fun tanh(arg: StructureND<Float64>): Float64BufferND = super<Floa64FieldOpsND>.tan(arg)
 
-    override fun asinh(arg: StructureND<Double>): Float64BufferND = super<Floa64FieldOpsND>.asinh(arg)
+    override fun asinh(arg: StructureND<Float64>): Float64BufferND = super<Floa64FieldOpsND>.asinh(arg)
 
-    override fun acosh(arg: StructureND<Double>): Float64BufferND = super<Floa64FieldOpsND>.acosh(arg)
+    override fun acosh(arg: StructureND<Float64>): Float64BufferND = super<Floa64FieldOpsND>.acosh(arg)
 
-    override fun atanh(arg: StructureND<Double>): Float64BufferND = super<Floa64FieldOpsND>.atanh(arg)
+    override fun atanh(arg: StructureND<Float64>): Float64BufferND = super<Floa64FieldOpsND>.atanh(arg)
 
     override fun number(value: Number): Float64BufferND {
         val d = value.toDouble() // minimize conversions

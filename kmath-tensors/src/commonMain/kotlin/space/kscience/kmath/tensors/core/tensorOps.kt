@@ -8,6 +8,7 @@ package space.kscience.kmath.tensors.core
 import space.kscience.kmath.nd.*
 import space.kscience.kmath.operations.covariance
 import space.kscience.kmath.structures.Buffer
+import space.kscience.kmath.structures.Float64
 import space.kscience.kmath.structures.Float64Buffer
 import space.kscience.kmath.tensors.api.Tensor
 import space.kscience.kmath.tensors.core.internal.*
@@ -44,12 +45,12 @@ public fun DoubleTensorAlgebra.randomNormalLike(structure: WithShape, seed: Long
  * @param tensors the [List] of tensors with same shapes to concatenate
  * @return tensor with concatenation result
  */
-public fun stack(tensors: List<Tensor<Double>>): DoubleTensor {
+public fun stack(tensors: List<Tensor<Float64>>): DoubleTensor {
     check(tensors.isNotEmpty()) { "List must have at least 1 element" }
     val shape = tensors[0].shape
     check(tensors.all { it.shape == shape }) { "Tensors must have same shapes" }
     val resShape = ShapeND(tensors.size) + shape
-//        val resBuffer: List<Double> = tensors.flatMap {
+//        val resBuffer: List<Float64> = tensors.flatMap {
 //            it.asDoubleTensor().source.array.drop(it.asDoubleTensor().bufferStart)
 //                .take(it.asDoubleTensor().linearSize)
 //        }
@@ -67,7 +68,7 @@ public fun stack(tensors: List<Tensor<Double>>): DoubleTensor {
  * The `pivots`  has the shape ``(∗, min(m, n))``. `pivots` stores all the intermediate transpositions of rows.
  */
 public fun DoubleTensorAlgebra.luFactor(
-    structureND: StructureND<Double>,
+    structureND: StructureND<Float64>,
     epsilon: Double = 1e-9,
 ): Pair<DoubleTensor, IntTensor> =
     computeLU(structureND, epsilon)
@@ -86,7 +87,7 @@ public fun DoubleTensorAlgebra.luFactor(
  * @return triple of `P`, `L` and `U` tensors
  */
 public fun DoubleTensorAlgebra.luPivot(
-    luTensor: StructureND<Double>,
+    luTensor: StructureND<Float64>,
     pivotsTensor: Tensor<Int>,
 ): Triple<DoubleTensor, DoubleTensor, DoubleTensor> {
     checkSquareMatrix(luTensor.shape)
@@ -130,7 +131,7 @@ public fun DoubleTensorAlgebra.luPivot(
  * @return triple of `P`, `L` and `U` tensors.
  */
 public fun DoubleTensorAlgebra.lu(
-    structureND: StructureND<Double>,
+    structureND: StructureND<Float64>,
     epsilon: Double = 1e-9,
 ): Triple<DoubleTensor, DoubleTensor, DoubleTensor> {
     val (lu, pivots) = luFactor(structureND, epsilon)
@@ -151,7 +152,7 @@ public fun DoubleTensorAlgebra.lu(
  * Used when checking the positive definiteness of the input matrix or matrices.
  * @return a pair of `Q` and `R` tensors.
  */
-public fun DoubleTensorAlgebra.cholesky(structureND: StructureND<Double>, epsilon: Double = 1e-6): DoubleTensor {
+public fun DoubleTensorAlgebra.cholesky(structureND: StructureND<Float64>, epsilon: Double = 1e-6): DoubleTensor {
     checkSquareMatrix(structureND.shape)
     checkPositiveDefinite(structureND.asDoubleTensor(), epsilon)
 
@@ -179,9 +180,9 @@ public fun DoubleTensorAlgebra.cholesky(structureND: StructureND<Double>, epsilo
  * @return a triple `Triple(U, S, V)`.
  */
 public fun DoubleTensorAlgebra.svd(
-    structureND: StructureND<Double>,
+    structureND: StructureND<Float64>,
     epsilon: Double,
-): Triple<StructureND<Double>, StructureND<Double>, StructureND<Double>> {
+): Triple<StructureND<Float64>, StructureND<Float64>, StructureND<Float64>> {
     val size = structureND.dimension
     val commonShape = structureND.shape.slice(0 until size - 2)
     val (n, m) = structureND.shape.slice(size - 2 until size)
@@ -213,7 +214,7 @@ public fun DoubleTensorAlgebra.svd(
 }
 
 public fun DoubleTensorAlgebra.svdGolubKahan(
-    structureND: StructureND<Double>,
+    structureND: StructureND<Float64>,
     iterations: Int = 30, epsilon: Double = 1e-10,
 ): Triple<DoubleTensor, DoubleTensor, DoubleTensor> {
     val size = structureND.dimension
@@ -253,13 +254,13 @@ public fun DoubleTensorAlgebra.svdGolubKahan(
  * @return a pair `eigenvalues to eigenvectors`.
  */
 public fun DoubleTensorAlgebra.symEigSvd(
-    structureND: StructureND<Double>,
+    structureND: StructureND<Float64>,
     epsilon: Double,
-): Pair<DoubleTensor, StructureND<Double>> {
+): Pair<DoubleTensor, StructureND<Float64>> {
     //TODO optimize conversion
     checkSymmetric(structureND.asDoubleTensor(), epsilon)
 
-    fun MutableStructure2D<Double>.cleanSym(n: Int) {
+    fun MutableStructure2D<Float64>.cleanSym(n: Int) {
         for (i in 0 until n) {
             for (j in 0 until n) {
                 if (i == j) {
@@ -284,7 +285,7 @@ public fun DoubleTensorAlgebra.symEigSvd(
 }
 
 public fun DoubleTensorAlgebra.symEigJacobi(
-    structureND: StructureND<Double>,
+    structureND: StructureND<Float64>,
     maxIteration: Int,
     epsilon: Double,
 ): Pair<DoubleTensor, DoubleTensor> {
@@ -326,7 +327,7 @@ public fun DoubleTensorAlgebra.symEigJacobi(
  * with zero.
  * @return the determinant.
  */
-public fun DoubleTensorAlgebra.detLU(structureND: StructureND<Double>, epsilon: Double = 1e-9): DoubleTensor {
+public fun DoubleTensorAlgebra.detLU(structureND: StructureND<Float64>, epsilon: Double = 1e-9): DoubleTensor {
     checkSquareMatrix(structureND.shape)
     //TODO check for unnecessary copies
     val luTensor = structureND.copyToTensor()
@@ -362,7 +363,7 @@ public fun DoubleTensorAlgebra.detLU(structureND: StructureND<Double>, epsilon: 
  * @param epsilon error in the LU algorithm&mdash;permissible error when comparing the determinant of a matrix with zero
  * @return the multiplicative inverse of a matrix.
  */
-public fun DoubleTensorAlgebra.invLU(structureND: StructureND<Double>, epsilon: Double = 1e-9): DoubleTensor {
+public fun DoubleTensorAlgebra.invLU(structureND: StructureND<Float64>, epsilon: Double = 1e-9): DoubleTensor {
     val (luTensor, pivotsTensor) = luFactor(structureND, epsilon)
     val invTensor = zeroesLike(luTensor)
 
@@ -384,7 +385,7 @@ public fun DoubleTensorAlgebra.invLU(structureND: StructureND<Double>, epsilon: 
  * @param vectors the [List] of 1-dimensional tensors with same shape
  * @return `M`.
  */
-public fun DoubleTensorAlgebra.covariance(vectors: List<Buffer<Double>>): DoubleTensor {
+public fun DoubleTensorAlgebra.covariance(vectors: List<Buffer<Float64>>): DoubleTensor {
     check(vectors.isNotEmpty()) { "List must have at least 1 element" }
     val n = vectors.size
     val m = vectors[0].size

@@ -6,6 +6,7 @@
 package space.kscience.kmath.expressions
 
 import space.kscience.kmath.operations.Float64Field
+import space.kscience.kmath.structures.Float64
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFails
@@ -37,7 +38,7 @@ class ExpressionFieldTest {
 
     @Test
     fun valueExpression() {
-        val expressionBuilder: FunctionalExpressionField<Double, *>.() -> Expression<Double> = {
+        val expressionBuilder: FunctionalExpressionField<Double, *>.() -> Expression<Float64> = {
             val x by binding
             x * x + 2 * x + one
         }

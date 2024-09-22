@@ -6,6 +6,7 @@
 package space.kscience.kmath.tensors.core.internal
 
 import space.kscience.kmath.nd.*
+import space.kscience.kmath.structures.Float64
 import space.kscience.kmath.structures.Float64Buffer
 import space.kscience.kmath.structures.asBuffer
 import space.kscience.kmath.structures.indices
@@ -19,10 +20,10 @@ import kotlin.math.max
 import kotlin.math.sqrt
 
 
-internal fun MutableStructure2D<Double>.jacobiHelper(
+internal fun MutableStructure2D<Float64>.jacobiHelper(
     maxIteration: Int,
     epsilon: Double,
-): Pair<Float64Buffer, Structure2D<Double>> {
+): Pair<Float64Buffer, Structure2D<Float64>> {
     val n = rowNum
     val A_ = copyToTensor()
     val V = eye(n)
@@ -35,7 +36,7 @@ internal fun MutableStructure2D<Double>.jacobiHelper(
         return source[i * shape[0] + j]
     }
 
-    operator fun BufferedTensor<Double>.set(i: Int, j: Int, value: Double) {
+    operator fun BufferedTensor<Float64>.set(i: Int, j: Int, value: Double) {
         source[i * shape[0] + j] = value
     }
 

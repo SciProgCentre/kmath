@@ -10,6 +10,7 @@ import space.kscience.kmath.random.RandomGenerator
 import space.kscience.kmath.random.chain
 import space.kscience.kmath.stat.Sampler
 import space.kscience.kmath.stat.next
+import space.kscience.kmath.structures.Float64
 import kotlin.math.*
 
 /**
@@ -26,14 +27,14 @@ import kotlin.math.*
 public class AhrensDieterMarsagliaTsangGammaSampler private constructor(
     alpha: Double,
     theta: Double,
-) : Sampler<Double> {
+) : Sampler<Float64> {
     private val delegate: BaseGammaSampler =
         if (alpha < 1) AhrensDieterGammaSampler(alpha, theta) else MarsagliaTsangGammaSampler(alpha, theta)
 
     private abstract class BaseGammaSampler internal constructor(
         protected val alpha: Double,
         protected val theta: Double,
-    ) : Sampler<Double> {
+    ) : Sampler<Float64> {
         init {
             require(alpha > 0) { "alpha is not strictly positive: $alpha" }
             require(theta > 0) { "theta is not strictly positive: $theta" }
@@ -47,7 +48,7 @@ public class AhrensDieterMarsagliaTsangGammaSampler private constructor(
         private val oneOverAlpha: Double = 1.0 / alpha
         private val bGSOptim: Double = 1.0 + alpha / E
 
-        override fun sample(generator: RandomGenerator): Chain<Double> = generator.chain {
+        override fun sample(generator: RandomGenerator): Chain<Float64> = generator.chain {
             var x: Double
 
             // [1]: p. 228, Algorithm GS.
@@ -90,7 +91,7 @@ public class AhrensDieterMarsagliaTsangGammaSampler private constructor(
             cOptim = ONE_THIRD / sqrt(dOptim)
         }
 
-        override fun sample(generator: RandomGenerator): Chain<Double> = generator.chain {
+        override fun sample(generator: RandomGenerator): Chain<Float64> = generator.chain {
             var v: Double
 
             while (true) {
@@ -113,13 +114,13 @@ public class AhrensDieterMarsagliaTsangGammaSampler private constructor(
         }
     }
 
-    override fun sample(generator: RandomGenerator): Chain<Double> = delegate.sample(generator)
+    override fun sample(generator: RandomGenerator): Chain<Float64> = delegate.sample(generator)
     override fun toString(): String = delegate.toString()
 
     public companion object {
         public fun of(
             alpha: Double,
             theta: Double,
-        ): Sampler<Double> = AhrensDieterMarsagliaTsangGammaSampler(alpha, theta)
+        ): Sampler<Float64> = AhrensDieterMarsagliaTsangGammaSampler(alpha, theta)
     }
 }

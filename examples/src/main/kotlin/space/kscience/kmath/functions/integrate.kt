@@ -14,11 +14,12 @@ import space.kscience.kmath.integration.gaussIntegrator
 import space.kscience.kmath.integration.integrate
 import space.kscience.kmath.integration.value
 import space.kscience.kmath.operations.Float64Field
+import space.kscience.kmath.structures.Float64
 import kotlin.math.pow
 
 fun main() {
     //Define a function
-    val function: Function1D<Double> = { x -> 3 * x.pow(2) + 2 * x + 1 }
+    val function: Function1D<Float64> = { x -> 3 * x.pow(2) + 2 * x + 1 }
 
     //get the result of the integration
     val result = Float64Field.gaussIntegrator.integrate(0.0..10.0, function = function)

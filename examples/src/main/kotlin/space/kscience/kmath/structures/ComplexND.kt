@@ -26,7 +26,7 @@ fun main() {
 
     val realTime = measureTimeMillis {
         realField {
-            var res: StructureND<Double> = one
+            var res: StructureND<Float64> = one
             repeat(n) {
                 res += 1.0
             }

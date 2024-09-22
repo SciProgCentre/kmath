@@ -4,8 +4,6 @@ plugins {
 
 description = "JetBrains Multik connector"
 
-val multikVersion: String by rootProject.extra
-
 kscience {
     jvm()
     js()
@@ -16,12 +14,12 @@ kotlin {
         commonMain {
             dependencies {
                 api(projects.kmathTensors)
-                api("org.jetbrains.kotlinx:multik-core:$multikVersion")
+                api(libs.multik.core)
             }
         }
         commonTest {
             dependencies {
-                api("org.jetbrains.kotlinx:multik-default:$multikVersion")
+                api(libs.multik.default)
             }
         }
     }

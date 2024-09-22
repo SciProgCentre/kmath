@@ -6,6 +6,7 @@
 package space.kscience.kmath.tensors.core
 
 import space.kscience.kmath.nd.*
+import space.kscience.kmath.structures.Float64
 import space.kscience.kmath.structures.Float64Buffer
 import space.kscience.kmath.structures.asBuffer
 import space.kscience.kmath.tensors.api.Tensor
@@ -14,7 +15,7 @@ import space.kscience.kmath.tensors.api.Tensor
 /**
  * Create a mutable copy of given [StructureND].
  */
-public fun StructureND<Double>.copyToTensor(): DoubleTensor = if (this is DoubleTensor) {
+public fun StructureND<Float64>.copyToTensor(): DoubleTensor = if (this is DoubleTensor) {
     DoubleTensor(shape, source.copy())
 } else if (this is Float64BufferND && indices is RowStrides) {
     DoubleTensor(shape, buffer.array.copyOf().asBuffer())
@@ -43,7 +44,7 @@ public fun StructureND<Int>.toDoubleTensor(): DoubleTensor {
 /**
  * Transforms [StructureND] of [Double] to [DoubleTensor]. Zero copy if possible, but is not guaranteed
  */
-public fun StructureND<Double>.asDoubleTensor(): DoubleTensor = if (this is DoubleTensor) {
+public fun StructureND<Float64>.asDoubleTensor(): DoubleTensor = if (this is DoubleTensor) {
     this
 } else if (this is Float64BufferND && indices is RowStrides) {
     DoubleTensor(shape, buffer)

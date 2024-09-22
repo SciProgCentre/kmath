@@ -11,7 +11,7 @@ import space.kscience.kmath.UnstableKMathAPI
  * Non-boxing access to primitive [Double]
  */
 @UnstableKMathAPI
-public fun Buffer<Double>.getDouble(index: Int): Double = if (this is BufferView) {
+public fun Buffer<Float64>.getDouble(index: Int): Double = if (this is BufferView) {
     val originIndex = originIndex(index)
     if (originIndex >= 0) {
         origin.getDouble(originIndex)

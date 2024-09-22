@@ -4,6 +4,7 @@
  */
 package space.kscience.kmath.operations
 
+import space.kscience.kmath.structures.Float64
 import space.kscience.kmath.structures.MutableBufferFactory
 import kotlin.math.pow as kpow
 
@@ -66,8 +67,8 @@ public interface ExtendedField<T> : ExtendedFieldOps<T>, Field<T>, NumericAlgebr
  * A field for [Double] without boxing. Does not produce an appropriate field element.
  */
 @Suppress("EXTENSION_SHADOWED_BY_MEMBER")
-public object Float64Field : ExtendedField<Double>, Norm<Double, Double>, ScaleOperations<Double> {
-    override val bufferFactory: MutableBufferFactory<Double> = MutableBufferFactory()
+public object Float64Field : ExtendedField<Float64>, Norm<Double, Double>, ScaleOperations<Float64> {
+    override val bufferFactory: MutableBufferFactory<Float64> = MutableBufferFactory()
 
     override val zero: Double get() = 0.0
     override val one: Double get() = 1.0

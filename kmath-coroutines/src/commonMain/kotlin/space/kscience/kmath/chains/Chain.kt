@@ -23,7 +23,7 @@ public interface Chain<out T> : Flow<T> {
     public suspend fun next(): T
 
     /**
-     * Create a copy of current chain state. Consuming resulting chain does not affect initial chain.
+     * Create a copy of the current chain state. Consuming the resulting chain does not affect the initial chain.
      */
     public suspend fun fork(): Chain<T>
 
@@ -47,7 +47,7 @@ public class SimpleChain<out R>(private val gen: suspend () -> R) : Chain<R> {
 /**
  * A stateless Markov chain
  */
-public class MarkovChain<out R : Any>(private val seed: suspend () -> R, private val gen: suspend (R) -> R) : Chain<R> {
+public class MarkovChain<out R>(private val seed: suspend () -> R, private val gen: suspend (R) -> R) : Chain<R> {
     private val mutex: Mutex = Mutex()
     private var value: R? = null
 
@@ -71,8 +71,8 @@ public class MarkovChain<out R : Any>(private val seed: suspend () -> R, private
  */
 public class StatefulChain<S, out R>(
     private val state: S,
-    private val seed: S.() -> R,
-    private val forkState: ((S) -> S),
+    private val seed: suspend S.() -> R,
+    private val forkState: suspend ((S) -> S),
     private val gen: suspend S.(R) -> R,
 ) : Chain<R> {
     private val mutex: Mutex = Mutex()
@@ -96,6 +96,11 @@ public class ConstantChain<out T>(public val value: T) : Chain<T> {
     override suspend fun next(): T = value
     override suspend fun fork(): Chain<T> = this
 }
+
+/**
+ * Discard a fixed number of samples
+ */
+public suspend inline fun <reified T> Chain<T>.discard(number: Int): Chain<T> = apply { nextBuffer<T>(number) }
 
 /**
  * Map the chain result using suspended transformation. Initial chain result can no longer be safely consumed

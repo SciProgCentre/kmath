@@ -124,7 +124,7 @@ public val <T> MatrixScope<T>.QR: QRDecompositionAttribute<T>
 
 public interface CholeskyDecomposition<T> {
     /**
-     * The triangular matrix in this decomposition. It may have either [UpperTriangular] or [LowerTriangular].
+     * The lower triangular matrix in this decomposition. It should have [LowerTriangular].
      */
     public val l: Matrix<T>
 }

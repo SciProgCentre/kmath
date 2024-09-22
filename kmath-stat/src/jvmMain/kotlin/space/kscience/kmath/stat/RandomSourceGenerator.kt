@@ -18,7 +18,7 @@ public class RandomSourceGenerator internal constructor(
     public val source: RandomSource,
     seed: Long?,
 ) : RandomGenerator {
-    internal val random: UniformRandomProvider = seed?.let { RandomSource.create(source, seed) }
+    internal val random: UniformRandomProvider = seed?.let { source.create(seed) }
         ?: RandomSource.create(source)
 
     override fun nextBoolean(): Boolean = random.nextBoolean()

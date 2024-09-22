@@ -19,7 +19,7 @@ internal class LinearInterpolatorTest {
             3.0 to 4.0
         )
 
-        //val polynomial: PiecewisePolynomial<Double> = DoubleField.linearInterpolator.interpolatePolynomials(data)
+        //val polynomial: PiecewisePolynomial<Float64> = DoubleField.linearInterpolator.interpolatePolynomials(data)
         val function = Float64Field.linearInterpolator.interpolate(data)
         assertEquals(null, function(-1.0))
         assertEquals(0.5, function(0.5))

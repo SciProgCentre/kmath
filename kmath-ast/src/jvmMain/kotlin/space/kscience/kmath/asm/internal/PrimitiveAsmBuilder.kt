@@ -15,6 +15,7 @@ import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.ast.TypedMst
 import space.kscience.kmath.expressions.*
 import space.kscience.kmath.operations.*
+import space.kscience.kmath.structures.Float64
 import java.lang.invoke.MethodHandles
 import java.lang.invoke.MethodType
 import java.nio.file.Paths
@@ -381,7 +382,7 @@ internal sealed class PrimitiveAsmBuilder<T : Number, out E : Expression<T>>(
 }
 
 @UnstableKMathAPI
-internal class DoubleAsmBuilder(target: TypedMst<Double>) : PrimitiveAsmBuilder<Double, DoubleExpression>(
+internal class DoubleAsmBuilder(target: TypedMst<Float64>) : PrimitiveAsmBuilder<Double, DoubleExpression>(
     Float64Field,
     java.lang.Double::class.java,
     java.lang.Double.TYPE,
@@ -410,7 +411,7 @@ internal class DoubleAsmBuilder(target: TypedMst<Double>) : PrimitiveAsmBuilder<
         false,
     )
 
-    override fun visitUnary(node: TypedMst.Unary<Double>) {
+    override fun visitUnary(node: TypedMst.Unary<Float64>) {
         super.visitUnary(node)
 
         when (node.operation) {
@@ -435,7 +436,7 @@ internal class DoubleAsmBuilder(target: TypedMst<Double>) : PrimitiveAsmBuilder<
         }
     }
 
-    override fun visitBinary(node: TypedMst.Binary<Double>) {
+    override fun visitBinary(node: TypedMst.Binary<Float64>) {
         super.visitBinary(node)
 
         when (node.operation) {

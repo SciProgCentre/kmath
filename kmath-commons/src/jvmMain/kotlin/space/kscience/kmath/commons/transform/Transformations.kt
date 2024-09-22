@@ -77,7 +77,7 @@ public fun Flow<Buffer<Complex>>.fft(
 }
 
 @JvmName("realFFT")
-public fun Flow<Buffer<Double>>.fft(
+public fun Flow<Buffer<Float64>>.fft(
     normalization: DftNormalization = DftNormalization.STANDARD,
     direction: TransformType = TransformType.FORWARD,
 ): Flow<Buffer<Complex>> {
@@ -89,7 +89,7 @@ public fun Flow<Buffer<Double>>.fft(
  * Process a continuous flow of real numbers in FFT splitting it in chunks of [bufferSize].
  */
 @JvmName("realFFT")
-public fun Flow<Double>.fft(
+public fun Flow<Float64>.fft(
     bufferSize: Int = Int.MAX_VALUE,
     normalization: DftNormalization = DftNormalization.STANDARD,
     direction: TransformType = TransformType.FORWARD,
@@ -99,4 +99,4 @@ public fun Flow<Double>.fft(
  * Map a complex flow into real flow by taking real part of each number
  */
 @FlowPreview
-public fun Flow<Complex>.real(): Flow<Double> = map { it.re }
+public fun Flow<Complex>.real(): Flow<Float64> = map { it.re }

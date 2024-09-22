@@ -6,6 +6,7 @@
 package space.kscience.kmath.tensors.core
 
 import space.kscience.kmath.structures.Buffer
+import space.kscience.kmath.structures.Float64
 import space.kscience.kmath.structures.Float64Buffer
 import space.kscience.kmath.structures.indices
 import kotlin.jvm.JvmName
@@ -20,5 +21,5 @@ public fun OffsetDoubleBuffer.contentEquals(vararg doubles: Double): Boolean = i
 public infix fun OffsetDoubleBuffer.contentEquals(otherArray: DoubleArray): Boolean = contentEquals(*otherArray)
 
 @JvmName("contentEqualsBuffer")
-public infix fun OffsetDoubleBuffer.contentEquals(otherBuffer: Buffer<Double>): Boolean =
+public infix fun OffsetDoubleBuffer.contentEquals(otherBuffer: Buffer<Float64>): Boolean =
     indices.all { get(it) == otherBuffer[it] }

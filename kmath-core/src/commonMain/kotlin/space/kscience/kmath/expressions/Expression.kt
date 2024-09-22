@@ -13,6 +13,7 @@ import space.kscience.kmath.operations.Algebra
 import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.operations.IntRing
 import space.kscience.kmath.operations.LongRing
+import space.kscience.kmath.structures.Float64
 import kotlin.jvm.JvmName
 import kotlin.properties.ReadOnlyProperty
 
@@ -47,9 +48,9 @@ public inline fun <reified T> Expression(noinline block: (Map<Symbol, T>) -> T):
  * Specialization of [Expression] for [Double] allowing better performance because of using array.
  */
 @UnstableKMathAPI
-public interface DoubleExpression : Expression<Double> {
+public interface DoubleExpression : Expression<Float64> {
 
-    override val type: SafeType<Double> get() = DoubleField.type
+    override val type: SafeType<Float64> get() = DoubleField.type
 
     /**
      * The indexer of this expression's arguments that should be used to build array for [invoke].

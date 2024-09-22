@@ -8,6 +8,7 @@ package space.kscience.kmath.functions
 import space.kscience.kmath.interpolation.SplineInterpolator
 import space.kscience.kmath.interpolation.interpolatePolynomials
 import space.kscience.kmath.operations.Float64Field
+import space.kscience.kmath.structures.Float64
 import space.kscience.plotly.Plotly
 import space.kscience.plotly.UnstablePlotlyAPI
 import space.kscience.plotly.makeFile
@@ -23,7 +24,7 @@ fun main() {
         x to sin(x)
     }
 
-    val polynomial: PiecewisePolynomial<Double> = SplineInterpolator(Float64Field).interpolatePolynomials(data)
+    val polynomial: PiecewisePolynomial<Float64> = SplineInterpolator(Float64Field).interpolatePolynomials(data)
 
     val function = polynomial.asFunction(Float64Field, 0.0)
 

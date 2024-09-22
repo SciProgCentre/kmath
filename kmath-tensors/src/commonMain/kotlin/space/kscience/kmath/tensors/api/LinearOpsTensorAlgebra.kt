@@ -8,6 +8,7 @@ package space.kscience.kmath.tensors.api
 import space.kscience.kmath.nd.MutableStructure2D
 import space.kscience.kmath.nd.StructureND
 import space.kscience.kmath.operations.Field
+import space.kscience.kmath.structures.Float64
 
 /**
  * Common linear algebra operations. Operates on [Tensor].
@@ -110,5 +111,5 @@ public interface LinearOpsTensorAlgebra<T, A : Field<T>> : TensorPartialDivision
      * @receiver the `input1` and the `input2`.
      * @return the square matrix x which is the solution of the equation.
      */
-    public fun solve(a: MutableStructure2D<Double>, b: MutableStructure2D<Double>): MutableStructure2D<Double>
+    public fun solve(a: MutableStructure2D<Float64>, b: MutableStructure2D<Float64>): MutableStructure2D<Float64>
 }

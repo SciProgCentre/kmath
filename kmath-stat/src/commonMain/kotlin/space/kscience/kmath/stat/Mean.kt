@@ -7,6 +7,7 @@ package space.kscience.kmath.stat
 
 import space.kscience.kmath.operations.*
 import space.kscience.kmath.structures.Buffer
+import space.kscience.kmath.structures.Float64
 import space.kscience.kmath.structures.indices
 
 /**
@@ -42,7 +43,7 @@ public class Mean<T>(
     }
 
     public companion object {
-        public fun evaluate(buffer: Buffer<Double>): Double = Float64Field.mean.evaluateBlocking(buffer)
+        public fun evaluate(buffer: Buffer<Float64>): Double = Float64Field.mean.evaluateBlocking(buffer)
         public fun evaluate(buffer: Buffer<Int>): Int = Int32Ring.mean.evaluateBlocking(buffer)
         public fun evaluate(buffer: Buffer<Long>): Long = Int64Ring.mean.evaluateBlocking(buffer)
     }
@@ -50,7 +51,7 @@ public class Mean<T>(
 
 
 //TODO replace with optimized version which respects overflow
-public val Float64Field.mean: Mean<Double> get() = Mean(Float64Field)
+public val Float64Field.mean: Mean<Float64> get() = Mean(Float64Field)
 public val Int32Ring.mean: Mean<Int> get() = Mean(Int32Field)
 public val Int64Ring.mean: Mean<Long> get() = Mean(Int64Field)
 

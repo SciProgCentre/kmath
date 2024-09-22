@@ -8,6 +8,7 @@ package space.kscience.kmath.nd4j
 import org.nd4j.linalg.api.ndarray.INDArray
 import space.kscience.kmath.PerformancePitfall
 import space.kscience.kmath.nd.*
+import space.kscience.kmath.structures.Float64
 
 /**
  * Represents a [StructureND] wrapping an [INDArray] object.
@@ -48,7 +49,7 @@ public data class Nd4jArrayIntStructure(override val ndArray: INDArray) : Nd4jAr
  */
 public fun INDArray.asIntStructure(): Nd4jArrayIntStructure = Nd4jArrayIntStructure(this)
 
-public data class Nd4jArrayDoubleStructure(override val ndArray: INDArray) : Nd4jArrayStructure<Double>(),
+public data class Nd4jArrayDoubleStructure(override val ndArray: INDArray) : Nd4jArrayStructure<Float64>(),
     StructureNDOfDouble {
     override fun elementsIterator(): Iterator<Pair<IntArray, Double>> = ndArray.realIterator()
 
@@ -64,7 +65,7 @@ public data class Nd4jArrayDoubleStructure(override val ndArray: INDArray) : Nd4
 /**
  * Wraps this [INDArray] to [Nd4jArrayStructure].
  */
-public fun INDArray.asDoubleStructure(): Nd4jArrayStructure<Double> = Nd4jArrayDoubleStructure(this)
+public fun INDArray.asDoubleStructure(): Nd4jArrayStructure<Float64> = Nd4jArrayDoubleStructure(this)
 
 public data class Nd4jArrayFloatStructure(override val ndArray: INDArray) : Nd4jArrayStructure<Float>() {
 

@@ -22,6 +22,7 @@ import space.kscience.kmath.expressions.SymbolIndexer
 import space.kscience.kmath.expressions.derivative
 import space.kscience.kmath.expressions.withSymbols
 import space.kscience.kmath.optimization.*
+import space.kscience.kmath.structures.Float64
 import kotlin.collections.set
 import kotlin.reflect.KClass
 
@@ -33,7 +34,7 @@ public object CMOptimizerEngine : OptimizationAttribute<() -> MultivariateOptimi
 /**
  * Specify a Commons-maths optimization engine
  */
-public fun AttributesBuilder<FunctionOptimization<Double>>.cmEngine(optimizerBuilder: () -> MultivariateOptimizer) {
+public fun AttributesBuilder<FunctionOptimization<Float64>>.cmEngine(optimizerBuilder: () -> MultivariateOptimizer) {
     set(CMOptimizerEngine, optimizerBuilder)
 }
 
@@ -42,18 +43,18 @@ public object CMOptimizerData : SetAttribute<SymbolIndexer.() -> OptimizationDat
 /**
  * Specify Commons-maths optimization data.
  */
-public fun AttributesBuilder<FunctionOptimization<Double>>.cmOptimizationData(data: SymbolIndexer.() -> OptimizationData) {
+public fun AttributesBuilder<FunctionOptimization<Float64>>.cmOptimizationData(data: SymbolIndexer.() -> OptimizationData) {
     CMOptimizerData add data
 }
 
-public fun AttributesBuilder<FunctionOptimization<Double>>.simplexSteps(vararg steps: Pair<Symbol, Double>) {
+public fun AttributesBuilder<FunctionOptimization<Float64>>.simplexSteps(vararg steps: Pair<Symbol, Double>) {
     //TODO use convergence checker from features
     cmEngine { SimplexOptimizer(CMOptimizer.defaultConvergenceChecker) }
     cmOptimizationData { NelderMeadSimplex(mapOf(*steps).toDoubleArray()) }
 }
 
 @OptIn(UnstableKMathAPI::class)
-public object CMOptimizer : Optimizer<Double, FunctionOptimization<Double>> {
+public object CMOptimizer : Optimizer<Double, FunctionOptimization<Float64>> {
 
     public const val DEFAULT_RELATIVE_TOLERANCE: Double = 1e-4
     public const val DEFAULT_ABSOLUTE_TOLERANCE: Double = 1e-4
@@ -67,12 +68,12 @@ public object CMOptimizer : Optimizer<Double, FunctionOptimization<Double>> {
 
 
     override suspend fun optimize(
-        problem: FunctionOptimization<Double>,
-    ): FunctionOptimization<Double> {
+        problem: FunctionOptimization<Float64>,
+    ): FunctionOptimization<Float64> {
         val startPoint = problem.startPoint
 
         val parameters = problem.attributes[OptimizationParameters]
-            ?: problem.attributes[OptimizationStartPoint<Double>()]?.keys
+            ?: problem.attributes[OptimizationStartPoint<Float64>()]?.keys
             ?: startPoint.keys
 
 

@@ -140,4 +140,18 @@ public fun <A : Attribute<Unit>> Attributes(
     attribute: A,
 ): Attributes = MapAttributes(mapOf(attribute to Unit))
 
-public operator fun Attributes.plus(other: Attributes): Attributes = MapAttributes(content + other.content)
+/**
+ * Create a new [Attributes] that overlays [other] on top of this set of attributes. New attributes are added.
+ * Existing attribute keys are replaced.
+ */
+public operator fun Attributes.plus(other: Attributes): Attributes = when {
+    isEmpty() -> other
+    other.isEmpty() -> this
+    else -> MapAttributes(content + other.content)
+}
+
+/**
+ * Create a new [Attributes] with removed [key] (if it is present).
+ */
+public operator fun Attributes.minus(key: Attribute<*>): Attributes =
+    if (content.contains(key)) MapAttributes(content.minus(key)) else this

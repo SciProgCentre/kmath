@@ -115,7 +115,7 @@ public fun <T> Buffer(
     size: Int,
     initializer: (Int) -> T,
 ): Buffer<T> = when (type.kType) {
-    typeOf<Double>() -> MutableBuffer.double(size) { initializer(it) as Double } as Buffer<T>
+    typeOf<Float64>() -> MutableBuffer.double(size) { initializer(it) as Double } as Buffer<T>
     typeOf<Short>() -> MutableBuffer.short(size) { initializer(it) as Short } as Buffer<T>
     typeOf<Int>() -> MutableBuffer.int(size) { initializer(it) as Int } as Buffer<T>
     typeOf<Long>() -> MutableBuffer.long(size) { initializer(it) as Long } as Buffer<T>
@@ -134,7 +134,7 @@ public inline fun <reified T> Buffer(size: Int, initializer: (Int) -> T): Buffer
     //code duplication here because we want to inline initializers
     val type = safeTypeOf<T>()
     return when (type.kType) {
-        typeOf<Double>() -> MutableBuffer.double(size) { initializer(it) as Double } as Buffer<T>
+        typeOf<Float64>() -> MutableBuffer.double(size) { initializer(it) as Double } as Buffer<T>
         typeOf<Short>() -> MutableBuffer.short(size) { initializer(it) as Short } as Buffer<T>
         typeOf<Int>() -> MutableBuffer.int(size) { initializer(it) as Int } as Buffer<T>
         typeOf<Long>() -> MutableBuffer.long(size) { initializer(it) as Long } as Buffer<T>

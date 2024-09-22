@@ -9,6 +9,7 @@ import space.kscience.kmath.nd.MutableStructure2D
 import space.kscience.kmath.nd.ShapeND
 import space.kscience.kmath.nd.as2D
 import space.kscience.kmath.nd.component1
+import space.kscience.kmath.structures.Float64
 import space.kscience.kmath.tensors.core.BroadcastDoubleTensorAlgebra
 import space.kscience.kmath.tensors.core.BroadcastDoubleTensorAlgebra.div
 import space.kscience.kmath.tensors.core.DoubleTensorAlgebra
@@ -19,24 +20,24 @@ import space.kscience.kmath.tensors.core.DoubleTensorAlgebra.Companion.times
 import space.kscience.kmath.tensors.core.asDoubleTensor
 
 public data class StartDataLm(
-    var lm_matx_y_dat: MutableStructure2D<Double>,
+    var lm_matx_y_dat: MutableStructure2D<Float64>,
     var example_number: Int,
-    var p_init: MutableStructure2D<Double>,
-    var t: MutableStructure2D<Double>,
-    var y_dat: MutableStructure2D<Double>,
+    var p_init: MutableStructure2D<Float64>,
+    var t: MutableStructure2D<Float64>,
+    var y_dat: MutableStructure2D<Float64>,
     var weight: Double,
-    var dp: MutableStructure2D<Double>,
-    var p_min: MutableStructure2D<Double>,
-    var p_max: MutableStructure2D<Double>,
-    var consts: MutableStructure2D<Double>,
+    var dp: MutableStructure2D<Float64>,
+    var p_min: MutableStructure2D<Float64>,
+    var p_max: MutableStructure2D<Float64>,
+    var consts: MutableStructure2D<Float64>,
     var opts: DoubleArray,
 )
 
 fun funcEasyForLm(
-    t: MutableStructure2D<Double>,
-    p: MutableStructure2D<Double>,
+    t: MutableStructure2D<Float64>,
+    p: MutableStructure2D<Float64>,
     exampleNumber: Int,
-): MutableStructure2D<Double> {
+): MutableStructure2D<Float64> {
     val m = t.shape.component1()
     var y_hat = DoubleTensorAlgebra.zeros(ShapeND(intArrayOf(m, 1)))
 
@@ -59,10 +60,10 @@ fun funcEasyForLm(
 }
 
 fun funcMiddleForLm(
-    t: MutableStructure2D<Double>,
-    p: MutableStructure2D<Double>,
+    t: MutableStructure2D<Float64>,
+    p: MutableStructure2D<Float64>,
     exampleNumber: Int,
-): MutableStructure2D<Double> {
+): MutableStructure2D<Float64> {
     val m = t.shape.component1()
     var y_hat = DoubleTensorAlgebra.zeros(ShapeND(intArrayOf(m, 1)))
 
@@ -79,10 +80,10 @@ fun funcMiddleForLm(
 }
 
 fun funcDifficultForLm(
-    t: MutableStructure2D<Double>,
-    p: MutableStructure2D<Double>,
+    t: MutableStructure2D<Float64>,
+    p: MutableStructure2D<Float64>,
     exampleNumber: Int,
-): MutableStructure2D<Double> {
+): MutableStructure2D<Float64> {
     val m = t.shape.component1()
     var y_hat = DoubleTensorAlgebra.zeros(ShapeND(intArrayOf(m, 1)))
 

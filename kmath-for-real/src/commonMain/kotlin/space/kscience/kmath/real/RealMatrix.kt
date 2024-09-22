@@ -15,6 +15,7 @@ import space.kscience.kmath.operations.Float64Field
 import space.kscience.kmath.operations.algebra
 import space.kscience.kmath.operations.asIterable
 import space.kscience.kmath.structures.Buffer
+import space.kscience.kmath.structures.Float64
 import space.kscience.kmath.structures.Float64Buffer
 import kotlin.math.pow
 
@@ -30,7 +31,7 @@ import kotlin.math.pow
  *  Functions that help create a real (Double) matrix
  */
 
-public typealias RealMatrix = Matrix<Double>
+public typealias RealMatrix = Matrix<Float64>
 
 public fun realMatrix(rowNum: Int, colNum: Int, initializer: Float64Field.(i: Int, j: Int) -> Double): RealMatrix =
     Double.algebra.linearSpace.buildMatrix(rowNum, colNum, initializer)
@@ -114,7 +115,7 @@ public operator fun RealMatrix.minus(other: RealMatrix): RealMatrix =
  *  Operations on columns
  */
 
-public inline fun RealMatrix.appendColumn(crossinline mapper: (Buffer<Double>) -> Double): RealMatrix =
+public inline fun RealMatrix.appendColumn(crossinline mapper: (Buffer<Float64>) -> Double): RealMatrix =
     Double.algebra.linearSpace.buildMatrix(rowNum, colNum + 1) { row, col ->
         if (col < colNum)
             get(row, col)

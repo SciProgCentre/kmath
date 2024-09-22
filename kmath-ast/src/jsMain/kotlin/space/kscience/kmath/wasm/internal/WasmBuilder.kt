@@ -11,6 +11,7 @@ import space.kscience.kmath.expressions.*
 import space.kscience.kmath.internal.binaryen.*
 import space.kscience.kmath.internal.webassembly.Instance
 import space.kscience.kmath.operations.*
+import space.kscience.kmath.structures.Float64
 import space.kscience.kmath.internal.binaryen.Module as BinaryenModule
 import space.kscience.kmath.internal.webassembly.Module as WasmModule
 
@@ -85,13 +86,13 @@ internal sealed class WasmBuilder<T : Number, out E : Expression<T>>(
 }
 
 @UnstableKMathAPI
-internal class DoubleWasmBuilder(target: TypedMst<Double>) :
+internal class DoubleWasmBuilder(target: TypedMst<Float64>) :
     WasmBuilder<Double, DoubleExpression>(f64, Float64Field, target) {
     override val instance by lazy {
         object : DoubleExpression {
             override val indexer = SimpleSymbolIndexer(keys)
 
-            override fun invoke(arguments: DoubleArray) = spreader(executable, arguments).unsafeCast<Double>()
+            override fun invoke(arguments: DoubleArray) = spreader(executable, arguments).unsafeCast<Float64>()
         }
     }
 
@@ -99,7 +100,7 @@ internal class DoubleWasmBuilder(target: TypedMst<Double>) :
 
     override fun visitNumber(number: Number) = ctx.f64.const(number.toDouble())
 
-    override fun visitUnary(node: TypedMst.Unary<Double>): ExpressionRef = when (node.operation) {
+    override fun visitUnary(node: TypedMst.Unary<Float64>): ExpressionRef = when (node.operation) {
         GroupOps.MINUS_OPERATION -> ctx.f64.neg(visit(node.value))
         GroupOps.PLUS_OPERATION -> visit(node.value)
         PowerOperations.SQRT_OPERATION -> ctx.f64.sqrt(visit(node.value))
@@ -120,7 +121,7 @@ internal class DoubleWasmBuilder(target: TypedMst<Double>) :
         else -> super.visitUnary(node)
     }
 
-    override fun visitBinary(mst: TypedMst.Binary<Double>): ExpressionRef = when (mst.operation) {
+    override fun visitBinary(mst: TypedMst.Binary<Float64>): ExpressionRef = when (mst.operation) {
         GroupOps.PLUS_OPERATION -> ctx.f64.add(visit(mst.left), visit(mst.right))
         GroupOps.MINUS_OPERATION -> ctx.f64.sub(visit(mst.left), visit(mst.right))
         RingOps.TIMES_OPERATION -> ctx.f64.mul(visit(mst.left), visit(mst.right))

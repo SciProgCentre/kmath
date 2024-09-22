@@ -12,6 +12,7 @@ import space.kscience.kmath.nd.StructureND
 import space.kscience.kmath.nd.structureND
 import space.kscience.kmath.nd.withNdAlgebra
 import space.kscience.kmath.operations.algebra
+import space.kscience.kmath.structures.Float64
 import kotlin.math.pow
 
 fun main(): Unit = Double.algebra.withNdAlgebra(2, 2) {
@@ -22,7 +23,7 @@ fun main(): Unit = Double.algebra.withNdAlgebra(2, 2) {
     }
 
     //Define a function in a nd space
-    val function: (Double) -> StructureND<Double> = { x: Double -> 3 * x.pow(2) + 2 * diagonal(x) + 1 }
+    val function: (Double) -> StructureND<Float64> = { x: Double -> 3 * x.pow(2) + 2 * diagonal(x) + 1 }
 
     //get the result of the integration
     val result = gaussIntegrator.integrate(0.0..10.0, function = function)

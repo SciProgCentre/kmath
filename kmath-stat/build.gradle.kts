@@ -7,21 +7,17 @@ kscience {
     js()
     native()
     wasm()
-}
 
-kotlin.sourceSets {
+    useCoroutines()
+
     commonMain {
-        dependencies {
-            api(projects.kmathCoroutines)
-            //implementation(spclibs.atomicfu)
-        }
+        api(projects.kmathCoroutines)
+        //implementation(spclibs.atomicfu)
     }
 
-    getByName("jvmMain") {
-        dependencies {
-            api("org.apache.commons:commons-rng-sampling:1.3")
-            api("org.apache.commons:commons-rng-simple:1.3")
-        }
+    jvmMain {
+        api(libs.commons.rng.simple)
+        api(libs.commons.rng.sampling)
     }
 }
 

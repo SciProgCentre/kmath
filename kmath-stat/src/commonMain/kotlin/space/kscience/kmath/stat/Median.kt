@@ -8,6 +8,7 @@ package space.kscience.kmath.stat
 import space.kscience.kmath.misc.sortedWith
 import space.kscience.kmath.operations.*
 import space.kscience.kmath.structures.Buffer
+import space.kscience.kmath.structures.Float64
 
 /**
  * Non-composable median
@@ -27,12 +28,12 @@ public class Median<T>(private val field: Field<T>, private val comparator: Comp
 
     public companion object {
 
-        public fun evaluate(buffer: Buffer<Double>): Double = Float64Field.mean.evaluateBlocking(buffer)
+        public fun evaluate(buffer: Buffer<Float64>): Double = Float64Field.mean.evaluateBlocking(buffer)
         public fun evaluate(buffer: Buffer<Int>): Int = Int32Ring.mean.evaluateBlocking(buffer)
         public fun evaluate(buffer: Buffer<Long>): Long = Int64Ring.mean.evaluateBlocking(buffer)
     }
 }
 
-public val Float64Field.median: Median<Double> get() = Median(Float64Field) { a, b -> a.compareTo(b) }
+public val Float64Field.median: Median<Float64> get() = Median(Float64Field) { a, b -> a.compareTo(b) }
 public val Int32Ring.median: Median<Int> get() = Median(Int32Field) { a, b -> a.compareTo(b) }
 public val Int64Ring.median: Median<Long> get() = Median(Int64Field) { a, b -> a.compareTo(b) }

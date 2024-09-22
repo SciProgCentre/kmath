@@ -9,6 +9,7 @@ import space.kscience.kmath.PerformancePitfall
 import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.nd.StructureND
 import space.kscience.kmath.operations.Float64Field
+import space.kscience.kmath.structures.Float64
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -37,7 +38,7 @@ class ParallelMatrixTest {
 
     @Test
     fun testMatrixExtension() = Float64Field.linearSpace.parallel {
-        val transitionMatrix: Matrix<Double> = VirtualMatrix(6, 6) { row, col ->
+        val transitionMatrix: Matrix<Float64> = VirtualMatrix(6, 6) { row, col ->
             when {
                 col == 0 -> .50
                 row + 1 == col -> .50
@@ -46,7 +47,7 @@ class ParallelMatrixTest {
             }
         }
 
-        infix fun Matrix<Double>.pow(power: Int): Matrix<Double> {
+        infix fun Matrix<Float64>.pow(power: Int): Matrix<Float64> {
             var res = this
             repeat(power - 1) {
                 res = res dot this@pow

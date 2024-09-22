@@ -11,6 +11,7 @@ import space.kscience.kmath.domains.center
 import space.kscience.kmath.linear.Point
 import space.kscience.kmath.operations.asSequence
 import space.kscience.kmath.structures.Buffer
+import space.kscience.kmath.structures.Float64
 
 
 /**
@@ -42,14 +43,14 @@ public interface Histogram1DBuilder<in T : Any, V : Any> : HistogramBuilder<T, V
      */
     public fun putValue(at: T, value: V = defaultValue)
 
-    override fun putValue(point: Point<out T>, value: V) {
+    override fun putValue(point: Point<T>, value: V) {
         require(point.size == 1) { "Only points with single value could be used in Histogram1D" }
         putValue(point[0], value)
     }
 }
 
 @UnstableKMathAPI
-public fun Histogram1DBuilder<Double, *>.fill(items: Iterable<Double>): Unit =
+public fun Histogram1DBuilder<Double, *>.fill(items: Iterable<Float64>): Unit =
     items.forEach(this::putValue)
 
 @UnstableKMathAPI

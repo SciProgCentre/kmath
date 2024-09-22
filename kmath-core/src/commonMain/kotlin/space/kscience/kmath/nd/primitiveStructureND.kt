@@ -6,8 +6,9 @@
 package space.kscience.kmath.nd
 
 import space.kscience.kmath.PerformancePitfall
+import space.kscience.kmath.structures.Float64
 
-public interface StructureNDOfDouble : StructureND<Double> {
+public interface StructureNDOfDouble : StructureND<Float64> {
 
     /**
      * Guaranteed non-blocking access to content
@@ -19,10 +20,10 @@ public interface StructureNDOfDouble : StructureND<Double> {
  * Optimized method to access primitive without boxing if possible
  */
 @OptIn(PerformancePitfall::class)
-public fun StructureND<Double>.getDouble(index: IntArray): Double =
+public fun StructureND<Float64>.getDouble(index: IntArray): Double =
     if (this is StructureNDOfDouble) getDouble(index) else get(index)
 
-public interface MutableStructureNDOfDouble : StructureNDOfDouble, MutableStructureND<Double> {
+public interface MutableStructureNDOfDouble : StructureNDOfDouble, MutableStructureND<Float64> {
 
     /**
      * Guaranteed non-blocking access to content
@@ -31,7 +32,7 @@ public interface MutableStructureNDOfDouble : StructureNDOfDouble, MutableStruct
 }
 
 @OptIn(PerformancePitfall::class)
-public fun MutableStructureND<Double>.getDouble(index: IntArray): Double =
+public fun MutableStructureND<Float64>.getDouble(index: IntArray): Double =
     if (this is StructureNDOfDouble) getDouble(index) else get(index)
 
 

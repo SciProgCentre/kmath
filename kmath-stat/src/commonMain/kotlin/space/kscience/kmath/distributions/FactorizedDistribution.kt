@@ -17,8 +17,9 @@ public interface NamedDistribution<T> : Distribution<Map<String, T>>
 /**
  * A multivariate distribution that has independent distributions for separate axis.
  */
-public class FactorizedDistribution<T>(public val distributions: Collection<NamedDistribution<T>>) :
-    NamedDistribution<T> {
+public class FactorizedDistribution<T>(
+    public val distributions: Collection<NamedDistribution<T>>
+) : NamedDistribution<T> {
     override fun probability(arg: Map<String, T>): Double =
         distributions.fold(1.0) { acc, dist -> acc * dist.probability(arg) }
 
@@ -28,8 +29,10 @@ public class FactorizedDistribution<T>(public val distributions: Collection<Name
     }
 }
 
-public class NamedDistributionWrapper<T : Any>(public val name: String, public val distribution: Distribution<T>) :
-    NamedDistribution<T> {
+public class NamedDistributionWrapper<T : Any>(
+    public val name: String,
+    public val distribution: Distribution<T>
+) : NamedDistribution<T> {
     override fun probability(arg: Map<String, T>): Double = distribution.probability(
         arg[name] ?: error("Argument with name $name not found in input parameters")
     )

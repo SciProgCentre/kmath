@@ -12,6 +12,7 @@ import space.kscience.kmath.nd.MutableStructure2D
 import space.kscience.kmath.nd.ShapeND
 import space.kscience.kmath.nd.as2D
 import space.kscience.kmath.nd.component1
+import space.kscience.kmath.structures.Float64
 import space.kscience.kmath.tensors.LevenbergMarquardt.StartDataLm
 import space.kscience.kmath.tensors.core.BroadcastDoubleTensorAlgebra.zeros
 import space.kscience.kmath.tensors.core.DoubleTensorAlgebra
@@ -20,9 +21,9 @@ import space.kscience.kmath.tensors.core.levenbergMarquardt
 import kotlin.random.Random
 
 fun streamLm(
-    lm_func: (MutableStructure2D<Double>, MutableStructure2D<Double>, Int) -> (MutableStructure2D<Double>),
+    lm_func: (MutableStructure2D<Float64>, MutableStructure2D<Float64>, Int) -> (MutableStructure2D<Float64>),
     startData: StartDataLm, launchFrequencyInMs: Long, numberOfLaunches: Int,
-): Flow<MutableStructure2D<Double>> = flow {
+): Flow<MutableStructure2D<Float64>> = flow {
 
     var example_number = startData.example_number
     var p_init = startData.p_init
@@ -64,7 +65,7 @@ fun streamLm(
     }
 }
 
-fun generateNewYDat(y_dat: MutableStructure2D<Double>, delta: Double): MutableStructure2D<Double> {
+fun generateNewYDat(y_dat: MutableStructure2D<Float64>, delta: Double): MutableStructure2D<Float64> {
     val n = y_dat.shape.component1()
     val y_dat_new = zeros(ShapeND(intArrayOf(n, 1))).as2D()
     for (i in 0 until n) {

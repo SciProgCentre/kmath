@@ -14,9 +14,13 @@ import org.nd4j.linalg.factory.ops.NDBase
 import org.nd4j.linalg.ops.transforms.Transforms
 import space.kscience.kmath.PerformancePitfall
 import space.kscience.kmath.UnsafeKMathAPI
-import space.kscience.kmath.nd.*
+import space.kscience.kmath.nd.ColumnStrides
+import space.kscience.kmath.nd.ShapeND
+import space.kscience.kmath.nd.StructureND
+import space.kscience.kmath.nd.asArray
 import space.kscience.kmath.operations.Field
 import space.kscience.kmath.operations.Float64Field
+import space.kscience.kmath.structures.Float64
 import space.kscience.kmath.tensors.api.AnalyticTensorAlgebra
 import space.kscience.kmath.tensors.api.Tensor
 import space.kscience.kmath.tensors.api.TensorAlgebra
@@ -177,13 +181,13 @@ public object DoubleNd4jTensorAlgebra : Nd4jTensorAlgebra<Double, Float64Field> 
 
     override val elementAlgebra: Float64Field get() = Float64Field
 
-    override fun INDArray.wrap(): Nd4jArrayStructure<Double> = asDoubleStructure()
+    override fun INDArray.wrap(): Nd4jArrayStructure<Float64> = asDoubleStructure()
 
     @OptIn(UnsafeKMathAPI::class)
     override fun mutableStructureND(
         shape: ShapeND,
         initializer: Float64Field.(IntArray) -> Double,
-    ): Nd4jArrayStructure<Double> {
+    ): Nd4jArrayStructure<Float64> {
         val array: INDArray = Nd4j.zeros(*shape.asArray())
         val indices = ColumnStrides(shape)
         indices.asSequence().forEach { index ->
@@ -194,29 +198,29 @@ public object DoubleNd4jTensorAlgebra : Nd4jTensorAlgebra<Double, Float64Field> 
 
 
     @OptIn(PerformancePitfall::class, UnsafeKMathAPI::class)
-    override val StructureND<Double>.ndArray: INDArray
+    override val StructureND<Float64>.ndArray: INDArray
         get() = when (this) {
-            is Nd4jArrayStructure<Double> -> ndArray
+            is Nd4jArrayStructure<Float64> -> ndArray
             else -> Nd4j.zeros(*shape.asArray()).also {
                 elements().forEach { (idx, value) -> it.putScalar(idx, value) }
             }
         }
 
-    override fun StructureND<Double>.valueOrNull(): Double? =
+    override fun StructureND<Float64>.valueOrNull(): Double? =
         if (shape == ShapeND(1)) ndArray.getDouble(0) else null
 
     // TODO rewrite
     override fun diagonalEmbedding(
-        diagonalEntries: StructureND<Double>,
+        diagonalEntries: StructureND<Float64>,
         offset: Int,
         dim1: Int,
         dim2: Int,
-    ): Tensor<Double> = DoubleTensorAlgebra.diagonalEmbedding(diagonalEntries, offset, dim1, dim2)
+    ): Tensor<Float64> = DoubleTensorAlgebra.diagonalEmbedding(diagonalEntries, offset, dim1, dim2)
 
-    override fun StructureND<Double>.sum(): Double = ndArray.sumNumber().toDouble()
-    override fun StructureND<Double>.min(): Double = ndArray.minNumber().toDouble()
-    override fun StructureND<Double>.max(): Double = ndArray.maxNumber().toDouble()
-    override fun mean(structureND: StructureND<Double>): Double = structureND.ndArray.meanNumber().toDouble()
-    override fun std(structureND: StructureND<Double>): Double = structureND.ndArray.stdNumber().toDouble()
-    override fun variance(structureND: StructureND<Double>): Double = structureND.ndArray.varNumber().toDouble()
+    override fun StructureND<Float64>.sum(): Double = ndArray.sumNumber().toDouble()
+    override fun StructureND<Float64>.min(): Double = ndArray.minNumber().toDouble()
+    override fun StructureND<Float64>.max(): Double = ndArray.maxNumber().toDouble()
+    override fun mean(structureND: StructureND<Float64>): Double = structureND.ndArray.meanNumber().toDouble()
+    override fun std(structureND: StructureND<Float64>): Double = structureND.ndArray.stdNumber().toDouble()
+    override fun variance(structureND: StructureND<Float64>): Double = structureND.ndArray.varNumber().toDouble()
 }

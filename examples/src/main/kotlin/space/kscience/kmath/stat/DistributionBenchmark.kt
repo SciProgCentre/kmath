@@ -36,8 +36,28 @@ private suspend fun runKMathChained(): Duration {
     return Duration.between(startTime, Instant.now())
 }
 
+private fun runKMathBlocking(): Duration {
+    val generator = RandomGenerator.fromSource(RandomSource.MT, 123L)
+    val normal = GaussianSampler(7.0, 2.0)
+    val chain = normal.sample(generator)
+    val startTime = Instant.now()
+    var sum = 0.0
+
+    repeat(10000001) { counter ->
+        sum += chain.nextBlocking()
+
+        if (counter % 100000 == 0) {
+            val duration = Duration.between(startTime, Instant.now())
+            val meanValue = sum / counter
+            println("Chain sampler completed $counter elements in $duration: $meanValue")
+        }
+    }
+
+    return Duration.between(startTime, Instant.now())
+}
+
 private fun runCMDirect(): Duration {
-    val rng = RandomSource.create(RandomSource.MT, 123L)
+    val rng = RandomSource.MT.create(123L)
 
     val sampler = CMGaussianSampler.of(
         BoxMullerNormalizedGaussianSampler.of(rng),
@@ -67,6 +87,8 @@ private fun runCMDirect(): Duration {
 fun main(): Unit = runBlocking(Dispatchers.Default) {
     val directJob = async { runCMDirect() }
     val chainJob = async { runKMathChained() }
+    val blockingJob = async { runKMathBlocking() }
     println("KMath Chained: ${chainJob.await()}")
+    println("KMath Blocking: ${blockingJob.await()}")
     println("Apache Direct: ${directJob.await()}")
 }

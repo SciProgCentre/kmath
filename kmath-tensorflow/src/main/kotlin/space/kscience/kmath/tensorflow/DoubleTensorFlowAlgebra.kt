@@ -20,13 +20,14 @@ import space.kscience.kmath.nd.StructureND
 import space.kscience.kmath.operations.FieldOps
 import space.kscience.kmath.operations.Float64Field
 import space.kscience.kmath.operations.PowerOperations
+import space.kscience.kmath.structures.Float64
 
 public class DoubleTensorFlowOutput(
     graph: Graph,
     output: Output<TFloat64>,
 ) : TensorFlowOutput<Double, TFloat64>(graph, output) {
 
-    override fun org.tensorflow.Tensor.actualizeTensor(): NdArray<Double> = this as TFloat64
+    override fun org.tensorflow.Tensor.actualizeTensor(): NdArray<Float64> = this as TFloat64
 }
 
 internal fun ShapeND.toLongArray(): LongArray = LongArray(size) { get(it).toLong() }
@@ -34,14 +35,14 @@ internal fun ShapeND.toLongArray(): LongArray = LongArray(size) { get(it).toLong
 public class DoubleTensorFlowAlgebra internal constructor(
     graph: Graph,
 ) : TensorFlowAlgebra<Double, TFloat64,
-        Float64Field>(graph), FieldOps<StructureND<Double>>, PowerOperations<StructureND<Double>> {
+        Float64Field>(graph), FieldOps<StructureND<Float64>>, PowerOperations<StructureND<Float64>> {
 
     override val elementAlgebra: Float64Field get() = Float64Field
 
     override fun mutableStructureND(
         shape: ShapeND,
         initializer: Float64Field.(IntArray) -> Double,
-    ): MutableStructureND<Double> {
+    ): MutableStructureND<Float64> {
         val res = TFloat64.tensorOf(org.tensorflow.ndarray.Shape.of(*shape.toLongArray())) { array ->
             ColumnStrides(shape).forEach { index ->
                 array.setDouble(elementAlgebra.initializer(index), *index.toLongArray())
@@ -50,7 +51,7 @@ public class DoubleTensorFlowAlgebra internal constructor(
         return DoubleTensorFlowOutput(graph, ops.constant(res).asOutput())
     }
 
-    override fun StructureND<Double>.asTensorFlow(): TensorFlowOutput<Double, TFloat64> =
+    override fun StructureND<Float64>.asTensorFlow(): TensorFlowOutput<Double, TFloat64> =
         if (this is TensorFlowOutput<Double, *> && output.type() == TFloat64::class.java) {
             @Suppress("UNCHECKED_CAST")
             this as TensorFlowOutput<Double, TFloat64>
@@ -69,13 +70,13 @@ public class DoubleTensorFlowAlgebra internal constructor(
     override fun const(value: Double): Constant<TFloat64> = ops.constant(value)
 
     override fun divide(
-        left: StructureND<Double>,
-        right: StructureND<Double>,
+        left: StructureND<Float64>,
+        right: StructureND<Float64>,
     ): TensorFlowOutput<Double, TFloat64> = left.operate(right) { l, r ->
         ops.math.div(l, r)
     }
 
-    override fun power(arg: StructureND<Double>, pow: Number): TensorFlowOutput<Double, TFloat64> =
+    override fun power(arg: StructureND<Float64>, pow: Number): TensorFlowOutput<Double, TFloat64> =
         arg.operate { ops.math.pow(it, const(pow.toDouble())) }
 }
 
@@ -86,8 +87,8 @@ public class DoubleTensorFlowAlgebra internal constructor(
  */
 @UnstableKMathAPI
 public fun Float64Field.produceWithTF(
-    block: DoubleTensorFlowAlgebra.() -> StructureND<Double>,
-): StructureND<Double> = Graph().use { graph ->
+    block: DoubleTensorFlowAlgebra.() -> StructureND<Float64>,
+): StructureND<Float64> = Graph().use { graph ->
     val scope = DoubleTensorFlowAlgebra(graph)
     scope.export(scope.block())
 }
@@ -99,8 +100,8 @@ public fun Float64Field.produceWithTF(
  */
 @OptIn(UnstableKMathAPI::class)
 public fun Float64Field.produceMapWithTF(
-    block: DoubleTensorFlowAlgebra.() -> Map<Symbol, StructureND<Double>>,
-): Map<Symbol, StructureND<Double>> = Graph().use { graph ->
+    block: DoubleTensorFlowAlgebra.() -> Map<Symbol, StructureND<Float64>>,
+): Map<Symbol, StructureND<Float64>> = Graph().use { graph ->
     val scope = DoubleTensorFlowAlgebra(graph)
     scope.block().mapValues { scope.export(it.value) }
 }
