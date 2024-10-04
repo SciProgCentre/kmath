@@ -19,6 +19,14 @@ repositories {
 }
 
 kotlin {
+    jvmToolchain(17)
+
+    compilerOptions {
+        optIn.addAll(
+            "space.kscience.kmath.UnstableKMathAPI"
+        )
+    }
+
     jvm()
 
     js(IR) {
@@ -58,7 +66,7 @@ kotlin {
                 implementation(project(":kmath-nd4j"))
                 implementation(project(":kmath-kotlingrad"))
                 implementation(project(":kmath-viktor"))
-                implementation(project(":kmath-jafama"))
+//                implementation(project(":kmath-jafama"))
                 implementation(projects.kmath.kmathTensorflow)
                 implementation("org.tensorflow:tensorflow-core-platform:0.4.0")
                 implementation("org.nd4j:nd4j-native:1.0.0-M1")
@@ -149,15 +157,6 @@ benchmark {
     configurations.register("integration") {
         commonConfiguration()
         include("IntegrationBenchmark")
-    }
-}
-
-kotlin {
-    jvmToolchain(11)
-    compilerOptions {
-        optIn.addAll(
-            "space.kscience.kmath.UnstableKMathAPI"
-        )
     }
 }
 

@@ -27,8 +27,6 @@ dependencies {
     implementation(project(":kmath-tensors"))
     implementation(project(":kmath-symja"))
     implementation(project(":kmath-for-real"))
-    //jafama
-    implementation(project(":kmath-jafama"))
     //multik
     implementation(project(":kmath-multik"))
     implementation(libs.multik.default)
@@ -54,7 +52,7 @@ dependencies {
 }
 
 kotlin {
-    jvmToolchain(11)
+    jvmToolchain(17)
     sourceSets.all {
         languageSettings {
             optIn("kotlin.contracts.ExperimentalContracts")

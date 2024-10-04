@@ -1,5 +1,5 @@
 plugins {
-    id("space.kscience.gradle.jvm")
+    id("space.kscience.gradle.mpp")
 }
 
 kotlin.sourceSets
@@ -9,11 +9,18 @@ kotlin.sourceSets
 
 description = "Kotlin∇ integration module"
 
-dependencies {
-    api("ai.hypergraph:kaliningraph:0.1.9")
-    api("ai.hypergraph:kotlingrad:0.4.7")
-    api(project(":kmath-core"))
-    testImplementation(project(":kmath-ast"))
+kscience{
+    jvm()
+
+    jvmMain{
+        api("ai.hypergraph:kaliningraph:0.1.9")
+        api("ai.hypergraph:kotlingrad:0.4.7")
+        api(project(":kmath-core"))
+    }
+
+    jvmTest{
+        implementation(project(":kmath-ast"))
+    }
 }
 
 readme {

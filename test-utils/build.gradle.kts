@@ -14,6 +14,7 @@ kotlin.sourceSets {
         dependencies {
             api(projects.kmath.kmathCore)
             api(kotlin("test"))
+            api(spclibs.logback.classic)
         }
     }
 }

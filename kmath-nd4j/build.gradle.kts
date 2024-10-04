@@ -1,14 +1,21 @@
 plugins {
-    id("space.kscience.gradle.jvm")
+    id("space.kscience.gradle.mpp")
 }
 
 description = "ND4J NDStructure implementation and according NDAlgebra classes"
 
-dependencies {
-    api(project(":kmath-tensors"))
-    api("org.nd4j:nd4j-api:1.0.0-M1")
-    testImplementation("org.nd4j:nd4j-native-platform:1.0.0-M1")
-    testImplementation("org.slf4j:slf4j-simple:1.7.32")
+
+kscience {
+    jvm()
+
+    jvmMain {
+        api(project(":kmath-tensors"))
+        api("org.nd4j:nd4j-api:1.0.0-M2.1")
+    }
+
+    jvmTest{
+        implementation("org.nd4j:nd4j-native-platform:1.0.0-M1")
+    }
 }
 
 readme {

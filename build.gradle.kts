@@ -19,6 +19,12 @@ allprojects {
     version = "0.4.1-dev"
 }
 
+dependencies{
+    subprojects.forEach {
+        dokka(it)
+    }
+}
+
 subprojects {
     if (name.startsWith("kmath")) apply<MavenPublishPlugin>()
 
