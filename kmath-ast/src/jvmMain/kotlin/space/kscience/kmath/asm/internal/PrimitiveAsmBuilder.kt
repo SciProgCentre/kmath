@@ -14,6 +14,8 @@ import org.objectweb.asm.commons.InstructionAdapter
 import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.ast.TypedMst
 import space.kscience.kmath.expressions.*
+import space.kscience.kmath.named.SimpleSymbolIndexer
+import space.kscience.kmath.named.SymbolIndexer
 import space.kscience.kmath.operations.*
 import space.kscience.kmath.structures.Float64
 import java.lang.invoke.MethodHandles

@@ -6,9 +6,7 @@
 package space.kscience.kmath.stat
 
 import space.kscience.kmath.operations.*
-import space.kscience.kmath.structures.Buffer
-import space.kscience.kmath.structures.Float64
-import space.kscience.kmath.structures.indices
+import space.kscience.kmath.structures.*
 
 /**
  * Arithmetic mean
@@ -44,8 +42,8 @@ public class Mean<T>(
 
     public companion object {
         public fun evaluate(buffer: Buffer<Float64>): Double = Float64Field.mean.evaluateBlocking(buffer)
-        public fun evaluate(buffer: Buffer<Int>): Int = Int32Ring.mean.evaluateBlocking(buffer)
-        public fun evaluate(buffer: Buffer<Long>): Long = Int64Ring.mean.evaluateBlocking(buffer)
+        public fun evaluate(buffer: Buffer<Int32>): Int = Int32Ring.mean.evaluateBlocking(buffer)
+        public fun evaluate(buffer: Buffer<Int64>): Long = Int64Ring.mean.evaluateBlocking(buffer)
     }
 }
 

@@ -6,9 +6,9 @@
 package space.kscience.kmath.optimization
 
 import space.kscience.attributes.*
-import space.kscience.kmath.expressions.NamedMatrix
 import space.kscience.kmath.expressions.Symbol
 import space.kscience.kmath.misc.Loggable
+import space.kscience.kmath.named.NamedMatrix
 
 public interface OptimizationAttribute<T> : Attribute<T>
 

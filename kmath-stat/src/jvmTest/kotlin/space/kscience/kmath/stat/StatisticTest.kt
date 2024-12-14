@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.last
 import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runTest
 import space.kscience.kmath.operations.Float64Field
 import space.kscience.kmath.random.RandomGenerator
 import space.kscience.kmath.random.chain
@@ -27,21 +28,21 @@ internal class StatisticTest {
     val chunked = data.chunked(1000)
 
     @Test
-    fun singleBlockingMean() {
+    fun singleBlockingMean() = runTest {
+        val first = chunked.first()
+        val res = Float64Field.mean(first)
+        assertEquals(0.5, res, 1e-1)
+    }
+
+    @Test
+    fun singleSuspendMean() = runTest {
         val first = runBlocking { chunked.first() }
         val res = Float64Field.mean(first)
         assertEquals(0.5, res, 1e-1)
     }
 
     @Test
-    fun singleSuspendMean() = runBlocking {
-        val first = runBlocking { chunked.first() }
-        val res = Float64Field.mean(first)
-        assertEquals(0.5, res, 1e-1)
-    }
-
-    @Test
-    fun parallelMean() = runBlocking {
+    fun parallelMean() = runTest {
         val average = Float64Field.mean
             .flow(chunked) //create a flow from evaluated results
             .take(100) // Take 100 data chunks from the source and accumulate them
