@@ -11,6 +11,10 @@ kscience {
     dependencies {
         api(projects.kmathCore)
     }
+
+    wasmJsMain{
+        api(spclibs.kotlinx.browser)
+    }
 }
 
 readme {

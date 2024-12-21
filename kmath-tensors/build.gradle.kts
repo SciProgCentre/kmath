@@ -7,7 +7,9 @@ kscience {
     js {
         browser {
             testTask {
-                useMocha().timeout = "0"
+                useMocha {
+                    timeout = "0"
+                }
             }
         }
     }

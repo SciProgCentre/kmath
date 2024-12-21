@@ -7,14 +7,18 @@ kscience {
     js{
         nodejs {
             testTask {
-                useMocha().timeout = "0"
+                useMocha {
+                    timeout = "0"
+                }
             }
         }
 
         browser {
             useCommonJs()
             testTask {
-                useMocha().timeout = "0"
+                useMocha {
+                    timeout = "0"
+                }
             }
         }
     }
