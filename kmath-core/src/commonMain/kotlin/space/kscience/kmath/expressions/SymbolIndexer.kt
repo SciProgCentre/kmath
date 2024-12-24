@@ -14,8 +14,6 @@ import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
 import kotlin.jvm.JvmInline
 
-//DO NOT MOVE THIS CLASS if you do not want ASM module to break
-
 /**
  * An environment to easy transform indexed variables to symbols and back.
  * TODO requires multi-receivers to be beautiful

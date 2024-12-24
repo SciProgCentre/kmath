@@ -372,12 +372,12 @@ internal sealed class PrimitiveAsmBuilder<T : Number, out E : Expression<T>>(
         /**
          * ASM type for [java.lang.Number].
          */
-        val NUMBER_TYPE: Type = getObjectType("java/lang/Number")
+        val NUMBER_TYPE: Type = getType(Number::class.java)
 
         /**
          * ASM type for [SymbolIndexer].
          */
-        val SYMBOL_INDEXER_TYPE: Type = getObjectType("space/kscience/kmath/expressions/SymbolIndexer")
+        val SYMBOL_INDEXER_TYPE: Type = getType(SymbolIndexer::class.java)
     }
 }
 
