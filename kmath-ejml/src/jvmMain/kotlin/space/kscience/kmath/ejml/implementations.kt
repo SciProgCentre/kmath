@@ -45,11 +45,11 @@ public fun Complex_F64.toKMathComplex(): Complex = Complex(real, imaginary)
  */
 public class EjmlDoubleVector<out M : DMatrix>(override val origin: M) : EjmlVector<Double, M>(origin) {
     init {
-        require(origin.numRows == 1) { "The origin matrix must have only one row to form a vector" }
+        require(origin.numCols == 1) { "The origin matrix must have only one column to form a vector" }
     }
 
 
-    override operator fun get(index: Int): Double = origin[0, index]
+    override operator fun get(index: Int): Double = origin[index, 0]
 }
 
 /**
@@ -57,10 +57,10 @@ public class EjmlDoubleVector<out M : DMatrix>(override val origin: M) : EjmlVec
  */
 public class EjmlFloatVector<out M : FMatrix>(override val origin: M) : EjmlVector<Float, M>(origin) {
     init {
-        require(origin.numRows == 1) { "The origin matrix must have only one row to form a vector" }
+        require(origin.numCols == 1) { "The origin matrix must have only one column to form a vector" }
     }
 
-    override operator fun get(index: Int): Float = origin[0, index]
+    override operator fun get(index: Int): Float = origin[index, 0]
 }
 
 /**

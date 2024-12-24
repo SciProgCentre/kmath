@@ -7,6 +7,9 @@ package space.kscience.kmath.ejml
 
 import org.ejml.data.DMatrixRMaj
 import org.ejml.dense.row.RandomMatrices_DDRM
+import space.kscience.kmath.linear.invoke
+import space.kscience.kmath.structures.asBuffer
+import space.kscience.kmath.testutils.assertBufferEquals
 import kotlin.random.Random
 import kotlin.random.asJavaRandom
 import kotlin.test.Test
@@ -53,5 +56,11 @@ internal class EjmlVectorTest {
         val m = randomMatrix
         val w = EjmlDoubleVector(m)
         assertSame(m, w.origin)
+    }
+
+    @Test
+    fun unaryMinus() = EjmlLinearSpaceDDRM {
+        val mu = doubleArrayOf(1.0, 2.0, 3.0).asBuffer()
+        assertBufferEquals(mu, -(-mu))
     }
 }

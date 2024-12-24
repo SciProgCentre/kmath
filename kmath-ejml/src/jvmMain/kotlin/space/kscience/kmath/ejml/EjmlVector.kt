@@ -18,7 +18,7 @@ import space.kscience.kmath.linear.Point
  */
 public abstract class EjmlVector<out T, out M : Matrix>(public open val origin: M) : Point<T> {
     override val size: Int
-        get() = origin.numCols
+        get() = origin.numRows
 
     override operator fun iterator(): Iterator<T> = object : Iterator<T> {
         private var cursor: Int = 0
