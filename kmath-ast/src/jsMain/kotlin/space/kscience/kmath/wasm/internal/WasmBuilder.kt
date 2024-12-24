@@ -5,7 +5,6 @@
 
 package space.kscience.kmath.wasm.internal
 
-import `<dynamic>`.invoke
 import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.ast.TypedMst
 import space.kscience.kmath.expressions.*
