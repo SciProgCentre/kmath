@@ -7,9 +7,13 @@ package space.kscience.kmath.wasm.internal
 
 import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.ast.TypedMst
-import space.kscience.kmath.expressions.*
+import space.kscience.kmath.expressions.DoubleExpression
+import space.kscience.kmath.expressions.Expression
+import space.kscience.kmath.expressions.IntExpression
+import space.kscience.kmath.expressions.Symbol
 import space.kscience.kmath.internal.binaryen.*
 import space.kscience.kmath.internal.webassembly.Instance
+import space.kscience.kmath.named.SimpleSymbolIndexer
 import space.kscience.kmath.operations.*
 import space.kscience.kmath.structures.Float64
 import space.kscience.kmath.internal.binaryen.Module as BinaryenModule

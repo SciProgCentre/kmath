@@ -5,14 +5,24 @@
 
 @file:OptIn(UnstableKMathAPI::class)
 
-package space.kscience.kmath.expressions
+package space.kscience.kmath.named
 
 import space.kscience.kmath.PerformancePitfall
 import space.kscience.kmath.UnstableKMathAPI
+import space.kscience.kmath.expressions.Symbol
 import space.kscience.kmath.linear.Matrix
 import space.kscience.kmath.structures.getOrNull
 
+/**
+ * A square matrix that could be accessed via column and row names.
+ *
+ * Multiple symbols could in theory reference the same columns or rows. Some columns could be not references at all.
+ */
 public class NamedMatrix<T>(public val values: Matrix<T>, public val indexer: SymbolIndexer) : Matrix<T> by values {
+    init {
+        require(values.rows.size == values.columns.size) { "Only square matrices could be named" }
+    }
+
     public operator fun get(i: Symbol, j: Symbol): T = get(indexer.indexOf(i), indexer.indexOf(j))
 
     public companion object {

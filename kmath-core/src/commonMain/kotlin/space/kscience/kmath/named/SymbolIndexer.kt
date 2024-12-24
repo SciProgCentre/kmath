@@ -3,9 +3,10 @@
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
-package space.kscience.kmath.expressions
+package space.kscience.kmath.named
 
 import space.kscience.kmath.UnstableKMathAPI
+import space.kscience.kmath.expressions.Symbol
 import space.kscience.kmath.linear.Point
 import space.kscience.kmath.nd.Structure2D
 import space.kscience.kmath.structures.BufferFactory
@@ -68,6 +69,9 @@ public interface SymbolIndexer {
 
     public fun Map<Symbol, Double>.toDoubleArray(): DoubleArray = DoubleArray(symbols.size) { getValue(symbols[it]) }
 }
+
+@UnstableKMathAPI
+public val SymbolIndexer.size: Int get() = symbols.size
 
 @UnstableKMathAPI
 @JvmInline

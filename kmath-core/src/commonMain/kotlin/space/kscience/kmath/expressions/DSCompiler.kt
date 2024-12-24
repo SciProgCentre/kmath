@@ -126,7 +126,7 @@ public class DSCompiler<T, out A : Algebra<T>> internal constructor(
      * If all orders are set to 0, then the 0<sup>th</sup> order derivative is returned, which is the value of the
      * function.
      *
-     * The indices of derivatives are between 0 and [size] &minus; 1. Their specific order is fixed for a given compiler, but
+     * The indices of derivatives are between 0 and [getSize] &minus; 1. Their specific order is fixed for a given compiler, but
      * otherwise not publicly specified. There are however some simple cases which have guaranteed indices:
      *
      *  * the index of 0<sup>th</sup> order derivative is always 0
