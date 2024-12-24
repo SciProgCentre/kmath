@@ -21,7 +21,7 @@ internal class EjmlVectorTest {
 
     private val randomMatrix: DMatrixRMaj
         get() {
-            val d = DMatrixRMaj(1, random.nextInt(2, 100))
+            val d = DMatrixRMaj(random.nextInt(2, 100), 1)
             RandomMatrices_DDRM.fillUniform(d, random.asJavaRandom())
             return d
         }
@@ -30,7 +30,7 @@ internal class EjmlVectorTest {
     fun size() {
         val m = randomMatrix
         val w = EjmlDoubleVector(m)
-        assertEquals(m.numCols, w.size)
+        assertEquals(m.numRows, w.size)
     }
 
     @Test
@@ -46,7 +46,7 @@ internal class EjmlVectorTest {
         val w = EjmlDoubleVector(m)
 
         assertEquals(
-            m.iterator(true, 0, 0, 0, m.numCols - 1).asSequence().toList(),
+            m.iterator(true, 0, 0, m.numRows - 1, 0).asSequence().toList(),
             w.iterator().asSequence().toList()
         )
     }
