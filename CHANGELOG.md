@@ -12,10 +12,11 @@
 ### Removed
 
 ### Fixed
+- Fix EJML to properly treat vectors as columns
 
 ### Security
 
-## 0.4.0-dev-3 - 2024-02-18
+## 0.4.0 - 2024-02-18
 
 ### Added
 
