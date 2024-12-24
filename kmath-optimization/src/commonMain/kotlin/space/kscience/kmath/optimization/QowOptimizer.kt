@@ -6,18 +6,15 @@
 package space.kscience.kmath.optimization
 
 import space.kscience.kmath.UnstableKMathAPI
-import space.kscience.kmath.expressions.DifferentiableExpression
-import space.kscience.kmath.expressions.Symbol
-import space.kscience.kmath.expressions.derivative
-import space.kscience.kmath.expressions.withDefaultArgs
+import space.kscience.kmath.expressions.*
 import space.kscience.kmath.linear.*
 import space.kscience.kmath.misc.log
 import space.kscience.kmath.named.NamedMatrix
-import space.kscience.kmath.named.SymbolIndexer
 import space.kscience.kmath.named.named
 import space.kscience.kmath.operations.Float64Field
 import space.kscience.kmath.operations.Float64L2Norm
 import space.kscience.kmath.operations.algebra
+import space.kscience.kmath.optimization.QowOptimizer.distance
 import space.kscience.kmath.structures.Float64
 import space.kscience.kmath.structures.Float64Buffer
 import kotlin.math.abs

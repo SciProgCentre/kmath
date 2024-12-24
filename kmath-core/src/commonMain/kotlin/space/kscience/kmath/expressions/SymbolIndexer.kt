@@ -3,10 +3,9 @@
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
-package space.kscience.kmath.named
+package space.kscience.kmath.expressions
 
 import space.kscience.kmath.UnstableKMathAPI
-import space.kscience.kmath.expressions.Symbol
 import space.kscience.kmath.linear.Point
 import space.kscience.kmath.nd.Structure2D
 import space.kscience.kmath.structures.BufferFactory
@@ -14,6 +13,8 @@ import space.kscience.kmath.structures.Float64Buffer
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
 import kotlin.jvm.JvmInline
+
+//DO NOT MOVE THIS CLASS if you do not want ASM module to break
 
 /**
  * An environment to easy transform indexed variables to symbols and back.

@@ -18,12 +18,11 @@ import space.kscience.attributes.AttributesBuilder
 import space.kscience.attributes.SetAttribute
 import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.expressions.Symbol
+import space.kscience.kmath.expressions.SymbolIndexer
 import space.kscience.kmath.expressions.derivative
-import space.kscience.kmath.named.SymbolIndexer
-import space.kscience.kmath.named.withSymbols
+import space.kscience.kmath.expressions.withSymbols
 import space.kscience.kmath.optimization.*
 import space.kscience.kmath.structures.Float64
-import kotlin.collections.set
 import kotlin.reflect.KClass
 
 public operator fun PointValuePair.component1(): DoubleArray = point

@@ -9,7 +9,6 @@ import space.kscience.attributes.SafeType
 import space.kscience.attributes.WithType
 import space.kscience.attributes.safeTypeOf
 import space.kscience.kmath.UnstableKMathAPI
-import space.kscience.kmath.named.SymbolIndexer
 import space.kscience.kmath.operations.Algebra
 import space.kscience.kmath.operations.DoubleField
 import space.kscience.kmath.operations.IntRing

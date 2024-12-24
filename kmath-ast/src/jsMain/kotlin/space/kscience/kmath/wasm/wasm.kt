@@ -11,7 +11,6 @@ import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.ast.TypedMst
 import space.kscience.kmath.ast.evaluateConstants
 import space.kscience.kmath.expressions.*
-import space.kscience.kmath.named.SimpleSymbolIndexer
 import space.kscience.kmath.operations.Float64Field
 import space.kscience.kmath.operations.Int32Ring
 import space.kscience.kmath.structures.Float64

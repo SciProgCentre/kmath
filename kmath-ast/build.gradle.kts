@@ -40,7 +40,7 @@ kscience {
     }
 
     dependencies(jvmMain) {
-        implementation("org.ow2.asm:asm-commons:9.2")
+        implementation("org.ow2.asm:asm-commons:9.7.1")
     }
 
 }
@@ -54,7 +54,7 @@ kotlin {
     }
 }
 
-if (System.getProperty("space.kscience.kmath.ast.dump.generated.classes") == "1") {
+if (project.properties["space.kscience.kmath.ast.dump.generated.classes"] == "1") {
     tasks.withType<org.jetbrains.kotlin.gradle.targets.jvm.tasks.KotlinJvmTest> {
         jvmArgs("-Dspace.kscience.kmath.ast.dump.generated.classes=1")
     }

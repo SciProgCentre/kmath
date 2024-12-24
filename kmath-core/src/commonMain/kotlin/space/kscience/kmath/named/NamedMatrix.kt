@@ -9,7 +9,9 @@ package space.kscience.kmath.named
 
 import space.kscience.kmath.PerformancePitfall
 import space.kscience.kmath.UnstableKMathAPI
+import space.kscience.kmath.expressions.SimpleSymbolIndexer
 import space.kscience.kmath.expressions.Symbol
+import space.kscience.kmath.expressions.SymbolIndexer
 import space.kscience.kmath.linear.Matrix
 import space.kscience.kmath.structures.getOrNull
 
@@ -20,7 +22,7 @@ import space.kscience.kmath.structures.getOrNull
  */
 public class NamedMatrix<T>(public val values: Matrix<T>, public val indexer: SymbolIndexer) : Matrix<T> by values {
     init {
-        require(values.rows.size == values.columns.size) { "Only square matrices could be named" }
+        require(values.rowNum == values.colNum) { "Only square matrices could be named" }
     }
 
     public operator fun get(i: Symbol, j: Symbol): T = get(indexer.indexOf(i), indexer.indexOf(j))

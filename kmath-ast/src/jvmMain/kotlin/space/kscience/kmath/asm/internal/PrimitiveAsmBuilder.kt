@@ -14,8 +14,6 @@ import org.objectweb.asm.commons.InstructionAdapter
 import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.ast.TypedMst
 import space.kscience.kmath.expressions.*
-import space.kscience.kmath.named.SimpleSymbolIndexer
-import space.kscience.kmath.named.SymbolIndexer
 import space.kscience.kmath.operations.*
 import space.kscience.kmath.structures.Float64
 import java.lang.invoke.MethodHandles
@@ -77,7 +75,7 @@ internal sealed class PrimitiveAsmBuilder<T : Number, out E : Expression<T>>(
     val instance: E by lazy {
         val classWriter = ClassWriter(ClassWriter.COMPUTE_FRAMES) {
             visit(
-                V1_8,
+                V11,
                 ACC_PUBLIC or ACC_FINAL or ACC_SUPER,
                 classType.internalName,
                 "${OBJECT_TYPE.descriptor}${expressionParentType.descriptor}",

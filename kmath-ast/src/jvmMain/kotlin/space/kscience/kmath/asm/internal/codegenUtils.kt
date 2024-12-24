@@ -73,7 +73,6 @@ internal tailrec fun buildName(marker: String, collision: Int = 0): String {
     return buildName(marker, collision + 1)
 }
 
-@Suppress("FunctionName")
 internal inline fun ClassWriter(flags: Int, block: ClassWriter.() -> Unit): ClassWriter {
     contract { callsInPlace(block, InvocationKind.EXACTLY_ONCE) }
     return ClassWriter(flags).apply(block)
