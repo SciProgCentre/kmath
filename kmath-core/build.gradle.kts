@@ -9,7 +9,7 @@ kscience {
     wasm()
 
     dependencies {
-        api(projects.attributesKt)
+        api(libs.attributes)
     }
 
     testDependencies {
