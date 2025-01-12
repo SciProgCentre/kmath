@@ -19,43 +19,44 @@ public enum class CMDecomposition {
     CHOLESKY
 }
 
-private fun CMLinearSpace.solver(
+private fun CMLinearSpace.cmSolver(
     a: Matrix<Float64>,
     decomposition: CMDecomposition = CMDecomposition.LUP,
 ): DecompositionSolver = when (decomposition) {
-    CMDecomposition.LUP -> LUDecomposition(a.toCM().origin).solver
-    CMDecomposition.RRQR -> RRQRDecomposition(a.toCM().origin).solver
-    CMDecomposition.QR -> QRDecomposition(a.toCM().origin).solver
-    CMDecomposition.EIGEN -> EigenDecomposition(a.toCM().origin).solver
-    CMDecomposition.CHOLESKY -> CholeskyDecomposition(a.toCM().origin).solver
+    CMDecomposition.LUP -> LUDecomposition(a.toCM()).solver
+    CMDecomposition.RRQR -> RRQRDecomposition(a.toCM()).solver
+    CMDecomposition.QR -> QRDecomposition(a.toCM()).solver
+    CMDecomposition.EIGEN -> EigenDecomposition(a.toCM()).solver
+    CMDecomposition.CHOLESKY -> CholeskyDecomposition(a.toCM()).solver
 }
 
 public fun CMLinearSpace.solve(
     a: Matrix<Float64>,
     b: Matrix<Float64>,
     decomposition: CMDecomposition = CMDecomposition.LUP,
-): CMMatrix = solver(a, decomposition).solve(b.toCM().origin).wrap()
+): CMMatrix = cmSolver(a, decomposition).solve(b.toCM()).asMatrix()
 
 public fun CMLinearSpace.solve(
     a: Matrix<Float64>,
     b: Point<Float64>,
     decomposition: CMDecomposition = CMDecomposition.LUP,
-): CMVector = solver(a, decomposition).solve(b.toCM().origin).toPoint()
+): CMVector = cmSolver(a, decomposition).solve(b.toCM()).asVector()
 
 public fun CMLinearSpace.inverse(
     a: Matrix<Float64>,
     decomposition: CMDecomposition = CMDecomposition.LUP,
-): CMMatrix = solver(a, decomposition).inverse.wrap()
+): CMMatrix = cmSolver(a, decomposition).inverse.asMatrix()
 
 
-public fun CMLinearSpace.solver(decomposition: CMDecomposition): LinearSolver<Float64> = object : LinearSolver<Float64> {
-    override fun solve(a: Matrix<Float64>, b: Matrix<Float64>): Matrix<Float64> =
-        solver(a, decomposition).solve(b.toCM().origin).wrap()
+public fun CMLinearSpace.solver(decomposition: CMDecomposition): LinearSolver<Float64> =
+    object : LinearSolver<Float64> {
+        override fun solve(a: Matrix<Float64>, b: Matrix<Float64>): Matrix<Float64> =
+            cmSolver(a, decomposition).solve(b.toCM()).asMatrix()
 
-    override fun solve(a: Matrix<Float64>, b: Point<Float64>): Point<Float64> =
-        solver(a, decomposition).solve(b.toCM().origin).toPoint()
+        override fun solve(a: Matrix<Float64>, b: Point<Float64>): Point<Float64> =
+            cmSolver(a, decomposition).solve(b.toCM()).asVector()
 
-    override fun inverse(matrix: Matrix<Float64>): Matrix<Float64> = solver(matrix, decomposition).inverse.wrap()
-}
+        override fun inverse(matrix: Matrix<Float64>): Matrix<Float64> = cmSolver(matrix, decomposition).inverse.asMatrix()
+    }
 
 public fun CMLinearSpace.lupSolver(): LinearSolver<Float64> = solver((CMDecomposition.LUP))

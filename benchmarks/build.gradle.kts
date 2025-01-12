@@ -53,7 +53,6 @@ kotlin {
                 implementation(project(":kmath-dimensions"))
                 implementation(project(":kmath-for-real"))
                 implementation(project(":kmath-tensors"))
-                implementation(project(":kmath-multik"))
                 implementation(libs.multik.default)
                 implementation(spclibs.kotlinx.benchmark.runtime)
             }
@@ -61,13 +60,14 @@ kotlin {
 
         val jvmMain by getting {
             dependencies {
-                implementation(project(":kmath-commons"))
-                implementation(project(":kmath-ejml"))
-                implementation(project(":kmath-nd4j"))
-                implementation(project(":kmath-kotlingrad"))
-                implementation(project(":kmath-viktor"))
-//                implementation(project(":kmath-jafama"))
+                implementation(projects.kmathCommons)
+                implementation(projects.kmathEjml)
+                implementation(projects.kmathNd4j)
+                implementation(projects.kmathKotlingrad)
+                implementation(projects.kmathViktor)
+                implementation(projects.kmathOjalgo)
                 implementation(projects.kmath.kmathTensorflow)
+                implementation(projects.kmathMultik)
                 implementation("org.tensorflow:tensorflow-core-platform:0.4.0")
                 implementation("org.nd4j:nd4j-native:1.0.0-M1")
                 //    uncomment if your system supports AVX2

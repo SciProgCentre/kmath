@@ -12,10 +12,9 @@ import kotlinx.benchmark.State
 import space.kscience.kmath.commons.linear.CMLinearSpace
 import space.kscience.kmath.commons.linear.lupSolver
 import space.kscience.kmath.ejml.EjmlLinearSpaceDDRM
-import space.kscience.kmath.linear.invoke
-import space.kscience.kmath.linear.linearSpace
-import space.kscience.kmath.linear.lupSolver
-import space.kscience.kmath.linear.parallel
+import space.kscience.kmath.linear.*
+import space.kscience.kmath.ojalgo.Ojalgo
+import space.kscience.kmath.ojalgo.linearSpace
 import space.kscience.kmath.operations.algebra
 import kotlin.random.Random
 
@@ -48,10 +47,14 @@ internal class MatrixInverseBenchmark {
         blackhole.consume(lupSolver().inverse(matrix))
     }
 
-
     @Benchmark
     fun ejmlInverse(blackhole: Blackhole) = EjmlLinearSpaceDDRM {
-        blackhole.consume(matrix.toEjml().inverted())
+        blackhole.consume(matrix.inverted())
+    }
+
+    @Benchmark
+    fun ojalgoInverse(blackhole: Blackhole) = Ojalgo.R064.linearSpace {
+        blackhole.consume(matrix.getOrComputeAttribute(Inverted))
     }
 
 }

@@ -6,7 +6,7 @@
 package space.kscience.kmath.linear
 
 /**
- * A group of methods to solve for *X* in equation *X = A<sup>&minus;1</sup> &middot; B*, where *A* and *B* are
+ * A group of methods to solve for $X$ in equation $X = A^{-1} \cdot B$, where $A$ and $B$ are
  * matrices or vectors.
  *
  * @param T the type of items.

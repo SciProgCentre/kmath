@@ -4,15 +4,19 @@
 
 ### Added
 - Metropolis-Hastings sampler
+- Ojalgo `LinearSpace` implementation.
 
 ### Changed
+- attributes-kt moved to a separate project, and the version used is 0.3.0
+- Kotlin 2.1. Now use cross-compilation to deploy macOS targets.
+- Changed `origin` to `cmMatrix` in kmath-commons to avoid property name clash. Expose bidirectional conversion in `CMLinearSpace`
 
 ### Deprecated
 
 ### Removed
 
 ### Fixed
-- Fix EJML to properly treat vectors as columns
+- (BREAKING CHANGE) Fix EJML to properly treat vectors as columns
 
 ### Security
 

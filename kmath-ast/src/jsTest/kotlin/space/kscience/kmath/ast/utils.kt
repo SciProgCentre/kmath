@@ -22,7 +22,7 @@ import space.kscience.kmath.wasm.compile as wasmCompile
 import space.kscience.kmath.wasm.compileToExpression as wasmCompileToExpression
 
 @OptIn(UnstableKMathAPI::class)
-private object WasmCompilerTestContext : CompilerTestContext {
+internal object WasmCompilerTestContext : CompilerTestContext {
     override fun MST.compileToExpression(algebra: Int32Ring): Expression<Int> = wasmCompileToExpression(algebra)
     override fun MST.compile(algebra: Int32Ring, arguments: Map<Symbol, Int>): Int = wasmCompile(algebra, arguments)
     override fun MST.compileToExpression(algebra: Float64Field): Expression<Float64> = wasmCompileToExpression(algebra)
@@ -31,7 +31,7 @@ private object WasmCompilerTestContext : CompilerTestContext {
         wasmCompile(algebra, arguments)
 }
 
-private object ESTreeCompilerTestContext : CompilerTestContext {
+internal object ESTreeCompilerTestContext : CompilerTestContext {
     override fun MST.compileToExpression(algebra: Int32Ring): Expression<Int> = estreeCompileToExpression(algebra)
     override fun MST.compile(algebra: Int32Ring, arguments: Map<Symbol, Int>): Int = estreeCompile(algebra, arguments)
     override fun MST.compileToExpression(algebra: Float64Field): Expression<Float64> = estreeCompileToExpression(algebra)

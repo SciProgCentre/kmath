@@ -229,6 +229,7 @@ public object EjmlLinearSpaceDDRM : EjmlLinearSpace<Double, Float64Field, DMatri
             }
 
             Determinant -> CommonOps_DDRM.det(origin)
+
             SVD -> object : SingularValueDecomposition<Float64> {
                 val ejmlSvd by lazy {
                     DecompositionFactory_DDRM

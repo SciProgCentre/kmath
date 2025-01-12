@@ -6,8 +6,6 @@ plugins {
     alias(spclibs.plugins.kotlinx.kover)
 }
 
-val attributesVersion by extra("0.2.0")
-
 allprojects {
     repositories {
         maven("https://repo.kotlin.link")
@@ -72,7 +70,7 @@ ksciencePublish {
         useSPCTeam()
     }
     repository("spc", "https://maven.sciprog.center/kscience")
-    sonatype("https://oss.sonatype.org")
+    central()
 }
 
 apiValidation.nonPublicMarkers.add("space.kscience.kmath.UnstableKMathAPI")

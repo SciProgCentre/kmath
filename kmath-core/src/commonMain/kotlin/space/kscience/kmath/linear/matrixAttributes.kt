@@ -15,7 +15,7 @@ import space.kscience.kmath.nd.StructureAttribute
  * A marker interface for algebras that operate on matrices
  * @param T type of matrix element
  */
-public interface MatrixScope<T> : AttributeScope<Matrix<T>>, WithType<T>
+public interface MatrixScope<T> : WithType<T>
 
 /**
  * A marker interface representing some properties of matrices or additional transformations of them. Features are used

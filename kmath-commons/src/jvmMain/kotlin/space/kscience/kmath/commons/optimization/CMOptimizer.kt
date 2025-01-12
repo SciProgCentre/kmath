@@ -34,7 +34,7 @@ public object CMOptimizerEngine : OptimizationAttribute<() -> MultivariateOptimi
  * Specify a Commons-maths optimization engine
  */
 public fun AttributesBuilder<FunctionOptimization<Float64>>.cmEngine(optimizerBuilder: () -> MultivariateOptimizer) {
-    set(CMOptimizerEngine, optimizerBuilder)
+    CMOptimizerEngine(optimizerBuilder)
 }
 
 public object CMOptimizerData : SetAttribute<SymbolIndexer.() -> OptimizationData>

@@ -125,9 +125,9 @@ public suspend fun XYColumnarData<Double, Double, Double>.fitWith(
         this,
         modelExpression,
         attributes.modified<XYFit> {
-            set(OptimizationStartPoint(), startingPoint)
-            if (!hasAny<OptimizationLog>()) {
-                set(OptimizationLog, Loggable.console)
+            put(OptimizationStartPoint(), startingPoint)
+            if (!attributes.hasAny<OptimizationLog>()) {
+                put(OptimizationLog, Loggable.console)
             }
         },
         pointToCurveDistance,

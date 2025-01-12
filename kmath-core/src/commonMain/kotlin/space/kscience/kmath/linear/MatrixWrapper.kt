@@ -8,6 +8,7 @@ package space.kscience.kmath.linear
 import space.kscience.attributes.Attribute
 import space.kscience.attributes.Attributes
 import space.kscience.attributes.withAttribute
+import space.kscience.attributes.withFlag
 import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.operations.Ring
 
@@ -47,7 +48,7 @@ public fun <T, A : Attribute<T>> Matrix<T>.withAttribute(
 public fun <T, A : Attribute<Unit>> Matrix<T>.withAttribute(
     attribute: A,
 ): MatrixWrapper<T> = if (this is MatrixWrapper) {
-    MatrixWrapper(origin, attributes.withAttribute(attribute))
+    MatrixWrapper(origin, attributes.withFlag(attribute))
 } else {
     MatrixWrapper(this, Attributes(attribute, Unit))
 }

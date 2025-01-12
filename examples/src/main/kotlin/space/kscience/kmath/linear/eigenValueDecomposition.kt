@@ -5,6 +5,7 @@
 
 package space.kscience.kmath.linear
 
+import space.kscience.kmath.PerformancePitfall
 import space.kscience.kmath.commons.linear.CMLinearSpace
 import space.kscience.kmath.ejml.EjmlLinearSpaceDDRM
 import space.kscience.kmath.nd.StructureND
@@ -12,6 +13,7 @@ import space.kscience.kmath.operations.algebra
 import space.kscience.kmath.structures.Float64
 import kotlin.random.Random
 
+@OptIn(PerformancePitfall::class)
 fun main() {
     val dim = 46
 
@@ -21,7 +23,7 @@ fun main() {
 
     listOf(CMLinearSpace, EjmlLinearSpaceDDRM).forEach { algebra ->
         with(algebra) {
-            //create a simmetric matrix
+            //create a symmetric matrix
             val matrix = buildMatrix(dim, dim) { row, col ->
                 if (row >= col) u[row, col] else u[col, row]
             }

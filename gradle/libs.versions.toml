@@ -4,11 +4,16 @@ commons-rng = "1.6"
 multik = "0.2.3"
 
 [libraries]
+attributes = "space.kscience:attributes-kt:0.3.0"
+
+commons-math = "org.apache.commons:commons-math3:3.6.1"
 
 commons-rng-simple = { module = "org.apache.commons:commons-rng-simple", version.ref = "commons-rng" }
 commons-rng-sampling = { module = "org.apache.commons:commons-rng-sampling", version.ref = "commons-rng" }
 
 multik-core = { module = "org.jetbrains.kotlinx:multik-core", version.ref = "multik" }
 multik-default = { module = "org.jetbrains.kotlinx:multik-default", version.ref = "multik" }
+
+ojalgo = "org.ojalgo:ojalgo:55.1.0"
 
 [plugins]

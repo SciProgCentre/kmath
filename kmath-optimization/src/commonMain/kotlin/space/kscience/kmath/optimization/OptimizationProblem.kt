@@ -24,7 +24,7 @@ public val <T> OptimizationProblem<T>.startPoint: Map<Symbol, T>
     get() = attributes[OptimizationStartPoint()] ?: error("Starting point not defined in $this")
 
 public fun <T> AttributesBuilder<OptimizationProblem<T>>.startAt(startingPoint: Map<Symbol, T>) {
-    set(OptimizationStartPoint(), startingPoint)
+    put(OptimizationStartPoint(), startingPoint)
 }
 
 
@@ -35,7 +35,7 @@ public class OptimizationCovariance<T> : OptimizationAttribute<NamedMatrix<T>>,
     PolymorphicAttribute<NamedMatrix<T>>(safeTypeOf())
 
 public fun <T> AttributesBuilder<OptimizationProblem<T>>.covariance(covariance: NamedMatrix<T>) {
-    set(OptimizationCovariance(), covariance)
+    put(OptimizationCovariance(), covariance)
 }
 
 
@@ -43,7 +43,7 @@ public class OptimizationResult<T>() : OptimizationAttribute<Map<Symbol, T>>,
     PolymorphicAttribute<Map<Symbol, T>>(safeTypeOf())
 
 public fun <T> AttributesBuilder<OptimizationProblem<T>>.result(result: Map<Symbol, T>) {
-    set(OptimizationResult(), result)
+    put(OptimizationResult(), result)
 }
 
 public val <T> OptimizationProblem<T>.resultOrNull: Map<Symbol, T>? get() = attributes[OptimizationResult()]

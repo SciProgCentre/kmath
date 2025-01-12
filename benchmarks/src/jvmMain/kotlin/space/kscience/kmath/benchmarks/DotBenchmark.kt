@@ -10,10 +10,13 @@ import kotlinx.benchmark.Blackhole
 import kotlinx.benchmark.Scope
 import kotlinx.benchmark.State
 import space.kscience.kmath.commons.linear.CMLinearSpace
+import space.kscience.kmath.commons.linear.CMLinearSpace.dot
 import space.kscience.kmath.ejml.EjmlLinearSpaceDDRM
 import space.kscience.kmath.linear.Float64ParallelLinearSpace
 import space.kscience.kmath.linear.invoke
 import space.kscience.kmath.linear.linearSpace
+import space.kscience.kmath.ojalgo.Ojalgo
+import space.kscience.kmath.ojalgo.linearSpace
 import space.kscience.kmath.operations.Float64Field
 import space.kscience.kmath.tensorflow.produceWithTF
 import space.kscience.kmath.tensors.core.tensorAlgebra
@@ -67,6 +70,11 @@ internal class DotBenchmark {
 
     @Benchmark
     fun ejmlDotWithConversion(blackhole: Blackhole) = EjmlLinearSpaceDDRM {
+        blackhole.consume(matrix1 dot matrix2)
+    }
+
+    @Benchmark
+    fun ojalgoDot(blackhole: Blackhole) = Ojalgo.R064.linearSpace {
         blackhole.consume(matrix1 dot matrix2)
     }
 

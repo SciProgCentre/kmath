@@ -12,7 +12,7 @@ import space.kscience.kmath.expressions.Symbol
 public class OptimizationValue<V>(type: SafeType<V>) : PolymorphicAttribute<V>(type)
 
 public inline fun <reified T> AttributesBuilder<FunctionOptimization<T>>.value(value: T) {
-    set(OptimizationValue(safeTypeOf<T>()), value)
+    put(OptimizationValue(safeTypeOf<T>()), value)
 }
 
 public enum class OptimizationDirection {
