@@ -22,16 +22,16 @@ import space.kscience.kmath.structures.Float64
  * @param M the EJML matrix type.
  * @author Iaroslav Postovalov
  */
-public abstract class EjmlLinearSpace<T : Any, out A : Ring<T>, out M : org.ejml.data.Matrix> : LinearSpace<T, A> {
+public interface EjmlLinearSpace<T : Any, out A : Ring<T>, M : org.ejml.data.Matrix> : LinearSpace<T, A> {
     /**
      * Converts this matrix to EJML one.
      */
-    public abstract fun Matrix<T>.toEjml(): EjmlMatrix<T, M>
+    public fun Matrix<T>.toEjml(): M
 
     /**
      * Converts this vector to EJML one.
      */
-    public abstract fun Point<T>.toEjml(): EjmlVector<T, M>
+    public fun Point<T>.toEjml(): M
 
     public abstract override fun buildMatrix(
         rows: Int,

@@ -55,7 +55,7 @@ internal class EjmlVectorTest {
     fun origin() {
         val m = randomMatrix
         val w = EjmlDoubleVector(m)
-        assertSame(m, w.origin)
+        assertSame(m, w.ejmlVector)
     }
 
     @Test

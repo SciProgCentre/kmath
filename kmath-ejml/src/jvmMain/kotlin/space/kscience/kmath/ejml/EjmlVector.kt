@@ -13,12 +13,12 @@ import space.kscience.kmath.linear.Point
  *
  * @param T the type of elements contained in the buffer.
  * @param M the type of EJML matrix.
- * @property origin The underlying matrix, must have only one row.
+ * @property ejmlVector The underlying matrix, must have only one row.
  * @author Iaroslav Postovalov
  */
-public abstract class EjmlVector<out T, out M : Matrix>(public open val origin: M) : Point<T> {
+public abstract class EjmlVector<out T, out M : Matrix>(public open val ejmlVector: M) : Point<T> {
     override val size: Int
-        get() = origin.numRows
+        get() = ejmlVector.numRows
 
     override operator fun iterator(): Iterator<T> = object : Iterator<T> {
         private var cursor: Int = 0
@@ -28,8 +28,8 @@ public abstract class EjmlVector<out T, out M : Matrix>(public open val origin: 
             return this@EjmlVector[cursor - 1]
         }
 
-        override fun hasNext(): Boolean = cursor < origin.numCols * origin.numRows
+        override fun hasNext(): Boolean = cursor < ejmlVector.numCols * ejmlVector.numRows
     }
 
-    override fun toString(): String = "EjmlVector(origin=$origin)"
+    override fun toString(): String = "EjmlVector(origin=$ejmlVector)"
 }

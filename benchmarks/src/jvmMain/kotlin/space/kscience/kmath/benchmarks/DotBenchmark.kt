@@ -10,7 +10,6 @@ import kotlinx.benchmark.Blackhole
 import kotlinx.benchmark.Scope
 import kotlinx.benchmark.State
 import space.kscience.kmath.commons.linear.CMLinearSpace
-import space.kscience.kmath.commons.linear.CMLinearSpace.dot
 import space.kscience.kmath.ejml.EjmlLinearSpaceDDRM
 import space.kscience.kmath.linear.Float64ParallelLinearSpace
 import space.kscience.kmath.linear.invoke
@@ -59,13 +58,13 @@ internal class DotBenchmark {
     }
 
     @Benchmark
-    fun cmDot(blackhole: Blackhole) = CMLinearSpace {
-        blackhole.consume(cmMatrix1 dot cmMatrix2)
+    fun cmDot(blackhole: Blackhole): Unit = CMLinearSpace {
+        blackhole.consume(cmMatrix1.asMatrix() dot cmMatrix2.asMatrix())
     }
 
     @Benchmark
-    fun ejmlDot(blackhole: Blackhole) = EjmlLinearSpaceDDRM {
-        blackhole.consume(ejmlMatrix1 dot ejmlMatrix2)
+    fun ejmlDot(blackhole: Blackhole): Unit = EjmlLinearSpaceDDRM {
+        blackhole.consume(ejmlMatrix1.asMatrix() dot ejmlMatrix2.asMatrix())
     }
 
     @Benchmark

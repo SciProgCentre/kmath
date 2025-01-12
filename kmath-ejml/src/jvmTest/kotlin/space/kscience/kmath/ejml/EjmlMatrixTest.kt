@@ -86,7 +86,7 @@ internal class EjmlMatrixTest {
     @Test
     fun origin() {
         val m = randomMatrix
-        assertSame(m, EjmlDoubleMatrix(m).origin)
+        assertSame(m, EjmlDoubleMatrix(m).ejmlMatrix)
     }
 
     @Test
@@ -100,7 +100,7 @@ internal class EjmlMatrixTest {
         val u = space.buildMatrix(dim, dim) { i, j -> if (i <= j) random.nextDouble() else 0.0 }
         val l = space.buildMatrix(dim, dim) { i, j -> if (i >= j) random.nextDouble() else 0.0 }
         val matrix = space { l dot u }
-        val inverted = matrix.toEjml().inverted()
+        val inverted = matrix.inverted()
 
         val res = matrix dot inverted
 

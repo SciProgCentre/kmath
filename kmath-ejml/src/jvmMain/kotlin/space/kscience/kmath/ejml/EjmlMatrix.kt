@@ -13,10 +13,10 @@ import space.kscience.kmath.nd.Structure2D
  *
  * @param T the type of elements contained in the buffer.
  * @param M the type of EJML matrix.
- * @property origin The underlying EJML matrix.
+ * @property ejmlMatrix The underlying EJML matrix.
  * @author Iaroslav Postovalov
  */
-public abstract class EjmlMatrix<out T, out M : Matrix>(public open val origin: M) : Structure2D<T> {
-    override val rowNum: Int get() = origin.numRows
-    override val colNum: Int get() = origin.numCols
+public abstract class EjmlMatrix<out T, out M : Matrix>(public open val ejmlMatrix: M) : Structure2D<T> {
+    override val rowNum: Int get() = ejmlMatrix.numRows
+    override val colNum: Int get() = ejmlMatrix.numCols
 }
