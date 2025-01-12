@@ -24,8 +24,8 @@ jobs:
             ${{ runner.os }}-gradle-
       - uses: gradle/gradle-build-action@v2.4.2
         with:
-          arguments: dokkaHtmlMultiModule --no-parallel
+          arguments: dokkaGenerateModuleHtml --no-parallel
       - uses: JamesIves/github-pages-deploy-action@v4.3.0
         with:
           branch: gh-pages
-          folder: build/dokka/htmlMultiModule
+          folder: build/dokka/html
