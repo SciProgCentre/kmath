@@ -8,7 +8,7 @@ Complex and hypercomplex number systems in KMath.
 
 ## Artifact:
 
-The Maven coordinates of this project are `space.kscience:kmath-complex:0.4.0`.
+The Maven coordinates of this project are `space.kscience:kmath-complex:0.4.1`.
 
 **Gradle Kotlin DSL:**
 ```kotlin
@@ -18,6 +18,6 @@ repositories {
 }
 
 dependencies {
-    implementation("space.kscience:kmath-complex:0.4.0")
+    implementation("space.kscience:kmath-complex:0.4.1")
 }
 ```

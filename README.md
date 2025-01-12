@@ -57,11 +57,6 @@ module definitions below. The module stability could have the following levels:
 ## Modules
 
 
-### [attributes-kt](attributes-kt)
-> An API and basic implementation for arranging objects in a continuous memory block.
->
-> **Maturity**: DEVELOPMENT
-
 ### [benchmarks](benchmarks)
 >
 > **Maturity**: EXPERIMENTAL
@@ -107,8 +102,6 @@ module definitions below. The module stability could have the following levels:
 > - [linear](kmath-core/src/commonMain/kotlin/space/kscience/kmath/operations/Algebra.kt) : Basic linear algebra operations (sums, products, etc.), backed by the `Space` API. Advanced linear algebra operations like matrix inversion and LU decomposition.
 > - [buffers](kmath-core/src/commonMain/kotlin/space/kscience/kmath/structures/Buffers.kt) : One-dimensional structure
 > - [expressions](kmath-core/src/commonMain/kotlin/space/kscience/kmath/expressions) : By writing a single mathematical expression once, users will be able to apply different types of 
-objects to the expression by providing a context. Expressions can be used for a wide variety of purposes from high 
-performance calculations to code generation.
 > - [domains](kmath-core/src/commonMain/kotlin/space/kscience/kmath/domains) : Domains
 > - [autodiff](kmath-core/src/commonMain/kotlin/space/kscience/kmath/expressions/SimpleAutoDiff.kt) : Automatic differentiation
 > - [Parallel linear algebra](kmath-core/#) : Parallel implementation for `LinearAlgebra`
@@ -167,15 +160,6 @@ One can still use generic algebras though.
 >
 > **Maturity**: PROTOTYPE
 
-### [kmath-jafama](kmath-jafama)
-> Jafama integration module
->
-> **Maturity**: DEPRECATED
->
-> **Features:**
-> - [jafama-double](kmath-jafama/src/main/kotlin/space/kscience/kmath/jafama/) : Double ExtendedField implementations based on Jafama
-
-
 ### [kmath-jupyter](kmath-jupyter)
 >
 > **Maturity**: PROTOTYPE
@@ -210,6 +194,11 @@ One can still use generic algebras though.
 > - [nd4jarrayrings](kmath-nd4j/#) : Rings over Nd4jArrayStructure of Int and Long
 > - [nd4jarrayfields](kmath-nd4j/#) : Fields over Nd4jArrayStructure of Float and Double
 
+
+### [kmath-ojalgo](kmath-ojalgo)
+> Ojalgo bindings for kmath
+>
+> **Maturity**: PROTOTYPE
 
 ### [kmath-optimization](kmath-optimization)
 >

@@ -1,8 +1,6 @@
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import kotlinx.benchmark.gradle.BenchmarksExtension
-import java.time.LocalDateTime
-import java.time.ZoneId
 import java.util.*
 
 plugins {
@@ -228,7 +226,7 @@ readme {
 
         property(propertyName) {
             val resDirectory = launches.listFiles()?.maxByOrNull {
-                LocalDateTime.parse(it.name).atZone(ZoneId.systemDefault()).toInstant()
+                it.nameWithoutExtension
             }
 
             if (resDirectory == null || !(resDirectory.resolve("jvm.json")).exists()) {
