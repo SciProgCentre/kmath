@@ -3,6 +3,7 @@
 ## Unreleased
 
 ### Added
+- Convenient matrix builders for rows, columns, vstacks and hstacks
 
 ### Changed
 
@@ -11,6 +12,7 @@
 ### Removed
 
 ### Fixed
+- Ojalgo conversion bug which made all converted matrices be zero.
 
 ### Security
 

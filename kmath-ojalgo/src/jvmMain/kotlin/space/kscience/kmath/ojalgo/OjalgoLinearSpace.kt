@@ -52,10 +52,10 @@ public class OjalgoLinearSpace<T : Comparable<T>, A : Ring<T>>(
     @OptIn(UnstableKMathAPI::class)
     public fun Matrix<T>.toOjalgo(): MatrixStore<T> = when (val matrix = origin) {
         is OjalgoMatrix<T> -> matrix.ojalgoVector
-        else -> ojalgo.storeFactory.make(rowNum.toLong(), colNum.toLong()).apply {
+        else -> ojalgo.storeFactory.make(rowNum.toLong(), colNum.toLong()).also {
             for (row in 0 until rowNum) {
                 for (column in 0 until colNum) {
-                    set(row.toLong(), column.toLong(), get(row, column))
+                    it.set(row.toLong(), column.toLong(), get(row, column))
                 }
             }
         }
@@ -73,10 +73,10 @@ public class OjalgoLinearSpace<T : Comparable<T>, A : Ring<T>>(
         columns: Int,
         initializer: A.(Int, Int) -> T
     ): Matrix<T> {
-        val structure: MatrixStore<T> = ojalgo.storeFactory.make(rows.toLong(), columns.toLong()).apply {
+        val structure: MatrixStore<T> = ojalgo.storeFactory.make(rows.toLong(), columns.toLong()).also {
             for (row in 0 until rows) {
                 for (column in 0 until columns) {
-                    set(row.toLong(), column.toLong(), elementAlgebra.initializer(row, column))
+                    it.set(row.toLong(), column.toLong(), elementAlgebra.initializer(row, column))
                 }
             }
         }
