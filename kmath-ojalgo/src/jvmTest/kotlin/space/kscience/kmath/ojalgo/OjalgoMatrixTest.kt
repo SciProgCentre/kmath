@@ -11,6 +11,7 @@ import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.linear.*
 import space.kscience.kmath.nd.StructureND
 import space.kscience.kmath.structures.Float64
+import space.kscience.kmath.testutils.assertStructureEquals
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
@@ -29,7 +30,7 @@ class OjalgoMatrixTest {
 
     @Test
     fun testBuilder() = Ojalgo.Companion.R064.linearSpace {
-        val matrix = matrix(2, 3)(
+        val matrix = buildMatrix(2, 3)(
             1.0, 0.0, 0.0,
             0.0, 1.0, 2.0
         )
@@ -72,5 +73,21 @@ class OjalgoMatrixTest {
         assertEquals(8.0, result[0, 1])
         assertEquals(8.0, result[1, 0])
         assertEquals(14.0, result[1, 1])
+    }
+
+    @Test
+    fun testCholesky() = with(Ojalgo.Companion.R064.linearSpace) {
+        val l = buildMatrix(4, 4)(
+            1.0, 0.0, 0.0, 0.0,
+            1.0, 1.0, 0.0, 0.0,
+            1.0, 1.0, 1.0, 0.0,
+            1.0, 1.0, 1.0, 1.0,
+        )
+
+        val matrix = l dot l.transposed()
+
+        val chol = computeAttribute(matrix, Cholesky)
+
+        assertStructureEquals(l, chol!!.l, 1e-4)
     }
 }
