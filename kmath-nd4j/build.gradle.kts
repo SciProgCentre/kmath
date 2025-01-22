@@ -10,11 +10,11 @@ kscience {
 
     jvmMain {
         api(project(":kmath-tensors"))
-        api("org.nd4j:nd4j-api:1.0.0-M2.1")
+        api(libs.nd4j.api)
     }
 
-    jvmTest{
-        implementation("org.nd4j:nd4j-native-platform:1.0.0-M1")
+    jvmTest {
+        implementation(libs.nd4j.native.platform)
     }
 }
 

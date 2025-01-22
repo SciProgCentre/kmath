@@ -2,6 +2,7 @@
 
 commons-rng = "1.6"
 multik = "0.2.3"
+nd4j = "1.0.0-M2.1"
 
 [libraries]
 attributes = "space.kscience:attributes-kt:0.3.0"
@@ -13,6 +14,9 @@ commons-rng-sampling = { module = "org.apache.commons:commons-rng-sampling", ver
 
 multik-core = { module = "org.jetbrains.kotlinx:multik-core", version.ref = "multik" }
 multik-default = { module = "org.jetbrains.kotlinx:multik-default", version.ref = "multik" }
+
+nd4j-api = { module = "org.nd4j:nd4j-api", version.ref = "nd4j" }
+nd4j-native-platform = { module = "org.nd4j:nd4j-native-platform", version.ref = "nd4j" }
 
 ojalgo = "org.ojalgo:ojalgo:55.1.0"
 

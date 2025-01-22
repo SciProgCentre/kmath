@@ -1,6 +1,6 @@
 public final class space/kscience/kmath/nd4j/DoubleNd4jArrayField : space/kscience/kmath/nd4j/DoubleNd4jArrayFieldOps, space/kscience/kmath/nd/FieldND {
-	public synthetic fun <init> ([ILkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public fun getShape-IIYLAfE ()[I
+	public fun <init> (Lspace/kscience/kmath/nd/ShapeND;)V
+	public fun getShape ()Lspace/kscience/kmath/nd/ShapeND;
 }
 
 public class space/kscience/kmath/nd4j/DoubleNd4jArrayFieldOps : space/kscience/kmath/nd4j/Nd4jArrayExtendedFieldOps {
@@ -42,8 +42,8 @@ public final class space/kscience/kmath/nd4j/DoubleNd4jTensorAlgebra : space/ksc
 	public synthetic fun mean (Lspace/kscience/kmath/nd/StructureND;)Ljava/lang/Object;
 	public fun min (Lspace/kscience/kmath/nd/StructureND;)Ljava/lang/Double;
 	public synthetic fun min (Lspace/kscience/kmath/nd/StructureND;)Ljava/lang/Object;
-	public synthetic fun mutableStructureND-qL90JFI ([ILkotlin/jvm/functions/Function2;)Lspace/kscience/kmath/nd/MutableStructureND;
-	public fun mutableStructureND-qL90JFI ([ILkotlin/jvm/functions/Function2;)Lspace/kscience/kmath/nd4j/Nd4jArrayStructure;
+	public synthetic fun mutableStructureND (Lspace/kscience/kmath/nd/ShapeND;Lkotlin/jvm/functions/Function2;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public fun mutableStructureND (Lspace/kscience/kmath/nd/ShapeND;Lkotlin/jvm/functions/Function2;)Lspace/kscience/kmath/nd4j/Nd4jArrayStructure;
 	public fun std (Lspace/kscience/kmath/nd/StructureND;)Ljava/lang/Double;
 	public synthetic fun std (Lspace/kscience/kmath/nd/StructureND;)Ljava/lang/Object;
 	public fun sum (Lspace/kscience/kmath/nd/StructureND;)Ljava/lang/Double;
@@ -56,8 +56,8 @@ public final class space/kscience/kmath/nd4j/DoubleNd4jTensorAlgebra : space/ksc
 }
 
 public final class space/kscience/kmath/nd4j/FloatNd4jArrayField : space/kscience/kmath/nd4j/FloatNd4jArrayFieldOps, space/kscience/kmath/nd/RingND {
-	public synthetic fun <init> ([ILkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public fun getShape-IIYLAfE ()[I
+	public fun <init> (Lspace/kscience/kmath/nd/ShapeND;)V
+	public fun getShape ()Lspace/kscience/kmath/nd/ShapeND;
 }
 
 public class space/kscience/kmath/nd4j/FloatNd4jArrayFieldOps : space/kscience/kmath/nd4j/Nd4jArrayExtendedFieldOps {
@@ -87,8 +87,8 @@ public final class space/kscience/kmath/nd4j/FloatNd4jArrayFieldOps$Companion : 
 }
 
 public final class space/kscience/kmath/nd4j/IntNd4jArrayRing : space/kscience/kmath/nd4j/IntNd4jArrayRingOps, space/kscience/kmath/nd/RingND {
-	public synthetic fun <init> ([ILkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public fun getShape-IIYLAfE ()[I
+	public fun <init> (Lspace/kscience/kmath/nd/ShapeND;)V
+	public fun getShape ()Lspace/kscience/kmath/nd/ShapeND;
 }
 
 public class space/kscience/kmath/nd4j/IntNd4jArrayRingOps : space/kscience/kmath/nd4j/Nd4jArrayRingOps {
@@ -117,8 +117,8 @@ public abstract interface class space/kscience/kmath/nd4j/Nd4jArrayAlgebra : spa
 	public fun map (Lspace/kscience/kmath/nd/StructureND;Lkotlin/jvm/functions/Function2;)Lspace/kscience/kmath/nd4j/Nd4jArrayStructure;
 	public synthetic fun mapIndexed (Lspace/kscience/kmath/nd/StructureND;Lkotlin/jvm/functions/Function3;)Lspace/kscience/kmath/nd/StructureND;
 	public fun mapIndexed (Lspace/kscience/kmath/nd/StructureND;Lkotlin/jvm/functions/Function3;)Lspace/kscience/kmath/nd4j/Nd4jArrayStructure;
-	public synthetic fun mutableStructureND-qL90JFI ([ILkotlin/jvm/functions/Function2;)Lspace/kscience/kmath/nd/MutableStructureND;
-	public fun mutableStructureND-qL90JFI ([ILkotlin/jvm/functions/Function2;)Lspace/kscience/kmath/nd4j/Nd4jArrayStructure;
+	public synthetic fun mutableStructureND (Lspace/kscience/kmath/nd/ShapeND;Lkotlin/jvm/functions/Function2;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public fun mutableStructureND (Lspace/kscience/kmath/nd/ShapeND;Lkotlin/jvm/functions/Function2;)Lspace/kscience/kmath/nd4j/Nd4jArrayStructure;
 	public abstract fun wrap (Lorg/nd4j/linalg/api/ndarray/INDArray;)Lspace/kscience/kmath/nd4j/Nd4jArrayStructure;
 	public synthetic fun zip (Lspace/kscience/kmath/nd/StructureND;Lspace/kscience/kmath/nd/StructureND;Lkotlin/jvm/functions/Function3;)Lspace/kscience/kmath/nd/StructureND;
 	public fun zip (Lspace/kscience/kmath/nd/StructureND;Lspace/kscience/kmath/nd/StructureND;Lkotlin/jvm/functions/Function3;)Lspace/kscience/kmath/nd4j/Nd4jArrayStructure;
@@ -248,7 +248,7 @@ public final class space/kscience/kmath/nd4j/Nd4jArrayRingOps$Companion {
 public abstract class space/kscience/kmath/nd4j/Nd4jArrayStructure : space/kscience/kmath/nd/MutableStructureND {
 	public fun elements ()Lkotlin/sequences/Sequence;
 	public abstract fun getNdArray ()Lorg/nd4j/linalg/api/ndarray/INDArray;
-	public fun getShape-IIYLAfE ()[I
+	public fun getShape ()Lspace/kscience/kmath/nd/ShapeND;
 }
 
 public final class space/kscience/kmath/nd4j/Nd4jArrayStructureKt {
@@ -332,7 +332,7 @@ public abstract interface class space/kscience/kmath/nd4j/Nd4jTensorAlgebra : sp
 	public fun minusAssign (Lspace/kscience/kmath/nd/MutableStructureND;Ljava/lang/Number;)V
 	public synthetic fun minusAssign (Lspace/kscience/kmath/nd/MutableStructureND;Ljava/lang/Object;)V
 	public fun minusAssign (Lspace/kscience/kmath/nd/MutableStructureND;Lspace/kscience/kmath/nd/StructureND;)V
-	public abstract fun mutableStructureND-qL90JFI ([ILkotlin/jvm/functions/Function2;)Lspace/kscience/kmath/nd4j/Nd4jArrayStructure;
+	public abstract fun mutableStructureND (Lspace/kscience/kmath/nd/ShapeND;Lkotlin/jvm/functions/Function2;)Lspace/kscience/kmath/nd4j/Nd4jArrayStructure;
 	public fun plus (Ljava/lang/Number;Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd4j/Nd4jArrayStructure;
 	public synthetic fun plus (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 	public synthetic fun plus (Ljava/lang/Object;Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
@@ -383,8 +383,8 @@ public abstract interface class space/kscience/kmath/nd4j/Nd4jTensorAlgebra : sp
 	public synthetic fun unaryMinus (Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
 	public fun unaryMinus (Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd4j/Nd4jArrayStructure;
 	public fun variance (Lspace/kscience/kmath/nd/StructureND;IZ)Lspace/kscience/kmath/nd/MutableStructureND;
-	public synthetic fun view-waz_sdI (Lspace/kscience/kmath/nd/MutableStructureND;[I)Lspace/kscience/kmath/nd/MutableStructureND;
-	public fun view-waz_sdI (Lspace/kscience/kmath/nd/MutableStructureND;[I)Lspace/kscience/kmath/nd4j/Nd4jArrayStructure;
+	public synthetic fun view (Lspace/kscience/kmath/nd/MutableStructureND;Lspace/kscience/kmath/nd/ShapeND;)Lspace/kscience/kmath/nd/MutableStructureND;
+	public fun view (Lspace/kscience/kmath/nd/MutableStructureND;Lspace/kscience/kmath/nd/ShapeND;)Lspace/kscience/kmath/nd4j/Nd4jArrayStructure;
 	public synthetic fun viewAs (Lspace/kscience/kmath/nd/MutableStructureND;Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd/MutableStructureND;
 	public fun viewAs (Lspace/kscience/kmath/nd/MutableStructureND;Lspace/kscience/kmath/nd/StructureND;)Lspace/kscience/kmath/nd4j/Nd4jArrayStructure;
 	public abstract fun wrap (Lorg/nd4j/linalg/api/ndarray/INDArray;)Lspace/kscience/kmath/nd4j/Nd4jArrayStructure;
