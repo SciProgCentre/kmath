@@ -28,7 +28,7 @@ class ParallelMatrixTest {
 
     @Test
     fun testBuilder() = Float64Field.linearSpace.parallel {
-        val matrix = matrix(2, 3)(
+        val matrix = MatrixBuilder(2, 3).fill(
             1.0, 0.0, 0.0,
             0.0, 1.0, 2.0
         )

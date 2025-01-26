@@ -9,8 +9,8 @@ import kotlinx.benchmark.Benchmark
 import kotlinx.benchmark.Blackhole
 import kotlinx.benchmark.Scope
 import kotlinx.benchmark.State
+import space.kscience.kmath.linear.MatrixBuilder
 import space.kscience.kmath.linear.linearSpace
-import space.kscience.kmath.linear.matrix
 import space.kscience.kmath.linear.symmetric
 import space.kscience.kmath.operations.Float64Field
 import space.kscience.kmath.tensors.core.symEigJacobi
@@ -24,7 +24,7 @@ internal class TensorAlgebraBenchmark {
         private val random = Random(12224)
         private const val dim = 30
 
-        private val matrix = Float64Field.linearSpace.matrix(dim, dim).symmetric { _, _ -> random.nextDouble() }
+        private val matrix = Float64Field.linearSpace.MatrixBuilder(dim, dim).symmetric { _, _ -> random.nextDouble() }
     }
 
     @Benchmark

@@ -22,7 +22,7 @@ internal class BufferAccessor2D<T>(
     }
 
     inline fun create(crossinline init: (i: Int, j: Int) -> T): MutableBuffer<T> =
-        factory(rowNum * colNum) { offset -> init(offset / colNum, offset % colNum) }
+        factory(this@BufferAccessor2D.rowNum * colNum) { offset -> init(offset / colNum, offset % colNum) }
 
     fun create(mat: Structure2D<T>): MutableBuffer<T> = create { i, j -> mat[i, j] }
 

@@ -15,6 +15,10 @@ kscience {
 //        api(projects.kmathFunctions)
         api(libs.ojalgo)
     }
+
+    jvmTest{
+        implementation(projects.testUtils)
+    }
 }
 
 readme {

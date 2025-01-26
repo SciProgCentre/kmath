@@ -29,7 +29,7 @@ class DoubleLUSolverTest {
 
     @Test
     fun testDecomposition() = with(Double.algebra.linearSpace) {
-        val matrix = matrix(2, 2)(
+        val matrix = MatrixBuilder(2, 2).fill(
             3.0, 1.0,
             2.0, 3.0
         )
@@ -44,14 +44,14 @@ class DoubleLUSolverTest {
 
     @Test
     fun testInvert() = Double.algebra.linearSpace.run {
-        val matrix = matrix(2, 2)(
+        val matrix = MatrixBuilder(2, 2).fill(
             3.0, 1.0,
             1.0, 3.0
         )
 
         val inverted = lupSolver().inverse(matrix)
 
-        val expected = matrix(2, 2)(
+        val expected = MatrixBuilder(2, 2).fill(
             0.375, -0.125,
             -0.125, 0.375
         )

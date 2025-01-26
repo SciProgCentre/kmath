@@ -24,9 +24,16 @@ public interface MatrixScope<T> : WithType<T>
 public interface MatrixAttribute<T> : StructureAttribute<T>
 
 /**
+ * Matrices with this feature are symmetric, meaning `matrix[i,j] == matrix[j,i]`
+ */
+public interface Symmetric : MatrixAttribute<Unit>, FlagAttribute{
+    public companion object: Symmetric
+}
+
+/**
  * Matrices with this feature are considered to have only diagonal non-zero elements.
  */
-public interface IsDiagonal : MatrixAttribute<Unit>, FlagAttribute {
+public interface IsDiagonal : Symmetric {
     public companion object : IsDiagonal
 }
 

@@ -29,7 +29,7 @@ class MatrixTest {
 
     @Test
     fun testBuilder() = Double.algebra.linearSpace.run {
-        val matrix = matrix(2, 3)(
+        val matrix = MatrixBuilder(2, 3).fill(
             1.0, 0.0, 0.0,
             0.0, 1.0, 2.0
         )

@@ -7,8 +7,9 @@ package space.kscience.kmath.real
 
 import space.kscience.kmath.PerformancePitfall
 import space.kscience.kmath.UnstableKMathAPI
+import space.kscience.kmath.linear.MatrixBuilder
+import space.kscience.kmath.linear.fill
 import space.kscience.kmath.linear.linearSpace
-import space.kscience.kmath.linear.matrix
 import space.kscience.kmath.nd.StructureND
 import space.kscience.kmath.operations.algebra
 import space.kscience.kmath.testutils.contentEquals
@@ -43,11 +44,11 @@ internal class DoubleMatrixTest {
 
     @Test
     fun testRepeatStackVertical() {
-        val matrix1 = realMatrix(2, 3)(
+        val matrix1 = MatrixBuilder(2, 3).fill(
             1.0, 0.0, 0.0,
             0.0, 1.0, 2.0
         )
-        val matrix2 = realMatrix(6, 3)(
+        val matrix2 = MatrixBuilder(6, 3).fill(
             1.0, 0.0, 0.0,
             0.0, 1.0, 2.0,
             1.0, 0.0, 0.0,
@@ -60,12 +61,12 @@ internal class DoubleMatrixTest {
 
     @Test
     fun testMatrixAndDouble() = Double.algebra.linearSpace.run {
-        val matrix1 = realMatrix(2, 3)(
+        val matrix1 = space.kscience.kmath.real.MatrixBuilder(2, 3).fill(
             1.0, 0.0, 3.0,
             4.0, 6.0, 2.0
         )
         val matrix2 = (matrix1 * 2.5 + 1.0 - 2.0) / 2.0
-        val expectedResult = matrix(2, 3)(
+        val expectedResult = this.MatrixBuilder(2, 3).fill(
             0.75, -0.5, 3.25,
             4.5, 7.0, 2.0
         )
@@ -74,13 +75,13 @@ internal class DoubleMatrixTest {
 
     @Test
     fun testDoubleAndMatrix() {
-        val matrix1 = realMatrix(2, 3)(
+        val matrix1 = MatrixBuilder(2, 3).fill(
             1.0, 0.0, 3.0,
             4.0, 6.0, 2.0
         )
         val matrix2 = 20.0 - (10.0 + (5.0 * matrix1))
         //val matrix2 = 10.0 + (5.0 * matrix1)
-        val expectedResult = realMatrix(2, 3)(
+        val expectedResult = MatrixBuilder(2, 3).fill(
             5.0, 10.0, -5.0,
             -10.0, -20.0, 0.0
         )
@@ -89,15 +90,15 @@ internal class DoubleMatrixTest {
 
     @Test
     fun testSquareAndPower() {
-        val matrix1 = realMatrix(2, 3)(
+        val matrix1 = MatrixBuilder(2, 3).fill(
             -1.0, 0.0, 3.0,
             4.0, -6.0, -2.0
         )
-        val matrix2 = realMatrix(2, 3)(
+        val matrix2 = MatrixBuilder(2, 3).fill(
             1.0, 0.0, 9.0,
             16.0, 36.0, 4.0
         )
-        val matrix3 = realMatrix(2, 3)(
+        val matrix3 = MatrixBuilder(2, 3).fill(
             -1.0, 0.0, 27.0,
             64.0, -216.0, -8.0
         )
@@ -108,16 +109,16 @@ internal class DoubleMatrixTest {
     @OptIn(UnstableKMathAPI::class)
     @Test
     fun testTwoMatrixOperations() {
-        val matrix1 = realMatrix(2, 3)(
+        val matrix1 = MatrixBuilder(2, 3).fill(
             -1.0, 0.0, 3.0,
             4.0, -6.0, 7.0
         )
-        val matrix2 = realMatrix(2, 3)(
+        val matrix2 = MatrixBuilder(2, 3).fill(
             1.0, 0.0, 3.0,
             4.0, 6.0, -2.0
         )
         val result = matrix1 * matrix2 + matrix1 - matrix2
-        val expectedResult = realMatrix(2, 3)(
+        val expectedResult = MatrixBuilder(2, 3).fill(
             -3.0, 0.0, 9.0,
             16.0, -48.0, -5.0
         )
@@ -126,16 +127,16 @@ internal class DoubleMatrixTest {
 
     @Test
     fun testColumnOperations() {
-        val matrix1 = realMatrix(2, 4)(
+        val matrix1 = MatrixBuilder(2, 4).fill(
             -1.0, 0.0, 3.0, 15.0,
             4.0, -6.0, 7.0, -11.0
         )
-        val matrix2 = realMatrix(2, 5)(
+        val matrix2 = MatrixBuilder(2, 5).fill(
             -1.0, 0.0, 3.0, 15.0, -1.0,
             4.0, -6.0, 7.0, -11.0, 4.0
         )
-        val col1 = realMatrix(2, 1)(0.0, -6.0)
-        val cols1to2 = realMatrix(2, 2)(
+        val col1 = MatrixBuilder(2, 1).fill(0.0, -6.0)
+        val cols1to2 = MatrixBuilder(2, 2).fill(
             0.0, 3.0,
             -6.0, 7.0
         )
@@ -160,7 +161,7 @@ internal class DoubleMatrixTest {
 
     @Test
     fun testAllElementOperations() = Double.algebra.linearSpace.run {
-        val matrix1 = matrix(2, 4)(
+        val matrix1 = this.MatrixBuilder(2, 4).fill(
             -1.0, 0.0, 3.0, 15.0,
             4.0, -6.0, 7.0, -11.0
         )

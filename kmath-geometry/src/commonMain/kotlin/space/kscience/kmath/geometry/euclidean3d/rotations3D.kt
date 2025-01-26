@@ -8,10 +8,7 @@ package space.kscience.kmath.geometry.euclidean3d
 import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.complex.*
 import space.kscience.kmath.geometry.*
-import space.kscience.kmath.linear.LinearSpace
-import space.kscience.kmath.linear.Matrix
-import space.kscience.kmath.linear.linearSpace
-import space.kscience.kmath.linear.matrix
+import space.kscience.kmath.linear.*
 import space.kscience.kmath.operations.Float64Field
 import space.kscience.kmath.structures.Float64
 import kotlin.math.*
@@ -103,7 +100,7 @@ public fun Quaternion.toRotationMatrix(
     linearSpace: LinearSpace<Double, *> = Float64Field.linearSpace,
 ): Matrix<Float64> {
     val s = QuaternionAlgebra.norm(this).pow(-2)
-    return linearSpace.matrix(3, 3)(
+    return linearSpace.MatrixBuilder(3, 3).fill(
         1.0 - 2 * s * (y * y + z * z), 2 * s * (x * y - z * w), 2 * s * (x * z + y * w),
         2 * s * (x * y + z * w), 1.0 - 2 * s * (x * x + z * z), 2 * s * (y * z - x * w),
         2 * s * (x * z - y * w), 2 * s * (y * z + x * w), 1.0 - 2 * s * (x * x + y * y)

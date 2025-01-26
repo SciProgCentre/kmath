@@ -228,7 +228,6 @@ public interface MutableStructureND<T> : StructureND<T> {
      * @param index the indices.
      * @param value the value.
      */
-    @PerformancePitfall
     public operator fun set(index: IntArray, value: T)
 }
 

@@ -91,7 +91,7 @@ public object QowOptimizer : Optimizer<Double, XYFit> {
      * D(\phi)=E(\phi_k(\theta_0) \phi_l(\theta_0))= disDeriv_k * disDeriv_l /sigma^2
      */
     private fun QoWeight.covarF(): Matrix<Float64> =
-        linearSpace.matrix(size, size).symmetric { s1, s2 ->
+        linearSpace.MatrixBuilder(size, size).symmetric { s1, s2 ->
             (0 until data.size).sumOf { d -> derivs[d, s1] * derivs[d, s2] / dispersion[d] }
         }
 

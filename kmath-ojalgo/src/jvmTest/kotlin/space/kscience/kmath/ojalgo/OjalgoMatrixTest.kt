@@ -30,7 +30,7 @@ class OjalgoMatrixTest {
 
     @Test
     fun testBuilder() = Ojalgo.Companion.R064.linearSpace {
-        val matrix = buildMatrix(2, 3)(
+        val matrix = MatrixBuilder(2, 3).fill(
             1.0, 0.0, 0.0,
             0.0, 1.0, 2.0
         )
@@ -77,7 +77,7 @@ class OjalgoMatrixTest {
 
     @Test
     fun testCholesky() = with(Ojalgo.Companion.R064.linearSpace) {
-        val l = buildMatrix(4, 4)(
+        val l = MatrixBuilder(4, 4).fill(
             1.0, 0.0, 0.0, 0.0,
             1.0, 1.0, 0.0, 0.0,
             1.0, 1.0, 1.0, 0.0,

@@ -37,8 +37,8 @@ public fun realMatrix(rowNum: Int, colNum: Int, initializer: Float64Field.(i: In
     Double.algebra.linearSpace.buildMatrix(rowNum, colNum, initializer)
 
 @OptIn(UnstableKMathAPI::class)
-public fun realMatrix(rowNum: Int, colNum: Int): MatrixBuilder<Double, Float64Field> =
-    Double.algebra.linearSpace.matrix(rowNum, colNum)
+public fun MatrixBuilder(rowNum: Int, colNum: Int): MatrixBuilder<Double, Float64Field> =
+    Double.algebra.linearSpace.MatrixBuilder(rowNum, colNum)
 
 public fun Array<DoubleArray>.toMatrix(): RealMatrix {
     return Double.algebra.linearSpace.buildMatrix(size, this[0].size) { row, col -> this@toMatrix[row][col] }

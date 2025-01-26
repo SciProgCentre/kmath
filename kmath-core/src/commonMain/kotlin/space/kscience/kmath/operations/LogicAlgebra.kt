@@ -10,7 +10,7 @@ import space.kscience.kmath.expressions.Symbol
 import space.kscience.kmath.structures.MutableBufferFactory
 
 /**
- * An algebra for generic boolean logic
+ * Algebra for generic boolean logic
  */
 @UnstableKMathAPI
 public interface LogicAlgebra<T : Any> : Algebra<T> {
