@@ -3,8 +3,6 @@
 ## Unreleased
 
 ### Added
-- Convenient matrix builders for rows, columns, vstacks and hstacks
-- Sparse matrix builder
 
 ### Changed
 
@@ -13,9 +11,19 @@
 ### Removed
 
 ### Fixed
-- Ojalgo conversion bug which made all converted matrices be zero.
 
 ### Security
+
+## 0.4.2 - 2025-01-27
+
+### Added
+
+- Convenient matrix builders for rows, columns, vstacks and hstacks
+- Sparse matrix builder
+
+### Fixed
+
+- Ojalgo conversion bug which made all converted matrices be zero.
 
 ## 0.4.1 - 2025-01-12
 

@@ -9,7 +9,7 @@ ND4J based implementations of KMath abstractions.
 
 ## Artifact:
 
-The Maven coordinates of this project are `space.kscience:kmath-nd4j:0.4.1`.
+The Maven coordinates of this project are `space.kscience:kmath-nd4j:0.4.2`.
 
 **Gradle Kotlin DSL:**
 ```kotlin
@@ -19,7 +19,7 @@ repositories {
 }
 
 dependencies {
-    implementation("space.kscience:kmath-nd4j:0.4.1")
+    implementation("space.kscience:kmath-nd4j:0.4.2")
 }
 ```
 
