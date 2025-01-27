@@ -23,16 +23,16 @@ readme {
 
     feature(
         id = "ejml-vector",
-        ref = "src/main/kotlin/space/kscience/kmath/ejml/EjmlVector.kt"
+        ref = "src/jvmMain/kotlin/space/kscience/kmath/ejml/EjmlVector.kt"
     ) { "Point implementations." }
 
     feature(
         id = "ejml-matrix",
-        ref = "src/main/kotlin/space/kscience/kmath/ejml/EjmlMatrix.kt"
+        ref = "src/jvmMain/kotlin/space/kscience/kmath/ejml/EjmlMatrix.kt"
     ) { "Matrix implementation." }
 
     feature(
         id = "ejml-linear-space",
-        ref = "src/main/kotlin/space/kscience/kmath/ejml/EjmlLinearSpace.kt"
+        ref = "src/jvmMain/kotlin/space/kscience/kmath/ejml/EjmlLinearSpace.kt"
     ) { "LinearSpace implementations." }
 }

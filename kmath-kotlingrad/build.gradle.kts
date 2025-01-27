@@ -29,14 +29,14 @@ readme {
 
     feature(
         "differentiable-mst-expression",
-        "src/main/kotlin/space/kscience/kmath/kotlingrad/KotlingradExpression.kt",
+        "src/jvmMain/kotlin/space/kscience/kmath/kotlingrad/KotlingradExpression.kt",
     ) {
         "MST based DifferentiableExpression."
     }
 
     feature(
         "scalars-adapters",
-        "src/main/kotlin/space/kscience/kmath/kotlingrad/scalarsAdapters.kt",
+        "src/jvmMain/kotlin/space/kscience/kmath/kotlingrad/scalarsAdapters.kt",
     ) {
         "Conversions between Kotlin∇'s SFun and MST"
     }
