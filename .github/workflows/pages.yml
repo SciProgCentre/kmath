@@ -13,7 +13,7 @@ jobs:
       - uses: actions/checkout@v3.0.0
       - uses: actions/setup-java@v3.0.0
         with:
-          java-version: 11
+          java-version: 17
           distribution: liberica
       - name: Cache konan
         uses: actions/cache@v3.0.1
@@ -24,8 +24,8 @@ jobs:
             ${{ runner.os }}-gradle-
       - uses: gradle/gradle-build-action@v2.4.2
         with:
-          arguments: dokkaHtmlMultiModule --no-parallel
+          arguments: dokkaGenerateModuleHtml --no-parallel
       - uses: JamesIves/github-pages-deploy-action@v4.3.0
         with:
           branch: gh-pages
-          folder: build/dokka/htmlMultiModule
+          folder: build/dokka/html
