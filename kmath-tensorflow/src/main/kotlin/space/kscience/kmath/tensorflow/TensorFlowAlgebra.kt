@@ -73,7 +73,7 @@ public abstract class TensorFlowOutput<T, TT : TType>(
 
     internal val actualTensor by lazy {
         Session(graph).use { session ->
-            TensorFlowArray(session.runner().fetch(output).run().first().actualizeTensor())
+            TensorFlowArray(session.runner().fetch(output).run().single().value.actualizeTensor())
         }
     }
 

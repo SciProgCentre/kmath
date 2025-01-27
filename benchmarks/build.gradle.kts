@@ -10,7 +10,7 @@ plugins {
 }
 
 allOpen.annotation("org.openjdk.jmh.annotations.State")
-sourceSets.register("benchmarks")
+//sourceSets.register("benchmarks")
 
 repositories {
     mavenCentral()
@@ -66,8 +66,8 @@ kotlin {
                 implementation(projects.kmathOjalgo)
                 implementation(projects.kmath.kmathTensorflow)
                 implementation(projects.kmathMultik)
-                implementation("org.tensorflow:tensorflow-core-platform:0.4.0")
-                implementation("org.nd4j:nd4j-native:1.0.0-M1")
+                implementation(libs.tensorflow.core.platform)
+//                implementation(libs.nd4j.native.platform)
                 //    uncomment if your system supports AVX2
                 //    val os = System.getProperty("os.name")
                 //
