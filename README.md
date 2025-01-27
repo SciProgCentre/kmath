@@ -170,8 +170,8 @@ One can still use generic algebras though.
 > **Maturity**: EXPERIMENTAL
 >
 > **Features:**
-> - [differentiable-mst-expression](kmath-kotlingrad/src/main/kotlin/space/kscience/kmath/kotlingrad/KotlingradExpression.kt) : MST based DifferentiableExpression.
-> - [scalars-adapters](kmath-kotlingrad/src/main/kotlin/space/kscience/kmath/kotlingrad/scalarsAdapters.kt) : Conversions between Kotlin∇'s SFun and MST
+> - [differentiable-mst-expression](kmath-kotlingrad/src/jvmMain/kotlin/space/kscience/kmath/kotlingrad/KotlingradExpression.kt) : MST based DifferentiableExpression.
+> - [scalars-adapters](kmath-kotlingrad/src/jvmMain/kotlin/space/kscience/kmath/kotlingrad/scalarsAdapters.kt) : Conversions between Kotlin∇'s SFun and MST
 
 
 ### [kmath-memory](kmath-memory)
