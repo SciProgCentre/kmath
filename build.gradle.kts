@@ -14,7 +14,7 @@ allprojects {
     }
 
     group = "space.kscience"
-    version = "0.4.2"
+    version = "0.4.3-dev-1"
 }
 
 dependencies{

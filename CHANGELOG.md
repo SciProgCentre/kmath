@@ -5,6 +5,7 @@
 ### Added
 
 ### Changed
+- Upgrade tensorflow version to 1.0.0
 
 ### Deprecated
 
