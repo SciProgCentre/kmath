@@ -6,11 +6,9 @@
 package space.kscience.kmath.linear
 
 import space.kscience.kmath.UnstableKMathAPI
-import space.kscience.kmath.nd.StructureND
 import space.kscience.kmath.operations.algebra
 import space.kscience.kmath.structures.Float64
 import kotlin.test.Test
-import kotlin.test.assertEquals
 
 @UnstableKMathAPI
 class MatrixBuilderTest {
@@ -31,8 +29,15 @@ class MatrixBuilderTest {
             )
         )
 
-        println(StructureND.toString(matrix))
+        val expected = sparse(5, 5).fill(
+            0.0, 0.0, 0.0, 0.0, 1.0,
+            1.0, 1.0, 0.0, 0.0, 0.0,
+            0.0, 1.0, 1.0, 0.0, 0.0,
+            0.0, 0.0, 1.0, 1.0, 0.0,
+            0.0, 0.0, 0.0, 1.0, 0.0
+        )
 
-        assertEquals(1.0, matrix[0, 4])
+        assertMatrixEquals(expected, matrix)
+
     }
 }

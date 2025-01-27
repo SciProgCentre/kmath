@@ -79,3 +79,20 @@ public fun <T> LinearSpace<T, Ring<T>>.hstack(vararg matrices: Matrix<T>): Matri
         columns[column][row]
     }
 }
+
+
+/**
+ * Fill the matrix with given elements. The number of elements must be the same as the number of elements in the matrix.
+ *
+ * This method is used for small matrices and test purposes.
+ */
+@UnstableKMathAPI
+public fun <T> MutableMatrix<T>.fill(vararg elements: T): MutableMatrix<T> {
+    require(rowNum * colNum == elements.size) { "The number of elements ${elements.size} is not equal $rowNum * $colNum" }
+    for (i in 0 until rowNum) {
+        for (j in 0 until colNum) {
+            set(i, j, elements[i * rowNum + j])
+        }
+    }
+    return this
+}

@@ -8,6 +8,7 @@ package space.kscience.kmath.nd
 import space.kscience.kmath.PerformancePitfall
 import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.structures.Float64
+import space.kscience.kmath.structures.Int32
 
 public open class VirtualStructureND<T>(
     override val shape: ShapeND,
@@ -22,13 +23,13 @@ public open class VirtualStructureND<T>(
 }
 
 @UnstableKMathAPI
-public class VirtualDoubleStructureND(
+public class VirtualFloat64StructureND(
     shape: ShapeND,
-    producer: (IntArray) -> Double,
+    producer: (IntArray) -> Float64,
 ) : VirtualStructureND<Float64>(shape, producer)
 
 @UnstableKMathAPI
-public class VirtualIntStructureND(
+public class VirtualInt32StructureND(
     shape: ShapeND,
-    producer: (IntArray) -> Int,
+    producer: (IntArray) -> Int32,
 ) : VirtualStructureND<Int>(shape, producer)

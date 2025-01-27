@@ -4,7 +4,7 @@
 
 ### Added
 - Convenient matrix builders for rows, columns, vstacks and hstacks
-- Spreadsheet matrix builder
+- Sparse matrix builder
 
 ### Changed
 

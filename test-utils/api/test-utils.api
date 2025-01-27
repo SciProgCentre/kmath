@@ -1,6 +1,8 @@
 public final class space/kscience/kmath/testutils/AssertsKt {
 	public static final fun assertBufferEquals (Lspace/kscience/kmath/structures/Buffer;Lspace/kscience/kmath/structures/Buffer;D)V
 	public static synthetic fun assertBufferEquals$default (Lspace/kscience/kmath/structures/Buffer;Lspace/kscience/kmath/structures/Buffer;DILjava/lang/Object;)V
+	public static final fun assertStructureEquals (Lspace/kscience/kmath/nd/StructureND;Lspace/kscience/kmath/nd/StructureND;D)V
+	public static synthetic fun assertStructureEquals$default (Lspace/kscience/kmath/nd/StructureND;Lspace/kscience/kmath/nd/StructureND;DILjava/lang/Object;)V
 }
 
 public final class space/kscience/kmath/testutils/BufferEqualityKt {

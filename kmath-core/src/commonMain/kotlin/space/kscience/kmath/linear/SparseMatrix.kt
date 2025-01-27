@@ -49,17 +49,10 @@ public class SparseMatrix<T>(
     }
 }
 
-@UnstableKMathAPI
-public fun <T> SparseMatrix<T>.fill(vararg elements: T): SparseMatrix<T> {
-    require(rowNum * colNum == elements.size) { "The number of elements ${elements.size} is not equal $rowNum * $colNum" }
-    for (i in 0 until rowNum) {
-        for (j in 0 until colNum) {
-            set(i, j, elements[i * rowNum + j])
-        }
-    }
-    return this
-}
-
+/**
+ * Create and optionally fill DOK [SparseMatrix]. Those matrices must be converted to dense or effective sparse form
+ * after creation for effective use.
+ */
 @UnstableKMathAPI
 public fun <T> LinearSpace<T, Ring<T>>.sparse(
     rows: Int,
