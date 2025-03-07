@@ -23,7 +23,6 @@ dependencies {
     implementation(project(":kmath-viktor"))
     implementation(project(":kmath-dimensions"))
     implementation(project(":kmath-ejml"))
-    implementation(project(":kmath-nd4j"))
     implementation(project(":kmath-tensors"))
     implementation(project(":kmath-symja"))
     implementation(project(":kmath-for-real"))
@@ -32,9 +31,10 @@ dependencies {
     implementation(libs.multik.default)
 
     //datetime
-    implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
+    implementation(spclibs.kotlinx.datetime)
 
-    implementation("org.nd4j:nd4j-native:1.0.0-beta7")
+//    implementation(project(":kmath-nd4j"))
+//    implementation("org.nd4j:nd4j-native:1.0.0-beta7")
 
 //    uncomment if your system supports AVX2
 //    val os = System.getProperty("os.name")
@@ -44,7 +44,7 @@ dependencies {
 //        os == "Linux" -> implementation("org.nd4j:nd4j-native:1.0.0-beta7:linux-x86_64-avx2")
 //        os == "Mac OS X" -> implementation("org.nd4j:nd4j-native:1.0.0-beta7:macosx-x86_64-avx2")
 //    } else
-    implementation("org.nd4j:nd4j-native-platform:1.0.0-beta7")
+//    implementation("org.nd4j:nd4j-native-platform:1.0.0-beta7")
 
     implementation("org.slf4j:slf4j-simple:1.7.32")
     // plotting

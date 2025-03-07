@@ -7,9 +7,7 @@ package space.kscience.kmath.structures
 
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
-import org.nd4j.linalg.factory.Nd4j
 import space.kscience.kmath.nd.*
-import space.kscience.kmath.nd4j.nd4j
 import space.kscience.kmath.operations.Float64Field
 import space.kscience.kmath.operations.invoke
 import space.kscience.kmath.viktor.ViktorFieldND
@@ -26,7 +24,6 @@ internal inline fun measureAndPrint(title: String, block: () -> Unit) {
 @OptIn(DelicateCoroutinesApi::class)
 fun main() {
     // initializing Nd4j
-    Nd4j.zeros(0)
     val dim = 1000
     val n = 1000
     val shape = ShapeND(dim, dim)
@@ -36,8 +33,6 @@ fun main() {
     val doubleField = Float64Field.ndAlgebra
     //A generic field. It should be used for objects, not primitives.
     val genericField = BufferedFieldOpsND(Float64Field)
-    // Nd4j specialized field.
-    val nd4jField = Float64Field.nd4j
     //viktor field
     val viktorField = ViktorFieldND(dim, dim)
     //parallel processing based on Java Streams
@@ -52,13 +47,6 @@ fun main() {
 
     measureAndPrint("Specialized addition") {
         doubleField {
-            var res: StructureND<Float64> = one(shape)
-            repeat(n) { res += 1.0 }
-        }
-    }
-
-    measureAndPrint("Nd4j specialized addition") {
-        nd4jField {
             var res: StructureND<Float64> = one(shape)
             repeat(n) { res += 1.0 }
         }

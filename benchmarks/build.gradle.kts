@@ -60,13 +60,14 @@ kotlin {
             dependencies {
                 implementation(projects.kmathCommons)
                 implementation(projects.kmathEjml)
-                implementation(projects.kmathNd4j)
                 implementation(projects.kmathKotlingrad)
                 implementation(projects.kmathViktor)
                 implementation(projects.kmathOjalgo)
                 implementation(projects.kmath.kmathTensorflow)
                 implementation(projects.kmathMultik)
                 implementation(libs.tensorflow.core.platform)
+//                implementation(projects.kmathNd4j)
+
 //                implementation(libs.nd4j.native.platform)
                 //    uncomment if your system supports AVX2
                 //    val os = System.getProperty("os.name")

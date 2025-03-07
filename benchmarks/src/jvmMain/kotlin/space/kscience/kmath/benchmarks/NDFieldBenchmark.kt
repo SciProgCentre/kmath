@@ -15,7 +15,6 @@ import org.jetbrains.kotlinx.multik.ndarray.data.DN
 import org.jetbrains.kotlinx.multik.ndarray.data.DataType
 import space.kscience.kmath.UnsafeKMathAPI
 import space.kscience.kmath.nd.*
-import space.kscience.kmath.nd4j.nd4j
 import space.kscience.kmath.operations.Float64Field
 import space.kscience.kmath.structures.Float64
 import space.kscience.kmath.tensors.core.DoubleTensor
@@ -32,7 +31,6 @@ internal class NDFieldBenchmark {
         private val shape = ShapeND(dim, dim)
         private val specializedField = Float64Field.ndAlgebra
         private val genericField = BufferedFieldOpsND(Float64Field)
-        private val nd4jField = Float64Field.nd4j
         private val viktorField = Float64Field.viktorAlgebra
     }
 
