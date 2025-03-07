@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     timeout-minutes: 40
     steps:
       - uses: actions/checkout@v3.0.0
@@ -24,7 +24,7 @@ jobs:
             ${{ runner.os }}-gradle-
       - uses: gradle/gradle-build-action@v2.4.2
         with:
-          arguments: dokkaGenerateModuleHtml --no-parallel
+          arguments: dokkaGenerate --no-parallel
       - uses: JamesIves/github-pages-deploy-action@v4.3.0
         with:
           branch: gh-pages
