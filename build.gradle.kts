@@ -23,6 +23,13 @@ dependencies {
     }
 }
 
+dokka{
+    dokkaSourceSets.configureEach {
+        val readmeFile = projectDir.resolve("README.md")
+        if (readmeFile.exists()) includes.from(readmeFile)
+    }
+}
+
 subprojects {
     if (name.startsWith("kmath")) apply<MavenPublishPlugin>()
 

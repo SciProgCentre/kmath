@@ -5,9 +5,8 @@
 
 @file:Suppress("CONTEXT_RECEIVERS_DEPRECATED")
 
-import space.kscience.kmath.geometry.GeometrySpace
-import space.kscience.kmath.geometry.Line
-import space.kscience.kmath.geometry.LineSegment
+package space.kscience.kmath.geometry
+
 import space.kscience.kmath.operations.Group
 
 /**
