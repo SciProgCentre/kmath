@@ -22,6 +22,15 @@ public enum class OptimizationDirection {
 
 public object FunctionOptimizationTarget : OptimizationAttribute<OptimizationDirection>
 
+public fun AttributesBuilder<FunctionOptimization<*>>.maximize() {
+    FunctionOptimizationTarget(OptimizationDirection.MAXIMIZE)
+}
+
+public fun AttributesBuilder<FunctionOptimization<*>>.minimize() {
+    FunctionOptimizationTarget(OptimizationDirection.MINIMIZE)
+}
+
+
 public class FunctionOptimization<T>(
     public val expression: DifferentiableExpression<T>,
     override val attributes: Attributes,
@@ -74,11 +83,11 @@ public fun <T> FunctionOptimization<T>.withAttributes(
 public suspend fun <T> DifferentiableExpression<T>.optimizeWith(
     optimizer: Optimizer<T, FunctionOptimization<T>>,
     startingPoint: Map<Symbol, T>,
-    modifier: AttributesBuilder<FunctionOptimization<T>>.() -> Unit = {},
+    attributesBuilder: AttributesBuilder<FunctionOptimization<T>>.() -> Unit = {},
 ): FunctionOptimization<T> {
     val problem = FunctionOptimization(this) {
         startAt(startingPoint)
-        modifier()
+        attributesBuilder()
     }
     return optimizer.optimize(problem)
 }
@@ -93,11 +102,11 @@ public val <T> FunctionOptimization<T>.resultValue: T
 public suspend fun <T> DifferentiableExpression<T>.optimizeWith(
     optimizer: Optimizer<T, FunctionOptimization<T>>,
     vararg startingPoint: Pair<Symbol, T>,
-    builder: AttributesBuilder<FunctionOptimization<T>>.() -> Unit = {},
+    attributesBuilder: AttributesBuilder<FunctionOptimization<T>>.() -> Unit = {},
 ): FunctionOptimization<T> {
     val problem = FunctionOptimization<T>(this) {
         startAt(mapOf(*startingPoint))
-        builder()
+        attributesBuilder()
     }
     return optimizer.optimize(problem)
 }

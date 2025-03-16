@@ -3,6 +3,7 @@
 ## Unreleased
 
 ### Added
+- Fit accessors with Attribute
 
 ### Changed
 - Upgrade tensorflow version to 1.0.0

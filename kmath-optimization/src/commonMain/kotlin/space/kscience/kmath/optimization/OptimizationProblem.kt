@@ -58,9 +58,15 @@ public object OptimizationLog : OptimizationAttribute<Loggable>
  */
 public object OptimizationParameters : OptimizationAttribute<List<Symbol>>
 
+public fun AttributesBuilder<OptimizationProblem<*>>.freeParameters(vararg symbols: Symbol) {
+    OptimizationParameters(symbols.asList())
+}
+
 /**
  * Maximum allowed number of iterations
  */
 public object OptimizationIterations : OptimizationAttribute<Int>
 
-
+public fun AttributesBuilder<OptimizationProblem<*>>.iterations(iterations: Int) {
+    OptimizationIterations(iterations)
+}

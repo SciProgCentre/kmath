@@ -137,6 +137,24 @@ public suspend fun XYColumnarData<Double, Double, Double>.fitWith(
     return optimizer.optimize(problem)
 }
 
+public suspend fun XYColumnarData<Double, Double, Double>.fitWith(
+    optimizer: Optimizer<Double, XYFit>,
+    modelExpression: DifferentiableExpression<Float64>,
+    startingPoint: Map<Symbol, Double>,
+    attributesBuilder: AttributesBuilder<XYFit>.() -> Unit,
+    xSymbol: Symbol = Symbol.x,
+    pointToCurveDistance: PointToCurveDistance = PointToCurveDistance.byY,
+    pointWeight: PointWeight = PointWeight.byYSigma,
+): XYFit = fitWith(
+    optimizer = optimizer,
+    modelExpression = modelExpression,
+    startingPoint = startingPoint,
+    attributes = Attributes<XYFit>(attributesBuilder),
+    xSymbol = xSymbol,
+    pointToCurveDistance = pointToCurveDistance,
+    pointWeight = pointWeight
+)
+
 /**
  * Fit given data with a model provided as an expression
  */
@@ -165,6 +183,26 @@ public suspend fun <I : Any, A> XYColumnarData<Double, Double, Double>.fitWith(
         pointWeight = pointWeight
     )
 }
+
+public suspend fun <I : Any, A> XYColumnarData<Double, Double, Double>.fitWith(
+    optimizer: Optimizer<Double, XYFit>,
+    processor: AutoDiffProcessor<Double, I, A>,
+    startingPoint: Map<Symbol, Double>,
+    attributesBuilder: AttributesBuilder<XYFit>.() -> Unit,
+    xSymbol: Symbol = Symbol.x,
+    pointToCurveDistance: PointToCurveDistance = PointToCurveDistance.byY,
+    pointWeight: PointWeight = PointWeight.byYSigma,
+    model: A.(I) -> I,
+): XYFit where A : ExtendedField<I>, A : ExpressionAlgebra<Double, I> = fitWith(
+    optimizer = optimizer,
+    processor = processor,
+    startingPoint = startingPoint,
+    attributes = Attributes<XYFit>(attributesBuilder),
+    xSymbol = xSymbol,
+    pointToCurveDistance = pointToCurveDistance,
+    pointWeight = pointWeight,
+    model = model
+)
 
 /**
  * Compute chi squared value for completed fit. Return null for incomplete fit
