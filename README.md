@@ -2,6 +2,7 @@
 [![DOI](https://zenodo.org/badge/129486382.svg)](https://zenodo.org/badge/latestdoi/129486382)
 ![Gradle build](https://github.com/SciProgCentre/kmath/workflows/Gradle%20build/badge.svg)
 [![Maven Central](https://img.shields.io/maven-central/v/space.kscience/kmath-core.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22space.kscience%22)
+[![libs.tech recommends](https://libs.tech/project/129486382/badge.svg)](https://libs.tech/project/129486382/kmath)
 
 # KMath
 
