@@ -20,12 +20,13 @@ import kotlin.math.sqrt
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class TestMetropolisHastingsSampler {
+class TestMetropolisHastingsForkingSampler {
 
     data class TestSetup(val mean: Double, val startPoint: Double, val sigma: Double = 0.5)
 
     private val sample = 1e5.toInt()
     private val burnIn = sample / 5
+
 
     @Test
     fun samplingNormalTest() = runTest {
@@ -36,11 +37,14 @@ class TestMetropolisHastingsSampler {
             TestSetup(68.13, 60.0),
         ).forEach {
             val distribution = NormalDistribution(it.mean, 1.0)
-            val sampler = MetropolisHastingsSampler.univariateNormal(
+            val sampler = RandomForkingSampler.univariateNormal(
+                scope = this,
                 startPoint = it.startPoint,
                 stepSigma = it.sigma,
-                targetPdf = distribution::probability
-            )
+                energySplitRule = TODO(),
+                targetPdf = distribution::probability,
+            ).values()
+
             val sampledValues = sampler.sample(generator).discard(burnIn).nextBuffer(sample)
 
             assertEquals(it.mean, Float64Field.mean(sampledValues), 0.05)
