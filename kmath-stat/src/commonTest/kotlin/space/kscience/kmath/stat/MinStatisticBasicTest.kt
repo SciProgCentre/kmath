@@ -16,25 +16,13 @@ import space.kscience.kmath.operations.Int64Ring
 import space.kscience.kmath.structures.Int32Buffer
 import space.kscience.kmath.structures.Int64Buffer
 
-internal class ExtremeValueStatisticTest {
+internal class MinStatisticBasicTest {
 
     // Int32 Tests
-    @Test
-    fun singleBlockingInt32Max() = runTest {
-        val res = Int32Ring.max(Int32Buffer(1, 2, 3))
-        assertEquals(3, res)
-    }
-
     @Test
     fun singleBlockingInt32Min() = runTest {
         val res = Int32Ring.min(Int32Buffer(1, 2, 3))
         assertEquals(1, res)
-    }
-
-    @Test
-    fun int32MaxWithNegativeValues() = runTest {
-        val res = Int32Ring.max(Int32Buffer(-1, -5, -3))
-        assertEquals(-1, res)
     }
 
     @Test
@@ -45,36 +33,18 @@ internal class ExtremeValueStatisticTest {
 
     @Test
     fun int32SingleElement() = runTest {
-        val res = Int32Ring.max(Int32Buffer(42))
+        val res = Int32Ring.min(Int32Buffer(42))
         assertEquals(42, res)
     }
 
     // Int64 Tests
-    @Test
-    fun singleBlockingInt64Max() = runTest {
-        val res = Int64Ring.max(Int64Buffer(1L, 2L, 3L))
-        assertEquals(3L, res)
-    }
-
     @Test
     fun singleBlockingInt64Min() = runTest {
         val res = Int64Ring.min(Int64Buffer(1L, 2L, 3L))
         assertEquals(1L, res)
     }
 
-    @Test
-    fun int64MaxWithLargeValues() = runTest {
-        val res = Int64Ring.max(Int64Buffer(Long.MAX_VALUE, Long.MIN_VALUE, 0L))
-        assertEquals(Long.MAX_VALUE, res)
-    }
-
     // Float64 Tests
-    @Test
-    fun singleBlockingFloat64Max() = runTest {
-        val res = Float64Field.max(Float64Buffer(1.0, 2.5, 3.1))
-        assertEquals(3.1, res)
-    }
-
     @Test
     fun singleBlockingFloat64Min() = runTest {
         val res = Float64Field.min(Float64Buffer(1.0, 2.5, 3.1))
@@ -82,21 +52,9 @@ internal class ExtremeValueStatisticTest {
     }
 
     @Test
-    fun float64MaxWithSpecialValues() = runTest {
-        val res = Float64Field.max(Float64Buffer(Double.POSITIVE_INFINITY, Double.MAX_VALUE, 0.0))
-        assertEquals(Double.POSITIVE_INFINITY, res)
-    }
-
-    @Test
-    fun float64MaxWithNaN() = runTest {
-        val res = Float64Field.max(Float64Buffer(Double.POSITIVE_INFINITY, Double.MAX_VALUE, Double.NaN))
-        assertEquals(Double.NaN, res) //keep linear order as it defined in Kotlin for special values
-    }
-
-    @Test
     fun float64MinWithNaN() = runTest {
         val res = Float64Field.min(Float64Buffer(Double.NEGATIVE_INFINITY, Double.MIN_VALUE, Double.NaN))
-        assertEquals(Double.NEGATIVE_INFINITY, res) //keep linear order as it defined in Kotlin for special values
+        assertEquals(Double.NEGATIVE_INFINITY, res)
     }
 
     @Test
@@ -115,7 +73,7 @@ internal class ExtremeValueStatisticTest {
 
     @Test
     fun allEqualValuesReturnsSame() = runTest {
-        val res = Int32Ring.max(Int32Buffer(5, 5, 5))
+        val res = Int32Ring.min(Int32Buffer(5, 5, 5))
         assertEquals(5, res)
     }
 
@@ -124,11 +82,4 @@ internal class ExtremeValueStatisticTest {
         val res = Float64Field.min(Float64Buffer(Double.MIN_VALUE, 1.0, 2.0))
         assertEquals(Double.MIN_VALUE, res)
     }
-
-    @Test
-    fun extremeValueAtBufferEnd() = runTest {
-        val res = Int64Ring.max(Int64Buffer(1L, 2L, Long.MAX_VALUE))
-        assertEquals(Long.MAX_VALUE, res)
-    }
-
 }

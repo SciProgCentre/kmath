@@ -103,6 +103,11 @@ benchmark {
         include("BufferBenchmark")
     }
 
+    configurations.register("minStatistic") {
+        commonConfiguration()
+        include("MinStatisticBenchmark")
+    }
+
     configurations.register("nd") {
         commonConfiguration()
         include("NDFieldBenchmark")
