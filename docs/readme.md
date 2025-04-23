@@ -11,4 +11,6 @@
 
 * [Expressions](expressions.md)
 
+* [Statistics](statistics.md): statistical functions on data [Buffers](buffers.md)
+
 * Commons math integration
