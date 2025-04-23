@@ -84,6 +84,13 @@ C:\Users\altavir\scoop\apps\gradle\current\.gradle\jdks\eclipse_adoptium-17-amd6
 |`kmathLupInversion`|4.0E+02 &plusmn; 52 ops/s|
 |`kmathParallelLupInversion`|4.0E+02 &plusmn; 9.6 ops/s|
 |`ojalgoInverse`|2.1E+03 &plusmn; 3.3E+02 ops/s|
+### [MinStatisticBenchmark.kt](src/jvmMain/kotlin/space/kscience/kmath/benchmarks/MinStatisticBenchmark.kt)
+
+| Benchmark | Score |
+|:---------:|:-----:|
+|`kotlinArrayMin`| 1875.7 &plusmn; 401.5 ops/s |
+|`minBlocking`| 1357.9 &plusmn; 72.0 ops/s  |
+
 ### [NDFieldBenchmark](src/jvmMain/kotlin/space/kscience/kmath/benchmarks/NDFieldBenchmark.kt)
 
 | Benchmark | Score |
