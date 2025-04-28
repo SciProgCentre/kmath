@@ -24,8 +24,8 @@ There are two subinterfaces of the `Statistic` interface:
 |                  | StandardDeviation | Population standard deviation (σ)   | 🚧 *(Depends on `Variance`)*   |
 |                  | Skewness          | Measure of distribution asymmetry   | 🚧 *(Requires `ThirdMoment`)*  |
 |                  | Kurtosis          | Measure of distribution tailedness  | 🚧 *(Requires `FourthMoment`)* |
-| **Advanced**     | GeometricMean     | Nth root of product of values       | 🚧 *(Requires `SumOfLogs`)*    |
-|                  | SumOfLogs         | Sum of natural logarithms           | 🚧 Not yet implemented         |
+| **Advanced**     | GeometricMean     | Nth root of product of values       | ✅ `ComposableStatistic`        |
+|                  | SumOfLogs         | Sum of natural logarithms           | Does not planned               |
 |                  | SumOfSquares      | Sum of squared values               | 🚧 *(Blocks `Variance`)*       |
 | **Moments**      | FirstMoment       | Mean (same as `Mean`)               | ✅ *(Alias for `Mean`)*         |
 |                  | SecondMoment      | Variance (same as `Variance`)       | 🚧 *(Alias for `Variance`)*    |
