@@ -9,18 +9,28 @@ import space.kscience.kmath.operations.*
 import space.kscience.kmath.structures.*
 
 /**
- * Arithmetic mean
+ * Arithmetic mean.
+ *
+ * To limit numeric errors, the value of the statistic is computed using the recursive updating algorithm:
+ *
+ *  Initialize `m` = the first value. For each additional value, update using
+ *  ```
+ *      m = m + (new value - m) / (number of observations)
+ *  ```
+ *
  */
 public class Mean<T>(
     private val field: Field<T>,
 ) : ComposableStatistic<T, Pair<T, Int>, T>, BlockingStatistic<T, T> {
 
     override fun evaluateBlocking(data: Buffer<T>): T = with(field) {
-        var res = zero
+        var mean = zero
+        var delta: T
         for (i in data.indices) {
-            res += data[i]
+            delta = data[i] - mean
+            mean += delta / (i + 1)
         }
-        res / data.size
+        return mean
     }
 
     override suspend fun evaluate(data: Buffer<T>): T = super<ComposableStatistic>.evaluate(data)
@@ -47,8 +57,6 @@ public class Mean<T>(
     }
 }
 
-
-//TODO replace with optimized version which respects overflow
 public val Float64Field.mean: Mean<Float64> get() = Mean(Float64Field)
 public val Int32Ring.mean: Mean<Int> get() = Mean(Int32Field)
 public val Int64Ring.mean: Mean<Long> get() = Mean(Int64Field)

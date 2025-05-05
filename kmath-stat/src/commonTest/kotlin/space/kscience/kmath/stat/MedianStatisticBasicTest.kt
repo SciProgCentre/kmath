@@ -13,7 +13,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 @OptIn(UnstableKMathAPI::class)
-class TestBasicStatistics {
+class MedianStatisticBasicTest {
     companion object {
         val float64Sample = RandomGenerator.default(123).nextDoubleBuffer(100)
     }
@@ -24,8 +24,4 @@ class TestBasicStatistics {
         assertEquals(0.5055, Float64Field.median(float64Sample.slice { 0..<last }), 0.0005)
     }
 
-    @Test
-    fun meanFloat64() {
-        assertEquals(0.488, Float64Field.mean(float64Sample), 0.0002)
-    }
 }
