@@ -20,15 +20,15 @@ There are two subinterfaces of the `Statistic` interface:
 |                  | Product           | Product of all values               | 🚧 Not yet implemented         |
 | **Distribution** | Median            | Median (50th percentile)            | ✅ `BlockingStatistic`          |
 |                  | Quantile          | Arbitrary percentile (e.g., Q1, Q3) | 🚧 Not yet implemented         |
-|                  | Variance          | Unbiased sample variance            | 🚧 *(Requires `SumOfSquares`)* |
-|                  | StandardDeviation | Population standard deviation (σ)   | 🚧 *(Depends on `Variance`)*   |
+|                  | Variance          | Unbiased sample variance            | ✅ `BlockingStatistic`          |
+|                  | StandardDeviation | Population standard deviation (σ)   | ✅ `BlockingStatistic`          |
 |                  | Skewness          | Measure of distribution asymmetry   | 🚧 *(Requires `ThirdMoment`)*  |
 |                  | Kurtosis          | Measure of distribution tailedness  | 🚧 *(Requires `FourthMoment`)* |
 | **Advanced**     | GeometricMean     | Nth root of product of values       | ✅ `ComposableStatistic`        |
 |                  | SumOfLogs         | Sum of natural logarithms           | Does not planned               |
 |                  | SumOfSquares      | Sum of squared values               | 🚧 *(Blocks `Variance`)*       |
 | **Moments**      | FirstMoment       | Mean (same as `Mean`)               | ✅ *(Alias for `Mean`)*         |
-|                  | SecondMoment      | Variance (same as `Variance`)       | 🚧 *(Alias for `Variance`)*    |
+|                  | SecondMoment      | Variance (same as `Variance`)       | ✅ *(Alias for `Variance`)*     |
 |                  | ThirdMoment       | Used in skewness calculation        | 🚧 Not yet implemented         |
 |                  | FourthMoment      | Used in kurtosis calculation        | 🚧 Not yet implemented         |
 | **Risk Metrics** | SemiVariance      | Downside variance                   | 🚧 *(Depends on `Variance`)*   |

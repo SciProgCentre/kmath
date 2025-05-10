@@ -18,6 +18,7 @@ internal class CommonsDistributionsTest {
         val generator = RandomGenerator.default(1)
         val sample = distribution.sample(generator).nextBuffer(1000)
         Assertions.assertEquals(7.0, Mean.evaluate(sample), 0.2)
+        Assertions.assertEquals(2.0, StandardDeviation.evaluate(sample), 0.2)
     }
 
     @Test
@@ -26,5 +27,6 @@ internal class CommonsDistributionsTest {
         val generator = RandomGenerator.default(1)
         val sample = distribution.sample(generator).nextBufferBlocking(1000)
         Assertions.assertEquals(7.0, Mean.evaluate(sample), 0.2)
+        Assertions.assertEquals(2.0, StandardDeviation.evaluate(sample), 0.2)
     }
 }

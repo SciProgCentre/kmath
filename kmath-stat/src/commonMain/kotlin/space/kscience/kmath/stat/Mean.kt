@@ -35,13 +35,7 @@ public class Mean<T>(
 
     override suspend fun evaluate(data: Buffer<T>): T = super<ComposableStatistic>.evaluate(data)
 
-    override suspend fun computeIntermediate(data: Buffer<T>): Pair<T, Int> = with(field) {
-        var res = zero
-        for (i in data.indices) {
-            res += data[i]
-        }
-        res to data.size
-    }
+    override suspend fun computeIntermediate(data: Buffer<T>): Pair<T, Int> = evaluateBlocking(data) to data.size
 
     override suspend fun composeIntermediate(first: Pair<T, Int>, second: Pair<T, Int>): Pair<T, Int> =
         with(field) { first.first + second.first } to (first.second + second.second)
