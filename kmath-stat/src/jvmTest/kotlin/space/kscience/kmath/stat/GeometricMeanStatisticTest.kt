@@ -5,6 +5,7 @@
 
 package space.kscience.kmath.stat
 
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.last
 import kotlinx.coroutines.flow.take
@@ -14,6 +15,7 @@ import space.kscience.kmath.operations.Float64Field
 import space.kscience.kmath.random.RandomGenerator
 import space.kscience.kmath.random.chain
 import space.kscience.kmath.streaming.chunked
+import space.kscience.kmath.structures.Float64Buffer
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -21,14 +23,17 @@ internal class GeometricMeanStatisticTest {
     //create a random number generator.
     val generator = RandomGenerator.default(1)
 
-    //Create a stateless chain from generator.
-    val data = generator.chain { if (nextBoolean()) 1.0 else 4.0 }
+    private fun setupData(): Flow<Float64Buffer> {
+        //Create a stateless chain from generator.
+        val data = generator.chain { if (nextBoolean()) 1.0 else 4.0 }
 
-    //Convert a chain to Flow and break it into chunks.
-    val chunked = data.chunked(1000)
+        //Convert a chain to Flow and break it into chunks.
+        return data.chunked(1000)
+    }
 
     @Test
     fun singleBlockingMean() = runTest {
+        val chunked = setupData()
         val first = chunked.first()
         val res = Float64Field.geometricMean(first)
         assertEquals(2.0, res, 1e-1)
@@ -36,6 +41,7 @@ internal class GeometricMeanStatisticTest {
 
     @Test
     fun singleSuspendMean() = runTest {
+        val chunked = setupData()
         val first = runBlocking { chunked.first() }
         val res = Float64Field.geometricMean(first)
         assertEquals(2.0, res, 1e-1)
@@ -43,6 +49,7 @@ internal class GeometricMeanStatisticTest {
 
     @Test
     fun parallelMean() = runTest {
+        val chunked = setupData()
         val average = Float64Field.geometricMean
             .flow(chunked) //create a flow from evaluated results
             .take(100) // Take 100 data chunks from the source and accumulate them
