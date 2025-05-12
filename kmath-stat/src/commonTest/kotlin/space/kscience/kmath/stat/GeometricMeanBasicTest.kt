@@ -5,6 +5,10 @@
 
 package space.kscience.kmath.stat
 
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.last
+import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.test.runTest
 import space.kscience.kmath.operations.*
 import space.kscience.kmath.structures.*
@@ -12,7 +16,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 
-internal class GeometricMeanTest {
+internal class GeometricMeanBasicTest {
 
     // Float64 tests
     @Test
@@ -53,6 +57,23 @@ internal class GeometricMeanTest {
         assertEquals(1e6, res,1e-1)
     }
 
+    @Test
+    fun float64GeometricMeanComposite() = runTest {
+        val flow: Flow<Float64Buffer> = flow {
+            emit(Float64Buffer(doubleArrayOf(1.0)))
+            emit(Float64Buffer(doubleArrayOf(8.0, 27.0)))
+        }
+
+        val average = Float64Field.geometricMean
+            .flow(flow)
+            .take(10)
+            .last()
+
+        // Product = 1 * 8 * 27 = 216
+        // 3d root of 216 = 6
+        assertEquals(6.0, average)
+    }
+
     // Float32 tests
     @Test
     fun singleBlockingFloat32GeometricMean() = runTest {
@@ -90,6 +111,23 @@ internal class GeometricMeanTest {
     fun float32GeometricMeanWithPrecision() = runTest {
         val res = Float32Field.geometricMean.evaluateBlocking(Float32Buffer(1f, 2f, 4f))
         assertEquals(2f, res) // 2^3 = 8, 8^(1/3) = 2
+    }
+
+    @Test
+    fun float32GeometricMeanComposite() = runTest {
+        val flow: Flow<Float32Buffer> = flow {
+            emit(Float32Buffer(1f))
+            emit(Float32Buffer(8f, 27f))
+        }
+
+        val average = Float32Field.geometricMean
+            .flow(flow)
+            .take(10)
+            .last()
+
+        // Product = 1 * 8 * 27 = 216
+        // 3d root of 216 = 6
+        assertEquals(6f, average)
     }
 
     // Extension property tests

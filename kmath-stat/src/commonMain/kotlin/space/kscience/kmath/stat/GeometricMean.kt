@@ -18,7 +18,7 @@ import space.kscience.kmath.structures.indices
  */
 public class GeometricMean<T : Comparable<T>>(
     private val field: ExtendedField<T>
-) : BlockingStatistic<T, T>, ComposableStatistic<T, T, T> {
+) : BlockingStatistic<T, T>, ComposableStatistic<T, Pair<T, Int>, T> {
 
     private fun logsum(data: Buffer<T>): T = with(field) {
         require(data.size > 0) { "Data must not be empty" }
@@ -34,11 +34,14 @@ public class GeometricMean<T : Comparable<T>>(
         exp(logsum(data) / data.size)
     }
 
-    override suspend fun computeIntermediate(data: Buffer<T>): T = evaluateBlocking(data)
+    override suspend fun computeIntermediate(data: Buffer<T>): Pair<T, Int> = logsum(data) to data.size
 
-    override suspend fun composeIntermediate(first: T, second: T): T = with(field) { exp((ln(first) + ln(second)) / 2) }
+    override suspend fun composeIntermediate(first: Pair<T, Int>, second: Pair<T, Int>): Pair<T, Int> = with(field) {
+        first.first + second.first to first.second + second.second
+    }
 
-    override suspend fun toResult(intermediate: T): T = intermediate
+    override suspend fun toResult(intermediate: Pair<T, Int>): T =
+        with(field) { exp(intermediate.first / intermediate.second) }
 
     override suspend fun evaluate(data: Buffer<T>): T = super<ComposableStatistic>.evaluate(data)
 }
