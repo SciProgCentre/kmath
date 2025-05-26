@@ -59,4 +59,13 @@ internal class MeanStatisticTest {
         assertEquals(0.5, average, 1e-2)
     }
 
+    @Test
+    fun quantileMatchMean() = runTest {
+        val chunked = setupData()
+        val first = runBlocking { chunked.first() }
+        val mean = Float64Field.mean(first)
+        val quantile = Quantile.evaluate(p=0.5,first)
+        assertEquals(mean, quantile, 1e-2)
+    }
+
 }
