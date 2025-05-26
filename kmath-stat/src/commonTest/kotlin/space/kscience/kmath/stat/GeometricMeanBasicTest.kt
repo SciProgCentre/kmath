@@ -10,8 +10,10 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.last
 import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.test.runTest
-import space.kscience.kmath.operations.*
-import space.kscience.kmath.structures.*
+import space.kscience.kmath.operations.Float32Field
+import space.kscience.kmath.operations.Float64Field
+import space.kscience.kmath.structures.Float32Buffer
+import space.kscience.kmath.structures.Float64Buffer
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
@@ -110,7 +112,7 @@ internal class GeometricMeanBasicTest {
     @Test
     fun float32GeometricMeanWithPrecision() = runTest {
         val res = Float32Field.geometricMean.evaluateBlocking(Float32Buffer(1f, 2f, 4f))
-        assertEquals(2f, res) // 2^3 = 8, 8^(1/3) = 2
+        assertEquals(2f, res, 1e-8f) // 2^3 = 8, 8^(1/3) = 2
     }
 
     @Test
