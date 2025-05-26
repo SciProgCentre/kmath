@@ -40,10 +40,9 @@ import kotlin.math.floor
  *
  * - [Quantile on Wikipedia](https://en.wikipedia.org/wiki/Quantile) details the different quantile definitions
  *
- * # Performance notes
- * * Performance can be improved by using a selection algorithm instead of a complete sort.
- * * Performance can be improved to support scenarios when several different percentiles are desired by allowing caching data array and pivots.
- *  To achieve it need to redesign class to pass parameter `p` as array.
+ * # Notes
+ * - Performance can be improved by using a selection algorithm instead of a complete sort.
+ * - As further improvement, API can be redesigned support "a batch mode" - scenarios when several different quantiles are desired.
  *
  */
 public class Quantile<T>(
