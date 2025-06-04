@@ -57,7 +57,7 @@ internal class MultikNDTest {
         assertEquals(matrix.shape[0], transposed.shape[1])
         assertEquals(matrix.shape[1], transposed.shape[0])
         matrix.indices.forEach { index ->
-            matrix[index] == transposed[index.reversed().toIntArray()]
+            assertEquals(matrix[index], transposed[index.reversed().toIntArray()], 1e-6)
         }
     }
 
