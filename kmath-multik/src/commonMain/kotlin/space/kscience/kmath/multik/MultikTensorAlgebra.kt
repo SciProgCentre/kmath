@@ -210,7 +210,7 @@ public abstract class MultikTensorAlgebra<T, A : Ring<T>>(
 
     override fun Tensor<T>.getTensor(i: Int): MultikTensor<T> = asMultik().array.mutableView(i).wrap()
 
-    override fun StructureND<T>.transposed(i: Int, j: Int): MultikTensor<T> = asMultik().array.transpose(i, j).wrap()
+    override fun StructureND<T>.transposed(i: Int, j: Int): MultikTensor<T> = asMultik().array.transpose(j, i).wrap()
 
     override fun Tensor<T>.view(shape: ShapeND): MultikTensor<T> {
         require(shape.asList().all { it > 0 })
