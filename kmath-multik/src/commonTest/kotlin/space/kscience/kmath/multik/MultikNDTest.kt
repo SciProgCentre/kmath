@@ -5,8 +5,9 @@
 
 package space.kscience.kmath.multik
 
-import org.jetbrains.kotlinx.multik.default.DefaultEngine
+import org.jetbrains.kotlinx.multik.api.d2arrayIndices
 import org.jetbrains.kotlinx.multik.api.mk
+import org.jetbrains.kotlinx.multik.default.DefaultEngine
 import space.kscience.kmath.PerformancePitfall
 import space.kscience.kmath.nd.ShapeND
 import space.kscience.kmath.nd.StructureND
@@ -16,6 +17,7 @@ import space.kscience.kmath.tensors.core.DoubleTensorAlgebra
 import space.kscience.kmath.tensors.core.randomNormal
 import space.kscience.kmath.tensors.core.tensorAlgebra
 import kotlin.test.Test
+import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 @OptIn(PerformancePitfall::class)
@@ -49,13 +51,14 @@ internal class MultikNDTest {
     }
 
     @Test
-    fun transposed(){
-        with(multikAlgebra) {
-            val matrix = mk.d2arrayIndices(5,3){i, j -> (i+j).toDouble()}.wrap()
-            val transposed = matrix.transposed()
-            assertTrue {
-                matrix.shape[0] == transposed.shape[1] && matrix.shape[1] == transposed.shape[0]
-            }
+    fun transposed() = with(multikAlgebra) {
+        val matrix = mk.d2arrayIndices(5, 3) { i, j -> (i + j).toDouble() }.wrap()
+        val transposed = matrix.transposed()
+        assertEquals(matrix.shape[0], transposed.shape[1])
+        assertEquals(matrix.shape[1], transposed.shape[0])
+        matrix.indices.forEach { index ->
+            matrix[index] == transposed[index.reversed().toIntArray()]
         }
     }
+
 }
