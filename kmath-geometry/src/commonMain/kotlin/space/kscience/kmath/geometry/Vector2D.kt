@@ -7,7 +7,7 @@ package space.kscience.kmath.geometry
 
 import space.kscience.kmath.linear.Point
 
-public interface Vector2D<T> : Point<T> {
+public interface Vector2D<out T> : Point<T> {
     public val x: T
     public val y: T
     override val size: Int get() = 2
