@@ -16,7 +16,7 @@ import kotlin.uuid.Uuid
 /**
  * The polytope construction.
  */
-public interface PolytopicConstruction<Vector, Vertex : Polytope, Polytope> {
+public interface PolytopicConstruction<Vector, Vertex, Polytope> {
     /**
      * Dimension of the polytopic construction.
      */
@@ -51,12 +51,16 @@ public interface PolytopicConstruction<Vector, Vertex : Polytope, Polytope> {
      * Position of [this] vertex in Euclidean space.
      */
     public val Vertex.position: Vector
+    /**
+     * Returns 0-dimensional polytope associated with the vertex.
+     */
+    public fun Vertex.asPolytope(): Polytope
 }
 
 /**
  * The mutable polytope construction.
  */
-public interface MutablePolytopicConstruction<Vector, Vertex : Polytope, Polytope> : PolytopicConstruction<Vector, Vertex, Polytope> {
+public interface MutablePolytopicConstruction<Vector, Vertex, Polytope> : PolytopicConstruction<Vector, Vertex, Polytope> {
     /**
      * Creates new vertex with provided position.
      */
@@ -70,6 +74,10 @@ public interface MutablePolytopicConstruction<Vector, Vertex : Polytope, Polytop
         faces: List<Set<Polytope>>,
     ): Polytope
     /**
+     * Removes the vertex.
+     */
+    public fun Vertex.remove()
+    /**
      * Removes the polytope.
      */
     public fun Polytope.remove()
@@ -79,14 +87,24 @@ public interface MutablePolytopicConstruction<Vector, Vertex : Polytope, Polytop
  * Abstract vertex that holds only an identifier and its position.
  */
 public class AbstractVertex<Vector>(
-    id: Uuid = Uuid.random(),
+    public val id: Uuid = Uuid.random(),
     public val position: Vector
-) : AbstractPolytope(id)
+) {
+    override fun toString(): String = "AbstractVertex#${id.toHexString()} at $position"
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is AbstractVertex<*>) return false
+        
+        return id == other.id
+    }
+    override fun hashCode(): Int = id.hashCode()
+}
 
 /**
  * Abstract polytope that holds an identifier.
  */
 public open class AbstractPolytope(public val id: Uuid = Uuid.random()) {
+    override fun toString(): String = "AbstractPolytope#${id.toHexString()}"
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other !is AbstractPolytope) return false

@@ -3,7 +3,7 @@
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
-package space.kscience.kmath.geometry.euclidean3d
+package proposals.v2.v2
 
 import kotlin.experimental.ExperimentalTypeInference
 
@@ -33,8 +33,6 @@ public interface PolytopicConstruction3D<out V> {
         public val edges: Set<Edge<V>>
         public val faces: Set<Polygon<V>>
     }
-    
-    public companion object
 }
 
 public interface MutablePolytopicConstruction3D<V> : PolytopicConstruction3D<V> {
@@ -53,20 +51,30 @@ public interface MutablePolytopicConstruction3D<V> : PolytopicConstruction3D<V> 
     }
     
     public interface Edge<V> : PolytopicConstruction3D.Edge<V> {
+        override val start: Vertex<V>
+        override val end: Vertex<V>
+        
         public fun remove()
     }
     
     public interface Polygon<V> : PolytopicConstruction3D.Polygon<V> {
+        override val vertices: Set<Vertex<V>>
+        override val edges: Set<Edge<V>>
+        
         public fun remove()
     }
     
     public interface Polyhedron<V> : PolytopicConstruction3D.Polyhedron<V> {
+        override val vertices: Set<Vertex<V>>
+        override val edges: Set<Edge<V>>
+        override val faces: Set<Polygon<V>>
+        
         public fun remove()
     }
 }
 
 @OptIn(ExperimentalTypeInference::class)
-public inline fun <V> PolytopicConstruction3D.Companion.build(@BuilderInference block: MutablePolytopicConstruction3D<V>.() -> Unit): PolytopicConstruction3D<V> =
+public inline fun <V> PolytopicConstruction3D(@BuilderInference block: MutablePolytopicConstruction3D<V>.() -> Unit): PolytopicConstruction3D<V> =
     MutablePolytopicConstruction3DImpl<V>().apply(block)
 
 @Suppress("UNCHECKED_CAST")

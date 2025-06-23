@@ -5,10 +5,6 @@
 
 package space.kscience.kmath.geometry
 
-import space.kscience.kmath.geometry.euclidean2d.PolytopicConstruction2D
-import space.kscience.kmath.geometry.euclidean2d.build
-import space.kscience.kmath.geometry.euclidean3d.PolytopicConstruction3D
-
 //TODO move vector to receiver
 
 /**
@@ -29,22 +25,3 @@ public fun <V : Any> GeometrySpace<V, *>.projectToLine(vector: V, line: Line<V>)
  */
 public fun <V : Any> GeometrySpace<V, *>.projectAlong(vector: V, normal: V, base: V): V =
     vector + normal * ((base - vector) dot normal) / (normal dot normal)
-
-public fun <V: Any> GeometrySpace<V, *>.projectAlong(
-    polytopicConstruction3D: PolytopicConstruction3D<V>,
-    normal: V,
-    base: V,
-): PolytopicConstruction2D<V> = PolytopicConstruction2D.build {
-    val newVertices = polytopicConstruction3D.vertices.associateWith { vertex ->
-        addVertex(projectAlong(vertex.position, normal, base))
-    }
-    val newEdges = polytopicConstruction3D.edges.associateWith { edge ->
-        addEdge(newVertices[edge.start]!!, newVertices[edge.end]!!)
-    }
-    polytopicConstruction3D.polygons.forEach { polygon ->
-        addPolygon(
-            vertices = polygon.vertices.mapTo(mutableSetOf()) { newVertices[it]!! },
-            edges = polygon.edges.mapTo(mutableSetOf()) { newEdges[it]!! }
-        )
-    }
-}
