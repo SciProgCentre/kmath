@@ -79,7 +79,7 @@ public inline fun <V> PolytopicConstruction3D(@BuilderInference block: MutablePo
 
 @Suppress("UNCHECKED_CAST")
 @PublishedApi
-internal class MutablePolytopicConstruction3DImpl<V> @PublishedApi internal constructor(): MutablePolytopicConstruction3D<V> {
+internal class MutablePolytopicConstruction3DImpl<V> : MutablePolytopicConstruction3D<V> {
     override val vertices: MutableSet<Vertex<V>> = mutableSetOf()
     override val edges: MutableSet<Edge<V>> = mutableSetOf()
     override val polygons: MutableSet<Polygon<V>> = mutableSetOf()

@@ -62,7 +62,7 @@ public inline fun <V> PolytopicConstruction2D(@BuilderInference block: MutablePo
 
 @Suppress("UNCHECKED_CAST")
 @PublishedApi
-internal class MutablePolytopicConstruction2DImpl<V> @PublishedApi internal constructor() : MutablePolytopicConstruction2D<V> {
+internal class MutablePolytopicConstruction2DImpl<V> : MutablePolytopicConstruction2D<V> {
     override val vertices: MutableSet<Vertex<V>> = mutableSetOf()
     override val edges: MutableSet<Edge<V>> = mutableSetOf()
     override val polygons: MutableSet<Polygon<V>> = mutableSetOf()
@@ -107,7 +107,7 @@ internal class MutablePolytopicConstruction2DImpl<V> @PublishedApi internal cons
     class Edge<V>(
         val construction: MutablePolytopicConstruction2DImpl<V>,
         override val start: Vertex<V>,
-        override val end: Vertex<V>
+        override val end: Vertex<V>,
     ) : MutablePolytopicConstruction2D.Edge<V> {
         val usedInPolygons: MutableSet<Polygon<V>> = mutableSetOf()
         
