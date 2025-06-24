@@ -34,6 +34,8 @@ public interface MutablePolytopicConstruction<V> : PolytopicConstruction<V> {
     public fun addPolytope(dimension: Int, vertices: Set<Vertex<V>>, faces: List<Set<Polytope<V>>>): Polytope<V>
     
     public interface Vertex<V> : PolytopicConstruction.Vertex<V> {
+        override fun asPolytope(): Polytope<V>
+        
         public fun remove()
     }
     

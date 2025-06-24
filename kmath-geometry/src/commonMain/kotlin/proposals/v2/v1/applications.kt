@@ -3,25 +3,30 @@
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
-package proposals.v2.v2
+package proposals.v2.v1
 
 import space.kscience.kmath.geometry.GeometrySpace
 import space.kscience.kmath.geometry.projectAlong
 
 
-public fun <V: Any> GeometrySpace<V, *>.projectAlong(
-    projectedPolytopicConstruction: PolytopicConstruction<V>,
-    targetPolytopicConstruction: MutablePolytopicConstruction<V>,
+public fun <
+    V: Any,
+    PVertex : PolytopicConstruction.Vertex<V, PVertex, PPolytope>,
+    PPolytope : PolytopicConstruction.Polytope<V, PVertex, PPolytope>,
+    TVertex : MutablePolytopicConstruction.Vertex<V, TVertex, TPolytope>,
+    TPolytope : MutablePolytopicConstruction.Polytope<V, TVertex, TPolytope>
+> GeometrySpace<V, *>.projectAlong(
+    projectedPolytopicConstruction: PolytopicConstruction<V, PVertex, PPolytope>,
+    targetPolytopicConstruction: MutablePolytopicConstruction<V, TVertex, TPolytope>,
     normal: V,
     base: V,
 ) {
     require(targetPolytopicConstruction.dimension >= projectedPolytopicConstruction.dimension - 1)
     with(targetPolytopicConstruction) {
-        val newVertices: Map<PolytopicConstruction.Vertex<V>, MutablePolytopicConstruction.Vertex<V>> =
-            projectedPolytopicConstruction.vertices.associateWith { vertex ->
-                addVertex(projectAlong(vertex.position, normal, base))
-            }
-        val newPolytopes: MutableList<Map<PolytopicConstruction.Polytope<V>, MutablePolytopicConstruction.Polytope<V>>> =
+        val newVertices: Map<PVertex, TVertex> = projectedPolytopicConstruction.vertices.associateWith { vertex ->
+            addVertex(projectAlong(vertex.position, normal, base))
+        }
+        val newPolytopes: MutableList<Map<PPolytope, TPolytope>> =
             mutableListOf(
                 buildMap {
                     for ((pVertex, tVertex) in newVertices) put(pVertex.asPolytope(), tVertex.asPolytope())
@@ -31,7 +36,7 @@ public fun <V: Any> GeometrySpace<V, *>.projectAlong(
             newPolytopes += buildMap {
                 for (pPolytope in projectedPolytopicConstruction.polytopes[dim]) {
                     val tVertices = pPolytope.vertices.mapTo(mutableSetOf()) { newVertices[it]!! }
-                    val tFaces: MutableList<Set<MutablePolytopicConstruction.Polytope<V>>> = mutableListOf()
+                    val tFaces: MutableList<Set<TPolytope>> = mutableListOf()
                     for (subdim in 0 ..< dim)
                         tFaces += pPolytope.faces[subdim].mapTo(mutableSetOf()) { newPolytopes[subdim][it]!! }
                     put(
@@ -47,11 +52,16 @@ public fun <V: Any> GeometrySpace<V, *>.projectAlong(
     }
 }
 
-public fun <V: Any> GeometrySpace<V, *>.projectAlong(
-    polytopicConstruction3D: PolytopicConstruction3D<V>,
+public fun <
+    V: Any,
+    PVertex : PolytopicConstruction3D.Vertex<V>,
+    PEdge : PolytopicConstruction3D.Edge<V, PVertex>,
+    PPolygon : PolytopicConstruction3D.Polygon<V, PVertex, PEdge>,
+> GeometrySpace<V, *>.projectAlongToAbstractPolytopicConstruction2D(
+    polytopicConstruction3D: PolytopicConstruction3D<V, PVertex, PEdge, PPolygon, *>,
     normal: V,
     base: V,
-): PolytopicConstruction2D<V> = PolytopicConstruction2D {
+): AbstractPolytopicConstruction2D<V> = AbstractPolytopicConstruction2D<V>().apply {
     val newVertices = polytopicConstruction3D.vertices.associateWith { vertex ->
         addVertex(projectAlong(vertex.position, normal, base))
     }
@@ -64,4 +74,23 @@ public fun <V: Any> GeometrySpace<V, *>.projectAlong(
             edges = polygon.edges.mapTo(mutableSetOf()) { newEdges[it]!! }
         )
     }
+}
+
+public fun <
+    Vector: Any,
+    VertexType: PolytopicConstruction.Vertex<Vector, VertexType, *>
+> GeometrySpace<Vector, *>.nearestVertexOfTo(
+    polytopicConstruction: PolytopicConstruction<Vector, VertexType, *>,
+    point: Vector,
+): VertexType =
+    polytopicConstruction.vertices.minBy { it.position.distanceTo(point) }
+
+public fun <
+    Vector: Any,
+    VertexType: MutablePolytopicConstruction.Vertex<Vector, VertexType, *>
+> GeometrySpace<Vector, *>.removeNearestVertexOfTo(
+    polytopicConstruction: MutablePolytopicConstruction<Vector, VertexType, *>,
+    point: Vector,
+) {
+    nearestVertexOfTo(polytopicConstruction, point).remove()
 }

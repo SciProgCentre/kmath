@@ -6,11 +6,10 @@
 package proposals.v1
 
 
-public interface PolytopicConstruction3D<Vector, Vertex, Edge, Polygon, Polyhedron> {
+public interface PolytopicConstruction2D<Vector, Vertex, Edge, Polygon> {
     public val vertices: Set<Vertex>
     public val edges: Set<Edge>
     public val polygons: Set<Polygon>
-    public val polyhedra: Set<Polyhedron>
     
     public val Vertex.position: Vector
     
@@ -19,20 +18,14 @@ public interface PolytopicConstruction3D<Vector, Vertex, Edge, Polygon, Polyhedr
     
     public val Polygon.vertices: Set<Vertex>
     public val Polygon.edges: Set<Edge>
-    
-    public val Polyhedron.vertices: Set<Vertex>
-    public val Polyhedron.edges: Set<Edge>
-    public val Polyhedron.polygons: Set<Polygon>
 }
 
-public interface MutablePolytopicConstruction3D<Vector, Vertex, Edge, Polygon, Polyhedron> : PolytopicConstruction3D<Vector, Vertex, Edge, Polygon, Polyhedron> {
+public interface MutablePolytopicConstruction2D<Vector, Vertex, Edge, Polygon> : PolytopicConstruction2D<Vector, Vertex, Edge, Polygon> {
     public fun addVertex(position: Vector): Vertex
     public fun addEdge(start: Vertex, end: Vertex): Edge
     public fun addPolygon(vertices: Set<Vertex>, edges: Set<Edge>): Polygon
-    public fun addPolyhedron(vertices: Set<Vertex>, edges: Set<Edge>, faces: Set<Polygon>): Polyhedron
     
     public fun Vertex.remove()
     public fun Edge.remove()
     public fun Polygon.remove()
-    public fun Polyhedron.remove()
 }

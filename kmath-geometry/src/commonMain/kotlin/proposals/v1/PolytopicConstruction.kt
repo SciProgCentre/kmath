@@ -3,14 +3,7 @@
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
-@file:OptIn(ExperimentalUuidApi::class)
-
 package proposals.v1
-
-import kotlin.contracts.InvocationKind
-import kotlin.contracts.contract
-import kotlin.uuid.ExperimentalUuidApi
-import kotlin.uuid.Uuid
 
 
 /**
@@ -81,51 +74,4 @@ public interface MutablePolytopicConstruction<Vector, Vertex, Polytope> : Polyto
      * Removes the polytope.
      */
     public fun Polytope.remove()
-}
-
-/**
- * Abstract vertex that holds only an identifier and its position.
- */
-public class AbstractVertex<Vector>(
-    public val id: Uuid = Uuid.random(),
-    public val position: Vector
-) {
-    override fun toString(): String = "AbstractVertex#${id.toHexString()} at $position"
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (other !is AbstractVertex<*>) return false
-        
-        return id == other.id
-    }
-    override fun hashCode(): Int = id.hashCode()
-}
-
-/**
- * Abstract polytope that holds an identifier.
- */
-public open class AbstractPolytope(public val id: Uuid = Uuid.random()) {
-    override fun toString(): String = "AbstractPolytope#${id.toHexString()}"
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (other !is AbstractPolytope) return false
-        
-        return id == other.id
-    }
-    override fun hashCode(): Int = id.hashCode()
-}
-
-public typealias AbstractPolytopicConstruction<Vector> = PolytopicConstruction<Vector, AbstractVertex<Vector>, AbstractPolytope>
-public typealias MutableAbstractPolytopicConstruction<Vector> = MutablePolytopicConstruction<Vector, AbstractVertex<Vector>, AbstractPolytope>
-
-/**
- * Builder for [AbstractPolytopicConstruction] via [MutableAbstractPolytopicConstruction] API.
- */
-public inline fun <Vector> AbstractPolytopicConstruction(
-    dimension: Int,
-    block: MutableAbstractPolytopicConstruction<Vector>.() -> Unit
-): AbstractPolytopicConstruction<Vector> {
-    contract {
-        callsInPlace(block, InvocationKind.EXACTLY_ONCE)
-    }
-    TODO()
 }

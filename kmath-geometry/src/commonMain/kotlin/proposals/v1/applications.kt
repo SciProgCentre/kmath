@@ -9,7 +9,7 @@ import space.kscience.kmath.geometry.GeometrySpace
 import space.kscience.kmath.geometry.projectAlong
 
 
-public fun <V: Any, PVertex : PPolytope, PPolytope, TVertex : TPolytope, TPolytope> GeometrySpace<V, *>.projectAlong(
+public fun <V: Any, PVertex, PPolytope, TVertex, TPolytope> GeometrySpace<V, *>.projectAlong(
     projectedPolytopicConstruction: PolytopicConstruction<V, PVertex, PPolytope>,
     targetPolytopicConstruction: MutablePolytopicConstruction<V, TVertex, TPolytope>,
     normal: V,
@@ -21,17 +21,21 @@ public fun <V: Any, PVertex : PPolytope, PPolytope, TVertex : TPolytope, TPolyto
             val newVertices: Map<PVertex, TVertex> = projectedPolytopicConstruction.vertices.associateWith { vertex ->
                 addVertex(projectAlong(vertex.position, normal, base))
             }
-            @Suppress("UNCHECKED_CAST")
-            val newPolytopes: MutableList<Map<PPolytope, TPolytope>> = mutableListOf(newVertices as Map<PPolytope, TVertex>)
+            val newPolytopes: MutableList<Map<PPolytope, TPolytope>> =
+                mutableListOf(
+                    buildMap {
+                        for ((pVertex, tVertex) in newVertices) put(pVertex.asPolytope(), tVertex.asPolytope())
+                    }
+                )
             for (dim in 1 ..< projectedPolytopicConstruction.dimension)
                 newPolytopes += buildMap {
                     for (pPolytope in projectedPolytopicConstruction.polytopes[dim]) {
                         @Suppress("UNCHECKED_CAST")
                         val tVertices = pPolytope.vertices.mapTo(mutableSetOf()) { newVertices[it] as TVertex }
-                        val tFaces: MutableList<Set<TPolytope>> = mutableListOf(tVertices)
-                        for (subdim in 1 ..< dim)
+                        val tFaces: MutableList<Set<TPolytope>> = mutableListOf()
+                        for (subdim in 0 ..< dim)
                             @Suppress("UNCHECKED_CAST")
-                            tFaces += pPolytope.faces[subdim].mapTo(mutableSetOf()) { newPolytopes[subdim] as TPolytope }
+                            tFaces += pPolytope.faces[subdim].mapTo(mutableSetOf()) { newPolytopes[subdim][it] as TPolytope }
                         put(
                             pPolytope,
                             addPolytope(
@@ -44,4 +48,50 @@ public fun <V: Any, PVertex : PPolytope, PPolytope, TVertex : TPolytope, TPolyto
                 }
         }
     }
+}
+
+public fun <
+    V: Any,
+    PVertex,
+    PEdge,
+    PPolygon,
+> GeometrySpace<V, *>.projectAlongToAbstractPolytopicConstruction2D(
+    polytopicConstruction3D: PolytopicConstruction3D<V, PVertex, PEdge, PPolygon, *>,
+    normal: V,
+    base: V,
+): AbstractPolytopicConstruction2D<V> = with(polytopicConstruction3D) {
+    AbstractPolytopicConstruction2D {
+        val newVertices = polytopicConstruction3D.vertices.associateWith { vertex ->
+            addVertex(projectAlong(vertex.position, normal, base))
+        }
+        val newEdges = polytopicConstruction3D.edges.associateWith { edge ->
+            addEdge(newVertices[edge.start]!!, newVertices[edge.end]!!)
+        }
+        polytopicConstruction3D.polygons.forEach { polygon ->
+            addPolygon(
+                vertices = polygon.vertices.mapTo(mutableSetOf()) { newVertices[it]!! },
+                edges = polygon.edges.mapTo(mutableSetOf()) { newEdges[it]!! }
+            )
+        }
+    }
+}
+
+public fun <
+    Vector: Any,
+    Vertex
+> GeometrySpace<Vector, *>.nearestVertexOfTo(
+    polytopicConstruction: PolytopicConstruction<Vector, Vertex, *>,
+    point: Vector,
+): Vertex =
+    with(polytopicConstruction) { vertices.minBy { it.position.distanceTo(point) } }
+
+public fun <
+    Vector: Any,
+    Vertex
+> GeometrySpace<Vector, *>.removeNearestVertexOfTo(
+    polytopicConstruction: MutablePolytopicConstruction<Vector, Vertex, *>,
+    point: Vector,
+) {
+    val vertexToRemove = nearestVertexOfTo(polytopicConstruction, point)
+    with(polytopicConstruction) { vertexToRemove.remove() }
 }
