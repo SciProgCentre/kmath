@@ -22,7 +22,7 @@ public interface PolytopicConstruction3D<Vector, Vertex, Edge, Polygon, Polyhedr
     
     public val Polyhedron.vertices: Set<Vertex>
     public val Polyhedron.edges: Set<Edge>
-    public val Polyhedron.polygons: Set<Polygon>
+    public val Polyhedron.faces: Set<Polygon>
 }
 
 public interface MutablePolytopicConstruction3D<Vector, Vertex, Edge, Polygon, Polyhedron> : PolytopicConstruction3D<Vector, Vertex, Edge, Polygon, Polyhedron> {
