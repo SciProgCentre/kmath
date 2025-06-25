@@ -14,11 +14,10 @@ import kotlin.uuid.Uuid
 
 
 /**
- * Abstract vertex that holds only an identifier and its position.
+ * Abstract vertex that holds only an identifier.
+ * It can be used for accessing properties of some vertex of some polytopic construction.
  */
-public class AbstractVertex internal constructor(
-    public val id: Uuid = Uuid.random(),
-) {
+public class AbstractVertex internal constructor(public val id: Uuid = Uuid.random()) {
     override fun toString(): String = "AbstractVertex#${id.toHexString()}"
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -29,6 +28,10 @@ public class AbstractVertex internal constructor(
     override fun hashCode(): Int = id.hashCode()
 }
 
+/**
+ * Abstract edge that holds only an identifier.
+ * It can be used for accessing properties of some edge of some polytopic construction.
+ */
 public class AbstractEdge internal constructor(public val id: Uuid = Uuid.random()) {
     override fun toString(): String = "AbstractEdge#${id.toHexString()}"
     override fun equals(other: Any?): Boolean {
@@ -40,6 +43,10 @@ public class AbstractEdge internal constructor(public val id: Uuid = Uuid.random
     override fun hashCode(): Int = id.hashCode()
 }
 
+/**
+ * Abstract polygon that holds only an identifier.
+ * It can be used for accessing properties of some polygon of some polytopic construction.
+ */
 public class AbstractPolygon internal constructor(public val id: Uuid = Uuid.random()) {
     override fun toString(): String = "AbstractPolygon#${id.toHexString()}"
     override fun equals(other: Any?): Boolean {
@@ -51,6 +58,10 @@ public class AbstractPolygon internal constructor(public val id: Uuid = Uuid.ran
     override fun hashCode(): Int = id.hashCode()
 }
 
+/**
+ * Abstract polyhedron that holds only an identifier.
+ * It can be used for accessing properties of some polyhedron of some polytopic construction.
+ */
 public class AbstractPolyhedron internal constructor(public val id: Uuid = Uuid.random()) {
     override fun toString(): String = "AbstractPolyhedron#${id.toHexString()}"
     override fun equals(other: Any?): Boolean {
@@ -63,7 +74,8 @@ public class AbstractPolyhedron internal constructor(public val id: Uuid = Uuid.
 }
 
 /**
- * Abstract polytope that holds an identifier.
+ * Abstract polytope that holds only an identifier.
+ * It can be used for accessing properties of some polytope of some polytopic construction.
  */
 public class AbstractPolytope internal constructor(public val id: Uuid = Uuid.random()) {
     override fun toString(): String = "AbstractPolytope#${id.toHexString()}"
@@ -85,6 +97,9 @@ public typealias MutableAbstractPolytopicConstruction3D<Vector> = MutablePolytop
 public typealias AbstractPolytopicConstruction<Vector> = PolytopicConstruction<Vector, AbstractVertex, AbstractPolytope>
 public typealias MutableAbstractPolytopicConstruction<Vector> = MutablePolytopicConstruction<Vector, AbstractVertex, AbstractPolytope>
 
+/**
+ * Builder of [AbstractPolytopicConstruction2D].
+ */
 public inline fun <Vector> AbstractPolytopicConstruction2D(
     block: MutableAbstractPolytopicConstruction2D<Vector>.() -> Unit
 ): AbstractPolytopicConstruction2D<Vector> {
@@ -193,6 +208,9 @@ internal class MutableAbstractPolytopicConstruction2DImpl<Vector> : MutableAbstr
     }
 }
 
+/**
+ * Builder of [AbstractPolytopicConstruction3D].
+ */
 public inline fun <Vector> AbstractPolytopicConstruction3D(
     block: MutableAbstractPolytopicConstruction3D<Vector>.() -> Unit
 ): AbstractPolytopicConstruction3D<Vector> {
@@ -354,7 +372,7 @@ internal class MutableAbstractPolytopicConstruction3DImpl<Vector> : MutableAbstr
 }
 
 /**
- * Builder for [AbstractPolytopicConstruction] via [MutableAbstractPolytopicConstruction] API.
+ * Builder for [AbstractPolytopicConstruction].
  */
 public inline fun <Vector> AbstractPolytopicConstruction(
     dimension: Int,

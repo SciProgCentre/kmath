@@ -9,6 +9,10 @@ import space.kscience.kmath.geometry.GeometrySpace
 import space.kscience.kmath.geometry.projectAlong
 
 
+/**
+ * Projects the [projectedPolytopicConstruction] along [normal] onto hyperplane normal to the [normal]
+ * and going through [base] and adds projection results to [targetPolytopicConstruction].
+ */
 public fun <V: Any, PVertex, PPolytope, TVertex, TPolytope> GeometrySpace<V, *>.projectAlong(
     projectedPolytopicConstruction: PolytopicConstruction<V, PVertex, PPolytope>,
     targetPolytopicConstruction: MutablePolytopicConstruction<V, TVertex, TPolytope>,
@@ -50,6 +54,10 @@ public fun <V: Any, PVertex, PPolytope, TVertex, TPolytope> GeometrySpace<V, *>.
     }
 }
 
+/**
+ * Projects the [polytopicConstruction3D] along [normal] onto hyperplane normal to the [normal] and going through [base].
+ * Result is a new [AbstractPolytopicConstruction2D].
+ */
 public fun <
     V: Any,
     PVertex,
@@ -76,6 +84,9 @@ public fun <
     }
 }
 
+/**
+ * Returns vertex of [polytopicConstruction] nearest to the [point].
+ */
 public fun <
     Vector: Any,
     Vertex
@@ -85,6 +96,9 @@ public fun <
 ): Vertex =
     with(polytopicConstruction) { vertices.minBy { it.position.distanceTo(point) } }
 
+/**
+ * Removes vertex of [polytopicConstruction] nearest to the [point].
+ */
 public fun <
     Vector: Any,
     Vertex

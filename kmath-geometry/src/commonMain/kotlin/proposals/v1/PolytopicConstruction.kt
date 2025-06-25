@@ -7,7 +7,7 @@ package proposals.v1
 
 
 /**
- * The polytope construction.
+ * The polytopic construction.
  */
 public interface PolytopicConstruction<Vector, Vertex, Polytope> {
     /**
@@ -51,7 +51,7 @@ public interface PolytopicConstruction<Vector, Vertex, Polytope> {
 }
 
 /**
- * The mutable polytope construction.
+ * The mutable polytopic construction.
  */
 public interface MutablePolytopicConstruction<Vector, Vertex, Polytope> : PolytopicConstruction<Vector, Vertex, Polytope> {
     /**
@@ -68,10 +68,12 @@ public interface MutablePolytopicConstruction<Vector, Vertex, Polytope> : Polyto
     ): Polytope
     /**
      * Removes the vertex.
+     * Also removes all polytopes that contain the vertex.
      */
     public fun Vertex.remove()
     /**
      * Removes the polytope.
+     * Also removes all polytopes that contain the polytope.
      */
     public fun Polytope.remove()
 }
