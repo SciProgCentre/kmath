@@ -6,17 +6,17 @@
 package proposals.v5
 
 
-public interface PolytopicConstruction<Vector, Vertex, Polytope> {
+public interface PolytopicConstruction<out Vector, out Vertex, out Polytope> {
     public val dimension: Int
     public val polytopes: List<Set<Polytope>>
     public val vertices: Set<Vertex>
     
-    public val Vertex.position: Vector
-    public fun Vertex.asPolytope(): Polytope
+    public val @UnsafeVariance Vertex.position: Vector
+    public fun @UnsafeVariance Vertex.asPolytope(): Polytope
     
-    public val Polytope.dimension: Int
-    public val Polytope.faces: List<Set<Polytope>>
-    public val Polytope.vertices: Set<Vertex>
+    public val @UnsafeVariance Polytope.dimension: Int
+    public val @UnsafeVariance Polytope.faces: List<Set<Polytope>>
+    public val @UnsafeVariance Polytope.vertices: Set<Vertex>
 }
 
 public interface MutablePolytopicConstruction<Vector, Vertex, Polytope> : PolytopicConstruction<Vector, Vertex, Polytope> {

@@ -6,13 +6,13 @@
 package proposals.v3.v2
 
 
-public interface Vertex<Vector> {
+public interface Vertex<out Vector> {
     public val position: Vector
     
     public fun asPolytope(): Polytope<Vector>
 }
 
-public interface Polytope<Vector> {
+public interface Polytope<out Vector> {
     public val dimension: Int
     public val vertices: Set<Vertex<Vector>>
     public val faces: List<Set<Polytope<Vector>>>

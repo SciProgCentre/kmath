@@ -6,13 +6,13 @@
 package proposals.v4
 
 
-public interface Polytope<Vector> {
+public interface Polytope<out Vector> {
     public val dimension: Int
     public val vertices: Set<Vertex<Vector>>
     public val faces: List<Set<Polytope<Vector>>>
 }
 
-public interface Vertex<Vector> : Polytope<Vector> {
+public interface Vertex<out Vector> : Polytope<Vector> {
     public val position: Vector
     
     override val dimension: Int get() = 0
@@ -20,7 +20,7 @@ public interface Vertex<Vector> : Polytope<Vector> {
     override val faces: List<Set<Polytope<Vector>>> get() = emptyList()
 }
 
-public interface Edge<Vector> : Polytope<Vector> {
+public interface Edge<out Vector> : Polytope<Vector> {
     public val start: Vertex<Vector>
     public val end: Vertex<Vector>
     
@@ -29,14 +29,14 @@ public interface Edge<Vector> : Polytope<Vector> {
     override val faces: List<Set<Polytope<Vector>>> get() = listOf(vertices)
 }
 
-public interface Polygon<Vector> : Polytope<Vector> {
+public interface Polygon<out Vector> : Polytope<Vector> {
     public val edges: Set<Edge<Vector>>
     
     override val dimension: Int get() = 2
     override val faces: List<Set<Polytope<Vector>>> get() = listOf(vertices, edges)
 }
 
-public interface Polyhedron<Vector> : Polytope<Vector> {
+public interface Polyhedron<out Vector> : Polytope<Vector> {
     public val edges: Set<Edge<Vector>>
     public val polygons: Set<Polygon<Vector>>
     

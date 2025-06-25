@@ -46,25 +46,25 @@ public interface MutablePolytopicConstruction3D<V> : PolytopicConstruction3D<V> 
     public fun addPolygon(vertices: Set<Vertex<V>>, edges: Set<Edge<V>>): Polygon<V>
     public fun addPolyhedron(vertices: Set<Vertex<V>>, edges: Set<Edge<V>>, faces: Set<Polygon<V>>): Polyhedron<V>
     
-    public interface Vertex<V> : PolytopicConstruction3D.Vertex<V> {
+    public interface Vertex<out V> : PolytopicConstruction3D.Vertex<V> {
         public fun remove()
     }
     
-    public interface Edge<V> : PolytopicConstruction3D.Edge<V> {
+    public interface Edge<out V> : PolytopicConstruction3D.Edge<V> {
         override val start: Vertex<V>
         override val end: Vertex<V>
         
         public fun remove()
     }
     
-    public interface Polygon<V> : PolytopicConstruction3D.Polygon<V> {
+    public interface Polygon<out V> : PolytopicConstruction3D.Polygon<V> {
         override val vertices: Set<Vertex<V>>
         override val edges: Set<Edge<V>>
         
         public fun remove()
     }
     
-    public interface Polyhedron<V> : PolytopicConstruction3D.Polyhedron<V> {
+    public interface Polyhedron<out V> : PolytopicConstruction3D.Polyhedron<V> {
         override val vertices: Set<Vertex<V>>
         override val edges: Set<Edge<V>>
         override val faces: Set<Polygon<V>>

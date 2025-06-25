@@ -9,7 +9,7 @@ package proposals.v1
 /**
  * The 3D polytopic construction.
  */
-public interface PolytopicConstruction3D<Vector, Vertex, Edge, Polygon, Polyhedron> {
+public interface PolytopicConstruction3D<out Vector, out Vertex, out Edge, out Polygon, out Polyhedron> {
     /**
      * Contains all the vertices in the construction.
      */
@@ -30,41 +30,41 @@ public interface PolytopicConstruction3D<Vector, Vertex, Edge, Polygon, Polyhedr
     /**
      * Returns position of the vertex.
      */
-    public val Vertex.position: Vector
+    public val @UnsafeVariance Vertex.position: Vector
     
     /**
      * Returns start vertex of the edge. It is just some one vertex of the edge.
      */
-    public val Edge.start: Vertex
+    public val @UnsafeVariance Edge.start: Vertex
     /**
      * Returns end vertex of the edge. It is just some one vertex of the edge.
      */
-    public val Edge.end: Vertex
+    public val @UnsafeVariance Edge.end: Vertex
     
     /**
      * Returns all vertices of the polygon.
      */
-    public val Polygon.vertices: Set<Vertex>
+    public val @UnsafeVariance Polygon.vertices: Set<Vertex>
     /**
      * Returns all edges of the polytope.
      */
-    public val Polygon.edges: Set<Edge>
+    public val @UnsafeVariance Polygon.edges: Set<Edge>
     
     /**
      * Returns all vertices of the polyhedron.
      */
-    public val Polyhedron.vertices: Set<Vertex>
+    public val @UnsafeVariance Polyhedron.vertices: Set<Vertex>
     /**
      * Returns all edges of the polyhedron.
      */
-    public val Polyhedron.edges: Set<Edge>
+    public val @UnsafeVariance Polyhedron.edges: Set<Edge>
     /**
      * Returns all faces of the polyhedron.
      */
-    public val Polyhedron.faces: Set<Polygon>
+    public val @UnsafeVariance Polyhedron.faces: Set<Polygon>
 }
 
-public interface MutablePolytopicConstruction3D<Vector, Vertex, Edge, Polygon, Polyhedron> : PolytopicConstruction3D<Vector, Vertex, Edge, Polygon, Polyhedron> {
+public interface MutablePolytopicConstruction3D<Vector, out Vertex, out Edge, out Polygon, out Polyhedron> : PolytopicConstruction3D<Vector, Vertex, Edge, Polygon, Polyhedron> {
     /**
      * Creates new vertex with provided position.
      */
@@ -72,33 +72,33 @@ public interface MutablePolytopicConstruction3D<Vector, Vertex, Edge, Polygon, P
     /**
      * Creates new edge with provided ends.
      */
-    public fun addEdge(start: Vertex, end: Vertex): Edge
+    public fun addEdge(start: @UnsafeVariance Vertex, end: @UnsafeVariance Vertex): Edge
     /**
      * Creates new polygon with provided vertices and edges.
      */
-    public fun addPolygon(vertices: Set<Vertex>, edges: Set<Edge>): Polygon
+    public fun addPolygon(vertices: Set<@UnsafeVariance Vertex>, edges: Set<@UnsafeVariance Edge>): Polygon
     /**
      * Creates new polyhedron with provided vertices, edges, and faces.
      */
-    public fun addPolyhedron(vertices: Set<Vertex>, edges: Set<Edge>, faces: Set<Polygon>): Polyhedron
+    public fun addPolyhedron(vertices: Set<@UnsafeVariance Vertex>, edges: Set<@UnsafeVariance Edge>, faces: Set<@UnsafeVariance Polygon>): Polyhedron
     
     /**
      * Removes the vertex.
      * Also removes all edges, polygons, and polyhedra that contain the vertex.
      */
-    public fun Vertex.remove()
+    public fun @UnsafeVariance Vertex.remove()
     /**
      * Removes the edge.
      * Also removes all polygons and polyhedra that contain the edge.
      */
-    public fun Edge.remove()
+    public fun @UnsafeVariance Edge.remove()
     /**
      * Removes the polygon.
      * Also removes all polyhedra that contain the edge.
      */
-    public fun Polygon.remove()
+    public fun @UnsafeVariance Polygon.remove()
     /**
      * Removes the polyhedra.
      */
-    public fun Polyhedron.remove()
+    public fun @UnsafeVariance Polyhedron.remove()
 }

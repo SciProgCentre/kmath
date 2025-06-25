@@ -37,18 +37,18 @@ public interface MutablePolytopicConstruction2D<V> : PolytopicConstruction2D<V> 
     public fun addEdge(start: Vertex<V>, end: Vertex<V>): Edge<V>
     public fun addPolygon(vertices: Set<Vertex<V>>, edges: Set<Edge<V>>): Polygon<V>
     
-    public interface Vertex<V> : PolytopicConstruction2D.Vertex<V> {
+    public interface Vertex<out V> : PolytopicConstruction2D.Vertex<V> {
         public fun remove()
     }
     
-    public interface Edge<V> : PolytopicConstruction2D.Edge<V> {
+    public interface Edge<out V> : PolytopicConstruction2D.Edge<V> {
         override val start: Vertex<V>
         override val end: Vertex<V>
         
         public fun remove()
     }
     
-    public interface Polygon<V> : PolytopicConstruction2D.Polygon<V> {
+    public interface Polygon<out V> : PolytopicConstruction2D.Polygon<V> {
         override val vertices: Set<Vertex<V>>
         override val edges: Set<Edge<V>>
         
