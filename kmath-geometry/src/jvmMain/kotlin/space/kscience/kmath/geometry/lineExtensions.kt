@@ -12,13 +12,13 @@ import space.kscience.kmath.operations.Group
 /**
  * Get a line, containing this [LineSegment]
  */
-context(Group<V>)
+context(algebra: Group<V>)
 public val <V : Any> LineSegment<V>.line: Line<V>
-    get() = Line(begin, end - begin)
+    get() = with(algebra) { Line(begin, end - begin) }
 
 /**
  * Get a length of a line segment
  */
-context(GeometrySpace<V, D>)
+context(algebra: GeometrySpace<V, D>)
 public val <V : Any, D : Comparable<D>> LineSegment<V>.length: D
-    get() = norm(end - begin)
+    get() = with(algebra) { norm(end - begin) }
