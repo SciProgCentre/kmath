@@ -5,11 +5,13 @@
 
 package space.kscience.kmath.series
 
-import kotlinx.datetime.Instant
 import space.kscience.kmath.operations.algebra
 import space.kscience.kmath.operations.bufferAlgebra
 import kotlin.time.Duration
+import kotlin.time.ExperimentalTime
+import kotlin.time.Instant
 
+@OptIn(ExperimentalTime::class)
 fun SeriesAlgebra.Companion.time(zero: Instant, step: Duration) = MonotonicSeriesAlgebra(
     bufferAlgebra = Double.algebra.bufferAlgebra,
     offsetToLabel = { zero + step * it },

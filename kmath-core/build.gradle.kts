@@ -6,7 +6,7 @@ kscience {
     jvm()
     js()
     native()
-    wasm()
+    wasmJs()
 
     dependencies {
         api(libs.attributes)
