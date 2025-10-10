@@ -107,8 +107,8 @@ public object EjmlLinearSpaceDDRM : EjmlLinearSpace<Double, Float64Field, DMatri
         }
     }
 
-    public fun <T: DMatrix> T.asMatrix() = EjmlDoubleMatrix(this)
-    public fun <T: DMatrix> T.asVector() = EjmlDoubleVector(this)
+    public fun <T: DMatrix> T.asMatrix(): EjmlDoubleMatrix<T> = EjmlDoubleMatrix(this)
+    public fun <T: DMatrix> T.asVector(): EjmlDoubleVector<T> = EjmlDoubleVector(this)
 
     override fun buildMatrix(
         rows: Int,
@@ -367,8 +367,8 @@ public object EjmlLinearSpaceFDRM : EjmlLinearSpace<Float, Float32Field, FMatrix
         }
     }
 
-    public fun <T: FMatrix> T.asMatrix() = EjmlFloatMatrix(this)
-    public fun <T: FMatrix> T.asVector() = EjmlFloatVector(this)
+    public fun <T: FMatrix> T.asMatrix(): EjmlFloatMatrix<T> = EjmlFloatMatrix(this)
+    public fun <T: FMatrix> T.asVector(): EjmlFloatVector<T> = EjmlFloatVector(this)
 
     override fun buildMatrix(
         rows: Int,
@@ -626,8 +626,8 @@ public object EjmlLinearSpaceDSCC : EjmlLinearSpace<Double, Float64Field, DMatri
         }
     }
 
-    public fun <T: DMatrix> T.asMatrix() = EjmlDoubleMatrix(this)
-    public fun <T: DMatrix> T.asVector() = EjmlDoubleVector(this)
+    public fun <T: DMatrix> T.asMatrix(): EjmlDoubleMatrix<T> = EjmlDoubleMatrix(this)
+    public fun <T: DMatrix> T.asVector(): EjmlDoubleVector<T> = EjmlDoubleVector(this)
 
 
     override fun buildMatrix(
@@ -853,8 +853,8 @@ public object EjmlLinearSpaceFSCC : EjmlLinearSpace<Float, Float32Field, FMatrix
         }
     }
 
-    public fun <T : FMatrix> T.asMatrix() = EjmlFloatMatrix(this)
-    public fun <T : FMatrix> T.asVector() = EjmlFloatVector(this)
+    public fun <T : FMatrix> T.asMatrix(): EjmlFloatMatrix<T> = EjmlFloatMatrix(this)
+    public fun <T : FMatrix> T.asVector(): EjmlFloatVector<T> = EjmlFloatVector(this)
 
     override fun buildMatrix(
         rows: Int,
