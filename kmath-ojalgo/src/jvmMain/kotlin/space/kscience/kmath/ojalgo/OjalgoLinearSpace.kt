@@ -5,6 +5,7 @@
 
 package space.kscience.kmath.ojalgo
 
+import org.ojalgo.matrix.decomposition.MatrixDecomposition
 import org.ojalgo.matrix.store.MatrixStore
 import org.ojalgo.matrix.store.PhysicalStore
 import space.kscience.kmath.UnstableKMathAPI
@@ -32,6 +33,13 @@ public value class OjalgoMatrix<T : Comparable<T>>(public val ojalgoVector: Matr
     override val colNum: Int get() = ojalgoVector.colDim
 
     override fun get(i: Int, j: Int): T = ojalgoVector.get(i.toLong(), j.toLong())
+}
+
+/**
+ * Decompose matrix and throw exception if decomposition failed
+ */
+private fun <T: Comparable<T>, D: MatrixDecomposition<T>> D.decomposeOrFail(matrix: MatrixStore<T>): D = apply {
+    if(!decompose(matrix)) error("Matrix decomposition failed")
 }
 
 
@@ -97,13 +105,13 @@ public class OjalgoLinearSpace<T : Comparable<T>, A : Ring<T>>(
         val origin = structure.toOjalgo()
 
         val raw: Any? = when (attribute) {
-            Determinant -> ojalgo.lu.make(origin).apply { decompose(origin) }.determinant
+            Determinant -> ojalgo.lu.make(origin).decomposeOrFail(origin).determinant
 
-            Inverted -> ojalgo.lu.make().apply { decompose(origin) }.inverse.asMatrix()
+            Inverted -> ojalgo.lu.make().decomposeOrFail(origin).inverse.asMatrix()
 
             LUP -> object : LupDecomposition<T> {
                 val lup by lazy {
-                    ojalgo.lu.make(origin).apply { decompose(origin) }
+                    ojalgo.lu.make(origin).decomposeOrFail(origin)
                 }
                 override val pivot: IntBuffer get() = lup.pivotOrder.asBuffer()
                 override val l: Matrix<T> get() = lup.l.asMatrix().withAttribute(LowerTriangular)
@@ -112,14 +120,14 @@ public class OjalgoLinearSpace<T : Comparable<T>, A : Ring<T>>(
 
             Cholesky -> object : CholeskyDecomposition<T> {
                 val cholesky by lazy {
-                    ojalgo.cholesky.make(origin).apply { decompose(origin) }
+                    ojalgo.cholesky.make(origin).decomposeOrFail(origin)
                 }
                 override val l: Matrix<T> get() = cholesky.l.asMatrix()
             }
 
             QR -> object : QRDecomposition<T> {
                 val qr by lazy {
-                    ojalgo.qr.make(origin).apply { decompose(origin) }
+                    ojalgo.qr.make(origin).decomposeOrFail(origin)
                 }
                 override val q: Matrix<T> get() = qr.q.asMatrix().withAttribute(OrthogonalAttribute)
                 override val r: Matrix<T> get() = qr.r.asMatrix().withAttribute(UpperTriangular)
@@ -127,7 +135,7 @@ public class OjalgoLinearSpace<T : Comparable<T>, A : Ring<T>>(
 
             SVD -> object : SingularValueDecomposition<T> {
                 val svd by lazy {
-                    ojalgo.svd.make(origin).apply { decompose(origin) }
+                    ojalgo.svd.make(origin).decomposeOrFail(origin)
                 }
 
                 override val u: Matrix<T> get() = svd.u.asMatrix()
@@ -141,7 +149,7 @@ public class OjalgoLinearSpace<T : Comparable<T>, A : Ring<T>>(
 
             EIG -> object : EigenDecomposition<T> {
                 val eigen by lazy {
-                    ojalgo.eigen.make(origin).apply { decompose(origin) }
+                    ojalgo.eigen.make(origin).decomposeOrFail(origin)
                 }
 
                 override val v: Matrix<T> get() = eigen.v.asMatrix()
