@@ -23,7 +23,7 @@ dependencies {
     }
 }
 
-dokka{
+dokka {
     dokkaSourceSets.configureEach {
         val readmeFile = projectDir.resolve("README.md")
         if (readmeFile.exists()) includes.from(readmeFile)
@@ -48,7 +48,7 @@ subprojects {
                     )
                 }
 
-                fun externalDocumentationLink(url: String, packageListUrl: String? = null){
+                fun externalDocumentationLink(url: String, packageListUrl: String? = null) {
                     externalDocumentationLinks.register(url) {
                         url(url)
                         packageListUrl?.let {
@@ -76,15 +76,18 @@ subprojects {
     }
 }
 
-readme.readmeTemplate = file("docs/templates/README-TEMPLATE.md")
+kscienceProject {
+    readme.readmeTemplate = file("docs/templates/README-TEMPLATE.md")
 
-ksciencePublish {
+
     pom("https://github.com/SciProgCentre/kmath") {
         useApache2Licence()
         useSPCTeam()
     }
-    repository("spc", "https://maven.sciprog.center/kscience")
-    central()
+    publishTo("spc", "https://maven.sciprog.center/kscience")
+    publishToCentral()
+
 }
 
-apiValidation.nonPublicMarkers.add("space.kscience.kmath.UnstableKMathAPI")
+
+//apiValidation.nonPublicMarkers.add("space.kscience.kmath.UnstableKMathAPI")

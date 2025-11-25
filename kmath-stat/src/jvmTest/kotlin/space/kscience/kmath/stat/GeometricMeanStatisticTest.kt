@@ -21,7 +21,7 @@ import kotlin.test.assertEquals
 
 internal class GeometricMeanStatisticTest {
     //create a random number generator.
-    val generator = RandomGenerator.default(1)
+    val generator = RandomGenerator.default(122)
 
     private fun setupData(): Flow<Float64Buffer> {
         //Create a stateless chain from generator.

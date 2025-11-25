@@ -35,13 +35,13 @@ class ExpressionsInterpretersBenchmark {
     fun mstExpression(blackhole: Blackhole) = invokeAndSum(mst, blackhole)
 
     /**
-     * Benchmark case for [Expression] created with [compileToExpression].
+     * Benchmark case for [Expression] created with [space.kscience.kmath.estree.compileToExpression].
      */
     @Benchmark
     fun wasmExpression(blackhole: Blackhole) = invokeAndSum(wasm, blackhole)
 
     /**
-     * Benchmark case for [Expression] created with [compileToExpression].
+     * Benchmark case for [Expression] created with [space.kscience.kmath.estree.compileToExpression].
      */
     @Benchmark
     fun estreeExpression(blackhole: Blackhole) = invokeAndSum(estree, blackhole)

@@ -19,7 +19,7 @@ internal abstract class AsmBuilder {
 
     protected val classLoader = ByteArrayClassLoader(javaClass.classLoader)
 
-    protected companion object {
+    companion object {
         /**
          * ASM type for [Expression].
          */

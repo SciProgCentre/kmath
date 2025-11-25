@@ -6,9 +6,9 @@ kscience {
     jvm()
     js()
     native()
-    wasm()
+    wasmJs()
 
-    useContextReceivers()
+    useContextParameters()
     useSerialization()
     dependencies {
         api(projects.kmath.kmathComplex)

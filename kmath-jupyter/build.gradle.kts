@@ -1,6 +1,6 @@
 plugins {
     id("space.kscience.gradle.jvm")
-    kotlin("jupyter.api")
+    alias(spclibs.plugins.kotlin.jupyter.api)
 }
 
 dependencies {
