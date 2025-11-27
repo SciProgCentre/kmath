@@ -5,9 +5,14 @@
 
 package space.kscience.kmath.linear
 
-import space.kscience.attributes.*
+import space.kscience.attributes.Attributes
+import space.kscience.attributes.SafeType
+import space.kscience.attributes.withAttribute
 import space.kscience.kmath.UnstableKMathAPI
-import space.kscience.kmath.nd.*
+import space.kscience.kmath.nd.MutableStructure2D
+import space.kscience.kmath.nd.Structure2D
+import space.kscience.kmath.nd.StructureAttribute
+import space.kscience.kmath.nd.as1D
 import space.kscience.kmath.operations.BufferRingOps
 import space.kscience.kmath.operations.Ring
 import space.kscience.kmath.operations.invoke
@@ -179,7 +184,7 @@ public interface LinearSpace<T, out A : Ring<T>> : MatrixScope<T> {
      * If the structure holds given [attribute] return itself. Otherwise, return a new [Matrix] that contains a computed attribute.
      *
      * This method is used to compute and cache attribute inside the structure. If one needs an attribute only once,
-     * better use [StructureND.getOrComputeAttribute].
+     * better use [Structure2D.getOrComputeAttribute].
      */
     @UnstableKMathAPI
     public fun <V : Any, A : StructureAttribute<V>> Matrix<T>.withComputedAttribute(

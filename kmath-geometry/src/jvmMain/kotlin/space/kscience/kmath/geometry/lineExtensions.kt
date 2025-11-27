@@ -8,17 +8,18 @@
 package space.kscience.kmath.geometry
 
 import space.kscience.kmath.operations.Group
+import space.kscience.kmath.operations.invoke
 
 /**
  * Get a line, containing this [LineSegment]
  */
-context(algebra: Group<V>)
+context(group: Group<V>)
 public val <V : Any> LineSegment<V>.line: Line<V>
-    get() = with(algebra) { Line(begin, end - begin) }
+    get() = Line(begin, group { end - begin })
 
 /**
  * Get a length of a line segment
  */
-context(algebra: GeometrySpace<V, D>)
+context(space: GeometrySpace<V, D>)
 public val <V : Any, D : Comparable<D>> LineSegment<V>.length: D
-    get() = with(algebra) { norm(end - begin) }
+    get() = space { norm(end - begin) }
