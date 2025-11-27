@@ -13,6 +13,7 @@ import space.kscience.kmath.nd.StructureND
 import space.kscience.kmath.structures.Float64
 import space.kscience.kmath.testutils.assertStructureEquals
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 import kotlin.test.assertTrue
 
 
@@ -22,14 +23,14 @@ import kotlin.test.assertTrue
 class OjalgoMatrixTest {
 
     @Test
-    fun testTranspose() = with(Ojalgo.Companion.R064.linearSpace) {
+    fun testTranspose() = with(Ojalgo.R064.linearSpace) {
         val matrix = one(3, 3)
         val transposed = matrix.transposed()
         assertTrue { StructureND.Companion.contentEquals(matrix, transposed) }
     }
 
     @Test
-    fun testBuilder() = Ojalgo.Companion.R064.linearSpace {
+    fun testBuilder() = Ojalgo.R064.linearSpace {
         val matrix = MatrixBuilder(2, 3).fill(
             1.0, 0.0, 0.0,
             0.0, 1.0, 2.0
@@ -39,7 +40,7 @@ class OjalgoMatrixTest {
     }
 
     @Test
-    fun testMatrixExtension() = with(Ojalgo.Companion.R064.linearSpace) {
+    fun testMatrixExtension() = with(Ojalgo.R064.linearSpace) {
         val transitionMatrix: Matrix<Float64> = VirtualMatrix(6, 6) { row, col ->
             when {
                 col == 0 -> .50
@@ -61,7 +62,7 @@ class OjalgoMatrixTest {
     }
 
     @Test
-    fun test2DDot() = with(Ojalgo.Companion.R064.linearSpace) {
+    fun test2DDot() = with(Ojalgo.R064.linearSpace) {
         val firstMatrix = buildMatrix(2, 3) { i, j -> (i + j).toDouble() }
         val secondMatrix = buildMatrix(3, 2) { i, j -> (i + j).toDouble() }
 
@@ -76,7 +77,7 @@ class OjalgoMatrixTest {
     }
 
     @Test
-    fun testCholesky() = with(Ojalgo.Companion.R064.linearSpace) {
+    fun testCholesky() = with(Ojalgo.R064.linearSpace) {
         val l = MatrixBuilder(4, 4).fill(
             1.0, 0.0, 0.0, 0.0,
             1.0, 1.0, 0.0, 0.0,
@@ -90,4 +91,18 @@ class OjalgoMatrixTest {
 
         assertStructureEquals(l, chol!!.l, 1e-4)
     }
+
+    @Test
+    fun testCholeskyNonPositive(): Unit = with(Ojalgo.R064.linearSpace) {
+        val matrix = MatrixBuilder(2, 2).fill(
+            1.0, 0.0,
+            0.0, -1.0,
+        )
+
+        assertFailsWith<IllegalStateException> {
+            computeAttribute(matrix, Cholesky)!!.l
+        }
+    }
+
+
 }
