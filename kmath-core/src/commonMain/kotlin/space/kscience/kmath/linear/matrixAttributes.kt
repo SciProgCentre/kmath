@@ -23,11 +23,14 @@ public interface MatrixScope<T> : WithType<T>
  */
 public interface MatrixAttribute<T> : StructureAttribute<T>
 
+public typealias BooleanAttribute = Attribute<Boolean>
+
+
 /**
  * Matrices with this feature are symmetric, meaning `matrix[i,j] == matrix[j,i]`
  */
-public interface Symmetric : MatrixAttribute<Unit>, FlagAttribute{
-    public companion object: Symmetric
+public interface Symmetric : MatrixAttribute<Boolean>, BooleanAttribute {
+    public companion object : Symmetric
 }
 
 /**
@@ -72,12 +75,12 @@ public val <T> MatrixScope<T>.Determinant: Determinant<T> get() = Determinant(ty
 /**
  * Matrices with this feature are lower triangular ones.
  */
-public object LowerTriangular : MatrixAttribute<Unit>, FlagAttribute
+public object LowerTriangular : MatrixAttribute<Boolean>, BooleanAttribute
 
 /**
  * Matrices with this feature are upper triangular ones.
  */
-public object UpperTriangular : MatrixAttribute<Unit>, FlagAttribute
+public object UpperTriangular : MatrixAttribute<Boolean>, BooleanAttribute
 
 /**
  * Matrices with this feature support LU factorization: *a = [l] &middot; [u]* where *a* is the owning matrix.
@@ -102,7 +105,7 @@ public val <T> MatrixScope<T>.LU: LuDecompositionAttribute<T> get() = LuDecompos
  * Matrices with this feature are orthogonal ones: *a &middot; a<sup>T</sup> = u* where *a* is the owning matrix, *u*
  * is the unit matrix ([IsUnit]).
  */
-public object OrthogonalAttribute : MatrixAttribute<Unit>, FlagAttribute
+public object OrthogonalAttribute : MatrixAttribute<Boolean>, BooleanAttribute
 
 
 public interface QRDecomposition<out T> {

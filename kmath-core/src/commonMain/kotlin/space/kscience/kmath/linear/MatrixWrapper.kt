@@ -54,6 +54,18 @@ public fun <T, A : Attribute<Unit>> Matrix<T>.withAttribute(
 }
 
 /**
+ * Add boolean attribute with default value `true`
+ */
+public fun <T, A : Attribute<Boolean>> Matrix<T>.withAttribute(
+    attribute: A,
+    value: Boolean = true
+): MatrixWrapper<T> = if (this is MatrixWrapper) {
+    MatrixWrapper(origin, attributes.withAttribute(attribute, value))
+} else {
+    MatrixWrapper(this, Attributes(attribute, value))
+}
+
+/**
  * Modify matrix attributes
  */
 public fun <T> Matrix<T>.modifyAttributes(modifier: (Attributes) -> Attributes): MatrixWrapper<T> =

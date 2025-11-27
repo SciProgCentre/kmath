@@ -15,7 +15,7 @@ allprojects {
     }
 
     group = "space.kscience"
-    version = "0.4.3-dev-1"
+    version = "0.5.0-dev-1"
 }
 
 dependencies {
@@ -91,7 +91,7 @@ kscienceProject {
     @OptIn(ExperimentalAbiValidation::class)
     abiValidation {
         filters {
-            excluded{
+            excluded {
                 annotatedWith.add("space.kscience.kmath.UnstableKMathAPI")
             }
         }
