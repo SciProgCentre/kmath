@@ -66,7 +66,7 @@ public class AbstractPolygon2D<Vector> internal constructor(
         construction._polygons.remove(this)
     }
     
-    override fun toString(): String = "AbstractEdge2D#${id.toHexString()}"
+    override fun toString(): String = "AbstractPolygon2D#${id.toHexString()}"
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other !is AbstractEdge2D<*>) return false

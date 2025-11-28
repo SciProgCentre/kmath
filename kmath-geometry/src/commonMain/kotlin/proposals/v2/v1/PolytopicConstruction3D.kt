@@ -55,24 +55,24 @@ public interface PolytopicConstruction3D<
 
 public interface MutablePolytopicConstruction3D<
     Vector,
-    VertexType: MutablePolytopicConstruction3D.Vertex<Vector>,
-    EdgeType: MutablePolytopicConstruction3D.Edge<Vector, VertexType>,
-    PolygonType: MutablePolytopicConstruction3D.Polygon<Vector, VertexType, EdgeType>,
+    out VertexType: MutablePolytopicConstruction3D.Vertex<Vector>,
+    out EdgeType: MutablePolytopicConstruction3D.Edge<Vector, VertexType>,
+    out PolygonType: MutablePolytopicConstruction3D.Polygon<Vector, VertexType, EdgeType>,
     out PolyhedronType: MutablePolytopicConstruction3D.Polyhedron<Vector, VertexType, EdgeType, PolygonType>,
 > : PolytopicConstruction3D<Vector, VertexType, EdgeType, PolygonType, PolyhedronType> {
     public fun addVertex(position: Vector): VertexType
     public fun addEdge(
-        start: VertexType,
-        end: VertexType,
+        start: @UnsafeVariance VertexType,
+        end: @UnsafeVariance VertexType,
     ): EdgeType
     public fun addPolygon(
-        vertices: Set<VertexType>,
-        edges: Set<EdgeType>,
+        vertices: Set<@UnsafeVariance VertexType>,
+        edges: Set<@UnsafeVariance EdgeType>,
     ): PolygonType
     public fun addPolyhedron(
-        vertices: Set<VertexType>,
-        edges: Set<EdgeType>,
-        faces: Set<PolygonType>,
+        vertices: Set<@UnsafeVariance VertexType>,
+        edges: Set<@UnsafeVariance EdgeType>,
+        faces: Set<@UnsafeVariance PolygonType>,
     ): PolyhedronType
     
     public interface Vertex<

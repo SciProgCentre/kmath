@@ -69,7 +69,7 @@ public class AbstractPolygon3D<Vector> internal constructor(
         construction._polyhedra.removeAll { this in it.faces }
     }
     
-    override fun toString(): String = "AbstractEdge3D#${id.toHexString()}"
+    override fun toString(): String = "AbstractPolygon3D#${id.toHexString()}"
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other !is AbstractEdge3D<*>) return false
@@ -91,7 +91,7 @@ public class AbstractPolyhedron3D<Vector> internal constructor(
         construction._polyhedra.remove(this)
     }
     
-    override fun toString(): String = "AbstractEdge3D#${id.toHexString()}"
+    override fun toString(): String = "AbstractPolyhedron3D#${id.toHexString()}"
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other !is AbstractEdge3D<*>) return false

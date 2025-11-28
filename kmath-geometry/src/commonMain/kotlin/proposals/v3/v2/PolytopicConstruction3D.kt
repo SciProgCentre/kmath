@@ -25,3 +25,29 @@ public interface Polyhedron3D<out Vector> {
     public val edges: Set<Edge3D<Vector>>
     public val faces: Set<Polygon3D<Vector>>
 }
+
+public interface PolytopicConstructor3D<Vector> {
+    public fun newVertex(
+        position: Vector,
+    ): Vertex3D<Vector>
+    public fun newEdge(
+        start: Vertex3D<Vector>,
+        end: Vertex3D<Vector>,
+    ): Edge3D<Vector>
+    public fun newPolygon(
+        vertices: Set<Vertex3D<Vector>>,
+        edges: Set<Edge3D<Vector>>,
+    ): Polygon3D<Vector>
+    public fun newPolyhedron(
+        vertices: Set<Vertex3D<Vector>>,
+        edges: Set<Edge3D<Vector>>,
+        faces: Set<Polygon3D<Vector>>,
+    ): Polyhedron3D<Vector>
+}
+
+public data class PolytopicConstruction3D<out Vector>(
+    public val vertices: Set<Vertex3D<Vector>>,
+    public val edges: Set<Edge3D<Vector>>,
+    public val polygons: Set<Polygon3D<Vector>>,
+    public val polyhedra: Set<Polyhedron3D<Vector>>,
+)

@@ -39,3 +39,41 @@ public interface Polyhedron3D<
     public val edges: Set<EdgeType>
     public val faces: Set<PolygonType>
 }
+
+public interface PolytopicConstructor3D<
+    Vector,
+    VertexType : Vertex3D<Vector>,
+    EdgeType : Edge3D<Vector, VertexType>,
+    PolygonType : Polygon3D<Vector, VertexType, EdgeType>,
+    PolyhedronType : Polyhedron3D<Vector, VertexType, EdgeType, PolygonType>,
+> {
+    public fun newVertex(
+        position: Vector,
+    ): VertexType
+    public fun newEdge(
+        start: VertexType,
+        end: VertexType,
+    ): EdgeType
+    public fun newPolygon(
+        vertices: Set<VertexType>,
+        edges: Set<EdgeType>,
+    ): PolygonType
+    public fun newPolyhedron(
+        vertices: Set<VertexType>,
+        edges: Set<EdgeType>,
+        faces: Set<PolygonType>,
+    ): PolyhedronType
+}
+
+public data class PolytopicConstruction3D<
+    out Vector,
+    out VertexType : Vertex3D<Vector>,
+    out EdgeType : Edge3D<Vector, VertexType>,
+    out PolygonType : Polygon3D<Vector, VertexType, EdgeType>,
+    out PolyhedronType : Polyhedron3D<Vector, VertexType, EdgeType, PolygonType>,
+>(
+    public val vertices: Set<VertexType>,
+    public val edges: Set<EdgeType>,
+    public val polygons: Set<PolygonType>,
+    public val polyhedra: Set<PolyhedronType>,
+)

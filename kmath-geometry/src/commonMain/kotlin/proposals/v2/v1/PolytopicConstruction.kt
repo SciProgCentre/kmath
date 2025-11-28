@@ -79,8 +79,8 @@ public interface PolytopicConstruction<
  */
 public interface MutablePolytopicConstruction<
     Vector,
-    VertexType: MutablePolytopicConstruction.Vertex<Vector, VertexType, PolytopeType>,
-    PolytopeType: MutablePolytopicConstruction.Polytope<Vector, VertexType, PolytopeType>,
+    out VertexType: MutablePolytopicConstruction.Vertex<Vector, VertexType, PolytopeType>,
+    out PolytopeType: MutablePolytopicConstruction.Polytope<Vector, VertexType, PolytopeType>,
 > : PolytopicConstruction<Vector, VertexType, PolytopeType> {
     /**
      * Creates new vertex with provided position.
@@ -91,8 +91,8 @@ public interface MutablePolytopicConstruction<
      */
     public fun addPolytope(
         dimension: Int,
-        vertices: Set<VertexType>,
-        faces: List<Set<PolytopeType>>,
+        vertices: Set<@UnsafeVariance VertexType>,
+        faces: List<Set<@UnsafeVariance PolytopeType>>,
     ): PolytopeType
     
     /**

@@ -28,3 +28,33 @@ public interface Polygon2D<
     public val vertices: Set<VertexType>
     public val edges: Set<EdgeType>
 }
+
+public interface PolytopicConstructor2D<
+    Vector,
+    VertexType : Vertex2D<Vector>,
+    EdgeType : Edge2D<Vector, VertexType>,
+    PolygonType : Polygon2D<Vector, VertexType, EdgeType>,
+> {
+    public fun newVertex(
+        position: Vector,
+    ): VertexType
+    public fun newEdge(
+        start: VertexType,
+        end: VertexType,
+    ): EdgeType
+    public fun newPolygon(
+        vertices: Set<VertexType>,
+        edges: Set<EdgeType>,
+    ): PolygonType
+}
+
+public data class PolytopicConstruction2D<
+    out Vector,
+    out VertexType : Vertex2D<Vector>,
+    out EdgeType : Edge2D<Vector, VertexType>,
+    out PolygonType : Polygon2D<Vector, VertexType, EdgeType>,
+>(
+    public val vertices: Set<VertexType>,
+    public val edges: Set<EdgeType>,
+    public val polygons: Set<PolygonType>,
+)
