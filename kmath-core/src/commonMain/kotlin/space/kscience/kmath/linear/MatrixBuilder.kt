@@ -68,7 +68,7 @@ public fun <T, A : Ring<T>> MatrixBuilder<T, A>.symmetric(
             } else {
                 cached
             }
-        }.withAttribute(Symmetric, true)
+        }.withAttribute(Symmetric)
     }
 }
 
@@ -97,7 +97,8 @@ public fun <T, A : Ring<T>> MatrixBuilder<T, A>.diagonal(
 @UnstableKMathAPI
 public fun <T> MatrixBuilder<T, Ring<T>>.diagonal(vararg elements: T): Matrix<T> {
     require(colNum == rowNum) { "In order to build symmetric matrix, number of rows $rowNum should be equal to number of columns $colNum" }
-    return return VirtualMatrix(rowNum, colNum, attributes = Attributes(IsDiagonal,true)) { i, j ->
+
+    return VirtualMatrix(rowNum, colNum, attributes = Attributes(IsDiagonal,true)) { i, j ->
         check(i in 0 until rowNum) { "$i out of bounds: 0..<$rowNum" }
         check(j in 0 until colNum) { "$j out of bounds: 0..<$colNum" }
         if (i == j) {
