@@ -36,8 +36,8 @@ public val <T : Any> Matrix<T>.origin: Matrix<T>
 /**
  * Add a single feature to a [Matrix]
  */
-public fun <T, A : Attribute<T>> Matrix<T>.withAttribute(
-    attribute: A,
+public fun <T> Matrix<T>.withAttribute(
+    attribute: Attribute<T>,
     attrValue: T,
 ): MatrixWrapper<T> = if (this is MatrixWrapper) {
     MatrixWrapper(origin, attributes.withAttribute(attribute, attrValue))
@@ -45,12 +45,24 @@ public fun <T, A : Attribute<T>> Matrix<T>.withAttribute(
     MatrixWrapper(this, Attributes(attribute, attrValue))
 }
 
-public fun <T, A : Attribute<Unit>> Matrix<T>.withAttribute(
-    attribute: A,
+public fun <T> Matrix<T>.withAttribute(
+    attribute: Attribute<Unit>,
 ): MatrixWrapper<T> = if (this is MatrixWrapper) {
     MatrixWrapper(origin, attributes.withFlag(attribute))
 } else {
     MatrixWrapper(this, Attributes(attribute, Unit))
+}
+
+/**
+ * Add boolean attribute with default value `true`
+ */
+public fun <T> Matrix<T>.withAttribute(
+    attribute: Attribute<Boolean>,
+    value: Boolean = true
+): MatrixWrapper<T> = if (this is MatrixWrapper) {
+    MatrixWrapper(origin, attributes.withAttribute(attribute, value))
+} else {
+    MatrixWrapper(this, Attributes(attribute, value))
 }
 
 /**

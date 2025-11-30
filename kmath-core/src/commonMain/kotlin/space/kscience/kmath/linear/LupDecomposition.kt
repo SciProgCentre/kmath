@@ -15,7 +15,9 @@ import space.kscience.kmath.PerformancePitfall
 import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.nd.*
 import space.kscience.kmath.operations.*
-import space.kscience.kmath.structures.*
+import space.kscience.kmath.structures.Float64
+import space.kscience.kmath.structures.IntBuffer
+import space.kscience.kmath.structures.asBuffer
 
 public interface LupDecomposition<T> {
     public val pivot: IntBuffer
@@ -47,7 +49,7 @@ public class GenericLupDecomposition<T>(
 
 
     override val l: Matrix<T>
-        get() = VirtualMatrix(lu.rowNum, lu.colNum, attributes = Attributes(LowerTriangular)) { i, j ->
+        get() = VirtualMatrix(lu.rowNum, lu.colNum, attributes = Attributes(LowerTriangular, true)) { i, j ->
             when {
                 j < i -> lu[i, j]
                 j == i -> elementAlgebra.one
@@ -56,7 +58,7 @@ public class GenericLupDecomposition<T>(
         }
 
     override val u: Matrix<T>
-        get() = VirtualMatrix(lu.rowNum, lu.colNum, attributes = Attributes(UpperTriangular)) { i, j ->
+        get() = VirtualMatrix(lu.rowNum, lu.colNum, attributes = Attributes(UpperTriangular,true)) { i, j ->
             if (j >= i) lu[i, j] else elementAlgebra.zero
         }
 
