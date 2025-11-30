@@ -11,6 +11,8 @@ import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.expressions.Symbol
 import space.kscience.kmath.operations.Ring.Companion.optimizedPower
 import space.kscience.kmath.structures.MutableBufferFactory
+import kotlin.contracts.InvocationKind
+import kotlin.contracts.contract
 
 /**
  * Represents an algebraic structure.
@@ -122,8 +124,12 @@ public fun <T> Algebra<T>.bindSymbol(symbol: Symbol): T = bindSymbol(symbol.iden
 /**
  * Call a block with an [Algebra] as receiver.
  */
-// TODO add contract when KT-32313 is fixed
-public inline operator fun <A : Algebra<*>, R> A.invoke(block: A.() -> R): R = run(block)
+public inline operator fun <A : Algebra<*>, R> A.invoke(block: A.() -> R): R {
+    contract {
+        callsInPlace(block, InvocationKind.EXACTLY_ONCE)
+    }
+    return this.block()
+}
 
 /**
  * Represents group without neutral element (also known as inverse semigroup) i.e., algebraic structure with

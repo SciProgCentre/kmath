@@ -17,6 +17,8 @@ import space.kscience.kmath.operations.BufferRingOps
 import space.kscience.kmath.operations.Ring
 import space.kscience.kmath.operations.invoke
 import space.kscience.kmath.structures.Buffer
+import kotlin.contracts.InvocationKind
+import kotlin.contracts.contract
 
 /**
  * Alias for [Structure2D] with more familiar name.
@@ -215,7 +217,12 @@ public interface LinearSpace<T, out A : Ring<T>> : MatrixScope<T> {
 }
 
 
-public inline operator fun <LS : LinearSpace<*, *>, R> LS.invoke(block: LS.() -> R): R = run(block)
+public inline operator fun <LS : LinearSpace<*, *>, R> LS.invoke(block: LS.() -> R): R {
+    contract {
+        callsInPlace(block, InvocationKind.EXACTLY_ONCE)
+    }
+    return this.block()
+}
 
 
 /**
