@@ -3,6 +3,7 @@
 ## Unreleased
 
 ### Added
+- More statistics functions by @qwazer
 - Fit accessors with Attribute
 
 ### Changed
@@ -11,6 +12,7 @@
 ### Deprecated
 
 ### Removed
+- Support for ND4J
 
 ### Fixed
 

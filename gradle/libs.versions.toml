@@ -6,7 +6,7 @@ nd4j = "1.0.0-M2.1"
 tensorflow = "1.0.0"
 
 [libraries]
-attributes = "space.kscience:attributes-kt:0.3.0"
+attributes = "space.kscience:attributes-kt:0.4.0"
 
 commons-math = "org.apache.commons:commons-math3:3.6.1"
 
@@ -19,7 +19,7 @@ multik-default = { module = "org.jetbrains.kotlinx:multik-default", version.ref 
 nd4j-api = { module = "org.nd4j:nd4j-api", version.ref = "nd4j" }
 nd4j-native-platform = { module = "org.nd4j:nd4j-native-platform", version.ref = "nd4j" }
 
-ojalgo = "org.ojalgo:ojalgo:55.1.0"
+ojalgo = "org.ojalgo:ojalgo:56.2.0"
 
 
 tensorflow-core-api = {module = "org.tensorflow:tensorflow-core-api", version.ref="tensorflow"}
