@@ -3,7 +3,7 @@
 commons-rng = "1.6"
 multik = "0.2.3"
 nd4j = "1.0.0-M2.1"
-tensorflow = "1.0.0"
+tensorflow = "1.1.0"
 
 [libraries]
 attributes = "space.kscience:attributes-kt:0.4.0"

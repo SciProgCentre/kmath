@@ -44,7 +44,12 @@ readme {
     feature(
         id = "linear",
         ref = "src/commonMain/kotlin/space/kscience/kmath/operations/Algebra.kt",
-    ) { "Basic linear algebra operations (sums, products, etc.), backed by the `Space` API. Advanced linear algebra operations like matrix inversion and LU decomposition." }
+    ) {
+        """
+            Basic linear algebra operations (sums, products, etc.), backed by the `Space` API. 
+            Advanced linear algebra operations like matrix inversion and LU decomposition.
+        """.trimIndent()
+    }
 
     feature(
         id = "buffers",
@@ -56,7 +61,7 @@ readme {
         ref = "src/commonMain/kotlin/space/kscience/kmath/expressions"
     ) {
         """
-            By writing a single mathematical expression once, users will be able to apply different types of 
+            By writing a single mathematical expression once, users will be able to apply different types of
             objects to the expression by providing a context. Expressions can be used for a wide variety of purposes from high 
             performance calculations to code generation.
         """.trimIndent()

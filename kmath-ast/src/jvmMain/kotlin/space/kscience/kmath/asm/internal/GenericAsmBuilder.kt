@@ -5,11 +5,16 @@
 
 package space.kscience.kmath.asm.internal
 
-import org.objectweb.asm.*
+import org.objectweb.asm.ClassWriter
+import org.objectweb.asm.FieldVisitor
 import org.objectweb.asm.Opcodes.*
+import org.objectweb.asm.Type
 import org.objectweb.asm.Type.*
 import org.objectweb.asm.commons.InstructionAdapter
-import space.kscience.kmath.expressions.*
+import space.kscience.kmath.expressions.Expression
+import space.kscience.kmath.expressions.MST
+import space.kscience.kmath.expressions.Symbol
+import space.kscience.kmath.expressions.invoke
 import java.lang.invoke.MethodHandles
 import java.lang.invoke.MethodType
 import java.nio.file.Paths
@@ -24,6 +29,7 @@ import kotlin.io.path.writeBytes
  * @property expressionResultCallback the function to apply to this object when generating expression value.
  * @author Iaroslav Postovalov
  */
+@Suppress("PLATFORM_CLASS_MAPPED_TO_KOTLIN")
 internal class GenericAsmBuilder<T>(
     classOfT: Class<*>,
     private val className: String,

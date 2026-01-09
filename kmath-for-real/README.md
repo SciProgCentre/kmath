@@ -9,7 +9,7 @@ Specialization of KMath APIs for Double numbers.
 
 ## Artifact:
 
-The Maven coordinates of this project are `space.kscience:kmath-for-real:0.4.2`.
+The Maven coordinates of this project are `space.kscience:kmath-for-real:0.5.0`.
 
 **Gradle Kotlin DSL:**
 ```kotlin
@@ -19,6 +19,6 @@ repositories {
 }
 
 dependencies {
-    implementation("space.kscience:kmath-for-real:0.4.2")
+    implementation("space.kscience:kmath-for-real:0.5.0")
 }
 ```

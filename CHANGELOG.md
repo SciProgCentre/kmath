@@ -3,20 +3,32 @@
 ## Unreleased
 
 ### Added
-- More statistics functions by @qwazer
-- Fit accessors with Attribute
 
 ### Changed
-- Upgrade tensorflow version to 1.0.0
 
 ### Deprecated
 
 ### Removed
-- Support for ND4J
 
 ### Fixed
 
 ### Security
+
+## 0.5.0 - 2026-01-09
+
+### Added
+
+- More statistics functions by @qwazer
+- Fit accessors with Attribute
+
+### Changed
+
+- Flag attributes are replaced with boolean attributes to properly support missing values
+- Upgrade tensorflow version to 1.0.0
+
+### Removed
+
+- Support for ND4J
 
 ## 0.4.2 - 2025-01-27
 

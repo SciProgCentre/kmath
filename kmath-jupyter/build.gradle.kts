@@ -1,19 +1,25 @@
 plugins {
-    id("space.kscience.gradle.jvm")
+    id("space.kscience.gradle.mpp")
     alias(spclibs.plugins.kotlin.jupyter.api)
 }
 
-dependencies {
-    api(spclibs.kotlinx.html)
-    api(project(":kmath-ast"))
-    api(project(":kmath-complex"))
-    api(project(":kmath-for-real"))
+kscience {
+    jvm()
+
+    jvmMain {
+        api(spclibs.kotlinx.html)
+        api(project(":kmath-ast"))
+        api(project(":kmath-complex"))
+        api(project(":kmath-for-real"))
+    }
 }
 
 readme {
     maturity = space.kscience.gradle.Maturity.PROTOTYPE
 }
 
-tasks.processJupyterApiResources {
-    libraryProducers = listOf("space.kscience.kmath.jupyter.KMathJupyter")
+kotlinJupyter {
+    integrations {
+        producer("space.kscience.kmath.jupyter.KMathJupyter")
+    }
 }

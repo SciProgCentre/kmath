@@ -1,13 +1,20 @@
 plugins {
-    id("space.kscience.gradle.jvm")
+    id("space.kscience.gradle.mpp")
 }
 
 description = "Google tensorflow connector"
 
-dependencies {
-    api(projects.kmathTensors)
-    api(libs.tensorflow.core.api)
-    testImplementation(libs.tensorflow.core.platform)
+kscience {
+    jvm()
+
+    jvmMain {
+        api(projects.kmathTensors)
+        api(libs.tensorflow.core.api)
+    }
+
+    jvmTest {
+        implementation(libs.tensorflow.core.platform)
+    }
 }
 
 readme {
