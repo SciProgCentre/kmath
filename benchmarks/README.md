@@ -1,3 +1,5 @@
+# Module KMath-Benchmarks
+
 # BenchmarksResult
 
 ## Report for benchmark configuration <code>main</code>
