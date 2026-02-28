@@ -11,7 +11,7 @@ import space.kscience.kmath.operations.Group
 import space.kscience.kmath.structures.*
 
 /**
- * Thread-safe ring buffer
+ * Coroutine-friendly ring buffer
  */
 public class RingBuffer<T>(
     private val buffer: MutableBuffer<T>,

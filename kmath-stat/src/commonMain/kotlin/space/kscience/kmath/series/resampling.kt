@@ -9,6 +9,9 @@ import space.kscience.kmath.operations.BufferAlgebra
 import space.kscience.kmath.operations.Ring
 import space.kscience.kmath.operations.sumWithGroupOf
 
+/**
+ * Imports a list of key-value pairs into a series, grouping by floor offset and summing values with the element algebra.
+ */
 public fun <T, A : Ring<T>, BA : BufferAlgebra<T, A>, L : Comparable<L>> MonotonicSeriesAlgebra<T, A, BA, L>.import(
     data: List<Pair<L, T>>,
 ): Series<T> {

@@ -10,7 +10,6 @@ import space.kscience.kmath.operations.Ring
 import space.kscience.kmath.operations.RingOps
 import space.kscience.kmath.stat.StatisticalAlgebra
 import space.kscience.kmath.structures.Buffer
-import space.kscience.kmath.structures.BufferView
 import space.kscience.kmath.structures.getOrNull
 import kotlin.math.max
 import kotlin.math.min
@@ -41,9 +40,6 @@ public interface Series<T> : Buffer<T> {
     public val position: Int
 }
 
-/**
- * A [BufferView] with index offset (both positive and negative) and possible size change
- */
 private class SeriesImpl<T>(
     override val origin: Buffer<T>,
     override val position: Int,
@@ -134,7 +130,7 @@ public open class SeriesAlgebra<T, out A : Ring<T>, out BA : BufferAlgebra<T, A>
         seriesByOffset(size, startOffset) { offset -> block(offsetToLabel(offset)) }
 
     /**
-     * Get a label buffer for given buffer.
+     * Get a label buffer for the given buffer.
      */
     public val Buffer<T>.labels: List<L> get() = offsetIndices.map(offsetToLabel)
 
