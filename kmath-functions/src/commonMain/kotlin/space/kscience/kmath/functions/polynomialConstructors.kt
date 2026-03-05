@@ -10,7 +10,6 @@ package space.kscience.kmath.functions
  * Constructs a [Polynomial] instance with provided [coefficients]. The collection of coefficients will be reversed
  * if [reverse] parameter is true.
  */
-@Suppress("FunctionName")
 public fun <C> Polynomial(coefficients: List<C>, reverse: Boolean = false): Polynomial<C> =
     Polynomial(with(coefficients) { if (reverse) reversed() else this })
 
@@ -18,6 +17,5 @@ public fun <C> Polynomial(coefficients: List<C>, reverse: Boolean = false): Poly
  * Constructs a [Polynomial] instance with provided [coefficients]. The collection of coefficients will be reversed
  * if [reverse] parameter is true.
  */
-@Suppress("FunctionName")
 public fun <C> Polynomial(vararg coefficients: C, reverse: Boolean = false): Polynomial<C> =
     Polynomial(with(coefficients) { if (reverse) reversed() else toList() })

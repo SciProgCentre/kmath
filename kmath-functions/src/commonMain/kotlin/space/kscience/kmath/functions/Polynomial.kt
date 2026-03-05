@@ -52,6 +52,8 @@ public data class Polynomial<out C>(
     public val coefficients: List<C>,
 ) {
     override fun toString(): String = "Polynomial$coefficients"
+
+    public companion object
 }
 
 /**
