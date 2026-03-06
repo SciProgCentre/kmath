@@ -64,6 +64,8 @@ private fun checkBinomial(
     return if (m < k) m else k
 }
 
+private val binomialCache = LruCache<Pair<Int, Int>, Long>(200)
+
 /**
  * Computes the binomial coefficient.
  *
@@ -83,59 +85,56 @@ private fun checkBinomial(
  * @throws ArithmeticException if the result is too large to be
  * represented by a `long`.
  */
-public fun IntRing.binomialCoefficient(n: Int, k: Int): Long {
-    val m = checkBinomial(n, k)
+public fun IntRing.binomialCoefficient(n: Int, k: Int): Long = binomialCache.getOrPut(n to k) {
+    when (val m = checkBinomial(n, k)) {
+        0 -> 1
+        1 -> n.toLong()
+        else -> {
+            // We use the formulae:
+            // (n choose m) = n! / (n-m)! / m!
+            // (n choose m) = ((n-m+1)*...*n) / (1*...*m)
+            // which can be written
+            // (n choose m) = (n-1 choose m-1) * n / m
+            var result: Long = 1
+            if (n <= SMALL_N) {
+                // For n <= 61, the naive implementation cannot overflow.
+                var i = n - m + 1
+                for (j in 1..m) {
+                    result = result * i / j
+                    i++
+                }
+            } else if (n <= LIMIT_N) {
+                // For n > 61 but n <= 66, the result cannot overflow,
+                // but we must take care not to overflow intermediate values.
+                var i = n - m + 1
+                for (j in 1..m) {
+                    // We know that (result * i) is divisible by j,
+                    // but (result * i) may overflow, so we split j:
+                    // Filter out the gcd, d, so j/d and i/d are integer.
+                    // result is divisible by (j/d) because (j/d)
+                    // is relative prime to (i/d) and is a divisor of
+                    // result * (i/d).
+                    val d: Int = gcd(i, j)
+                    result = (result / (j / d)) * (i / d)
+                    ++i
+                }
+            } else {
+                if (m > MAX_M) {
+                    error("$n choose $k")
+                }
 
-    if (m == 0) {
-        return 1
+                // For n > 66, a result overflow might occur, so we check
+                // the multiplication, taking care to not overflow
+                // unnecessary.
+                var i = n - m + 1
+                for (j in 1..m) {
+                    val d = gcd(i, j)
+                    result = LongRing.multiplyExact(result / (j / d), (i / d).toLong())
+                    ++i
+                }
+            }
+
+            result
+        }
     }
-    if (m == 1) {
-        return n.toLong()
-    }
-
-    // We use the formulae:
-    // (n choose m) = n! / (n-m)! / m!
-    // (n choose m) = ((n-m+1)*...*n) / (1*...*m)
-    // which can be written
-    // (n choose m) = (n-1 choose m-1) * n / m
-    var result: Long = 1
-    if (n <= SMALL_N) {
-        // For n <= 61, the naive implementation cannot overflow.
-        var i = n - m + 1
-        for (j in 1..m) {
-            result = result * i / j
-            i++
-        }
-    } else if (n <= LIMIT_N) {
-        // For n > 61 but n <= 66, the result cannot overflow,
-        // but we must take care not to overflow intermediate values.
-        var i = n - m + 1
-        for (j in 1..m) {
-            // We know that (result * i) is divisible by j,
-            // but (result * i) may overflow, so we split j:
-            // Filter out the gcd, d, so j/d and i/d are integer.
-            // result is divisible by (j/d) because (j/d)
-            // is relative prime to (i/d) and is a divisor of
-            // result * (i/d).
-            val d: Int = gcd(i, j)
-            result = (result / (j / d)) * (i / d)
-            ++i
-        }
-    } else {
-        if (m > MAX_M) {
-            error("$n choose $k")
-        }
-
-        // For n > 66, a result overflow might occur, so we check
-        // the multiplication, taking care to not overflow
-        // unnecessary.
-        var i = n - m + 1
-        for (j in 1..m) {
-            val d = gcd(i, j)
-            result = LongRing.multiplyExact(result / (j / d), (i / d).toLong())
-            ++i
-        }
-    }
-
-    return result
 }

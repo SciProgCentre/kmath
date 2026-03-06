@@ -5,6 +5,11 @@
 
 package space.kscience.kmath.misc
 
+/**
+ * A simple LRU cache implementation.
+ *
+ * The implementation is not thread-safe.
+ */
 public class LruCache<K, V>(public val maxSize: Int) {
     private val map = HashMap<K, V>(maxSize)
     private val keys = ArrayList<K>(maxSize)
@@ -41,3 +46,5 @@ public class LruCache<K, V>(public val maxSize: Int) {
 
     public val size: Int get() = map.size
 }
+
+public inline fun <K, V> LruCache<K, V>.getOrPut(key: K, compute: () -> V): V = get(key) ?: compute().also { set(key, it) }
