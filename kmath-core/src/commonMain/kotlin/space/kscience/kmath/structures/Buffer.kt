@@ -100,6 +100,16 @@ public interface Buffer<out T> : WithSize {
             return true
         }
 
+        public val EMPTY: Buffer<Nothing> = object : Buffer<Nothing> {
+            override val size: Int get() = 0
+
+            override fun get(index: Int): Nothing {
+                throw IndexOutOfBoundsException("Buffer is empty")
+            }
+
+            override fun toString(): String = "[]"
+        }
+
     }
 }
 

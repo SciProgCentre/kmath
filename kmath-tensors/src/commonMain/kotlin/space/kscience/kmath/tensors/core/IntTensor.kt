@@ -37,7 +37,7 @@ public class OffsetIntBuffer(
     public fun copy(): Int32Buffer = source.array.copyOfRange(offset, offset + size).asBuffer()
 
     override fun iterator(): Iterator<Int> = iterator {
-        for (i in indices) {
+        for (i in this@OffsetIntBuffer.indices) {
             yield(get(i))
         }
     }
@@ -68,7 +68,7 @@ public inline fun OffsetIntBuffer.zip(
  * map in place
  */
 public inline fun OffsetIntBuffer.mapInPlace(operation: (Int) -> Int) {
-    indices.forEach { set(it, operation(get(it))) }
+    this@mapInPlace.indices.forEach { set(it, operation(get(it))) }
 }
 
 /**

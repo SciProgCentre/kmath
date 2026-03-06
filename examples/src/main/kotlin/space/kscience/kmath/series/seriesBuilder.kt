@@ -30,7 +30,7 @@ fun main(): Unit = with(Double.seriesAlgebra()) {
     fun Plot.series(name: String, buffer: Buffer<Float64>, block: Scatter.() -> Unit = {}) {
         scatter {
             this.name = name
-            x.numbers = buffer.offsetIndices
+            x.numbers = buffer.indices
             y.doubles = buffer.toDoubleArray()
             block()
         }

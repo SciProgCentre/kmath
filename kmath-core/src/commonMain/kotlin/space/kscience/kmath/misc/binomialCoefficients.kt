@@ -86,6 +86,8 @@ private val binomialCache = LruCache<Pair<Int, Int>, Long>(200)
  * represented by a `long`.
  */
 public fun IntRing.binomialCoefficient(n: Int, k: Int): Long = binomialCache.getOrPut(n to k) {
+    //TODO do not compute mirroring coefficients
+
     when (val m = checkBinomial(n, k)) {
         0 -> 1
         1 -> n.toLong()

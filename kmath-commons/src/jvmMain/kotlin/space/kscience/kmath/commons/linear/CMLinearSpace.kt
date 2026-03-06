@@ -66,7 +66,7 @@ public object CMLinearSpace : LinearSpace<Double, Float64Field> {
     }
 
     public fun Point<Float64>.toCM(): RealVector = if (this is CMVector) cmVector else {
-        val array = DoubleArray(size) { get(it) }
+        val array = DoubleArray(size) { this@toCM.get(it) }
         ArrayRealVector(array)
     }
 

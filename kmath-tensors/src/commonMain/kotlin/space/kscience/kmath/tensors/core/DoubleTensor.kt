@@ -37,7 +37,7 @@ public class OffsetDoubleBuffer(
     public fun copy(): Float64Buffer = origin.array.copyOfRange(offset, offset + size).asBuffer()
 
     override fun iterator(): Iterator<Float64> = iterator {
-        for (i in indices) {
+        for (i in this@OffsetDoubleBuffer.indices) {
             yield(get(i))
         }
     }
@@ -75,7 +75,7 @@ public inline fun OffsetDoubleBuffer.zip(
  * map in place
  */
 public inline fun OffsetDoubleBuffer.mapInPlace(operation: (Double) -> Double) {
-    indices.forEach { set(it, operation(get(it))) }
+    this@mapInPlace.indices.forEach { set(it, operation(get(it))) }
 }
 
 /**

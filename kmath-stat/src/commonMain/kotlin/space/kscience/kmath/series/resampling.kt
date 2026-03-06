@@ -21,5 +21,5 @@ public fun <T, A : Ring<T>, BA : BufferAlgebra<T, A>, L : Comparable<L>> Monoton
     return elementAlgebra.bufferFactory(maxIndex - minIndex) { relativeIndex ->
         val index = relativeIndex + minIndex
         groupedData[index]?.sumWithGroupOf(elementAlgebra) { it.second } ?: elementAlgebra.zero
-    }.moveTo(minIndex)
+    }.asSeries(minIndex)
 }

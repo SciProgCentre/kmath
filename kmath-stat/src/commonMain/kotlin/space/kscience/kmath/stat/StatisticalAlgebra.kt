@@ -11,10 +11,10 @@ import space.kscience.kmath.operations.*
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.MutableBufferFactory
 
-public interface StatisticalAlgebra<T, out A : Algebra<T>, out BA : BufferAlgebra<T, A>> : Algebra<Buffer<T>> {
+public interface StatisticalAlgebra<T, out A : Algebra<T>, out BA : BufferAlgebra<T, A>>  {
     public val bufferAlgebra: BA
     public val elementAlgebra: A get() = bufferAlgebra.elementAlgebra
-    override val bufferFactory: MutableBufferFactory<Buffer<T>> get() = bufferAlgebra.bufferFactory
+    public val bufferFactory: MutableBufferFactory<Buffer<T>> get() = bufferAlgebra.bufferFactory
 }
 
 /**

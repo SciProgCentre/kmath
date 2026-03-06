@@ -5,98 +5,101 @@
 
 package space.kscience.kmath.series
 
-import space.kscience.kmath.operations.BufferAlgebra
-import space.kscience.kmath.operations.ExponentialOperations
-import space.kscience.kmath.operations.PowerOperations
-import space.kscience.kmath.operations.TrigonometricOperations
+import space.kscience.kmath.operations.*
 import space.kscience.kmath.structures.Buffer
 
 
 //trigonometric
 
 public fun <T, BA> SeriesAlgebra<T, *, BA, *>.sin(
-    arg: Buffer<T>,
+    arg: Series<T>,
 ): Series<T> where BA : BufferAlgebra<T, *>, BA : TrigonometricOperations<Buffer<T>> =
-    bufferAlgebra.sin(arg).moveTo(arg.startOffset)
+    bufferAlgebra.sin(arg.origin).asSeries(arg.position)
 
 public fun <T, BA> SeriesAlgebra<T, *, BA, *>.cos(
-    arg: Buffer<T>,
+    arg: Series<T>,
 ): Series<T> where BA : BufferAlgebra<T, *>, BA : TrigonometricOperations<Buffer<T>> =
-    bufferAlgebra.cos(arg).moveTo(arg.startOffset)
+    bufferAlgebra.cos(arg.origin).asSeries(arg.position)
 
 public fun <T, BA> SeriesAlgebra<T, *, BA, *>.tan(
-    arg: Buffer<T>,
+    arg: Series<T>,
 ): Series<T> where BA : BufferAlgebra<T, *>, BA : TrigonometricOperations<Buffer<T>> =
-    bufferAlgebra.tan(arg).moveTo(arg.startOffset)
+    bufferAlgebra.tan(arg.origin).asSeries(arg.position)
 
 public fun <T, BA> SeriesAlgebra<T, *, BA, *>.asin(
-    arg: Buffer<T>,
+    arg: Series<T>,
 ): Series<T> where BA : BufferAlgebra<T, *>, BA : TrigonometricOperations<Buffer<T>> =
-    bufferAlgebra.asin(arg).moveTo(arg.startOffset)
+    bufferAlgebra.asin(arg.origin).asSeries(arg.position)
 
 public fun <T, BA> SeriesAlgebra<T, *, BA, *>.acos(
-    arg: Buffer<T>,
+    arg: Series<T>,
 ): Series<T> where BA : BufferAlgebra<T, *>, BA : TrigonometricOperations<Buffer<T>> =
-    bufferAlgebra.acos(arg).moveTo(arg.startOffset)
+    bufferAlgebra.acos(arg.origin).asSeries(arg.position)
 
 public fun <T, BA> SeriesAlgebra<T, *, BA, *>.atan(
-    arg: Buffer<T>,
+    arg: Series<T>,
 ): Series<T> where BA : BufferAlgebra<T, *>, BA : TrigonometricOperations<Buffer<T>> =
-    bufferAlgebra.atan(arg).moveTo(arg.startOffset)
+    bufferAlgebra.atan(arg.origin).asSeries(arg.position)
 
 
 //exponential
 
 public fun <T, BA> SeriesAlgebra<T, *, BA, *>.exp(
-    arg: Buffer<T>,
+    arg: Series<T>,
 ): Series<T> where BA : BufferAlgebra<T, *>, BA : ExponentialOperations<Buffer<T>> =
-    bufferAlgebra.exp(arg).moveTo(arg.startOffset)
+    bufferAlgebra.exp(arg.origin).asSeries(arg.position)
 
 public fun <T, BA> SeriesAlgebra<T, *, BA, *>.ln(
-    arg: Buffer<T>,
+    arg: Series<T>,
 ): Series<T> where BA : BufferAlgebra<T, *>, BA : ExponentialOperations<Buffer<T>> =
-    bufferAlgebra.ln(arg).moveTo(arg.startOffset)
+    bufferAlgebra.ln(arg.origin).asSeries(arg.position)
 
 public fun <T, BA> SeriesAlgebra<T, *, BA, *>.sinh(
-    arg: Buffer<T>,
+    arg: Series<T>,
 ): Series<T> where BA : BufferAlgebra<T, *>, BA : ExponentialOperations<Buffer<T>> =
-    bufferAlgebra.sinh(arg).moveTo(arg.startOffset)
+    bufferAlgebra.sinh(arg.origin).asSeries(arg.position)
 
 public fun <T, BA> SeriesAlgebra<T, *, BA, *>.cosh(
-    arg: Buffer<T>,
+    arg: Series<T>,
 ): Series<T> where BA : BufferAlgebra<T, *>, BA : ExponentialOperations<Buffer<T>> =
-    bufferAlgebra.cosh(arg).moveTo(arg.startOffset)
+    bufferAlgebra.cosh(arg.origin).asSeries(arg.position)
 
 public fun <T, BA> SeriesAlgebra<T, *, BA, *>.tanh(
-    arg: Buffer<T>,
+    arg: Series<T>,
 ): Series<T> where BA : BufferAlgebra<T, *>, BA : ExponentialOperations<Buffer<T>> =
-    bufferAlgebra.tanh(arg).moveTo(arg.startOffset)
+    bufferAlgebra.tanh(arg.origin).asSeries(arg.position)
 
 public fun <T, BA> SeriesAlgebra<T, *, BA, *>.asinh(
-    arg: Buffer<T>,
+    arg: Series<T>,
 ): Series<T> where BA : BufferAlgebra<T, *>, BA : ExponentialOperations<Buffer<T>> =
-    bufferAlgebra.asinh(arg).moveTo(arg.startOffset)
+    bufferAlgebra.asinh(arg.origin).asSeries(arg.position)
 
 public fun <T, BA> SeriesAlgebra<T, *, BA, *>.acosh(
-    arg: Buffer<T>,
+    arg: Series<T>,
 ): Series<T> where BA : BufferAlgebra<T, *>, BA : ExponentialOperations<Buffer<T>> =
-    bufferAlgebra.acosh(arg).moveTo(arg.startOffset)
+    bufferAlgebra.acosh(arg.origin).asSeries(arg.position)
 
 public fun <T, BA> SeriesAlgebra<T, *, BA, *>.atanh(
-    arg: Buffer<T>,
+    arg: Series<T>,
 ): Series<T> where BA : BufferAlgebra<T, *>, BA : ExponentialOperations<Buffer<T>> =
-    bufferAlgebra.atanh(arg).moveTo(arg.startOffset)
+    bufferAlgebra.atanh(arg.origin).asSeries(arg.position)
 
 
 //power
 
 public fun <T, BA> SeriesAlgebra<T, *, BA, *>.power(
-    arg: Buffer<T>,
+    arg: Series<T>,
     pow: Number,
 ): Series<T> where BA : BufferAlgebra<T, *>, BA : PowerOperations<Buffer<T>> =
-    bufferAlgebra.power(arg, pow).moveTo(arg.startOffset)
+    bufferAlgebra.power(arg.origin, pow).asSeries(arg.position)
 
 public fun <T, BA> SeriesAlgebra<T, *, BA, *>.sqrt(
-    arg: Buffer<T>,
+    arg: Series<T>,
 ): Series<T> where BA : BufferAlgebra<T, *>, BA : PowerOperations<Buffer<T>> =
-    bufferAlgebra.sqrt(arg).moveTo(arg.startOffset)
+    bufferAlgebra.sqrt(arg.origin).asSeries(arg.position)
+
+// reduction
+
+public fun <T> SeriesAlgebra<T, *, *, *>.sum(arg: Series<T>): T = with(elementAlgebra){
+    arg.origin.fold(zero) { acc, value -> acc + value }
+}

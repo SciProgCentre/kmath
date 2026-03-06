@@ -15,11 +15,11 @@ import kotlin.jvm.JvmName
 /**
  * Simplified [Float64Buffer] to array comparison
  */
-public fun OffsetDoubleBuffer.contentEquals(vararg doubles: Double): Boolean = indices.all { get(it) == doubles[it] }
+public fun OffsetDoubleBuffer.contentEquals(vararg doubles: Double): Boolean = this@contentEquals.indices.all { get(it) == doubles[it] }
 
 @JvmName("contentEqualsArray")
 public infix fun OffsetDoubleBuffer.contentEquals(otherArray: DoubleArray): Boolean = contentEquals(*otherArray)
 
 @JvmName("contentEqualsBuffer")
 public infix fun OffsetDoubleBuffer.contentEquals(otherBuffer: Buffer<Float64>): Boolean =
-    indices.all { get(it) == otherBuffer[it] }
+    this@contentEquals.indices.all { get(it) == otherBuffer[it] }

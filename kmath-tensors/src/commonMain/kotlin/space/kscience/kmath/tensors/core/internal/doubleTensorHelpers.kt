@@ -142,7 +142,7 @@ internal fun List<OffsetDoubleBuffer>.concat(): Float64Buffer {
     val array = DoubleArray(sumOf { it.size })
     var pointer = 0
     while (pointer < array.size) {
-        for (bufferIndex in indices) {
+        for (bufferIndex in this@concat.indices) {
             val buffer = get(bufferIndex)
             for (innerIndex in buffer.indices) {
                 array[pointer] = buffer[innerIndex]

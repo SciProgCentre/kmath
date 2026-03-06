@@ -7,8 +7,6 @@ package space.kscience.kmath.series
 
 import space.kscience.kmath.distributions.NormalDistribution
 import space.kscience.kmath.operations.Float64Field.pow
-import space.kscience.kmath.operations.fold
-import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.Float64
 import kotlin.math.absoluteValue
 
@@ -32,20 +30,19 @@ public data class VarianceRatioTestResult(
  *
  * 	@author https://github.com/mrFendel
  */
-public fun SeriesAlgebra<Double, *, *, *>.varianceRatioTest(
-    series: Buffer<Float64>,
+public fun SeriesAlgebra<Float64, *, *, *>.varianceRatioTest(
+    series: Series<Float64>,
     shift: Int,
     homoscedastic: Boolean = true,
 ): VarianceRatioTestResult {
 
     require(shift > 1) { "Shift must be greater than one" }
     require(shift < series.size) { "Shift must be smaller than sample size" }
-    val sum = { x: Double, y: Double -> x + y }
 
 
-    val mean = series.fold(0.0, sum) / series.size
+    val mean = sum(series) / series.size
     val demeanedSquares = series.map { (it - mean).pow(2) }
-    val variance = demeanedSquares.fold(0.0, sum)
+    val variance = sum(demeanedSquares)
     if (variance == 0.0) return VarianceRatioTestResult()
 
 
@@ -55,7 +52,7 @@ public fun SeriesAlgebra<Double, *, *, *>.varianceRatioTest(
     }
 
     val demeanedSquaresAgg = seriesAgg.map { (it - shift * mean).pow(2) }
-    val varianceAgg = demeanedSquaresAgg.fold(0.0, sum)
+    val varianceAgg = sum(demeanedSquaresAgg)
 
     val varianceRatio =
         varianceAgg * (series.size.toDouble() - 1) / variance / (series.size.toDouble() - shift.toDouble() + 1) / (1 - shift.toDouble() / series.size.toDouble()) / shift.toDouble()
@@ -67,8 +64,7 @@ public fun SeriesAlgebra<Double, *, *, *>.varianceRatioTest(
     } else { // under heteroscedastic null hypothesis
         var accumulator = 0.0
         for (j in 1..<shift) {
-            val temp = demeanedSquares
-            val delta = series.size * temp.zipWithShift(j) { v1, v2 -> v1 * v2 }.fold(0.0, sum) / variance.pow(2)
+            val delta = series.size * sum(demeanedSquares.zipWithShift(j) { v1, v2 -> v1 * v2 }) / variance.pow(2)
             accumulator += delta * 4 * (shift - j).toDouble().pow(2) / shift.toDouble().pow(2)
         }
         accumulator

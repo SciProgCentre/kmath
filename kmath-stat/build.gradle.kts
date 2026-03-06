@@ -12,6 +12,7 @@ kscience {
 
     commonMain {
         api(projects.kmathCoroutines)
+        api(projects.kmathFunctions)
         //implementation(spclibs.atomicfu)
     }
 
