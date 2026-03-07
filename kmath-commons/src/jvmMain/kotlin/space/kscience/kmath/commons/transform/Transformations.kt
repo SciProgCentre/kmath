@@ -20,7 +20,7 @@ import space.kscience.kmath.structures.*
  */
 public object Transformations {
     private fun Buffer<Complex>.toCmComplexArray(): Array<org.apache.commons.math3.complex.Complex> =
-        Array(size) { org.apache.commons.math3.complex.Complex(this@toCmComplexArray.get(it).re, this@toCmComplexArray.get(it).im) }
+        Array(size) { org.apache.commons.math3.complex.Complex(get(it).re, get(it).im) }
 
     /**
      * Create a virtual buffer on top of array

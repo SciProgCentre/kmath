@@ -23,7 +23,7 @@ internal fun List<OffsetIntBuffer>.concat(): Int32Buffer {
     val array = IntArray(sumOf { it.size })
     var pointer = 0
     while (pointer < array.size) {
-        for (bufferIndex in this@concat.indices) {
+        for (bufferIndex in indices) {
             val buffer = get(bufferIndex)
             for (innerIndex in buffer.indices) {
                 array[pointer] = buffer[innerIndex]

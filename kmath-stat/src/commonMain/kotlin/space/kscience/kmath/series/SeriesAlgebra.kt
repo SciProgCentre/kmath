@@ -8,6 +8,7 @@ package space.kscience.kmath.series
 import space.kscience.kmath.operations.BufferAlgebra
 import space.kscience.kmath.operations.Ring
 import space.kscience.kmath.operations.RingOps
+import space.kscience.kmath.stat.StatisticalAlgebra
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.MutableBufferFactory
 import space.kscience.kmath.structures.getOrNull
@@ -41,25 +42,24 @@ public class Series<T>(
     override fun toString(): String = "$origin-->${position}"
 }
 
+/**
+ * A range of valid offset indices. In general, does not start with zero.
+ */
+public val Series<*>.indices: IntRange
+    get() = position until (position + size)
+
 
 /**
  * A scope to operation on series
  */
 public open class SeriesAlgebra<T, out A : Ring<T>, out BA : BufferAlgebra<T, A>, L>(
-    public val bufferAlgebra: BA,
+    override val bufferAlgebra: BA,
     public val offsetToLabel: (Int) -> L,
-) : RingOps<Series<T>> {
+) : RingOps<Series<T>>, StatisticalAlgebra<T, A, BA> {
 
-    public val elementAlgebra: A get() = bufferAlgebra.elementAlgebra
     override val bufferFactory: MutableBufferFactory<Series<T>> = MutableBufferFactory()
 
     public fun Buffer<T>.asSeries(position: Int = 0): Series<T> = Series(this, position)
-
-    /**
-     * A range of valid offset indices. In general, does not start with zero.
-     */
-    public val Series<T>.indices: IntRange
-        get() = position until position + size
 
     /**
      * Get the value by absolute offset in the series algebra or return null if index is out of range
@@ -110,7 +110,7 @@ public open class SeriesAlgebra<T, out A : Ring<T>, out BA : BufferAlgebra<T, A>
     public val Series<T>.labels: List<L> get() = indices.map(offsetToLabel)
 
     /**
-     * Try to resolve element by label and return null if element with a given label is not found
+     * Try to resolve an element by label and return null if an element with a given label is not found
      */
     public open fun Series<T>.getByLabelOrNull(label: L): T? {
         val index = labels.indexOf(label)
@@ -129,7 +129,7 @@ public open class SeriesAlgebra<T, out A : Ring<T>, out BA : BufferAlgebra<T, A>
      */
     public inline fun Series<T>.map(crossinline transform: A.(T) -> T): Series<T> {
         val buf = elementAlgebra.bufferFactory(size) {
-            elementAlgebra.transform(get(it))
+            elementAlgebra.transform(origin[it])
         }
         return buf.asSeries(indices.first)
     }
@@ -140,22 +140,21 @@ public open class SeriesAlgebra<T, out A : Ring<T>, out BA : BufferAlgebra<T, A>
     public inline fun Series<T>.mapWithLabel(crossinline transform: A.(arg: T, label: L) -> T): Series<T> {
         val labels = labels
         val buf = elementAlgebra.bufferFactory(size) {
-            elementAlgebra.transform(get(it), labels[it])
+            elementAlgebra.transform(origin[it], labels[it])
         }
         return buf.asSeries(indices.first)
     }
 
     public inline fun <R> Series<T>.fold(initial: R, operation: A.(acc: R, T) -> R): R {
         var accumulator = initial
-        for (index in this.indices) accumulator = elementAlgebra.operation(accumulator, get(index))
+        for (index in indices) accumulator = elementAlgebra.operation(accumulator, get(index))
         return accumulator
     }
 
     public inline fun <R> Series<T>.foldWithLabel(initial: R, operation: A.(acc: R, arg: T, label: L) -> R): R {
         val labels = labels
         var accumulator = initial
-        for (index in this.indices) accumulator =
-            elementAlgebra.operation(accumulator, get(index), labels[index])
+        for (index in indices) accumulator = elementAlgebra.operation(accumulator, get(index), labels[index - position])
         return accumulator
     }
 
@@ -182,7 +181,7 @@ public open class SeriesAlgebra<T, out A : Ring<T>, out BA : BufferAlgebra<T, A>
         shift: Int = 1,
         crossinline operation: A.(left: T, right: T) -> T,
     ): Series<T> {
-        val shifted = this.moveBy(shift)
+        val shifted = moveBy(shift)
         return zip(shifted, operation)
     }
 
@@ -195,7 +194,11 @@ public open class SeriesAlgebra<T, out A : Ring<T>, out BA : BufferAlgebra<T, A>
     /**
      * Compute difference serries between a value and value shifted back by [shift] steps
      */
-    public fun Series<T>.difference(shift: Int = 1): Series<T> = this.zipWithShift(shift) { l, r -> r - l }
+    public fun Series<T>.difference(shift: Int = 1): Series<T> = zipWithShift(shift) { l, r ->
+        //subtract offset to the right series from this one
+        l - r
+    }
+
 
 
     /**
@@ -209,6 +212,34 @@ public open class SeriesAlgebra<T, out A : Ring<T>, out BA : BufferAlgebra<T, A>
         if (intersection.isEmpty()) return Series(Buffer.EMPTY, intersection.first)
         val newOrigin = origin.slice((intersection.first - position)..(intersection.last - position))
         return Series(newOrigin, intersection.first)
+    }
+
+    /**
+     * Zero-copy convert [Series] to [Buffer]. Buffer spans the whole [range] (first index of a buffer corrsponds to first in range)
+     * and fills gaps with [missingValue].
+     */
+    public fun Series<T>.asBuffer(
+        missingValue: T = elementAlgebra.zero,
+        range: IntRange = 0 until (position + size)
+    ): Buffer<T> = when (range) {
+        indices -> origin
+        in indices -> origin.slice((range.first - position)..(range.last - position))
+        else -> object : Buffer<T> {
+
+            init {
+                require(range.last >= range.first) { "Invalid range $range" }
+            }
+
+            override val size: Int = range.last - range.first + 1
+
+            override fun get(index: Int): T = if ((index + range.first) in indices) {
+                origin[index - position + range.first]
+            } else {
+                missingValue
+            }
+
+            override fun toString(): String = "SeriesBuffer(${range.first}..${range.last})"
+        }
     }
 
     public companion object

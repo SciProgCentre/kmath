@@ -52,7 +52,7 @@ public fun <T, A : Ring<T>> SeriesAlgebra<T, A, *, *>.integrate(
     val result = bufferFactory(series.size + 1) { i ->
         accumulator.also {
             if (i < series.size) {
-                accumulator += series[i]
+                accumulator += series.origin[i]
             }
         }
     }

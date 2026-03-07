@@ -26,7 +26,7 @@ public interface BufferView<T> : Buffer<T> {
 }
 
 /**
- * A zero-copy buffer that "sees" only part of original buffer. Slice can't go beyond original buffer borders.
+ * A zero-copy buffer that "sees" only part of the original buffer. Slice can't go beyond original buffer borders.
  */
 public class BufferSlice<T>(
     override val origin: Buffer<T>,
