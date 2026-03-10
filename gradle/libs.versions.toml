@@ -19,7 +19,7 @@ multik-default = { module = "org.jetbrains.kotlinx:multik-default", version.ref 
 nd4j-api = { module = "org.nd4j:nd4j-api", version.ref = "nd4j" }
 nd4j-native-platform = { module = "org.nd4j:nd4j-native-platform", version.ref = "nd4j" }
 
-ojalgo = "org.ojalgo:ojalgo:56.2.0"
+ojalgo = "org.ojalgo:ojalgo:56.2.1"
 
 
 tensorflow-core-api = {module = "org.tensorflow:tensorflow-core-api", version.ref="tensorflow"}
