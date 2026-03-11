@@ -22,3 +22,4 @@ out/
 !/.idea/scopes/
 /gradle/yarn.lock
 
+/gradle/js/yarn.lock

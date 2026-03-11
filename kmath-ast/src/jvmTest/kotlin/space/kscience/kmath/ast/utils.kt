@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2024 KMath contributors.
+ * Copyright 2018-2026 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -16,7 +16,7 @@ import space.kscience.kmath.structures.Float64
 import space.kscience.kmath.asm.compile as asmCompile
 import space.kscience.kmath.asm.compileToExpression as asmCompileToExpression
 
-private object GenericAsmCompilerTestContext : CompilerTestContext {
+internal object GenericAsmCompilerTestContext : CompilerTestContext {
     override fun MST.compileToExpression(algebra: Int32Ring): Expression<Int> =
         asmCompileToExpression(algebra as Algebra<Int>)
 
@@ -31,7 +31,7 @@ private object GenericAsmCompilerTestContext : CompilerTestContext {
 }
 
 @OptIn(UnstableKMathAPI::class)
-private object PrimitiveAsmCompilerTestContext : CompilerTestContext {
+internal object PrimitiveAsmCompilerTestContext : CompilerTestContext {
     override fun MST.compileToExpression(algebra: Int32Ring): Expression<Int> = asmCompileToExpression(algebra)
     override fun MST.compile(algebra: Int32Ring, arguments: Map<Symbol, Int>): Int = asmCompile(algebra, arguments)
     override fun MST.compileToExpression(algebra: Float64Field): Expression<Float64> = asmCompileToExpression(algebra)

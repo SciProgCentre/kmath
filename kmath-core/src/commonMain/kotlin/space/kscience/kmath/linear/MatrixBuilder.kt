@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2024 KMath contributors.
+ * Copyright 2018-2026 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -80,7 +80,7 @@ public fun <T, A : Ring<T>> MatrixBuilder<T, A>.diagonal(
     builder: A.(Int) -> T
 ): Matrix<T> = with(linearSpace.elementAlgebra) {
     require(colNum == rowNum) { "In order to build symmetric matrix, number of rows $rowNum should be equal to number of columns $colNum" }
-    return VirtualMatrix(rowNum, colNum, attributes = Attributes(IsDiagonal)) { i, j ->
+    return VirtualMatrix(rowNum, colNum, attributes = Attributes(IsDiagonal, true)) { i, j ->
         check(i in 0 until rowNum) { "$i out of bounds: 0..<$rowNum" }
         check(j in 0 until colNum) { "$j out of bounds: 0..<$colNum" }
         if (i == j) {
@@ -97,7 +97,8 @@ public fun <T, A : Ring<T>> MatrixBuilder<T, A>.diagonal(
 @UnstableKMathAPI
 public fun <T> MatrixBuilder<T, Ring<T>>.diagonal(vararg elements: T): Matrix<T> {
     require(colNum == rowNum) { "In order to build symmetric matrix, number of rows $rowNum should be equal to number of columns $colNum" }
-    return return VirtualMatrix(rowNum, colNum, attributes = Attributes(IsDiagonal)) { i, j ->
+
+    return VirtualMatrix(rowNum, colNum, attributes = Attributes(IsDiagonal,true)) { i, j ->
         check(i in 0 until rowNum) { "$i out of bounds: 0..<$rowNum" }
         check(j in 0 until colNum) { "$j out of bounds: 0..<$colNum" }
         if (i == j) {

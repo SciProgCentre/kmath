@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2024 KMath contributors.
+ * Copyright 2018-2026 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -35,13 +35,13 @@ class ExpressionsInterpretersBenchmark {
     fun mstExpression(blackhole: Blackhole) = invokeAndSum(mst, blackhole)
 
     /**
-     * Benchmark case for [Expression] created with [compileToExpression].
+     * Benchmark case for [Expression] created with [space.kscience.kmath.estree.compileToExpression].
      */
     @Benchmark
     fun wasmExpression(blackhole: Blackhole) = invokeAndSum(wasm, blackhole)
 
     /**
-     * Benchmark case for [Expression] created with [compileToExpression].
+     * Benchmark case for [Expression] created with [space.kscience.kmath.estree.compileToExpression].
      */
     @Benchmark
     fun estreeExpression(blackhole: Blackhole) = invokeAndSum(estree, blackhole)

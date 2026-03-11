@@ -1,10 +1,12 @@
+
+
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import kotlinx.benchmark.gradle.BenchmarksExtension
 import java.util.*
 
 plugins {
-    kotlin("multiplatform")
+    id("space.kscience.gradle.mpp")
     alias(spclibs.plugins.kotlin.plugin.allopen)
     alias(spclibs.plugins.kotlinx.benchmark)
 }
@@ -16,19 +18,57 @@ repositories {
     mavenCentral()
 }
 
-kotlin {
-    jvmToolchain(17)
+kscience {
+    maturity = space.kscience.gradle.Maturity.EXPERIMENTAL
 
+    jvm()
+
+    js {
+        nodejs()
+    }
+
+    commonMain{
+        implementation(project(":kmath-ast"))
+        implementation(project(":kmath-core"))
+        implementation(project(":kmath-coroutines"))
+        implementation(project(":kmath-complex"))
+        implementation(project(":kmath-stat"))
+        implementation(project(":kmath-dimensions"))
+        implementation(project(":kmath-for-real"))
+        implementation(project(":kmath-tensors"))
+        implementation(libs.multik.default)
+        implementation(spclibs.kotlinx.benchmark.runtime)
+    }
+
+    jvmMain {
+        implementation(projects.kmathCommons)
+        implementation(projects.kmathEjml)
+        implementation(projects.kmathKotlingrad)
+        implementation(projects.kmathViktor)
+        implementation(projects.kmathOjalgo)
+        implementation(projects.kmath.kmathTensorflow)
+        implementation(projects.kmathMultik)
+        implementation(libs.tensorflow.core.platform)
+//                implementation(projects.kmathNd4j)
+
+//                implementation(libs.nd4j.native.platform)
+        //    uncomment if your system supports AVX2
+        //    val os = System.getProperty("os.name")
+        //
+        //    if (System.getProperty("os.arch") in arrayOf("x86_64", "amd64")) when {
+        //        os.startsWith("Windows") -> implementation("org.nd4j:nd4j-native:1.0.0-beta7:windows-x86_64-avx2")
+        //        os == "Linux" -> implementation("org.nd4j:nd4j-native:1.0.0-beta7:linux-x86_64-avx2")
+        //        os == "Mac OS X" -> implementation("org.nd4j:nd4j-native:1.0.0-beta7:macosx-x86_64-avx2")
+        //    } else
+        //    implementation("org.nd4j:nd4j-native-platform:1.0.0-beta7")
+    }
+}
+
+kotlin {
     compilerOptions {
         optIn.addAll(
             "space.kscience.kmath.UnstableKMathAPI"
         )
-    }
-
-    jvm()
-
-    js(IR) {
-        nodejs()
     }
 
     sourceSets {
@@ -38,46 +78,6 @@ kotlin {
                 optIn("kotlin.contracts.ExperimentalContracts")
                 optIn("kotlin.ExperimentalUnsignedTypes")
                 optIn("space.kscience.kmath.UnstableKMathAPI")
-            }
-        }
-
-        val commonMain by getting {
-            dependencies {
-                implementation(project(":kmath-ast"))
-                implementation(project(":kmath-core"))
-                implementation(project(":kmath-coroutines"))
-                implementation(project(":kmath-complex"))
-                implementation(project(":kmath-stat"))
-                implementation(project(":kmath-dimensions"))
-                implementation(project(":kmath-for-real"))
-                implementation(project(":kmath-tensors"))
-                implementation(libs.multik.default)
-                implementation(spclibs.kotlinx.benchmark.runtime)
-            }
-        }
-
-        val jvmMain by getting {
-            dependencies {
-                implementation(projects.kmathCommons)
-                implementation(projects.kmathEjml)
-                implementation(projects.kmathKotlingrad)
-                implementation(projects.kmathViktor)
-                implementation(projects.kmathOjalgo)
-                implementation(projects.kmath.kmathTensorflow)
-                implementation(projects.kmathMultik)
-                implementation(libs.tensorflow.core.platform)
-//                implementation(projects.kmathNd4j)
-
-//                implementation(libs.nd4j.native.platform)
-                //    uncomment if your system supports AVX2
-                //    val os = System.getProperty("os.name")
-                //
-                //    if (System.getProperty("os.arch") in arrayOf("x86_64", "amd64")) when {
-                //        os.startsWith("Windows") -> implementation("org.nd4j:nd4j-native:1.0.0-beta7:windows-x86_64-avx2")
-                //        os == "Linux" -> implementation("org.nd4j:nd4j-native:1.0.0-beta7:linux-x86_64-avx2")
-                //        os == "Mac OS X" -> implementation("org.nd4j:nd4j-native:1.0.0-beta7:macosx-x86_64-avx2")
-                //    } else
-                //    implementation("org.nd4j:nd4j-native-platform:1.0.0-beta7")
             }
         }
     }
@@ -215,7 +215,6 @@ private data class JmhReport(
 }
 
 readme {
-    maturity = space.kscience.gradle.Maturity.EXPERIMENTAL
 
     val jsonMapper = jacksonObjectMapper()
 
@@ -265,7 +264,7 @@ readme {
                     )
 
                     reports.groupBy { it.benchmark.substringBeforeLast(".") }.forEach { (cl, compare) ->
-                        appendLine("### [${cl.substringAfterLast(".")}](src/jvmMain/kotlin/${cl.replace(".","/")}.kt)")
+                        appendLine("### [${cl.substringAfterLast(".")}](src/jvmMain/kotlin/${cl.replace(".", "/")}.kt)")
                         appendLine()
                         appendLine("| Benchmark | Score |")
                         appendLine("|:---------:|:-----:|")
@@ -282,3 +281,5 @@ readme {
         }
     }
 }
+
+kotlin.explicitApi = org.jetbrains.kotlin.gradle.dsl.ExplicitApiMode.Disabled

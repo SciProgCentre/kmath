@@ -52,7 +52,7 @@ dependencies {
 }
 
 kotlin {
-    jvmToolchain(17)
+    jvmToolchain(21)
     sourceSets.all {
         languageSettings {
             optIn("kotlin.contracts.ExperimentalContracts")
@@ -64,10 +64,6 @@ kotlin {
 
 tasks.withType<KotlinJvmCompile> {
     compilerOptions {
-        freeCompilerArgs.addAll("-Xjvm-default=all", "-Xopt-in=kotlin.RequiresOptIn", "-Xlambdas=indy")
+        freeCompilerArgs.addAll("-Xopt-in=kotlin.RequiresOptIn")
     }
-}
-
-readme {
-    maturity = space.kscience.gradle.Maturity.EXPERIMENTAL
 }

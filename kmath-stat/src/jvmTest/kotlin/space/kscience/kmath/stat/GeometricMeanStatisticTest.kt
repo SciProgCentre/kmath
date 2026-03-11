@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2025 KMath contributors.
+ * Copyright 2018-2026 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -21,7 +21,7 @@ import kotlin.test.assertEquals
 
 internal class GeometricMeanStatisticTest {
     //create a random number generator.
-    val generator = RandomGenerator.default(1)
+    val generator = RandomGenerator.default(122)
 
     private fun setupData(): Flow<Float64Buffer> {
         //Create a stateless chain from generator.

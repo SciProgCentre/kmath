@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2024 KMath contributors.
+ * Copyright 2018-2026 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -27,8 +27,8 @@ public data class Float64Circle2D(
     override val radius: Float64,
 ) : Circle2D<Float64>
 
-public fun Circle2D(center: Vector2D<Float64>, radius: Double): Float64Circle2D = Float64Circle2D(
-    center as? Float64Vector2D ?: Float64Vector2D(center.x, center.y),
+public fun Circle2D(center: Vector2D<Float64>, radius: Float64): Circle2D<Float64> = Float64Circle2D(
+    center,
     radius
 )
 

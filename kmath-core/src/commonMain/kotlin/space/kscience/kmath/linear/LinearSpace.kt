@@ -1,17 +1,24 @@
 /*
- * Copyright 2018-2024 KMath contributors.
+ * Copyright 2018-2026 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
 package space.kscience.kmath.linear
 
-import space.kscience.attributes.*
+import space.kscience.attributes.Attributes
+import space.kscience.attributes.SafeType
+import space.kscience.attributes.withAttribute
 import space.kscience.kmath.UnstableKMathAPI
-import space.kscience.kmath.nd.*
+import space.kscience.kmath.nd.MutableStructure2D
+import space.kscience.kmath.nd.Structure2D
+import space.kscience.kmath.nd.StructureAttribute
+import space.kscience.kmath.nd.as1D
 import space.kscience.kmath.operations.BufferRingOps
 import space.kscience.kmath.operations.Ring
 import space.kscience.kmath.operations.invoke
 import space.kscience.kmath.structures.Buffer
+import kotlin.contracts.InvocationKind
+import kotlin.contracts.contract
 
 /**
  * Alias for [Structure2D] with more familiar name.
@@ -179,7 +186,7 @@ public interface LinearSpace<T, out A : Ring<T>> : MatrixScope<T> {
      * If the structure holds given [attribute] return itself. Otherwise, return a new [Matrix] that contains a computed attribute.
      *
      * This method is used to compute and cache attribute inside the structure. If one needs an attribute only once,
-     * better use [StructureND.getOrComputeAttribute].
+     * better use [Structure2D.getOrComputeAttribute].
      */
     @UnstableKMathAPI
     public fun <V : Any, A : StructureAttribute<V>> Matrix<T>.withComputedAttribute(
@@ -210,7 +217,12 @@ public interface LinearSpace<T, out A : Ring<T>> : MatrixScope<T> {
 }
 
 
-public inline operator fun <LS : LinearSpace<*, *>, R> LS.invoke(block: LS.() -> R): R = run(block)
+public inline operator fun <LS : LinearSpace<*, *>, R> LS.invoke(block: LS.() -> R): R {
+    contract {
+        callsInPlace(block, InvocationKind.EXACTLY_ONCE)
+    }
+    return this.block()
+}
 
 
 /**

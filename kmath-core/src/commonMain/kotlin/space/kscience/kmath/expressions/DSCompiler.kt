@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2024 KMath contributors.
+ * Copyright 2018-2026 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -209,12 +209,12 @@ internal fun <T, A> DSCompiler<T, A>.pow(
     n: Int,
     result: MutableBuffer<T>,
     resultOffset: Int,
-) where A : Field<T>, A : PowerOperations<T> = algebra {
+): Unit where A : Field<T>, A : PowerOperations<T> = algebra {
     if (n == 0) {
         // special case, x^0 = 1 for all x
         result[resultOffset] = one
         result.fill(zero, resultOffset + 1, resultOffset + size)
-        return
+        return Unit
     }
 
     // create the power function value and derivatives
