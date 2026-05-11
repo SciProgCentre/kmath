@@ -56,7 +56,7 @@ public class HamiltonianMonteCarloSampler(
             // Potential energy gradient: ∇U = -∇logπ
             var grad = gradientLogPdf(proposedPos)
             for (i in 0 until dimension) {
-                proposedMom[i] += 0.5 * stepSize * (-grad[i])
+                proposedMom[i] += 0.5 * stepSize * grad[i]
             }
 
             // Full leapfrog steps
@@ -66,7 +66,7 @@ public class HamiltonianMonteCarloSampler(
                 }
                 grad = gradientLogPdf(proposedPos)
                 for (i in 0 until dimension) {
-                    proposedMom[i] += stepSize * (-grad[i])
+                    proposedMom[i] += stepSize * grad[i]
                 }
             }
 
@@ -78,7 +78,7 @@ public class HamiltonianMonteCarloSampler(
             // Final half-step for momentum
             grad = gradientLogPdf(proposedPos)
             for (i in 0 until dimension) {
-                proposedMom[i] += 0.5 * stepSize * (-grad[i])
+                proposedMom[i] += 0.5 * stepSize * grad[i]
             }
 
             // Metropolis acceptance criterion

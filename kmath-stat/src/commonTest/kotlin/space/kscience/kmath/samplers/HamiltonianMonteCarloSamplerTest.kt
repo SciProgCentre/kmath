@@ -14,6 +14,8 @@ import kotlin.test.assertTrue
 
 class HamiltonianMonteCarloSamplerTest {
 
+    private val precision = 0.05
+
     @Test
     fun testUnivariateStandardNormal() = runTest {
         val sampler = HamiltonianMonteCarloSampler.univariate(
@@ -34,8 +36,8 @@ class HamiltonianMonteCarloSamplerTest {
         val mean = samples.average()
         val variance = samples.map { (it - mean) * (it - mean) }.average()
 
-        assertTrue(abs(mean) < 0.15, "Mean should be close to 0, was $mean")
-        assertTrue(abs(variance - 1.0) < 0.15, "Variance should be close to 1, was $variance")
+        assertTrue(abs(mean) < precision, "Mean should be close to 0, was $mean")
+        assertTrue(abs(variance - 1.0) < precision, "Variance should be close to 1, was $variance")
     }
 
     @Test
@@ -53,18 +55,18 @@ class HamiltonianMonteCarloSamplerTest {
         val chain = sampler.sample(generator)
 
         // Burn-in
-        repeat(2_000) { chain.next() }
+        repeat(1_000) { chain.next() }
 
-        val samples = List(10_000) { chain.next() }
+        val samples = List(5_000) { chain.next() }
         val meanX = samples.map { it[0] }.average()
         val meanY = samples.map { it[1] }.average()
         val varX = samples.map { (it[0] - meanX) * (it[0] - meanX) }.average()
         val varY = samples.map { (it[1] - meanY) * (it[1] - meanY) }.average()
 
-        assertTrue(abs(meanX) < 0.15, "Mean X should be close to 0, was $meanX")
-        assertTrue(abs(meanY) < 0.15, "Mean Y should be close to 0, was $meanY")
-        assertTrue(abs(varX - 1.0) < 0.15, "Var X should be close to 1, was $varX")
-        assertTrue(abs(varY - 1.0) < 0.15, "Var Y should be close to 1, was $varY")
+        assertTrue(abs(meanX) < precision, "Mean X should be close to 0, was $meanX")
+        assertTrue(abs(meanY) < precision, "Mean Y should be close to 0, was $meanY")
+        assertTrue(abs(varX - 1.0) < precision, "Var X should be close to 1, was $varX")
+        assertTrue(abs(varY - 1.0) < precision, "Var Y should be close to 1, was $varY")
     }
 
     @Test
@@ -100,9 +102,9 @@ class HamiltonianMonteCarloSamplerTest {
         val chain = sampler.sample(generator)
 
         // Burn-in
-        repeat(3_000) { chain.next() }
+        repeat(1_000) { chain.next() }
 
-        val samples = List(50_000) { chain.next() }
+        val samples = List(5_000) { chain.next() }
         val meanX = samples.map { it[0] }.average()
         val meanY = samples.map { it[1] }.average()
 
@@ -111,10 +113,10 @@ class HamiltonianMonteCarloSamplerTest {
         val covYY = samples.map { (it[1] - meanY) * (it[1] - meanY) }.average()
         val covXY = samples.map { (it[0] - meanX) * (it[1] - meanY) }.average()
 
-        assertTrue(abs(meanX) < 0.15, "Mean X should be close to 0, was $meanX")
+        assertTrue(abs(meanX) < precision, "Mean X should be close to 0, was $meanX")
         assertTrue(abs(meanY) < 0.15, "Mean Y should be close to 0, was $meanY")
-        assertTrue(abs(covXX - 1.0) < 0.15, "Cov XX should be close to 1, was $covXX")
-        assertTrue(abs(covYY - 1.0) < 0.15, "Cov YY should be close to 1, was $covYY")
-        assertTrue(abs(covXY - 0.5) < 0.15, "Cov XY should be close to 0.5, was $covXY")
+        assertTrue(abs(covXX - 1.0) < precision, "Cov XX should be close to 1, was $covXX")
+        assertTrue(abs(covYY - 1.0) < precision, "Cov YY should be close to 1, was $covYY")
+        assertTrue(abs(covXY - 0.5) < precision, "Cov XY should be close to 0.5, was $covXY")
     }
 }
