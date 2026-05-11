@@ -5,7 +5,7 @@
 
 package space.kscience.kmath.samplers
 
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runTest
 import space.kscience.kmath.random.RandomGenerator
 import space.kscience.kmath.structures.MutableBuffer
 import kotlin.math.abs
@@ -15,7 +15,7 @@ import kotlin.test.assertTrue
 class HamiltonianMonteCarloSamplerTest {
 
     @Test
-    fun testUnivariateStandardNormal() = runBlocking {
+    fun testUnivariateStandardNormal() = runTest {
         val sampler = HamiltonianMonteCarloSampler.univariate(
             startPoint = 2.0,
             targetLogPdf = { -0.5 * it * it },
@@ -39,7 +39,7 @@ class HamiltonianMonteCarloSamplerTest {
     }
 
     @Test
-    fun testBivariateIsotropicNormal() = runBlocking {
+    fun testBivariateIsotropicNormal() = runTest {
         val sampler = HamiltonianMonteCarloSampler(
             dimension = 2,
             startPoint = { MutableBuffer.double(2) { 2.0 } },
@@ -68,7 +68,7 @@ class HamiltonianMonteCarloSamplerTest {
     }
 
     @Test
-    fun testCorrelatedBivariateNormal() = runBlocking {
+    fun testCorrelatedBivariateNormal() = runTest {
         // Target: N(0, Σ) with Σ = [[1, 0.5], [0.5, 1]]
         // Σ^-1 = (1/0.75) * [[1, -0.5], [-0.5, 1]]
         val inv11 = 4.0 / 3.0

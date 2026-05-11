@@ -7,8 +7,8 @@ package space.kscience.kmath.samplers
 
 import space.kscience.kmath.chains.Chain
 import space.kscience.kmath.chains.StatefulChain
+import space.kscience.kmath.linear.Point
 import space.kscience.kmath.random.RandomGenerator
-import space.kscience.kmath.samplers.GaussianSampler
 import space.kscience.kmath.stat.Sampler
 import space.kscience.kmath.structures.Buffer
 import space.kscience.kmath.structures.Float64
@@ -29,12 +29,12 @@ import kotlin.math.ln
  */
 public class HamiltonianMonteCarloSampler(
     public val dimension: Int,
-    public val startPoint: suspend (RandomGenerator) -> Buffer<Float64>,
-    public val targetLogPdf: suspend (Buffer<Float64>) -> Float64,
-    public val gradientLogPdf: suspend (Buffer<Float64>) -> Buffer<Float64>,
+    public val startPoint: RandomGenerator.() -> Buffer<Float64>,
+    public val targetLogPdf: suspend (Point<Float64>) -> Float64,
+    public val gradientLogPdf: suspend (Point<Float64>) -> Buffer<Float64>,
     public val stepSize: Float64,
     public val leapfrogSteps: Int,
-) : Sampler<Buffer<Float64>> {
+) : Sampler<Point<Float64>> {
 
     private val momentumSampler: Sampler<Float64> = GaussianSampler(0.0, 1.0)
 
@@ -43,7 +43,7 @@ public class HamiltonianMonteCarloSampler(
 
         return StatefulChain<Chain<Float64>, Buffer<Float64>>(
             state = momentumChain,
-            seed = { startPoint(generator) },
+            seed = { generator.startPoint() },
             forkState = Chain<Float64>::fork
         ) { previousPoint: Buffer<Float64> ->
             // Sample fresh momentum ~ N(0, I)
