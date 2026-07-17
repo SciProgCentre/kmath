@@ -174,7 +174,7 @@ public class OjalgoLinearSpace<T : Comparable<T>, A : Ring<T>>(
 
     override fun Matrix<T>.minus(other: Matrix<T>): OjalgoMatrix<T> = toOjalgo().subtract(other.toOjalgo()).asMatrix()
 
-    override fun Point<T>.plus(other: Point<T>): OjalgoBuffer<T> = toOjalgo().subtract(other.toOjalgo()).asVector()
+    override fun Point<T>.plus(other: Point<T>): OjalgoBuffer<T> = toOjalgo().add(other.toOjalgo()).asVector()
 
     override fun Matrix<T>.plus(other: Matrix<T>): OjalgoMatrix<T> = toOjalgo().add(other.toOjalgo()).asMatrix()
 
