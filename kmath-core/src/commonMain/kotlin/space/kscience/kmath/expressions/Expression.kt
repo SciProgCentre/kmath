@@ -231,7 +231,6 @@ public operator fun LongExpression.invoke(): Long = this(LongExpression.EMPTY_LO
 /**
  * Calls this expression from arguments.
  *
- * @param pairs the pairs of arguments to values.
  * @return a value.
  */
 @UnstableKMathAPI

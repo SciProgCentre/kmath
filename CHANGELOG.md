@@ -5,12 +5,14 @@
 ### Added
 
 ### Changed
+- SymbolIndexer uses context receivers
 
 ### Deprecated
 
 ### Removed
 
 ### Fixed
+- MstExtendedField properly scales with times instead of plus
 
 ### Security
 

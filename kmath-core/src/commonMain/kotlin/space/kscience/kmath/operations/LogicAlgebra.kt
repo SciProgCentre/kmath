@@ -32,6 +32,7 @@ public interface LogicAlgebra<T : Any> : Algebra<T> {
     override fun binaryOperation(operation: String, left: T, right: T): T = when (operation) {
         Boolean::and.name -> left.and(right)
         Boolean::or.name -> left.or(right)
+        Boolean::xor.name -> left.xor(right)
         else -> super.binaryOperation(operation, left, right)
     }
 
