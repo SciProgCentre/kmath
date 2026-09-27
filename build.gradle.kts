@@ -1,4 +1,3 @@
-import org.jetbrains.kotlin.gradle.dsl.abi.ExperimentalAbiValidation
 import space.kscience.gradle.useApache2Licence
 import space.kscience.gradle.useSPCTeam
 
@@ -15,7 +14,7 @@ allprojects {
     }
 
     group = "space.kscience"
-    version = "0.5.0"
+    version = "0.5.1-dev"
 }
 
 dependencies {
@@ -87,15 +86,6 @@ kscienceProject {
     }
     publishTo("spc", "https://maven.sciprog.center/kscience")
     publishToCentral()
-
-    @OptIn(ExperimentalAbiValidation::class)
-    abiValidation {
-        filters {
-            excluded {
-                annotatedWith.add("space.kscience.kmath.UnstableKMathAPI")
-            }
-        }
-    }
 }
 
 

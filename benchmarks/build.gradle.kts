@@ -19,7 +19,7 @@ repositories {
 }
 
 kscience {
-    maturity = space.kscience.gradle.Maturity.EXPERIMENTAL
+    maturity = space.kscience.gradle.Maturity.DEPRECATED
 
     jvm()
 
@@ -65,6 +65,8 @@ kscience {
 }
 
 kotlin {
+    explicitApi = org.jetbrains.kotlin.gradle.dsl.ExplicitApiMode.Disabled
+
     compilerOptions {
         optIn.addAll(
             "space.kscience.kmath.UnstableKMathAPI"
@@ -281,5 +283,3 @@ readme {
         }
     }
 }
-
-kotlin.explicitApi = org.jetbrains.kotlin.gradle.dsl.ExplicitApiMode.Disabled
