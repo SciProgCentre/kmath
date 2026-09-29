@@ -131,4 +131,6 @@ public fun <X : SFun<X>> MST.toSFun(): SFun<X> = when (this) {
         PowerOperations.POW_OPERATION -> left.toSFun<X>() pow (right as MST.Numeric).toSConst()
         else -> error("Binary operation $operation not defined in $this")
     }
+
+    is MST.FunctionCall -> TODO("Function call not supported in scalars adapters")
 }

@@ -7,8 +7,7 @@ package space.kscience.kmath.ast
 
 import space.kscience.attributes.SafeType
 import space.kscience.attributes.WithType
-import space.kscience.kmath.expressions.Expression
-import space.kscience.kmath.expressions.Symbol
+import space.kscience.kmath.expressions.*
 import space.kscience.kmath.operations.Algebra
 import space.kscience.kmath.operations.NumericAlgebra
 
@@ -119,8 +118,8 @@ public sealed interface TypedMst<T> : WithType<T> {
         }
 
         override fun hashCode(): Int {
-            var result = value?.hashCode() ?: 0
-            result = 31 * result + (number?.hashCode() ?: 0)
+            var result = value.hashCode()
+            result = 31 * result + number.hashCode()
             return result
         }
 
@@ -145,43 +144,82 @@ public sealed interface TypedMst<T> : WithType<T> {
         override fun hashCode(): Int = symbol.hashCode()
         override fun toString(): String = "Variable(symbol=$symbol)"
     }
+
+    public class FunctionCall<T>(
+        public val name: String,
+        public val arguments: Map<Symbol, TypedMst<T>>,
+    ) : TypedMst<T> {
+        init {
+            require(arguments.isNotEmpty()) { "Function call must have at least one argument" }
+            require(arguments.values.map { it.type }.distinct().size == 1) {
+                "Function call arguments must have the same type as the function"
+            }
+        }
+
+        override val type: SafeType<T> get() = arguments.values.first().type
+        override fun equals(other: Any?): Boolean {
+            if (this === other) return true
+            if (other == null || this::class != other::class) return false
+
+            other as FunctionCall<*>
+
+            if (name != other.name) return false
+            if (arguments != other.arguments) return false
+
+            return true
+        }
+
+        override fun hashCode(): Int {
+            var result = name.hashCode()
+            result = 31 * result + arguments.hashCode()
+            return result
+        }
+
+
+    }
 }
 
 /**
- * Interprets the [TypedMst] node with this [Algebra] and [arguments].
+ * Interprets the [TypedMst] node
  */
-public fun <T> TypedMst<T>.interpret(algebra: Algebra<T>, arguments: Map<Symbol, T>): T = when (this) {
-    is TypedMst.Unary -> algebra.unaryOperation(operation, interpret(algebra, arguments))
+context(mstContext: MSTInterpreterContext<T>)
+public fun <T> TypedMst<T>.interpret(): T = when (this) {
+    is TypedMst.Unary -> algebra.unaryOperation(operation, interpret())
 
-    is TypedMst.Binary -> when {
-        algebra is NumericAlgebra && left is TypedMst.Constant && left.number != null ->
-            algebra.leftSideNumberOperation(operation, left.number, right.interpret(algebra, arguments))
+    is TypedMst.Binary -> when (val algebra = algebra) {
+        is NumericAlgebra if left is TypedMst.Constant && left.number != null ->
+            algebra.leftSideNumberOperation(operation, left.number, right.interpret())
 
-        algebra is NumericAlgebra && right is TypedMst.Constant && right.number != null ->
-            algebra.rightSideNumberOperation(operation, left.interpret(algebra, arguments), right.number)
+        is NumericAlgebra if right is TypedMst.Constant && right.number != null ->
+            algebra.rightSideNumberOperation(operation, left.interpret(), right.number)
 
         else -> algebra.binaryOperation(
             operation,
-            left.interpret(algebra, arguments),
-            right.interpret(algebra, arguments),
+            left.interpret(),
+            right.interpret(),
         )
     }
 
     is TypedMst.Constant -> value
-    is TypedMst.Variable -> arguments.getValue(symbol)
+    is TypedMst.Variable -> mstContext.arguments.getValue(symbol)
+
+    is TypedMst.FunctionCall<T> -> mstContext.callFunction(name, arguments.mapValues { it.value.interpret() })
+}
+
+public fun <T> TypedMst<T>.interpret(algebra: Algebra<T>, arguments: Map<Symbol, T>): T = context(
+    MSTInterpreterContext(algebra, arguments)
+) {
+    interpret()
 }
 
 /**
  * Interprets the [TypedMst] node with this [Algebra] and optional [arguments].
  */
-public fun <T> TypedMst<T>.interpret(algebra: Algebra<T>, vararg arguments: Pair<Symbol, T>): T = interpret(
-    algebra,
-    when (arguments.size) {
-        0 -> emptyMap()
-        1 -> mapOf(arguments[0])
-        else -> hashMapOf(*arguments)
-    },
-)
+public fun <T> TypedMst<T>.interpret(algebra: Algebra<T>, vararg arguments: Pair<Symbol, T>): T = context(
+    MSTInterpreterContext(algebra, arguments.toMap())
+) {
+    interpret()
+}
 
 /**
  * Interpret this [TypedMst] node as expression.

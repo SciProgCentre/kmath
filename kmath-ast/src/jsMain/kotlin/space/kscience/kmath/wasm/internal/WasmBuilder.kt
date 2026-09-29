@@ -82,6 +82,7 @@ internal sealed class WasmBuilder<T : Number, out E : Expression<T>>(
         is TypedMst.Variable -> visitVariable(node)
         is TypedMst.Unary -> visitUnary(node)
         is TypedMst.Binary -> visitBinary(node)
+        is TypedMst.FunctionCall<*> -> TODO("Asm builder for FunctionCall is not supported")
     }
 }
 

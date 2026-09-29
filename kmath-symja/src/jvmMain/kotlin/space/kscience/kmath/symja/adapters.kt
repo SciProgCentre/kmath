@@ -92,4 +92,6 @@ public fun MST.toIExpr(): IExpr = when (this) {
         PowerOperations.POW_OPERATION -> F.Power(left.toIExpr(), F.symjify((right as MST.Numeric).value))
         else -> error("Binary operation $operation not defined in $this")
     }
+
+    is MST.FunctionCall -> TODO("Function call not supported in symja")
 }

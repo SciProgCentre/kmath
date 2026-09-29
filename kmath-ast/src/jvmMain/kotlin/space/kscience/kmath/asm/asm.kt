@@ -21,11 +21,9 @@ import space.kscience.kmath.operations.Int64Ring
  * Compiles given MST to an Expression using AST compiler.
  *
  * @param type the target type.
- * @param algebra the target algebra.
  * @return the compiled expression.
  * @author Alexander Nozik
  */
-@OptIn(UnstableKMathAPI::class)
 @PublishedApi
 internal fun <T : Any> MST.compileWith(type: Class<T>, algebra: Algebra<T>): Expression<T> {
     val typed = evaluateConstants(algebra)
@@ -41,6 +39,7 @@ internal fun <T : Any> MST.compileWith(type: Class<T>, algebra: Algebra<T>): Exp
 
         is TypedMst.Variable -> prepareVariable(node.symbol)
         is TypedMst.Constant -> Unit
+        is TypedMst.FunctionCall<*> -> TODO("Asm builder for FunctionCall is not supported")
     }
 
     fun GenericAsmBuilder<T>.expressionVisitor(node: TypedMst<T>): Unit = when (node) {
@@ -56,6 +55,10 @@ internal fun <T : Any> MST.compileWith(type: Class<T>, algebra: Algebra<T>): Exp
             expressionVisitor(node.left)
             expressionVisitor(node.right)
         }
+
+        is TypedMst.FunctionCall<T> -> TODO("Asm builder for FunctionCall is not supported")
+
+
     }
 
     return GenericAsmBuilder<T>(

@@ -28,7 +28,7 @@ public fun <T> MST.evaluateConstants(algebra: Algebra<T>): TypedMst<T> = when (t
                 arg.value,
             )
 
-            TypedMst.Constant(algebra.type, value, if (value is Number) value else null)
+            TypedMst.Constant(algebra.type, value, value as? Number)
         }
 
         else -> TypedMst.Unary(operation, algebra.unaryOperationFunction(operation), arg)
@@ -40,14 +40,14 @@ public fun <T> MST.evaluateConstants(algebra: Algebra<T>): TypedMst<T> = when (t
 
         when {
             left is TypedMst.Constant<T> && right is TypedMst.Constant<T> -> {
-                val value = when {
-                    algebra is NumericAlgebra && left.number != null -> algebra.leftSideNumberOperation(
+                val value = when (algebra) {
+                    is NumericAlgebra if left.number != null -> algebra.leftSideNumberOperation(
                         operation,
                         left.number,
                         right.value,
                     )
 
-                    algebra is NumericAlgebra && right.number != null -> algebra.rightSideNumberOperation(
+                    is NumericAlgebra if right.number != null -> algebra.rightSideNumberOperation(
                         operation,
                         left.value,
                         right.number,
@@ -89,4 +89,6 @@ public fun <T> MST.evaluateConstants(algebra: Algebra<T>): TypedMst<T> = when (t
         else
             TypedMst.Variable(algebra.type, this)
     }
+
+    is MST.FunctionCall -> TypedMst.FunctionCall(name, arguments.mapValues { it.value.evaluateConstants(algebra) })
 }

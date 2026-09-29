@@ -5,7 +5,6 @@
 
 package space.kscience.kmath.estree
 
-import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.ast.TypedMst
 import space.kscience.kmath.ast.evaluateConstants
 import space.kscience.kmath.estree.internal.ESTreeBuilder
@@ -19,7 +18,6 @@ import space.kscience.kmath.operations.Algebra
 /**
  * Create a compiled expression with given [MST] and given [algebra].
  */
-@OptIn(UnstableKMathAPI::class)
 public fun <T : Any> MST.compileToExpression(algebra: Algebra<T>): Expression<T> {
     val typed = evaluateConstants(algebra)
     if (typed is TypedMst.Constant<T>) return Expression(algebra.type) { typed.value }
@@ -34,6 +32,7 @@ public fun <T : Any> MST.compileToExpression(algebra: Algebra<T>): Expression<T>
             visit(node.left),
             visit(node.right),
         )
+        is TypedMst.FunctionCall<*> -> TODO("Asm builder for FunctionCall is not supported")
     }
 
     return ESTreeBuilder(algebra.type) { visit(typed) }.instance

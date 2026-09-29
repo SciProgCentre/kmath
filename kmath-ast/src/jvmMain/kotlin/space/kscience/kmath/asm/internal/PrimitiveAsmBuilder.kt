@@ -350,6 +350,8 @@ internal sealed class PrimitiveAsmBuilder<T : Number, out E : Expression<T>>(
         }
 
         is TypedMst.Constant -> Unit
+
+        is TypedMst.FunctionCall<*> -> TODO("Asm builder for FunctionCall is not supported")
     }
 
     private fun visitExpression(node: TypedMst<T>): Unit = when (node) {
@@ -361,6 +363,7 @@ internal sealed class PrimitiveAsmBuilder<T : Number, out E : Expression<T>>(
 
         is TypedMst.Unary -> visitUnary(node)
         is TypedMst.Binary -> visitBinary(node)
+        is TypedMst.FunctionCall<*> -> TODO("Asm builder for FunctionCall is not supported")
     }
 
     protected open fun visitUnary(node: TypedMst.Unary<T>) = visitExpression(node.value)
