@@ -9,8 +9,7 @@ package space.kscience.kmath.asm
 
 import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.asm.internal.*
-import space.kscience.kmath.ast.TypedMst
-import space.kscience.kmath.ast.evaluateConstants
+import space.kscience.kmath.ast.*
 import space.kscience.kmath.expressions.*
 import space.kscience.kmath.operations.Algebra
 import space.kscience.kmath.operations.Float64Field
@@ -25,8 +24,13 @@ import space.kscience.kmath.operations.Int64Ring
  * @author Alexander Nozik
  */
 @PublishedApi
-internal fun <T : Any> MST.compileWith(type: Class<T>, algebra: Algebra<T>): Expression<T> {
-    val typed = evaluateConstants(algebra)
+internal fun <T : Any> MST.compileWith(
+    type: Class<T>,
+    algebra: Algebra<T>,
+    functions: Map<String, Expression<T>> = emptyMap(),
+    constants: Map<Symbol, T> = emptyMap(),
+): Expression<T> {
+    val typed = evaluateConstants(algebra, constants)
     if (typed is TypedMst.Constant<T>) return Expression(algebra.type) { typed.value }
 
     fun GenericAsmBuilder<T>.variablesVisitor(node: TypedMst<T>): Unit = when (node) {
@@ -39,7 +43,7 @@ internal fun <T : Any> MST.compileWith(type: Class<T>, algebra: Algebra<T>): Exp
 
         is TypedMst.Variable -> prepareVariable(node.symbol)
         is TypedMst.Constant -> Unit
-        is TypedMst.FunctionCall<*> -> TODO("Asm builder for FunctionCall is not supported")
+        is TypedMst.FunctionCall -> node.arguments.values.forEach { variablesVisitor(it) }
     }
 
     fun GenericAsmBuilder<T>.expressionVisitor(node: TypedMst<T>): Unit = when (node) {
@@ -56,12 +60,25 @@ internal fun <T : Any> MST.compileWith(type: Class<T>, algebra: Algebra<T>): Exp
             expressionVisitor(node.right)
         }
 
-        is TypedMst.FunctionCall<T> -> TODO("Asm builder for FunctionCall is not supported")
+        is TypedMst.FunctionCall -> {
+            val function = resolveFunction(functions, node)
 
+            val arguments = positionalArguments(function, node).map { argument ->
+                { expressionVisitor(argument) }
+            }
 
+            // The array call unboxes arguments and boxes the result, so T must be exactly the primitive's box
+            // (e.g. java.lang.Double for DoubleExpression); otherwise fall back to the map-based adapter.
+            val arrayTypes = arrayExpressionTypes(function)?.takeIf { it.second.kotlin.javaObjectType == type }
+
+            if (arrayTypes == null)
+                buildFunctionCall(positionalAdapter(function, node), arguments)
+            else
+                buildArrayExpressionCall(function, arrayTypes.first, arrayTypes.second.asm, arguments)
+        }
     }
 
-    return GenericAsmBuilder<T>(
+    return GenericAsmBuilder(
         type,
         buildName("${typed.hashCode()}_${type.simpleName}"),
         { variablesVisitor(typed) },
@@ -70,22 +87,42 @@ internal fun <T : Any> MST.compileWith(type: Class<T>, algebra: Algebra<T>): Exp
 }
 
 /**
- * Create a compiled expression with given [MST] and given [algebra].
+ * Create a compiled expression with given [MST] and given [algebra]. [MST.FunctionCall] nodes are resolved against
+ * [functions].
  */
-public inline fun <reified T : Any> MST.compileToExpression(algebra: Algebra<T>): Expression<T> =
-    compileWith(T::class.java, algebra)
+public inline fun <reified T : Any> MST.compileToExpression(
+    algebra: Algebra<T>,
+    functions: Map<String, Expression<T>> = emptyMap(),
+): Expression<T> = compileWith(T::class.java, algebra, functions)
 
 /**
  * Compile given MST to expression and evaluate it against [arguments]
  */
-public inline fun <reified T : Any> MST.compile(algebra: Algebra<T>, arguments: Map<Symbol, T>): T =
-    compileToExpression(algebra)(arguments)
+public inline fun <reified T : Any> MST.compile(
+    algebra: Algebra<T>,
+    arguments: Map<Symbol, T>,
+    functions: Map<String, Expression<T>> = emptyMap(),
+): T = compileToExpression(algebra, functions)(arguments)
 
 /**
  * Compile given MST to expression and evaluate it against [arguments]
  */
 public inline fun <reified T : Any> MST.compile(algebra: Algebra<T>, vararg arguments: Pair<Symbol, T>): T =
     compileToExpression(algebra)(*arguments)
+
+/**
+ * Create a compiled expression with given [MST] using algebra, constants and functions of [MSTInterpreterContext].
+ * [MSTInterpreterContext.arguments] are not used.
+ */
+context(mstContext: MSTInterpreterContext<T>)
+public inline fun <reified T : Any> MST.compileToExpression(): Expression<T> =
+    compileWith(T::class.java, mstContext.algebra, mstContext.functions, mstContext.constants)
+
+/**
+ * Compile given MST to expression and evaluate it against [MSTInterpreterContext.arguments].
+ */
+context(mstContext: MSTInterpreterContext<T>)
+public inline fun <reified T : Any> MST.compile(): T = compileToExpression()(mstContext.arguments)
 
 
 /**
@@ -94,7 +131,10 @@ public inline fun <reified T : Any> MST.compile(algebra: Algebra<T>, vararg argu
  * @author Iaroslav Postovalov
  */
 @UnstableKMathAPI
-public fun MST.compileToExpression(algebra: Int32Ring): IntExpression {
+public fun MST.compileToExpression(
+    algebra: Int32Ring,
+    functions: Map<String, Expression<Int>> = emptyMap(),
+): IntExpression {
     val typed = evaluateConstants(algebra)
 
     return if (typed is TypedMst.Constant) object : IntExpression {
@@ -102,7 +142,7 @@ public fun MST.compileToExpression(algebra: Int32Ring): IntExpression {
 
         override fun invoke(arguments: IntArray): Int = typed.value
     } else
-        IntAsmBuilder(typed).instance
+        IntAsmBuilder(typed, functions).instance
 }
 
 /**
@@ -111,8 +151,11 @@ public fun MST.compileToExpression(algebra: Int32Ring): IntExpression {
  * @author Iaroslav Postovalov
  */
 @UnstableKMathAPI
-public fun MST.compile(algebra: Int32Ring, arguments: Map<Symbol, Int>): Int =
-    compileToExpression(algebra)(arguments)
+public fun MST.compile(
+    algebra: Int32Ring,
+    arguments: Map<Symbol, Int>,
+    functions: Map<String, Expression<Int>> = emptyMap(),
+): Int = compileToExpression(algebra, functions)(arguments)
 
 /**
  * Compile given MST to expression and evaluate it against [arguments].
@@ -130,7 +173,10 @@ public fun MST.compile(algebra: Int32Ring, vararg arguments: Pair<Symbol, Int>):
  * @author Iaroslav Postovalov
  */
 @UnstableKMathAPI
-public fun MST.compileToExpression(algebra: Int64Ring): LongExpression {
+public fun MST.compileToExpression(
+    algebra: Int64Ring,
+    functions: Map<String, Expression<Long>> = emptyMap(),
+): LongExpression {
     val typed = evaluateConstants(algebra)
 
     return if (typed is TypedMst.Constant<Long>) object : LongExpression {
@@ -138,7 +184,7 @@ public fun MST.compileToExpression(algebra: Int64Ring): LongExpression {
 
         override fun invoke(arguments: LongArray): Long = typed.value
     } else
-        LongAsmBuilder(typed).instance
+        LongAsmBuilder(typed, functions).instance
 }
 
 /**
@@ -147,8 +193,11 @@ public fun MST.compileToExpression(algebra: Int64Ring): LongExpression {
  * @author Iaroslav Postovalov
  */
 @UnstableKMathAPI
-public fun MST.compile(algebra: Int64Ring, arguments: Map<Symbol, Long>): Long =
-    compileToExpression(algebra)(arguments)
+public fun MST.compile(
+    algebra: Int64Ring,
+    arguments: Map<Symbol, Long>,
+    functions: Map<String, Expression<Long>> = emptyMap(),
+): Long = compileToExpression(algebra, functions)(arguments)
 
 
 /**
@@ -167,7 +216,10 @@ public fun MST.compile(algebra: Int64Ring, vararg arguments: Pair<Symbol, Long>)
  * @author Iaroslav Postovalov
  */
 @UnstableKMathAPI
-public fun MST.compileToExpression(algebra: Float64Field): DoubleExpression {
+public fun MST.compileToExpression(
+    algebra: Float64Field,
+    functions: Map<String, Expression<Double>> = emptyMap(),
+): DoubleExpression {
     val typed = evaluateConstants(algebra)
 
     return if (typed is TypedMst.Constant) object : DoubleExpression {
@@ -175,7 +227,7 @@ public fun MST.compileToExpression(algebra: Float64Field): DoubleExpression {
 
         override fun invoke(arguments: DoubleArray): Double = typed.value
     } else
-        DoubleAsmBuilder(typed).instance
+        DoubleAsmBuilder(typed, functions).instance
 }
 
 
@@ -185,8 +237,11 @@ public fun MST.compileToExpression(algebra: Float64Field): DoubleExpression {
  * @author Iaroslav Postovalov
  */
 @UnstableKMathAPI
-public fun MST.compile(algebra: Float64Field, arguments: Map<Symbol, Double>): Double =
-    compileToExpression(algebra)(arguments)
+public fun MST.compile(
+    algebra: Float64Field,
+    arguments: Map<Symbol, Double>,
+    functions: Map<String, Expression<Double>> = emptyMap(),
+): Double = compileToExpression(algebra, functions)(arguments)
 
 /**
  * Compile given MST to expression and evaluate it against [arguments].

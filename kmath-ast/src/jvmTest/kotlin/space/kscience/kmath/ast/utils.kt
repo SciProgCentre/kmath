@@ -23,21 +23,45 @@ internal object GenericAsmCompilerTestContext : CompilerTestContext {
     override fun MST.compile(algebra: Int32Ring, arguments: Map<Symbol, Int>): Int =
         asmCompile(algebra as Algebra<Int>, arguments)
 
+    override fun MST.compile(
+        algebra: Int32Ring,
+        arguments: Map<Symbol, Int>,
+        functions: Map<String, Expression<Int>>,
+    ): Int = asmCompile(algebra as Algebra<Int>, arguments, functions)
+
     override fun MST.compileToExpression(algebra: Float64Field): Expression<Float64> =
         asmCompileToExpression(algebra as Algebra<Float64>)
 
     override fun MST.compile(algebra: Float64Field, arguments: Map<Symbol, Double>): Double =
         asmCompile(algebra as Algebra<Float64>, arguments)
+
+    override fun MST.compile(
+        algebra: Float64Field,
+        arguments: Map<Symbol, Double>,
+        functions: Map<String, Expression<Float64>>,
+    ): Double = asmCompile(algebra as Algebra<Float64>, arguments, functions)
 }
 
 @OptIn(UnstableKMathAPI::class)
 internal object PrimitiveAsmCompilerTestContext : CompilerTestContext {
     override fun MST.compileToExpression(algebra: Int32Ring): Expression<Int> = asmCompileToExpression(algebra)
     override fun MST.compile(algebra: Int32Ring, arguments: Map<Symbol, Int>): Int = asmCompile(algebra, arguments)
+
+    override fun MST.compile(
+        algebra: Int32Ring,
+        arguments: Map<Symbol, Int>,
+        functions: Map<String, Expression<Int>>,
+    ): Int = asmCompile(algebra, arguments, functions)
     override fun MST.compileToExpression(algebra: Float64Field): Expression<Float64> = asmCompileToExpression(algebra)
 
     override fun MST.compile(algebra: Float64Field, arguments: Map<Symbol, Double>): Double =
         asmCompile(algebra, arguments)
+
+    override fun MST.compile(
+        algebra: Float64Field,
+        arguments: Map<Symbol, Double>,
+        functions: Map<String, Expression<Float64>>,
+    ): Double = asmCompile(algebra, arguments, functions)
 }
 
 

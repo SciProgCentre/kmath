@@ -13,15 +13,20 @@ import space.kscience.kmath.operations.bindSymbolOrNull
 
 /**
  * Evaluates constants in given [MST] for given [algebra] at the same time with converting to [TypedMst].
+ *
+ * Symbols found in [constants] are substituted before binding them with [algebra].
  */
-public fun <T> MST.evaluateConstants(algebra: Algebra<T>): TypedMst<T> = when (this) {
+public fun <T> MST.evaluateConstants(
+    algebra: Algebra<T>,
+    constants: Map<Symbol, T> = emptyMap(),
+): TypedMst<T> = when (this) {
     is MST.Numeric -> TypedMst.Constant(
         algebra.type,
         (algebra as? NumericAlgebra<T>)?.number(value) ?: error("Numeric nodes are not supported by $algebra"),
         value,
     )
 
-    is MST.Unary -> when (val arg = value.evaluateConstants(algebra)) {
+    is MST.Unary -> when (val arg = value.evaluateConstants(algebra, constants)) {
         is TypedMst.Constant<T> -> {
             val value = algebra.unaryOperation(
                 operation,
@@ -35,8 +40,8 @@ public fun <T> MST.evaluateConstants(algebra: Algebra<T>): TypedMst<T> = when (t
     }
 
     is MST.Binary -> {
-        val left = left.evaluateConstants(algebra)
-        val right = right.evaluateConstants(algebra)
+        val left = left.evaluateConstants(algebra, constants)
+        val right = right.evaluateConstants(algebra, constants)
 
         when {
             left is TypedMst.Constant<T> && right is TypedMst.Constant<T> -> {
@@ -82,7 +87,7 @@ public fun <T> MST.evaluateConstants(algebra: Algebra<T>): TypedMst<T> = when (t
     }
 
     is Symbol -> {
-        val boundSymbol = algebra.bindSymbolOrNull(this)
+        val boundSymbol = constants[this] ?: algebra.bindSymbolOrNull(this)
 
         if (boundSymbol != null)
             TypedMst.Constant(algebra.type, boundSymbol, if (boundSymbol is Number) boundSymbol else null)
@@ -90,5 +95,8 @@ public fun <T> MST.evaluateConstants(algebra: Algebra<T>): TypedMst<T> = when (t
             TypedMst.Variable(algebra.type, this)
     }
 
-    is MST.FunctionCall -> TypedMst.FunctionCall(name, arguments.mapValues { it.value.evaluateConstants(algebra) })
+    is MST.FunctionCall -> TypedMst.FunctionCall(
+        name,
+        arguments.mapValues { it.value.evaluateConstants(algebra, constants) },
+    )
 }

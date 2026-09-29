@@ -8,6 +8,7 @@
 
 ### Changed
 - SymbolIndexer uses context receivers
+- ASM compiler defines generated classes as hidden classes instead of using a custom class loader
 
 ### Deprecated
 
