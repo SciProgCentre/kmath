@@ -3,6 +3,7 @@
 ## Unreleased
 
 ### Added
+- Support for function calls with named arguments (transformed to MST.FunctionCall) and string literals in math parser
 
 ### Changed
 - SymbolIndexer uses context receivers

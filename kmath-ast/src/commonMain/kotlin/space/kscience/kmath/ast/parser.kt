@@ -32,10 +32,12 @@ import kotlin.math.floor
  */
 public object ArithmeticsEvaluator : Grammar<MST>() {
     private val num: Token by regexToken("[\\d.]+(?:[eE][-+]?\\d+)?".toRegex())
+    private val string: Token by regexToken("\"(?:\\\\.|[^\"\\\\])*\"|'(?:\\\\.|[^'\\\\])*'".toRegex())
     private val id: Token by regexToken("[a-z_A-Z][\\da-z_A-Z]*".toRegex())
     private val lpar: Token by literalToken("(")
     private val rpar: Token by literalToken(")")
     private val comma: Token by literalToken(",")
+    private val eq: Token by literalToken("=")
     private val mul: Token by literalToken("*")
     private val pow: Token by literalToken("^")
     private val div: Token by literalToken("/")
@@ -57,7 +59,22 @@ public object ArithmeticsEvaluator : Grammar<MST>() {
         )
     }
 
+    private val stringLiteral: Parser<MST> by string use {
+        Symbol(text.substring(1, text.length - 1))
+    }
+
     private val singular: Parser<MST> by id use { Symbol(text) }
+
+    private val namedArgument: Parser<Pair<Symbol, MST>> by id
+        .and(-eq)
+        .and(parser(ArithmeticsEvaluator::subSumChain))
+        .map { (id, value) -> Symbol(id.text) to value }
+
+    private val functionCall: Parser<MST> by id
+        .and(-lpar)
+        .and(separatedTerms(namedArgument, comma))
+        .and(-rpar)
+        .map { (id, args) -> MST.FunctionCall(id.text, args.toMap()) }
 
     private val unaryFunction: Parser<MST> by (id and -lpar and parser(ArithmeticsEvaluator::subSumChain) and -rpar)
         .map { (id, term) -> MST.Unary(id.text, term) }
@@ -71,6 +88,8 @@ public object ArithmeticsEvaluator : Grammar<MST>() {
         .map { (id, left, right) -> MST.Binary(id.text, left, right) }
 
     private val term: Parser<MST> by number
+        .or(stringLiteral)
+        .or(functionCall)
         .or(binaryFunction)
         .or(unaryFunction)
         .or(singular)
