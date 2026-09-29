@@ -5,17 +5,9 @@
 
 package space.kscience.kmath.estree
 
-import space.kscience.kmath.ast.TypedMst
-import space.kscience.kmath.ast.evaluateConstants
-import space.kscience.kmath.ast.positionalAdapter
-import space.kscience.kmath.ast.positionalArguments
-import space.kscience.kmath.ast.resolveFunction
+import space.kscience.kmath.ast.*
 import space.kscience.kmath.estree.internal.ESTreeBuilder
-import space.kscience.kmath.expressions.Expression
-import space.kscience.kmath.expressions.MST
-import space.kscience.kmath.expressions.MSTInterpreterContext
-import space.kscience.kmath.expressions.Symbol
-import space.kscience.kmath.expressions.invoke
+import space.kscience.kmath.expressions.*
 import space.kscience.kmath.internal.estree.BaseExpression
 import space.kscience.kmath.operations.Algebra
 
@@ -72,15 +64,15 @@ public fun <T : Any> MST.compile(algebra: Algebra<T>, vararg arguments: Pair<Sym
     compileToExpression(algebra)(*arguments)
 
 /**
- * Create a compiled expression with given [MST] using algebra, constants and functions of [MSTInterpreterContext].
- * [MSTInterpreterContext.arguments] are not used.
+ * Create a compiled expression with given [MST] using algebra, constants and functions of [MstInterpreterContext].
+ * [MstInterpreterContext.arguments] are not used.
  */
-context(mstContext: MSTInterpreterContext<T>)
+context(mstContext: MstInterpreterContext<T>)
 public fun <T : Any> MST.compileToExpression(): Expression<T> =
     compileWith(mstContext.algebra, mstContext.functions, mstContext.constants)
 
 /**
- * Compile given MST to expression and evaluate it against [MSTInterpreterContext.arguments].
+ * Compile given MST to expression and evaluate it against [MstInterpreterContext.arguments].
  */
-context(mstContext: MSTInterpreterContext<T>)
+context(mstContext: MstInterpreterContext<T>)
 public fun <T : Any> MST.compile(): T = compileToExpression()(mstContext.arguments)

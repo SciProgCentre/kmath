@@ -9,7 +9,6 @@ import space.kscience.attributes.SafeType
 import space.kscience.attributes.WithType
 import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.expressions.*
-import space.kscience.kmath.expressions.Symbol
 import space.kscience.kmath.operations.Algebra
 import space.kscience.kmath.operations.NumericAlgebra
 
@@ -184,7 +183,7 @@ public sealed interface TypedMst<T> : WithType<T> {
 /**
  * Interprets the [TypedMst] node
  */
-context(mstContext: MSTInterpreterContext<T>)
+context(mstContext: MstInterpreterContext<T>)
 public fun <T> TypedMst<T>.interpret(): T = when (this) {
     is TypedMst.Unary -> algebra.unaryOperation(operation, interpret())
 
@@ -209,7 +208,7 @@ public fun <T> TypedMst<T>.interpret(): T = when (this) {
 }
 
 public fun <T> TypedMst<T>.interpret(algebra: Algebra<T>, arguments: Map<Symbol, T>): T = context(
-    MSTInterpreterContext(algebra, arguments)
+    MstInterpreterContext(algebra, arguments)
 ) {
     interpret()
 }
@@ -218,7 +217,7 @@ public fun <T> TypedMst<T>.interpret(algebra: Algebra<T>, arguments: Map<Symbol,
  * Interprets the [TypedMst] node with this [Algebra] and optional [arguments].
  */
 public fun <T> TypedMst<T>.interpret(algebra: Algebra<T>, vararg arguments: Pair<Symbol, T>): T = context(
-    MSTInterpreterContext(algebra, arguments.toMap())
+    MstInterpreterContext(algebra, arguments.toMap())
 ) {
     interpret()
 }

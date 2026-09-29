@@ -7,7 +7,7 @@ package space.kscience.kmath.asm
 
 import space.kscience.kmath.expressions.Expression
 import space.kscience.kmath.expressions.MST
-import space.kscience.kmath.expressions.MSTInterpreterContext
+import space.kscience.kmath.expressions.MstInterpreterContext
 import space.kscience.kmath.expressions.Symbol
 import space.kscience.kmath.expressions.Symbol.Companion.x
 import space.kscience.kmath.operations.Float64Field
@@ -20,7 +20,7 @@ internal class TestAsmContext {
         val a = Symbol("a")
         val c = Symbol("c")
 
-        val mstContext = MSTInterpreterContext(
+        val mstContext = MstInterpreterContext(
             algebra = Float64Field,
             arguments = mapOf(x to 3.0),
             constants = mapOf(c to 10.0),

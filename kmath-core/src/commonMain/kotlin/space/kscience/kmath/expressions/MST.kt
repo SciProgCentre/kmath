@@ -55,34 +55,35 @@ public sealed interface MST {
  * @param constants the map of constants.
  * @param functions the map of functions.
  */
-public data class MSTInterpreterContext<T>(
+public data class MstInterpreterContext<T>(
     public val algebra: Algebra<T>,
     public val arguments: Map<Symbol, T>,
     public val constants: Map<Symbol, T> = emptyMap(),
+    public val unaryOperations: Map<String, (arg: T) -> T> = emptyMap(),
+    public val binaryOperations: Map<String, (left: T, right: T) -> T> = emptyMap(),
     public val functions: Map<String, Expression<T>> = emptyMap(),
 )
 
 /**
- * Call function in this [MSTInterpreterContext]
+ * Call function in this [MstInterpreterContext]
  */
-public fun <T> MSTInterpreterContext<T>.callFunction(name: String, arguments: Map<Symbol, T>): T {
+public fun <T> MstInterpreterContext<T>.callFunction(name: String, arguments: Map<Symbol, T>): T {
     //first try using library function
     functions[name]?.invoke(arguments)?.let { return it }
 
-    //TODO add aliases for functions from  algebra
     error("Function with name ${name} is not defined in $this")
 }
 
 /**
  * Bridge method to extract algebra from MST interpretation context
  */
-context(mstInterpreterContext: MSTInterpreterContext<T>)
+context(mstInterpreterContext: MstInterpreterContext<T>)
 public val <T> algebra: Algebra<T> get() = mstInterpreterContext.algebra
 
 /**
- * Interprets the [MST] node using given [MSTInterpreterContext]
+ * Interprets the [MST] node using given [MstInterpreterContext]
  */
-context(mstContext: MSTInterpreterContext<T>)
+context(mstContext: MstInterpreterContext<T>)
 public fun <T> MST.interpret(): T = when (this) {
     is MST.Numeric -> (algebra as NumericAlgebra<T>?)?.number(value)
         ?: error("Numeric nodes are not supported by $algebra")
@@ -92,13 +93,14 @@ public fun <T> MST.interpret(): T = when (this) {
         ?: algebra.bindSymbolOrNull(this)
         ?: error("Symbol $this is not defined in $mstContext")
 
-    is MST.Unary -> when(val algebra = mstContext.algebra) {
+    is MST.Unary -> when (val algebra = mstContext.algebra) {
         is NumericAlgebra if this.value is MST.Numeric -> algebra.unaryOperation(
             this.operation,
             algebra.number(this.value.value),
         )
-
-        else -> algebra.unaryOperationFunction(this.operation)(this.value.interpret())
+        //use override operation if available
+        else -> mstContext.unaryOperations[this.operation]?.invoke(this.value.interpret())
+            ?: algebra.unaryOperationFunction(this.operation)(this.value.interpret())
     }
 
     is MST.Binary -> when (val algebra = algebra) {
@@ -120,11 +122,13 @@ public fun <T> MST.interpret(): T = when (this) {
             right.value,
         )
 
-        else -> algebra.binaryOperation(
-            this.operation,
-            this.left.interpret(),
-            this.right.interpret(),
-        )
+        //use override operation if available
+        else -> mstContext.binaryOperations[this.operation]?.invoke(this.left.interpret(), this.right.interpret())
+            ?: algebra.binaryOperation(
+                this.operation,
+                this.left.interpret(),
+                this.right.interpret(),
+            )
     }
 
     is MST.FunctionCall -> mstContext.callFunction(name, arguments.mapValues { it.value.interpret() })
@@ -134,7 +138,7 @@ public fun <T> MST.interpret(): T = when (this) {
  * Interprets the [MST] node with this [Algebra] and  [arguments]
  */
 public fun <T> MST.interpret(algebra: Algebra<T>, arguments: Map<Symbol, T>): T =
-    context(MSTInterpreterContext(algebra, arguments)) {
+    context(MstInterpreterContext(algebra, arguments)) {
         interpret()
     }
 

@@ -567,7 +567,7 @@ internal class TestParser {
     @Test
     fun testFunctionCallEvaluation() {
         val mst = "myFunc(a=20, b=22)".parseMath()
-        val context = space.kscience.kmath.expressions.MSTInterpreterContext(
+        val context = space.kscience.kmath.expressions.MstInterpreterContext(
             algebra = Float64Field,
             arguments = emptyMap(),
             functions = mapOf(

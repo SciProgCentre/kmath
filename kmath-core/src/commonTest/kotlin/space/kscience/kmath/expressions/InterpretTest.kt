@@ -230,4 +230,207 @@ internal class InterpretTest {
         val varMst = MstField { x + 1.0 }
         assertFails { varMst.interpret(Float64Field) }
     }
+
+    // LLM generated code: Tests for custom functions and algebra function overrides with MSTInterpreterContext
+
+    @Test
+    fun customFunctionsInterpretation() {
+        val hypotFunc = Expression(Float64Field.type) { args ->
+            val u = args[Symbol("u")] ?: 0.0
+            val v = args[Symbol("v")] ?: 0.0
+            sqrt(u * u + v * v)
+        }
+
+        val clampFunc = Expression(Float64Field.type) { args ->
+            val value = args[Symbol("value")] ?: 0.0
+            val min = args[Symbol("min")] ?: Double.NEGATIVE_INFINITY
+            val max = args[Symbol("max")] ?: Double.POSITIVE_INFINITY
+            value.coerceIn(min, max)
+        }
+
+        val context = MstInterpreterContext(
+            algebra = Float64Field,
+            arguments = mapOf(x to 3.0, y to 4.0),
+            functions = mapOf(
+                "hypot" to hypotFunc,
+                "clamp" to clampFunc,
+            )
+        )
+
+        // Basic custom function call
+        val hypotNode = MST.FunctionCall("hypot", mapOf(Symbol("u") to Symbol("x"), Symbol("v") to Symbol("y")))
+        val hypotResult = context(context) { hypotNode.interpret() }
+        assertEquals(5.0, hypotResult, 1e-6)
+
+        // Custom function call with expressions inside named arguments
+        val exprArgsNode = MST.FunctionCall(
+            "hypot",
+            mapOf(
+                Symbol("u") to MST.Binary("+", Symbol("x"), MST.Numeric(3.0)), // 3 + 3 = 6
+                Symbol("v") to MST.Binary("*", Symbol("y"), MST.Numeric(2.0))  // 4 * 2 = 8
+            )
+        )
+        val exprArgsResult = context(context) { exprArgsNode.interpret() }
+        assertEquals(10.0, exprArgsResult, 1e-6)
+
+        // Nested custom function calls
+        val nestedFuncNode = MST.FunctionCall(
+            "clamp",
+            mapOf(
+                Symbol("value") to MST.FunctionCall(
+                    "hypot",
+                    mapOf(Symbol("u") to Symbol("x"), Symbol("v") to Symbol("y")) // 5.0
+                ),
+                Symbol("min") to MST.Numeric(0.0),
+                Symbol("max") to MST.Numeric(4.0)
+            )
+        )
+        val nestedResult = context(context) { nestedFuncNode.interpret() }
+        assertEquals(4.0, nestedResult, 1e-6)
+
+        // Direct callFunction invocation on MSTInterpreterContext
+        val directCall = context.callFunction(
+            "hypot",
+            mapOf(Symbol("u") to 6.0, Symbol("v") to 8.0)
+        )
+        assertEquals(10.0, directCall, 1e-6)
+
+        // Undefined function call should fail
+        val undefinedNode = MST.FunctionCall("unknownFunction", emptyMap())
+        assertFails {
+            context(context) { undefinedNode.interpret() }
+        }
+        assertFails {
+            context.callFunction("unknownFunction", emptyMap())
+        }
+    }
+
+    @Test
+    fun unaryOperationOverridesInterpretation() {
+        val context = MstInterpreterContext(
+            algebra = Float64Field,
+            arguments = mapOf(x to 5.0, y to -12.0),
+            unaryOperations = mapOf(
+                // Override standard unary minus with custom scaled negation
+                "-" to { arg: Double -> arg * -10.0 },
+                // Custom unary operation not in standard algebra
+                "cube" to { arg: Double -> arg * arg * arg },
+                "inv" to { arg: Double -> 1.0 / arg }
+            )
+        )
+
+        // Unary override on symbol (non-numeric node)
+        val overriddenMinus = MST.Unary("-", Symbol("x"))
+        assertEquals(-50.0, context(context) { overriddenMinus.interpret() }, 1e-6)
+
+        // Custom unary operation
+        val customUnary = MST.Unary("cube", Symbol("x"))
+        assertEquals(125.0, context(context) { customUnary.interpret() }, 1e-6)
+
+        // Unary override on composite expression
+        val exprUnary = MST.Unary("cube", MST.Binary("+", Symbol("x"), Symbol("y"))) // 5 + (-12) = -7 -> -343
+        assertEquals(-343.0, context(context) { exprUnary.interpret() }, 1e-6)
+
+        // Chained unary operations
+        val chainedUnary = MST.Unary("inv", MST.Unary("cube", Symbol("x"))) // 1 / 125 = 0.008
+        assertEquals(0.008, context(context) { chainedUnary.interpret() }, 1e-6)
+
+        // Fallback to algebra's unary operation when not in unaryOperations map
+        val fallbackUnary = MST.Unary("sin", MST.Binary("+", Symbol("x"), MST.Numeric(0.0)))
+        assertEquals(kotlin.math.sin(5.0), context(context) { fallbackUnary.interpret() }, 1e-6)
+    }
+
+    @Test
+    fun binaryOperationOverridesInterpretation() {
+        val context = MstInterpreterContext(
+            algebra = Float64Field,
+            arguments = mapOf(x to 10.0, y to 3.0),
+            binaryOperations = mapOf(
+                // Override standard binary + to behave as a custom scaled operation
+                "+" to { left: Double, right: Double -> (left + right) * 2.0 },
+                // Custom binary operation not in algebra
+                "mod" to { left: Double, right: Double -> left % right },
+                "atan2" to { yVal: Double, xVal: Double -> kotlin.math.atan2(yVal, xVal) }
+            )
+        )
+
+        // Binary override on symbols
+        val overriddenPlus = MST.Binary("+", Symbol("x"), Symbol("y")) // (10 + 3) * 2 = 26
+        assertEquals(26.0, context(context) { overriddenPlus.interpret() }, 1e-6)
+
+        // Custom binary operation on symbols
+        val customBinary = MST.Binary("mod", Symbol("x"), Symbol("y")) // 10 % 3 = 1
+        assertEquals(1.0, context(context) { customBinary.interpret() }, 1e-6)
+
+        // Custom binary atan2 on subexpressions
+        val atan2Binary = MST.Binary(
+            "atan2",
+            MST.Binary("-", Symbol("x"), Symbol("y")), // 10 - 3 = 7 (fallback to Float64Field minus)
+            Symbol("y") // 3
+        )
+        assertEquals(kotlin.math.atan2(7.0, 3.0), context(context) { atan2Binary.interpret() }, 1e-6)
+
+        // Fallback to algebra binary operation when not in binaryOperations map
+        val fallbackBinary = MST.Binary("*", Symbol("x"), Symbol("y"))
+        assertEquals(30.0, context(context) { fallbackBinary.interpret() }, 1e-6)
+    }
+
+    @Test
+    fun constantsArgumentsAndSymbolResolutionPriority() {
+        val c = Symbol("c")
+        val context = MstInterpreterContext(
+            algebra = Float64Field,
+            constants = mapOf(c to 100.0, x to 50.0), // x is in both constants and arguments
+            arguments = mapOf(x to 10.0, y to 20.0),
+        )
+
+        // c is resolved from constants
+        assertEquals(100.0, context(context) { c.interpret() })
+
+        // x is resolved from constants (constants take precedence over arguments)
+        assertEquals(50.0, context(context) { x.interpret() })
+
+        // y is resolved from arguments
+        assertEquals(20.0, context(context) { y.interpret() })
+
+        // undefined symbol fails
+        val unk = Symbol("unknown")
+        assertFails {
+            context(context) { unk.interpret() }
+        }
+    }
+
+    @Test
+    fun combinedContextInterpretation() {
+        val customMul = Expression(Float64Field.type) { args ->
+            val p = args[Symbol("p")] ?: 1.0
+            val q = args[Symbol("q")] ?: 1.0
+            p * q
+        }
+
+        val constK = Symbol("k")
+        val context = MstInterpreterContext(
+            algebra = Float64Field,
+            constants = mapOf(constK to 10.0),
+            arguments = mapOf(x to 2.0, y to 4.0),
+            unaryOperations = mapOf("sqr" to { it * it }),
+            binaryOperations = mapOf("diff" to { l, r -> l - r }),
+            functions = mapOf("customMul" to customMul)
+        )
+
+        // Expression: customMul(p=sqr(x), q=diff(y, k))
+        // sqr(x) = sqr(2.0) = 4.0
+        // diff(y, k) = y - k = 4.0 - 10.0 = -6.0
+        // customMul(p=4.0, q=-6.0) = 4.0 * -6.0 = -24.0
+        val mst = MST.FunctionCall(
+            "customMul",
+            mapOf(
+                Symbol("p") to MST.Unary("sqr", Symbol("x")),
+                Symbol("q") to MST.Binary("diff", Symbol("y"), constK)
+            )
+        )
+
+        val result = context(context) { mst.interpret() }
+        assertEquals(-24.0, result, 1e-6)
+    }
 }

@@ -183,7 +183,7 @@ val mst = MST.FunctionCall("f", mapOf(a to x, b to y))
 mst.compile(Float64Field, mapOf(x to 3.0, y to 1.0), mapOf("f" to f)) // 5.0
 ```
 
-For generic algebras, `compile()` and `compileToExpression()` can instead take an `MSTInterpreterContext` context
+For generic algebras, `compile()` and `compileToExpression()` can instead take an `MstInterpreterContext` context
 parameter. `DoubleExpression`, `IntExpression` and `LongExpression` functions are called via their array-based `invoke`
 for better performance. WebAssembly doesn't support function calls.
 
