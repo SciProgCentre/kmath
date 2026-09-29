@@ -463,3 +463,31 @@ public class InverseHyperbolicOperations(operations: Collection<String>?) : Unar
         )
     }
 }
+
+/**
+ * Handles function call nodes by producing [FunctionCallSyntax].
+ *
+ * @property names The allowed function names. If `null`, any function name is accepted.
+ * @author Iaroslav Postovalov
+ */
+public open class FunctionCall(public val names: Collection<String>?) : RenderFeature {
+    protected open fun renderFunctionCall(parent: FeaturedMathRenderer, node: MST.FunctionCall): MathSyntax? =
+        FunctionCallSyntax(
+            prefix = OperatorNameSyntax(name = node.name),
+            arguments = node.arguments.entries.associate { (k, v) ->
+                SymbolSyntax(k.identity) to parent.render(v)
+            },
+        )
+
+    public final override fun render(renderer: FeaturedMathRenderer, node: MST): MathSyntax? {
+        if (node !is MST.FunctionCall || names != null && node.name !in names) return null
+        return renderFunctionCall(renderer, node)
+    }
+
+    public companion object {
+        /**
+         * The default instance configured with `null`.
+         */
+        public val Default: FunctionCall = FunctionCall(null)
+    }
+}

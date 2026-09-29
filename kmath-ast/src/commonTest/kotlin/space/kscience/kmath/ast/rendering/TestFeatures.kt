@@ -113,6 +113,12 @@ internal class TestFeatures {
         testLatex("atanh(x)", "\\operatorname{artanh}\\,\\left(x\\right)")
     }
 
+    // LLM generated code: Tests for FunctionCall render feature
+    @Test
+    fun functionCall() {
+        testLatex("foo(a=1, b=2)", "\\operatorname{foo}\\left(a=1,b=2\\right)")
+    }
+
 //    @Test
 //    fun unaryPlus() {
 //        testLatex("+1", "+1")

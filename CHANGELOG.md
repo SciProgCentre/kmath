@@ -4,6 +4,7 @@
 
 ### Added
 - Support for function calls with named arguments (transformed to MST.FunctionCall) and string literals in math parser
+- Rendering support for function calls with named arguments (LaTeX and MathML)
 
 ### Changed
 - SymbolIndexer uses context receivers

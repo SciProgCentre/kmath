@@ -354,3 +354,23 @@ public data class MultiplicationSyntax(
         right.parent = this
     }
 }
+
+/**
+ * Represents a function call with named arguments (like *f(a = 1, b = 2)*).
+ *
+ * @property prefix The prefix or function name syntax.
+ * @property arguments The map of argument name to operand / value syntax.
+ * @author Iaroslav Postovalov
+ */
+public data class FunctionCallSyntax(
+    public var prefix: MathSyntax,
+    public val arguments: Map<SymbolSyntax, MathSyntax>,
+) : MathSyntax() {
+    init {
+        prefix.parent = this
+        for ((k, v) in arguments) {
+            k.parent = this
+            v.parent = this
+        }
+    }
+}

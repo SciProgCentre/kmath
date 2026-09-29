@@ -90,6 +90,7 @@ public open class FeaturedMathRendererWithPostProcess(
                 // Fallback option for unknown operations - printing them as operator
                 BinaryOperator.Default,
                 UnaryOperator.Default,
+                FunctionCall.Default,
 
                 // Pretty printing for some objects
                 PrettyPrintFloats.Default,
