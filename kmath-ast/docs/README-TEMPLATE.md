@@ -152,6 +152,23 @@ An example of emitted Wasm IR in the form of WAT:
 - ESTree expression compilation uses `eval` which can be unavailable in several environments.
 - WebAssembly isn't supported by old versions of browsers (see https://webassembly.org/roadmap/).
 
+### Function calls
+
+`MST.FunctionCall` nodes are resolved against a map of functions passed to the compiler:
+
+```kotlin
+val a = Symbol("a")
+val b = Symbol("b")
+val f = Expression(Float64Field.type) { it.getValue(a) * 2 - it.getValue(b) }
+
+val mst = MST.FunctionCall("f", mapOf(a to x, b to y))
+mst.compile(Float64Field, mapOf(x to 3.0, y to 1.0), mapOf("f" to f)) // 5.0
+```
+
+For generic algebras, `compile()` and `compileToExpression()` can instead take an `MSTInterpreterContext` context
+parameter. `DoubleExpression`, `IntExpression` and `LongExpression` functions are called via their array-based `invoke`
+for better performance. WebAssembly doesn't support function calls.
+
 ## Rendering expressions
 
 kmath-ast also includes an extensible engine to display expressions in LaTeX or MathML syntax.

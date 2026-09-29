@@ -7,7 +7,9 @@ package space.kscience.kmath.ast
 
 import space.kscience.attributes.SafeType
 import space.kscience.attributes.WithType
+import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.expressions.*
+import space.kscience.kmath.expressions.Symbol
 import space.kscience.kmath.operations.Algebra
 import space.kscience.kmath.operations.NumericAlgebra
 
@@ -227,4 +229,39 @@ public fun <T> TypedMst<T>.interpret(algebra: Algebra<T>, vararg arguments: Pair
 public fun <T : Any> TypedMst<T>.toExpression(algebra: Algebra<T>): Expression<T> =
     Expression(algebra.type) { arguments ->
         interpret(algebra, arguments)
+    }
+
+internal fun <T> resolveFunction(functions: Map<String, Expression<T>>, call: TypedMst.FunctionCall<T>): Expression<T> =
+    checkNotNull(functions[call.name]) { "Function with name ${call.name} is not defined" }
+
+@OptIn(UnstableKMathAPI::class)
+internal fun specializedIndexerOrNull(function: Expression<*>): SymbolIndexer? = when (function) {
+    is DoubleExpression -> function.indexer
+    is IntExpression -> function.indexer
+    is LongExpression -> function.indexer
+    else -> null
+}
+
+// Array-based expressions take arguments in their indexer order, others in the order of the call's arguments.
+internal fun <T> positionalArguments(function: Expression<T>, call: TypedMst.FunctionCall<T>): List<TypedMst<T>> =
+    specializedIndexerOrNull(function)?.symbols?.map { symbol ->
+        checkNotNull(call.arguments[symbol]) { "Argument $symbol of function ${call.name} is not provided" }
+    } ?: call.arguments.values.toList()
+
+@OptIn(UnstableKMathAPI::class)
+@Suppress("UNCHECKED_CAST")
+internal fun <T> positionalAdapter(function: Expression<T>, call: TypedMst.FunctionCall<T>): (Array<Any?>) -> T =
+    when (function) {
+        is DoubleExpression -> { values -> function(DoubleArray(values.size) { values[it] as Double }) as T }
+        is IntExpression -> { values -> function(IntArray(values.size) { values[it] as Int }) as T }
+        is LongExpression -> { values -> function(LongArray(values.size) { values[it] as Long }) as T }
+        else -> {
+            val symbols = call.arguments.keys.toList()
+            
+            ({ values ->
+                function(buildMap(symbols.size) {
+                    symbols.forEachIndexed { index, symbol -> put(symbol, values[index] as T) }
+                })
+            })
+        }
     }
