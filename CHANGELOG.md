@@ -3,9 +3,13 @@
 ## Unreleased
 
 ### Added
+- Support for function calls with named arguments (transformed to MST.FunctionCall) and string literals in math parser
+- Rendering support for function calls with named arguments (LaTeX and MathML)
+- Dedicated expression parser and `MstInterpreterContext` documentation in `kmath-ast`
 
 ### Changed
 - SymbolIndexer uses context receivers
+- ASM compiler defines generated classes as hidden classes instead of using a custom class loader
 
 ### Deprecated
 

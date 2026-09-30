@@ -91,4 +91,21 @@ internal class TestMathML {
         testMathML("x*1", "<mi>x</mi><mo>&times;</mo><mn>1</mn>")
         testMathML("1*x", "<mn>1</mn><mspace width=\"0.167em\"></mspace><mi>x</mi>")
     }
+
+    // LLM generated code: Unit tests for function call rendering to MathML
+    @Test
+    fun functionCall() {
+        testMathML(
+            "foo(a=22)",
+            "<mo>foo</mo><mfenced open=\"(\" close=\")\" separators=\"\"><mi>a</mi><mo>=</mo><mn>22</mn></mfenced>",
+        )
+        testMathML(
+            "foo(a=22, b=\"bar\", c=false)",
+            "<mo>foo</mo><mfenced open=\"(\" close=\")\" separators=\"\"><mi>a</mi><mo>=</mo><mn>22</mn><mo>,</mo><mi>b</mi><mo>=</mo><mi>bar</mi><mo>,</mo><mi>c</mi><mo>=</mo><mi>false</mi></mfenced>",
+        )
+        testMathML(
+            "outer(inner=bar(x=1))",
+            "<mo>outer</mo><mfenced open=\"(\" close=\")\" separators=\"\"><mi>inner</mi><mo>=</mo><mo>bar</mo><mfenced open=\"(\" close=\")\" separators=\"\"><mi>x</mi><mo>=</mo><mn>1</mn></mfenced></mfenced>",
+        )
+    }
 }

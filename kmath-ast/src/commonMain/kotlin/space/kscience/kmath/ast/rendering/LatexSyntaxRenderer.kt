@@ -142,6 +142,20 @@ public object LatexSyntaxRenderer : SyntaxRenderer {
                 append(if (node.times) "\\times" else "\\,")
                 render(node.right)
             }
+
+            is FunctionCallSyntax -> {
+                render(node.prefix)
+                append("\\left(")
+                var first = true
+                for ((name, value) in node.arguments) {
+                    if (!first) append(',')
+                    render(name)
+                    append('=')
+                    render(value)
+                    first = false
+                }
+                append("\\right)")
+            }
         }
     }
 }

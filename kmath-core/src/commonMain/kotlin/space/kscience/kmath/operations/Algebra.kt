@@ -117,6 +117,14 @@ public interface Algebra<T> : WithType<T> {
     public fun export(arg: T): T = arg
 }
 
+/**
+ * Attempts to bind the given [symbol] to an object of type [T] in the context of the [Algebra].
+ * Uses the identity of the provided [Symbol] to perform the binding.
+ *
+ * @param T the type of element this Algebra operates on.
+ * @param symbol the symbol to be bound, represented by its unique identity.
+ * @return the bound object of type [T], or `null` if the symbol's identity could not be bound.
+ */
 public fun <T> Algebra<T>.bindSymbolOrNull(symbol: Symbol): T? = bindSymbolOrNull(symbol.identity)
 
 public fun <T> Algebra<T>.bindSymbol(symbol: Symbol): T = bindSymbol(symbol.identity)

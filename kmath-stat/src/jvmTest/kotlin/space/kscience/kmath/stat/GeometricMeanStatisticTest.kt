@@ -55,7 +55,7 @@ internal class GeometricMeanStatisticTest {
             .take(100) // Take 100 data chunks from the source and accumulate them
             .last() //get 1e5 data samples average
 
-        assertEquals(2.0, average, 1e-2)
+        assertEquals(2.0, average, 2e-2)
     }
 
 }

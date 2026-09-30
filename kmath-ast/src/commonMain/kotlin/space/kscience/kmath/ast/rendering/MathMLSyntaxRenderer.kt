@@ -149,6 +149,20 @@ public object MathMLSyntaxRenderer : SyntaxRenderer {
                 if (node.times) tag("mo") { append("&times;") } else tag("mspace", "width" to "0.167em")
                 render(node.right)
             }
+
+            is FunctionCallSyntax -> {
+                render(node.prefix)
+                tag("mfenced", "open" to "(", "close" to ")", "separators" to "") {
+                    var first = true
+                    for ((name, value) in node.arguments) {
+                        if (!first) tag("mo") { append(',') }
+                        render(name)
+                        tag("mo") { append('=') }
+                        render(value)
+                        first = false
+                    }
+                }
+            }
         }
     }
 }

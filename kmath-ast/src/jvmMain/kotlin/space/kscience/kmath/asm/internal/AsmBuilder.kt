@@ -7,48 +7,59 @@ package space.kscience.kmath.asm.internal
 
 import org.objectweb.asm.Type
 import org.objectweb.asm.Type.getObjectType
+import org.objectweb.asm.Type.getType
 import space.kscience.kmath.expressions.Expression
+import java.lang.invoke.MethodHandles
 
 internal abstract class AsmBuilder {
-    /**
-     * Internal classloader with alias to define class from byte array.
-     */
-    class ByteArrayClassLoader(parent: ClassLoader) : ClassLoader(parent) {
-        fun defineClass(name: String?, b: ByteArray): Class<*> = defineClass(name, b, 0, b.size)
-    }
-
-    protected val classLoader = ByteArrayClassLoader(javaClass.classLoader)
+    protected fun defineHiddenClass(binary: ByteArray): MethodHandles.Lookup =
+        MethodHandles.lookup().defineHiddenClass(binary, true)
 
     companion object {
         /**
-         * ASM type for [Expression].
+         * ASM type [Expression].
          */
         val EXPRESSION_TYPE: Type = getObjectType("space/kscience/kmath/expressions/Expression")
 
         /**
-         * ASM type for [java.util.Map].
+         * ASM type [java.util.Map].
          */
         val MAP_TYPE: Type = getObjectType("java/util/Map")
 
         /**
-         * ASM type for [java.lang.Object].
+         * ASM type [java.lang.Object].
          */
         val OBJECT_TYPE: Type = getObjectType("java/lang/Object")
 
         /**
-         * ASM type for [java.lang.String].
+         * ASM type [java.lang.String].
          */
         val STRING_TYPE: Type = getObjectType("java/lang/String")
 
         /**
-         * ASM type for MapIntrinsics.
+         * ASM type MapIntrinsics.
          */
         val MAP_INTRINSICS_TYPE: Type = getObjectType("space/kscience/kmath/asm/internal/MapIntrinsics")
 
         /**
-         * ASM Type for [space.kscience.kmath.expressions.Symbol].
+         * ASM Type [space.kscience.kmath.expressions.Symbol].
          */
         val SYMBOL_TYPE: Type = getObjectType("space/kscience/kmath/expressions/Symbol")
+
+        /**
+         * ASM type [java.lang.Number].
+         */
+        val NUMBER_TYPE: Type = getObjectType("java/lang/Number")
+
+        /**
+         * ASM type [kotlin.jvm.functions.Function1].
+         */
+        val FUNCTION1_TYPE: Type = getObjectType("kotlin/jvm/functions/Function1")
+
+        /**
+         * ASM type `java.lang.Object[]`.
+         */
+        val OBJECT_ARRAY_TYPE: Type = getType("[Ljava/lang/Object;")
 
         const val ARGUMENTS_NAME = "args"
     }

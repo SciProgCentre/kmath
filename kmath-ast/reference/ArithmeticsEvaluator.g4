@@ -6,6 +6,7 @@ fragment CAPITAL_LETTER: 'A'..'Z';
 fragment UNDERSCORE: '_';
 
 ID: (LETTER | UNDERSCORE | CAPITAL_LETTER) (LETTER | UNDERSCORE | DIGIT | CAPITAL_LETTER)*;
+STRING: '"' ('\\"' | ~["\r\n])* '"' | '\'' ('\\\'' | ~['\r\n])* '\'';
 NUM: (DIGIT | '.')+ ([eE] [-+]? DIGIT+)?;
 MUL: '*';
 DIV: '/';
@@ -13,6 +14,7 @@ PLUS: '+';
 MINUS: '-';
 POW: '^';
 COMMA: ',';
+EQ: '=';
 LPAR: '(';
 RPAR: ')';
 WS: [ \n\t\r]+ -> skip;
@@ -21,8 +23,20 @@ num
     : NUM
     ;
 
+string
+    : STRING
+    ;
+
 singular
     : ID
+    ;
+
+namedArgument
+    : ID EQ subSumChain
+    ;
+
+functionCall
+    : ID LPAR namedArgument (COMMA namedArgument)* RPAR
     ;
 
 unaryFunction
@@ -35,9 +49,11 @@ binaryFunction
 
 term
     : num
-    | singular
+    | string
+    | functionCall
     | unaryFunction
     | binaryFunction
+    | singular
     | MINUS term
     | LPAR subSumChain RPAR
     ;

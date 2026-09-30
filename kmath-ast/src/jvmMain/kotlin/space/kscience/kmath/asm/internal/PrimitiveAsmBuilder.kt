@@ -15,10 +15,12 @@ import org.objectweb.asm.Type.*
 import org.objectweb.asm.commons.InstructionAdapter
 import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.ast.TypedMst
+import space.kscience.kmath.ast.positionalAdapter
+import space.kscience.kmath.ast.positionalArguments
+import space.kscience.kmath.ast.resolveFunction
 import space.kscience.kmath.expressions.*
 import space.kscience.kmath.operations.*
 import space.kscience.kmath.structures.Float64
-import java.lang.invoke.MethodHandles
 import java.lang.invoke.MethodType
 import java.nio.file.Paths
 import kotlin.io.path.writeBytes
@@ -30,6 +32,7 @@ internal sealed class PrimitiveAsmBuilder<T : Number, out E : Expression<T>>(
     protected val classOfTPrimitive: Class<*>,
     expressionParent: Class<E>,
     protected val target: TypedMst<T>,
+    private val functions: Map<String, Expression<T>>,
 ) : AsmBuilder() {
     private val className: String = buildName("${target.hashCode()}_${classOfT.simpleName}")
 
@@ -69,6 +72,13 @@ internal sealed class PrimitiveAsmBuilder<T : Number, out E : Expression<T>>(
     private val argumentsIndexer = mutableListOf<Symbol>()
 
     /**
+     * Function call adapters to provide to the subclass.
+     */
+    private val constants = mutableListOf<Any>()
+
+    private val functionCallIndices = hashMapOf<TypedMst.FunctionCall<T>, Int>()
+
+    /**
      * Subclasses, loads and instantiates [Expression] for given parameters.
      *
      * The built instance is cached.
@@ -93,6 +103,16 @@ internal sealed class PrimitiveAsmBuilder<T : Number, out E : Expression<T>>(
                 value = null,
                 block = FieldVisitor::visitEnd,
             )
+
+            visitField(
+                access = ACC_PRIVATE or ACC_FINAL,
+                name = "constants",
+                descriptor = OBJECT_ARRAY_TYPE.descriptor,
+                signature = null,
+                value = null,
+                block = FieldVisitor::visitEnd,
+            )
+
             visitMethod(
                 ACC_PUBLIC,
                 "getIndexer",
@@ -226,7 +246,7 @@ internal sealed class PrimitiveAsmBuilder<T : Number, out E : Expression<T>>(
             visitMethod(
                 ACC_PUBLIC or ACC_SYNTHETIC,
                 "<init>",
-                getMethodDescriptor(VOID_TYPE, SYMBOL_INDEXER_TYPE),
+                getMethodDescriptor(VOID_TYPE, SYMBOL_INDEXER_TYPE, OBJECT_ARRAY_TYPE),
                 null,
                 null,
             ).instructionAdapter {
@@ -236,10 +256,14 @@ internal sealed class PrimitiveAsmBuilder<T : Number, out E : Expression<T>>(
                 load(0, classType)
                 load(1, SYMBOL_INDEXER_TYPE)
                 putfield(classType.internalName, "indexer", SYMBOL_INDEXER_TYPE.descriptor)
+                load(0, classType)
+                load(2, OBJECT_ARRAY_TYPE)
+                putfield(classType.internalName, "constants", OBJECT_ARRAY_TYPE.descriptor)
                 areturn(VOID_TYPE)
                 val end = label()
                 visitLocalVariable("this", classType.descriptor, null, start, end, 0)
                 visitLocalVariable("indexer", SYMBOL_INDEXER_TYPE.descriptor, null, start, end, 1)
+                visitLocalVariable("constants", OBJECT_ARRAY_TYPE.descriptor, null, start, end, 2)
                 visitMaxs(0, 0)
                 visitEnd()
             }
@@ -248,15 +272,18 @@ internal sealed class PrimitiveAsmBuilder<T : Number, out E : Expression<T>>(
         }
 
         val binary = classWriter.toByteArray()
-        val cls = classLoader.defineClass(className, binary)
 
         if (System.getProperty("space.kscience.kmath.ast.dump.generated.classes") == "1")
             Paths.get("${className.split('.').last()}.class").writeBytes(binary)
 
-        MethodHandles
-            .publicLookup()
-            .findConstructor(cls, MethodType.methodType(Void.TYPE, SymbolIndexer::class.java))
-            .invoke(SimpleSymbolIndexer(argumentsIndexer)) as E
+        val lookup = defineHiddenClass(binary)
+
+        lookup
+            .findConstructor(
+                lookup.lookupClass(),
+                MethodType.methodType(Void.TYPE, SymbolIndexer::class.java, Array<Any>::class.java),
+            )
+            .invoke(SimpleSymbolIndexer(argumentsIndexer), constants.toTypedArray()) as E
     }
 
     /**
@@ -350,6 +377,8 @@ internal sealed class PrimitiveAsmBuilder<T : Number, out E : Expression<T>>(
         }
 
         is TypedMst.Constant -> Unit
+
+        is TypedMst.FunctionCall -> node.arguments.values.forEach { visitVariables(it, arrayMode, alreadyLoaded) }
     }
 
     private fun visitExpression(node: TypedMst<T>): Unit = when (node) {
@@ -361,6 +390,55 @@ internal sealed class PrimitiveAsmBuilder<T : Number, out E : Expression<T>>(
 
         is TypedMst.Unary -> visitUnary(node)
         is TypedMst.Binary -> visitBinary(node)
+        is TypedMst.FunctionCall -> visitFunctionCall(node)
+    }
+
+    private fun visitFunctionCall(node: TypedMst.FunctionCall<T>): Unit = invokeMethodVisitor.run {
+        val function = resolveFunction(functions, node)
+        val arguments = positionalArguments(function, node)
+        val expressionType = arrayExpressionTypes(function)?.takeIf { it.second == classOfTPrimitive }?.first
+
+        // Both invoke methods visit the same tree, so constants are shared between them.
+        val index = functionCallIndices.getOrPut(node) {
+            constants += if (expressionType != null) function else positionalAdapter(function, node)
+            constants.lastIndex
+        }
+
+        load(0, classType)
+        getfield(classType.internalName, "constants", OBJECT_ARRAY_TYPE.descriptor)
+        iconst(index)
+        aload(OBJECT_TYPE)
+
+        if (expressionType != null) {
+            checkcast(expressionType)
+            iconst(arguments.size)
+            newarray(tTypePrimitive)
+
+            for ((index, argument) in arguments.withIndex()) {
+                dup()
+                iconst(index)
+                visitExpression(argument)
+                astore(tTypePrimitive)
+            }
+
+            invokeinterface(expressionType.internalName, "invoke", getMethodDescriptor(tTypePrimitive, tTypePrimitiveArray))
+        } else {
+            checkcast(FUNCTION1_TYPE)
+            iconst(arguments.size)
+            newarray(OBJECT_TYPE)
+
+            for ((index, argument) in arguments.withIndex()) {
+                dup()
+                iconst(index)
+                visitExpression(argument)
+                box()
+                astore(OBJECT_TYPE)
+            }
+
+            invokeinterface(FUNCTION1_TYPE.internalName, "invoke", getMethodDescriptor(OBJECT_TYPE, OBJECT_TYPE))
+            checkcast(tType)
+            unbox()
+        }
     }
 
     protected open fun visitUnary(node: TypedMst.Unary<T>) = visitExpression(node.value)
@@ -372,11 +450,6 @@ internal sealed class PrimitiveAsmBuilder<T : Number, out E : Expression<T>>(
 
     protected companion object {
         /**
-         * ASM type for [java.lang.Number].
-         */
-        val NUMBER_TYPE: Type = getType(Number::class.java)
-
-        /**
          * ASM type for [SymbolIndexer].
          */
         val SYMBOL_INDEXER_TYPE: Type = getType(SymbolIndexer::class.java)
@@ -384,12 +457,13 @@ internal sealed class PrimitiveAsmBuilder<T : Number, out E : Expression<T>>(
 }
 
 @UnstableKMathAPI
-internal class DoubleAsmBuilder(target: TypedMst<Float64>) : PrimitiveAsmBuilder<Double, DoubleExpression>(
+internal class DoubleAsmBuilder(target: TypedMst<Float64>, functions: Map<String, Expression<Float64>>) : PrimitiveAsmBuilder<Double, DoubleExpression>(
     Float64Field,
     java.lang.Double::class.java,
     java.lang.Double.TYPE,
     DoubleExpression::class.java,
     target,
+    functions,
 ) {
     private fun buildUnaryJavaMathCall(name: String) = invokeMethodVisitor.invokestatic(
         MATH_TYPE.internalName,
@@ -458,13 +532,14 @@ internal class DoubleAsmBuilder(target: TypedMst<Float64>) : PrimitiveAsmBuilder
 }
 
 @UnstableKMathAPI
-internal class IntAsmBuilder(target: TypedMst<Int>) :
+internal class IntAsmBuilder(target: TypedMst<Int>, functions: Map<String, Expression<Int>>) :
     PrimitiveAsmBuilder<Int, IntExpression>(
         Int32Ring,
         Integer::class.java,
         Integer.TYPE,
         IntExpression::class.java,
-        target
+        target,
+        functions,
     ) {
     override fun visitUnary(node: TypedMst.Unary<Int>) {
         super.visitUnary(node)
@@ -489,12 +564,13 @@ internal class IntAsmBuilder(target: TypedMst<Int>) :
 }
 
 @UnstableKMathAPI
-internal class LongAsmBuilder(target: TypedMst<Long>) : PrimitiveAsmBuilder<Long, LongExpression>(
+internal class LongAsmBuilder(target: TypedMst<Long>, functions: Map<String, Expression<Long>>) : PrimitiveAsmBuilder<Long, LongExpression>(
     Int64Ring,
     java.lang.Long::class.java,
     java.lang.Long.TYPE,
     LongExpression::class.java,
     target,
+    functions,
 ) {
     override fun visitUnary(node: TypedMst.Unary<Long>) {
         super.visitUnary(node)
