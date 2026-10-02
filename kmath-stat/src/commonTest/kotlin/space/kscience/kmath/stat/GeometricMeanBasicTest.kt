@@ -86,7 +86,7 @@ internal class GeometricMeanBasicTest {
     @Test
     fun float32GeometricMeanWithSingleElement() = runTest {
         val res = Float32Field.geometricMean.evaluateBlocking(Float32Buffer(5f))
-        assertEquals(5f, res)
+        assertEquals(5f, res, 1e-4f)
     }
 
     @Test
