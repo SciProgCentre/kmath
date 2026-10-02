@@ -91,12 +91,14 @@ internal class BigIntBenchmark {
     }
 
     @Benchmark
-    fun kmParsing16(blackhole: Blackhole) = JBigIntegerField {
+    context(_: BigIntField)
+    fun kmParsing16(blackhole: Blackhole) {
         blackhole.consume("0x7f57ed8b89c29a3b9a85c7a5b84ca3929c7b7488593".parseBigInteger())
     }
 
     @Benchmark
-    fun kmParsing10(blackhole: Blackhole) = JBigIntegerField {
+    context(_: BigIntField)
+    fun kmParsing10(blackhole: Blackhole) {
         blackhole.consume("236656783929183747565738292847574838922010".parseBigInteger())
     }
 
