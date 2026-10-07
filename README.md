@@ -102,6 +102,7 @@ performance calculations to code generation.
 > - [domains](kmath-core/src/commonMain/kotlin/space/kscience/kmath/domains) : Domains
 > - [autodiff](kmath-core/src/commonMain/kotlin/space/kscience/kmath/expressions/SimpleAutoDiff.kt) : Automatic differentiation
 > - [Parallel linear algebra](kmath-core/#) : Parallel implementation for `LinearAlgebra`
+> - [bignumbers](kmath-core/src/commonMain/kotlin/space/kscience/kmath/operations/BigInt.kt) : Arbitrary precision integers (BigInt) and decimals (BigDecimal) with algebraic contexts.
 
 
 ### [kmath-coroutines](kmath-coroutines)

@@ -3,8 +3,6 @@
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
-@file:Suppress("CONTEXT_RECEIVERS_DEPRECATED")
-
 package space.kscience.kmath.geometry
 
 import space.kscience.kmath.operations.Group

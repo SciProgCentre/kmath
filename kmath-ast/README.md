@@ -10,7 +10,7 @@ Extensions to MST API: transformations, dynamic compilation and visualization.
 
 ## Artifact:
 
-The Maven coordinates of this project are `space.kscience:kmath-ast:0.5.1-dev`.
+The Maven coordinates of this project are `space.kscience:kmath-ast:0.6.0`.
 
 **Gradle Kotlin DSL:**
 ```kotlin
@@ -20,7 +20,7 @@ repositories {
 }
 
 dependencies {
-    implementation("space.kscience:kmath-ast:0.5.1-dev")
+    implementation("space.kscience:kmath-ast:0.6.0")
 }
 ```
 

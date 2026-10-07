@@ -14,7 +14,7 @@ allprojects {
     }
 
     group = "space.kscience"
-    version = "0.5.1-dev"
+    version = "0.6.0"
 }
 
 dependencies {
@@ -86,6 +86,15 @@ kscienceProject {
     }
     publishTo("spc", "https://maven.sciprog.center/kscience")
     publishToCentral()
+
+//    @OptIn(ExperimentalAbiValidation::class)
+//    abiValidation {
+//        filters {
+//            exclude {
+//                annotatedWith.add("space.kscience.kmath.UnstableKMathAPI")
+//            }
+//        }
+//    }
 }
 
 
