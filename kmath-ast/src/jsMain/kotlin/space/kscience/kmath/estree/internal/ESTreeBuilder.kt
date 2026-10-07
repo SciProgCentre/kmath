@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2024 KMath contributors.
+ * Copyright 2018-2026 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -21,7 +21,7 @@ internal class ESTreeBuilder<T>(
         val executable: dynamic,
         val constants: Array<dynamic>,
     ) : Expression<T> {
-        @Suppress("UNUSED_VARIABLE")
+        @Suppress("UNUSED_VARIABLE", "unused")
         override fun invoke(arguments: Map<Symbol, T>): T {
             val e = executable
             val c = constants
@@ -31,7 +31,7 @@ internal class ESTreeBuilder<T>(
         }
     }
 
-    @Suppress("UNUSED_VARIABLE")
+    @Suppress("UNUSED_VARIABLE", "unused")
     val instance: Expression<T> by lazy {
         val node = Program(
             sourceType = "script",
@@ -71,8 +71,19 @@ internal class ESTreeBuilder<T>(
         *args,
     )
 
+    fun call(function: (Array<Any?>) -> T, args: List<BaseExpression>): BaseExpression = SimpleCallExpression(
+        optional = false,
+        callee = constant(variadic(function)),
+        *args.toTypedArray(),
+    )
+
     private companion object {
-        @Suppress("UNUSED_VARIABLE")
+        /**
+         * Wraps a function taking an array into a JS function taking the same values as positional arguments.
+         */
+        val variadic: (function: (Array<Any?>) -> Any?) -> dynamic = eval("(f) => (...args) => f(args)")
+
+        @Suppress("UNUSED_VARIABLE", "unused")
         val getOrFail: (`object`: dynamic, key: String) -> dynamic = { `object`, key ->
             val k = key
             val o = `object`

@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2024 KMath contributors.
+ * Copyright 2018-2026 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -352,5 +352,25 @@ public data class MultiplicationSyntax(
     init {
         left.parent = this
         right.parent = this
+    }
+}
+
+/**
+ * Represents a function call with named arguments (like *f(a = 1, b = 2)*).
+ *
+ * @property prefix The prefix or function name syntax.
+ * @property arguments The map of argument name to operand / value syntax.
+ * @author Iaroslav Postovalov
+ */
+public data class FunctionCallSyntax(
+    public var prefix: MathSyntax,
+    public val arguments: Map<SymbolSyntax, MathSyntax>,
+) : MathSyntax() {
+    init {
+        prefix.parent = this
+        for ((k, v) in arguments) {
+            k.parent = this
+            v.parent = this
+        }
     }
 }

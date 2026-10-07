@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2024 KMath contributors.
+ * Copyright 2018-2026 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -148,6 +148,20 @@ public object MathMLSyntaxRenderer : SyntaxRenderer {
                 render(node.left)
                 if (node.times) tag("mo") { append("&times;") } else tag("mspace", "width" to "0.167em")
                 render(node.right)
+            }
+
+            is FunctionCallSyntax -> {
+                render(node.prefix)
+                tag("mfenced", "open" to "(", "close" to ")", "separators" to "") {
+                    var first = true
+                    for ((name, value) in node.arguments) {
+                        if (!first) tag("mo") { append(',') }
+                        render(name)
+                        tag("mo") { append('=') }
+                        render(value)
+                        first = false
+                    }
+                }
             }
         }
     }

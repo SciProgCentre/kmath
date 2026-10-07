@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2024 KMath contributors.
+ * Copyright 2018-2026 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -79,6 +79,14 @@ public val BetterMultiplication: PostProcessPhase = PostProcessPhase { node ->
             perform(node.left)
             perform(node.right)
         }
+
+        is FunctionCallSyntax -> {
+            perform(node.prefix)
+            for ((name, value) in node.arguments) {
+                perform(name)
+                perform(value)
+            }
+        }
     }
 
     perform(node)
@@ -148,6 +156,14 @@ public val BetterFraction: PostProcessPhase = PostProcessPhase { node ->
             perform(node.left, infix)
             perform(node.right, infix)
         }
+
+        is FunctionCallSyntax -> {
+            perform(node.prefix, infix)
+            for ((name, value) in node.arguments) {
+                perform(name, infix)
+                perform(value, infix)
+            }
+        }
     }
 
     perform(node)
@@ -186,6 +202,7 @@ public val BetterExponent: PostProcessPhase = PostProcessPhase { node ->
             is FractionSyntax -> true
             is RadicalWithIndexSyntax -> true
             is MultiplicationSyntax -> perform(node.left) || perform(node.right)
+            is FunctionCallSyntax -> perform(node.prefix) || node.arguments.keys.any { perform(it) } || node.arguments.values.any { perform(it) }
         }
     }
 
@@ -286,6 +303,14 @@ public class SimplifyParentheses(public val precedenceFunction: (MathSyntax) -> 
         is RadicalWithIndexSyntax -> {
             perform(node.left)
             perform(node.right)
+        }
+
+        is FunctionCallSyntax -> {
+            perform(node.prefix)
+            for ((name, value) in node.arguments) {
+                perform(name)
+                perform(value)
+            }
         }
     }
 

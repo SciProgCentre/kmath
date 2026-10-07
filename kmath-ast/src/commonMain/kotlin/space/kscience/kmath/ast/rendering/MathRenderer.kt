@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2024 KMath contributors.
+ * Copyright 2018-2026 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -90,6 +90,7 @@ public open class FeaturedMathRendererWithPostProcess(
                 // Fallback option for unknown operations - printing them as operator
                 BinaryOperator.Default,
                 UnaryOperator.Default,
+                FunctionCall.Default,
 
                 // Pretty printing for some objects
                 PrettyPrintFloats.Default,

@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2024 KMath contributors.
+ * Copyright 2018-2026 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -90,5 +90,22 @@ internal class TestMathML {
     fun multiplication() {
         testMathML("x*1", "<mi>x</mi><mo>&times;</mo><mn>1</mn>")
         testMathML("1*x", "<mn>1</mn><mspace width=\"0.167em\"></mspace><mi>x</mi>")
+    }
+
+    // LLM generated code: Unit tests for function call rendering to MathML
+    @Test
+    fun functionCall() {
+        testMathML(
+            "foo(a=22)",
+            "<mo>foo</mo><mfenced open=\"(\" close=\")\" separators=\"\"><mi>a</mi><mo>=</mo><mn>22</mn></mfenced>",
+        )
+        testMathML(
+            "foo(a=22, b=\"bar\", c=false)",
+            "<mo>foo</mo><mfenced open=\"(\" close=\")\" separators=\"\"><mi>a</mi><mo>=</mo><mn>22</mn><mo>,</mo><mi>b</mi><mo>=</mo><mi>bar</mi><mo>,</mo><mi>c</mi><mo>=</mo><mi>false</mi></mfenced>",
+        )
+        testMathML(
+            "outer(inner=bar(x=1))",
+            "<mo>outer</mo><mfenced open=\"(\" close=\")\" separators=\"\"><mi>inner</mi><mo>=</mo><mo>bar</mo><mfenced open=\"(\" close=\")\" separators=\"\"><mi>x</mi><mo>=</mo><mn>1</mn></mfenced></mfenced>",
+        )
     }
 }

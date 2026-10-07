@@ -8,7 +8,6 @@ kscience {
     native()
     wasmJs()
 
-    useContextParameters()
     useSerialization()
     dependencies {
         api(projects.kmath.kmathComplex)

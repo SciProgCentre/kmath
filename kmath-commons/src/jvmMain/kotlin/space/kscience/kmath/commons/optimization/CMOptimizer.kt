@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2024 KMath contributors.
+ * Copyright 2018-2026 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 @file:OptIn(UnstableKMathAPI::class)
@@ -17,10 +17,7 @@ import org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizer
 import space.kscience.attributes.AttributesBuilder
 import space.kscience.attributes.SetAttribute
 import space.kscience.kmath.UnstableKMathAPI
-import space.kscience.kmath.expressions.Symbol
-import space.kscience.kmath.expressions.SymbolIndexer
-import space.kscience.kmath.expressions.derivative
-import space.kscience.kmath.expressions.withSymbols
+import space.kscience.kmath.expressions.*
 import space.kscience.kmath.optimization.*
 import space.kscience.kmath.structures.Float64
 import kotlin.reflect.KClass
@@ -52,7 +49,6 @@ public fun AttributesBuilder<FunctionOptimization<Float64>>.simplexSteps(vararg 
     cmOptimizationData { NelderMeadSimplex(mapOf(*steps).toDoubleArray()) }
 }
 
-@OptIn(UnstableKMathAPI::class)
 public object CMOptimizer : Optimizer<Double, FunctionOptimization<Float64>> {
 
     public const val DEFAULT_RELATIVE_TOLERANCE: Double = 1e-4

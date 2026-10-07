@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2024 KMath contributors.
+ * Copyright 2018-2026 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -130,7 +130,8 @@ public object MstField : Field<MST>, NumbersAddOps<MST>, ScaleOperations<MST> {
  * [ExtendedField] over [MST] nodes.
  */
 @Suppress("OVERRIDE_BY_INLINE")
-public object MstExtendedField : ExtendedField<MST>, NumericAlgebra<MST> {
+@OptIn(UnstableKMathAPI::class)
+public object MstExtendedField : ExtendedField<MST>, NumbersAddOps<MST>, ScaleOperations<MST> {
 
     override val bufferFactory: MutableBufferFactory<MST> = MutableBufferFactory()
 
@@ -156,7 +157,7 @@ public object MstExtendedField : ExtendedField<MST>, NumericAlgebra<MST> {
     override fun sqrt(arg: MST): MST = unaryOperationFunction(PowerOperations.SQRT_OPERATION)(arg)
 
     override fun scale(a: MST, value: Double): MST =
-        binaryOperation(GroupOps.PLUS_OPERATION, a, number(value))
+        binaryOperation(RingOps.TIMES_OPERATION, a, number(value))
 
     override fun multiply(left: MST, right: MST): MST.Binary = MstField.multiply(left, right)
     override fun divide(left: MST, right: MST): MST.Binary = MstField.divide(left, right)

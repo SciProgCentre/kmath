@@ -1,7 +1,9 @@
 /*
- * Copyright 2018-2024 KMath contributors.
+ * Copyright 2018-2026 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
+
+@file:Suppress("unused", "UnnecessaryVariable", "DuplicatedCode")
 
 package space.kscience.kmath.asm.internal
 
@@ -14,8 +16,6 @@ import org.objectweb.asm.commons.InstructionAdapter
 import space.kscience.kmath.expressions.Expression
 import space.kscience.kmath.expressions.MST
 import space.kscience.kmath.expressions.Symbol
-import space.kscience.kmath.expressions.invoke
-import java.lang.invoke.MethodHandles
 import java.lang.invoke.MethodType
 import java.nio.file.Paths
 import kotlin.io.path.writeBytes
@@ -24,7 +24,7 @@ import kotlin.io.path.writeBytes
  * ASM Builder is a structure that abstracts building a class designated to unwrap [MST] to plain Java expression.
  * This class uses [ClassLoader] for loading the generated class, then it is able to instantiate the new class.
  *
- * @property T the type of AsmExpression to unwrap.
+ * @param T the type of AsmExpression to unwrap.
  * @property className the unique class name of new loaded class.
  * @property expressionResultCallback the function to apply to this object when generating expression value.
  * @author Iaroslav Postovalov
@@ -194,12 +194,12 @@ internal class GenericAsmBuilder<T>(
         }
 
         val binary = classWriter.toByteArray()
-        val cls = classLoader.defineClass(className, binary)
 
         if (System.getProperty("space.kscience.kmath.ast.dump.generated.classes") == "1")
             Paths.get("${className.split('.').last()}.class").writeBytes(binary)
 
-        val l = MethodHandles.publicLookup()
+        val l = defineHiddenClass(binary)
+        val cls = l.lookupClass()
 
         (if (hasConstants)
             l.findConstructor(cls, MethodType.methodType(Void.TYPE, Array<Any>::class.java))(constants.toTypedArray())
@@ -304,6 +304,52 @@ internal class GenericAsmBuilder<T>(
         invokeMethodVisitor.checkcast(tType)
     }
 
+    fun buildFunctionCall(
+        function: (Array<Any?>) -> T,
+        arguments: List<() -> Unit>,
+    ): Unit = invokeMethodVisitor.run {
+        loadObjectConstant(function, FUNCTION1_TYPE)
+        iconst(arguments.size)
+        newarray(OBJECT_TYPE)
+
+        for ((index, argument) in arguments.withIndex()) {
+            dup()
+            iconst(index)
+            argument()
+            astore(OBJECT_TYPE)
+        }
+
+        invokeinterface(FUNCTION1_TYPE.internalName, "invoke", getMethodDescriptor(OBJECT_TYPE, OBJECT_TYPE))
+        checkcast(tType)
+    }
+
+    fun buildArrayExpressionCall(
+        function: Expression<T>,
+        expressionType: Type,
+        primitive: Type,
+        arguments: List<() -> Unit>,
+    ): Unit = invokeMethodVisitor.run {
+        loadObjectConstant(function, expressionType)
+        iconst(arguments.size)
+        newarray(primitive)
+
+        for ((index, argument) in arguments.withIndex()) {
+            dup()
+            iconst(index)
+            argument()
+            invokevirtual(NUMBER_TYPE.internalName, "${primitive.className}Value", getMethodDescriptor(primitive), false)
+            astore(primitive)
+        }
+
+        invokeinterface(
+            expressionType.internalName,
+            "invoke",
+            getMethodDescriptor(primitive, getType("[" + primitive.descriptor)),
+        )
+
+        invokestatic(tType.internalName, "valueOf", getMethodDescriptor(tType, primitive), false)
+    }
+
     private companion object {
         /**
          * Maps JVM primitive numbers boxed ASM types to their primitive ASM types.
@@ -318,10 +364,5 @@ internal class GenericAsmBuilder<T>(
                 Double::class.java.asm to DOUBLE_TYPE,
             )
         }
-
-        /**
-         * ASM type for array of [java.lang.Object].
-         */
-        val OBJECT_ARRAY_TYPE: Type = getType("[Ljava/lang/Object;")
     }
 }

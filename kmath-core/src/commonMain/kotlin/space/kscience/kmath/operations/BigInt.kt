@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2024 KMath contributors.
+ * Copyright 2018-2026 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -47,9 +47,11 @@ public object BigIntField : Field<BigInt>, NumbersAddOps<BigInt>, ScaleOperation
 }
 
 public class BigInt internal constructor(
-    private val sign: Byte,
+    sign: Byte,
     private val magnitude: Magnitude,
 ) : Comparable<BigInt> {
+
+    private val sign: Byte = if (magnitude.isEmpty()) 0 else sign
 
     override fun compareTo(other: BigInt): Int = when {
         (sign == 0.toByte()) and (other.sign == 0.toByte()) -> 0
@@ -60,7 +62,7 @@ public class BigInt internal constructor(
 
     override fun equals(other: Any?): Boolean = other is BigInt && compareTo(other) == 0
 
-    override fun hashCode(): Int = magnitude.hashCode() + sign
+    override fun hashCode(): Int = magnitude.contentHashCode() + sign
 
     public fun abs(): BigInt = if (sign == 0.toByte()) this else BigInt(1, magnitude)
 
@@ -382,16 +384,19 @@ public class BigInt internal constructor(
     }
 }
 
+/**
+ *
+ */
 private fun stripLeadingZeros(mag: Magnitude): Magnitude {
-    if (mag.isEmpty() || mag.last() != 0U) return mag
+    if (mag.isEmpty()) return mag
     var resSize = mag.size - 1
 
-    while (mag[resSize] == 0U) {
-        if (resSize == 0) break
+    while (resSize >= 0 && mag[resSize] == 0U) {
         resSize -= 1
     }
 
-    return mag.sliceArray(IntRange(0, resSize))
+    if (resSize < 0) return uintArrayOf()
+    return if (resSize == mag.size - 1) mag else mag.sliceArray(0..resSize)
 }
 
 /**
@@ -402,12 +407,12 @@ public fun abs(x: BigInt): BigInt = x.abs()
 /**
  * Convert this [Int] to [BigInt]
  */
-public fun Int.toBigInt(): BigInt = BigInt(sign.toByte(), uintArrayOf(kotlin.math.abs(this).toUInt()))
+public fun Int.toBigInt(): BigInt = if (this == 0) BigInt.ZERO else BigInt(sign.toByte(), uintArrayOf(kotlin.math.abs(this).toUInt()))
 
 /**
  * Convert this [Long] to [BigInt]
  */
-public fun Long.toBigInt(): BigInt = BigInt(
+public fun Long.toBigInt(): BigInt = if (this == 0L) BigInt.ZERO else BigInt(
     sign.toByte(),
     stripLeadingZeros(
         uintArrayOf(
@@ -420,7 +425,7 @@ public fun Long.toBigInt(): BigInt = BigInt(
 /**
  * Convert UInt to [BigInt]
  */
-public fun UInt.toBigInt(): BigInt = BigInt(1, uintArrayOf(this))
+public fun UInt.toBigInt(): BigInt = if (this == 0U) BigInt.ZERO else BigInt(1, uintArrayOf(this))
 
 /**
  * Convert ULong to [BigInt]
@@ -439,20 +444,21 @@ public fun ULong.toBigInt(): BigInt = BigInt(
  * Create a [BigInt] with this array of magnitudes with protective copy
  */
 public fun UIntArray.toBigInt(sign: Byte): BigInt {
-    require(sign != 0.toByte() || !isNotEmpty())
+    require(sign != 0.toByte() || isEmpty())
     return BigInt(sign, copyOf())
 }
 
 /**
  * Returns `null` if a valid number cannot be read from a string
  */
+context(_: BigIntField)
 public fun String.parseBigInteger(): BigInt? {
     if (isEmpty()) return null
     val sign: Int
 
     val positivePartIndex = when (this[0]) {
         '+' -> {
-            sign = +1
+            sign = 1
             1
         }
 
@@ -462,7 +468,7 @@ public fun String.parseBigInteger(): BigInt? {
         }
 
         else -> {
-            sign = +1
+            sign = 1
             0
         }
     }
@@ -531,6 +537,7 @@ public fun String.parseBigInteger(): BigInt? {
     }
 }
 
+@Suppress("UnusedReceiverParameter")
 public val BigInt.algebra: BigIntField get() = BigIntField
 
 public inline fun BigInt.Companion.buffer(size: Int, initializer: (Int) -> BigInt): Buffer<BigInt> =
@@ -539,5 +546,6 @@ public inline fun BigInt.Companion.buffer(size: Int, initializer: (Int) -> BigIn
 public inline fun BigInt.Companion.mutableBuffer(size: Int, initializer: (Int) -> BigInt): Buffer<BigInt> =
     Buffer(size, initializer)
 
+@Suppress("UnusedReceiverParameter")
 public val BigIntField.nd: BufferedRingOpsND<BigInt, BigIntField>
     get() = BufferedRingOpsND(BufferRingOps(BigIntField))

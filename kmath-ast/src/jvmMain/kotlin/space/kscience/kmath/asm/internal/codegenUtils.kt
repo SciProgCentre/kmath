@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2024 KMath contributors.
+ * Copyright 2018-2026 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -7,7 +7,11 @@ package space.kscience.kmath.asm.internal
 
 import org.objectweb.asm.*
 import org.objectweb.asm.commons.InstructionAdapter
+import space.kscience.kmath.UnstableKMathAPI
+import space.kscience.kmath.expressions.DoubleExpression
 import space.kscience.kmath.expressions.Expression
+import space.kscience.kmath.expressions.IntExpression
+import space.kscience.kmath.expressions.LongExpression
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
 
@@ -18,6 +22,15 @@ import kotlin.contracts.contract
  */
 internal inline val Class<*>.asm: Type
     get() = Type.getType(this)
+
+// Interface type and primitive argument/result class of array-based expressions.
+@OptIn(UnstableKMathAPI::class)
+internal fun arrayExpressionTypes(function: Expression<*>): Pair<Type, Class<*>>? = when (function) {
+    is DoubleExpression -> DoubleExpression::class.java.asm to java.lang.Double.TYPE
+    is IntExpression -> IntExpression::class.java.asm to Integer.TYPE
+    is LongExpression -> LongExpression::class.java.asm to java.lang.Long.TYPE
+    else -> null
+}
 
 /**
  * Returns singleton array with this value if the [predicate] is true, returns empty array otherwise.
@@ -51,27 +64,11 @@ internal inline fun MethodVisitor.instructionAdapter(block: InstructionAdapter.(
  *
  * @author Iaroslav Postovalov
  */
+@Suppress("UnusedReceiverParameter")
 internal fun MethodVisitor.label(): Label = Label().also(::visitLabel)
 
-/**
- * Creates a class name for [Expression] based with appending [marker] to reduce collisions.
- *
- * These methods help to avoid collisions of class name to prevent loading several classes with the same name. If there
- * is a colliding class, change [collision] parameter or leave it `0` to check existing classes recursively.
- *
- * @author Iaroslav Postovalov
- */
-internal tailrec fun buildName(marker: String, collision: Int = 0): String {
-    val name = "space.kscience.kmath.asm.generated.CompiledExpression_${marker}_$collision"
-
-    try {
-        Class.forName(name)
-    } catch (ignored: ClassNotFoundException) {
-        return name
-    }
-
-    return buildName(marker, collision + 1)
-}
+// Hidden classes must be in the package of the lookup class defining them; the JVM makes their names unique.
+internal fun buildName(marker: String): String = "space.kscience.kmath.asm.internal.CompiledExpression_$marker"
 
 internal inline fun ClassWriter(flags: Int, block: ClassWriter.() -> Unit): ClassWriter {
     contract { callsInPlace(block, InvocationKind.EXACTLY_ONCE) }

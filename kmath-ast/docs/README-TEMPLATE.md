@@ -9,12 +9,13 @@ ${artifact}
 ## Parsing expressions
 
 In this module there is a parser from human-readable strings like `"x^3-x+3"` (in the more
-specific [grammar](reference/ArithmeticsEvaluator.g4)) to MST instances.
+specific [grammar](reference/ArithmeticsEvaluator.g4)) to MST instances. For a detailed guide on syntax, evaluation with algebras, and integration with `MstInterpreterContext`, see [Expression Parser Documentation](docs/parser.md).
 
 Supported literals:
 
 1. Constants and variables (consist of latin letters, digits and underscores, can't start with digit): `x`, `_Abc2`.
 2. Numbers: `123`, `1.02`, `1e10`, `1e-10`, `1.0e+3`&mdash;all parsed either as `kotlin.Long` or `kotlin.Double`.
+3. String literals: `"foo"`, `'bar'`&mdash;parsed into `Symbol`.
 
 Supported binary operators (from the highest precedence to the lowest one):
 
@@ -26,11 +27,12 @@ Supported unary operator:
 
 1. `-`, e.&nbsp;g. `-x`
 
-Arbitrary unary and binary functions are also supported: names consist of latin letters, digits and underscores, can't
+Arbitrary unary and binary functions as well as functions with named arguments are also supported: names consist of latin letters, digits and underscores, can't
 start with digit. Examples:
 
 1. `sin(x)`
 2. `add(x, y)`
+3. `foo(a = 22, b = "bar", c = false)`
 
 ## Dynamic expression code generation
 
@@ -151,6 +153,23 @@ An example of emitted Wasm IR in the form of WAT:
 
 - ESTree expression compilation uses `eval` which can be unavailable in several environments.
 - WebAssembly isn't supported by old versions of browsers (see https://webassembly.org/roadmap/).
+
+### Function calls
+
+`MST.FunctionCall` nodes are resolved against a map of functions passed to the compiler:
+
+```kotlin
+val a = Symbol("a")
+val b = Symbol("b")
+val f = Expression(Float64Field.type) { it.getValue(a) * 2 - it.getValue(b) }
+
+val mst = MST.FunctionCall("f", mapOf(a to x, b to y))
+mst.compile(Float64Field, mapOf(x to 3.0, y to 1.0), mapOf("f" to f)) // 5.0
+```
+
+For generic algebras, `compile()` and `compileToExpression()` can instead take an `MstInterpreterContext` context
+parameter. `DoubleExpression`, `IntExpression` and `LongExpression` functions are called via their array-based `invoke`
+for better performance. WebAssembly doesn't support function calls.
 
 ## Rendering expressions
 

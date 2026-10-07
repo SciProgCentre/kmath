@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2024 KMath contributors.
+ * Copyright 2018-2026 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -23,6 +23,20 @@ import space.kscience.kmath.wasm.compileToExpression as wasmCompileToExpression
 
 @OptIn(UnstableKMathAPI::class)
 internal object WasmCompilerTestContext : CompilerTestContext {
+    override val supportsFunctionCalls: Boolean get() = false
+
+    override fun MST.compile(
+        algebra: Int32Ring,
+        arguments: Map<Symbol, Int>,
+        functions: Map<String, Expression<Int>>,
+    ): Int = throw UnsupportedOperationException("Function calls are not supported by WASM compiler")
+
+    override fun MST.compile(
+        algebra: Float64Field,
+        arguments: Map<Symbol, Double>,
+        functions: Map<String, Expression<Float64>>,
+    ): Double = throw UnsupportedOperationException("Function calls are not supported by WASM compiler")
+
     override fun MST.compileToExpression(algebra: Int32Ring): Expression<Int> = wasmCompileToExpression(algebra)
     override fun MST.compile(algebra: Int32Ring, arguments: Map<Symbol, Int>): Int = wasmCompile(algebra, arguments)
     override fun MST.compileToExpression(algebra: Float64Field): Expression<Float64> = wasmCompileToExpression(algebra)
@@ -34,10 +48,22 @@ internal object WasmCompilerTestContext : CompilerTestContext {
 internal object ESTreeCompilerTestContext : CompilerTestContext {
     override fun MST.compileToExpression(algebra: Int32Ring): Expression<Int> = estreeCompileToExpression(algebra)
     override fun MST.compile(algebra: Int32Ring, arguments: Map<Symbol, Int>): Int = estreeCompile(algebra, arguments)
+
+    override fun MST.compile(
+        algebra: Int32Ring,
+        arguments: Map<Symbol, Int>,
+        functions: Map<String, Expression<Int>>,
+    ): Int = estreeCompile(algebra, arguments, functions)
     override fun MST.compileToExpression(algebra: Float64Field): Expression<Float64> = estreeCompileToExpression(algebra)
 
     override fun MST.compile(algebra: Float64Field, arguments: Map<Symbol, Double>): Double =
         estreeCompile(algebra, arguments)
+
+    override fun MST.compile(
+        algebra: Float64Field,
+        arguments: Map<Symbol, Double>,
+        functions: Map<String, Expression<Float64>>,
+    ): Double = estreeCompile(algebra, arguments, functions)
 }
 
 internal actual inline fun runCompilerTest(action: CompilerTestContext.() -> Unit) {

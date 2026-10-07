@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2024 KMath contributors.
+ * Copyright 2018-2026 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -69,5 +69,23 @@ internal class TestLatex {
     fun multiplication() {
         testLatex("x*1", "x\\times1")
         testLatex("1*x", "1\\,x")
+    }
+
+    // LLM generated code: Unit tests for function call rendering to LaTeX
+    @Test
+    fun functionCall() {
+        testLatex("foo(a=22)", "\\operatorname{foo}\\left(a=22\\right)")
+        testLatex(
+            "foo(a=22, b=\"bar\", c=false)",
+            "\\operatorname{foo}\\left(a=22,b=bar,c=false\\right)",
+        )
+        testLatex(
+            "foo(x=a+1, y=b*2)",
+            "\\operatorname{foo}\\left(x=a+1,y=b\\times2\\right)",
+        )
+        testLatex(
+            "outer(inner=bar(x=1))",
+            "\\operatorname{outer}\\left(inner=\\operatorname{bar}\\left(x=1\\right)\\right)",
+        )
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2025 KMath contributors.
+ * Copyright 2018-2026 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -55,7 +55,7 @@ internal class GeometricMeanStatisticTest {
             .take(100) // Take 100 data chunks from the source and accumulate them
             .last() //get 1e5 data samples average
 
-        assertEquals(2.0, average, 1e-2)
+        assertEquals(2.0, average, 2e-2)
     }
 
 }

@@ -84,4 +84,9 @@ readme {
             Parallel implementation for `LinearAlgebra`
         """.trimIndent()
     }
+
+    feature(
+        id = "bignumbers",
+        ref = "src/commonMain/kotlin/space/kscience/kmath/operations/BigInt.kt",
+    ) { "Arbitrary precision integers (BigInt) and decimals (BigDecimal) with algebraic contexts." }
 }

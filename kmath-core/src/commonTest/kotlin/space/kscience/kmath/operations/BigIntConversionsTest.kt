@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2024 KMath contributors.
+ * Copyright 2018-2026 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -13,7 +13,7 @@ import kotlin.test.assertNull
 class BigIntConversionsTest {
 
     @Test
-    fun testEmptyString() {
+    fun testEmptyString() = with(BigIntField) {
         assertNull("".parseBigInteger())
         assertNull("+".parseBigInteger())
         assertNull("-".parseBigInteger())
@@ -39,7 +39,7 @@ class BigIntConversionsTest {
     }
 
     @Test
-    fun testUnderscores() {
+    fun testUnderscores() = with(BigIntField) {
         assertEquals("0x10", "0x_1_0_".parseBigInteger().toString())
         assertEquals("0xa", "_1_0_".parseBigInteger().toString())
     }
@@ -63,13 +63,13 @@ class BigIntConversionsTest {
     }
 
     @Test
-    fun testFromString_0x17ead2ffffd11223344() {
+    fun testFromString_0x17ead2ffffd11223344() = with(BigIntField) {
         val x = "0x17ead2ffffd11223344".parseBigInteger()
         assertEquals("0x17ead2ffffd11223344", x.toString())
     }
 
     @Test
-    fun testFromString_7059135710711894913860() {
+    fun testFromString_7059135710711894913860() = with(BigIntField) {
         val x = "-7059135710711894913860".parseBigInteger()
         assertEquals("-0x17ead2ffffd11223344", x.toString())
     }

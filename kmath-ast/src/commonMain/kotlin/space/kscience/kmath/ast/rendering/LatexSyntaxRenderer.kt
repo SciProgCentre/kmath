@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2024 KMath contributors.
+ * Copyright 2018-2026 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -141,6 +141,20 @@ public object LatexSyntaxRenderer : SyntaxRenderer {
                 render(node.left)
                 append(if (node.times) "\\times" else "\\,")
                 render(node.right)
+            }
+
+            is FunctionCallSyntax -> {
+                render(node.prefix)
+                append("\\left(")
+                var first = true
+                for ((name, value) in node.arguments) {
+                    if (!first) append(',')
+                    render(name)
+                    append('=')
+                    render(value)
+                    first = false
+                }
+                append("\\right)")
             }
         }
     }

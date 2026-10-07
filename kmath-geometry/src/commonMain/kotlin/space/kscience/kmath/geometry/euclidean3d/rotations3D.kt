@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2024 KMath contributors.
+ * Copyright 2018-2026 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -25,8 +25,14 @@ public fun Quaternion.power(number: Number): Quaternion = QuaternionAlgebra.powe
 public fun QuaternionAlgebra.slerp(from: Quaternion, to: Quaternion, fraction: Double): Quaternion =
     (to / from).pow(fraction) * from
 
+/**
+ * Scalar angle between two quaternions
+ */
 public fun QuaternionAlgebra.angleBetween(q1: Quaternion, q2: Quaternion): Angle = (q1.conjugate * q2).theta
 
+/**
+ * Euclidean product of two quaternions
+ */
 public infix fun Quaternion.dot(other: Quaternion): Double = w * other.w + x * other.x + y * other.y + z * other.z
 
 

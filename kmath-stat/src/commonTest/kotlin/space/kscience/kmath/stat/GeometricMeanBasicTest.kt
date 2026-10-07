@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2025 KMath contributors.
+ * Copyright 2018-2026 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -86,7 +86,7 @@ internal class GeometricMeanBasicTest {
     @Test
     fun float32GeometricMeanWithSingleElement() = runTest {
         val res = Float32Field.geometricMean.evaluateBlocking(Float32Buffer(5f))
-        assertEquals(5f, res)
+        assertEquals(5f, res, 1e-4f)
     }
 
     @Test

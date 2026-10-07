@@ -19,7 +19,7 @@ repositories {
 }
 
 kscience {
-    maturity = space.kscience.gradle.Maturity.EXPERIMENTAL
+    maturity = space.kscience.gradle.Maturity.DEPRECATED
 
     jvm()
 
@@ -65,6 +65,8 @@ kscience {
 }
 
 kotlin {
+    explicitApi = org.jetbrains.kotlin.gradle.dsl.ExplicitApiMode.Disabled
+
     compilerOptions {
         optIn.addAll(
             "space.kscience.kmath.UnstableKMathAPI"
@@ -136,6 +138,11 @@ benchmark {
     configurations.register("bigInt") {
         commonConfiguration()
         include("BigIntBenchmark")
+    }
+
+    configurations.register("bigDecimal") {
+        commonConfiguration()
+        include("BigDecimalBenchmark")
     }
 
     configurations.register("jafamaDouble") {
@@ -281,5 +288,3 @@ readme {
         }
     }
 }
-
-kotlin.explicitApi = org.jetbrains.kotlin.gradle.dsl.ExplicitApiMode.Disabled

@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2024 KMath contributors.
+ * Copyright 2018-2026 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -92,4 +92,6 @@ public fun MST.toIExpr(): IExpr = when (this) {
         PowerOperations.POW_OPERATION -> F.Power(left.toIExpr(), F.symjify((right as MST.Numeric).value))
         else -> error("Binary operation $operation not defined in $this")
     }
+
+    is MST.FunctionCall -> TODO("Function call not supported in symja")
 }

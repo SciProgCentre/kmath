@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2024 KMath contributors.
+ * Copyright 2018-2026 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -111,6 +111,12 @@ internal class TestFeatures {
         testLatex("asinh(x)", "\\operatorname{arsinh}\\,\\left(x\\right)")
         testLatex("acosh(x)", "\\operatorname{arcosh}\\,\\left(x\\right)")
         testLatex("atanh(x)", "\\operatorname{artanh}\\,\\left(x\\right)")
+    }
+
+    // LLM generated code: Tests for FunctionCall render feature
+    @Test
+    fun functionCall() {
+        testLatex("foo(a=1, b=2)", "\\operatorname{foo}\\left(a=1,b=2\\right)")
     }
 
 //    @Test

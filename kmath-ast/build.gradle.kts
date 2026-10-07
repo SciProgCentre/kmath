@@ -54,7 +54,7 @@ kotlin {
     }
 }
 
-if (project.properties["space.kscience.kmath.ast.dump.generated.classes"] == "1") {
+if (project.findProperty("space.kscience.kmath.ast.dump.generated.classes") == "1") {
     tasks.withType<org.jetbrains.kotlin.gradle.targets.jvm.tasks.KotlinJvmTest> {
         jvmArgs("-Dspace.kscience.kmath.ast.dump.generated.classes=1")
     }

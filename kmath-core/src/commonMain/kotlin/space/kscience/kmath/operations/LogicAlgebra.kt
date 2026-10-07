@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2024 KMath contributors.
+ * Copyright 2018-2026 KMath contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -32,6 +32,7 @@ public interface LogicAlgebra<T : Any> : Algebra<T> {
     override fun binaryOperation(operation: String, left: T, right: T): T = when (operation) {
         Boolean::and.name -> left.and(right)
         Boolean::or.name -> left.or(right)
+        Boolean::xor.name -> left.xor(right)
         else -> super.binaryOperation(operation, left, right)
     }
 
