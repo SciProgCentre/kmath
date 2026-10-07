@@ -10,7 +10,7 @@ Extensions to MST API: transformations, dynamic compilation and visualization.
 
 ## Artifact:
 
-The Maven coordinates of this project are `space.kscience:kmath-ast:0.5.0`.
+The Maven coordinates of this project are `space.kscience:kmath-ast:0.5.1-dev`.
 
 **Gradle Kotlin DSL:**
 ```kotlin
@@ -20,19 +20,20 @@ repositories {
 }
 
 dependencies {
-    implementation("space.kscience:kmath-ast:0.5.0")
+    implementation("space.kscience:kmath-ast:0.5.1-dev")
 }
 ```
 
 ## Parsing expressions
 
 In this module there is a parser from human-readable strings like `"x^3-x+3"` (in the more
-specific [grammar](reference/ArithmeticsEvaluator.g4)) to MST instances.
+specific [grammar](reference/ArithmeticsEvaluator.g4)) to MST instances. For a detailed guide on syntax, evaluation with algebras, and integration with `MstInterpreterContext`, see [Expression Parser Documentation](docs/parser.md).
 
 Supported literals:
 
 1. Constants and variables (consist of latin letters, digits and underscores, can't start with digit): `x`, `_Abc2`.
 2. Numbers: `123`, `1.02`, `1e10`, `1e-10`, `1.0e+3`&mdash;all parsed either as `kotlin.Long` or `kotlin.Double`.
+3. String literals: `"foo"`, `'bar'`&mdash;parsed into `Symbol`.
 
 Supported binary operators (from the highest precedence to the lowest one):
 
@@ -44,11 +45,12 @@ Supported unary operator:
 
 1. `-`, e.&nbsp;g. `-x`
 
-Arbitrary unary and binary functions are also supported: names consist of latin letters, digits and underscores, can't
+Arbitrary unary and binary functions as well as functions with named arguments are also supported: names consist of latin letters, digits and underscores, can't
 start with digit. Examples:
 
 1. `sin(x)`
 2. `add(x, y)`
+3. `foo(a = 22, b = "bar", c = false)`
 
 ## Dynamic expression code generation
 

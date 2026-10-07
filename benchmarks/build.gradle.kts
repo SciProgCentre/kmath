@@ -140,6 +140,11 @@ benchmark {
         include("BigIntBenchmark")
     }
 
+    configurations.register("bigDecimal") {
+        commonConfiguration()
+        include("BigDecimalBenchmark")
+    }
+
     configurations.register("jafamaDouble") {
         commonConfiguration()
         include("JafamaBenchmark")
